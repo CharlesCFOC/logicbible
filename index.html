@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Brother Bible AI</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+    <script src="bible-data.js" defer></script>
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell" data-theme="dark">
+      <aside class="side-rail" aria-label="Desktop navigation">
+        <div class="brand-mark" aria-hidden="true">B</div>
+        <button class="rail-button is-active" data-nav="home" aria-label="Home">
+          <i data-lucide="home"></i>
+        </button>
+        <button class="rail-button" data-nav="bible" aria-label="Bible">
+          <i data-lucide="book-open"></i>
+        </button>
+        <button class="rail-button" data-nav="ai" aria-label="Brother AI">
+          <i data-lucide="sparkles"></i>
+        </button>
+        <button class="rail-button" data-nav="apologetics" aria-label="Apologetics">
+          <i data-lucide="shield"></i>
+        </button>
+        <button class="rail-button" data-nav="profile" aria-label="Profile">
+          <i data-lucide="user-round"></i>
+        </button>
+      </aside>
+
+      <main class="phone-frame" aria-live="polite">
+        <section id="home" class="screen is-active" data-screen>
+          <header class="home-hero">
+            <div class="home-brand">
+              <span class="home-mark" aria-hidden="true">B</span>
+              <div>
+                <strong>Brother</strong>
+                <span>Today</span>
+              </div>
+            </div>
+            <button class="icon-button" data-open-search aria-label="Search">
+              <i data-lucide="search"></i>
+            </button>
+          </header>
+
+          <article class="home-focus">
+            <div class="home-visual" aria-hidden="true">
+              <span class="visual-light"></span>
+              <span class="visual-page one"></span>
+              <span class="visual-page two"></span>
+              <span class="visual-line a"></span>
+              <span class="visual-line b"></span>
+              <span class="visual-line c"></span>
+            </div>
+            <p class="home-reference">Psalm 23:1</p>
+            <blockquote>The Lord is my shepherd; I shall not want.</blockquote>
+          </article>
+
+          <div class="home-actions">
+            <button data-nav="bible">
+              <i data-lucide="book-open"></i>
+              <span>
+                <strong>Galatians 6</strong>
+                <small>Continue</small>
+              </span>
+            </button>
+            <button data-nav="ai">
+              <i data-lucide="sparkles"></i>
+              <span>
+                <strong>Ask AI</strong>
+                <small>Study</small>
+              </span>
+            </button>
+          </div>
+
+          <div class="home-status" aria-label="Reading progress">
+            <span>
+              <strong>18</strong>
+              <small>day streak</small>
+            </span>
+            <span>
+              <strong>42%</strong>
+              <small>plan</small>
+            </span>
+            <span>
+              <strong>7</strong>
+              <small>notes</small>
+            </span>
+          </div>
+        </section>
+
+        <section id="bible" class="screen reader-screen" data-screen>
+          <header class="reader-topbar">
+            <label class="reader-select-label" aria-label="Bible version">
+              <select data-version-select></select>
+            </label>
+            <label class="reader-select-label" aria-label="Book">
+              <select data-book-select></select>
+            </label>
+            <label class="reader-select-label compact" aria-label="Chapter">
+              <select data-chapter-select></select>
+            </label>
+            <button class="icon-button" data-open-search aria-label="Search Scripture">
+              <i data-lucide="search"></i>
+            </button>
+          </header>
+
+          <section class="parallel-controls" data-parallel-controls>
+            <button class="parallel-toggle" data-parallel-toggle>
+              <i data-lucide="columns-3"></i>
+              <span>Parallèle</span>
+            </button>
+            <div class="parallel-selects" data-parallel-selects hidden>
+              <label aria-label="Compare with Bible version">
+                <select data-parallel-version-one></select>
+              </label>
+            </div>
+          </section>
+
+          <article class="scripture-page" data-scripture-page>
+            <p class="section-title" data-reader-source>Loading Scripture</p>
+            <div class="chapter-number" data-reader-chapter>15</div>
+            <div data-verses-list></div>
+            <p class="copyright-note" data-copyright-note></p>
+          </article>
+
+        </section>
+
+        <section id="ai" class="screen ai-screen" data-screen>
+          <header class="ai-topbar">
+            <div>
+              <strong>Brother AI</strong>
+              <span>Scripture chat</span>
+            </div>
+            <button class="icon-button" data-new-ai-chat aria-label="New chat">
+              <i data-lucide="square-pen"></i>
+            </button>
+          </header>
+
+          <div class="chat-thread" data-ai-thread>
+            <article class="message ai-message">
+              <div class="ai-message-stack">
+                <div class="message-body rich-text"><p>Ask me about a verse, doctrine, original language, cross references, or biblical context.</p></div>
+              </div>
+            </article>
+          </div>
+
+          <form class="composer" data-ai-form>
+            <textarea rows="1" placeholder="Message Brother AI..." aria-label="Message Brother AI"></textarea>
+            <button aria-label="Send message"><i data-lucide="send"></i></button>
+          </form>
+        </section>
+
+        <section id="apologetics" class="screen apologetics-screen" data-screen>
+          <header class="page-header apologetics-track-header">
+            <nav class="apologetics-breadcrumbs" aria-label="Breadcrumb">
+              <span class="apologetics-breadcrumb-current">Apologetics</span>
+            </nav>
+            <button class="icon-button" data-apologetics-coach="overview" aria-label="Open apologetics coach">
+              <i data-lucide="sparkles"></i>
+            </button>
+          </header>
+
+          <article class="apologetics-hero-image">
+            <img src="assets/profile-hero.png" alt="" />
+            <div class="apologetics-hero-image-copy">
+              <h2>Train to defend your faith with confidence.</h2>
+              <p>Learn to answer real objections through guided lessons, structured practice, and AI conversations built for apologetics training.</p>
+            </div>
+          </article>
+
+          <section>
+            <div class="section-heading">
+              <h2>Today's Challenge</h2>
+            </div>
+            <article class="apologetics-challenge-card" data-apologetics-challenge></article>
+          </section>
+
+          <section>
+            <div class="section-heading">
+              <h2>Progress</h2>
+            </div>
+            <div class="apologetics-progress-grid" data-apologetics-progress></div>
+          </section>
+
+          <section>
+            <div class="section-heading">
+              <h2>Training Paths</h2>
+            </div>
+            <div class="apologetics-track-carousel" data-apologetics-tracks></div>
+          </section>
+
+          <section>
+            <div class="section-heading">
+              <h2>Featured Topics</h2>
+            </div>
+            <div class="apologetics-topic-list" data-apologetics-topics></div>
+          </section>
+        </section>
+
+        <section id="apologetics-track" class="screen apologetics-screen" data-screen>
+          <header class="page-header apologetics-track-header">
+            <nav class="apologetics-breadcrumbs" aria-label="Breadcrumb">
+              <button class="apologetics-breadcrumb-link" data-apologetics-back="apologetics">Apologetics</button>
+              <span>/</span>
+              <span class="apologetics-breadcrumb-current" data-apologetics-track-title>Islam</span>
+            </nav>
+            <button class="icon-button" data-apologetics-coach="overview" aria-label="Open apologetics coach">
+              <i data-lucide="sparkles"></i>
+            </button>
+          </header>
+
+          <article class="apologetics-hero" data-apologetics-track-hero></article>
+          <section class="apologetics-track-progress-panel" data-apologetics-track-progress></section>
+          <section class="apologetics-track-quick" data-apologetics-track-quick></section>
+          <section class="apologetics-track-rewards" data-apologetics-track-rewards></section>
+          <p class="apologetics-selection-line" data-apologetics-selection-line></p>
+          <section>
+            <div class="section-heading">
+              <h2>Topics</h2>
+              <span class="apologetics-topic-count" data-apologetics-topic-count>0</span>
+            </div>
+            <div class="apologetics-filter-row" data-apologetics-filters aria-label="Apologetics filters"></div>
+            <div class="apologetics-topic-list" data-apologetics-track-topics></div>
+          </section>
+        </section>
+
+        <section id="apologetics-topic" class="screen apologetics-screen" data-screen>
+          <header class="page-header apologetics-track-header">
+            <nav class="apologetics-breadcrumbs" aria-label="Breadcrumb">
+              <button class="apologetics-breadcrumb-link" data-apologetics-back="apologetics">Apologetics</button>
+              <span>/</span>
+              <button class="apologetics-breadcrumb-link" data-apologetics-back="apologetics-track" data-apologetics-topic-breadcrumb>Islam</button>
+              <span>/</span>
+              <span class="apologetics-breadcrumb-current" data-apologetics-topic-title>Topic</span>
+            </nav>
+            <button class="icon-button" data-apologetics-copy aria-label="Copy short answer">
+              <i data-lucide="copy"></i>
+            </button>
+          </header>
+
+          <div class="apologetics-topic-tabs" data-apologetics-topic-tabs>
+            <button class="is-active" data-apologetics-topic-tab="introduction">Introduction</button>
+            <button data-apologetics-topic-tab="chat">Start Debate</button>
+          </div>
+
+          <section class="apologetics-detail-panel" data-apologetics-detail></section>
+          <section class="apologetics-panel apologetics-chat-panel" hidden>
+            <div class="section-heading">
+              <h2>Start Debate</h2>
+            </div>
+            <div class="apologetics-chat-tabs" data-apologetics-chat-tabs>
+              <button class="is-active" data-apologetics-chat-tab="muslim">From Muslim</button>
+              <button data-apologetics-chat-tab="coach">From Coach</button>
+            </div>
+            <div class="apologetics-chat-thread" data-apologetics-chat-thread></div>
+            <form class="apologetics-chat-composer" data-apologetics-chat-form>
+              <textarea rows="1" placeholder="Write your argument..." aria-label="Write your apologetics response"></textarea>
+              <button aria-label="Send apologetics message"><i data-lucide="send"></i></button>
+            </form>
+          </section>
+        </section>
+
+        <section id="profile" class="screen profile-screen" data-screen>
+          <article class="profile-hero">
+            <img src="assets/profile-hero.png" alt="" />
+            <div class="profile-hero-overlay">
+              <div class="profile-avatar" data-profile-avatar>CB</div>
+              <div>
+                <p class="eyebrow">Profile</p>
+                <h1 data-profile-name>Charles</h1>
+                <p data-profile-streak>18 days in Scripture</p>
+              </div>
+            </div>
+          </article>
+
+          <section class="profile-info-section" aria-labelledby="profile-info-title">
+            <div class="preference-heading">
+              <h2 id="profile-info-title">Informations</h2>
+              <span>Identity</span>
+            </div>
+
+            <div class="profile-info-card">
+              <div class="profile-account-grid">
+                <article class="profile-account-tile">
+                  <span>Authentication</span>
+                  <strong data-profile-auth-status>Local profile</strong>
+                </article>
+                <article class="profile-account-tile">
+                  <span>Storage</span>
+                  <strong data-profile-storage-status>Local only</strong>
+                </article>
+                <article class="profile-account-tile">
+                  <span>Account ID</span>
+                  <strong data-profile-account-id>local-charles</strong>
+                </article>
+              </div>
+
+              <form class="profile-info-form" data-profile-form>
+                <label class="profile-field">
+                  <span>Display name</span>
+                  <input type="text" name="displayName" maxlength="40" placeholder="Your name" />
+                </label>
+
+                <label class="profile-field">
+                  <span>Email</span>
+                  <input type="email" name="email" maxlength="120" placeholder="you@example.com" />
+                </label>
+
+                <label class="profile-field">
+                  <span>Avatar initials</span>
+                  <input type="text" name="avatarInitials" maxlength="3" placeholder="CB" />
+                </label>
+
+                <label class="profile-field profile-field-wide">
+                  <span>Bio</span>
+                  <textarea name="bio" rows="4" maxlength="220" placeholder="Tell a few words about your focus, ministry, or study goals."></textarea>
+                </label>
+
+                <div class="profile-info-actions">
+                  <button type="submit" class="profile-save-button">Save information</button>
+                  <p data-profile-form-feedback>These details stay on this device until Supabase auth is connected.</p>
+                </div>
+              </form>
+            </div>
+          </section>
+
+          <section class="preference-section" aria-labelledby="appearance-title">
+            <div class="preference-heading">
+              <h2 id="appearance-title">Preferences</h2>
+              <span>Local</span>
+            </div>
+
+            <div class="preference-card">
+              <div class="preference-copy">
+                <i data-lucide="image"></i>
+                <div>
+                  <strong>Background</strong>
+                  <p>Choose the reading atmosphere.</p>
+                </div>
+              </div>
+              <div class="segmented-control" data-background-options>
+                <button data-background-option="dark">Dark</button>
+                <button data-background-option="black">Black</button>
+                <button data-background-option="warm">Warm</button>
+                <button data-background-option="navy">Navy</button>
+                <button data-background-option="forest">Forest</button>
+                <button data-background-option="wine">Wine</button>
+                <button data-background-option="slate">Slate</button>
+                <button data-background-option="ivory">Ivory</button>
+                <button data-background-option="paper">Paper</button>
+              </div>
+            </div>
+
+            <div class="preference-card">
+              <div class="preference-copy">
+                <i data-lucide="type"></i>
+                <div>
+                  <strong>Text size</strong>
+                  <p>Adjust Bible reading text.</p>
+                </div>
+              </div>
+              <div class="segmented-control" data-text-size-options>
+                <button data-text-size-option="xs">XS</button>
+                <button data-text-size-option="small">S</button>
+                <button data-text-size-option="medium">M</button>
+                <button data-text-size-option="large">L</button>
+                <button data-text-size-option="xl">XL</button>
+              </div>
+              <div class="text-size-preview" aria-label="Text size preview">
+                <span>Jean 3:16</span>
+                <p><sup>16</sup> Car Dieu a tant aimé le monde qu'il a donné son Fils unique.</p>
+              </div>
+            </div>
+
+            <div class="preference-card">
+              <div class="preference-copy">
+                <i data-lucide="palette"></i>
+                <div>
+                  <strong>Accent color</strong>
+                  <p>Change the current electric blue.</p>
+                </div>
+              </div>
+              <div class="accent-swatches" data-accent-options aria-label="Accent color">
+                <button data-accent-option="electric-blue" style="--swatch: #00e5ff" aria-label="Electric blue"></button>
+                <button data-accent-option="violet" style="--swatch: #9d7cff" aria-label="Violet"></button>
+                <button data-accent-option="lime" style="--swatch: #baff29" aria-label="Lime"></button>
+                <button data-accent-option="pink" style="--swatch: #ff4fc3" aria-label="Pink"></button>
+                <button data-accent-option="amber" style="--swatch: #ffb020" aria-label="Amber"></button>
+              </div>
+            </div>
+          </section>
+
+          <section class="profile-library" aria-label="Library">
+            <button data-profile-view="bookmarks"><i data-lucide="bookmark"></i><span>Bookmarks</span><i data-lucide="chevron-right"></i></button>
+            <button data-profile-view="highlights"><i data-lucide="highlighter"></i><span>Highlights</span><i data-lucide="chevron-right"></i></button>
+          </section>
+          <section class="profile-saved-panel" data-profile-saved-panel hidden></section>
+        </section>
+
+        <button class="apologetics-begin-button is-disabled" data-apologetics-begin aria-disabled="true" hidden>Continue Learning</button>
+
+        <nav class="bottom-nav" aria-label="Primary navigation">
+          <button class="is-active" data-nav="home"><i data-lucide="home"></i><span>Home</span></button>
+          <button data-nav="bible"><i data-lucide="book-open"></i><span>Bible</span></button>
+          <button data-nav="ai"><i data-lucide="sparkles"></i><span>AI</span></button>
+          <button data-nav="apologetics"><i data-lucide="shield"></i><span>Apologetics</span></button>
+          <button data-nav="profile"><i data-lucide="user-round"></i><span>Profile</span></button>
+        </nav>
+
+      <div class="modal-layer" data-modal-layer hidden>
+        <section class="search-panel" data-search-panel role="dialog" aria-modal="true" aria-label="Universal Search">
+          <div class="modal-handle" aria-hidden="true"></div>
+          <div class="search-field">
+            <i data-lucide="search"></i>
+            <input type="search" placeholder="Verse, topic, word, person, place..." />
+            <button data-close-modal aria-label="Close"><i data-lucide="x"></i></button>
+          </div>
+          <div class="search-suggestions">
+            <p class="label">Recent</p>
+            <button>Romans 8</button>
+            <button>Anxiety</button>
+            <button>David</button>
+            <button>Greek agape</button>
+          </div>
+          <div class="result-list">
+            <article>
+              <span>Verse</span>
+              <strong>Philippians 4:6</strong>
+              <p>Be careful for nothing; but in every thing by prayer...</p>
+            </article>
+            <article>
+              <span>Topic</span>
+              <strong>Peace</strong>
+              <p>86 verses, 12 plans, 4 apologetics notes</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="bottom-sheet" data-verse-sheet role="dialog" aria-modal="true" aria-label="Verse Actions">
+          <div class="modal-handle" aria-hidden="true"></div>
+          <div class="sheet-title">
+            <span data-selected-verse>John 15:5</span>
+            <button data-close-modal aria-label="Close"><i data-lucide="x"></i></button>
+          </div>
+          <div class="action-grid">
+            <button data-verse-action="highlight"><i data-lucide="highlighter"></i><span>Highlight</span></button>
+            <button data-verse-action="copy"><i data-lucide="copy"></i><span>Copy</span></button>
+            <button data-verse-action="share"><i data-lucide="share"></i><span>Share</span></button>
+            <button data-verse-action="bookmark"><i data-lucide="bookmark"></i><span>Bookmark</span></button>
+            <button data-verse-action="note"><i data-lucide="notebook-pen"></i><span>Note</span></button>
+            <button data-verse-action="ask-ai"><i data-lucide="sparkles"></i><span>Ask AI</span></button>
+            <button data-verse-action="original-language"><i data-lucide="languages"></i><span>Greek</span></button>
+            <button data-verse-action="compare"><i data-lucide="git-compare"></i><span>Compare</span></button>
+            <button data-verse-action="parallel"><i data-lucide="columns-3"></i><span>Parallèle</span></button>
+            <button data-verse-action="target"><i data-lucide="crosshair"></i><span>Cible</span></button>
+          </div>
+          <p class="sheet-feedback" data-sheet-feedback aria-live="polite"></p>
+          <div class="verse-detail-panel" data-verse-detail hidden></div>
+        </section>
+
+        <section class="verse-ai-panel" data-verse-ai-panel role="dialog" aria-modal="true" aria-label="Verse AI Chat">
+          <header class="verse-ai-header">
+            <div>
+              <span>Verse AI</span>
+              <strong data-verse-ai-reference>John 3:16</strong>
+            </div>
+            <button data-close-modal aria-label="Close"><i data-lucide="x"></i></button>
+          </header>
+          <blockquote data-verse-ai-context></blockquote>
+          <div class="verse-ai-thread" data-verse-ai-thread></div>
+          <form class="verse-ai-composer" data-verse-ai-form>
+            <input type="text" placeholder="Ask about this verse..." aria-label="Ask about this verse" />
+            <button aria-label="Send"><i data-lucide="send"></i></button>
+          </form>
+        </section>
+
+      </div>
+      </main>
+    </div>
+  </body>
+</html>
