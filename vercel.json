@@ -1,7 +1,6 @@
 {
   "functions": {
     "server.mjs": {
-      "runtime": "@vercel/node",
       "includeFiles": "{assets/**,lib/**,index.html,styles.css,script.js,bible-data.js}"
     }
   },
