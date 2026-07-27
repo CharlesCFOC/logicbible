@@ -469,7 +469,7 @@ async function serveStatic(req, res) {
   }
 }
 
-const server = createServer(async (req, res) => {
+async function requestHandler(req, res) {
   try {
     if (req.url.startsWith("/api/bible/versions")) {
       await handleVersions(res);
@@ -505,8 +505,13 @@ const server = createServer(async (req, res) => {
   } catch (error) {
     sendJson(res, error.status || 500, { error: error.message || "Server error" });
   }
-});
+}
 
-server.listen(port, () => {
-  console.log(`Brother Bible AI running at http://localhost:${port}/`);
-});
+export default requestHandler;
+
+if (!process.env.VERCEL) {
+  const server = createServer(requestHandler);
+  server.listen(port, () => {
+    console.log(`Brother Bible AI running at http://localhost:${port}/`);
+  });
+}
