@@ -3915,7 +3915,20 @@ p {
     padding: 24px 18px calc(var(--bottom-nav-offset) + var(--ai-composer-height));
   }
 
+  .bottom-nav {
+    position: fixed;
+    right: 0;
+    bottom: var(--system-bottom-clearance);
+    left: 0;
+    width: 100vw;
+  }
+
   .composer {
+    position: fixed;
+    right: 0;
+    bottom: var(--bottom-nav-offset);
+    left: 0;
+    width: 100vw;
     padding: 10px 18px;
   }
 
