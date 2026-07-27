@@ -4,7 +4,6 @@
       "runtime": "@vercel/node",
       "includeFiles": [
         "assets/**",
-        "data/**",
         "lib/**",
         "index.html",
         "styles.css",
