@@ -691,7 +691,7 @@ const apologeticsChatState = {
   pendingKeys: {},
 };
 const apologeticsOverviewState = {
-  featuredExpanded: false,
+  featuredOpenTrackId: "",
   trackFrameworkOpen: {},
 };
 let apologeticsChatRequestId = 0;
@@ -1432,18 +1432,20 @@ function renderApologeticsFeaturedTopics() {
     return;
   }
 
-  apologeticsTopics.innerHTML = apologeticsTracksData.map((track, index) => {
+  apologeticsTopics.innerHTML = apologeticsTracksData.map((track) => {
     const featuredTopics = track.topics.slice(0, 3);
-    const isCollapsible = index === 0;
-    const isExpanded = !isCollapsible || apologeticsOverviewState.featuredExpanded;
+    const isExpanded = apologeticsOverviewState.featuredOpenTrackId === track.id;
     return `
-      <section class="apologetics-featured-group${isCollapsible ? " is-collapsible" : ""}${isExpanded ? " is-expanded" : ""}">
-        <div class="section-heading apologetics-featured-group-heading">
-          <h3>${escapeHtml(track.title)}</h3>
-          <span>${featuredTopics.length}</span>
-        </div>
-        <div class="apologetics-topic-carousel-wrap">
-          <div class="apologetics-topic-carousel">
+      <section class="apologetics-featured-group${isExpanded ? " is-expanded" : ""}">
+        <button class="section-heading apologetics-featured-group-heading" data-apologetics-featured-toggle="${escapeAttr(track.id)}" aria-expanded="${isExpanded ? "true" : "false"}">
+          <span class="apologetics-featured-group-heading-copy">
+            <h3>${escapeHtml(track.title)}</h3>
+            <span>${featuredTopics.length}</span>
+          </span>
+          <i data-lucide="chevron-down"></i>
+        </button>
+        <div class="apologetics-topic-dropdown"${isExpanded ? "" : " hidden"}>
+          <div class="apologetics-topic-dropdown-list">
           ${featuredTopics.map((topic) => `
             <button class="apologetics-topic-card apologetics-topic-card--carousel" data-apologetics-topic="${escapeAttr(topic.id)}" data-apologetics-track-jump="${escapeAttr(track.id)}">
               <span class="apologetics-topic-meta">
@@ -1459,11 +1461,6 @@ function renderApologeticsFeaturedTopics() {
             </button>
           `).join("")}
           </div>
-          ${isCollapsible && !isExpanded ? `
-            <button class="apologetics-carousel-expand" data-apologetics-featured-toggle aria-label="Expand featured topics">
-              <span>+</span>
-            </button>
-          ` : ""}
         </div>
       </section>
     `;
@@ -3638,7 +3635,8 @@ apologeticsFilters?.addEventListener("click", (event) => {
 apologeticsTopics?.addEventListener("click", (event) => {
   const toggleButton = event.target.closest("[data-apologetics-featured-toggle]");
   if (toggleButton) {
-    apologeticsOverviewState.featuredExpanded = !apologeticsOverviewState.featuredExpanded;
+    const trackId = toggleButton.dataset.apologeticsFeaturedToggle || "";
+    apologeticsOverviewState.featuredOpenTrackId = apologeticsOverviewState.featuredOpenTrackId === trackId ? "" : trackId;
     renderApologeticsFeaturedTopics();
     refreshIcons();
     return;
