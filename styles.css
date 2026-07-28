@@ -1644,13 +1644,38 @@ p {
   margin-bottom: 18px;
 }
 
+.apologetics-primary-heading {
+  display: grid;
+  gap: 8px;
+}
+
+.apologetics-primary-heading .eyebrow {
+  margin-bottom: 0;
+}
+
+.apologetics-primary-heading h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 28px;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+}
+
+.apologetics-primary-heading p {
+  max-width: 34ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.58;
+}
+
 .apologetics-challenge-button {
   display: grid;
   gap: 12px;
   width: 100%;
-  padding: 18px;
+  padding: 16px;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
+  border-radius: 18px;
   background:
     radial-gradient(circle at top right, rgba(0, 229, 255, 0.16), transparent 36%),
     linear-gradient(145deg, rgba(19, 25, 40, 0.98), rgba(12, 16, 29, 0.98));
@@ -1686,14 +1711,14 @@ p {
 .apologetics-challenge-button h3 {
   margin: 0;
   color: #f3f8ff;
-  font-size: 22px;
+  font-size: 20px;
   line-height: 1.12;
 }
 
 .apologetics-challenge-button p {
   margin: 0;
   color: rgba(224, 236, 252, 0.88);
-  line-height: 1.62;
+  line-height: 1.58;
 }
 
 .apologetics-overview-strip {
@@ -2056,9 +2081,9 @@ p {
 
 .apologetics-track-carousel {
   display: flex;
-  gap: 12px;
+  gap: 14px;
   overflow-x: auto;
-  padding: 2px 0 8px;
+  padding: 4px 0 12px;
   scrollbar-width: none;
   scroll-snap-type: x proximity;
 }
@@ -2068,12 +2093,12 @@ p {
 }
 
 .apologetics-track-card {
-  flex: 0 0 78%;
+  flex: 0 0 86%;
   display: grid;
-  gap: 10px;
-  padding: 16px;
+  gap: 12px;
+  padding: 18px;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 18px;
+  border-radius: 22px;
   background:
     radial-gradient(circle at top right, rgba(0, 229, 255, 0.18), transparent 34%),
     rgba(255, 255, 255, 0.03);
@@ -2082,7 +2107,7 @@ p {
   text-justify: inter-word;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    0 16px 34px rgba(0, 0, 0, 0.22);
+    0 20px 40px rgba(0, 0, 0, 0.24);
   scroll-snap-align: start;
 }
 
@@ -2127,7 +2152,7 @@ p {
 
 .apologetics-track-card > strong {
   color: #f8fbff;
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .apologetics-track-card p {
@@ -2189,9 +2214,9 @@ p {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 38px;
+  min-height: 40px;
   width: fit-content;
-  padding: 0 14px;
+  padding: 0 16px;
   border-radius: 999px;
   color: #071712;
   background: rgba(127, 240, 173, 0.96);
