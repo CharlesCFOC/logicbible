@@ -1504,22 +1504,22 @@ function renderApologeticsProgress() {
 
   const overview = getApologeticsOverviewProgress();
   apologeticsProgress.innerHTML = `
-    <article class="apologetics-progress-card">
+    <article class="apologetics-progress-card apologetics-progress-card--cyan">
       <small>Overall Completion</small>
       <strong>${overview.overallPercent}%</strong>
       <span>Across all apologetics tracks</span>
     </article>
-    <article class="apologetics-progress-card">
+    <article class="apologetics-progress-card apologetics-progress-card--green">
       <small>Topics Completed</small>
       <strong>${overview.completedCount}/${overview.totalTopics}</strong>
       <span>Finished lessons so far</span>
     </article>
-    <article class="apologetics-progress-card">
+    <article class="apologetics-progress-card apologetics-progress-card--violet">
       <small>Current Streak</small>
       <strong>${overview.streak}</strong>
       <span>Consecutive active days</span>
     </article>
-    <article class="apologetics-progress-card">
+    <article class="apologetics-progress-card apologetics-progress-card--amber">
       <small>XP Earned</small>
       <strong>${overview.xpEarned}</strong>
       <span>Training points collected</span>
