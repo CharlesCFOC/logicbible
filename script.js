@@ -1432,10 +1432,6 @@ function renderApologeticsFeaturedTopics() {
     return;
   }
 
-  if (!apologeticsOverviewState.featuredOpenTrackId && apologeticsTracksData[0]) {
-    apologeticsOverviewState.featuredOpenTrackId = apologeticsTracksData[0].id;
-  }
-
   apologeticsTopics.innerHTML = apologeticsTracksData.map((track) => {
     const featuredTopics = track.topics.slice(0, 3);
     const isExpanded = apologeticsOverviewState.featuredOpenTrackId === track.id;
