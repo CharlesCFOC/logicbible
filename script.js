@@ -691,7 +691,7 @@ const apologeticsChatState = {
   pendingKeys: {},
 };
 const apologeticsOverviewState = {
-  featuredOpenTrackId: "",
+  featuredOpenTrackId: "islam",
   trackFrameworkOpen: {},
 };
 let apologeticsChatRequestId = 0;
@@ -1432,6 +1432,10 @@ function renderApologeticsFeaturedTopics() {
     return;
   }
 
+  if (!apologeticsOverviewState.featuredOpenTrackId && apologeticsTracksData[0]) {
+    apologeticsOverviewState.featuredOpenTrackId = apologeticsTracksData[0].id;
+  }
+
   apologeticsTopics.innerHTML = apologeticsTracksData.map((track) => {
     const featuredTopics = track.topics.slice(0, 3);
     const isExpanded = apologeticsOverviewState.featuredOpenTrackId === track.id;
@@ -1439,10 +1443,14 @@ function renderApologeticsFeaturedTopics() {
       <section class="apologetics-featured-group${isExpanded ? " is-expanded" : ""}">
         <button class="section-heading apologetics-featured-group-heading" data-apologetics-featured-toggle="${escapeAttr(track.id)}" aria-expanded="${isExpanded ? "true" : "false"}">
           <span class="apologetics-featured-group-heading-copy">
+            <small>${escapeHtml(track.level)} track</small>
             <h3>${escapeHtml(track.title)}</h3>
-            <span>${featuredTopics.length}</span>
+            <p>${escapeHtml(track.description)}</p>
           </span>
-          <i data-lucide="chevron-down"></i>
+          <span class="apologetics-featured-group-heading-side">
+            <span>${featuredTopics.length}</span>
+            <i data-lucide="chevron-down"></i>
+          </span>
         </button>
         <div class="apologetics-topic-dropdown"${isExpanded ? "" : " hidden"}>
           <div class="apologetics-topic-dropdown-list">
@@ -1458,6 +1466,7 @@ function renderApologeticsFeaturedTopics() {
                 <small>${formatMinutes(getTopicEstimatedMinutes(topic))}</small>
                 <small>${getTopicCompletionState(topic.id)}</small>
               </span>
+              <span class="apologetics-topic-open">Open topic</span>
             </button>
           `).join("")}
           </div>
