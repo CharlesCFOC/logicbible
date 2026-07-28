@@ -674,6 +674,159 @@ p {
   color: var(--ink);
 }
 
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-breadcrumbs,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-breadcrumbs {
+  color: rgba(80, 71, 58, 0.72);
+}
+
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-breadcrumb-current,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-breadcrumb-current {
+  color: var(--ink);
+}
+
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-challenge-button,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-challenge-button,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-progress-card,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-progress-card,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-progress-panel,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-progress-panel,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-rewards,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-rewards,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-quick,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-quick,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-framework-grid section,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-framework-grid section,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-rewards-grid span,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-rewards-grid span,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-topic-card,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-topic-card,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-chat-empty,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-chat-empty,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-chat-composer,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-chat-composer {
+  border-color: var(--line);
+  background: var(--bg-soft);
+}
+
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-progress-card,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-progress-card {
+  background: transparent;
+}
+
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-challenge-top small,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-challenge-top small,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-challenge-meta span,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-challenge-meta span,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-progress-card small,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-progress-card small,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-progress-card span,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-progress-card span,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-hero-progress-top span,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-hero-progress-top span,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-rewards-head span,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-rewards-head span,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-progress-copy p,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-progress-copy p,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-framework-grid p,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-framework-grid p,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-rewards-grid small,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-rewards-grid small,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-selection-line,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-selection-line,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-card-top,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-card-top,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-card-top small,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-card-top small,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-card p,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-card p,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-card-metrics small,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-card-metrics small,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-topic-meta-row small,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-topic-meta-row small,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-topic-status,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-topic-status,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-intro-header .apologetics-summary,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-intro-header .apologetics-summary,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-intro-block p,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-intro-block p {
+  color: var(--muted);
+}
+
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-challenge-button h3,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-challenge-button h3,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-challenge-button p,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-challenge-button p,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-progress-card strong,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-progress-card strong,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-hero-copy h2,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-hero-copy h2,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-hero-copy p,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-hero-copy p,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-hero-progress-top strong,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-hero-progress-top strong,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-progress-copy strong,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-progress-copy strong,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-rewards-head strong,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-rewards-head strong,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-quick-head strong,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-quick-head strong,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-framework-detail h3,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-framework-detail h3,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-framework-grid strong,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-framework-grid strong,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-rewards-grid strong,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-rewards-grid strong,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-selection-line.is-active,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-selection-line.is-active,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-card > strong,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-card > strong,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-card-metrics strong,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-card-metrics strong,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-topic-card > strong,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-topic-card > strong,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-chat-empty strong,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-chat-empty strong,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-intro-header h2,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-intro-header h2,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-intro-block strong,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-intro-block strong {
+  color: var(--ink);
+}
+
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-card,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-card,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-topic-card {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-card,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-card,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-topic-card,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-topic-card,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-hero--track,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-hero--track {
+  background: var(--bg-soft);
+}
+
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-topic-meta-row small,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-topic-meta-row small,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-topic-status,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-topic-status,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-quick-steps button,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-quick-steps button,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-chat-tabs,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-chat-tabs,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-topic-tabs,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-topic-tabs {
+  background: rgba(29, 26, 22, 0.04);
+}
+
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-quick-steps button,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-quick-steps button {
+  color: var(--ink);
+  border-color: var(--line);
+}
+
 .reader-screen {
   background: #fffdf9;
 }
@@ -1570,10 +1723,8 @@ p {
   padding: 14px 12px 12px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.025);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 10px 22px rgba(0, 0, 0, 0.18);
+  background: transparent;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
   scroll-snap-align: start;
 }
 
