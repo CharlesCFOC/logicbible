@@ -1,40 +1,50 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap");
+
 :root {
-  color-scheme: dark;
+  color-scheme: light;
   --system-bottom-clearance: env(safe-area-inset-bottom);
   --bottom-nav-height: calc(68px + env(safe-area-inset-bottom));
   --bottom-nav-offset: var(--bottom-nav-height);
   --ai-composer-height: 64px;
-  --bg: #f8f5ef;
-  --bg-soft: #f1ece3;
-  --ink: #1d1a16;
-  --muted: #746d62;
-  --line: #ddd4c6;
-  --gold: #00e5ff;
-  --gold-soft: rgba(0, 229, 255, 0.16);
-  --green: #3d8b5c;
+  --font-body: "Manrope", -apple-system, BlinkMacSystemFont, "SF Pro Text", Segoe UI, sans-serif;
+  --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --bg: #fffdf8;
+  --bg-soft: #f6f1e9;
+  --ink: #201c17;
+  --muted: #7b6f62;
+  --line: #e9dfd1;
+  --gold: #8a7764;
+  --gold-soft: rgba(181, 159, 131, 0.12);
+  --cool: #8a7764;
+  --cool-soft: rgba(181, 159, 131, 0.16);
+  --green: #7a7d6f;
   --green-soft: #e8f1ec;
-  --warning: #00bfff;
+  --warning: #8d6a42;
   --error: #c84747;
-  --beige: #f2eadc;
-  --accent-contrast: #03191d;
-  --shadow: 0 24px 70px rgba(31, 24, 11, 0.12);
-  --radius: 8px;
-  --tap: 48px;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", Inter, Segoe UI, sans-serif;
+  --beige: #f1ece1;
+  --sky: #877868;
+  --mint: #8b8477;
+  --violet: #8c7d70;
+  --peach: #a18f7b;
+  --accent-contrast: #0f1720;
+  --shadow: 0 4px 10px rgba(47, 60, 74, 0.014);
+  --radius: 32px;
+  --tap: 52px;
+  font-family: var(--font-body);
 }
 
 .app-shell[data-theme="dark"] {
   color: var(--ink);
-  --bg: #121212;
-  --bg-soft: #1b1b1a;
-  --ink: #f4f1ea;
-  --muted: #a9a49c;
-  --line: #2d2b27;
-  --gold-soft: rgba(0, 229, 255, 0.16);
-  --green-soft: rgba(61, 139, 92, 0.16);
-  --beige: rgba(0, 229, 255, 0.16);
+  --bg: #fcfdff;
+  --bg-soft: #f5f7fa;
+  --ink: #18212b;
+  --muted: #7b6f62;
+  --line: #e9dfd1;
+  --gold-soft: rgba(181, 159, 131, 0.12);
+  --green-soft: rgba(111, 125, 106, 0.12);
+  --beige: rgba(240, 244, 248, 0.98);
   --reader-text-size: 19px;
-  --shadow: 0 24px 70px rgba(0, 0, 0, 0.36);
+  --shadow: 0 4px 10px rgba(47, 60, 74, 0.014);
 }
 
 * {
@@ -43,17 +53,19 @@
 
 html {
   min-height: 100%;
-  background: #f3eee5;
+  background: #f4f7fb;
 }
 
 body {
   min-height: 100vh;
   margin: 0;
   color: var(--ink);
+  font-family: var(--font-body);
   background:
-    radial-gradient(circle at 56% 8%, rgba(0, 229, 255, 0.06) 0, rgba(0, 229, 255, 0) 28%),
-    radial-gradient(circle at 18% 72%, rgba(61, 139, 92, 0.05) 0, rgba(61, 139, 92, 0) 30%),
-    linear-gradient(135deg, #f8f4ec, #f2ede4 52%, #ebe4d8);
+    radial-gradient(circle at top center, rgba(255, 253, 249, 0.98) 0%, rgba(255, 253, 249, 0.96) 34%, rgba(255, 253, 249, 0) 64%),
+    radial-gradient(circle at 18% 18%, rgba(245, 236, 223, 0.36) 0%, rgba(245, 236, 223, 0) 26%),
+    radial-gradient(circle at 82% 72%, rgba(238, 228, 216, 0.28) 0%, rgba(238, 228, 216, 0) 24%),
+    linear-gradient(135deg, #ffffff 0%, #fdf8f1 46%, #f1e7db 100%);
 }
 
 button,
@@ -79,30 +91,30 @@ svg {
   position: relative;
   isolation: isolate;
   display: grid;
-  grid-template-columns: 72px minmax(320px, 430px);
+  grid-template-columns: minmax(0, 394px);
   justify-content: center;
   align-content: center;
-  gap: 22px;
-  width: min(760px, calc(100vw - 48px));
+  gap: 12px;
+  width: min(424px, calc(100vw - 12px));
   margin: 0 auto;
   min-height: 100vh;
-  padding: 24px;
+  padding: 16px 0 14px;
 }
 
 .app-shell::before {
   position: absolute;
-  inset: 18px -26px;
+  inset: 4px -42px;
   z-index: 0;
   pointer-events: none;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 52px;
+  border: 1px solid rgba(221, 227, 234, 0.001);
+  border-radius: 188px;
   background:
-    linear-gradient(90deg, rgba(250, 247, 241, 0.94), rgba(243, 237, 227, 0.9) 44%, rgba(236, 228, 216, 0.92)),
-    repeating-linear-gradient(90deg, rgba(26, 26, 26, 0.035) 0 1px, transparent 1px 72px),
-    #f8f4ec;
+    radial-gradient(circle at 50% 0%, rgba(255, 253, 249, 0.998), rgba(255, 253, 249, 0) 54%),
+    radial-gradient(circle at 50% 100%, rgba(242, 233, 220, 0.32), rgba(242, 233, 220, 0) 68%),
+    linear-gradient(180deg, rgba(255, 253, 249, 0.996), rgba(248, 243, 236, 0.9));
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.72),
-    0 34px 120px rgba(52, 42, 27, 0.12);
+    inset 0 1px 0 rgba(255, 255, 255, 0.99),
+    0 10px 22px rgba(46, 58, 72, 0.01);
   content: "";
 }
 
@@ -113,17 +125,21 @@ svg {
 }
 
 .side-rail {
-  align-self: center;
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
-  padding: 14px 10px;
-  border: 1px solid rgba(255, 250, 242, 0.72);
-  border-radius: 22px;
-  background: rgba(248, 242, 233, 0.78);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(24px);
+  gap: 9px;
+  width: 64px;
+  padding: 12px 8px;
+  border: 1px solid rgba(221, 227, 234, 0.012);
+  border-radius: 40px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(251, 248, 241, 0.985));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.99),
+    0 6px 16px rgba(47, 60, 74, 0.008),
+    0 0 0 1px rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(8px);
 }
 
 .brand-mark,
@@ -132,16 +148,20 @@ svg {
   display: grid;
   place-items: center;
   border-radius: 50%;
-  color: #fff;
-  background: #1d2a24;
+  color: var(--ink);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.988));
+  border: 1px solid rgba(221, 227, 234, 0.02);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.99),
+    0 2px 4px rgba(47, 60, 74, 0.001);
 }
 
 .brand-mark {
-  width: 42px;
-  height: 42px;
-  margin-bottom: 8px;
-  font-family: Georgia, serif;
-  font-size: 22px;
+  width: 34px;
+  height: 34px;
+  margin-bottom: 6px;
+  font-family: var(--font-display);
+  font-size: 18px;
 }
 
 .rail-button,
@@ -158,8 +178,11 @@ svg {
 .rail-button.is-active,
 .icon-button:hover,
 .bottom-nav button.is-active {
-  color: var(--gold);
-  background: var(--gold-soft);
+  color: var(--ink);
+  background: linear-gradient(180deg, rgba(241, 234, 223, 0.95), rgba(255, 255, 255, 0.82));
+  box-shadow:
+    inset 0 0 0 1px rgba(221, 227, 234, 0.06),
+    0 0 10px rgba(181, 159, 131, 0.02);
 }
 
 .app-shell[data-theme="dark"] .side-rail,
@@ -170,11 +193,25 @@ svg {
   background: rgba(18, 18, 18, 0.88);
 }
 
+.app-shell[data-theme="dark"][data-app-background] .side-rail,
+.app-shell[data-theme="dark"][data-app-background] .bottom-nav,
+.app-shell[data-theme="dark"][data-app-background] .composer {
+  border-color: rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(180deg, rgba(18, 24, 31, 0.98), rgba(10, 13, 18, 0.98));
+}
+
 .app-shell[data-theme="dark"] .side-rail {
   box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.65),
-    0 24px 80px rgba(0, 0, 0, 0.62),
-    0 0 48px rgba(0, 229, 255, 0.08);
+    0 0 0 1px rgba(47, 60, 74, 0.04),
+    0 4px 10px rgba(47, 60, 74, 0.03),
+    0 0 20px rgba(181, 159, 131, 0.02);
+}
+
+.app-shell[data-theme="dark"][data-app-background] .side-rail {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 10px 24px rgba(12, 16, 22, 0.14);
 }
 
 .app-shell[data-theme="dark"] .side-rail,
@@ -186,33 +223,38 @@ svg {
 .phone-frame {
   position: relative;
   overflow: hidden;
-  width: min(100%, 430px);
-  height: min(900px, calc(100vh - 48px));
-  min-height: min(900px, calc(100vh - 48px));
-  max-height: 900px;
-  border: 1px solid rgba(255, 255, 255, 0.82);
-  border-radius: 36px;
-  background: var(--bg);
-  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 392px);
+  height: min(862px, calc(100vh - 20px));
+  min-height: min(862px, calc(100vh - 20px));
+  max-height: 862px;
+  border: 1px solid rgba(221, 227, 234, 0.2);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 253, 249, 0.999), rgba(255, 253, 249, 0) 34%),
+    linear-gradient(180deg, rgba(255, 253, 249, 0.999), rgba(250, 246, 240, 0.988));
+  box-shadow:
+    0 16px 34px rgba(46, 58, 72, 0.004),
+    0 0 0 1px rgba(255, 255, 255, 0.22);
 }
 
 .app-shell[data-theme="dark"] .phone-frame {
-  border-color: rgba(255, 255, 255, 0.18);
+  border-color: rgba(222, 228, 234, 0.98);
   background:
-    linear-gradient(#121212, #121212) padding-box,
-    linear-gradient(160deg, rgba(255, 255, 255, 0.2), rgba(0, 229, 255, 0.18), rgba(255, 255, 255, 0.06)) border-box;
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.995), rgba(255, 255, 255, 0) 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(245, 248, 251, 0.995));
   box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.72),
-    0 34px 110px rgba(0, 0, 0, 0.74),
-    0 0 70px rgba(0, 229, 255, 0.1);
+    0 14px 30px rgba(47, 60, 74, 0.024),
+    0 0 0 1px rgba(255, 255, 255, 0.42);
 }
 
 .screen {
   display: none;
-  height: 100%;
-  min-height: min(900px, calc(100vh - 48px));
+  flex: 1 1 auto;
+  min-height: 0;
   overflow-y: auto;
-  padding: 28px 22px 168px;
+  padding: 18px 14px 118px;
   scrollbar-width: none;
 }
 
@@ -223,6 +265,18 @@ svg {
 .screen.is-active {
   display: block;
   animation: screenIn 180ms ease;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 @keyframes screenIn {
@@ -247,13 +301,237 @@ svg {
   gap: 14px;
 }
 
+.home-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 32px;
+  padding: 6px 2px 0;
+}
+
+.home-hero .icon-button {
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  box-shadow: none;
+  color: rgba(114, 101, 90, 0.72);
+}
+
+.home-hero .icon-button:hover {
+  background: transparent;
+  box-shadow: none;
+  color: var(--ink);
+}
+
+.home-title {
+  margin: 0;
+  padding: 12px 2px 16px;
+  text-align: center;
+  color: #232526;
+  font-family: var(--font-display);
+  font-size: clamp(40px, 5.4vw, 58px);
+  line-height: 0.88;
+  letter-spacing: -0.04em;
+  font-weight: 600;
+}
+
+.home-hero-image {
+  position: relative;
+  min-height: 390px;
+  margin: -18px 0 18px;
+  overflow: hidden;
+  border: 3px solid #fff;
+  border-radius: 42px;
+  background: #c7b49d;
+}
+
+.home-hero-image img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(0.84) brightness(0.94) contrast(0.94);
+}
+
+.home-hero-image::after {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(17, 18, 18, 0.04) 0%, rgba(17, 18, 18, 0.03) 42%, rgba(17, 18, 18, 0.62) 100%),
+    linear-gradient(90deg, rgba(17, 18, 18, 0.18), transparent 62%);
+  content: "";
+}
+
+.home-hero-image-copy {
+  position: absolute;
+  right: 22px;
+  bottom: 26px;
+  left: 22px;
+  z-index: 1;
+  display: grid;
+  gap: 7px;
+  align-content: end;
+  max-width: 300px;
+  color: #fffdf8;
+}
+
+.home-hero-image-copy span {
+  color: rgba(255, 253, 248, 0.78);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.home-hero-image-copy h1 {
+  margin: 0;
+  color: #fffdf8;
+  font-family: var(--font-body);
+  font-size: clamp(28px, 7vw, 38px);
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+}
+
+.home-hero-image-copy p {
+  max-width: 27ch;
+  margin: 0;
+  color: rgba(255, 253, 248, 0.82);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.home-hero-image-copy button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: max-content;
+  min-height: 40px;
+  margin-top: 5px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: #fffdf8;
+  color: #29251f;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.home-hero-image-copy button svg {
+  width: 15px;
+  height: 15px;
+}
+
+.home-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0 0 18px;
+}
+
+.home-content-cards {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 18px;
+}
+
+.home-content-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 104px;
+  padding: 16px;
+  border-radius: 20px;
+  background: #fffdf8;
+  box-shadow: 0 3px 8px rgba(47, 60, 74, 0.025);
+}
+
+.home-content-card > div {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.home-content-card--continue { background: #eeeae4; }
+.home-content-card--verse { background: #e6ece9; }
+
+.home-content-label {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.home-content-card strong {
+  color: var(--ink);
+  font-size: 18px;
+  line-height: 1.15;
+}
+
+.home-content-card--verse strong {
+  max-width: 28ch;
+  font-family: var(--font-display);
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.home-content-card small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.home-content-card button {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 38px;
+  min-height: 38px;
+  border-radius: 50%;
+  background: #fffdf8;
+  color: var(--ink);
+}
+
+.home-content-card button svg { width: 17px; height: 17px; }
+
+.home-stat-card {
+  display: grid;
+  gap: 5px;
+  min-height: 104px;
+  padding: 14px;
+  border: 1px solid rgba(221, 227, 234, 0.06);
+  border-radius: 18px;
+  background: #eeeae4;
+  color: var(--ink);
+}
+
+.home-stat-card--online {
+  background: #e6ece9;
+}
+
+.home-stat-card span,
+.home-stat-card small {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.home-stat-card strong {
+  font-size: 23px;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
 .eyebrow,
 .label {
   margin: 0 0 7px;
-  color: var(--gold);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0;
+  color: var(--cool);
+  font-size: 11px;
+  font-weight: 760;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
@@ -268,22 +546,25 @@ h1 {
   margin-bottom: 0;
   font-size: 30px;
   line-height: 1.06;
-  font-weight: 740;
-  letter-spacing: 0;
+  font-weight: 720;
+  letter-spacing: -0.02em;
+  font-family: var(--font-body);
 }
 
 h2 {
   margin-bottom: 0;
   font-size: 20px;
   line-height: 1.2;
-  letter-spacing: 0;
+  letter-spacing: -0.02em;
+  font-family: var(--font-body);
 }
 
 h3 {
   margin-bottom: 6px;
   font-size: 16px;
   line-height: 1.25;
-  letter-spacing: 0;
+  letter-spacing: -0.01em;
+  font-family: var(--font-body);
 }
 
 p {
@@ -296,7 +577,6 @@ p {
 .screen li,
 .scripture-line,
 .parallel-scripture-column,
-.home-actions button,
 .apologetics-track-card,
 .apologetics-topic-card,
 .apologetics-panel,
@@ -310,237 +590,753 @@ p {
   text-justify: inter-word;
 }
 
-.home-brand {
+.home-focus {
+  display: grid;
+  gap: 9px;
+  margin: 0 0 4px;
+}
+
+.home-luxury-panel {
+  position: relative;
+  display: grid;
+  gap: 10px;
+  padding: 22px 18px 18px;
+  border: 1px solid rgba(221, 227, 234, 0.024);
+  border-radius: 40px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(250, 247, 240, 0.994));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.996),
+    0 6px 14px rgba(47, 60, 74, 0.006);
+  backdrop-filter: blur(4px);
+}
+
+.home-luxury-copy {
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+  text-align: center;
+}
+
+.home-luxury-copy .eyebrow {
+  margin-bottom: 0;
+}
+
+.home-luxury-copy p {
+  max-width: 30ch;
+  margin: 0;
+  color: rgba(122, 111, 99, 0.66);
+  font-size: 9.6px;
+  line-height: 1.5;
+}
+
+.home-mini-tabs-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 7px;
+  align-items: center;
+  padding-inline: 1px;
+  margin-bottom: 0;
+}
+
+.home-mini-tabs {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-top: 0;
+}
+
+.home-mini-tabs button {
+  min-height: 32px;
+  padding: 0 14px;
+  border: 1px solid rgba(221, 227, 234, 0.004);
+  border-radius: 999px;
+  background: rgba(250, 247, 240, 0.96);
+  color: rgba(120, 109, 97, 0.86);
+  font-size: 10px;
+  font-weight: 760;
+}
+
+.home-mini-tabs button.is-active {
+  border-color: rgba(221, 227, 234, 0.04);
+  background: rgba(255, 255, 255, 0.995);
+  color: var(--ink);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.985),
+    0 1px 3px rgba(47, 60, 74, 0.0016);
+}
+
+.home-mini-tabs-more {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  min-height: 24px;
+  padding: 0;
+  border: 1px solid rgba(221, 227, 234, 0.004);
+  border-radius: 50%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(250, 247, 240, 0.97));
+  color: rgba(122, 111, 99, 0.92);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.985),
+    0 1px 3px rgba(47, 60, 74, 0.0011);
+}
+
+.home-mini-tabs-more svg {
+  width: 15px;
+  height: 15px;
+}
+
+.home-icon-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 7px;
+  padding: 0;
+}
+
+.home-icon-grid button {
+  display: grid;
+  place-items: center;
+  gap: 6px;
+  min-height: 60px;
+  padding: 7px 6px 6px;
+  border: 1px solid rgba(221, 227, 234, 0.02);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(250, 247, 240, 0.992));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.985),
+    0 4px 10px rgba(47, 60, 74, 0.004);
+  color: var(--muted);
+  font-size: 9.5px;
+  font-weight: 720;
+  text-align: center;
+}
+
+.home-icon-grid button:nth-child(1) {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(248, 252, 248, 0.98));
+}
+
+.home-icon-grid button:nth-child(2) {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(250, 247, 240, 0.98));
+}
+
+.home-icon-grid button:nth-child(3) {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 245, 238, 0.98));
+}
+
+.home-icon-grid button:nth-child(4) {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(253, 249, 243, 0.98));
+}
+
+.home-icon-grid button:nth-child(5) {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(247, 249, 246, 0.98));
+}
+
+.home-icon-grid svg {
+  color: rgba(122, 111, 99, 0.96);
+}
+
+.home-icon-grid span {
+  color: var(--ink);
+}
+
+.prayer-screen {
+  display: none;
+  gap: 14px;
+}
+
+.prayer-screen.is-active {
+  display: block;
+}
+
+.prayer-page-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  margin-bottom: 16px;
+  padding: 4px;
+  border-radius: 15px;
+  background: #eeeae4;
+}
+
+.prayer-page-tabs button {
+  min-height: 40px;
+  border-radius: 11px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.prayer-page-tabs button.is-active {
+  background: #fffdf8;
+  color: var(--ink);
+  box-shadow: 0 1px 3px rgba(47, 60, 74, 0.04);
+}
+
+.prayer-header {
+  margin-bottom: 16px;
+}
+
+.prayer-header > div {
+  min-width: 0;
+  flex: 1;
+}
+
+.prayer-header h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.prayer-header .eyebrow {
+  margin: 0 0 2px;
+}
+
+.prayer-header-mark {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  min-height: 42px;
+  border-radius: 50%;
+  background: #e6ece9;
+  color: var(--cool);
+}
+
+.prayer-intro {
+  margin: 0 0 12px;
+  padding: 18px;
+  border-radius: 22px;
+  background: #eeeae4;
+}
+
+.prayer-intro .label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.prayer-intro h2 {
+  max-width: 18ch;
+  margin: 0 0 7px;
+  font-size: 24px;
+}
+
+.prayer-intro p {
+  max-width: 34ch;
+  margin: 0;
+  font-size: 13px;
+}
+
+.prayer-compose {
+  display: grid;
+  gap: 9px;
+  margin-bottom: 18px;
+  padding: 14px;
+  border: 1px solid rgba(221, 227, 234, 0.06);
+  border-radius: 18px;
+  background: #f7f5f1;
+}
+
+.prayer-compose > label {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.prayer-compose textarea {
+  width: 100%;
+  min-height: 112px;
+  resize: vertical;
+  padding: 12px;
+  border: 1px solid #ded8cf;
+  border-radius: 13px;
+  outline: 0;
+  background: #fffdf8;
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.prayer-compose textarea:focus {
+  border-color: var(--cool);
+  box-shadow: 0 0 0 3px var(--cool-soft);
+}
+
+.prayer-compose-footer {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
 }
 
-.home-mark {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  color: #f4f1ea;
-  background: #1d2a24;
-  font-family: Georgia, serif;
-  font-size: 21px;
+.prayer-compose-footer small,
+.prayer-form-feedback {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.prayer-compose-footer small.is-over-limit {
+  color: var(--error);
+}
+
+.prayer-compose-footer button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 13px;
+  border-radius: 999px;
+  background: var(--cool);
+  color: #fffdf8;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.prayer-compose-footer button svg {
+  width: 15px;
+  height: 15px;
+}
+
+.prayer-form-feedback {
+  min-height: 16px;
+  margin: 0;
+}
+
+.prayer-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.prayer-board-label {
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.prayer-tabs {
+  display: flex;
+  gap: 4px;
+  min-width: 0;
+  padding: 4px;
+  border-radius: 14px;
+  background: #eeeae4;
+}
+
+.prayer-tabs button {
+  min-height: 34px;
+  padding: 0 10px;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.prayer-tabs button.is-active {
+  background: #fffdf8;
+  color: var(--ink);
+  box-shadow: 0 1px 3px rgba(47, 60, 74, 0.04);
+}
+
+.prayer-sort select {
+  min-height: 38px;
+  max-width: 116px;
+  padding: 0 9px;
+  border: 1px solid #ded8cf;
+  border-radius: 11px;
+  outline: 0;
+  background: #fffdf8;
+  color: var(--muted);
+  font-size: 10px;
   font-weight: 700;
 }
 
-.home-brand strong,
-.home-brand div span {
-  display: block;
-}
-
-.home-brand strong {
-  color: var(--ink);
-  font-size: 16px;
-  line-height: 1.1;
-}
-
-.home-brand span {
-  margin-top: 2px;
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 650;
-}
-
-.home-focus {
+.prayer-list {
   display: grid;
-  gap: 18px;
-  margin: 34px 0 18px;
+  gap: 10px;
 }
 
-.home-visual {
-  position: relative;
-  overflow: hidden;
-  min-height: 292px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background:
-    linear-gradient(180deg, rgba(244, 241, 234, 0.04), rgba(18, 18, 18, 0.3)),
-    linear-gradient(145deg, #22231f 0%, #151515 48%, #0f1210 100%);
-}
-
-.home-visual::before {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(0deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-  background-size: 42px 42px;
-  content: "";
-  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.42), transparent 78%);
-}
-
-.visual-light {
-  position: absolute;
-  top: 36px;
-  left: 50%;
-  width: 112px;
-  height: 112px;
-  border-radius: 50%;
-  background: #00e5ff;
-  box-shadow: 0 0 54px rgba(0, 229, 255, 0.34);
-  transform: translateX(-50%);
-}
-
-.visual-page {
-  position: absolute;
-  bottom: 48px;
-  width: 146px;
-  height: 98px;
-  border: 1px solid rgba(244, 241, 234, 0.12);
-  background: rgba(244, 241, 234, 0.08);
-  backdrop-filter: blur(10px);
-}
-
-.visual-page.one {
-  right: 50%;
-  border-radius: 8px 3px 3px 8px;
-  transform: skewY(6deg);
-}
-
-.visual-page.two {
-  left: 50%;
-  border-radius: 3px 8px 8px 3px;
-  transform: skewY(-6deg);
-}
-
-.visual-line {
-  position: absolute;
-  left: 50%;
-  height: 2px;
-  border-radius: 999px;
-  background: rgba(244, 241, 234, 0.34);
-  transform: translateX(-50%);
-}
-
-.visual-line.a {
-  bottom: 112px;
-  width: 132px;
-}
-
-.visual-line.b {
-  bottom: 91px;
-  width: 190px;
-}
-
-.visual-line.c {
-  bottom: 70px;
-  width: 154px;
-}
-
-.home-reference {
+.prayer-empty {
   margin: 0;
-  color: var(--gold);
-  font-size: 12px;
-  font-weight: 760;
-  letter-spacing: 0;
-  text-align: center;
-  text-transform: uppercase;
-}
-
-.home-focus blockquote {
-  max-width: 340px;
-  margin: 0 auto;
-  color: var(--ink);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 32px;
-  line-height: 1.22;
+  padding: 24px 16px;
+  border-radius: 18px;
+  background: #f7f5f1;
+  color: var(--muted);
+  font-size: 13px;
   text-align: center;
 }
 
-.home-actions {
+.prayer-card {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  margin: 28px 0 20px;
+  gap: 8px;
+  padding: 11px 12px 11px 14px;
+  border: 1px solid rgba(111, 125, 106, 0.16);
+  border-left: 4px solid #9aa995;
+  border-radius: 14px;
+  background: #f1f4ef;
+  box-shadow: 0 3px 8px rgba(47, 60, 74, 0.025);
 }
 
-.home-actions button {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 72px;
-  padding: 14px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--bg-soft);
+.prayer-card:nth-child(2n) {
+  border-color: rgba(181, 159, 131, 0.2);
+  border-left-color: #c0a98d;
+  background: #f5f0e9;
+}
+
+.prayer-card:nth-child(3n) {
+  border-color: rgba(128, 143, 163, 0.2);
+  border-left-color: #9aaabd;
+  background: #eef2f5;
+}
+
+.prayer-card:nth-child(4n) {
+  border-color: rgba(156, 137, 160, 0.2);
+  border-left-color: #b29bb5;
+  background: #f3eef4;
+}
+
+.prayer-card.is-expanded {
+  border-color: rgba(76, 72, 65, 0.24);
+  box-shadow: 0 5px 12px rgba(47, 60, 74, 0.06);
+}
+
+.prayer-card p {
+  margin: 0;
   color: var(--ink);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.prayer-card-toggle {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 0 !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--ink) !important;
   text-align: left;
 }
 
-.home-actions svg {
-  flex: 0 0 auto;
-  color: var(--gold);
-}
-
-.home-actions strong,
-.home-actions small {
-  display: block;
-}
-
-.home-actions strong {
-  font-size: 14px;
-}
-
-.home-actions small {
-  margin-top: 2px;
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 650;
-}
-
-.home-status {
+.prayer-card-toggle > span {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--line);
-}
-
-.home-status span {
-  display: grid;
-  gap: 3px;
+  gap: 6px;
   min-width: 0;
-  padding: 14px 8px;
-  background: var(--bg);
-  text-align: center;
 }
 
-.home-status strong,
-.home-status small {
-  display: block;
-}
-
-.home-status strong {
-  color: var(--ink);
-  font-size: 20px;
-}
-
-.home-status small {
+.prayer-card-toggle strong {
   color: var(--muted);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.prayer-card-toggle p {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 0;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.prayer-card-toggle svg {
+  flex: 0 0 auto;
+  margin-left: 10px;
+  color: var(--muted);
+  transition: transform 160ms ease;
+}
+
+.prayer-card.is-expanded .prayer-card-toggle svg {
+  transform: rotate(180deg);
+}
+
+.prayer-card-expanded {
+  padding-top: 2px;
+  border-top: 1px solid rgba(221, 227, 234, 0.5);
+}
+
+.prayer-card-expanded p {
+  margin: 10px 0 0;
+}
+
+.prayer-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.prayer-card-meta span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.prayer-card button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 9px;
+  border-radius: 9px;
+  background: #e6ece9;
+  color: var(--ink);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.prayer-card button.is-prayed {
+  background: var(--cool);
+  color: #fffdf8;
+}
+
+.prayer-card button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.home-story-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  padding-top: 0;
+}
+
+.home-story-card {
+  position: relative;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  min-height: 0;
+  border: 0;
+  border-radius: 38px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(250, 247, 240, 0.992));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.995),
+    0 8px 18px rgba(47, 60, 74, 0.008);
+}
+
+.home-story-card--image:first-child {
+  grid-column: auto;
+  grid-template-rows: 1fr auto;
+  min-height: 202px;
+}
+
+.home-story-card--image:first-child .home-story-copy {
+  border: 1px solid rgba(221, 227, 234, 0.012);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(250, 247, 240, 0.986));
+  backdrop-filter: blur(4px);
+}
+
+.home-story-card--alt {
+  min-height: 202px;
+}
+
+.home-story-card--alt .home-story-copy {
+  padding: 7px 8px 8px;
+  border: 1px solid rgba(221, 227, 234, 0.012);
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(250, 247, 240, 0.982)),
+    linear-gradient(135deg, rgba(240, 230, 216, 0.14), rgba(255, 255, 255, 0));
+}
+
+.home-story-media {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1 / 1.06;
+}
+
+.home-story-badge {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 1px solid rgba(221, 227, 234, 0.006);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.992), rgba(247, 249, 252, 0.95));
+  color: rgba(108, 97, 86, 0.96);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 1px 2px rgba(47, 60, 74, 0.0025);
+  transform: translateX(-50%);
+}
+
+.home-story-badge--alt {
+  color: rgba(121, 111, 98, 0.96);
+}
+
+.home-story-card--image:first-child .home-story-media {
+  aspect-ratio: 1 / 1.12;
+}
+
+.home-story-card--image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.8) brightness(1.07) contrast(0.9);
+}
+
+.home-story-card--image::after {
+  position: absolute;
+  inset: auto 0 0;
+  height: 58px;
+  background: rgba(255, 255, 255, 0.01);
+  content: "";
+}
+
+.home-story-card--alt img {
+  object-position: center center;
+  filter: saturate(0.76) brightness(1.06) contrast(0.9);
+}
+
+.home-story-card--alt::after {
+  background: rgba(255, 255, 255, 0.01);
+}
+
+.home-story-copy,
+.home-story-card--alt .home-story-copy {
+  display: grid;
+  align-content: end;
+  gap: 4px;
+  padding: 7px 9px 8px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(250, 247, 240, 0.988));
+}
+
+.home-story-copy {
+  position: relative;
+}
+
+.home-story-copy span,
+.home-story-card--alt .home-story-copy span {
+  color: rgba(122, 111, 99, 0.86);
+  font-size: 7.8px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.home-story-copy strong,
+.home-story-card--alt .home-story-copy strong {
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 10.5px;
+  line-height: 1.1;
+  font-weight: 760;
+}
+
+.home-story-card--alt .home-story-copy strong {
+  max-width: 11ch;
   font-size: 11px;
-  font-weight: 650;
 }
 
-.app-shell[data-theme="dark"] .explore-feature,
-.app-shell[data-theme="dark"] .search-panel,
-.app-shell[data-theme="dark"] .bottom-sheet,
-.app-shell[data-theme="dark"] .verse-ai-panel {
+.home-story-copy small,
+.home-story-card--alt .home-story-copy small {
+  color: rgba(124, 113, 101, 0.76);
+  font-size: 7px;
+  line-height: 1.25;
+}
+
+.home-bottom-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 8px;
+  align-items: center;
+  margin-top: 0;
+}
+
+.home-action-pill {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 9px;
+  align-items: center;
+  min-height: 54px;
+  padding: 9px 13px 9px 9px;
+  border-radius: 22px;
+  border: 1px solid rgba(181, 159, 131, 0.14);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(250, 247, 240, 0.988));
+  color: var(--ink);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 4px 10px rgba(47, 60, 74, 0.004);
+}
+
+.home-action-chip {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, rgba(242, 228, 210, 0.96), rgba(255, 255, 255, 0.82));
+  color: #42362d;
+}
+
+.home-action-pill span {
+  display: grid;
+  gap: 1px;
+  justify-items: start;
+}
+
+.home-action-pill strong {
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 750;
+}
+
+.home-action-pill small {
+  color: rgba(124, 113, 101, 0.76);
+  font-size: 9px;
+  line-height: 1;
+}
+
+.home-action-circle {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(181, 159, 131, 0.14);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(250, 247, 240, 0.988));
+  color: var(--ink);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 2px 6px rgba(47, 60, 74, 0.004);
+}
+
+.app-shell[data-theme="dark"]:not([data-app-background="paper"]) .explore-feature,
+.app-shell[data-theme="dark"]:not([data-app-background="paper"]) .search-panel,
+.app-shell[data-theme="dark"]:not([data-app-background="paper"]) .bottom-sheet,
+.app-shell[data-theme="dark"]:not([data-app-background="paper"]) .verse-ai-panel {
   border-color: var(--line);
-  background: #171716;
+  background: linear-gradient(180deg, rgba(35, 30, 25, 0.96), rgba(26, 22, 18, 0.96));
 }
 
-.apologetics-panel {
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--bg-soft);
+.app-shell[data-theme="dark"][data-app-background="paper"] .search-panel,
+.app-shell[data-theme="dark"][data-app-background="paper"] .bottom-sheet,
+.app-shell[data-theme="dark"][data-app-background="paper"] .verse-ai-panel {
+  border-color: rgba(221, 227, 234, 0.02);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.995));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.94),
+    0 2px 5px rgba(47, 60, 74, 0.004);
 }
 
 .section-heading {
@@ -551,41 +1347,168 @@ p {
   min-height: 36px;
   padding: 0 2px;
   background: transparent;
-  color: var(--gold);
+  color: var(--cool);
   font-weight: 700;
 }
 
-.app-shell[data-theme="dark"] .home-actions button,
-.app-shell[data-theme="dark"] .home-status span,
-.app-shell[data-theme="dark"] .preference-card,
-.app-shell[data-theme="dark"] .profile-library button,
-.app-shell[data-theme="dark"] .saved-verse-row,
-.app-shell[data-theme="dark"] .saved-folder-form,
-.app-shell[data-theme="dark"] .saved-empty,
-.app-shell[data-theme="dark"] .apologetics-panel,
-.app-shell[data-theme="dark"] .topic-list button,
-.app-shell[data-theme="dark"] .explore-grid button,
-.app-shell[data-theme="dark"] .result-list article,
-.app-shell[data-theme="dark"] .action-grid button {
+.app-shell[data-theme="dark"]:not([data-app-background="paper"]) .preference-card,
+.app-shell[data-theme="dark"]:not([data-app-background="paper"]) .profile-library button,
+.app-shell[data-theme="dark"]:not([data-app-background="paper"]) .saved-verse-row,
+.app-shell[data-theme="dark"]:not([data-app-background="paper"]) .saved-folder-form,
+.app-shell[data-theme="dark"]:not([data-app-background="paper"]) .saved-empty,
+.app-shell[data-theme="dark"]:not([data-app-background="paper"]) .apologetics-panel,
+.app-shell[data-theme="dark"]:not([data-app-background="paper"]) .topic-list button,
+.app-shell[data-theme="dark"]:not([data-app-background="paper"]) .explore-grid button,
+.app-shell[data-theme="dark"]:not([data-app-background="paper"]) .result-list article,
+.app-shell[data-theme="dark"]:not([data-app-background="paper"]) .action-grid button {
   border-color: var(--line);
-  background: #1b1b1a;
+  background: linear-gradient(180deg, rgba(35, 30, 25, 0.96), rgba(26, 22, 18, 0.96));
+}
+
+.app-shell[data-theme="dark"][data-app-background="paper"] .preference-card,
+.app-shell[data-theme="dark"][data-app-background="paper"] .profile-library button,
+.app-shell[data-theme="dark"][data-app-background="paper"] .saved-verse-row,
+.app-shell[data-theme="dark"][data-app-background="paper"] .saved-folder-form,
+.app-shell[data-theme="dark"][data-app-background="paper"] .saved-empty,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-panel,
+.app-shell[data-theme="dark"][data-app-background="paper"] .topic-list button,
+.app-shell[data-theme="dark"][data-app-background="paper"] .explore-grid button,
+.app-shell[data-theme="dark"][data-app-background="paper"] .result-list article,
+.app-shell[data-theme="dark"][data-app-background="paper"] .action-grid button {
+  border-color: rgba(221, 227, 234, 0.03);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.992), rgba(247, 249, 252, 0.978));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.965),
+    0 2px 4px rgba(47, 60, 74, 0.004);
 }
 
 .app-shell[data-theme="dark"] .tabs button.is-active {
-  background: #24231f;
+  background: rgba(242, 228, 210, 0.12);
+  color: var(--ink);
 }
 
 .app-shell[data-app-background="black"] {
-  --bg: #050505;
-  --bg-soft: #101010;
-  --line: #242424;
+  --bg: #141414;
+  --bg-soft: #1d1d1d;
+  --line: #2d2d2d;
+}
+
+.apologetics-coming-soon-gate {
+  position: absolute;
+  z-index: 8;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 28px;
+  border-radius: 24px;
+  background: rgba(255, 253, 249, 0.82);
+  backdrop-filter: blur(18px);
+}
+
+.apologetics-coming-soon-gate[hidden] {
+  display: none;
+}
+
+.apologetics-gate-card {
+  width: min(100%, 310px);
+  padding: 28px 22px 24px;
+  border: 1px solid rgba(181, 159, 131, 0.2);
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 245, 238, 0.96));
+  box-shadow: 0 18px 42px rgba(47, 39, 30, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.96);
+  text-align: center;
+}
+
+.apologetics-gate-icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 16px;
+  border-radius: 17px;
+  color: #8a7764;
+  background: #f1ece1;
+}
+
+.apologetics-gate-card h2 {
+  margin: 6px 0 8px;
+  font-size: 28px;
+}
+
+.apologetics-gate-card > p {
+  margin: 0 auto 20px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.apologetics-gate-card form {
+  display: grid;
+  gap: 10px;
+}
+
+.apologetics-gate-card label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+  text-align: left;
+}
+
+.apologetics-gate-card input {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 14px;
+  border: 1px solid #ded8cf;
+  border-radius: 14px;
+  outline: 0;
+  color: var(--ink);
+  background: #fff;
+  text-align: center;
+  letter-spacing: 0.22em;
+}
+
+.apologetics-gate-card input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px var(--gold-soft);
+}
+
+.apologetics-gate-card form > button {
+  min-height: 46px;
+  border-radius: 14px;
+  color: #fff;
+  background: #8a7764;
+  font-weight: 800;
+}
+
+.apologetics-gate-feedback {
+  min-height: 16px;
+  margin: 0;
+  color: var(--error);
+  font-size: 11px;
+}
+
+/* The black background is limited to the reading surface. Keep the
+   Scripture content readable even while the surrounding shell stays light. */
+.app-shell[data-app-background="black"] .reader-screen .chapter-number,
+.app-shell[data-app-background="black"] .reader-screen .scripture-line,
+.app-shell[data-app-background="black"] .reader-screen .parallel-scripture-line {
+  color: #f2eee6;
+}
+
+.app-shell[data-app-background="black"] .reader-screen .scripture-line sup,
+.app-shell[data-app-background="black"] .reader-screen .parallel-scripture-line sup,
+.app-shell[data-app-background="black"] .reader-screen .section-title,
+.app-shell[data-app-background="black"] .reader-screen .copyright-note {
+  color: #b8aa98;
 }
 
 .app-shell[data-theme="dark"][data-app-background="black"] .phone-frame,
 .app-shell[data-theme="dark"][data-app-background="black"] .reader-screen,
 .app-shell[data-theme="dark"][data-app-background="black"] .reader-topbar,
 .app-shell[data-theme="dark"][data-app-background="black"] .ai-topbar {
-  background: #050505;
+  background: #141414;
 }
 
 .app-shell[data-app-background="warm"] {
@@ -627,90 +1550,274 @@ p {
 }
 
 .app-shell[data-app-background="ivory"] {
-  --bg: #fbfaf6;
-  --bg-soft: #f1eee6;
+  --bg: #fcfdff;
+  --bg-soft: #f4f6f8;
   --ink: #181714;
   --muted: #6f6a60;
-  --line: #ddd7c9;
+  --line: #dde3ea;
 }
 
 .app-shell[data-app-background="paper"] {
-  --bg: #f6efe3;
-  --bg-soft: #eadecc;
-  --ink: #1f1a13;
-  --muted: #756b5d;
-  --line: #d3c4ac;
+  --bg: #fcfdff;
+  --bg-soft: #f4f6f8;
+  --ink: #18212b;
+  --muted: #776b5e;
+  --line: #dde3ea;
+  --gold: #8a7764;
+  --gold-soft: rgba(181, 159, 131, 0.12);
+  --cool: #8a7764;
+  --cool-soft: rgba(181, 159, 131, 0.16);
+  --green: #6f7d6a;
+  --green-soft: rgba(111, 125, 106, 0.14);
+  --warning: #8d6a42;
+  --beige: rgba(239, 243, 247, 0.98);
+  --accent-contrast: #0f1720;
 }
 
-.app-shell[data-theme="dark"][data-app-background] .phone-frame,
-.app-shell[data-theme="dark"][data-app-background] .reader-screen,
-.app-shell[data-theme="dark"][data-app-background] .reader-topbar,
-.app-shell[data-theme="dark"][data-app-background] .ai-topbar {
+.app-shell[data-app-background] .phone-frame,
+.app-shell[data-app-background] .reader-screen,
+.app-shell[data-app-background] .reader-topbar,
+.app-shell[data-app-background] .ai-topbar {
   background: var(--bg);
 }
 
-.app-shell[data-theme="dark"][data-app-background] .home-actions button,
-.app-shell[data-theme="dark"][data-app-background] .home-status span,
-.app-shell[data-theme="dark"][data-app-background] .preference-card,
-.app-shell[data-theme="dark"][data-app-background] .profile-library button,
-.app-shell[data-theme="dark"][data-app-background] .saved-verse-row,
-.app-shell[data-theme="dark"][data-app-background] .saved-folder-form,
-.app-shell[data-theme="dark"][data-app-background] .saved-empty,
-.app-shell[data-theme="dark"][data-app-background] .apologetics-panel,
-.app-shell[data-theme="dark"][data-app-background] .topic-list button,
-.app-shell[data-theme="dark"][data-app-background] .explore-grid button,
-.app-shell[data-theme="dark"][data-app-background] .result-list article,
-.app-shell[data-theme="dark"][data-app-background] .action-grid button {
-  border-color: var(--line);
-  background: var(--bg-soft);
+.app-shell[data-app-background] .phone-frame {
+  border-color: rgba(221, 227, 234, 0.18);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.999), rgba(255, 255, 255, 0) 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(250, 252, 254, 0.994));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    0 20px 40px rgba(47, 60, 74, 0.05),
+    0 0 0 1px rgba(255, 255, 255, 0.18);
+  border-radius: 24px;
 }
 
-.app-shell[data-theme="dark"][data-app-background="ivory"] .chapter-number,
-.app-shell[data-theme="dark"][data-app-background="ivory"] .scripture-line,
-.app-shell[data-theme="dark"][data-app-background="ivory"] .parallel-scripture-line,
-.app-shell[data-theme="dark"][data-app-background="paper"] .chapter-number,
-.app-shell[data-theme="dark"][data-app-background="paper"] .scripture-line,
-.app-shell[data-theme="dark"][data-app-background="paper"] .parallel-scripture-line {
+.app-shell[data-app-background] .bottom-nav {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 7px 9px calc(7px + env(safe-area-inset-bottom));
+  border: 1px solid rgba(221, 227, 234, 0.016);
+  border-radius: 18px 18px 0 0;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0) 68%),
+    linear-gradient(180deg, rgba(255, 253, 249, 0.999), rgba(247, 241, 232, 0.992));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.985),
+    0 1px 0 rgba(255, 255, 255, 0.985);
+  backdrop-filter: blur(10px);
+}
+
+.app-shell[data-app-background] .bottom-nav button {
+  color: rgba(108, 102, 94, 0.88);
+}
+
+.app-shell[data-app-background] .bottom-nav button.is-active {
+  color: var(--ink);
+  background: linear-gradient(180deg, rgba(242, 228, 210, 0.96), rgba(255, 255, 255, 0.84));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    0 1px 2px rgba(181, 159, 131, 0.02);
+}
+
+.app-shell[data-app-background] .composer {
+  border: 1px solid rgba(221, 227, 234, 0.015);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(250, 251, 253, 0.8));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 3px 8px rgba(47, 60, 74, 0.0008);
+  backdrop-filter: blur(16px);
+}
+
+.app-shell[data-app-background] .preference-card,
+.app-shell[data-app-background] .profile-library button,
+.app-shell[data-app-background] .saved-verse-row,
+.app-shell[data-app-background] .saved-folder-form,
+.app-shell[data-app-background] .saved-empty,
+.app-shell[data-app-background] .apologetics-panel,
+.app-shell[data-app-background] .topic-list button,
+.app-shell[data-app-background] .explore-grid button,
+.app-shell[data-app-background] .result-list article,
+.app-shell[data-app-background] .action-grid button {
+  border-color: rgba(221, 227, 234, 0.018);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(250, 252, 254, 0.988));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.985),
+    0 2px 5px rgba(47, 60, 74, 0.0009);
+}
+
+.app-shell[data-app-background] .tabs {
+  border: 1px solid rgba(221, 227, 234, 0.02);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(249, 251, 253, 0.985));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.97),
+    0 3px 8px rgba(47, 60, 74, 0.0014);
+}
+
+.app-shell[data-app-background] .tabs button.is-active {
+  color: var(--ink);
+  background: rgba(242, 228, 210, 0.88);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    0 4px 8px rgba(181, 159, 131, 0.015);
+}
+
+.app-shell[data-app-background] .profile-library button.is-active {
+  border-color: rgba(181, 159, 131, 0.2);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(249, 251, 253, 0.986));
+  color: var(--cool);
+  box-shadow:
+    inset 0 0 0 1px rgba(181, 159, 131, 0.08),
+    0 4px 8px rgba(181, 159, 131, 0.02);
+}
+
+.app-shell[data-app-background] .profile-library button.is-active svg,
+.app-shell[data-app-background] .profile-library button.is-active span {
+  color: var(--cool);
+}
+
+.app-shell[data-app-background] .ai-action-button {
+  border-color: rgba(221, 227, 234, 0.5);
+  background: rgba(255, 255, 255, 0.76);
   color: var(--ink);
 }
 
-.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-breadcrumbs,
-.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-breadcrumbs {
-  color: rgba(80, 71, 58, 0.72);
-}
-
-.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-breadcrumb-current,
-.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-breadcrumb-current {
+.app-shell[data-app-background] .ai-action-button.is-active {
+  border-color: rgba(181, 159, 131, 0.24);
   color: var(--ink);
+  background: rgba(242, 228, 210, 0.12);
 }
 
-.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-challenge-button,
-.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-challenge-button,
-.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-progress-card,
-.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-progress-card,
-.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-progress-panel,
-.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-progress-panel,
-.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-rewards,
-.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-rewards,
-.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-quick,
-.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-quick,
-.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-framework-grid section,
-.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-framework-grid section,
-.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-rewards-grid span,
-.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-rewards-grid span,
-.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-topic-card,
-.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-topic-card,
-.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-chat-empty,
-.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-chat-empty,
-.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-chat-composer,
-.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-chat-composer {
-  border-color: var(--line);
-  background: var(--bg-soft);
-}
-
-.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-progress-card,
-.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-progress-card {
+.app-shell[data-app-background] .composer textarea {
+  color: var(--ink);
+  caret-color: var(--cool);
   background: transparent;
+}
+
+.app-shell[data-app-background] .composer textarea::placeholder {
+  color: rgba(124, 113, 101, 0.65);
+}
+
+.app-shell[data-app-background] .reader-select-label select,
+.app-shell[data-app-background] .parallel-toggle,
+.app-shell[data-app-background] .parallel-selects select {
+  border-color: #ded8cf;
+  background: #eeeae4;
+  color: #2b2926;
+}
+
+.app-shell[data-app-background] .reader-topbar {
+  background: rgba(252, 253, 255, 0.98);
+}
+
+.app-shell[data-app-background] .reader-select-label select {
+  background-image: none;
+}
+
+.app-shell[data-app-background] .apologetics-breadcrumbs {
+  color: rgba(116, 109, 98, 0.8);
+}
+
+.app-shell[data-app-background] .apologetics-breadcrumb-link {
+  color: var(--cool);
+}
+
+.app-shell[data-app-background] .apologetics-breadcrumb-current {
+  color: var(--ink);
+}
+
+.app-shell[data-app-background] .apologetics-verse-tags span {
+  border-color: rgba(221, 227, 234, 0.96);
+  color: var(--cool);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(247, 249, 252, 0.92));
+}
+
+.app-shell[data-app-background] .profile-account-tile {
+  border-color: rgba(221, 227, 234, 0.96);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(247, 249, 252, 0.99));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 2px 6px rgba(47, 60, 74, 0.006);
+}
+
+.app-shell[data-app-background] .profile-hero::after {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.app-shell[data-app-background] .profile-hero h1 {
+  color: var(--ink);
+}
+
+.app-shell[data-app-background] .profile-hero p:not(.eyebrow) {
+  color: var(--muted);
+}
+
+.app-shell[data-app-background] .profile-avatar {
+  border-color: rgba(221, 227, 234, 0.96);
+}
+
+.app-shell[data-app-background] .highlight-palette button {
+  border-color: rgba(221, 227, 234, 0.96);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(247, 249, 252, 0.948));
+}
+
+.app-shell[data-app-background] .highlight-palette span {
+  border-color: rgba(255, 255, 255, 0.82);
+}
+
+.app-shell[data-app-background] .highlight-palette button.is-selected {
+  border-color: rgba(181, 159, 131, 0.42);
+  box-shadow: 0 0 0 3px rgba(181, 159, 131, 0.12);
+}
+
+.app-shell[data-app-background="ivory"] .chapter-number,
+.app-shell[data-app-background="ivory"] .scripture-line,
+.app-shell[data-app-background="ivory"] .parallel-scripture-line,
+.app-shell[data-app-background="paper"] .chapter-number,
+.app-shell[data-app-background="paper"] .scripture-line,
+.app-shell[data-app-background="paper"] .parallel-scripture-line {
+  color: var(--ink);
+}
+
+.app-shell[data-app-background="ivory"] .apologetics-breadcrumbs,
+.app-shell[data-app-background="paper"] .apologetics-breadcrumbs {
+  color: rgba(124, 113, 101, 0.78);
+}
+
+.app-shell[data-app-background="ivory"] .apologetics-breadcrumb-current,
+.app-shell[data-app-background="paper"] .apologetics-breadcrumb-current {
+  color: var(--ink);
+}
+
+.app-shell[data-app-background="ivory"] .apologetics-challenge-button,
+.app-shell[data-app-background="paper"] .apologetics-challenge-button,
+.app-shell[data-app-background="ivory"] .apologetics-progress-card,
+.app-shell[data-app-background="paper"] .apologetics-progress-card,
+.app-shell[data-app-background="ivory"] .apologetics-track-progress-panel,
+.app-shell[data-app-background="paper"] .apologetics-track-progress-panel,
+.app-shell[data-app-background="ivory"] .apologetics-track-rewards,
+.app-shell[data-app-background="paper"] .apologetics-track-rewards,
+.app-shell[data-app-background="ivory"] .apologetics-track-quick,
+.app-shell[data-app-background="paper"] .apologetics-track-quick,
+.app-shell[data-app-background="ivory"] .apologetics-framework-grid section,
+.app-shell[data-app-background="paper"] .apologetics-framework-grid section,
+.app-shell[data-app-background="ivory"] .apologetics-rewards-grid span,
+.app-shell[data-app-background="paper"] .apologetics-rewards-grid span,
+.app-shell[data-app-background="ivory"] .apologetics-topic-card,
+.app-shell[data-app-background="paper"] .apologetics-topic-card,
+.app-shell[data-app-background="ivory"] .apologetics-chat-empty,
+.app-shell[data-app-background="paper"] .apologetics-chat-empty,
+.app-shell[data-app-background="ivory"] .apologetics-chat-composer,
+.app-shell[data-app-background="paper"] .apologetics-chat-composer {
+  border-color: rgba(221, 227, 234, 0.02);
+  background: linear-gradient(180deg, rgba(255, 253, 249, 0.998), rgba(247, 243, 236, 0.986));
+}
+
+.app-shell[data-app-background="ivory"] .apologetics-progress-card,
+.app-shell[data-app-background="paper"] .apologetics-progress-card {
+  background: linear-gradient(180deg, rgba(255, 253, 249, 0.998), rgba(247, 243, 236, 0.988));
 }
 
 .app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-challenge-top small,
@@ -796,7 +1903,9 @@ p {
 .app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-card,
 .app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-card,
 .app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-topic-card {
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    0 6px 14px rgba(47, 60, 74, 0.02);
 }
 
 .app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-card,
@@ -805,7 +1914,7 @@ p {
 .app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-topic-card,
 .app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-hero--track,
 .app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-hero--track {
-  background: var(--bg-soft);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(247, 249, 252, 0.994));
 }
 
 .app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-topic-meta-row small,
@@ -818,7 +1927,7 @@ p {
 .app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-chat-tabs,
 .app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-topic-tabs,
 .app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-topic-tabs {
-  background: rgba(29, 26, 22, 0.04);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(247, 249, 252, 0.94));
 }
 
 .app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-quick-steps button,
@@ -828,12 +1937,7 @@ p {
 }
 
 .reader-screen {
-  background: #fffdf9;
-}
-
-.app-shell[data-theme="dark"] .reader-screen,
-.app-shell[data-theme="dark"] .reader-topbar {
-  background: #121212;
+  background: #fcfdff;
 }
 
 .app-shell[data-theme="dark"][data-app-background] .phone-frame,
@@ -848,9 +1952,9 @@ p {
   z-index: 4;
   top: -28px;
   margin: -28px -22px 0;
-  padding: 22px 22px 14px;
-  background: rgba(255, 253, 249, 0.92);
-  backdrop-filter: blur(18px);
+  padding: 18px 20px 12px;
+  background: linear-gradient(180deg, rgba(252, 253, 255, 0.97), rgba(250, 251, 253, 0.88));
+  backdrop-filter: blur(12px);
   gap: 8px;
 }
 
@@ -878,19 +1982,12 @@ p {
   width: 100%;
   min-height: 42px;
   padding: 0 30px 0 12px;
-  border: 1px solid var(--line);
+  border: 1px solid #ded8cf;
   border-radius: 999px;
   outline: 0;
-  color: var(--ink);
-  background-color: var(--bg-soft);
-  background-image:
-    linear-gradient(45deg, transparent 50%, var(--muted) 50%),
-    linear-gradient(135deg, var(--muted) 50%, transparent 50%);
-  background-position:
-    calc(100% - 16px) 18px,
-    calc(100% - 11px) 18px;
-  background-repeat: no-repeat;
-  background-size: 5px 5px, 5px 5px;
+  color: #2b2926;
+  background: #eeeae4;
+  background-image: none;
   font-size: 12px;
   font-weight: 760;
   appearance: none;
@@ -909,19 +2006,22 @@ p {
   gap: 8px;
   width: 100%;
   min-height: 44px;
-  border: 1px solid var(--line);
+  border: 1px solid rgba(221, 227, 234, 0.02);
   border-radius: 999px;
-  background: var(--bg-soft);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(249, 251, 253, 0.986));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 3px 8px rgba(47, 60, 74, 0.0014);
   color: var(--muted);
   font-size: 13px;
   font-weight: 760;
 }
 
 .parallel-toggle.is-active {
-  border-color: var(--gold);
-  background: var(--gold-soft);
-  color: var(--gold);
-  box-shadow: inset 0 0 0 1px var(--gold-soft);
+  border-color: var(--cool);
+  background: var(--cool-soft);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--cool-soft);
 }
 
 .parallel-selects {
@@ -937,32 +2037,32 @@ p {
   width: 100%;
   min-height: 40px;
   padding: 0 28px 0 12px;
-  border: 1px solid var(--line);
+  border: 1px solid rgba(221, 227, 234, 0.02);
   border-radius: 999px;
   outline: 0;
   color: var(--ink);
-  background-color: var(--bg-soft);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(249, 251, 253, 0.986));
   font-size: 12px;
   font-weight: 760;
 }
 
 .scripture-page {
-  padding-top: 30px;
+  padding-top: 26px;
 }
 
 .section-title {
   margin-bottom: 4px;
-  color: var(--gold);
+  color: var(--cool);
   font-size: 13px;
   font-weight: 700;
   text-align: center;
 }
 
 .chapter-number {
-  margin: 10px 0 24px;
-  color: #2d2a24;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 78px;
+  margin: 10px 0 20px;
+  color: rgba(31, 42, 53, 0.92);
+  font-family: var(--font-display);
+  font-size: 72px;
   line-height: 0.95;
   text-align: center;
 }
@@ -971,9 +2071,9 @@ p {
   position: relative;
   margin: 0 -4px 18px;
   padding: 5px 4px;
-  border-radius: var(--radius);
+  border-radius: 18px;
   color: #24211c;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-body);
   font-size: var(--reader-text-size, 19px);
   line-height: 1.85;
   transition: opacity 160ms ease, filter 160ms ease, background-color 160ms ease;
@@ -986,7 +2086,7 @@ p {
 
 .scripture-line sup {
   margin-right: 6px;
-  color: var(--gold);
+  color: var(--cool);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
   font-size: 11px;
   font-weight: 760;
@@ -998,7 +2098,7 @@ p {
 
 .scripture-line.is-selected,
 .parallel-scripture-line.is-selected {
-  background: var(--gold-soft);
+  background: var(--cool-soft);
 }
 
 .parallel-scripture-grid {
@@ -1013,7 +2113,7 @@ p {
   column-gap: 22px;
   margin: 0 -4px 18px;
   padding: 5px 4px;
-  border-radius: var(--radius);
+  border-radius: 18px;
   color: #24211c;
   transition: opacity 160ms ease, filter 160ms ease, background-color 160ms ease;
 }
@@ -1029,7 +2129,7 @@ p {
   width: 7px;
   height: 22px;
   border-radius: 0 0 4px 4px;
-  background: var(--gold);
+  background: var(--cool);
   content: "";
 }
 
@@ -1037,19 +2137,23 @@ p {
   margin: 0;
   min-width: 0;
   color: inherit;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-body);
   font-size: max(14px, calc(var(--reader-text-size, 19px) - 4px));
   line-height: 1.85;
 }
 
+.parallel-scripture-column[data-parallel-role="primary"] {
+  padding-right: 8px;
+}
+
 .parallel-scripture-column[data-parallel-role="compare"] {
   padding-left: 18px;
-  border-left: 1px solid color-mix(in srgb, var(--line) 76%, var(--gold));
+  border-left: 1px solid color-mix(in srgb, var(--line) 76%, var(--cool));
 }
 
 .parallel-scripture-column sup {
   margin-right: 6px;
-  color: var(--gold);
+  color: var(--cool);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
   font-size: 11px;
   font-weight: 760;
@@ -1066,9 +2170,9 @@ p {
   gap: 12px;
   margin: 0 0 18px;
   padding: 10px 12px;
-  border: 1px solid var(--gold);
-  border-radius: 16px;
-  background: var(--gold-soft);
+  border: 1px solid var(--cool);
+  border-radius: 18px;
+  background: var(--cool-soft);
   color: var(--ink);
   font-size: 12px;
   font-weight: 760;
@@ -1078,7 +2182,7 @@ p {
   min-height: 34px;
   padding: 0 12px;
   border-radius: 999px;
-  background: var(--gold);
+  background: var(--cool);
   color: var(--accent-contrast, #fff);
   font-size: 11px;
   font-weight: 760;
@@ -1095,7 +2199,7 @@ p {
   z-index: 1;
   opacity: 1;
   filter: none;
-  background: var(--gold-soft);
+  background: var(--cool-soft);
 }
 
 .scripture-line.is-bookmarked::after {
@@ -1105,7 +2209,7 @@ p {
   width: 7px;
   height: 22px;
   border-radius: 0 0 4px 4px;
-  background: var(--gold);
+  background: var(--cool);
   content: "";
 }
 
@@ -1114,10 +2218,13 @@ p {
   gap: 8px;
   margin: 18px 0;
   padding: 18px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
+  border: 1px solid rgba(221, 227, 234, 0.02);
+  border-radius: 24px;
   color: var(--muted);
-  background: var(--bg-soft);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(249, 251, 253, 0.986));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.985),
+    0 3px 8px rgba(47, 60, 74, 0.0014);
   line-height: 1.45;
 }
 
@@ -1139,9 +2246,9 @@ p {
 
 .tabs button,
 .topic-list button {
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: #fff;
+  border: 1px solid rgba(221, 227, 234, 0.02);
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.988));
   color: #333;
   text-align: left;
 }
@@ -1174,8 +2281,9 @@ p {
   justify-content: space-between;
   gap: 14px;
   margin: -28px -22px 0;
-  padding: 22px 22px 12px;
-  background: var(--bg);
+  padding: 18px 20px 10px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.992), rgba(251, 248, 241, 0.82));
+  backdrop-filter: blur(16px);
 }
 
 .ai-topbar div {
@@ -1199,10 +2307,10 @@ p {
   align-content: start;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
   min-height: 0;
   overflow-y: auto;
-  padding: 22px 0 8px;
+  padding: 20px 0 8px;
   scrollbar-width: none;
 }
 
@@ -1211,7 +2319,7 @@ p {
 }
 
 .message {
-  max-width: 86%;
+  max-width: 84%;
   color: var(--ink);
   font-size: 15px;
   line-height: 1.45;
@@ -1230,16 +2338,16 @@ p {
   display: inline-block;
   color: transparent;
   background:
-    radial-gradient(circle at 0% 55%, rgba(255, 255, 255, 0.95) 0 10%, transparent 11% 100%),
-    radial-gradient(circle at 25% 45%, rgba(255, 255, 255, 0.88) 0 9%, transparent 10% 100%),
-    radial-gradient(circle at 50% 58%, rgba(255, 255, 255, 0.94) 0 10%, transparent 11% 100%),
-    radial-gradient(circle at 75% 42%, rgba(255, 255, 255, 0.86) 0 9%, transparent 10% 100%),
-    radial-gradient(circle at 100% 55%, rgba(255, 255, 255, 0.95) 0 10%, transparent 11% 100%),
-    linear-gradient(90deg, #6d7480 0%, #b8ecff 18%, #ffffff 34%, #8fdcff 52%, #ffffff 70%, #6d7480 100%);
+    radial-gradient(circle at 0% 55%, rgba(255, 255, 255, 0.76) 0 10%, transparent 11% 100%),
+    radial-gradient(circle at 25% 45%, rgba(255, 255, 255, 0.66) 0 9%, transparent 10% 100%),
+    radial-gradient(circle at 50% 58%, rgba(255, 255, 255, 0.74) 0 10%, transparent 11% 100%),
+    radial-gradient(circle at 75% 42%, rgba(255, 255, 255, 0.64) 0 9%, transparent 10% 100%),
+    radial-gradient(circle at 100% 55%, rgba(255, 255, 255, 0.76) 0 10%, transparent 11% 100%),
+    linear-gradient(90deg, #6f6a63 0%, #f1ede6 18%, #ffffff 34%, #ece8e1 52%, #ffffff 70%, #6f6a63 100%);
   background-size: 180px 100%, 180px 100%, 180px 100%, 180px 100%, 180px 100%, 220% 100%;
   background-clip: text;
   -webkit-background-clip: text;
-  animation: shiningText 2.8s ease-in-out infinite;
+  animation: shiningText 3.6s ease-in-out infinite;
   will-change: background-position, filter;
 }
 
@@ -1247,9 +2355,13 @@ p {
   justify-self: end;
   align-self: flex-end;
   padding: 11px 14px;
-  border-radius: 18px 18px 4px 18px;
-  background: var(--gold);
-  color: var(--accent-contrast, #fff);
+  border-radius: 24px 24px 8px 24px;
+  border: 1px solid rgba(181, 159, 131, 0.16);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(247, 249, 252, 0.992));
+  color: var(--ink);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 4px 10px rgba(47, 60, 74, 0.005);
 }
 
 .ai-message {
@@ -1294,7 +2406,7 @@ p {
   padding: 0;
   border: 1px solid var(--line);
   border-radius: 999px;
-  background: var(--bg-soft);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(247, 249, 252, 0.99));
   color: var(--muted);
   transition:
     transform 140ms ease,
@@ -1323,25 +2435,41 @@ p {
 }
 
 .ai-action-button.is-active {
-  border-color: color-mix(in srgb, var(--gold) 48%, var(--line));
-  color: var(--gold);
-  background: var(--gold-soft);
+  border-color: color-mix(in srgb, var(--cool) 48%, var(--line));
+  color: var(--cool);
+  background: var(--cool-soft);
 }
 
 .app-shell[data-theme="dark"] .ai-action-button {
-  border-color: rgba(120, 216, 255, 0.12);
+  border-color: rgba(181, 159, 131, 0.2);
   background: rgba(255, 255, 255, 0.04);
-  color: #a8bfd8;
+  color: #d4dde7;
 }
 
 .app-shell[data-theme="dark"] .ai-action-button.is-active {
-  border-color: rgba(66, 182, 255, 0.45);
-  color: #6bc7ff;
-  background: rgba(66, 182, 255, 0.12);
+  border-color: rgba(181, 159, 131, 0.26);
+  color: var(--cool);
+  background: rgba(242, 228, 210, 0.12);
 }
 
 .app-shell[data-theme="dark"] .ai-action-button.is-success {
-  box-shadow: 0 0 0 6px rgba(66, 182, 255, 0.12);
+  box-shadow: 0 0 0 6px rgba(181, 159, 131, 0.1);
+}
+
+.app-shell[data-theme="dark"][data-app-background] .ai-action-button {
+  border-color: rgba(221, 227, 234, 0.92);
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--ink);
+}
+
+.app-shell[data-theme="dark"][data-app-background] .ai-action-button.is-active {
+  border-color: rgba(181, 159, 131, 0.24);
+  color: var(--cool);
+  background: rgba(242, 228, 210, 0.12);
+}
+
+.app-shell[data-theme="dark"][data-app-background] .ai-action-button.is-success {
+  box-shadow: 0 0 0 6px rgba(181, 159, 131, 0.1);
 }
 
 @keyframes aiActionPulse {
@@ -1374,11 +2502,35 @@ p {
 }
 
 .app-shell[data-theme="dark"] .rich-text {
-  color: #e9f3ff;
+  color: var(--ink);
+}
+
+.app-shell[data-theme="dark"][data-app-background] .rich-text {
+  color: var(--ink);
+}
+
+.app-shell[data-theme="dark"][data-app-background] .rich-text h2,
+.app-shell[data-theme="dark"][data-app-background] .rich-text h3,
+.app-shell[data-theme="dark"][data-app-background] .rich-text h4 {
+  color: var(--cool);
+}
+
+.app-shell[data-theme="dark"][data-app-background] .rich-text strong {
+  color: color-mix(in srgb, var(--ink) 84%, #000);
+}
+
+.app-shell[data-theme="dark"][data-app-background] .rich-text code {
+  background: rgba(242, 228, 210, 0.12);
+}
+
+.app-shell[data-theme="dark"][data-app-background] .rich-text blockquote {
+  border-left-color: rgba(181, 159, 131, 0.92);
+  color: color-mix(in srgb, var(--ink) 84%, var(--muted));
+  background: rgba(242, 228, 210, 0.12);
 }
 
 .rich-text > * + * {
-  margin-top:72px;
+  margin-top: 16px;
 }
 
 .rich-text p {
@@ -1394,7 +2546,7 @@ p {
 .rich-text h3,
 .rich-text h4 {
   margin: 10px 0 2px;
-  color: #118cff;
+  color: var(--cool);
   line-height: 1.25;
   letter-spacing: -0.02em;
 }
@@ -1402,7 +2554,7 @@ p {
 .app-shell[data-theme="dark"] .rich-text h2,
 .app-shell[data-theme="dark"] .rich-text h3,
 .app-shell[data-theme="dark"] .rich-text h4 {
-  color: #42b6ff;
+  color: var(--cool);
 }
 
 .rich-text h2 {
@@ -1415,11 +2567,17 @@ p {
 
 .rich-text h4 {
   font-size: 16px;
-  color: #ff9f1a;
+  color: var(--cool);
 }
 
 .app-shell[data-theme="dark"] .rich-text h4 {
-  color: #ffb347;
+  color: var(--cool);
+}
+
+.app-shell[data-theme="dark"][data-app-background] .rich-text h2,
+.app-shell[data-theme="dark"][data-app-background] .rich-text h3,
+.app-shell[data-theme="dark"][data-app-background] .rich-text h4 {
+  color: var(--cool);
 }
 
 .rich-text strong {
@@ -1431,29 +2589,49 @@ p {
   color: #ffffff;
 }
 
+.app-shell[data-theme="dark"][data-app-background] .rich-text strong {
+  color: color-mix(in srgb, var(--ink) 84%, #000);
+}
+
 .rich-text code {
   padding: 2px 6px;
-  border-radius: 8px;
+  border-radius: 16px;
   font-size: 0.92em;
-  background: rgba(31, 24, 11, 0.08);
+  background: rgba(242, 228, 210, 0.12);
 }
 
 .app-shell[data-theme="dark"] .rich-text code {
   background: rgba(255, 255, 255, 0.08);
 }
 
+.app-shell[data-theme="dark"][data-app-background] .rich-text code {
+  background: rgba(242, 228, 210, 0.12);
+}
+
 .rich-text blockquote {
   margin: 2px 0 0;
   padding: 10px 0 10px 14px;
-  border-left: 3px solid var(--gold);
+  border-left: 3px solid var(--cool);
   color: color-mix(in srgb, var(--ink) 84%, var(--muted));
-  background: rgba(216, 161, 58, 0.08);
+  background: rgba(242, 228, 210, 0.12);
   border-radius: 0 14px 14px 0;
 }
 
 .app-shell[data-theme="dark"] .rich-text blockquote {
-  color: #cfe5ff;
-  background: rgba(0, 229, 255, 0.08);
+  color: #e3edf7;
+  background: rgba(242, 228, 210, 0.12);
+}
+
+.app-shell[data-theme="dark"][data-app-background] .rich-text blockquote {
+  border-left-color: rgba(181, 159, 131, 0.92);
+  color: color-mix(in srgb, var(--ink) 84%, var(--muted));
+  background: rgba(242, 228, 210, 0.12);
+}
+
+.app-shell[data-theme="dark"][data-app-background] .rich-text blockquote {
+  border-left-color: rgba(181, 159, 131, 0.92);
+  color: color-mix(in srgb, var(--ink) 84%, var(--muted));
+  background: rgba(242, 228, 210, 0.12);
 }
 
 .rich-text blockquote p + p {
@@ -1481,14 +2659,13 @@ p {
   gap: 10px;
   margin-top: 0;
   padding: 10px 18px;
-  border-top: 1px solid var(--line);
-  border-right: 0;
-  border-bottom: 0;
-  border-left: 0;
-  border-radius: 0;
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 -10px 24px rgba(31, 24, 11, 0.08);
-  backdrop-filter: blur(20px);
+  border: 1px solid rgba(221, 227, 234, 0.02);
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.985), rgba(251, 248, 241, 0.9));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 8px 18px rgba(47, 60, 74, 0.006);
+  backdrop-filter: blur(18px);
 }
 
 .composer textarea,
@@ -1502,16 +2679,16 @@ p {
 }
 
 .composer textarea {
-  min-height: 52px;
-  max-height: 168px;
+  min-height: 56px;
+  max-height: 192px;
   padding: 10px 0;
   line-height: 1.45;
   resize: none;
   overflow-y: hidden;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  border-radius: 18px;
+  background: transparent;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .composer textarea::placeholder,
@@ -1526,17 +2703,20 @@ p {
   place-items: center;
   min-width: var(--tap);
   border-radius: 999px;
-  background: var(--gold);
-  color: var(--accent-contrast, #fff);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(251, 248, 241, 0.988));
+  color: var(--ink);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 6px 14px rgba(47, 60, 74, 0.006);
 }
 
 .apologetics-screen {
   position: relative;
-  padding-top: 18px;
+  padding-top: 14px;
 }
 
 #apologetics-track {
-  padding-bottom: calc(var(--bottom-nav-offset) + 108px);
+  padding-bottom: calc(var(--bottom-nav-offset) + 132px);
 }
 
 .apologetics-subheader {
@@ -1563,28 +2743,38 @@ p {
   min-height: 0;
   padding: 0;
   background: transparent;
-  color: #93bfff;
+  color: var(--cool);
   font-size: 13px;
   font-weight: 700;
 }
 
+.app-shell[data-theme="dark"][data-app-background] .apologetics-breadcrumb-link {
+  color: var(--cool);
+}
+
 .apologetics-breadcrumb-current {
   min-width: 0;
-  color: #f1f6ff;
+  color: var(--ink);
   font-weight: 700;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+.app-shell[data-theme="dark"][data-app-background] .apologetics-breadcrumb-current {
+  color: var(--ink);
+}
+
 .apologetics-hero-image {
   position: relative;
   overflow: hidden;
-  min-height: 30dvh;
-  max-height: 300px;
-  margin: 0 -22px 18px;
-  border-radius: 0;
-  background: #0f1724;
+  min-height: 60dvh;
+  max-height: 500px;
+  margin: -18px -18px 16px;
+  border: 0;
+  border-radius: 0 0 48px 48px;
+  background: transparent;
+  box-shadow: none;
 }
 
 .apologetics-hero-image img {
@@ -1593,60 +2783,73 @@ p {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: saturate(0.84) brightness(0.58);
+  filter: saturate(0.88) brightness(1.03) contrast(0.9);
 }
 
 .apologetics-hero-image::after {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.42) 34%, rgba(0, 0, 0, 0.86) 72%, rgba(0, 0, 0, 0.96));
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0) 20%, rgba(8, 10, 12, 0.18) 100%),
+    radial-gradient(circle at 50% 100%, rgba(247, 241, 232, 0.16), rgba(247, 249, 252, 0) 68%);
   content: "";
 }
 
 .apologetics-hero-image-copy {
   position: absolute;
-  right: 20px;
-  top: 26px;
-  left: 20px;
+  top: 28px;
+  right: 22px;
+  left: 22px;
   z-index: 1;
   display: grid;
-  gap: 14px;
+  gap: 6px;
   align-content: start;
+  justify-items: center;
+  max-width: 62%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  backdrop-filter: none;
 }
 
 .apologetics-hero-image-copy h2 {
-  max-width: 344px;
   margin: 0;
-  color: #f6fbff;
-  font-size: clamp(26px, 4.8vw, 34px);
+  color: rgba(255, 253, 248, 0.98);
+  font-family: var(--font-body);
+  font-size: clamp(24px, 4vw, 32px);
   line-height: 1.02;
-  font-weight: 780;
-  letter-spacing: -0.045em;
+  font-weight: 700;
+  letter-spacing: -0.038em;
   text-wrap: balance;
-  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.34);
-  text-align: left;
+  text-align: center;
+  text-shadow: 0 3px 16px rgba(7, 10, 14, 0.24);
 }
 
 .apologetics-hero-image-copy p {
-  max-width: 316px;
   margin: 0;
-  padding-left: 14px;
-  border-left: 2px solid rgba(111, 215, 255, 0.78);
-  color: rgba(228, 239, 255, 0.94);
-  font-size: 14px;
-  line-height: 1.62;
-  text-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
-  text-align: left;
+  padding: 0;
+  border-left: 0;
+  border-right: 0;
+  color: rgba(255, 253, 249, 0.9);
+  font-size: 10px;
+  line-height: 1.55;
+  text-align: center;
+  text-shadow: 0 1px 8px rgba(7, 10, 14, 0.18);
 }
 
 .apologetics-challenge-card {
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 }
 
 .apologetics-primary-heading {
   display: grid;
   gap: 8px;
+  padding: 0 4px 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .apologetics-primary-heading .eyebrow {
@@ -1656,52 +2859,59 @@ p {
 .apologetics-primary-heading h2 {
   margin: 0;
   color: var(--ink);
-  font-size: 28px;
+  font-family: var(--font-body);
+  font-size: 24px;
   line-height: 1.02;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.045em;
+  font-weight: 760;
 }
 
 .apologetics-primary-heading p {
   max-width: 34ch;
   margin: 0;
-  color: var(--muted);
-  font-size: 14px;
+  color: rgba(124, 113, 101, 0.84);
+  font-size: 12px;
   line-height: 1.58;
 }
 
 .apologetics-secondary-heading {
   display: grid;
-  gap: 6px;
+  gap: 8px;
+  padding: 2px 4px 0;
 }
 
 .apologetics-secondary-heading h2 {
   margin: 0;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 22px;
+  line-height: 1.03;
+  letter-spacing: -0.04em;
+  font-weight: 760;
 }
 
 .apologetics-secondary-heading p {
-  max-width: 38ch;
+  max-width: 36ch;
   margin: 0;
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.55;
+  color: rgba(124, 113, 101, 0.82);
+  font-size: 12px;
+  line-height: 1.58;
 }
 
 .apologetics-challenge-button {
   display: grid;
-  gap: 12px;
+  gap: 10px;
   width: 100%;
-  padding: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 18px;
-  background:
-    radial-gradient(circle at top right, rgba(0, 229, 255, 0.16), transparent 36%),
-    linear-gradient(145deg, rgba(19, 25, 40, 0.98), rgba(12, 16, 29, 0.98));
+  padding: 13px;
+  border: 1px solid rgba(221, 227, 234, 0.028);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(247, 249, 252, 0.996));
   color: var(--ink);
   text-align: justify;
   text-justify: inter-word;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 18px 34px rgba(0, 0, 0, 0.24);
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 1px 3px rgba(47, 60, 74, 0.0008);
 }
 
 .apologetics-challenge-top,
@@ -1714,40 +2924,40 @@ p {
 
 .apologetics-challenge-top small,
 .apologetics-challenge-meta span {
-  color: rgba(213, 226, 242, 0.72);
+  color: rgba(124, 113, 101, 0.78);
   font-size: 12px;
   font-weight: 700;
 }
 
 .apologetics-challenge-top strong {
-  color: #7ff0ad;
+  color: var(--cool);
   font-size: 12px;
   font-weight: 800;
 }
 
 .apologetics-challenge-button h3 {
   margin: 0;
-  color: #f3f8ff;
+  color: var(--ink);
   font-size: 20px;
   line-height: 1.12;
 }
 
 .apologetics-challenge-button p {
   margin: 0;
-  color: rgba(224, 236, 252, 0.88);
+  color: rgba(124, 113, 101, 0.84);
   line-height: 1.58;
 }
 
 .apologetics-overview-strip {
-  margin-top: 14px;
-  margin-bottom: 18px;
+  margin-top: 6px;
+  margin-bottom: 14px;
 }
 
 .apologetics-progress-carousel {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   overflow-x: auto;
-  padding: 2px 0 8px;
+  padding: 2px 0 4px;
   scrollbar-width: none;
   scroll-snap-type: x proximity;
 }
@@ -1757,16 +2967,18 @@ p {
 }
 
 .apologetics-progress-card {
-  flex: 0 0 46%;
+  flex: 0 0 min(26%, 92px);
   position: relative;
   display: grid;
-  gap: 4px;
+  gap: 6px;
   min-width: 0;
-  padding: 14px 12px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  background: transparent;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  padding: 8px 8px 7px;
+  border: 1px solid rgba(221, 227, 234, 0.014);
+  border-radius: 15px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.985));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.985),
+    0 4px 10px rgba(47, 60, 74, 0.003);
   scroll-snap-align: start;
 }
 
@@ -1777,82 +2989,77 @@ p {
   left: 12px;
   height: 2px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(181, 159, 131, 0.42);
   content: "";
 }
 
 .apologetics-progress-card--cyan::before {
-  background: #49dfff;
+  background: linear-gradient(90deg, rgba(166, 140, 112, 0.86), rgba(231, 219, 206, 0.74));
 }
 
 .apologetics-progress-card--green::before {
-  background: #71f0ab;
+  background: linear-gradient(90deg, rgba(145, 126, 104, 0.8), rgba(226, 214, 201, 0.72));
 }
 
 .apologetics-progress-card--violet::before {
-  background: #a784ff;
+  background: linear-gradient(90deg, rgba(166, 140, 112, 0.8), rgba(231, 219, 206, 0.74));
 }
 
 .apologetics-progress-card--amber::before {
-  background: #ffbe5c;
+  background: linear-gradient(90deg, rgba(166, 140, 112, 0.8), rgba(231, 219, 206, 0.74));
 }
 
 .apologetics-progress-card small {
-  color: rgba(203, 215, 231, 0.62);
-  font-size: 10px;
+  color: rgba(124, 113, 101, 0.78);
+  font-size: 9px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 
 .apologetics-progress-card strong {
-  color: #f7fbff;
-  font-size: 18px;
+  color: var(--ink);
+  font-size: 14px;
   line-height: 1;
 }
 
 .apologetics-progress-card span {
-  color: rgba(219, 230, 244, 0.68);
-  font-size: 10px;
+  color: rgba(124, 113, 101, 0.76);
+  font-size: 8px;
   line-height: 1.4;
 }
 
 .apologetics-hero {
   display: grid;
-  gap: 16px;
-  margin-bottom: 18px;
-  padding: 18px;
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  background:
-    radial-gradient(circle at top right, rgba(0, 229, 255, 0.14), transparent 36%),
-    linear-gradient(145deg, color-mix(in srgb, var(--bg-soft) 88%, #07131d), var(--bg-soft));
+  gap: 12px;
+  margin-bottom: 8px;
+  padding: 9px;
+  border: 1px solid rgba(221, 227, 234, 0.002);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.995));
 }
 
 .apologetics-hero--track {
-  gap: 14px;
-  padding: 18px;
+  gap: 8px;
+  padding: 4px 4px 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .apologetics-hero--track-islam {
-  border-color: rgba(70, 255, 193, 0.18);
-  background:
-    radial-gradient(circle at top right, rgba(0, 255, 183, 0.14), transparent 32%),
-    linear-gradient(145deg, rgba(10, 40, 42, 0.96), rgba(10, 21, 33, 0.96));
+  border-color: rgba(221, 227, 234, 0.03);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(247, 249, 252, 0.992));
 }
 
 .apologetics-hero--track-jehovahs-witnesses {
-  border-color: rgba(255, 194, 75, 0.18);
-  background:
-    radial-gradient(circle at top right, rgba(255, 193, 7, 0.14), transparent 32%),
-    linear-gradient(145deg, rgba(49, 32, 10, 0.96), rgba(24, 18, 10, 0.96));
+  border-color: rgba(221, 227, 234, 0.03);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(247, 249, 252, 0.992));
 }
 
 .apologetics-hero--track-atheism {
-  border-color: rgba(120, 154, 255, 0.18);
-  background:
-    radial-gradient(circle at top right, rgba(98, 140, 255, 0.16), transparent 34%),
-    linear-gradient(145deg, rgba(18, 28, 55, 0.96), rgba(13, 17, 32, 0.96));
+  border-color: rgba(221, 227, 234, 0.03);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(247, 249, 252, 0.992));
 }
 
 .apologetics-hero-copy h2 {
@@ -1866,12 +3073,15 @@ p {
 
 .apologetics-hero--track .apologetics-hero-copy h2 {
   margin: 0 0 4px;
-  font-size: 24px;
+  font-size: 22px;
   line-height: 1.05;
+  font-family: var(--font-body);
+  font-weight: 700;
+  letter-spacing: -0.035em;
 }
 
 .apologetics-hero--track .apologetics-hero-copy p {
-  color: rgba(222, 234, 246, 0.88);
+  color: rgba(124, 113, 101, 0.8);
   font-size: 14px;
   line-height: 1.56;
 }
@@ -1885,20 +3095,20 @@ p {
 .apologetics-hero-stats span {
   display: grid;
   gap: 2px;
-  padding: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.04);
+  padding: 8px 9px;
+  border: 1px solid rgba(221, 227, 234, 0.006);
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(247, 249, 252, 0.96));
 }
 
 .apologetics-hero-stats strong {
-  color: #f4fbff;
+  color: var(--ink);
   font-size: 17px;
   line-height: 1;
 }
 
 .apologetics-hero-stats small {
-  color: rgba(225, 235, 248, 0.68);
+  color: rgba(124, 113, 101, 0.78);
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
@@ -1908,7 +3118,7 @@ p {
 .apologetics-track-progress-panel,
 .apologetics-track-rewards {
   display: grid;
-  gap: 12px;
+  gap: 10px;
 }
 
 .apologetics-track-hero-progress-top,
@@ -1922,30 +3132,33 @@ p {
 .apologetics-track-hero-progress-top strong,
 .apologetics-track-progress-copy strong,
 .apologetics-rewards-head strong {
-  color: #f4fbff;
+  color: var(--ink);
   font-size: 14px;
   font-weight: 760;
 }
 
 .apologetics-track-hero-progress-top span,
 .apologetics-rewards-head span {
-  color: rgba(208, 221, 240, 0.72);
+  color: rgba(124, 113, 101, 0.78);
   font-size: 12px;
   font-weight: 700;
 }
 
 .apologetics-track-progress-panel,
 .apologetics-track-rewards {
-  margin-bottom: 14px;
-  padding: 14px 15px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.025);
+  margin-bottom: 12px;
+  padding: 10px;
+  border: 1px solid rgba(221, 227, 234, 0.003);
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.992));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 3px 8px rgba(47, 60, 74, 0.0025);
 }
 
 .apologetics-track-progress-copy p {
   margin: 0;
-  color: rgba(212, 225, 241, 0.82);
+  color: rgba(124, 113, 101, 0.82);
   font-size: 13px;
   line-height: 1.58;
 }
@@ -1956,12 +3169,15 @@ p {
 
 .apologetics-track-quick {
   display: grid;
-  gap: 14px;
-  margin-bottom: 14px;
-  padding: 14px 15px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.025);
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 10px;
+  border: 1px solid rgba(221, 227, 234, 0.003);
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.992));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 3px 8px rgba(47, 60, 74, 0.0025);
 }
 
 .apologetics-quick-head strong {
@@ -1974,28 +3190,28 @@ p {
 .apologetics-quick-steps {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  gap: 7px;
 }
 
 .apologetics-quick-steps button {
   display: flex;
   align-items: center;
   gap: 8px;
-  min-height: 38px;
-  padding: 0 10px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  color: #dce8f7;
-  background: rgba(255, 255, 255, 0.025);
+  min-height: 30px;
+  padding: 0 9px;
+  border: 1px solid rgba(221, 227, 234, 0.028);
+  border-radius: 18px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.92);
   font-size: 12px;
   font-weight: 650;
   text-align: left;
 }
 
 .apologetics-quick-steps button.is-active {
-  border-color: rgba(0, 229, 255, 0.22);
-  background: rgba(0, 229, 255, 0.08);
-  box-shadow: inset 0 0 0 1px rgba(0, 229, 255, 0.12);
+  border-color: rgba(221, 227, 234, 0.08);
+  background: rgba(241, 234, 223, 0.66);
+  box-shadow: inset 0 0 0 1px rgba(221, 227, 234, 0.04);
 }
 
 .apologetics-quick-steps small {
@@ -2005,8 +3221,8 @@ p {
   min-width: 22px;
   height: 22px;
   border-radius: 999px;
-  color: #08141b;
-  background: var(--gold);
+  color: var(--accent-contrast);
+  background: var(--cool);
   font-size: 11px;
   font-weight: 800;
 }
@@ -2019,34 +3235,34 @@ p {
 
 .apologetics-framework-detail h3 {
   margin: 0;
-  color: #f2f8ff;
+  color: var(--ink);
   font-size: 18px;
 }
 
 .apologetics-framework-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  gap: 8px;
 }
 
 .apologetics-framework-grid section {
   display: grid;
   gap: 6px;
-  padding: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.02);
+  padding: 9px;
+  border: 1px solid rgba(221, 227, 234, 0.012);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(247, 249, 252, 0.992));
 }
 
 .apologetics-framework-grid strong {
-  color: #f1f7ff;
+  color: var(--ink);
   font-size: 13px;
   font-weight: 760;
 }
 
 .apologetics-framework-grid p {
   margin: 0;
-  color: rgba(212, 224, 240, 0.82);
+  color: rgba(124, 113, 101, 0.82);
   font-size: 13px;
   line-height: 1.58;
 }
@@ -2054,53 +3270,53 @@ p {
 .apologetics-rewards-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  gap: 8px;
 }
 
 .apologetics-rewards-grid span {
   display: grid;
   gap: 6px;
   min-width: 0;
-  padding: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.02);
+  padding: 9px;
+  border: 1px solid rgba(221, 227, 234, 0.012);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(247, 249, 252, 0.992));
 }
 
 .apologetics-rewards-grid span.is-unlocked {
-  border-color: rgba(125, 247, 168, 0.2);
-  background: rgba(125, 247, 168, 0.08);
+  border-color: rgba(181, 159, 131, 0.16);
+  background: rgba(242, 228, 210, 0.72);
 }
 
 .apologetics-rewards-grid small {
-  color: rgba(203, 216, 233, 0.66);
+  color: rgba(124, 113, 101, 0.78);
   font-size: 11px;
   font-weight: 800;
   text-transform: uppercase;
 }
 
 .apologetics-rewards-grid strong {
-  color: #f4fbff;
+  color: var(--ink);
   font-size: 13px;
   line-height: 1.35;
 }
 
 .apologetics-selection-line {
   margin: 0 0 14px;
-  color: rgba(199, 212, 228, 0.72);
+  color: rgba(124, 113, 101, 0.78);
   font-size: 13px;
   line-height: 1.5;
 }
 
 .apologetics-selection-line.is-active {
-  color: #f0f7ff;
+  color: var(--cool);
 }
 
 .apologetics-track-carousel {
   display: flex;
-  gap: 14px;
+  gap: 10px;
   overflow-x: auto;
-  padding: 4px 0 12px;
+  padding: 4px 0 9px;
   scrollbar-width: none;
   scroll-snap-type: x proximity;
 }
@@ -2110,46 +3326,35 @@ p {
 }
 
 .apologetics-track-card {
-  flex: 0 0 86%;
+  flex: 0 0 min(74%, 206px);
   display: grid;
-  gap: 12px;
-  padding: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 22px;
-  background:
-    radial-gradient(circle at top right, rgba(0, 229, 255, 0.18), transparent 34%),
-    rgba(255, 255, 255, 0.03);
+  gap: 8px;
+  padding: 12px 12px 11px;
+  border: 1px solid rgba(221, 227, 234, 0.006);
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.996));
   color: var(--ink);
   text-align: justify;
   text-justify: inter-word;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    0 20px 40px rgba(0, 0, 0, 0.24);
+    inset 0 1px 0 rgba(255, 255, 255, 0.985),
+    0 1px 2px rgba(47, 60, 74, 0.00022);
   scroll-snap-align: start;
 }
 
 .apologetics-track-card--islam {
-  border-color: rgba(70, 255, 193, 0.22);
-  background:
-    radial-gradient(circle at top right, rgba(0, 255, 183, 0.22), transparent 32%),
-    radial-gradient(circle at bottom left, rgba(0, 186, 255, 0.16), transparent 34%),
-    linear-gradient(145deg, rgba(9, 53, 51, 0.98), rgba(8, 30, 44, 0.96));
+  border-color: rgba(221, 227, 234, 0.03);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(252, 247, 240, 0.985));
 }
 
 .apologetics-track-card--jehovahs-witnesses {
-  border-color: rgba(255, 194, 75, 0.24);
-  background:
-    radial-gradient(circle at top right, rgba(255, 193, 7, 0.24), transparent 32%),
-    radial-gradient(circle at bottom left, rgba(255, 120, 48, 0.18), transparent 36%),
-    linear-gradient(145deg, rgba(56, 34, 10, 0.98), rgba(36, 20, 6, 0.96));
+  border-color: rgba(221, 227, 234, 0.03);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(252, 249, 243, 0.985));
 }
 
 .apologetics-track-card--atheism {
-  border-color: rgba(120, 154, 255, 0.24);
-  background:
-    radial-gradient(circle at top right, rgba(98, 140, 255, 0.26), transparent 34%),
-    radial-gradient(circle at bottom left, rgba(183, 92, 255, 0.16), transparent 36%),
-    linear-gradient(145deg, rgba(18, 26, 56, 0.98), rgba(14, 17, 34, 0.96));
+  border-color: rgba(221, 227, 234, 0.03);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(253, 249, 244, 0.985));
 }
 
 .apologetics-track-card-top {
@@ -2157,87 +3362,87 @@ p {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  color: #cfeaff;
+  color: rgba(124, 113, 101, 0.88);
 }
 
 .apologetics-track-card-top small {
-  color: rgba(233, 241, 255, 0.82);
-  font-size: 11px;
-  font-weight: 750;
+  color: rgba(118, 107, 96, 0.88);
+  font-size: 10px;
+  font-weight: 800;
   text-transform: uppercase;
 }
 
 .apologetics-track-card > strong {
-  color: #f8fbff;
-  font-size: 20px;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 760;
 }
 
 .apologetics-track-card p {
-  color: rgba(221, 232, 245, 0.88);
-}
-
-.apologetics-track-card p {
+  color: rgba(124, 113, 101, 0.84);
   margin-bottom: 0;
+  font-size: 11px;
+  line-height: 1.5;
 }
 
 .apologetics-track-card-metrics {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
+  gap: 6px;
 }
 
 .apologetics-track-card-metrics span {
   display: grid;
-  gap: 3px;
-  padding: 10px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 2px;
+  padding: 7px 0 4px;
+  border-top: 1px solid rgba(221, 227, 234, 0.02);
 }
 
 .apologetics-track-card-metrics strong {
-  color: #f8fbff;
-  font-size: 16px;
+  color: var(--ink);
+  font-size: 12px;
   line-height: 1;
 }
 
 .apologetics-track-card-metrics small {
-  color: rgba(221, 232, 245, 0.7);
-  font-size: 11px;
+  color: rgba(124, 113, 101, 0.76);
+  font-size: 9px;
   font-weight: 700;
   text-transform: uppercase;
 }
 
 .apologetics-track-card-footer {
   display: grid;
-  gap: 10px;
+  gap: 8px;
 }
 
 .apologetics-track-progress-bar {
   position: relative;
   overflow: hidden;
   width: 100%;
-  height: 6px;
+  height: 5px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(221, 227, 234, 0.55);
 }
 
 .apologetics-track-progress-bar span {
   position: absolute;
   inset: 0 auto 0 0;
   border-radius: inherit;
-  background: linear-gradient(90deg, rgba(0, 229, 255, 0.9), rgba(81, 255, 182, 0.92));
+  background: linear-gradient(90deg, rgba(181, 159, 131, 0.96), rgba(216, 201, 183, 0.94));
 }
 
 .apologetics-track-card-cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 40px;
+  min-height: 26px;
   width: fit-content;
-  padding: 0 16px;
-  border-radius: 999px;
-  color: #071712;
-  background: rgba(127, 240, 173, 0.96);
-  font-size: 12px;
+  padding: 0 11px;
+  border-radius: 18px;
+  color: var(--ink);
+  background: rgba(242, 228, 210, 0.88);
+  font-size: 9.5px;
   font-weight: 800;
 }
 
@@ -2247,10 +3452,10 @@ p {
   gap: 6px;
   min-height: 34px;
   padding: 0 12px;
-  border: 1px solid var(--line);
+  border: 1px solid rgba(221, 227, 234, 0.028);
   border-radius: 999px;
-  color: var(--gold);
-  background: rgba(255, 255, 255, 0.04);
+  color: #5d6672;
+  background: rgba(255, 255, 255, 0.92);
   font-size: 12px;
   font-weight: 700;
 }
@@ -2276,45 +3481,66 @@ p {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  min-height: 42px;
-  padding: 0 14px;
-  border: 1px solid var(--line);
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid rgba(221, 227, 234, 0.022);
   border-radius: 999px;
-  background: var(--bg-soft);
-  color: var(--muted);
+  background:
+    rgba(255, 255, 255, 0.996);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    0 3px 8px rgba(47, 60, 74, 0.005);
+  color: rgba(124, 113, 101, 0.8);
   font-size: 13px;
   font-weight: 700;
 }
 
 .apologetics-filter-row button.is-active {
-  border-color: var(--gold);
-  background: var(--gold-soft);
-  color: var(--gold);
+  border-color: rgba(181, 159, 131, 0.26);
+  background: rgba(242, 228, 210, 0.88);
+  color: var(--ink);
 }
 
 .apologetics-panel {
   margin-top: 0;
-  padding: 16px;
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  background: var(--bg-soft);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .apologetics-topic-count {
-  color: var(--gold);
+  color: var(--cool);
   font-size: 13px;
   font-weight: 700;
 }
 
 .apologetics-topic-list {
   display: grid;
-  gap: 14px;
-  padding: 2px 0 6px;
+  gap: 7px;
+  padding: 2px 0 92px;
 }
 
 .apologetics-featured-group {
   display: grid;
   gap: 12px;
+}
+
+.apologetics-featured-group > button,
+.apologetics-featured-group > summary {
+  appearance: none;
+  border: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.apologetics-featured-group > summary {
+  list-style: none;
+}
+
+.apologetics-featured-group > summary::-webkit-details-marker {
+  display: none;
 }
 
 .apologetics-featured-group + .apologetics-featured-group {
@@ -2326,27 +3552,33 @@ p {
   min-height: 0;
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 14px;
-  padding: 16px 16px 15px;
-  border: 1px solid var(--line);
-  border-radius: 24px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(247, 241, 232, 0.88)),
-    var(--bg-soft);
+  gap: 9px;
+  padding: 10px 10px 9px;
+  border: 1px solid rgba(221, 227, 234, 0.008);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.996), rgba(247, 249, 252, 0.94));
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.8),
-    0 12px 30px rgba(52, 42, 27, 0.08);
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 2px 6px rgba(47, 60, 74, 0.0012);
   text-align: left;
+  cursor: pointer;
+  transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease, transform 140ms ease;
+}
+
+.apologetics-featured-group-heading:hover,
+.apologetics-featured-group-heading:focus-visible {
+  border-color: rgba(181, 159, 131, 0.22);
+  transform: translateY(-1px);
 }
 
 .apologetics-featured-group-heading-copy {
   display: grid;
-  gap: 6px;
+  gap: 5px;
   min-width: 0;
 }
 
 .apologetics-featured-group-heading-copy small {
-  color: var(--gold);
+  color: var(--cool);
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -2356,20 +3588,21 @@ p {
 .apologetics-featured-group-heading h3 {
   margin: 0;
   color: var(--ink);
-  font-size: 20px;
+  font-size: 15px;
   line-height: 1.05;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
 }
 
 .apologetics-featured-group-heading p {
   margin: 0;
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.55;
+  color: rgba(124, 113, 101, 0.76);
+  font-size: 10px;
+  line-height: 1.5;
 }
 
 .apologetics-featured-group-heading-side {
-  display: inline-flex;
+  display: inline-grid;
+  justify-items: end;
   align-items: center;
   gap: 10px;
   align-self: start;
@@ -2379,24 +3612,51 @@ p {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 30px;
-  min-height: 30px;
-  padding: 0 11px;
+  min-width: 26px;
+  min-height: 26px;
+  padding: 0 9px;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--gold-soft) 38%, rgba(255, 255, 255, 0.3));
-  color: var(--gold);
-  font-size: 12px;
+  background: rgba(242, 228, 210, 0.88);
+  color: var(--cool);
+  font-size: 10px;
   font-weight: 760;
+}
+
+.apologetics-featured-group.is-expanded .apologetics-featured-group-heading,
+.apologetics-featured-group[open] .apologetics-featured-group-heading {
+  border-color: rgba(181, 159, 131, 0.12);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(247, 249, 252, 0.995));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 2px 6px rgba(181, 159, 131, 0.012);
+}
+
+.apologetics-featured-group.is-expanded .apologetics-featured-group-heading-side span,
+.apologetics-featured-group[open] .apologetics-featured-group-heading-side span {
+  background: rgba(242, 228, 210, 0.9);
+}
+
+.apologetics-featured-group-heading-state {
+  min-width: 0;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: rgba(124, 113, 101, 0.76);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .apologetics-featured-group-heading svg {
   width: 18px;
   height: 18px;
-  color: var(--muted);
+  color: rgba(124, 113, 101, 0.76);
   transition: transform 180ms ease, color 180ms ease, opacity 180ms ease;
 }
 
-.apologetics-featured-group.is-expanded .apologetics-featured-group-heading svg {
+.apologetics-featured-group.is-expanded .apologetics-featured-group-heading svg,
+.apologetics-featured-group[open] .apologetics-featured-group-heading svg {
   color: var(--ink);
   transform: rotate(180deg);
 }
@@ -2407,88 +3667,86 @@ p {
 
 .apologetics-topic-dropdown-list {
   display: grid;
-  gap: 12px;
+  gap: 6px;
 }
 
 .apologetics-topic-card {
   position: relative;
   display: grid;
-  gap: 9px;
-  padding: 15px 54px 15px 15px;
-  border: 1px solid color-mix(in srgb, rgba(115, 136, 255, 0.18) 36%, var(--line));
+  gap: 7px;
+  padding: 11px 40px 11px 12px;
+  border: 1px solid rgba(226, 219, 209, 0.018);
   border-radius: 22px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(243, 237, 227, 0.96)),
-    var(--bg-soft);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(247, 249, 252, 0.986));
   color: var(--ink);
   text-align: justify;
   text-justify: inter-word;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.7),
-    0 14px 28px rgba(52, 42, 27, 0.08);
+    inset 0 1px 0 rgba(255, 255, 255, 0.985),
+    0 2px 5px rgba(47, 60, 74, 0.0009);
   transition: transform 140ms ease, border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
 }
 
 .apologetics-topic-card--bible {
-  border-color: rgba(78, 188, 255, 0.22);
+  border-color: rgba(187, 164, 135, 0.16);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(253, 249, 243, 0.97));
 }
 
 .apologetics-topic-card--jesus {
-  border-color: rgba(0, 234, 205, 0.22);
+  border-color: rgba(187, 164, 135, 0.18);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(253, 248, 241, 0.97));
 }
 
 .apologetics-topic-card--doctrine {
-  border-color: rgba(255, 169, 58, 0.22);
+  border-color: rgba(187, 164, 135, 0.18);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(253, 248, 241, 0.97));
 }
 
 .apologetics-topic-card--history {
-  border-color: rgba(168, 122, 255, 0.24);
+  border-color: rgba(187, 164, 135, 0.18);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(252, 247, 240, 0.97));
 }
 
 .apologetics-topic-card--bible .apologetics-topic-meta small {
-  color: #7ad3ff;
+  color: var(--cool);
 }
 
 .apologetics-topic-card--jesus .apologetics-topic-meta small {
-  color: #54f0dc;
+  color: var(--cool);
 }
 
 .apologetics-topic-card--doctrine .apologetics-topic-meta small {
-  color: #ffbc64;
+  color: var(--cool);
 }
 
 .apologetics-topic-card--history .apologetics-topic-meta small {
-  color: #b893ff;
+  color: var(--cool);
 }
 
 .apologetics-topic-card.is-selected {
-  border-color: rgba(0, 229, 255, 0.88);
-  background:
-    linear-gradient(180deg, rgba(12, 44, 68, 0.92), rgba(9, 28, 48, 0.96)),
-    rgba(255, 255, 255, 0.02);
+  border-color: rgba(221, 227, 234, 0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(245, 247, 250, 0.992));
   box-shadow:
-    inset 0 0 0 1px rgba(0, 229, 255, 0.3),
-    0 0 0 1px rgba(0, 229, 255, 0.12),
-    0 12px 28px rgba(0, 229, 255, 0.12);
-  transform: translateY(-1px);
+    inset 0 0 0 1px rgba(221, 227, 234, 0.05),
+    0 0 0 1px rgba(221, 227, 234, 0.02),
+    0 2px 6px rgba(47, 60, 74, 0.004);
+  transform: translateY(0);
 }
 
 .apologetics-topic-card--carousel {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(243, 237, 227, 0.98)),
-    var(--bg-soft);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(247, 249, 252, 0.995));
 }
 
 .apologetics-topic-open {
   display: inline-flex;
   align-items: center;
   width: fit-content;
-  min-height: 30px;
-  padding: 0 11px;
+  min-height: 24px;
+  padding: 0 10px;
   border-radius: 999px;
-  color: var(--ink);
-  background: rgba(255, 255, 255, 0.68);
-  font-size: 11px;
+  color: #5b625d;
+  background: rgba(241, 234, 223, 0.92);
+  font-size: 10px;
   font-weight: 760;
 }
 
@@ -2502,59 +3760,57 @@ p {
 .apologetics-topic-meta-row small {
   display: inline-flex;
   align-items: center;
-  min-height: 28px;
-  padding: 0 10px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  min-height: 22px;
+  padding: 0 7px;
+  border: 1px solid rgba(226, 219, 209, 0.04);
   border-radius: 999px;
-  color: rgba(218, 229, 244, 0.76);
-  background: rgba(255, 255, 255, 0.03);
-  font-size: 11px;
+  color: rgba(124, 113, 101, 0.78);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(247, 249, 252, 0.96));
+  font-size: 9px;
   font-weight: 700;
 }
 
 .apologetics-topic-plus {
   position: absolute;
-  top: 14px;
-  right: 14px;
+  top: 10px;
+  right: 10px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
-  border: 1px solid rgba(109, 197, 255, 0.92);
-  border-radius: 999px;
-  color: #effcff;
-  background:
-    radial-gradient(circle at 30% 30%, rgba(144, 225, 255, 0.38), rgba(144, 225, 255, 0) 58%),
-    linear-gradient(135deg, rgba(120, 91, 255, 0.34), rgba(0, 229, 255, 0.34));
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(181, 159, 131, 0.12);
+  border-radius: 50%;
+  color: rgba(124, 113, 101, 0.9);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(247, 249, 252, 0.982));
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
-    0 0 0 1px rgba(98, 164, 255, 0.18),
-    0 0 22px rgba(64, 201, 255, 0.24);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.84),
+    0 0 0 1px rgba(181, 159, 131, 0.02),
+    0 0 7px rgba(181, 159, 131, 0.022);
 }
 
 .apologetics-topic-plus svg {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   stroke-width: 2.2;
 }
 
 .apologetics-topic-card.is-selected .apologetics-topic-plus {
-  border-color: rgba(164, 244, 255, 0.96);
-  background:
-    radial-gradient(circle at 30% 30%, rgba(197, 243, 255, 0.42), rgba(197, 243, 255, 0) 58%),
-    linear-gradient(135deg, rgba(55, 214, 255, 0.56), rgba(82, 109, 255, 0.56));
+  border-color: rgba(221, 227, 234, 0.08);
+  background: rgba(247, 249, 252, 0.98);
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.12),
-    0 0 0 1px rgba(109, 228, 255, 0.24),
-    0 0 28px rgba(0, 229, 255, 0.34);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 0 0 1px rgba(221, 227, 234, 0.03),
+    0 0 8px rgba(181, 159, 131, 0.015);
   transform: rotate(45deg);
 }
 
 .apologetics-topic-card > strong {
   color: var(--ink);
-  font-size: 15px;
+  font-size: 13px;
   line-height: 1.3;
+  font-family: var(--font-body);
+  font-weight: 760;
 }
 
 .apologetics-topic-card p,
@@ -2570,7 +3826,7 @@ p {
 }
 
 .apologetics-topic-meta small {
-  color: var(--muted);
+  color: rgba(124, 113, 101, 0.78);
   font-size: 11px;
   font-weight: 750;
   text-transform: uppercase;
@@ -2580,26 +3836,26 @@ p {
 .apologetics-topic-status {
   display: inline-flex;
   align-items: center;
-  min-height: 26px;
+  min-height: 22px;
   padding: 0 10px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(221, 227, 234, 0.022);
   border-radius: 999px;
-  color: rgba(214, 226, 241, 0.74);
-  background: rgba(255, 255, 255, 0.03);
-  font-size: 11px;
+  color: rgba(124, 113, 101, 0.8);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.996), rgba(247, 249, 252, 0.99));
+  font-size: 10px;
   font-weight: 750;
 }
 
 .apologetics-topic-status.is-progress {
-  color: #7ad3ff;
+  color: var(--cool);
 }
 
 .apologetics-topic-status.is-completed {
-  color: #82efad;
+  color: var(--cool);
 }
 
 .apologetics-detail-panel {
-  margin-top: 16px;
+  margin-top: 12px;
   padding: 0;
   border: 0;
   border-radius: 0;
@@ -2609,36 +3865,43 @@ p {
 .apologetics-topic-tabs {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
-  margin-top: 14px;
-  margin-bottom: 16px;
-  padding: 4px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.03);
+  gap: 5px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  padding: 3px;
+  border: 1px solid rgba(221, 227, 234, 0.022);
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.997), rgba(247, 249, 252, 0.993));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 4px 10px rgba(47, 60, 74, 0.0025);
 }
 
 .apologetics-topic-tabs button {
   min-height: 42px;
   border-radius: 999px;
   background: transparent;
-  color: var(--muted);
+  color: rgba(124, 113, 101, 0.8);
   font-size: 13px;
   font-weight: 700;
 }
 
 .apologetics-topic-tabs button.is-active {
-  color: var(--gold);
-  background: color-mix(in srgb, var(--gold-soft) 55%, var(--bg-soft));
+  color: var(--ink);
+  background: rgba(242, 228, 210, 0.88);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.96);
 }
 
 .apologetics-topic-tabs button[data-apologetics-topic-tab="chat"] {
-  color: #7fe6a8;
+  color: var(--cool);
 }
 
 .apologetics-topic-tabs button[data-apologetics-topic-tab="chat"].is-active {
-  color: #03140a;
-  background: linear-gradient(135deg, #28dd72, #7df7a8);
-  box-shadow: 0 10px 24px rgba(40, 221, 114, 0.24);
+  color: var(--ink);
+  background: rgba(242, 228, 210, 0.88);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    0 2px 3px rgba(181, 159, 131, 0.015);
 }
 
 .apologetics-chat-panel {
@@ -2652,7 +3915,7 @@ p {
 }
 
 .apologetics-intro-kicker {
-  color: #72ccff;
+  color: var(--cool);
   font-size: 12px;
   font-weight: 760;
   letter-spacing: 0.08em;
@@ -2661,14 +3924,14 @@ p {
 
 .apologetics-intro-header h2 {
   margin: 0;
-  color: #f3f8ff;
+  color: var(--ink);
   font-size: 24px;
   line-height: 1.08;
 }
 
 .apologetics-intro-header .apologetics-summary {
   max-width: 36ch;
-  color: rgba(222, 233, 246, 0.86);
+  color: rgba(124, 113, 101, 0.84);
   font-size: 15px;
   line-height: 1.65;
 }
@@ -2684,34 +3947,33 @@ p {
 }
 
 .apologetics-intro-block strong {
-  color: #f3f8ff;
+  color: var(--ink);
   font-size: 15px;
   font-weight: 760;
 }
 
 .apologetics-intro-block p {
   margin: 0;
-  color: rgba(213, 225, 240, 0.88);
+  color: rgba(124, 113, 101, 0.82);
   line-height: 1.7;
 }
 
 .apologetics-begin-button {
-  position: absolute;
-  right: -22px;
+  position: sticky;
   bottom: calc(var(--bottom-nav-height) - 1px);
-  left: -22px;
-  z-index: 11;
+  z-index: 8;
   display: grid;
   place-items: center;
-  margin: 0;
+  width: 100%;
+  margin: 18px 0 0;
   min-height: 58px;
-  border-radius: 0;
-  background: linear-gradient(90deg, #1f9f52, #33c36b);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.992), rgba(247, 249, 252, 0.972));
   color: transparent;
   font-size: 15px;
   font-weight: 800;
   letter-spacing: 0.01em;
-  box-shadow: 0 -10px 28px rgba(18, 64, 35, 0.28);
+  box-shadow: 0 -8px 18px rgba(46, 58, 74, 0.05);
   transition: filter 180ms ease, opacity 180ms ease, transform 160ms ease;
 }
 
@@ -2720,13 +3982,14 @@ p {
 }
 
 .apologetics-begin-button.is-disabled {
-  background: rgba(0, 0, 0, 0.96);
-  box-shadow: 0 -10px 28px rgba(0, 0, 0, 0.28);
+  background: rgba(251, 252, 254, 0.985);
+  box-shadow: 0 -8px 18px rgba(46, 58, 74, 0.05);
+  pointer-events: none;
 }
 
 .apologetics-begin-button::after {
   content: attr(data-label);
-  color: #f7fff9;
+  color: rgba(24, 33, 43, 0.86);
 }
 
 .apologetics-begin-button.is-disabled::after {
@@ -2744,30 +4007,35 @@ p {
   gap: 8px;
   margin-bottom: 14px;
   padding: 4px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(221, 227, 234, 0.015);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(250, 251, 253, 0.993));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 2px 5px rgba(47, 60, 74, 0.0008);
 }
 
 .apologetics-chat-tabs button {
   min-height: 40px;
   border-radius: 999px;
-  color: var(--muted);
+  color: rgba(124, 113, 101, 0.8);
   background: transparent;
   font-size: 13px;
   font-weight: 700;
 }
 
 .apologetics-chat-tabs button.is-active {
-  color: var(--gold);
-  background: color-mix(in srgb, var(--gold-soft) 55%, var(--bg-soft));
+  color: var(--ink);
+  background: rgba(242, 228, 210, 0.88);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.98);
 }
 
 .apologetics-chat-thread {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  min-height: 240px;
-  max-height: 420px;
+  min-height: 220px;
+  max-height: 400px;
   overflow-y: auto;
   padding: 4px 0 14px;
   scrollbar-width: none;
@@ -2779,9 +4047,12 @@ p {
 
 .apologetics-chat-empty {
   padding: 18px 16px;
-  border: 1px dashed var(--line);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(221, 227, 234, 0.015);
+  border-radius: 26px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(247, 249, 252, 0.99));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    0 3px 8px rgba(47, 60, 74, 0.0012);
 }
 
 .apologetics-chat-empty strong {
@@ -2792,6 +4063,7 @@ p {
 
 .apologetics-chat-empty p {
   margin-bottom: 0;
+  color: rgba(124, 113, 101, 0.82);
 }
 
 .apologetics-chat-composer {
@@ -2799,12 +4071,15 @@ p {
   align-items: flex-end;
   gap: 10px;
   margin-top: 4px;
-  padding: 10px 12px;
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  padding: 10px 12px 11px;
+  border: 1px solid rgba(221, 227, 234, 0.015);
+  border-radius: 26px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(247, 249, 252, 0.99));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    0 3px 8px rgba(47, 60, 74, 0.001);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
 .apologetics-chat-composer textarea {
@@ -2822,18 +4097,18 @@ p {
 }
 
 .apologetics-chat-composer textarea::placeholder {
-  color: var(--muted);
+  color: rgba(124, 113, 101, 0.74);
   opacity: 0.9;
 }
 
 .apologetics-chat-composer button {
   display: grid;
   place-items: center;
-  width: 46px;
-  min-width: 46px;
-  min-height: 46px;
+  width: 42px;
+  min-width: 42px;
+  min-height: 42px;
   border-radius: 50%;
-  background: var(--gold);
+  background: var(--cool);
   color: var(--accent-contrast, #fff);
 }
 
@@ -2845,7 +4120,7 @@ p {
 .apologetics-bullet-list {
   margin: 10px 0 0;
   padding-left: 18px;
-  color: var(--muted);
+  color: rgba(124, 113, 101, 0.82);
 }
 
 .apologetics-bullet-list li + li {
@@ -2864,24 +4139,28 @@ p {
   display: flex;
   align-items: flex-end;
   padding: 18px;
-  border-radius: var(--radius);
-  color: #fff;
+  border-radius: 24px;
+  border: 1px solid rgba(221, 227, 234, 0.02);
+  color: var(--ink);
   background:
-    linear-gradient(180deg, rgba(15, 20, 17, 0.02), rgba(15, 20, 17, 0.72)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(247, 241, 232, 0.88)),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 720 420'%3E%3Cdefs%3E%3ClinearGradient id='s' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop stop-color='%23f9f3e5'/%3E%3Cstop offset='1' stop-color='%238da391'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='720' height='420' fill='url(%23s)'/%3E%3Ccircle cx='520' cy='105' r='52' fill='%23d8a13a' opacity='.8'/%3E%3Cpath d='M0 294c80-67 150-86 226-58 84 31 133 7 213-40 93-54 176-33 281 47v177H0z' fill='%233d8b5c' opacity='.46'/%3E%3Cpath d='M0 335c94-55 188-58 281-8 98 53 206 44 439-44v137H0z' fill='%231d2a24' opacity='.42'/%3E%3C/svg%3E");
   background-size: cover;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    0 8px 18px rgba(47, 60, 74, 0.006);
 }
 
 .explore-feature h2,
 .explore-feature p,
 .explore-feature .label {
-  color: #fff;
+  color: var(--ink);
 }
 
 .explore-feature h2 {
   max-width: 280px;
   margin-bottom: 8px;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-display);
   font-size: 27px;
   font-weight: 500;
 }
@@ -2893,7 +4172,10 @@ p {
   margin: 18px 0 14px;
   padding: 4px;
   border-radius: 999px;
-  background: var(--bg-soft);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(247, 249, 252, 0.995));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    0 2px 5px rgba(47, 60, 74, 0.004);
 }
 
 .tabs button {
@@ -2906,9 +4188,9 @@ p {
 }
 
 .tabs button.is-active {
-  color: var(--gold);
-  background: #fff;
-  box-shadow: 0 6px 20px rgba(31, 24, 11, 0.08);
+  color: var(--cool);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.992));
+  box-shadow: 0 4px 10px rgba(47, 60, 74, 0.004);
 }
 
 .explore-grid {
@@ -2923,9 +4205,9 @@ p {
   gap: 8px;
   aspect-ratio: 1;
   padding: 8px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: #fff;
+  border: 1px solid rgba(221, 227, 234, 0.04);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.992));
   color: var(--muted);
   font-size: 12px;
   font-weight: 650;
@@ -2935,11 +4217,6 @@ p {
 .explore-grid button span {
   max-width: 100%;
   overflow-wrap: anywhere;
-}
-
-.apologetics-panel {
-  margin-top: 18px;
-  padding: 15px;
 }
 
 .topic-list {
@@ -2953,19 +4230,26 @@ p {
   padding: 0 11px;
   font-size: 13px;
   font-weight: 650;
+  border: 1px solid rgba(221, 227, 234, 0.04);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.992));
 }
 
 .profile-screen {
-  padding-top: 18px;
+  padding-top: 8px;
 }
 
 .profile-hero {
   position: relative;
   overflow: hidden;
-  min-height: 188px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--bg-soft);
+  min-height: 320px;
+  margin-bottom: 8px;
+  border: 0;
+  border-radius: 50px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.995));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.99),
+    0 8px 18px rgba(47, 60, 74, 0.008);
 }
 
 .profile-hero img {
@@ -2974,31 +4258,42 @@ p {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  filter: saturate(0.7) brightness(1.08) contrast(0.88);
 }
 
 .profile-hero::after {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.76));
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0) 42%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0) 18%, rgba(34, 26, 18, 0.08) 100%);
   content: "";
 }
 
 .profile-hero-overlay {
   position: absolute;
-  right: 16px;
-  bottom: 16px;
-  left: 16px;
+  right: 14px;
+  bottom: 14px;
+  left: 14px;
   z-index: 1;
   display: flex;
   align-items: flex-end;
-  gap: 12px;
+  gap: 10px;
+  padding: 12px 12px;
+  border: 1px solid rgba(221, 227, 234, 0.045);
+  border-radius: 42px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.44), rgba(255, 255, 255, 0.16));
+  backdrop-filter: blur(9px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.985),
+    0 6px 14px rgba(47, 60, 74, 0.006);
 }
 
 .profile-avatar {
   flex: 0 0 auto;
-  width: 58px;
-  height: 58px;
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
   font-weight: 760;
 }
 
@@ -3012,17 +4307,152 @@ p {
 }
 
 .profile-hero h1 {
-  color: #fff;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 27px;
+  line-height: 0.92;
+  letter-spacing: -0.03em;
 }
 
 .profile-hero p:not(.eyebrow) {
-  color: rgba(255, 255, 255, 0.76);
-  font-size: 13px;
+  color: rgba(124, 113, 101, 0.8);
+  font-size: 12px;
+}
+
+.profile-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin: 12px 0 14px;
+  padding: 5px;
+  border: 1px solid rgba(181, 159, 131, 0.16);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.profile-tabs button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 38px;
+  padding: 0 6px;
+  border-radius: 13px;
+  color: #75695e;
+  background: transparent;
+  font-size: 10px;
+  font-weight: 800;
+  transition: background-color 160ms ease, color 160ms ease, transform 120ms ease;
+}
+
+.profile-tabs button svg {
+  width: 15px;
+  height: 15px;
+}
+
+.profile-tabs button.is-active {
+  color: #201c17;
+  background: #f1e8dc;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88);
+}
+
+.profile-tabs button:active {
+  transform: scale(0.97);
+}
+
+.profile-settings-panel[hidden] {
+  display: none;
+}
+
+.profile-info-card,
+.profile-account-tile,
+.profile-library button {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.99),
+    0 3px 8px rgba(47, 60, 74, 0.003);
 }
 
 .profile-info-section,
+.profile-auth-card,
 .preference-section {
-  margin-top: 20px;
+  margin-top: 12px;
+}
+
+.profile-auth-card {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid rgba(221, 227, 234, 0.035);
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.992));
+}
+
+.profile-auth-card .preference-heading {
+  margin-bottom: 0;
+}
+
+.profile-auth-form {
+  display: grid;
+  gap: 8px;
+}
+
+.profile-auth-form input {
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid #cfc4b7;
+  border-radius: 13px;
+  outline: 0;
+  background: #fffdf8;
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+}
+
+.profile-auth-form input:focus {
+  border-color: var(--cool);
+  box-shadow: 0 0 0 3px var(--cool-soft);
+}
+
+.profile-auth-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.profile-auth-actions button {
+  min-height: 40px;
+  padding: 0 10px;
+  border-radius: 12px;
+  background: #eeeae4;
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.profile-auth-actions button:first-child {
+  background: var(--cool);
+  color: #fffdf8;
+}
+
+.profile-auth-actions button[data-auth-action="sign-out"] {
+  grid-column: 1 / -1;
+  background: #f5f1eb;
+}
+
+.profile-auth-form p {
+  margin: 0;
+  color: #655b51;
+  font-size: 11px;
+}
+
+.profile-auth-form p[data-state="error"] {
+  color: var(--error);
+}
+
+.profile-info-section {
+  position: relative;
+  z-index: 1;
+  margin-top: 0;
 }
 
 .preference-heading {
@@ -3033,7 +4463,7 @@ p {
 }
 
 .preference-heading span {
-  color: var(--muted);
+  color: #655b51;
   font-size: 12px;
   font-weight: 700;
 }
@@ -3041,11 +4471,14 @@ p {
 .profile-info-card,
 .preference-card {
   display: grid;
-  gap: 14px;
-  padding: 14px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--bg-soft);
+  gap: 10px;
+  padding: 11px;
+  border: 1px solid rgba(221, 227, 234, 0.035);
+  border-radius: 24px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.999), rgba(250, 247, 241, 0.98));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 4px 10px rgba(47, 60, 74, 0.0035);
 }
 
 .preference-card + .preference-card {
@@ -3055,80 +4488,114 @@ p {
 .profile-account-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
+  gap: 6px;
 }
 
 .profile-account-tile {
   display: grid;
   gap: 6px;
-  padding: 12px;
-  border: 1px solid color-mix(in srgb, var(--line) 78%, transparent);
-  border-radius: 18px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0)),
-    rgba(255, 255, 255, 0.02);
+  min-width: 0;
+  padding: 9px 8px;
+  border: 1px solid rgba(221, 227, 234, 0.045);
+  border-radius: 16px;
+  background: #fff;
 }
 
-.profile-account-tile span {
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: 760;
-  letter-spacing: 0.05em;
+.profile-account-tile:nth-child(1) {
+  background: #f8f2e9;
+}
+
+.profile-account-tile:nth-child(2) {
+  background: #f1f6f2;
+}
+
+.profile-account-tile:nth-child(3) {
+  background: #f2f3f7;
+}
+
+.profile-account-tile-heading {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 5px;
+}
+
+.profile-account-tile-heading svg {
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
+  color: var(--gold);
+  stroke-width: 1.9;
+}
+
+.profile-account-tile-heading span {
+  overflow: hidden;
+  color: rgba(124, 113, 101, 0.92);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.045em;
+  text-overflow: ellipsis;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .profile-account-tile strong {
   color: var(--ink);
-  font-size: 13px;
+  overflow: hidden;
+  font-size: 11px;
   line-height: 1.4;
   word-break: break-word;
+  text-overflow: ellipsis;
 }
 
 .profile-info-form {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: 8px;
+  padding-top: 2px;
 }
 
 .profile-field {
   display: grid;
-  gap: 8px;
+  gap: 5px;
 }
 
 .profile-field span {
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 700;
+  color: #554b42;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
 }
 
 .profile-field input,
 .profile-field textarea {
   width: 100%;
-  padding: 12px 14px;
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  background: var(--bg);
-  color: var(--ink);
+  min-height: 40px;
+  padding: 8px 11px;
+  border: 1px solid #cfc4b7;
+  border-radius: 14px;
+  background: #fffdf8;
+  color: #201c17;
   font: inherit;
   text-align: justify;
   text-justify: inter-word;
 }
 
 .profile-field textarea {
-  min-height: 108px;
+  min-height: 76px;
   resize: vertical;
 }
 
 .profile-field input::placeholder,
 .profile-field textarea::placeholder {
-  color: color-mix(in srgb, var(--muted) 78%, transparent);
+  color: #75695e;
 }
 
 .profile-field input:focus,
 .profile-field textarea:focus {
   outline: none;
-  border-color: var(--gold);
-  box-shadow: 0 0 0 3px var(--gold-soft);
+  border-color: var(--cool);
+  box-shadow: 0 0 0 3px var(--cool-soft);
 }
 
 .profile-field-wide {
@@ -3136,19 +4603,22 @@ p {
 }
 
 .profile-info-actions {
-  display: grid;
+  display: flex;
+  align-items: center;
   grid-column: 1 / -1;
   gap: 10px;
 }
 
 .profile-save-button {
-  min-height: 48px;
-  border: 1px solid color-mix(in srgb, var(--gold) 44%, transparent);
-  border-radius: 18px;
-  background: linear-gradient(135deg, color-mix(in srgb, var(--gold) 20%, transparent), color-mix(in srgb, var(--gold) 8%, transparent));
-  color: var(--ink);
-  font-size: 14px;
-  font-weight: 760;
+  min-height: 42px;
+  padding: 0 16px;
+  border: 1px solid rgba(221, 227, 234, 0.02);
+  border-radius: 14px;
+  background: #8a7764;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
 }
 
 .profile-save-button:active {
@@ -3157,20 +4627,21 @@ p {
 
 .profile-info-actions p {
   margin: 0;
-  color: var(--muted);
-  font-size: 12px;
+  color: #655b51;
+  font-size: 10px;
+  line-height: 1.35;
 }
 
 .preference-copy {
   display: flex;
   align-items: flex-start;
-  gap: 11px;
+  gap: 9px;
 }
 
 .preference-copy svg {
   flex: 0 0 auto;
   margin-top: 1px;
-  color: var(--gold);
+  color: var(--cool);
 }
 
 .preference-copy strong,
@@ -3195,16 +4666,16 @@ p {
   grid-template-columns: repeat(3, 1fr);
   gap: 4px;
   padding: 4px;
-  border: 1px solid var(--line);
+  border: 1px solid rgba(221, 227, 234, 0.04);
   border-radius: 999px;
-  background: var(--bg);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.992));
 }
 
 .segmented-control[data-background-options] {
   display: flex;
   overflow-x: auto;
   padding: 4px 4px 8px;
-  border-radius: var(--radius);
+  border-radius: 22px;
   scroll-padding: 4px;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
@@ -3235,21 +4706,21 @@ p {
 }
 
 .segmented-control button.is-active {
-  background: var(--gold-soft);
-  color: var(--gold);
+  background: rgba(242, 228, 210, 0.88);
+  color: var(--cool);
 }
 
 .text-size-preview {
   padding: 13px 14px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--bg);
+  border: 1px solid rgba(221, 227, 234, 0.04);
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.992));
 }
 
 .text-size-preview span {
   display: block;
   margin-bottom: 8px;
-  color: var(--gold);
+  color: var(--cool);
   font-size: 11px;
   font-weight: 760;
 }
@@ -3257,14 +4728,14 @@ p {
 .text-size-preview p {
   margin: 0;
   color: var(--ink);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-body);
   font-size: var(--reader-text-size, 19px);
   line-height: 1.55;
 }
 
 .text-size-preview sup {
   margin-right: 5px;
-  color: var(--gold);
+  color: var(--cool);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
   font-size: 11px;
   font-weight: 760;
@@ -3293,14 +4764,14 @@ p {
 }
 
 .accent-swatches button.is-active {
-  border-color: var(--gold);
-  box-shadow: 0 0 0 3px var(--gold-soft);
+  border-color: var(--cool);
+  box-shadow: 0 0 0 3px rgba(181, 159, 131, 0.12);
 }
 
 .profile-library {
   display: grid;
-  gap: 8px;
-  margin-top: 18px;
+  gap: 6px;
+  margin-top: 14px;
 }
 
 .profile-library button {
@@ -3308,11 +4779,14 @@ p {
   grid-template-columns: 24px 1fr 20px;
   align-items: center;
   gap: 12px;
-  min-height: 54px;
-  padding: 0 14px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--bg-soft);
+  min-height: 50px;
+  padding: 0 12px;
+  border: 1px solid rgba(221, 227, 234, 0.02);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.992));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.97),
+    0 3px 8px rgba(47, 60, 74, 0.0025);
   color: var(--muted);
   text-align: justify;
   text-justify: inter-word;
@@ -3325,21 +4799,19 @@ p {
 
 .profile-library button.is-active,
 .app-shell[data-theme="dark"] .profile-library button.is-active {
-  border-color: var(--gold);
-  background:
-    linear-gradient(0deg, var(--gold-soft), var(--gold-soft)),
-    var(--bg-soft);
-  color: var(--gold);
+  border-color: rgba(181, 159, 131, 0.2);
+  background: rgba(242, 228, 210, 0.88);
+  color: var(--cool);
   box-shadow:
-    inset 0 0 0 1px var(--gold),
-    0 0 0 3px var(--gold-soft);
+    inset 0 0 0 1px rgba(181, 159, 131, 0.08),
+    0 0 0 1px rgba(181, 159, 131, 0.018);
 }
 
 .profile-library button.is-active span,
 .profile-library button.is-active svg,
 .app-shell[data-theme="dark"] .profile-library button.is-active svg,
 .app-shell[data-theme="dark"] .profile-library button.is-active span {
-  color: var(--gold);
+  color: var(--cool);
 }
 
 .profile-library button.is-active svg:last-child {
@@ -3389,8 +4861,8 @@ p {
   min-width: 28px;
   min-height: 28px;
   border-radius: 999px;
-  background: var(--gold-soft);
-  color: var(--gold);
+  background: var(--cool-soft);
+  color: var(--cool);
   font-size: 12px;
   font-weight: 760;
 }
@@ -3416,18 +4888,18 @@ p {
   flex: 0 0 auto;
   min-height: 34px;
   padding: 0 12px;
-  border: 1px solid var(--line);
+  border: 1px solid rgba(221, 227, 234, 0.015);
   border-radius: 999px;
-  background: var(--bg-soft);
+  background: rgba(255, 255, 255, 0.999);
   color: var(--muted);
   font-size: 12px;
   font-weight: 760;
 }
 
 .saved-folder-chips button.is-active {
-  border-color: var(--gold);
-  background: var(--gold-soft);
-  color: var(--gold);
+  border-color: var(--cool);
+  background: var(--cool-soft);
+  color: var(--cool);
 }
 
 .saved-folder-form {
@@ -3435,9 +4907,12 @@ p {
   grid-template-columns: 1fr 42px;
   gap: 8px;
   padding: 6px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--bg-soft);
+  border: 1px solid rgba(221, 227, 234, 0.015);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(247, 249, 252, 0.992));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.97),
+    0 1px 3px rgba(47, 60, 74, 0.0007);
 }
 
 .saved-folder-form input {
@@ -3455,18 +4930,21 @@ p {
   width: 42px;
   min-height: 42px;
   border-radius: 50%;
-  background: var(--gold);
+  background: var(--cool);
   color: var(--accent-contrast, #fff);
 }
 
 .saved-verse-row {
   display: grid;
   gap: 10px;
-  min-height: 116px;
-  padding: 13px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--bg-soft);
+  min-height: 108px;
+  padding: 12px;
+  border: 1px solid rgba(221, 227, 234, 0.015);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(247, 249, 252, 0.992));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.97),
+    0 1px 3px rgba(47, 60, 74, 0.0007);
   color: var(--muted);
   text-align: justify;
   text-justify: inter-word;
@@ -3487,7 +4965,7 @@ p {
 
 .saved-verse-open svg {
   margin-top: 2px;
-  color: var(--gold);
+  color: var(--cool);
 }
 
 .saved-verse-open strong,
@@ -3503,7 +4981,7 @@ p {
 
 .saved-verse-open small {
   margin-top: 1px;
-  color: var(--gold);
+  color: var(--cool);
   font-size: 11px;
   font-weight: 760;
 }
@@ -3537,10 +5015,10 @@ p {
   width: 100%;
   min-height: 34px;
   padding: 0 28px 0 10px;
-  border: 1px solid var(--line);
+  border: 1px solid rgba(221, 227, 234, 0.012);
   border-radius: 999px;
   outline: 0;
-  background-color: var(--bg);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(249, 251, 253, 0.99));
   color: var(--ink);
   font-size: 12px;
   font-weight: 700;
@@ -3558,9 +5036,12 @@ p {
 .saved-empty {
   margin: 0;
   padding: 16px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--bg-soft);
+  border: 1px solid rgba(221, 227, 234, 0.015);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(250, 247, 240, 0.992));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.99),
+    0 3px 8px rgba(47, 60, 74, 0.0012);
   font-size: 13px;
 }
 
@@ -3571,30 +5052,42 @@ p {
   bottom: 0;
   z-index: 10;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 2px;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1px;
   min-height: var(--bottom-nav-height);
-  padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
-  border-top: 1px solid rgba(232, 227, 216, 0.9);
-  border-right: 0;
-  border-bottom: 0;
-  border-left: 0;
-  border-radius: 0;
-  background: rgba(255, 255, 255, 0.88);
-  box-shadow: 0 18px 45px rgba(31, 24, 11, 0.12);
-  backdrop-filter: blur(22px);
+  padding: 5px 5px calc(5px + env(safe-area-inset-bottom));
+  border: 1px solid rgba(221, 227, 234, 0.02);
+  border-radius: 18px 18px 0 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(251, 248, 241, 0.992)),
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0) 68%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.995),
+    0 1px 0 rgba(255, 255, 255, 0.995);
+  backdrop-filter: blur(12px);
 }
 
 .bottom-nav button {
   display: grid;
   place-items: center;
-  gap: 2px;
-  min-height: 52px;
-  border-radius: 18px;
+  gap: 3px;
+  min-height: 34px;
+  padding: 2px 0 1px;
+  border-radius: 17px;
   background: transparent;
-  color: var(--muted);
-  font-size: 11px;
+  color: rgba(118, 107, 96, 0.88);
+  font-size: 8.5px;
   font-weight: 700;
+}
+
+.bottom-nav button.is-active {
+  transform: translateY(-1px) scale(1.01);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(242, 228, 210, 0.96), rgba(255, 255, 255, 0.84));
+  color: var(--ink);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 1px 2px rgba(181, 159, 131, 0.02);
 }
 
 .bottom-nav svg {
@@ -3609,8 +5102,27 @@ p {
   display: grid;
   align-items: end;
   justify-items: center;
-  padding: 18px;
-  background: rgba(18, 18, 18, 0.26);
+  padding: 14px;
+  background: rgba(255, 252, 247, 0.18);
+  backdrop-filter: blur(10px);
+}
+
+.app-shell[data-modal="verse"] .modal-layer {
+  background: rgba(255, 252, 247, 0.14);
+  backdrop-filter: none;
+}
+
+.reader-screen.is-verse-focused .scripture-line:not(.is-selected),
+.reader-screen.is-verse-focused .parallel-scripture-line:not(.is-selected) {
+  filter: blur(7px);
+  opacity: 0.42;
+  transition: filter 180ms ease, opacity 180ms ease;
+}
+
+.reader-screen.is-verse-focused .scripture-line.is-selected,
+.reader-screen.is-verse-focused .parallel-scripture-line.is-selected {
+  position: relative;
+  z-index: 1;
 }
 
 .modal-layer[hidden] {
@@ -3626,10 +5138,22 @@ p {
   width: min(430px, 100%);
   max-height: min(82vh, 720px);
   overflow: auto;
-  padding: 10px 16px 18px;
-  border-radius: 26px 26px 18px 18px;
-  background: #fff;
-  box-shadow: var(--shadow);
+  padding: 9px 12px 13px;
+  border-radius: 24px 24px 20px 20px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.997), rgba(251, 248, 241, 0.986));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.985),
+    0 4px 10px rgba(47, 60, 74, 0.0015);
+}
+
+.app-shell[data-theme="dark"][data-app-background="paper"] .search-panel,
+.app-shell[data-theme="dark"][data-app-background="paper"] .bottom-sheet,
+.app-shell[data-theme="dark"][data-app-background="paper"] .verse-ai-panel {
+  border-color: rgba(221, 227, 234, 0.028);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.997), rgba(251, 248, 241, 0.988));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.965),
+    0 3px 8px rgba(47, 60, 74, 0.0008);
 }
 
 .search-panel.is-visible,
@@ -3644,8 +5168,8 @@ p {
   height: 85%;
   max-height: 85%;
   overflow: hidden;
-  padding: 14px;
-  background: var(--bg);
+  padding: 8px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.997), rgba(251, 248, 241, 0.986));
 }
 
 .verse-ai-panel.is-visible {
@@ -3688,19 +5212,19 @@ p {
   width: 40px;
   min-height: 40px;
   border-radius: 50%;
-  background: var(--bg-soft);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.996), rgba(249, 251, 253, 0.982));
   color: var(--muted);
 }
 
 .verse-ai-panel blockquote {
   margin: 0 0 12px;
   padding: 12px 13px;
-  border: 1px solid var(--line);
-  border-left: 3px solid var(--gold);
-  border-radius: var(--radius);
-  background: var(--bg-soft);
+  border: 1px solid rgba(221, 227, 234, 0.014);
+  border-left: 3px solid var(--cool);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.995), rgba(249, 251, 253, 0.982));
   color: var(--ink);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-body);
   font-size: 14px;
   line-height: 1.45;
 }
@@ -3724,9 +5248,9 @@ p {
   align-items: center;
   gap: 9px;
   padding: 8px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--bg-soft);
+  border: 1px solid rgba(221, 227, 234, 0.012);
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.996), rgba(249, 251, 253, 0.982));
 }
 
 .verse-ai-composer input {
@@ -3744,8 +5268,11 @@ p {
   width: 42px;
   min-height: 42px;
   border-radius: 50%;
-  background: var(--gold);
-  color: var(--accent-contrast, #03191d);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(251, 248, 241, 0.988));
+  color: var(--accent-contrast, #0f1720);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 6px 14px rgba(47, 60, 74, 0.006);
 }
 
 @keyframes sheetIn {
@@ -3778,7 +5305,7 @@ p {
       84% 57%,
       108% 43%,
       50% 0;
-    filter: drop-shadow(0 0 10px rgba(143, 220, 255, 0.22));
+    filter: drop-shadow(0 0 10px rgba(230, 208, 175, 0.18));
   }
   100% {
     background-position:
@@ -3806,14 +5333,14 @@ p {
   gap: 10px;
   min-height: 54px;
   padding: 0 8px 0 14px;
-  border: 1px solid var(--line);
+  border: 1px solid rgba(221, 227, 234, 0.01);
   border-radius: 999px;
-  background: var(--bg-soft);
+  background: rgba(255, 255, 255, 0.88);
 }
 
 .app-shell[data-theme="dark"] .search-field {
   border-color: var(--line);
-  background: #20201f;
+  background: linear-gradient(180deg, rgba(35, 30, 25, 0.96), rgba(26, 22, 18, 0.96));
 }
 
 .search-field button,
@@ -3842,8 +5369,8 @@ p {
   min-height: 38px;
   padding: 0 11px;
   border-radius: 999px;
-  background: var(--gold-soft);
-  color: var(--gold);
+  background: rgba(242, 228, 210, 0.88);
+  color: var(--cool);
   font-size: 13px;
   font-weight: 700;
 }
@@ -3855,12 +5382,16 @@ p {
 
 .result-list article {
   padding: 14px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
+  border: 1px solid rgba(221, 227, 234, 0.01);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.986));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 2px 6px rgba(47, 60, 74, 0.0008);
 }
 
 .result-list span {
-  color: var(--gold);
+  color: var(--cool);
   font-size: 12px;
   font-weight: 700;
 }
@@ -3883,15 +5414,17 @@ p {
 
 .action-grid {
   display: grid;
-  grid-template-columns: repeat(5, 96px);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   grid-template-rows: repeat(2, 82px);
+  grid-auto-rows: 82px;
   grid-auto-flow: row;
-  gap: 10px;
-  overflow-x: auto;
-  overflow-y: hidden;
+  gap: 8px;
+  max-height: none;
+  width: 100%;
+  overflow: hidden;
   padding: 0 2px 8px;
   scroll-padding: 2px;
-  scroll-snap-type: x mandatory;
+  scroll-snap-type: y mandatory;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
 }
@@ -3903,12 +5436,13 @@ p {
 .action-grid button {
   display: grid;
   place-items: center;
-  gap: 7px;
-  width: 96px;
+  gap: 5px;
+  width: 100%;
   min-height: 82px;
   padding: 8px;
-  border-radius: var(--radius);
-  background: var(--bg-soft);
+  border: 1px solid rgba(221, 227, 234, 0.01);
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.986));
   color: var(--muted);
   font-size: 11px;
   font-weight: 700;
@@ -3919,13 +5453,13 @@ p {
 
 .action-grid button:hover,
 .action-grid button.is-active {
-  color: var(--gold);
-  background: var(--gold-soft);
+  color: var(--cool);
+  background: var(--cool-soft);
 }
 
 .action-grid button.is-active {
-  border: 1px solid var(--gold);
-  box-shadow: inset 0 0 0 1px var(--gold-soft);
+  border: 1px solid var(--cool);
+  box-shadow: inset 0 0 0 1px var(--cool-soft);
 }
 
 .action-grid button.is-pressed {
@@ -3935,7 +5469,7 @@ p {
 .sheet-feedback {
   min-height: 20px;
   margin: 12px 0 0;
-  color: var(--gold);
+  color: var(--cool);
   font-size: 13px;
   font-weight: 700;
   text-align: center;
@@ -3959,11 +5493,11 @@ p {
   min-height: 118px;
   resize: vertical;
   padding: 14px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
+  border: 1px solid rgba(221, 227, 234, 0.05);
+  border-radius: 22px;
   outline: 0;
   color: var(--ink);
-  background: var(--bg-soft);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(247, 249, 252, 0.96));
   font-size: 14px;
   line-height: 1.45;
   text-transform: none;
@@ -3985,9 +5519,12 @@ p {
 
 .detail-stack article {
   padding: 13px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--bg-soft);
+  border: 1px solid rgba(221, 227, 234, 0.01);
+  border-radius: 26px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.986));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 2px 6px rgba(47, 60, 74, 0.0008);
 }
 
 .detail-stack strong,
@@ -3997,7 +5534,7 @@ p {
 
 .detail-stack span {
   margin: 4px 0 7px;
-  color: var(--gold);
+  color: var(--cool);
   font-size: 12px;
   font-weight: 760;
 }
@@ -4029,15 +5566,15 @@ p {
   width: 54px;
   min-height: 54px;
   padding: 0;
-  border: 1px solid var(--line);
+  border: 1px solid rgba(221, 227, 234, 0.01);
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.04);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.99));
   scroll-snap-align: start;
 }
 
 .highlight-palette button.is-selected {
-  border-color: var(--gold);
-  box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.18);
+  border-color: var(--cool);
+  box-shadow: 0 0 0 3px rgba(181, 159, 131, 0.14);
 }
 
 .highlight-palette span {
@@ -4074,11 +5611,11 @@ p {
   width: 100%;
   min-height: 44px;
   padding: 0 34px 0 13px;
-  border: 1px solid var(--line);
+  border: 1px solid rgba(221, 227, 234, 0.01);
   border-radius: 999px;
   outline: 0;
   color: var(--ink);
-  background-color: var(--bg-soft);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(247, 249, 252, 0.99));
   font-size: 13px;
   font-weight: 760;
   text-transform: none;
@@ -4090,9 +5627,12 @@ p {
   grid-template-columns: 1fr 42px;
   gap: 8px;
   padding: 6px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--bg-soft);
+  border: 1px solid rgba(221, 227, 234, 0.01);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.99));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    0 2px 6px rgba(47, 60, 74, 0.0008);
 }
 
 .highlight-folder-form input {
@@ -4110,17 +5650,17 @@ p {
   width: 42px;
   min-height: 42px;
   border-radius: 50%;
-  background: var(--gold);
+  background: var(--cool);
   color: var(--accent-contrast, #fff);
 }
 
 .secondary-button {
   width: 100%;
   min-height: 48px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
+  border: 1px solid rgba(221, 227, 234, 0.01);
+  border-radius: 18px;
   color: var(--muted);
-  background: var(--bg-soft);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.99));
   font-weight: 760;
 }
 
@@ -4164,6 +5704,8 @@ p {
   .phone-frame {
     position: fixed;
     inset: 0;
+    display: flex;
+    flex-direction: column;
     width: 100vw;
     max-width: 100vw;
     height: 100dvh;
@@ -4181,17 +5723,18 @@ p {
   }
 
   .screen {
-    min-height: 100dvh;
-    height: 100dvh;
+    flex: 1 1 auto;
+    min-height: 0;
+    height: auto;
     overflow-y: auto;
     overscroll-behavior-y: contain;
     -webkit-overflow-scrolling: touch;
-    padding: 24px 18px 168px;
+    padding: 20px 16px 168px;
   }
 
   .ai-screen {
-    min-height: 100dvh;
-    height: 100dvh;
+    min-height: 0;
+    height: auto;
     padding: 24px 18px calc(var(--bottom-nav-offset) + var(--ai-composer-height));
   }
 
@@ -4200,7 +5743,8 @@ p {
     right: 0;
     bottom: 0;
     left: 0;
-    width: 100vw;
+    width: auto;
+    border-radius: 18px 18px 0 0;
   }
 
   .composer {
@@ -4243,6 +5787,32 @@ p {
   .apologetics-begin-button {
     right: -18px;
     left: -18px;
+  }
+}
+
+@media (min-width: 681px) {
+  .app-shell {
+    grid-template-columns: 72px minmax(340px, 448px);
+    gap: 26px;
+    width: min(812px, calc(100vw - 40px));
+    padding: 28px;
+  }
+
+  .app-shell::before {
+    display: block;
+  }
+
+  .side-rail {
+    display: flex;
+  }
+
+  .phone-frame {
+    width: min(100%, 448px);
+    border-radius: 24px;
+  }
+
+  .app-shell[data-theme="dark"] .phone-frame {
+    border-color: rgba(255, 255, 255, 0.9);
   }
 }
 

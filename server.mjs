@@ -375,6 +375,14 @@ async function handleVersions(res) {
   sendJson(res, 200, { data, configured: true });
 }
 
+function handleSupabaseConfig(res) {
+  sendJson(res, 200, {
+    url: process.env.SUPABASE_URL || "",
+    anonKey: process.env.SUPABASE_ANON_KEY || "",
+    configured: Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_ANON_KEY),
+  });
+}
+
 async function handleChapter(req, res) {
   const url = new URL(req.url, `http://${req.headers.host}`);
   const bibleId = url.searchParams.get("bibleId");
@@ -471,6 +479,11 @@ async function serveStatic(req, res) {
 
 async function requestHandler(req, res) {
   try {
+    if (req.url.startsWith("/api/supabase/config")) {
+      handleSupabaseConfig(res);
+      return;
+    }
+
     if (req.url.startsWith("/api/bible/versions")) {
       await handleVersions(res);
       return;

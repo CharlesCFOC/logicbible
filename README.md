@@ -45,7 +45,7 @@ SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 Recommended order:
 
 1. Create a Supabase project.
-2. Run the SQL in [supabase/001_init.sql](supabase/001_init.sql).
+2. Run the SQL files in order: [supabase/001_init.sql](supabase/001_init.sql), [supabase/002_prayers.sql](supabase/002_prayers.sql), then [supabase/003_user_sync.sql](supabase/003_user_sync.sql).
 3. Fill `.env.local`.
 4. Restart `npm run dev`.
 
@@ -54,6 +54,8 @@ Files added for the backend foundation:
 - [lib/supabase/client.js](lib/supabase/client.js)
 - [lib/supabase/server.js](lib/supabase/server.js)
 - [supabase/001_init.sql](supabase/001_init.sql)
+- [supabase/002_prayers.sql](supabase/002_prayers.sql)
+- [supabase/003_user_sync.sql](supabase/003_user_sync.sql)
 
 Data model included in the initial schema:
 

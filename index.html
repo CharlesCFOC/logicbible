@@ -6,11 +6,12 @@
     <title>Brother Bible AI</title>
     <link rel="stylesheet" href="styles.css" />
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="bible-data.js" defer></script>
     <script src="script.js" defer></script>
   </head>
   <body>
-    <div class="app-shell" data-theme="dark">
+    <div class="app-shell" data-theme="light" data-app-background="paper">
       <aside class="side-rail" aria-label="Desktop navigation">
         <div class="brand-mark" aria-hidden="true">B</div>
         <button class="rail-button is-active" data-nav="home" aria-label="Home">
@@ -18,6 +19,9 @@
         </button>
         <button class="rail-button" data-nav="bible" aria-label="Bible">
           <i data-lucide="book-open"></i>
+        </button>
+        <button class="rail-button" data-nav="prayer" aria-label="Prayer">
+          <i data-lucide="hand-heart"></i>
         </button>
         <button class="rail-button" data-nav="ai" aria-label="Brother AI">
           <i data-lucide="sparkles"></i>
@@ -33,62 +37,54 @@
       <main class="phone-frame" aria-live="polite">
         <section id="home" class="screen is-active" data-screen>
           <header class="home-hero">
-            <div class="home-brand">
-              <span class="home-mark" aria-hidden="true">B</span>
-              <div>
-                <strong>Brother</strong>
-                <span>Today</span>
-              </div>
-            </div>
-            <button class="icon-button" data-open-search aria-label="Search">
-              <i data-lucide="search"></i>
-            </button>
           </header>
 
-          <article class="home-focus">
-            <div class="home-visual" aria-hidden="true">
-              <span class="visual-light"></span>
-              <span class="visual-page one"></span>
-              <span class="visual-page two"></span>
-              <span class="visual-line a"></span>
-              <span class="visual-line b"></span>
-              <span class="visual-line c"></span>
+          <article class="home-hero-image">
+            <img src="assets/home-card-sunset.png" alt="Sunrise over a mountain lake" />
+            <div class="home-hero-image-copy">
+              <span>Daily Scripture</span>
+              <h1>Make space for faith today.</h1>
+              <p>Read, reflect, and keep moving with a little more peace.</p>
+              <button type="button" data-nav="bible">Start reading <i data-lucide="arrow-up-right"></i></button>
             </div>
-            <p class="home-reference">Psalm 23:1</p>
-            <blockquote>The Lord is my shepherd; I shall not want.</blockquote>
           </article>
 
-          <div class="home-actions">
-            <button data-nav="bible">
-              <i data-lucide="book-open"></i>
-              <span>
-                <strong>Galatians 6</strong>
-                <small>Continue</small>
-              </span>
-            </button>
-            <button data-nav="ai">
-              <i data-lucide="sparkles"></i>
-              <span>
-                <strong>Ask AI</strong>
-                <small>Study</small>
-              </span>
-            </button>
-          </div>
+          <section class="home-stats" aria-label="Daily activity">
+            <article class="home-stat-card">
+              <span>Connected streak</span>
+              <strong data-home-streak>1 day</strong>
+              <small>Keep coming back</small>
+            </article>
+            <article class="home-stat-card home-stat-card--online">
+              <span>People online</span>
+              <strong data-people-online>128</strong>
+              <small>Reading right now</small>
+            </article>
+          </section>
 
-          <div class="home-status" aria-label="Reading progress">
-            <span>
-              <strong>18</strong>
-              <small>day streak</small>
-            </span>
-            <span>
-              <strong>42%</strong>
-              <small>plan</small>
-            </span>
-            <span>
-              <strong>7</strong>
-              <small>notes</small>
-            </span>
-          </div>
+          <section class="home-content-cards" aria-label="Home reading">
+            <article class="home-content-card home-content-card--continue">
+              <div>
+                <span class="home-content-label">Continue to read</span>
+                <strong>Galatians 6:16</strong>
+                <small>Pick up where you left off</small>
+              </div>
+              <button type="button" data-nav="bible" aria-label="Continue reading">
+                <i data-lucide="arrow-up-right"></i>
+              </button>
+            </article>
+            <article class="home-content-card home-content-card--verse">
+              <div>
+                <span class="home-content-label">Verse of the day</span>
+                <strong>“The Lord is my shepherd; I shall not want.”</strong>
+                <small>Psalm 23:1</small>
+              </div>
+              <button type="button" data-nav="bible" aria-label="Read today's verse">
+                <i data-lucide="book-open"></i>
+              </button>
+            </article>
+          </section>
+
         </section>
 
         <section id="bible" class="screen reader-screen" data-screen>
@@ -246,8 +242,8 @@
           </header>
 
           <div class="apologetics-topic-tabs" data-apologetics-topic-tabs>
-            <button class="is-active" data-apologetics-topic-tab="introduction">Introduction</button>
-            <button data-apologetics-topic-tab="chat">Start Debate</button>
+            <button class="is-active" type="button" data-apologetics-topic-tab="introduction">Introduction</button>
+            <button type="button" data-apologetics-topic-tab="chat">Start Debate</button>
           </div>
 
           <section class="apologetics-detail-panel" data-apologetics-detail></section>
@@ -256,15 +252,82 @@
               <h2>Start Debate</h2>
             </div>
             <div class="apologetics-chat-tabs" data-apologetics-chat-tabs>
-              <button class="is-active" data-apologetics-chat-tab="muslim">From Muslim</button>
-              <button data-apologetics-chat-tab="coach">From Coach</button>
+              <button class="is-active" type="button" data-apologetics-chat-tab="muslim">From Muslim</button>
+              <button type="button" data-apologetics-chat-tab="coach">From Coach</button>
             </div>
             <div class="apologetics-chat-thread" data-apologetics-chat-thread></div>
             <form class="apologetics-chat-composer" data-apologetics-chat-form>
               <textarea rows="1" placeholder="Write your argument..." aria-label="Write your apologetics response"></textarea>
-              <button aria-label="Send apologetics message"><i data-lucide="send"></i></button>
+              <button type="button" aria-label="Send apologetics message"><i data-lucide="send"></i></button>
             </form>
           </section>
+        </section>
+
+        <section class="apologetics-coming-soon-gate" data-apologetics-gate hidden aria-labelledby="apologetics-gate-title">
+          <div class="apologetics-gate-card">
+            <div class="apologetics-gate-icon" aria-hidden="true"><i data-lucide="shield-lock"></i></div>
+            <span class="eyebrow">Apologetics</span>
+            <h2 id="apologetics-gate-title">Coming soon</h2>
+            <p>This training space is almost ready. Enter the access code to preview it.</p>
+            <form data-apologetics-gate-form>
+              <label>
+                <span>Access code</span>
+                <input type="password" inputmode="numeric" autocomplete="off" maxlength="3" placeholder="•••" aria-label="Apologetics access code" />
+              </label>
+              <button type="submit">Access</button>
+              <p class="apologetics-gate-feedback" data-apologetics-gate-feedback role="status" aria-live="polite"></p>
+            </form>
+          </div>
+        </section>
+
+        <section id="prayer" class="screen prayer-screen" data-screen>
+          <header class="page-header prayer-header">
+            <button class="icon-button" data-nav="home" aria-label="Back to Home">
+              <i data-lucide="arrow-left"></i>
+            </button>
+            <div>
+              <p class="eyebrow">Community</p>
+              <h1>Prayer</h1>
+            </div>
+            <span class="prayer-header-mark" aria-hidden="true"><i data-lucide="hand-heart"></i></span>
+          </header>
+
+          <div class="prayer-page-tabs" role="tablist" aria-label="Prayer sections">
+            <button class="is-active" type="button" data-prayer-page-tab="board">Prayer</button>
+            <button type="button" data-prayer-page-tab="request">Prayer request</button>
+          </div>
+
+          <section class="prayer-request-panel" data-prayer-request-panel hidden>
+            <article class="prayer-intro">
+              <span class="label">Carry one another</span>
+              <h2>Someone may need your prayer today.</h2>
+              <p>Share a request anonymously and let the community stand with you.</p>
+            </article>
+
+            <form class="prayer-compose" data-prayer-form>
+              <label for="prayer-request">Share a prayer request</label>
+              <textarea id="prayer-request" name="request" rows="5" maxlength="2200" placeholder="What would you like us to pray for?" required></textarea>
+              <div class="prayer-compose-footer">
+                <small data-prayer-word-count>0 / 300 words</small>
+                <button type="submit"><i data-lucide="send"></i><span>Post anonymously</span></button>
+              </div>
+              <p class="prayer-form-feedback" data-prayer-feedback aria-live="polite"></p>
+            </form>
+          </section>
+
+          <div class="prayer-toolbar">
+            <span class="prayer-board-label">Prayer board</span>
+            <label class="prayer-sort">
+              <span class="sr-only">Sort prayers</span>
+              <select data-prayer-sort>
+                <option value="most">Most prayed</option>
+                <option value="least">Least prayed</option>
+                <option value="recent">Most recent</option>
+              </select>
+            </label>
+          </div>
+
+          <section class="prayer-list" data-prayer-list aria-live="polite"></section>
         </section>
 
         <section id="profile" class="screen profile-screen" data-screen>
@@ -280,6 +343,30 @@
             </div>
           </article>
 
+          <nav class="profile-tabs" data-profile-tabs aria-label="Profile sections">
+            <button class="is-active" type="button" data-profile-tab="settings"><i data-lucide="sliders-horizontal"></i><span>Paramètre</span></button>
+            <button type="button" data-profile-tab="bookmarks"><i data-lucide="bookmark"></i><span>Bookmark</span></button>
+            <button type="button" data-profile-tab="highlights"><i data-lucide="highlighter"></i><span>Highlight</span></button>
+          </nav>
+
+          <div class="profile-settings-panel" data-profile-panel="settings">
+          <section class="profile-auth-card" aria-labelledby="profile-auth-title">
+            <div class="preference-heading">
+              <h2 id="profile-auth-title">Cloud account</h2>
+              <span data-auth-mode-label>Not connected</span>
+            </div>
+            <form class="profile-auth-form" data-auth-form>
+              <input type="email" name="email" placeholder="Email" autocomplete="email" required />
+              <input type="password" name="password" placeholder="Password" autocomplete="current-password" minlength="6" required />
+              <div class="profile-auth-actions">
+                <button type="submit" data-auth-action="sign-in">Sign in</button>
+                <button type="button" data-auth-action="sign-up">Create account</button>
+                <button type="button" data-auth-action="sign-out" hidden>Sign out</button>
+              </div>
+              <p data-auth-feedback>Connect to sync your profile and app data across devices.</p>
+            </form>
+          </section>
+
           <section class="profile-info-section" aria-labelledby="profile-info-title">
             <div class="preference-heading">
               <h2 id="profile-info-title">Informations</h2>
@@ -287,21 +374,6 @@
             </div>
 
             <div class="profile-info-card">
-              <div class="profile-account-grid">
-                <article class="profile-account-tile">
-                  <span>Authentication</span>
-                  <strong data-profile-auth-status>Local profile</strong>
-                </article>
-                <article class="profile-account-tile">
-                  <span>Storage</span>
-                  <strong data-profile-storage-status>Local only</strong>
-                </article>
-                <article class="profile-account-tile">
-                  <span>Account ID</span>
-                  <strong data-profile-account-id>local-charles</strong>
-                </article>
-              </div>
-
               <form class="profile-info-form" data-profile-form>
                 <label class="profile-field">
                   <span>Display name</span>
@@ -334,7 +406,7 @@
           <section class="preference-section" aria-labelledby="appearance-title">
             <div class="preference-heading">
               <h2 id="appearance-title">Preferences</h2>
-              <span>Local</span>
+              <span>Contrast</span>
             </div>
 
             <div class="preference-card">
@@ -342,73 +414,25 @@
                 <i data-lucide="image"></i>
                 <div>
                   <strong>Background</strong>
-                  <p>Choose the reading atmosphere.</p>
+                  <p>Use the clean white reading mode.</p>
                 </div>
               </div>
               <div class="segmented-control" data-background-options>
-                <button data-background-option="dark">Dark</button>
-                <button data-background-option="black">Black</button>
-                <button data-background-option="warm">Warm</button>
-                <button data-background-option="navy">Navy</button>
-                <button data-background-option="forest">Forest</button>
-                <button data-background-option="wine">Wine</button>
-                <button data-background-option="slate">Slate</button>
-                <button data-background-option="ivory">Ivory</button>
-                <button data-background-option="paper">Paper</button>
-              </div>
-            </div>
-
-            <div class="preference-card">
-              <div class="preference-copy">
-                <i data-lucide="type"></i>
-                <div>
-                  <strong>Text size</strong>
-                  <p>Adjust Bible reading text.</p>
-                </div>
-              </div>
-              <div class="segmented-control" data-text-size-options>
-                <button data-text-size-option="xs">XS</button>
-                <button data-text-size-option="small">S</button>
-                <button data-text-size-option="medium">M</button>
-                <button data-text-size-option="large">L</button>
-                <button data-text-size-option="xl">XL</button>
-              </div>
-              <div class="text-size-preview" aria-label="Text size preview">
-                <span>Jean 3:16</span>
-                <p><sup>16</sup> Car Dieu a tant aimé le monde qu'il a donné son Fils unique.</p>
-              </div>
-            </div>
-
-            <div class="preference-card">
-              <div class="preference-copy">
-                <i data-lucide="palette"></i>
-                <div>
-                  <strong>Accent color</strong>
-                  <p>Change the current electric blue.</p>
-                </div>
-              </div>
-              <div class="accent-swatches" data-accent-options aria-label="Accent color">
-                <button data-accent-option="electric-blue" style="--swatch: #00e5ff" aria-label="Electric blue"></button>
-                <button data-accent-option="violet" style="--swatch: #9d7cff" aria-label="Violet"></button>
-                <button data-accent-option="lime" style="--swatch: #baff29" aria-label="Lime"></button>
-                <button data-accent-option="pink" style="--swatch: #ff4fc3" aria-label="Pink"></button>
-                <button data-accent-option="amber" style="--swatch: #ffb020" aria-label="Amber"></button>
+                <button data-background-option="paper">Light</button>
               </div>
             </div>
           </section>
+          </div>
 
-          <section class="profile-library" aria-label="Library">
-            <button data-profile-view="bookmarks"><i data-lucide="bookmark"></i><span>Bookmarks</span><i data-lucide="chevron-right"></i></button>
-            <button data-profile-view="highlights"><i data-lucide="highlighter"></i><span>Highlights</span><i data-lucide="chevron-right"></i></button>
-          </section>
-          <section class="profile-saved-panel" data-profile-saved-panel hidden></section>
+          <section class="profile-saved-panel" data-profile-panel="saved" data-profile-saved-panel hidden></section>
         </section>
 
-        <button class="apologetics-begin-button is-disabled" data-apologetics-begin aria-disabled="true" hidden>Continue Learning</button>
+        <button class="apologetics-begin-button is-disabled" type="button" data-apologetics-begin aria-disabled="true" hidden>Continue Learning</button>
 
         <nav class="bottom-nav" aria-label="Primary navigation">
           <button class="is-active" data-nav="home"><i data-lucide="home"></i><span>Home</span></button>
           <button data-nav="bible"><i data-lucide="book-open"></i><span>Bible</span></button>
+          <button data-nav="prayer"><i data-lucide="hand-heart"></i><span>Prayer</span></button>
           <button data-nav="ai"><i data-lucide="sparkles"></i><span>AI</span></button>
           <button data-nav="apologetics"><i data-lucide="shield"></i><span>Apologetics</span></button>
           <button data-nav="profile"><i data-lucide="user-round"></i><span>Profile</span></button>
@@ -457,7 +481,6 @@
             <button data-verse-action="note"><i data-lucide="notebook-pen"></i><span>Note</span></button>
             <button data-verse-action="ask-ai"><i data-lucide="sparkles"></i><span>Ask AI</span></button>
             <button data-verse-action="original-language"><i data-lucide="languages"></i><span>Greek</span></button>
-            <button data-verse-action="compare"><i data-lucide="git-compare"></i><span>Compare</span></button>
             <button data-verse-action="parallel"><i data-lucide="columns-3"></i><span>Parallèle</span></button>
             <button data-verse-action="target"><i data-lucide="crosshair"></i><span>Cible</span></button>
           </div>

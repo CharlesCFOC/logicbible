@@ -8,6 +8,7 @@ const verseAiPanel = document.querySelector("[data-verse-ai-panel]");
 const selectedVerse = document.querySelector("[data-selected-verse]");
 const sheetFeedback = document.querySelector("[data-sheet-feedback]");
 const verseDetail = document.querySelector("[data-verse-detail]");
+const readerScreen = document.querySelector("#bible");
 const verseAiReference = document.querySelector("[data-verse-ai-reference]");
 const verseAiContext = document.querySelector("[data-verse-ai-context]");
 const verseAiThread = document.querySelector("[data-verse-ai-thread]");
@@ -39,12 +40,21 @@ const apologeticsChatThread = document.querySelector("[data-apologetics-chat-thr
 const apologeticsChatForm = document.querySelector("[data-apologetics-chat-form]");
 const apologeticsChatInput = apologeticsChatForm?.querySelector("textarea");
 const apologeticsTopicTabs = document.querySelector("[data-apologetics-topic-tabs]");
+const apologeticsGate = document.querySelector("[data-apologetics-gate]");
+const apologeticsGateForm = document.querySelector("[data-apologetics-gate-form]");
+const apologeticsGateInput = apologeticsGateForm?.querySelector("input");
+const apologeticsGateFeedback = document.querySelector("[data-apologetics-gate-feedback]");
 const aiMemoryKey = "brother.aiMemory";
 const aiBookmarksKey = "brother.aiBookmarks";
 const apologeticsChatKey = "brother.apologeticsChat";
 const apologeticsProgressKey = "brother.apologeticsProgress";
+const apologeticsGateSessionKey = "brother.apologeticsUnlocked";
 const aiMemoryTtlMs = 24 * 60 * 60 * 1000;
 const maxAiMemoryMessages = 24;
+
+let supabaseClient = null;
+let supabaseUser = null;
+let isHydratingSupabase = false;
 
 const apologeticsTrackUi = {
   islam: {
@@ -184,7 +194,67 @@ const profileAuthStatus = document.querySelector("[data-profile-auth-status]");
 const profileStorageStatus = document.querySelector("[data-profile-storage-status]");
 const profileAccountId = document.querySelector("[data-profile-account-id]");
 const profileViewButtons = [...document.querySelectorAll("[data-profile-view]")];
+const profileTabButtons = [...document.querySelectorAll("[data-profile-tab]")];
+const profileSettingsPanel = document.querySelector('[data-profile-panel="settings"]');
 const profileSavedPanel = document.querySelector("[data-profile-saved-panel]");
+const authForm = document.querySelector("[data-auth-form]");
+const authModeLabel = document.querySelector("[data-auth-mode-label]");
+const authFeedback = document.querySelector("[data-auth-feedback]");
+const authSignInButton = document.querySelector('[data-auth-action="sign-in"]');
+const authSignUpButton = document.querySelector('[data-auth-action="sign-up"]');
+const authSignOutButton = document.querySelector('[data-auth-action="sign-out"]');
+const homeStreak = document.querySelector("[data-home-streak]");
+const peopleOnline = document.querySelector("[data-people-online]");
+const prayerForm = document.querySelector("[data-prayer-form]");
+const prayerRequestPanel = document.querySelector("[data-prayer-request-panel]");
+const prayerList = document.querySelector("[data-prayer-list]");
+const prayerFeedback = document.querySelector("[data-prayer-feedback]");
+const prayerWordCount = document.querySelector("[data-prayer-word-count]");
+const prayerRequestInput = prayerForm?.querySelector("textarea");
+const prayerUserId = localStorage.getItem("brother.prayerUserId") || (() => {
+  const id = `local-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  localStorage.setItem("brother.prayerUserId", id);
+  return id;
+})();
+const prayerState = {
+  requests: readJson("brother.prayerRequests", [
+    {
+      id: "demo-prayer-1",
+      text: "Please pray for peace and wisdom as I make an important decision for my family.",
+      prayerCount: 12,
+      prayedBy: [],
+      createdAt: "2026-08-10T09:00:00.000Z",
+      demo: true,
+    },
+    {
+      id: "demo-prayer-2",
+      text: "Pray for my friend who is going through a difficult season and needs hope, strength, and good people around them.",
+      prayerCount: 8,
+      prayedBy: [],
+      createdAt: "2026-08-09T14:30:00.000Z",
+      demo: true,
+    },
+    {
+      id: "demo-prayer-3",
+      text: "I am starting a new job this week. Please pray that I would stay grounded, kind, and confident.",
+      prayerCount: 4,
+      prayedBy: [],
+      createdAt: "2026-08-08T11:15:00.000Z",
+      demo: true,
+    },
+    {
+      id: "demo-prayer-4",
+      text: "Please pray for healing and comfort for someone close to me who has been unwell.",
+      prayerCount: 0,
+      prayedBy: [],
+      createdAt: "2026-08-07T17:45:00.000Z",
+      demo: true,
+    },
+  ]),
+  tab: "all",
+  sort: "most",
+  pageTab: "board",
+};
 
 const readerState = {
   versionId: localStorage.getItem("brother.version") || "local-kjv",
@@ -217,9 +287,9 @@ const savedFolders = {
   ...readJson("brother.savedFolders", {}),
 };
 const defaultPreferences = {
-  background: "dark",
+  background: "paper",
   textSize: "medium",
-  accent: "electric-blue",
+  accent: "taupe",
 };
 const defaultProfile = {
   displayName: "Charles",
@@ -241,24 +311,24 @@ const savedPreferences = {
 };
 
 const highlightColors = [
-  { id: "gold", label: "Gold", value: "rgba(182, 138, 53, 0.30)" },
-  { id: "honey", label: "Honey", value: "rgba(216, 161, 58, 0.28)" },
-  { id: "sage", label: "Sage", value: "rgba(116, 145, 101, 0.28)" },
-  { id: "emerald", label: "Emerald", value: "rgba(61, 139, 92, 0.28)" },
-  { id: "teal", label: "Teal", value: "rgba(55, 145, 145, 0.26)" },
-  { id: "sky", label: "Sky", value: "rgba(80, 132, 180, 0.30)" },
-  { id: "indigo", label: "Indigo", value: "rgba(86, 101, 176, 0.28)" },
-  { id: "violet", label: "Violet", value: "rgba(136, 104, 190, 0.28)" },
-  { id: "rose", label: "Rose", value: "rgba(200, 71, 91, 0.26)" },
-  { id: "clay", label: "Clay", value: "rgba(190, 104, 74, 0.26)" },
-  { id: "pearl", label: "Pearl", value: "rgba(232, 227, 216, 0.20)" },
-  { id: "charcoal", label: "Charcoal", value: "rgba(255, 255, 255, 0.12)" },
-  { id: "electric-lime", label: "Lime", value: "rgba(190, 255, 45, 0.24)" },
-  { id: "electric-cyan", label: "Cyan", value: "rgba(0, 229, 255, 0.23)" },
-  { id: "electric-blue", label: "Volt Blue", value: "rgba(45, 125, 255, 0.28)" },
-  { id: "electric-purple", label: "Neon Purple", value: "rgba(170, 75, 255, 0.26)" },
-  { id: "electric-pink", label: "Hot Pink", value: "rgba(255, 45, 180, 0.24)" },
-  { id: "electric-orange", label: "Neon Orange", value: "rgba(255, 115, 35, 0.24)" },
+  { id: "gold", label: "Gold", value: "rgba(140, 150, 162, 0.24)" },
+  { id: "honey", label: "Honey", value: "rgba(168, 176, 185, 0.22)" },
+  { id: "sage", label: "Sage", value: "rgba(111, 125, 138, 0.20)" },
+  { id: "olive", label: "Olive", value: "rgba(127, 135, 146, 0.20)" },
+  { id: "taupe", label: "Taupe", value: "rgba(145, 156, 166, 0.18)" },
+  { id: "sky", label: "Cloud", value: "rgba(180, 185, 191, 0.24)" },
+  { id: "indigo", label: "Slate", value: "rgba(118, 121, 132, 0.22)" },
+  { id: "violet", label: "Mauve", value: "rgba(176, 148, 174, 0.18)" },
+  { id: "rose", label: "Rose", value: "rgba(192, 123, 128, 0.16)" },
+  { id: "clay", label: "Clay", value: "rgba(154, 166, 178, 0.18)" },
+  { id: "pearl", label: "Pearl", value: "rgba(232, 237, 242, 0.22)" },
+  { id: "charcoal", label: "Charcoal", value: "rgba(76, 72, 65, 0.18)" },
+  { id: "electric-lime", label: "Light", value: "rgba(224, 228, 233, 0.22)" },
+  { id: "electric-cyan", label: "Sage", value: "rgba(111, 125, 138, 0.18)" },
+  { id: "electric-blue", label: "Bronze", value: "rgba(140, 150, 162, 0.24)" },
+  { id: "electric-purple", label: "Mauve", value: "rgba(176, 148, 174, 0.18)" },
+  { id: "electric-pink", label: "Blush", value: "rgba(212, 149, 157, 0.16)" },
+  { id: "electric-orange", label: "Copper", value: "rgba(194, 125, 78, 0.16)" },
 ];
 
 const greekInsights = {
@@ -313,12 +383,21 @@ const textSizeOptions = {
   xl: "25px",
 };
 const accentOptions = {
-  "electric-blue": { value: "#00e5ff", soft: "rgba(0, 229, 255, 0.16)", contrast: "#03191d" },
-  violet: { value: "#9d7cff", soft: "rgba(157, 124, 255, 0.18)", contrast: "#ffffff" },
-  lime: { value: "#baff29", soft: "rgba(186, 255, 41, 0.18)", contrast: "#151a05" },
-  pink: { value: "#ff4fc3", soft: "rgba(255, 79, 195, 0.18)", contrast: "#ffffff" },
-  amber: { value: "#ffb020", soft: "rgba(255, 176, 32, 0.18)", contrast: "#1e1300" },
+  bronze: { value: "#6b7f93", soft: "rgba(107, 127, 147, 0.16)", contrast: "#ffffff" },
+  sage: { value: "#6f7d8a", soft: "rgba(111, 125, 138, 0.16)", contrast: "#171512" },
+  pearl: { value: "#d9dfe6", soft: "rgba(217, 223, 230, 0.18)", contrast: "#1f1a13" },
+  clay: { value: "#9aa6b2", soft: "rgba(154, 166, 178, 0.16)", contrast: "#ffffff" },
+  charcoal: { value: "#4c4841", soft: "rgba(76, 72, 65, 0.16)", contrast: "#ffffff" },
+  taupe: { value: "#6b7f93", soft: "rgba(107, 127, 147, 0.16)", contrast: "#ffffff" },
+  "electric-blue": { value: "#6b7f93", soft: "rgba(107, 127, 147, 0.16)", contrast: "#ffffff" },
 };
+
+function normalizeAccentKey(accent) {
+  if (accent === "electric-blue" || accent === "bronze") {
+    return "taupe";
+  }
+  return accentOptions[accent] ? accent : defaultPreferences.accent;
+}
 
 const apologeticsTracksData = [
   {
@@ -690,9 +769,10 @@ const apologeticsChatState = {
   conversations: readJson(apologeticsChatKey, {}),
   pendingKeys: {},
 };
+const savedApologeticsOverview = readJson("brother.apologeticsOverview", {});
 const apologeticsOverviewState = {
-  featuredOpenTrackId: "islam",
-  trackFrameworkOpen: {},
+  featuredOpenTrackId: savedApologeticsOverview.featuredOpenTrackId || "",
+  trackFrameworkOpen: savedApologeticsOverview.trackFrameworkOpen || {},
 };
 let apologeticsChatRequestId = 0;
 
@@ -708,6 +788,244 @@ function readJson(key, fallback) {
 
 function writeJson(key, value) {
   localStorage.setItem(key, JSON.stringify(value));
+  syncStateKey(key, value);
+}
+
+function setLocalValue(key, value) {
+  localStorage.setItem(key, value);
+  syncStateKey(key, value);
+}
+
+function removeLocalValue(key) {
+  localStorage.removeItem(key);
+  if (supabaseClient && supabaseUser && !isHydratingSupabase) {
+    supabaseClient.from("user_app_state").delete().eq("user_id", supabaseUser.id).eq("state_key", key);
+  }
+}
+
+function parseStoredValue(rawValue) {
+  try {
+    return JSON.parse(rawValue);
+  } catch {
+    return rawValue;
+  }
+}
+
+function encodeLocalPayload(rawValue) {
+  const raw = String(rawValue ?? "");
+  try {
+    return { __localState: true, raw: false, value: JSON.parse(raw) };
+  } catch {
+    return { __localState: true, raw: true, value: raw };
+  }
+}
+
+function decodeRemotePayload(payload) {
+  if (payload && payload.__localState === true) {
+    return payload.raw ? String(payload.value ?? "") : JSON.stringify(payload.value);
+  }
+  return typeof payload === "string" ? payload : JSON.stringify(payload);
+}
+
+async function syncStateKey(key, value) {
+  if (key === "brother.prayerRequests" || !supabaseClient || !supabaseUser || isHydratingSupabase || !key.startsWith("brother.")) {
+    return;
+  }
+
+  const { error } = await supabaseClient.from("user_app_state").upsert({
+    user_id: supabaseUser.id,
+    state_key: key,
+    payload: encodeLocalPayload(typeof value === "string" ? value : JSON.stringify(value)),
+    updated_at: new Date().toISOString(),
+  }, { onConflict: "user_id,state_key" });
+
+  if (error) {
+    console.warn("Supabase state sync failed:", error.message);
+  }
+}
+
+function setAuthFeedback(message, isError = false) {
+  if (!authFeedback) {
+    return;
+  }
+  authFeedback.textContent = message;
+  authFeedback.dataset.state = isError ? "error" : "success";
+}
+
+function updateAuthUi() {
+  const connected = Boolean(supabaseUser);
+  if (authModeLabel) {
+    authModeLabel.textContent = connected ? "Connected" : "Not connected";
+  }
+  if (authSignInButton) authSignInButton.hidden = connected;
+  if (authSignUpButton) authSignUpButton.hidden = connected;
+  if (authSignOutButton) authSignOutButton.hidden = !connected;
+  if (profileAuthStatus) profileAuthStatus.textContent = connected ? "Supabase account" : "Local profile";
+  if (profileStorageStatus) profileStorageStatus.textContent = connected ? "Synced" : "Local only";
+  if (profileAccountId && connected) profileAccountId.textContent = supabaseUser.id;
+}
+
+async function hydrateSupabaseState() {
+  if (!supabaseClient || !supabaseUser) {
+    return false;
+  }
+
+  isHydratingSupabase = true;
+  try {
+    const { data: rows, error } = await supabaseClient
+      .from("user_app_state")
+      .select("state_key,payload")
+      .eq("user_id", supabaseUser.id);
+
+    if (error) {
+      throw error;
+    }
+
+    const localKeys = Object.keys(localStorage).filter((key) => key.startsWith("brother."));
+    const localRows = new Map(localKeys.map((key) => [key, localStorage.getItem(key)]));
+    const remoteRows = new Map((rows || []).map((row) => [row.state_key, row.payload]));
+    const missingRows = [];
+
+    remoteRows.forEach((payload, key) => {
+      localStorage.setItem(key, decodeRemotePayload(payload));
+    });
+
+    localRows.forEach((payload, key) => {
+      if (!remoteRows.has(key)) {
+        missingRows.push({ user_id: supabaseUser.id, state_key: key, payload: encodeLocalPayload(payload) });
+      }
+    });
+
+    if (missingRows.length) {
+      const { error: uploadError } = await supabaseClient
+        .from("user_app_state")
+        .upsert(missingRows, { onConflict: "user_id,state_key" });
+      if (uploadError) throw uploadError;
+    }
+
+    const { data: profile } = await supabaseClient
+      .from("profiles")
+      .select("id,email,display_name,avatar_url,bio,streak")
+      .eq("id", supabaseUser.id)
+      .maybeSingle();
+    if (profile) {
+      const localProfile = readJson("brother.profile", {});
+      writeLocalWithoutSync("brother.profile", {
+        ...localProfile,
+        email: profile.email || supabaseUser.email || "",
+        displayName: profile.display_name || localProfile.displayName || "Charles",
+        avatarInitials: localProfile.avatarInitials || getProfileInitials(profile.display_name),
+        bio: profile.bio || localProfile.bio || "",
+        accountId: profile.id,
+        authStatus: "Supabase account",
+        storageStatus: "Synced",
+      });
+    }
+
+    const { data: preferences } = await supabaseClient
+      .from("user_preferences")
+      .select("app_background,text_size,accent")
+      .eq("user_id", supabaseUser.id)
+      .maybeSingle();
+    if (preferences) {
+      writeLocalWithoutSync("brother.preferences", {
+        background: preferences.app_background || "paper",
+        textSize: preferences.text_size || "medium",
+        accent: preferences.accent || "taupe",
+      });
+    }
+
+    return true;
+  } finally {
+    isHydratingSupabase = false;
+  }
+}
+
+function writeLocalWithoutSync(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
+}
+
+async function handleSupabaseSession(session) {
+  supabaseUser = session?.user || null;
+  updateAuthUi();
+  if (!supabaseUser) {
+    await loadPrayerFromSupabase();
+    return;
+  }
+
+  try {
+    const hydrated = await hydrateSupabaseState();
+    await loadPrayerFromSupabase();
+    const marker = sessionStorage.getItem("brother.supabaseHydratedUser");
+    if (hydrated && marker !== supabaseUser.id) {
+      sessionStorage.setItem("brother.supabaseHydratedUser", supabaseUser.id);
+      window.location.reload();
+    }
+  } catch (error) {
+    setAuthFeedback(`Sync failed: ${error.message}`, true);
+  }
+}
+
+async function initSupabase() {
+  if (!window.supabase?.createClient) {
+    setAuthFeedback("Supabase client could not be loaded.", true);
+    return;
+  }
+
+  try {
+    const response = await fetch("/api/supabase/config");
+    const config = await response.json();
+    if (!config.configured) {
+      updateAuthUi();
+      return;
+    }
+
+    supabaseClient = window.supabase.createClient(config.url, config.anonKey, {
+      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
+    });
+    supabaseClient.auth.onAuthStateChange((_event, session) => {
+      window.setTimeout(() => handleSupabaseSession(session), 0);
+    });
+    const { data } = await supabaseClient.auth.getSession();
+    await handleSupabaseSession(data.session);
+  } catch (error) {
+    setAuthFeedback(`Supabase unavailable: ${error.message}`, true);
+  }
+}
+
+function initAuthForm() {
+  if (!authForm || !window.supabase) {
+    return;
+  }
+
+  authForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!supabaseClient) {
+      setAuthFeedback("Supabase is not configured yet.", true);
+      return;
+    }
+    const email = authForm.elements.email.value.trim();
+    const password = authForm.elements.password.value;
+    const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+    setAuthFeedback(error ? error.message : "Signed in. Syncing your data...");
+  });
+
+  authSignUpButton?.addEventListener("click", async () => {
+    if (!supabaseClient) {
+      setAuthFeedback("Supabase is not configured yet.", true);
+      return;
+    }
+    const email = authForm.elements.email.value.trim();
+    const password = authForm.elements.password.value;
+    const { error } = await supabaseClient.auth.signUp({ email, password });
+    setAuthFeedback(error ? error.message : "Account created. Check your email if confirmation is enabled.", Boolean(error));
+  });
+
+  authSignOutButton?.addEventListener("click", async () => {
+    await supabaseClient?.auth.signOut();
+    sessionStorage.removeItem("brother.supabaseHydratedUser");
+    setAuthFeedback("Signed out. The app is now local-only.");
+  });
 }
 
 function getTodayKey() {
@@ -716,6 +1034,261 @@ function getTodayKey() {
     month: "2-digit",
     day: "2-digit",
   }).format(new Date());
+}
+
+function initHomeStats() {
+  const storageKey = "brother.homeActivity";
+  const activity = readJson(storageKey, { lastDate: "", streak: 0 });
+  const today = getTodayKey();
+
+  if (activity.lastDate !== today) {
+    const previous = activity.lastDate
+      ? new Date(`${activity.lastDate}T00:00:00`)
+      : null;
+    const current = new Date(`${today}T00:00:00`);
+    const difference = previous
+      ? Math.round((current - previous) / 86400000)
+      : null;
+
+    activity.streak = difference === 1 ? Number(activity.streak || 0) + 1 : previous ? 0 : 1;
+    activity.lastDate = today;
+    writeJson(storageKey, activity);
+  }
+
+  if (homeStreak) {
+    homeStreak.textContent = `${activity.streak} ${activity.streak === 1 ? "day" : "days"}`;
+  }
+
+  if (peopleOnline) {
+    peopleOnline.textContent = String(Math.floor(Math.random() * 91) + 120);
+  }
+}
+
+function countPrayerWords(value) {
+  return String(value || "").trim() ? String(value).trim().split(/\s+/).length : 0;
+}
+
+function savePrayerRequests() {
+  writeJson("brother.prayerRequests", prayerState.requests);
+}
+
+async function loadPrayerFromSupabase() {
+  if (!supabaseClient) {
+    return;
+  }
+
+  const { data: requests, error } = await supabaseClient
+    .from("prayer_requests")
+    .select("id,content,prayer_count,created_at")
+    .eq("status", "active");
+  if (error) {
+    console.warn("Prayer requests could not be loaded:", error.message);
+    return;
+  }
+
+  if (!requests?.length) {
+    renderPrayerPage();
+    return;
+  }
+
+  let ownInteractions = [];
+  if (supabaseUser) {
+    const { data } = await supabaseClient
+      .from("prayer_interactions")
+      .select("request_id")
+      .eq("user_id", supabaseUser.id);
+    ownInteractions = data || [];
+  }
+  const prayedIds = new Set(ownInteractions.map((item) => item.request_id));
+  prayerState.requests = (requests || []).map((request) => ({
+    id: request.id,
+    text: request.content,
+    prayerCount: request.prayer_count || 0,
+    prayedBy: prayedIds.has(request.id) && supabaseUser ? [supabaseUser.id] : [],
+    createdAt: request.created_at,
+  }));
+  renderPrayerPage();
+}
+
+async function createPrayerRequest(text) {
+  if (!supabaseClient || !supabaseUser) {
+    return false;
+  }
+  const { error } = await supabaseClient.from("prayer_requests").insert({
+    author_id: supabaseUser.id,
+    content: text,
+  });
+  if (error) {
+    prayerFeedback.textContent = error.message;
+    return false;
+  }
+  await loadPrayerFromSupabase();
+  return true;
+}
+
+function renderPrayerPage() {
+  if (!prayerList) {
+    return;
+  }
+
+  if (prayerRequestPanel) prayerRequestPanel.hidden = prayerState.pageTab !== "request";
+  prayerList.hidden = prayerState.pageTab !== "board";
+  document.querySelectorAll("[data-prayer-page-tab]").forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.prayerPageTab === prayerState.pageTab);
+  });
+
+  const requests = prayerState.requests
+    .filter(() => prayerState.pageTab === "board")
+    .sort((a, b) => {
+      if (prayerState.sort === "recent") {
+        return String(b.createdAt).localeCompare(String(a.createdAt));
+      }
+      const difference = prayerState.sort === "least"
+        ? a.prayerCount - b.prayerCount
+        : b.prayerCount - a.prayerCount;
+      return difference || String(b.createdAt).localeCompare(String(a.createdAt));
+    });
+
+  prayerList.innerHTML = requests.length
+    ? requests.map((request) => {
+        const hasPrayed = request.prayedBy?.includes(prayerUserId);
+        const date = new Intl.DateTimeFormat("en-CA", { month: "short", day: "numeric" }).format(new Date(request.createdAt));
+        const expanded = Boolean(request.expanded);
+        return `
+          <article class="prayer-card${expanded ? " is-expanded" : ""}">
+            <button type="button" class="prayer-card-toggle" data-prayer-toggle data-prayer-id="${escapeAttr(request.id)}" aria-expanded="${expanded}">
+              <span>
+                <strong>${request.demo ? "Example request" : "Anonymous request"}</strong>
+                <p>${escapeHtml(request.text)}</p>
+              </span>
+              <i data-lucide="chevron-down"></i>
+            </button>
+            ${expanded ? `<div class="prayer-card-expanded"><p>${escapeHtml(request.text)}</p></div>` : ""}
+            <div class="prayer-card-meta">
+              <span>${request.demo ? "Example" : "Anonymous"} · ${date}</span>
+              <button type="button" class="${hasPrayed ? "is-prayed" : ""}" data-prayer-action="pray" data-prayer-id="${escapeAttr(request.id)}">
+                <i data-lucide="hand-heart"></i>
+                <span>${hasPrayed ? "I prayed" : "I prayed"} · ${request.prayerCount}</span>
+              </button>
+            </div>
+          </article>
+        `;
+      }).join("")
+    : `<p class="prayer-empty">No prayer requests have been posted yet.</p>`;
+  const sortSelect = document.querySelector("[data-prayer-sort]");
+  if (sortSelect) {
+    sortSelect.value = prayerState.sort;
+  }
+  refreshIcons();
+}
+
+function initPrayerPage() {
+  if (!prayerForm || !prayerList) {
+    return;
+  }
+
+  prayerRequestInput?.addEventListener("input", () => {
+    const count = countPrayerWords(prayerRequestInput.value);
+    if (prayerWordCount) {
+      prayerWordCount.textContent = `${count} / 300 words`;
+      prayerWordCount.classList.toggle("is-over-limit", count > 300);
+    }
+  });
+
+  prayerForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const text = prayerRequestInput.value.trim();
+    const wordCount = countPrayerWords(text);
+    if (!text || wordCount > 300) {
+      prayerFeedback.textContent = wordCount > 300 ? "Please keep your request under 300 words." : "Write a prayer request first.";
+      return;
+    }
+
+    if (supabaseClient && !supabaseUser) {
+      prayerFeedback.textContent = "Sign in to share a prayer request with the community.";
+      return;
+    }
+
+    if (supabaseClient && supabaseUser) {
+      const created = await createPrayerRequest(text);
+      if (!created) return;
+    } else {
+      prayerState.requests.unshift({
+      id: `prayer-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      text,
+      prayerCount: 0,
+      prayedBy: [],
+      createdAt: new Date().toISOString(),
+      });
+      savePrayerRequests();
+    }
+    prayerRequestInput.value = "";
+    prayerWordCount.textContent = "0 / 300 words";
+    prayerFeedback.textContent = "Your request was shared anonymously.";
+    prayerState.pageTab = "board";
+    prayerState.tab = "all";
+    renderPrayerPage();
+  });
+
+  document.querySelectorAll("[data-prayer-page-tab]").forEach((button) => {
+    button.addEventListener("click", () => {
+      prayerState.pageTab = button.dataset.prayerPageTab;
+      if (prayerRequestPanel) prayerRequestPanel.hidden = prayerState.pageTab !== "request";
+      prayerList.hidden = prayerState.pageTab !== "board";
+      document.querySelectorAll("[data-prayer-page-tab]").forEach((item) => {
+        item.classList.toggle("is-active", item === button);
+      });
+      renderPrayerPage();
+    });
+  });
+
+  document.querySelector("[data-prayer-sort]")?.addEventListener("change", (event) => {
+    prayerState.sort = event.target.value;
+    renderPrayerPage();
+  });
+
+  prayerList.addEventListener("click", async (event) => {
+    const toggle = event.target.closest("[data-prayer-toggle]");
+    if (toggle) {
+      const request = prayerState.requests.find((item) => item.id === toggle.dataset.prayerId);
+      if (request) {
+        request.expanded = !request.expanded;
+        renderPrayerPage();
+      }
+      return;
+    }
+    const button = event.target.closest("[data-prayer-action=\"pray\"]");
+    if (!button) {
+      return;
+    }
+    const request = prayerState.requests.find((item) => item.id === button.dataset.prayerId);
+    if (!request) {
+      return;
+    }
+    if (supabaseClient && !supabaseUser) {
+      prayerFeedback.textContent = "Sign in to record your prayer.";
+      return;
+    }
+    if (supabaseClient && supabaseUser) {
+      const { error } = await supabaseClient.rpc("pray_for_request", { request_uuid: request.id });
+      if (error) {
+        prayerFeedback.textContent = error.message;
+        return;
+      }
+      await loadPrayerFromSupabase();
+      return;
+    }
+    request.prayedBy ||= [];
+    if (request.prayedBy.includes(prayerUserId)) {
+      return;
+    }
+    request.prayedBy.push(prayerUserId);
+    request.prayerCount += 1;
+    savePrayerRequests();
+    renderPrayerPage();
+  });
+
+  renderPrayerPage();
 }
 
 function normalizeApologeticsProgress() {
@@ -728,6 +1301,10 @@ function normalizeApologeticsProgress() {
 function saveApologeticsProgress() {
   normalizeApologeticsProgress();
   writeJson(apologeticsProgressKey, apologeticsProgressState);
+}
+
+function saveApologeticsOverview() {
+  writeJson("brother.apologeticsOverview", apologeticsOverviewState);
 }
 
 function touchApologeticsProgress() {
@@ -789,11 +1366,13 @@ function rememberAiMessage(role, text) {
 }
 
 function clearAiMemory() {
-  localStorage.removeItem(aiMemoryKey);
+  removeLocalValue(aiMemoryKey);
 }
 
 function savePreferences() {
+  savedPreferences.accent = normalizeAccentKey(savedPreferences.accent);
   writeJson("brother.preferences", savedPreferences);
+  syncPreferencesRecord();
 }
 
 function getProfileInitials(name) {
@@ -814,6 +1393,32 @@ function getProfileInitials(name) {
 
 function saveProfile() {
   writeJson("brother.profile", savedProfile);
+  syncProfileRecord();
+}
+
+async function syncProfileRecord() {
+  if (!supabaseClient || !supabaseUser) return;
+  const { error } = await supabaseClient.from("profiles").upsert({
+    id: supabaseUser.id,
+    email: supabaseUser.email || savedProfile.email || null,
+    display_name: savedProfile.displayName,
+    bio: savedProfile.bio,
+    streak: Number(readJson("brother.homeActivity", {}).streak || 0),
+    updated_at: new Date().toISOString(),
+  });
+  if (error) setAuthFeedback(`Profile sync failed: ${error.message}`, true);
+}
+
+async function syncPreferencesRecord() {
+  if (!supabaseClient || !supabaseUser) return;
+  const { error } = await supabaseClient.from("user_preferences").upsert({
+    user_id: supabaseUser.id,
+    app_background: savedPreferences.background,
+    text_size: savedPreferences.textSize,
+    accent: savedPreferences.accent,
+    updated_at: new Date().toISOString(),
+  });
+  if (error) setAuthFeedback(`Preferences sync failed: ${error.message}`, true);
 }
 
 function applyProfile() {
@@ -874,10 +1479,13 @@ function setActivePreference(buttons, activeValue, dataKey) {
 }
 
 function applyPreferences() {
+  savedPreferences.accent = normalizeAccentKey(savedPreferences.accent);
   const accent = accentOptions[savedPreferences.accent] || accentOptions[defaultPreferences.accent];
   const textSize = textSizeOptions[savedPreferences.textSize] || textSizeOptions[defaultPreferences.textSize];
+  savedPreferences.background = "paper";
+  const background = "paper";
 
-  appShell.dataset.appBackground = savedPreferences.background || defaultPreferences.background;
+  appShell.dataset.appBackground = background;
   appShell.style.setProperty("--gold", accent.value);
   appShell.style.setProperty("--gold-soft", accent.soft);
   appShell.style.setProperty("--beige", accent.soft);
@@ -1121,10 +1729,10 @@ function getTodaysApologeticsChallenge() {
 }
 
 function saveApologeticsState() {
-  localStorage.setItem("brother.apologetics.track", apologeticsState.trackId);
-  localStorage.setItem("brother.apologetics.category", apologeticsState.category);
-  localStorage.setItem("brother.apologetics.topic", apologeticsState.topicId);
-  localStorage.setItem("brother.apologetics.selectedTrackTopic", apologeticsState.selectedTrackTopicId || "");
+  setLocalValue("brother.apologetics.track", apologeticsState.trackId);
+  setLocalValue("brother.apologetics.category", apologeticsState.category);
+  setLocalValue("brother.apologetics.topic", apologeticsState.topicId);
+  setLocalValue("brother.apologetics.selectedTrackTopic", apologeticsState.selectedTrackTopicId || "");
 }
 
 function saveApologeticsChatState() {
@@ -1436,8 +2044,8 @@ function renderApologeticsFeaturedTopics() {
     const featuredTopics = track.topics.slice(0, 3);
     const isExpanded = apologeticsOverviewState.featuredOpenTrackId === track.id;
     return `
-      <section class="apologetics-featured-group${isExpanded ? " is-expanded" : ""}">
-        <button class="section-heading apologetics-featured-group-heading" data-apologetics-featured-toggle="${escapeAttr(track.id)}" aria-expanded="${isExpanded ? "true" : "false"}">
+      <section class="apologetics-featured-group${isExpanded ? " is-expanded" : ""}" data-apologetics-featured-group="${escapeAttr(track.id)}">
+        <button class="section-heading apologetics-featured-group-heading" type="button" data-apologetics-featured-toggle="${escapeAttr(track.id)}" aria-expanded="${isExpanded ? "true" : "false"}" aria-controls="apologetics-topic-dropdown-${escapeAttr(track.id)}">
           <span class="apologetics-featured-group-heading-copy">
             <small>${escapeHtml(track.level)} track</small>
             <h3>${escapeHtml(track.title)}</h3>
@@ -1445,13 +2053,14 @@ function renderApologeticsFeaturedTopics() {
           </span>
           <span class="apologetics-featured-group-heading-side">
             <span>${featuredTopics.length}</span>
+            <span class="apologetics-featured-group-heading-state">${isExpanded ? "Close" : "Open"}</span>
             <i data-lucide="chevron-down"></i>
           </span>
         </button>
-        <div class="apologetics-topic-dropdown"${isExpanded ? "" : " hidden"}>
+        <div class="apologetics-topic-dropdown" id="apologetics-topic-dropdown-${escapeAttr(track.id)}"${isExpanded ? "" : " hidden"}>
           <div class="apologetics-topic-dropdown-list">
           ${featuredTopics.map((topic) => `
-            <button class="apologetics-topic-card apologetics-topic-card--carousel" data-apologetics-topic="${escapeAttr(topic.id)}" data-apologetics-track-jump="${escapeAttr(track.id)}">
+            <button class="apologetics-topic-card apologetics-topic-card--carousel" type="button" data-apologetics-topic="${escapeAttr(topic.id)}" data-apologetics-track-jump="${escapeAttr(track.id)}">
               <span class="apologetics-topic-meta">
                 <small>${escapeHtml(topic.category)}</small>
               </span>
@@ -1484,7 +2093,7 @@ function renderApologeticsChallenge() {
   }
 
   apologeticsChallenge.innerHTML = `
-    <button class="apologetics-challenge-button" data-apologetics-topic="${escapeAttr(challenge.id)}" data-apologetics-track-jump="${escapeAttr(challenge.trackId)}">
+    <button class="apologetics-challenge-button" type="button" data-apologetics-topic="${escapeAttr(challenge.id)}" data-apologetics-track-jump="${escapeAttr(challenge.trackId)}">
       <span class="apologetics-challenge-top">
         <small>Featured objection</small>
         <strong>+${challenge.xpReward} XP</strong>
@@ -1650,8 +2259,9 @@ function renderApologeticsTrackScreen() {
   apologeticsTopicCount.textContent = String(topics.length);
   apologeticsTrackTopics.innerHTML = topics.map((topic) => {
     const completionState = getTopicCompletionState(topic.id);
+    const isSelected = topic.id === apologeticsState.selectedTrackTopicId;
     return `
-    <button class="apologetics-topic-card apologetics-topic-card--${escapeAttr(topic.category.toLowerCase())} ${topic.id === apologeticsState.selectedTrackTopicId ? "is-selected" : ""}" data-apologetics-topic="${escapeAttr(topic.id)}">
+    <button class="apologetics-topic-card apologetics-topic-card--${escapeAttr(topic.category.toLowerCase())} ${isSelected ? "is-selected" : ""}" type="button" data-apologetics-topic="${escapeAttr(topic.id)}" aria-pressed="${isSelected ? "true" : "false"}">
       <span class="apologetics-topic-meta">
         <small>${escapeHtml(topic.category)}</small>
         <span class="apologetics-topic-status ${completionState === "Completed" ? "is-completed" : completionState === "In progress" ? "is-progress" : ""}">${escapeHtml(completionState)}</span>
@@ -1664,7 +2274,7 @@ function renderApologeticsTrackScreen() {
         <small>${topic.keyVerses.length} verses</small>
       </span>
       <span class="apologetics-topic-plus" aria-hidden="true">
-        <i data-lucide="plus"></i>
+        <i data-lucide="${isSelected ? "minus" : "plus"}"></i>
       </span>
     </button>
   `;
@@ -1784,6 +2394,33 @@ function refreshIcons() {
   }
 }
 
+function initApologeticsGate() {
+  if (!apologeticsGateForm || !apologeticsGate) {
+    return;
+  }
+
+  const unlocked = sessionStorage.getItem(apologeticsGateSessionKey) === "true";
+  apologeticsGate.hidden = unlocked;
+
+  apologeticsGateForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (apologeticsGateInput?.value.trim() !== "158") {
+      if (apologeticsGateFeedback) {
+        apologeticsGateFeedback.textContent = "Invalid access code.";
+      }
+      apologeticsGateInput?.select();
+      return;
+    }
+
+    sessionStorage.setItem(apologeticsGateSessionKey, "true");
+    apologeticsGate.hidden = true;
+    apologeticsGateInput.value = "";
+    if (apologeticsGateFeedback) {
+      apologeticsGateFeedback.textContent = "";
+    }
+  });
+}
+
 function setScreen(id) {
   const activeNavId = id.startsWith("apologetics") ? "apologetics" : id;
   appShell.dataset.activeScreen = id;
@@ -1800,6 +2437,16 @@ function setScreen(id) {
 
   if (id.startsWith("apologetics")) {
     renderApologetics();
+    if (sessionStorage.getItem(apologeticsGateSessionKey) !== "true" && apologeticsGate) {
+      apologeticsGate.hidden = false;
+      window.setTimeout(() => apologeticsGateInput?.focus(), 80);
+    }
+  } else if (apologeticsGate) {
+    apologeticsGate.hidden = true;
+  }
+
+  if (id === "prayer") {
+    renderPrayerPage();
   }
 
   renderApologeticsBeginButton();
@@ -1810,6 +2457,10 @@ function showModal(panel) {
   modalLayer.hidden = false;
   panel.classList.add("is-visible");
   appShell.dataset.modal = panel === verseSheet ? "verse" : panel === verseAiPanel ? "verse-ai" : "standard";
+  if (panel === verseSheet) {
+    readerScreen?.classList.add("is-verse-focused");
+    window.requestAnimationFrame(centerSelectedVerse);
+  }
   const input = panel.querySelector("input, textarea");
   if (input) {
     window.setTimeout(() => input.focus(), 80);
@@ -1820,8 +2471,26 @@ function closeModal() {
   [searchPanel, verseSheet, verseAiPanel].forEach((item) => item?.classList.remove("is-visible"));
   modalLayer.hidden = true;
   delete appShell.dataset.modal;
+  readerScreen?.classList.remove("is-verse-focused");
   document.querySelectorAll(".scripture-line.is-selected, .parallel-scripture-line.is-selected").forEach((line) => line.classList.remove("is-selected"));
   hideVerseDetail();
+}
+
+function centerSelectedVerse() {
+  const verse = readerScreen?.querySelector(".scripture-line.is-selected, .parallel-scripture-line.is-selected");
+  if (!verse || !verseSheet?.classList.contains("is-visible") || !readerScreen) {
+    return;
+  }
+
+  const screenRect = readerScreen.getBoundingClientRect();
+  const sheetRect = verseSheet.getBoundingClientRect();
+  const availableTop = screenRect.top + 18;
+  const availableBottom = Math.max(availableTop, sheetRect.top - 18);
+  const targetCenter = availableTop + (availableBottom - availableTop) / 2;
+  const verseRect = verse.getBoundingClientRect();
+  const scrollDelta = verseRect.top + verseRect.height / 2 - targetCenter;
+
+  readerScreen.scrollBy({ top: scrollDelta, behavior: "smooth" });
 }
 
 function getBook(bookId) {
@@ -2218,10 +2887,10 @@ function syncVerseActionStates() {
 async function loadChapter() {
   const requestId = ++chapterRequestId;
   renderLoading();
-  localStorage.setItem("brother.version", readerState.versionId);
-  localStorage.setItem("brother.book", readerState.bookId);
-  localStorage.setItem("brother.chapter", String(readerState.chapter));
-  localStorage.setItem("brother.parallel", String(readerState.parallelEnabled));
+  setLocalValue("brother.version", readerState.versionId);
+  setLocalValue("brother.book", readerState.bookId);
+  setLocalValue("brother.chapter", String(readerState.chapter));
+  setLocalValue("brother.parallel", String(readerState.parallelEnabled));
   writeJson("brother.parallelVersions", readerState.parallelVersionIds);
 
   try {
@@ -2607,23 +3276,88 @@ async function shareVerse() {
   setFeedback("Sharing is not available here, so the verse was copied.");
 }
 
-function toggleBookmark() {
+function showBookmarkPicker() {
+  if (!selectedVerseData) {
+    return;
+  }
+
   const line = document.querySelector(`[data-verse-key="${CSS.escape(selectedVerseData.key)}"]`);
-  if (savedState.bookmarks[selectedVerseData.key]) {
-    delete savedState.bookmarks[selectedVerseData.key];
-    line?.classList.remove("is-bookmarked");
-    setFeedback("Bookmark removed.");
-  } else {
+  if (!savedState.bookmarks[selectedVerseData.key]) {
     savedState.bookmarks[selectedVerseData.key] = {
       ...selectedVerseData,
       createdAt: new Date().toISOString(),
+      folderId: "",
     };
     line?.classList.add("is-bookmarked");
-    setFeedback("Bookmarked.");
+    writeJson("brother.bookmarks", savedState.bookmarks);
   }
+
+  const currentBookmark = savedState.bookmarks[selectedVerseData.key];
+  const folderOptions = [
+    '<option value="">No folder</option>',
+    ...getSavedFolders("bookmarks").map((folder) => `<option value="${escapeAttr(folder.id)}">${escapeHtml(folder.name)}</option>`),
+  ].join("");
+
+  verseDetail.hidden = false;
+  verseDetail.innerHTML = `
+    <div class="detail-stack">
+      <h3>Bookmark folder</h3>
+      <div class="highlight-folder-tools">
+        <label class="highlight-folder-select">
+          <span>Folder</span>
+          <select data-bookmark-folder-select>${folderOptions}</select>
+        </label>
+        <form class="highlight-folder-form" data-bookmark-folder-form>
+          <input type="text" name="folder" placeholder="New folder" aria-label="New bookmark folder" />
+          <button aria-label="Create bookmark folder"><i data-lucide="plus"></i></button>
+        </form>
+      </div>
+      <button class="secondary-button" data-remove-bookmark>Remove Bookmark</button>
+    </div>
+  `;
+
+  const folderSelect = verseDetail.querySelector("[data-bookmark-folder-select]");
+  folderSelect.value = currentBookmark.folderId || "";
+  folderSelect.addEventListener("change", () => {
+    currentBookmark.folderId = folderSelect.value;
+    writeJson("brother.bookmarks", savedState.bookmarks);
+    refreshProfilePanel();
+    setFeedback(`Bookmark filed in ${getFolderName("bookmarks", folderSelect.value)}.`);
+  });
+
+  verseDetail.querySelector("[data-bookmark-folder-form]").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const input = event.currentTarget.elements.folder;
+    const folderName = input.value.trim() || window.prompt("Folder name") || "";
+    const folderId = createSavedFolder("bookmarks", folderName, { renderProfile: false });
+    input.value = "";
+    if (folderId) {
+      currentBookmark.folderId = folderId;
+      writeJson("brother.bookmarks", savedState.bookmarks);
+      showBookmarkPicker();
+      setFeedback(`Bookmark filed in ${getFolderName("bookmarks", folderId)}.`);
+    }
+  });
+
+  verseDetail.querySelector("[data-remove-bookmark]").addEventListener("click", removeBookmark);
+  syncVerseActionStates();
+  refreshProfilePanel();
+  refreshIcons();
+}
+
+function removeBookmark() {
+  if (!selectedVerseData) {
+    return;
+  }
+
+  const line = document.querySelector(`[data-verse-key="${CSS.escape(selectedVerseData.key)}"]`);
+  delete savedState.bookmarks[selectedVerseData.key];
+  line?.classList.remove("is-bookmarked");
   writeJson("brother.bookmarks", savedState.bookmarks);
   syncVerseActionStates();
   refreshProfilePanel();
+  hideVerseDetail();
+  setFeedback("Bookmark removed.");
 }
 
 function showNoteEditor() {
@@ -3207,6 +3941,23 @@ function closeProfileSavedPanel() {
   }
 }
 
+function setProfileTab(tab) {
+  profileTabButtons.forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.profileTab === tab);
+  });
+
+  if (profileSettingsPanel) {
+    profileSettingsPanel.hidden = tab !== "settings";
+  }
+
+  if (tab === "settings") {
+    closeProfileSavedPanel();
+    return;
+  }
+
+  renderProfileSavedPanel(tab);
+}
+
 function renderProfileSavedPanel(type) {
   if (!profileSavedPanel) {
     return;
@@ -3478,7 +4229,7 @@ async function handleVerseAction(action) {
     if (action === "highlight") showHighlightPicker();
     if (action === "copy") await copyVerse();
     if (action === "share") await shareVerse();
-    if (action === "bookmark") toggleBookmark();
+    if (action === "bookmark") showBookmarkPicker();
     if (action === "note") showNoteEditor();
     if (action === "ask-ai") askAiAboutVerse();
     if (action === "original-language") await showOriginalLanguagePanel();
@@ -3592,6 +4343,10 @@ profileViewButtons.forEach((button) => {
   });
 });
 
+profileTabButtons.forEach((button) => {
+  button.addEventListener("click", () => setProfileTab(button.dataset.profileTab));
+});
+
 document.querySelectorAll("[data-verse-action]").forEach((button) => {
   button.addEventListener("click", () => {
     button.classList.add("is-pressed");
@@ -3613,6 +4368,8 @@ apologeticsTracks?.addEventListener("click", (event) => {
     return;
   }
 
+  apologeticsOverviewState.featuredOpenTrackId = "";
+  saveApologeticsOverview();
   apologeticsState.trackId = button.dataset.apologeticsTrack;
   apologeticsState.category = "all";
   apologeticsState.topicId = getApologeticsTrack()?.topics[0]?.id || "";
@@ -3627,6 +4384,8 @@ apologeticsFilters?.addEventListener("click", (event) => {
     return;
   }
 
+  apologeticsOverviewState.featuredOpenTrackId = "";
+  saveApologeticsOverview();
   apologeticsState.category = button.dataset.apologeticsFilter;
   const nextTopic = getApologeticsTopics()[0];
   if (nextTopic) {
@@ -3638,11 +4397,18 @@ apologeticsFilters?.addEventListener("click", (event) => {
 });
 
 apologeticsTopics?.addEventListener("click", (event) => {
-  const toggleButton = event.target.closest("[data-apologetics-featured-toggle]");
-  if (toggleButton) {
-    const trackId = toggleButton.dataset.apologeticsFeaturedToggle || "";
-    apologeticsOverviewState.featuredOpenTrackId = apologeticsOverviewState.featuredOpenTrackId === trackId ? "" : trackId;
-    renderApologeticsFeaturedTopics();
+  const featuredToggle = event.target.closest("[data-apologetics-featured-toggle]");
+  if (featuredToggle) {
+    const group = featuredToggle.closest("[data-apologetics-featured-group]");
+    if (!group) {
+      return;
+    }
+
+    const trackId = group.dataset.apologeticsFeaturedGroup || "";
+    const nextTrackId = apologeticsOverviewState.featuredOpenTrackId === trackId ? "" : trackId;
+    apologeticsOverviewState.featuredOpenTrackId = nextTrackId;
+    saveApologeticsOverview();
+    renderApologetics();
     refreshIcons();
     return;
   }
@@ -3652,6 +4418,8 @@ apologeticsTopics?.addEventListener("click", (event) => {
     return;
   }
 
+  apologeticsOverviewState.featuredOpenTrackId = "";
+  saveApologeticsOverview();
   apologeticsState.trackId = button.dataset.apologeticsTrackJump || apologeticsState.trackId;
   apologeticsState.category = "all";
   apologeticsState.topicId = button.dataset.apologeticsTopic;
@@ -3665,6 +4433,8 @@ apologeticsChallenge?.addEventListener("click", (event) => {
     return;
   }
 
+  apologeticsOverviewState.featuredOpenTrackId = "";
+  saveApologeticsOverview();
   apologeticsState.trackId = button.dataset.apologeticsTrackJump || apologeticsState.trackId;
   apologeticsState.category = "all";
   apologeticsState.topicId = button.dataset.apologeticsTopic;
@@ -3678,6 +4448,8 @@ apologeticsTrackTopics?.addEventListener("click", (event) => {
     return;
   }
 
+  apologeticsOverviewState.featuredOpenTrackId = "";
+  saveApologeticsOverview();
   apologeticsState.selectedTrackTopicId = apologeticsState.selectedTrackTopicId === button.dataset.apologeticsTopic
     ? ""
     : button.dataset.apologeticsTopic;
@@ -3697,6 +4469,7 @@ apologeticsTrackQuick?.addEventListener("click", (event) => {
   }
 
   apologeticsOverviewState.trackFrameworkOpen[track.id] = Number(button.dataset.apologeticsFrameworkStep);
+  saveApologeticsOverview();
   renderApologeticsTrackScreen();
 });
 
@@ -3795,9 +4568,14 @@ modalLayer.addEventListener("click", (event) => {
 
 window.addEventListener("load", refreshIcons);
 appShell.dataset.activeScreen = document.querySelector(".screen.is-active")?.id || "home";
+initHomeStats();
+initPrayerPage();
 initProfile();
 initPreferences();
 initReader();
+initApologeticsGate();
+initAuthForm();
+initSupabase();
 restoreAiMemory();
 renderApologetics();
 refreshIcons();
