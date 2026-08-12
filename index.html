@@ -357,12 +357,24 @@
             </div>
             <form class="profile-auth-form" data-auth-form>
               <input type="email" name="email" placeholder="Email" autocomplete="email" required />
-              <input type="password" name="password" placeholder="Password" autocomplete="current-password" minlength="6" required />
+              <div class="auth-connected-email" data-auth-connected-email hidden>
+                <span>Connected with</span>
+                <strong data-auth-connected-email-value></strong>
+              </div>
+              <div class="auth-password-field">
+                <input type="password" name="password" placeholder="Password" autocomplete="current-password" minlength="6" required />
+                <button type="button" class="auth-password-toggle" data-password-toggle="password" aria-label="Show password"><i data-lucide="eye"></i></button>
+              </div>
+              <div class="auth-password-field" hidden>
+                <input type="password" name="passwordConfirm" placeholder="Confirm password" autocomplete="new-password" minlength="6" />
+                <button type="button" class="auth-password-toggle" data-password-toggle="passwordConfirm" aria-label="Show password confirmation"><i data-lucide="eye"></i></button>
+              </div>
               <div class="profile-auth-actions">
                 <button type="submit" data-auth-action="sign-in">Sign in</button>
                 <button type="button" data-auth-action="sign-up">Create account</button>
                 <button type="button" data-auth-action="sign-out" hidden>Sign out</button>
               </div>
+              <button type="button" class="auth-forgot-button" data-auth-action="forgot">Forgot password?</button>
               <p data-auth-feedback>Connect to sync your profile and app data across devices.</p>
             </form>
           </section>
@@ -376,23 +388,18 @@
             <div class="profile-info-card">
               <form class="profile-info-form" data-profile-form>
                 <label class="profile-field">
-                  <span>Display name</span>
+                  <span>Name</span>
                   <input type="text" name="displayName" maxlength="40" placeholder="Your name" />
                 </label>
 
                 <label class="profile-field">
-                  <span>Email</span>
-                  <input type="email" name="email" maxlength="120" placeholder="you@example.com" />
+                  <span>Country</span>
+                  <input type="text" name="country" maxlength="60" placeholder="Canada" />
                 </label>
 
                 <label class="profile-field">
-                  <span>Avatar initials</span>
-                  <input type="text" name="avatarInitials" maxlength="3" placeholder="CB" />
-                </label>
-
-                <label class="profile-field profile-field-wide">
-                  <span>Bio</span>
-                  <textarea name="bio" rows="4" maxlength="220" placeholder="Tell a few words about your focus, ministry, or study goals."></textarea>
+                  <span>Age</span>
+                  <input type="number" name="age" min="13" max="120" placeholder="28" />
                 </label>
 
                 <div class="profile-info-actions">
@@ -421,6 +428,27 @@
                 <button data-background-option="paper">Light</button>
               </div>
             </div>
+
+            <div class="preference-card">
+              <div class="preference-copy">
+                <i data-lucide="type"></i>
+                <div>
+                  <strong>Text size</strong>
+                  <p>Adjust the Scripture reading size.</p>
+                </div>
+              </div>
+              <div class="text-size-preview">
+                <span>Preview</span>
+                <p><sup>1</sup> In the beginning was the Word.</p>
+              </div>
+              <div class="segmented-control" data-text-size-options>
+                <button data-text-size-option="xs" aria-label="Extra small text">A−</button>
+                <button data-text-size-option="small" aria-label="Small text">A</button>
+                <button data-text-size-option="medium" aria-label="Medium text">A</button>
+                <button data-text-size-option="large" aria-label="Large text">A</button>
+                <button data-text-size-option="xl" aria-label="Extra large text">A+</button>
+              </div>
+            </div>
           </section>
           </div>
 
@@ -428,6 +456,10 @@
         </section>
 
         <button class="apologetics-begin-button is-disabled" type="button" data-apologetics-begin aria-disabled="true" hidden>Continue Learning</button>
+
+        <button class="multi-select-menu-toggle" data-multi-select-toggle type="button" aria-label="Open selected verse actions" hidden>
+          <i data-lucide="chevron-up"></i>
+        </button>
 
         <nav class="bottom-nav" aria-label="Primary navigation">
           <button class="is-active" data-nav="home"><i data-lucide="home"></i><span>Home</span></button>
@@ -502,6 +534,40 @@
             <input type="text" placeholder="Ask about this verse..." aria-label="Ask about this verse" />
             <button aria-label="Send"><i data-lucide="send"></i></button>
           </form>
+        </section>
+
+        <section class="note-editor-panel" data-note-editor-panel role="dialog" aria-modal="true" aria-label="Verse note editor">
+          <header class="note-editor-panel-header">
+            <div>
+              <span>Notes</span>
+              <strong data-note-editor-reference>Selected verses</strong>
+            </div>
+            <button data-close-modal aria-label="Close note editor"><i data-lucide="x"></i></button>
+          </header>
+          <div class="note-editor-toolbar" role="toolbar" aria-label="Note formatting">
+            <button type="button" data-note-command="bold" aria-label="Bold"><b>B</b></button>
+            <button type="button" data-note-command="italic" aria-label="Italic"><i>I</i></button>
+            <button type="button" data-note-command="underline" aria-label="Underline"><u>U</u></button>
+            <button type="button" data-note-command="formatBlock" data-note-value="h2" aria-label="Title">H</button>
+            <button type="button" data-note-command="insertUnorderedList" aria-label="Bulleted list">•</button>
+            <button type="button" data-note-command="insertOrderedList" aria-label="Numbered list">1.</button>
+            <button type="button" data-note-command="justifyLeft" aria-label="Align left">≡</button>
+            <button type="button" data-note-command="justifyCenter" aria-label="Center">≡</button>
+            <button type="button" data-note-command="justifyFull" aria-label="Justify">☰</button>
+            <label class="note-format-select" aria-label="Text color">
+              <span>A</span>
+              <input type="color" data-note-color value="#201c17" />
+            </label>
+            <label class="note-format-select" aria-label="Highlight color">
+              <span>▰</span>
+              <input type="color" data-note-highlight value="#facc15" />
+            </label>
+          </div>
+          <div class="note-editor-content" data-note-editor-content contenteditable="true" role="textbox" aria-label="Write your note"></div>
+          <div class="note-editor-footer">
+            <span data-note-editor-status>Notes are saved to the selected verses.</span>
+            <button type="button" class="primary-button" data-save-rich-note>Save note</button>
+          </div>
         </section>
 
       </div>

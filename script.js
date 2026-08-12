@@ -5,6 +5,10 @@ const modalLayer = document.querySelector("[data-modal-layer]");
 const searchPanel = document.querySelector("[data-search-panel]");
 const verseSheet = document.querySelector("[data-verse-sheet]");
 const verseAiPanel = document.querySelector("[data-verse-ai-panel]");
+const noteEditorPanel = document.querySelector("[data-note-editor-panel]");
+const noteEditorContent = document.querySelector("[data-note-editor-content]");
+const noteEditorReference = document.querySelector("[data-note-editor-reference]");
+const noteEditorStatus = document.querySelector("[data-note-editor-status]");
 const selectedVerse = document.querySelector("[data-selected-verse]");
 const sheetFeedback = document.querySelector("[data-sheet-feedback]");
 const verseDetail = document.querySelector("[data-verse-detail]");
@@ -14,6 +18,7 @@ const verseAiContext = document.querySelector("[data-verse-ai-context]");
 const verseAiThread = document.querySelector("[data-verse-ai-thread]");
 const verseAiForm = document.querySelector("[data-verse-ai-form]");
 const verseAiInput = verseAiForm?.querySelector("input");
+const multiSelectMenuToggle = document.querySelector("[data-multi-select-toggle]");
 const aiComposerInput = document.querySelector(".composer textarea");
 const aiForm = document.querySelector("[data-ai-form]");
 const aiThread = document.querySelector("[data-ai-thread]");
@@ -196,6 +201,7 @@ const profileAccountId = document.querySelector("[data-profile-account-id]");
 const profileViewButtons = [...document.querySelectorAll("[data-profile-view]")];
 const profileTabButtons = [...document.querySelectorAll("[data-profile-tab]")];
 const profileSettingsPanel = document.querySelector('[data-profile-panel="settings"]');
+const profilePreferenceSection = document.querySelector(".preference-section");
 const profileSavedPanel = document.querySelector("[data-profile-saved-panel]");
 const authForm = document.querySelector("[data-auth-form]");
 const authModeLabel = document.querySelector("[data-auth-mode-label]");
@@ -203,6 +209,10 @@ const authFeedback = document.querySelector("[data-auth-feedback]");
 const authSignInButton = document.querySelector('[data-auth-action="sign-in"]');
 const authSignUpButton = document.querySelector('[data-auth-action="sign-up"]');
 const authSignOutButton = document.querySelector('[data-auth-action="sign-out"]');
+const authForgotButton = document.querySelector('[data-auth-action="forgot"]');
+const passwordToggleButtons = [...document.querySelectorAll("[data-password-toggle]")];
+const authConnectedEmail = document.querySelector("[data-auth-connected-email]");
+const authConnectedEmailValue = document.querySelector("[data-auth-connected-email-value]");
 const homeStreak = document.querySelector("[data-home-streak]");
 const peopleOnline = document.querySelector("[data-people-online]");
 const prayerForm = document.querySelector("[data-prayer-form]");
@@ -267,6 +277,10 @@ const readerState = {
 };
 let chapterRequestId = 0;
 let selectedVerseData = null;
+let multiSelectMode = false;
+let multiSelectedVerseData = [];
+let multiLongPressTimer = null;
+let suppressVerseClickUntil = 0;
 let verseAiContextData = null;
 let currentChapterData = null;
 let activeProfileView = "";
@@ -294,6 +308,8 @@ const defaultPreferences = {
 const defaultProfile = {
   displayName: "Charles",
   email: "",
+  country: "",
+  age: "",
   avatarInitials: "CB",
   bio: "Focused on Scripture, apologetics, and daily spiritual growth.",
   streakLabel: "18 days in Scripture",
@@ -311,24 +327,13 @@ const savedPreferences = {
 };
 
 const highlightColors = [
-  { id: "gold", label: "Gold", value: "rgba(140, 150, 162, 0.24)" },
-  { id: "honey", label: "Honey", value: "rgba(168, 176, 185, 0.22)" },
-  { id: "sage", label: "Sage", value: "rgba(111, 125, 138, 0.20)" },
-  { id: "olive", label: "Olive", value: "rgba(127, 135, 146, 0.20)" },
-  { id: "taupe", label: "Taupe", value: "rgba(145, 156, 166, 0.18)" },
-  { id: "sky", label: "Cloud", value: "rgba(180, 185, 191, 0.24)" },
-  { id: "indigo", label: "Slate", value: "rgba(118, 121, 132, 0.22)" },
-  { id: "violet", label: "Mauve", value: "rgba(176, 148, 174, 0.18)" },
-  { id: "rose", label: "Rose", value: "rgba(192, 123, 128, 0.16)" },
-  { id: "clay", label: "Clay", value: "rgba(154, 166, 178, 0.18)" },
-  { id: "pearl", label: "Pearl", value: "rgba(232, 237, 242, 0.22)" },
-  { id: "charcoal", label: "Charcoal", value: "rgba(76, 72, 65, 0.18)" },
-  { id: "electric-lime", label: "Light", value: "rgba(224, 228, 233, 0.22)" },
-  { id: "electric-cyan", label: "Sage", value: "rgba(111, 125, 138, 0.18)" },
-  { id: "electric-blue", label: "Bronze", value: "rgba(140, 150, 162, 0.24)" },
-  { id: "electric-purple", label: "Mauve", value: "rgba(176, 148, 174, 0.18)" },
-  { id: "electric-pink", label: "Blush", value: "rgba(212, 149, 157, 0.16)" },
-  { id: "electric-orange", label: "Copper", value: "rgba(194, 125, 78, 0.16)" },
+  { id: "gold", label: "Yellow", value: "rgba(250, 204, 21, 0.34)" },
+  { id: "sage", label: "Green", value: "rgba(74, 222, 128, 0.30)" },
+  { id: "sky", label: "Blue", value: "rgba(56, 189, 248, 0.30)" },
+  { id: "violet", label: "Purple", value: "rgba(167, 139, 250, 0.30)" },
+  { id: "rose", label: "Pink", value: "rgba(251, 113, 133, 0.28)" },
+  { id: "orange", label: "Orange", value: "rgba(251, 146, 60, 0.32)" },
+  { id: "charcoal", label: "Slate", value: "rgba(100, 116, 139, 0.28)" },
 ];
 
 const greekInsights = {
@@ -854,9 +859,15 @@ function setAuthFeedback(message, isError = false) {
 
 function updateAuthUi() {
   const connected = Boolean(supabaseUser);
+  const authEmailInput = authForm?.elements.email;
+  const authPasswordField = authForm?.elements.password?.closest(".auth-password-field");
   if (authModeLabel) {
     authModeLabel.textContent = connected ? "Connected" : "Not connected";
   }
+  if (authEmailInput) authEmailInput.hidden = connected;
+  if (authPasswordField) authPasswordField.hidden = connected;
+  if (authConnectedEmail) authConnectedEmail.hidden = !connected;
+  if (authConnectedEmailValue) authConnectedEmailValue.textContent = connected ? (supabaseUser.email || "") : "";
   if (authSignInButton) authSignInButton.hidden = connected;
   if (authSignUpButton) authSignUpButton.hidden = connected;
   if (authSignOutButton) authSignOutButton.hidden = !connected;
@@ -905,7 +916,7 @@ async function hydrateSupabaseState() {
 
     const { data: profile } = await supabaseClient
       .from("profiles")
-      .select("id,email,display_name,avatar_url,bio,streak")
+      .select("id,email,display_name,country,age,avatar_url,bio,streak")
       .eq("id", supabaseUser.id)
       .maybeSingle();
     if (profile) {
@@ -914,6 +925,8 @@ async function hydrateSupabaseState() {
         ...localProfile,
         email: profile.email || supabaseUser.email || "",
         displayName: profile.display_name || localProfile.displayName || "Charles",
+        country: profile.country || localProfile.country || "",
+        age: profile.age || localProfile.age || "",
         avatarInitials: localProfile.avatarInitials || getProfileInitials(profile.display_name),
         bio: profile.bio || localProfile.bio || "",
         accountId: profile.id,
@@ -998,6 +1011,36 @@ function initAuthForm() {
     return;
   }
 
+  let authMode = "sign-in";
+  const passwordConfirm = authForm.elements.passwordConfirm;
+
+  const setAuthMode = (mode) => {
+    authMode = mode;
+    const isSignUp = mode === "sign-up";
+    authSignInButton.type = isSignUp ? "button" : "submit";
+    authSignUpButton.type = isSignUp ? "submit" : "button";
+    authSignInButton.classList.toggle("is-secondary", isSignUp);
+    authSignUpButton.classList.toggle("is-primary", isSignUp);
+    passwordConfirm.closest(".auth-password-field").hidden = !isSignUp;
+    if (!isSignUp) {
+      passwordConfirm.value = "";
+    }
+    setAuthFeedback(isSignUp ? "Create your account with an email and password." : "Sign in to sync your data.");
+  };
+
+  setAuthMode("sign-in");
+
+  passwordToggleButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const input = authForm.elements[button.dataset.passwordToggle];
+      const isVisible = input.type === "text";
+      input.type = isVisible ? "password" : "text";
+      button.setAttribute("aria-label", `${isVisible ? "Show" : "Hide"} password${input.name === "passwordConfirm" ? " confirmation" : ""}`);
+      button.innerHTML = `<i data-lucide="${isVisible ? "eye" : "eye-off"}"></i>`;
+      refreshIcons();
+    });
+  });
+
   authForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     if (!supabaseClient) {
@@ -1006,19 +1049,59 @@ function initAuthForm() {
     }
     const email = authForm.elements.email.value.trim();
     const password = authForm.elements.password.value;
+    if (authMode === "sign-up") {
+      if (!passwordConfirm.value) {
+        setAuthFeedback("Confirm your password to create the account.", true);
+        passwordConfirm.focus();
+        return;
+      }
+      if (password !== passwordConfirm.value) {
+        setAuthFeedback("Passwords do not match.", true);
+        passwordConfirm.focus();
+        return;
+      }
+      const { error } = await supabaseClient.auth.signUp({ email, password });
+      setAuthFeedback(error ? error.message : "Account created. Check your email if confirmation is enabled.", Boolean(error));
+      return;
+    }
+
     const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
     setAuthFeedback(error ? error.message : "Signed in. Syncing your data...");
   });
 
-  authSignUpButton?.addEventListener("click", async () => {
+  authSignInButton?.addEventListener("click", (event) => {
+    if (authMode === "sign-up") {
+      event.preventDefault();
+      setAuthMode("sign-in");
+    }
+  });
+
+  authSignUpButton?.addEventListener("click", () => {
+    if (!supabaseClient) {
+      setAuthFeedback("Supabase is not configured yet.", true);
+      return;
+    }
+    if (authMode !== "sign-up") {
+      setAuthMode("sign-up");
+      passwordConfirm.focus();
+    }
+  });
+
+  authForgotButton?.addEventListener("click", async () => {
     if (!supabaseClient) {
       setAuthFeedback("Supabase is not configured yet.", true);
       return;
     }
     const email = authForm.elements.email.value.trim();
-    const password = authForm.elements.password.value;
-    const { error } = await supabaseClient.auth.signUp({ email, password });
-    setAuthFeedback(error ? error.message : "Account created. Check your email if confirmation is enabled.", Boolean(error));
+    if (!email) {
+      authForm.elements.email.focus();
+      setAuthFeedback("Enter your email first to reset your password.", true);
+      return;
+    }
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}${window.location.pathname}`,
+    });
+    setAuthFeedback(error ? error.message : "Password reset email sent. Check your inbox.", Boolean(error));
   });
 
   authSignOutButton?.addEventListener("click", async () => {
@@ -1402,6 +1485,8 @@ async function syncProfileRecord() {
     id: supabaseUser.id,
     email: supabaseUser.email || savedProfile.email || null,
     display_name: savedProfile.displayName,
+    country: savedProfile.country || null,
+    age: savedProfile.age ? Number(savedProfile.age) : null,
     bio: savedProfile.bio,
     streak: Number(readJson("brother.homeActivity", {}).streak || 0),
     updated_at: new Date().toISOString(),
@@ -1430,6 +1515,8 @@ function applyProfile() {
   const avatarInitials = String(savedProfile.avatarInitials || "").trim().toUpperCase() || getProfileInitials(displayName);
 
   savedProfile.displayName = displayName;
+  savedProfile.country = String(savedProfile.country || "").trim();
+  savedProfile.age = savedProfile.age ? String(savedProfile.age) : "";
   savedProfile.streakLabel = streakLabel;
   savedProfile.authStatus = authStatus;
   savedProfile.storageStatus = storageStatus;
@@ -1460,14 +1547,11 @@ function applyProfile() {
     if (formData.get("displayName") !== displayName) {
       profileForm.elements.displayName.value = displayName;
     }
-    if (formData.get("email") !== savedProfile.email) {
-      profileForm.elements.email.value = savedProfile.email || "";
+    if (formData.get("country") !== (savedProfile.country || "")) {
+      profileForm.elements.country.value = savedProfile.country || "";
     }
-    if (formData.get("avatarInitials") !== avatarInitials) {
-      profileForm.elements.avatarInitials.value = avatarInitials;
-    }
-    if (formData.get("bio") !== savedProfile.bio) {
-      profileForm.elements.bio.value = savedProfile.bio || "";
+    if (formData.get("age") !== String(savedProfile.age || "")) {
+      profileForm.elements.age.value = savedProfile.age || "";
     }
   }
 }
@@ -1578,17 +1662,12 @@ function initProfile() {
     event.preventDefault();
 
     const displayName = String(profileForm.elements.displayName.value || "").trim();
-    const email = String(profileForm.elements.email.value || "").trim();
-    const avatarInitialsInput = String(profileForm.elements.avatarInitials.value || "").trim().toUpperCase();
-    const bio = String(profileForm.elements.bio.value || "").trim();
+    const country = String(profileForm.elements.country.value || "").trim();
+    const age = String(profileForm.elements.age.value || "").trim();
 
     savedProfile.displayName = displayName || defaultProfile.displayName;
-    savedProfile.email = email;
-    savedProfile.bio = bio;
-    savedProfile.avatarInitials = avatarInitialsInput || getProfileInitials(savedProfile.displayName);
-    savedProfile.accountId = email
-      ? `local-${email.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 28) || "user"}`
-      : `local-${savedProfile.displayName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 28) || "user"}`;
+    savedProfile.country = country;
+    savedProfile.age = age;
 
     saveProfile();
     applyProfile();
@@ -2399,8 +2478,9 @@ function initApologeticsGate() {
     return;
   }
 
-  const unlocked = sessionStorage.getItem(apologeticsGateSessionKey) === "true";
-  apologeticsGate.hidden = unlocked;
+  // The gate should only appear after the user opens Apologetics.
+  // Never let it cover the Home screen during app startup.
+  apologeticsGate.hidden = true;
 
   apologeticsGateForm.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -2423,6 +2503,9 @@ function initApologeticsGate() {
 
 function setScreen(id) {
   const activeNavId = id.startsWith("apologetics") ? "apologetics" : id;
+  if (id !== "bible" && multiSelectMode) {
+    exitMultiSelectMode();
+  }
   appShell.dataset.activeScreen = id;
   screens.forEach((screen) => {
     screen.classList.toggle("is-active", screen.id === id);
@@ -2453,10 +2536,16 @@ function setScreen(id) {
 }
 
 function showModal(panel) {
-  [searchPanel, verseSheet, verseAiPanel].forEach((item) => item?.classList.remove("is-visible"));
+  const isNotePanel = panel === noteEditorPanel;
+  if (!isNotePanel) {
+    [searchPanel, verseSheet, verseAiPanel, noteEditorPanel].forEach((item) => item?.classList.remove("is-visible"));
+  } else {
+    searchPanel?.classList.remove("is-visible");
+    verseAiPanel?.classList.remove("is-visible");
+  }
   modalLayer.hidden = false;
   panel.classList.add("is-visible");
-  appShell.dataset.modal = panel === verseSheet ? "verse" : panel === verseAiPanel ? "verse-ai" : "standard";
+  appShell.dataset.modal = panel === verseSheet ? "verse" : panel === verseAiPanel ? "verse-ai" : isNotePanel ? "note" : "standard";
   if (panel === verseSheet) {
     readerScreen?.classList.add("is-verse-focused");
     window.requestAnimationFrame(centerSelectedVerse);
@@ -2468,12 +2557,93 @@ function showModal(panel) {
 }
 
 function closeModal() {
-  [searchPanel, verseSheet, verseAiPanel].forEach((item) => item?.classList.remove("is-visible"));
+  [searchPanel, verseSheet, verseAiPanel, noteEditorPanel].forEach((item) => item?.classList.remove("is-visible"));
   modalLayer.hidden = true;
   delete appShell.dataset.modal;
   readerScreen?.classList.remove("is-verse-focused");
   document.querySelectorAll(".scripture-line.is-selected, .parallel-scripture-line.is-selected").forEach((line) => line.classList.remove("is-selected"));
   hideVerseDetail();
+}
+
+function updateMultiSelectionUi() {
+  const selectedKeys = new Set(multiSelectedVerseData.map((item) => item.highlightKey));
+  document.querySelectorAll(".scripture-line, .parallel-scripture-line").forEach((line) => {
+    line.classList.toggle("is-multi-selected", selectedKeys.has(line.dataset.highlightKey));
+  });
+  if (multiSelectMenuToggle) {
+    multiSelectMenuToggle.hidden = !multiSelectMode || !multiSelectedVerseData.length;
+  }
+  if (multiSelectMode && selectedVerse) {
+    selectedVerse.textContent = `${multiSelectedVerseData.length} verses selected`;
+  }
+}
+
+function startMultiSelect(verse) {
+  multiSelectMode = true;
+  multiSelectedVerseData = [getVerseDataFromElement(verse)];
+  selectedVerseData = multiSelectedVerseData[0];
+  updateMultiSelectionUi();
+  setFeedback("Tap other verses to select them.");
+}
+
+function toggleMultiSelectedVerse(verse) {
+  const data = getVerseDataFromElement(verse);
+  const existingIndex = multiSelectedVerseData.findIndex((item) => item.highlightKey === data.highlightKey);
+  if (existingIndex >= 0) {
+    multiSelectedVerseData.splice(existingIndex, 1);
+  } else {
+    multiSelectedVerseData.push(data);
+  }
+  if (!multiSelectedVerseData.length) {
+    multiSelectMode = false;
+    multiSelectMenuToggle && (multiSelectMenuToggle.hidden = true);
+    hideVerseDetail();
+  } else {
+    selectedVerseData = multiSelectedVerseData[0];
+  }
+  updateMultiSelectionUi();
+}
+
+function exitMultiSelectMode() {
+  multiSelectMode = false;
+  multiSelectedVerseData = [];
+  document.querySelectorAll(".scripture-line.is-multi-selected, .parallel-scripture-line.is-multi-selected").forEach((line) => line.classList.remove("is-multi-selected"));
+  if (multiSelectMenuToggle) multiSelectMenuToggle.hidden = true;
+}
+
+function closeNoteTooltips() {
+  document.querySelectorAll(".verse-note-tooltip").forEach((tooltip) => tooltip.remove());
+}
+
+function showNoteTooltip(verse, verseData) {
+  closeNoteTooltips();
+  const note = savedState.notes[verseData.key];
+  if (!note?.note) {
+    return;
+  }
+
+  const tooltip = document.createElement("div");
+  tooltip.className = "verse-note-tooltip";
+  tooltip.innerHTML = `
+    <span class="verse-note-tooltip-label">Saved note</span>
+    <p>${escapeHtml(note.note)}</p>
+    <button type="button" data-open-saved-note>Open note</button>
+  `;
+  tooltip.addEventListener("click", (event) => event.stopPropagation());
+  tooltip.querySelector("[data-open-saved-note]").addEventListener("click", (event) => {
+    event.stopPropagation();
+    selectedVerseData = verseData;
+    tooltip.remove();
+    showNoteEditor();
+    showModal(verseSheet);
+  });
+  verse.appendChild(tooltip);
+}
+
+function clearMultiSelectionVisuals() {
+  multiSelectMode = false;
+  document.querySelectorAll(".scripture-line.is-multi-selected, .parallel-scripture-line.is-multi-selected").forEach((line) => line.classList.remove("is-multi-selected"));
+  if (multiSelectMenuToggle) multiSelectMenuToggle.hidden = true;
 }
 
 function centerSelectedVerse() {
@@ -2761,11 +2931,13 @@ function renderChapter(chapter, parallelChapters = []) {
       const versionedKey = getVersionedVerseKey(book.id, readerState.chapter, verse.number || 0, version.abbreviation);
       migrateLegacyHighlight(highlightKey, versionedKey);
       const highlight = savedState.highlights[highlightKey];
+      const note = savedState.notes[versionedKey];
       const highlighted = highlight ? " is-highlighted" : "";
       const bookmarked = savedState.bookmarks[versionedKey] ? " is-bookmarked" : "";
       const colorStyle = highlight?.colorValue ? ` style="--highlight-color: ${highlight.colorValue}"` : "";
+      const noted = note ? " is-noted" : "";
       return `
-        <p class="scripture-line${highlighted}${bookmarked}"${colorStyle} data-verse="${reference}" data-highlight-key="${highlightKey}" data-verse-key="${versionedKey}" data-verse-number="${verse.number || ""}" data-verse-version="${escapeAttr(chapter.version || version.abbreviation)}" data-verse-text="${escapeAttr(verse.text)}">
+        <p class="scripture-line${highlighted}${bookmarked}${noted}"${colorStyle} data-verse="${reference}" data-highlight-key="${highlightKey}" data-verse-key="${versionedKey}" data-verse-number="${verse.number || ""}" data-verse-version="${escapeAttr(chapter.version || version.abbreviation)}" data-verse-text="${escapeAttr(verse.text)}">
           ${verse.number ? `<sup>${verse.number}</sup>` : ""}${verse.text}
         </p>
       `;
@@ -2790,8 +2962,10 @@ function renderParallelVerses(visibleVerses, chapter, parallelChapters, book, ve
       const versionedKey = getVersionedVerseKey(book.id, readerState.chapter, verse.number || 0, version.abbreviation);
       migrateLegacyHighlight(highlightKey, versionedKey);
       const highlight = savedState.highlights[highlightKey];
+      const note = savedState.notes[versionedKey];
       const highlighted = highlight ? " is-highlighted" : "";
       const bookmarked = savedState.bookmarks[versionedKey] ? " is-bookmarked" : "";
+      const noted = note ? " is-noted" : "";
       const colorStyle = highlight?.colorValue ? ` style="--highlight-color: ${highlight.colorValue}"` : "";
       const comparisonChapter = parallelChapters[0];
       const comparisonVersion = comparisonChapter?.version || getVersion(readerState.parallelVersionIds[0])?.abbreviation || "Compare";
@@ -2801,7 +2975,7 @@ function renderParallelVerses(visibleVerses, chapter, parallelChapters, book, ve
       const verseNumber = verse.number ? `<sup>${verse.number}</sup>` : "";
 
       return `
-        <article class="parallel-scripture-line${highlighted}${bookmarked}"${colorStyle} data-verse="${reference}" data-highlight-key="${highlightKey}" data-verse-key="${versionedKey}" data-verse-number="${verse.number || ""}" data-verse-version="${escapeAttr(chapter.version || version.abbreviation)}" data-verse-text="${escapeAttr(verse.text)}">
+        <article class="parallel-scripture-line${highlighted}${bookmarked}${noted}"${colorStyle} data-verse="${reference}" data-highlight-key="${highlightKey}" data-verse-key="${versionedKey}" data-verse-number="${verse.number || ""}" data-verse-version="${escapeAttr(chapter.version || version.abbreviation)}" data-verse-text="${escapeAttr(verse.text)}">
           <p class="parallel-scripture-column" data-parallel-role="active" aria-label="${escapeAttr(chapter.version || version.abbreviation)}">
             ${verseNumber}${escapeHtml(verse.text)}
           </p>
@@ -2866,6 +3040,11 @@ function getSelectedVerseShareText() {
   if (!selectedVerseData) {
     return "";
   }
+  if (multiSelectedVerseData.length > 1) {
+    return multiSelectedVerseData
+      .map((item) => `${item.reference} ${item.version}\n${item.text}`)
+      .join("\n\n");
+  }
   return `${selectedVerseData.reference} ${selectedVerseData.version}\n${selectedVerseData.text}`;
 }
 
@@ -2885,6 +3064,9 @@ function syncVerseActionStates() {
 }
 
 async function loadChapter() {
+  if (multiSelectMode) {
+    exitMultiSelectMode();
+  }
   const requestId = ++chapterRequestId;
   renderLoading();
   setLocalValue("brother.version", readerState.versionId);
@@ -3044,11 +3226,39 @@ function bindVerseActions() {
     let touchStartY = 0;
     let suppressClickUntil = 0;
 
+    const cancelLongPress = () => {
+      if (multiLongPressTimer) {
+        window.clearTimeout(multiLongPressTimer);
+        multiLongPressTimer = null;
+      }
+    };
+
+    verse.addEventListener("pointerdown", () => {
+      cancelLongPress();
+      multiLongPressTimer = window.setTimeout(() => {
+        startMultiSelect(verse);
+        suppressClickUntil = Date.now() + 800;
+        suppressVerseClickUntil = Date.now() + 800;
+        multiLongPressTimer = null;
+      }, 550);
+    });
+
+    verse.addEventListener("pointerup", cancelLongPress);
+    verse.addEventListener("pointercancel", cancelLongPress);
+    verse.addEventListener("pointermove", cancelLongPress);
+
     verse.addEventListener("click", () => {
-      if (Date.now() < suppressClickUntil) {
+      if (Date.now() < suppressClickUntil || Date.now() < suppressVerseClickUntil) {
         return;
       }
 
+      if (multiSelectMode) {
+        toggleMultiSelectedVerse(verse);
+        return;
+      }
+
+      multiSelectedVerseData = [];
+      closeNoteTooltips();
       selectedVerseData = getVerseDataFromElement(verse);
       document.querySelectorAll(".scripture-line.is-selected, .parallel-scripture-line.is-selected").forEach((line) => line.classList.remove("is-selected"));
       verse.classList.add("is-selected");
@@ -3076,6 +3286,10 @@ function bindVerseActions() {
 
       suppressClickUntil = Date.now() + 700;
       selectedVerseData = getVerseDataFromElement(verse);
+      if (multiSelectMode) {
+        openRichNoteEditor();
+        return;
+      }
       document.querySelectorAll(".scripture-line.is-selected, .parallel-scripture-line.is-selected").forEach((line) => line.classList.remove("is-selected"));
       verse.classList.add("is-selected");
       openVerseAiChat(selectedVerseData);
@@ -3156,28 +3370,32 @@ function showHighlightPicker(selectedFolderId = null) {
 
 function applyHighlight(colorId) {
   const color = highlightColors.find((item) => item.id === colorId) || highlightColors[0];
-  const lines = document.querySelectorAll(`[data-highlight-key="${CSS.escape(selectedVerseData.highlightKey)}"]`);
-  const existingHighlight = savedState.highlights[selectedVerseData.highlightKey];
-  const folderId = verseDetail.querySelector("[data-highlight-folder-select]")?.value || existingHighlight?.folderId || "";
-  savedState.highlights[selectedVerseData.highlightKey] = {
-    ...selectedVerseData,
-    key: selectedVerseData.highlightKey,
-    folderId,
-    color: color.id,
-    colorValue: color.value,
-    updatedAt: new Date().toISOString(),
-  };
-  lines.forEach((line) => {
-    line.classList.add("is-highlighted");
-    line.style.setProperty("--highlight-color", color.value);
+  const items = multiSelectedVerseData.length ? multiSelectedVerseData : [selectedVerseData];
+  items.forEach((item) => {
+    const lines = document.querySelectorAll(`[data-highlight-key="${CSS.escape(item.highlightKey)}"]`);
+    const existingHighlight = savedState.highlights[item.highlightKey];
+    const folderId = verseDetail.querySelector("[data-highlight-folder-select]")?.value || existingHighlight?.folderId || "";
+    savedState.highlights[item.highlightKey] = {
+      ...item,
+      key: item.highlightKey,
+      folderId,
+      color: color.id,
+      colorValue: color.value,
+      updatedAt: new Date().toISOString(),
+    };
+    lines.forEach((line) => {
+      line.classList.add("is-highlighted");
+      line.style.setProperty("--highlight-color", color.value);
+    });
   });
   verseDetail.querySelectorAll("[data-highlight-color]").forEach((button) => {
     button.classList.toggle("is-selected", button.dataset.highlightColor === color.id);
   });
   writeJson("brother.highlights", savedState.highlights);
-  setFeedback(`${color.label} highlight applied.`);
+  setFeedback(`${color.label} highlight applied to ${items.length} verse${items.length === 1 ? "" : "s"}.`);
   syncVerseActionStates();
   refreshProfilePanel();
+  if (multiSelectedVerseData.length) exitMultiSelectMode();
 }
 
 function updateSelectedHighlightFolder(folderId, options = {}) {
@@ -3281,16 +3499,19 @@ function showBookmarkPicker() {
     return;
   }
 
-  const line = document.querySelector(`[data-verse-key="${CSS.escape(selectedVerseData.key)}"]`);
-  if (!savedState.bookmarks[selectedVerseData.key]) {
-    savedState.bookmarks[selectedVerseData.key] = {
-      ...selectedVerseData,
-      createdAt: new Date().toISOString(),
-      folderId: "",
-    };
-    line?.classList.add("is-bookmarked");
-    writeJson("brother.bookmarks", savedState.bookmarks);
-  }
+  const items = multiSelectedVerseData.length ? multiSelectedVerseData : [selectedVerseData];
+  items.forEach((item) => {
+    const line = document.querySelector(`[data-verse-key="${CSS.escape(item.key)}"]`);
+    if (!savedState.bookmarks[item.key]) {
+      savedState.bookmarks[item.key] = {
+        ...item,
+        createdAt: new Date().toISOString(),
+        folderId: "",
+      };
+      line?.classList.add("is-bookmarked");
+    }
+  });
+  writeJson("brother.bookmarks", savedState.bookmarks);
 
   const currentBookmark = savedState.bookmarks[selectedVerseData.key];
   const folderOptions = [
@@ -3319,7 +3540,9 @@ function showBookmarkPicker() {
   const folderSelect = verseDetail.querySelector("[data-bookmark-folder-select]");
   folderSelect.value = currentBookmark.folderId || "";
   folderSelect.addEventListener("change", () => {
-    currentBookmark.folderId = folderSelect.value;
+    items.forEach((item) => {
+      if (savedState.bookmarks[item.key]) savedState.bookmarks[item.key].folderId = folderSelect.value;
+    });
     writeJson("brother.bookmarks", savedState.bookmarks);
     refreshProfilePanel();
     setFeedback(`Bookmark filed in ${getFolderName("bookmarks", folderSelect.value)}.`);
@@ -3350,14 +3573,18 @@ function removeBookmark() {
     return;
   }
 
-  const line = document.querySelector(`[data-verse-key="${CSS.escape(selectedVerseData.key)}"]`);
-  delete savedState.bookmarks[selectedVerseData.key];
-  line?.classList.remove("is-bookmarked");
+  const items = multiSelectMode && multiSelectedVerseData.length ? multiSelectedVerseData : [selectedVerseData];
+  items.forEach((item) => {
+    const line = document.querySelector(`[data-verse-key="${CSS.escape(item.key)}"]`);
+    delete savedState.bookmarks[item.key];
+    line?.classList.remove("is-bookmarked");
+  });
   writeJson("brother.bookmarks", savedState.bookmarks);
   syncVerseActionStates();
   refreshProfilePanel();
   hideVerseDetail();
-  setFeedback("Bookmark removed.");
+  setFeedback(`Bookmark${items.length === 1 ? "" : "s"} removed.`);
+  if (multiSelectedVerseData.length) exitMultiSelectMode();
 }
 
 function showNoteEditor() {
@@ -3372,20 +3599,105 @@ function showNoteEditor() {
   `;
   verseDetail.querySelector("[data-save-note]").addEventListener("click", () => {
     const note = verseDetail.querySelector("[data-note-input]").value.trim();
+    const items = multiSelectedVerseData.length ? multiSelectedVerseData : [selectedVerseData];
     if (note) {
-      savedState.notes[selectedVerseData.key] = {
-        ...selectedVerseData,
-        note,
-        updatedAt: new Date().toISOString(),
-      };
-      setFeedback("Note saved.");
+      items.forEach((item) => {
+        savedState.notes[item.key] = {
+          ...item,
+          note,
+          updatedAt: new Date().toISOString(),
+        };
+        document.querySelectorAll(`[data-verse-key="${CSS.escape(item.key)}"]`).forEach((line) => line.classList.add("is-noted"));
+      });
+      setFeedback(`Note saved to ${items.length} verse${items.length === 1 ? "" : "s"}.`);
     } else {
-      delete savedState.notes[selectedVerseData.key];
-      setFeedback("Note cleared.");
+      items.forEach((item) => {
+        delete savedState.notes[item.key];
+        document.querySelectorAll(`[data-verse-key="${CSS.escape(item.key)}"]`).forEach((line) => line.classList.remove("is-noted"));
+      });
+      setFeedback(`Note${items.length === 1 ? "" : "s"} cleared.`);
     }
     writeJson("brother.notes", savedState.notes);
+    refreshProfilePanel();
+    if (multiSelectedVerseData.length) exitMultiSelectMode();
   });
   verseDetail.querySelector("[data-note-input]").focus();
+}
+
+function sanitizeNoteHtml(html) {
+  const template = document.createElement("template");
+  template.innerHTML = String(html || "");
+  const allowed = new Set(["B", "STRONG", "I", "EM", "U", "P", "BR", "H2", "H3", "UL", "OL", "LI", "DIV"]);
+  template.content.querySelectorAll("*").forEach((element) => {
+    if (!allowed.has(element.tagName)) {
+      element.replaceWith(...element.childNodes);
+      return;
+    }
+    [...element.attributes].forEach((attribute) => {
+      if (attribute.name !== "style") {
+        element.removeAttribute(attribute.name);
+      }
+    });
+    if (element.hasAttribute("style")) {
+      const color = element.style.color;
+      const backgroundColor = element.style.backgroundColor;
+      const textAlign = element.style.textAlign;
+      element.removeAttribute("style");
+      if (color) element.style.color = color;
+      if (backgroundColor) element.style.backgroundColor = backgroundColor;
+      if (textAlign) element.style.textAlign = textAlign;
+    }
+  });
+  return template.innerHTML;
+}
+
+function getNoteSelectionItems() {
+  return multiSelectedVerseData.length ? multiSelectedVerseData : selectedVerseData ? [selectedVerseData] : [];
+}
+
+function openRichNoteEditor() {
+  if (!noteEditorPanel || !noteEditorContent) {
+    return;
+  }
+  const items = getNoteSelectionItems();
+  if (!items.length) {
+    return;
+  }
+  const existing = items.find((item) => savedState.notes[item.key]?.noteHtml || savedState.notes[item.key]?.note)?.key;
+  const note = existing ? savedState.notes[existing] : null;
+  noteEditorReference.textContent = items.length === 1 ? items[0].reference : `${items.length} verses selected`;
+  noteEditorContent.innerHTML = sanitizeNoteHtml(note?.noteHtml || (note?.note ? `<p>${escapeHtml(note.note)}</p>` : "<p><br></p>"));
+  noteEditorStatus.textContent = `This note will be saved to ${items.length} verse${items.length === 1 ? "" : "s"}.`;
+  showModal(noteEditorPanel);
+  noteEditorContent.focus();
+}
+
+function saveRichNote() {
+  const items = getNoteSelectionItems();
+  if (!items.length || !noteEditorContent) {
+    return;
+  }
+  const noteHtml = sanitizeNoteHtml(noteEditorContent.innerHTML);
+  const noteText = noteEditorContent.innerText.trim();
+  items.forEach((item) => {
+    if (!noteText) {
+      delete savedState.notes[item.key];
+      document.querySelectorAll(`[data-verse-key="${CSS.escape(item.key)}"]`).forEach((line) => line.classList.remove("is-noted"));
+      return;
+    }
+    savedState.notes[item.key] = {
+      ...item,
+      note: noteText,
+      noteHtml,
+      updatedAt: new Date().toISOString(),
+    };
+    document.querySelectorAll(`[data-verse-key="${CSS.escape(item.key)}"]`).forEach((line) => line.classList.add("is-noted"));
+  });
+  writeJson("brother.notes", savedState.notes);
+  refreshProfilePanel();
+  setFeedback(`Note saved to ${items.length} verse${items.length === 1 ? "" : "s"}.`);
+  closeModal();
+  exitMultiSelectMode();
 }
 
 function askAiAboutVerse() {
@@ -4226,16 +4538,35 @@ async function handleVerseAction(action) {
   }
 
   try {
-    if (action === "highlight") showHighlightPicker();
-    if (action === "copy") await copyVerse();
-    if (action === "share") await shareVerse();
-    if (action === "bookmark") showBookmarkPicker();
-    if (action === "note") showNoteEditor();
+    const isMultiAction = multiSelectedVerseData.length > 0;
+    if (action === "highlight") {
+      showHighlightPicker();
+      if (isMultiAction) clearMultiSelectionVisuals();
+    }
+    if (action === "copy") {
+      await copyVerse();
+      if (isMultiAction) exitMultiSelectMode();
+    }
+    if (action === "share") {
+      await shareVerse();
+      if (isMultiAction) exitMultiSelectMode();
+    }
+    if (action === "bookmark") {
+      showBookmarkPicker();
+      if (isMultiAction) clearMultiSelectionVisuals();
+    }
+    if (action === "note") {
+      showNoteEditor();
+      if (isMultiAction) clearMultiSelectionVisuals();
+    }
     if (action === "ask-ai") askAiAboutVerse();
     if (action === "original-language") await showOriginalLanguagePanel();
     if (action === "compare") showComparePanel();
     if (action === "parallel") await showParallelFromVerse();
     if (action === "target") showHighlightedVersesOnly();
+    if (isMultiAction && !["highlight", "bookmark", "note", "copy", "share"].includes(action)) {
+      clearMultiSelectionVisuals();
+    }
   } catch (error) {
     setFeedback(error.message || "Action failed.");
   }
@@ -4353,6 +4684,37 @@ document.querySelectorAll("[data-verse-action]").forEach((button) => {
     window.setTimeout(() => button.classList.remove("is-pressed"), 180);
     handleVerseAction(button.dataset.verseAction);
   });
+});
+
+document.querySelectorAll("[data-note-command]").forEach((button) => {
+  button.addEventListener("click", () => {
+    noteEditorContent?.focus();
+    document.execCommand(button.dataset.noteCommand, false, button.dataset.noteValue || null);
+  });
+});
+
+document.querySelector("[data-note-color]")?.addEventListener("input", (event) => {
+  noteEditorContent?.focus();
+  document.execCommand("foreColor", false, event.target.value);
+});
+
+document.querySelector("[data-note-highlight]")?.addEventListener("input", (event) => {
+  noteEditorContent?.focus();
+  document.execCommand("hiliteColor", false, event.target.value);
+});
+
+document.querySelector("[data-save-rich-note]")?.addEventListener("click", saveRichNote);
+
+multiSelectMenuToggle?.addEventListener("click", () => {
+  if (!multiSelectMode || !multiSelectedVerseData.length) {
+    return;
+  }
+  selectedVerseData = multiSelectedVerseData[0];
+  selectedVerse.textContent = `${multiSelectedVerseData.length} verses selected`;
+  sheetFeedback.textContent = "Choose an action to apply to the selected verses.";
+  hideVerseDetail();
+  syncVerseActionStates();
+  showModal(verseSheet);
 });
 
 document.querySelectorAll(".tabs button").forEach((button) => {
@@ -4568,6 +4930,7 @@ modalLayer.addEventListener("click", (event) => {
 
 window.addEventListener("load", refreshIcons);
 appShell.dataset.activeScreen = document.querySelector(".screen.is-active")?.id || "home";
+profileSettingsPanel?.prepend(profilePreferenceSection);
 initHomeStats();
 initPrayerPage();
 initProfile();
