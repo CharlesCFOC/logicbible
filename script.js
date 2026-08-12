@@ -9,6 +9,11 @@ const noteEditorPanel = document.querySelector("[data-note-editor-panel]");
 const noteEditorContent = document.querySelector("[data-note-editor-content]");
 const noteEditorReference = document.querySelector("[data-note-editor-reference]");
 const noteEditorStatus = document.querySelector("[data-note-editor-status]");
+const noteEditorVerseChips = document.querySelector("[data-note-editor-verse-chips]");
+const noteEditorTitle = document.querySelector("[data-note-title]");
+const saveRichNoteButton = document.querySelector("[data-save-rich-note]");
+const noteFontSizeInput = document.querySelector("[data-note-font-size]");
+const noteFontSizeValue = document.querySelector("[data-note-font-size-value]");
 const selectedVerse = document.querySelector("[data-selected-verse]");
 const sheetFeedback = document.querySelector("[data-sheet-feedback]");
 const verseDetail = document.querySelector("[data-verse-detail]");
@@ -19,6 +24,7 @@ const verseAiThread = document.querySelector("[data-verse-ai-thread]");
 const verseAiForm = document.querySelector("[data-verse-ai-form]");
 const verseAiInput = verseAiForm?.querySelector("input");
 const multiSelectMenuToggle = document.querySelector("[data-multi-select-toggle]");
+const noteAddSaveButton = document.querySelector("[data-note-add-save]");
 const aiComposerInput = document.querySelector(".composer textarea");
 const aiForm = document.querySelector("[data-ai-form]");
 const aiThread = document.querySelector("[data-ai-thread]");
@@ -200,8 +206,9 @@ const profileStorageStatus = document.querySelector("[data-profile-storage-statu
 const profileAccountId = document.querySelector("[data-profile-account-id]");
 const profileViewButtons = [...document.querySelectorAll("[data-profile-view]")];
 const profileTabButtons = [...document.querySelectorAll("[data-profile-tab]")];
+const homeLibraryTabButtons = [...document.querySelectorAll("[data-home-library-tab]")];
+const homeLibraryPanel = document.querySelector("[data-home-library-panel]");
 const profileSettingsPanel = document.querySelector('[data-profile-panel="settings"]');
-const profilePreferenceSection = document.querySelector(".preference-section");
 const profileSavedPanel = document.querySelector("[data-profile-saved-panel]");
 const authForm = document.querySelector("[data-auth-form]");
 const authModeLabel = document.querySelector("[data-auth-mode-label]");
@@ -215,6 +222,8 @@ const authConnectedEmail = document.querySelector("[data-auth-connected-email]")
 const authConnectedEmailValue = document.querySelector("[data-auth-connected-email-value]");
 const homeStreak = document.querySelector("[data-home-streak]");
 const peopleOnline = document.querySelector("[data-people-online]");
+const homeContinueReading = document.querySelector("[data-home-continue-reading]");
+const homePrayerCount = document.querySelector("[data-home-prayer-count]");
 const prayerForm = document.querySelector("[data-prayer-form]");
 const prayerRequestPanel = document.querySelector("[data-prayer-request-panel]");
 const prayerList = document.querySelector("[data-prayer-list]");
@@ -279,6 +288,21 @@ let chapterRequestId = 0;
 let selectedVerseData = null;
 let multiSelectMode = false;
 let multiSelectedVerseData = [];
+let noteEditorVerseItems = [];
+let noteEditorRemovedVerseKeys = new Set();
+let noteEditorFontSize = 17;
+let noteEditorGroupId = "";
+let noteEditorSelectionRange = null;
+let noteEditorAddingVerses = false;
+let noteEditorNoteTitle = "";
+
+function markNoteEditorDirty() {
+  saveRichNoteButton?.classList.add("is-dirty");
+}
+
+function resetNoteEditorDirty() {
+  saveRichNoteButton?.classList.remove("is-dirty");
+}
 let multiLongPressTimer = null;
 let suppressVerseClickUntil = 0;
 let verseAiContextData = null;
@@ -1145,6 +1169,18 @@ function initHomeStats() {
   if (peopleOnline) {
     peopleOnline.textContent = String(Math.floor(Math.random() * 91) + 120);
   }
+  updateHomeContinueReading();
+  updateHomePrayerCount();
+}
+
+function updateHomeContinueReading() {
+  if (!homeContinueReading) return;
+  const book = BOOKS.find((item) => item.id === readerState.bookId);
+  homeContinueReading.textContent = `${book?.name || readerState.bookId} ${readerState.chapter}`;
+}
+
+function updateHomePrayerCount() {
+  if (homePrayerCount) homePrayerCount.textContent = String(prayerState.requests.length);
 }
 
 function countPrayerWords(value) {
@@ -1153,6 +1189,7 @@ function countPrayerWords(value) {
 
 function savePrayerRequests() {
   writeJson("brother.prayerRequests", prayerState.requests);
+  updateHomePrayerCount();
 }
 
 async function loadPrayerFromSupabase() {
@@ -1168,6 +1205,7 @@ async function loadPrayerFromSupabase() {
     console.warn("Prayer requests could not be loaded:", error.message);
     return;
   }
+  updateHomePrayerCount();
 
   if (!requests?.length) {
     renderPrayerPage();
@@ -2541,6 +2579,7 @@ function showModal(panel) {
     [searchPanel, verseSheet, verseAiPanel, noteEditorPanel].forEach((item) => item?.classList.remove("is-visible"));
   } else {
     searchPanel?.classList.remove("is-visible");
+    verseSheet?.classList.remove("is-visible");
     verseAiPanel?.classList.remove("is-visible");
   }
   modalLayer.hidden = false;
@@ -2556,7 +2595,10 @@ function showModal(panel) {
   }
 }
 
-function closeModal() {
+function closeModal(options = {}) {
+  if (noteEditorPanel?.classList.contains("is-visible") && !options.preserveNoteAddMode) {
+    noteEditorAddingVerses = false;
+  }
   [searchPanel, verseSheet, verseAiPanel, noteEditorPanel].forEach((item) => item?.classList.remove("is-visible"));
   modalLayer.hidden = true;
   delete appShell.dataset.modal;
@@ -2572,6 +2614,9 @@ function updateMultiSelectionUi() {
   });
   if (multiSelectMenuToggle) {
     multiSelectMenuToggle.hidden = !multiSelectMode || !multiSelectedVerseData.length;
+  }
+  if (noteAddSaveButton) {
+    noteAddSaveButton.hidden = !noteEditorAddingVerses || !multiSelectedVerseData.length;
   }
   if (multiSelectMode && selectedVerse) {
     selectedVerse.textContent = `${multiSelectedVerseData.length} verses selected`;
@@ -2609,6 +2654,7 @@ function exitMultiSelectMode() {
   multiSelectedVerseData = [];
   document.querySelectorAll(".scripture-line.is-multi-selected, .parallel-scripture-line.is-multi-selected").forEach((line) => line.classList.remove("is-multi-selected"));
   if (multiSelectMenuToggle) multiSelectMenuToggle.hidden = true;
+  if (noteAddSaveButton) noteAddSaveButton.hidden = true;
 }
 
 function closeNoteTooltips() {
@@ -3072,6 +3118,7 @@ async function loadChapter() {
   setLocalValue("brother.version", readerState.versionId);
   setLocalValue("brother.book", readerState.bookId);
   setLocalValue("brother.chapter", String(readerState.chapter));
+  updateHomeContinueReading();
   setLocalValue("brother.parallel", String(readerState.parallelEnabled));
   writeJson("brother.parallelVersions", readerState.parallelVersionIds);
 
@@ -3225,6 +3272,8 @@ function bindVerseActions() {
     let touchStartX = 0;
     let touchStartY = 0;
     let suppressClickUntil = 0;
+    let longPressActivated = false;
+    let noteSwipeOpened = false;
 
     const cancelLongPress = () => {
       if (multiLongPressTimer) {
@@ -3233,19 +3282,47 @@ function bindVerseActions() {
       }
     };
 
-    verse.addEventListener("pointerdown", () => {
+    verse.addEventListener("pointerdown", (event) => {
       cancelLongPress();
+      touchStartX = event.clientX;
+      touchStartY = event.clientY;
+      longPressActivated = false;
+      noteSwipeOpened = false;
       multiLongPressTimer = window.setTimeout(() => {
         startMultiSelect(verse);
+        longPressActivated = true;
         suppressClickUntil = Date.now() + 800;
         suppressVerseClickUntil = Date.now() + 800;
         multiLongPressTimer = null;
       }, 550);
     });
 
-    verse.addEventListener("pointerup", cancelLongPress);
-    verse.addEventListener("pointercancel", cancelLongPress);
-    verse.addEventListener("pointermove", cancelLongPress);
+    verse.addEventListener("pointerup", () => {
+      cancelLongPress();
+      longPressActivated = false;
+    });
+    verse.addEventListener("pointercancel", () => {
+      cancelLongPress();
+      longPressActivated = false;
+    });
+    verse.addEventListener("pointermove", (event) => {
+      if (!longPressActivated || noteSwipeOpened) {
+        if (!longPressActivated) cancelLongPress();
+        return;
+      }
+
+      const deltaX = event.clientX - touchStartX;
+      const deltaY = event.clientY - touchStartY;
+      const isLeftSwipe = deltaX < -64 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2;
+      if (!isLeftSwipe) {
+        return;
+      }
+
+      noteSwipeOpened = true;
+      suppressClickUntil = Date.now() + 900;
+      selectedVerseData = getVerseDataFromElement(verse);
+      openRichNoteEditor();
+    });
 
     verse.addEventListener("click", () => {
       if (Date.now() < suppressClickUntil || Date.now() < suppressVerseClickUntil) {
@@ -3253,6 +3330,18 @@ function bindVerseActions() {
       }
 
       if (multiSelectMode) {
+        if (noteEditorAddingVerses) {
+          const data = getVerseDataFromElement(verse);
+          const alreadyAttached = multiSelectedVerseData.some((item) => item.key === data.key);
+          if (!alreadyAttached) {
+            multiSelectedVerseData.push(data);
+            selectedVerseData = data;
+            updateMultiSelectionUi();
+            markNoteEditorDirty();
+            setFeedback(`${data.reference} added. Open the note menu to continue.`);
+          }
+          return;
+        }
         toggleMultiSelectedVerse(verse);
         return;
       }
@@ -3275,25 +3364,6 @@ function bindVerseActions() {
       touchStartY = touch.clientY;
     }, { passive: true });
 
-    verse.addEventListener("touchend", (event) => {
-      const touch = event.changedTouches[0];
-      const deltaX = touch.clientX - touchStartX;
-      const deltaY = touch.clientY - touchStartY;
-      const isLeftSwipe = deltaX < -64 && Math.abs(deltaX) > Math.abs(deltaY) * 1.4;
-      if (!isLeftSwipe) {
-        return;
-      }
-
-      suppressClickUntil = Date.now() + 700;
-      selectedVerseData = getVerseDataFromElement(verse);
-      if (multiSelectMode) {
-        openRichNoteEditor();
-        return;
-      }
-      document.querySelectorAll(".scripture-line.is-selected, .parallel-scripture-line.is-selected").forEach((line) => line.classList.remove("is-selected"));
-      verse.classList.add("is-selected");
-      openVerseAiChat(selectedVerseData);
-    }, { passive: true });
   });
 }
 
@@ -3395,6 +3465,7 @@ function applyHighlight(colorId) {
   setFeedback(`${color.label} highlight applied to ${items.length} verse${items.length === 1 ? "" : "s"}.`);
   syncVerseActionStates();
   refreshProfilePanel();
+  refreshHomeLibraryPanel();
   if (multiSelectedVerseData.length) exitMultiSelectMode();
 }
 
@@ -3627,8 +3698,22 @@ function showNoteEditor() {
 function sanitizeNoteHtml(html) {
   const template = document.createElement("template");
   template.innerHTML = String(html || "");
-  const allowed = new Set(["B", "STRONG", "I", "EM", "U", "P", "BR", "H2", "H3", "UL", "OL", "LI", "DIV"]);
+  const allowed = new Set(["B", "STRONG", "I", "EM", "U", "P", "BR", "H2", "H3", "UL", "OL", "LI", "DIV", "SPAN"]);
   template.content.querySelectorAll("*").forEach((element) => {
+    if (element.tagName === "FONT") {
+      const level = Number(element.getAttribute("size") || 4);
+      const size = [14, 16, 18, 21, 25, 28, 30][Math.min(7, Math.max(1, level)) - 1];
+      const span = document.createElement("span");
+      const color = element.getAttribute("color") || element.style.color;
+      const backgroundColor = element.style.backgroundColor;
+      const fontSize = element.style.fontSize || `${size}px`;
+      if (color) span.style.color = color;
+      if (backgroundColor) span.style.backgroundColor = backgroundColor;
+      if (fontSize) span.style.fontSize = fontSize;
+      span.innerHTML = element.innerHTML;
+      element.replaceWith(span);
+      return;
+    }
     if (!allowed.has(element.tagName)) {
       element.replaceWith(...element.childNodes);
       return;
@@ -3642,31 +3727,141 @@ function sanitizeNoteHtml(html) {
       const color = element.style.color;
       const backgroundColor = element.style.backgroundColor;
       const textAlign = element.style.textAlign;
+      const fontSize = element.style.fontSize;
       element.removeAttribute("style");
       if (color) element.style.color = color;
       if (backgroundColor) element.style.backgroundColor = backgroundColor;
       if (textAlign) element.style.textAlign = textAlign;
+      if (fontSize) element.style.fontSize = fontSize;
     }
   });
   return template.innerHTML;
 }
 
 function getNoteSelectionItems() {
+  if (noteEditorPanel?.classList.contains("is-visible")) {
+    return noteEditorVerseItems;
+  }
   return multiSelectedVerseData.length ? multiSelectedVerseData : selectedVerseData ? [selectedVerseData] : [];
+}
+
+function getNoteGroupItems(item) {
+  const note = savedState.notes[item?.key];
+  if (!note) {
+    return [item].filter(Boolean);
+  }
+
+  const sameGroup = note.noteGroupId
+    ? Object.values(savedState.notes).filter((entry) => entry?.noteGroupId === note.noteGroupId)
+    : Object.values(savedState.notes).filter((entry) => (
+      entry?.noteHtml && note.noteHtml
+        ? entry.noteHtml === note.noteHtml
+        : entry?.note === note.note
+    ));
+
+  const groupKeys = new Set(sameGroup.map((entry) => entry.key));
+  const groupItems = sameGroup
+    .filter((entry) => groupKeys.has(entry.key))
+    .map((entry) => ({ ...entry }));
+  return groupItems.length ? groupItems : [item].filter(Boolean);
+}
+
+function renderNoteEditorVerseChips() {
+  if (!noteEditorVerseChips) {
+    return;
+  }
+  noteEditorVerseChips.innerHTML = `
+    <button type="button" class="note-editor-add-verse" data-add-note-verse><span aria-hidden="true">+</span> Add verse</button>
+    ${noteEditorVerseItems.length
+      ? noteEditorVerseItems.map((item) => `
+        <span class="note-editor-verse-chip">
+          <span>${escapeHtml(item.reference)}</span>
+          <button type="button" data-remove-note-verse="${escapeAttr(item.key)}" aria-label="Remove ${escapeAttr(item.reference)} from note">×</button>
+        </span>
+      `).join("")
+      : '<span class="note-editor-no-verses">No verses attached</span>'}
+  `;
+
+  noteEditorVerseChips.querySelector("[data-add-note-verse]")?.addEventListener("click", startAddingNoteVerses);
+
+  noteEditorVerseChips.querySelectorAll("[data-remove-note-verse]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const key = button.dataset.removeNoteVerse;
+      const removed = noteEditorVerseItems.find((item) => item.key === key);
+      noteEditorVerseItems = noteEditorVerseItems.filter((item) => item.key !== key);
+      noteEditorRemovedVerseKeys.add(key);
+      markNoteEditorDirty();
+      multiSelectedVerseData = multiSelectedVerseData.filter((item) => item.key !== key);
+      if (selectedVerseData?.key === key) {
+        selectedVerseData = noteEditorVerseItems[0] || null;
+      }
+      renderNoteEditorVerseChips();
+      noteEditorReference.textContent = noteEditorVerseItems.length === 1
+        ? noteEditorVerseItems[0].reference
+        : `${noteEditorVerseItems.length} verses selected`;
+      noteEditorStatus.textContent = noteEditorVerseItems.length
+        ? `This note will be saved to ${noteEditorVerseItems.length} verse${noteEditorVerseItems.length === 1 ? "" : "s"}.`
+        : "Add a verse before saving this note.";
+      setFeedback(removed ? `${removed.reference} removed from the note.` : "Verse removed from the note.");
+    });
+  });
+}
+
+function startAddingNoteVerses() {
+  if (!noteEditorVerseItems.length) {
+    return;
+  }
+  noteEditorAddingVerses = true;
+  multiSelectMode = true;
+  multiSelectedVerseData = [...noteEditorVerseItems];
+  selectedVerseData = multiSelectedVerseData[0];
+  updateMultiSelectionUi();
+  closeModal({ preserveNoteAddMode: true });
+  setFeedback("Tap other verses to add them to this note, then open the note menu.");
+}
+
+function saveAddedNoteVerses() {
+  if (!noteEditorAddingVerses || !multiSelectedVerseData.length) return;
+  noteEditorVerseItems = [...multiSelectedVerseData];
+  noteEditorAddingVerses = false;
+  updateMultiSelectionUi();
+  openRichNoteEditor();
+  saveRichNote();
+  setFeedback("Verses added and note saved.");
 }
 
 function openRichNoteEditor() {
   if (!noteEditorPanel || !noteEditorContent) {
     return;
   }
-  const items = getNoteSelectionItems();
+  const selectedItems = getNoteSelectionItems();
+  const selectedExistingNote = selectedItems.length === 1 && savedState.notes[selectedItems[0].key];
+  const items = selectedExistingNote ? getNoteGroupItems(selectedItems[0]) : selectedItems;
   if (!items.length) {
     return;
   }
+  const wasAddingVerses = noteEditorAddingVerses;
+  noteEditorVerseItems = [...items];
+  noteEditorAddingVerses = false;
+  noteEditorRemovedVerseKeys = new Set();
+  noteEditorSelectionRange = null;
+  renderNoteEditorVerseChips();
   const existing = items.find((item) => savedState.notes[item.key]?.noteHtml || savedState.notes[item.key]?.note)?.key;
   const note = existing ? savedState.notes[existing] : null;
+  noteEditorGroupId = note?.noteGroupId || `note-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  noteEditorFontSize = Number(note?.noteFontSize || 17);
+  noteEditorNoteTitle = note?.noteTitle || "";
+  if (noteEditorTitle) noteEditorTitle.value = noteEditorNoteTitle;
+  if (noteFontSizeInput) noteFontSizeInput.value = String(noteEditorFontSize);
+  if (noteFontSizeValue) noteFontSizeValue.textContent = `${noteEditorFontSize} px`;
+  noteEditorContent.style.setProperty("--note-editor-font-size", `${noteEditorFontSize}px`);
   noteEditorReference.textContent = items.length === 1 ? items[0].reference : `${items.length} verses selected`;
   noteEditorContent.innerHTML = sanitizeNoteHtml(note?.noteHtml || (note?.note ? `<p>${escapeHtml(note.note)}</p>` : "<p><br></p>"));
+  if (saveRichNoteButton) saveRichNoteButton.textContent = "Save note";
+  resetNoteEditorDirty();
+  if (wasAddingVerses) {
+    markNoteEditorDirty();
+  }
   noteEditorStatus.textContent = `This note will be saved to ${items.length} verse${items.length === 1 ? "" : "s"}.`;
   showModal(noteEditorPanel);
   noteEditorContent.focus();
@@ -3674,11 +3869,21 @@ function openRichNoteEditor() {
 
 function saveRichNote() {
   const items = getNoteSelectionItems();
-  if (!items.length || !noteEditorContent) {
+  if (!noteEditorContent) {
+    return;
+  }
+  noteEditorRemovedVerseKeys.forEach((key) => {
+    delete savedState.notes[key];
+    document.querySelectorAll(`[data-verse-key="${CSS.escape(key)}"]`).forEach((line) => line.classList.remove("is-noted"));
+  });
+  if (!items.length) {
+    writeJson("brother.notes", savedState.notes);
+    resetNoteEditorDirty();
     return;
   }
   const noteHtml = sanitizeNoteHtml(noteEditorContent.innerHTML);
   const noteText = noteEditorContent.innerText.trim();
+  const noteGroupId = noteEditorGroupId || `note-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
   items.forEach((item) => {
     if (!noteText) {
       delete savedState.notes[item.key];
@@ -3689,6 +3894,9 @@ function saveRichNote() {
       ...item,
       note: noteText,
       noteHtml,
+      noteTitle: noteEditorNoteTitle.trim(),
+      noteFontSize: noteEditorFontSize,
+      noteGroupId,
       updatedAt: new Date().toISOString(),
     };
     document.querySelectorAll(`[data-verse-key="${CSS.escape(item.key)}"]`).forEach((line) => line.classList.add("is-noted"));
@@ -3696,8 +3904,94 @@ function saveRichNote() {
   writeJson("brother.notes", savedState.notes);
   refreshProfilePanel();
   setFeedback(`Note saved to ${items.length} verse${items.length === 1 ? "" : "s"}.`);
+  if (saveRichNoteButton) {
+    saveRichNoteButton.textContent = "Saved";
+    window.setTimeout(() => {
+      if (saveRichNoteButton) saveRichNoteButton.textContent = "Save note";
+    }, 1600);
+  }
+  noteEditorRemovedVerseKeys = new Set();
+  resetNoteEditorDirty();
+}
+
+function deleteRichNote() {
+  const items = noteEditorVerseItems;
+  if (!items.length || !window.confirm("Delete this note from all attached verses?")) {
+    return;
+  }
+  items.forEach((item) => {
+    delete savedState.notes[item.key];
+    document.querySelectorAll(`[data-verse-key="${CSS.escape(item.key)}"]`).forEach((line) => line.classList.remove("is-noted"));
+  });
+  writeJson("brother.notes", savedState.notes);
+  refreshProfilePanel();
+  setFeedback(`Note deleted from ${items.length} verse${items.length === 1 ? "" : "s"}.`);
   closeModal();
   exitMultiSelectMode();
+}
+
+function captureNoteSelection() {
+  if (!noteEditorContent) return;
+  const selection = window.getSelection();
+  if (!selection?.rangeCount || selection.isCollapsed) return;
+  const range = selection.getRangeAt(0);
+  if (noteEditorContent.contains(range.commonAncestorContainer)) {
+    noteEditorSelectionRange = range.cloneRange();
+    const selectedSize = getSelectedNoteFontSize();
+    if (selectedSize) {
+      noteEditorFontSize = selectedSize;
+      if (noteFontSizeInput) noteFontSizeInput.value = String(selectedSize);
+      if (noteFontSizeValue) noteFontSizeValue.textContent = `${selectedSize} px`;
+    }
+  }
+}
+
+function restoreNoteSelection() {
+  if (!noteEditorSelectionRange) return false;
+  const selection = window.getSelection();
+  selection.removeAllRanges();
+  selection.addRange(noteEditorSelectionRange);
+  return true;
+}
+
+function getSelectedNoteFontSize() {
+  const selection = window.getSelection();
+  if (!selection?.rangeCount || selection.isCollapsed) return null;
+  const node = selection.anchorNode?.nodeType === Node.TEXT_NODE
+    ? selection.anchorNode.parentElement
+    : selection.anchorNode;
+  if (!node || !noteEditorContent?.contains(node)) return null;
+  const size = Number.parseFloat(window.getComputedStyle(node).fontSize);
+  return Number.isFinite(size) ? Math.round(Math.min(30, Math.max(14, size))) : null;
+}
+
+function applySelectedNoteFontSize(size) {
+  if (!restoreNoteSelection() || !noteEditorSelectionRange || noteEditorSelectionRange.collapsed) {
+    return false;
+  }
+
+  const selection = window.getSelection();
+  const range = selection.getRangeAt(0);
+  const container = range.commonAncestorContainer.nodeType === Node.TEXT_NODE
+    ? range.commonAncestorContainer.parentElement
+    : range.commonAncestorContainer;
+  const existing = container?.closest?.("[data-note-font-size]");
+  if (existing && noteEditorContent.contains(existing) && range.toString() === existing.textContent) {
+    existing.style.fontSize = `${size}px`;
+  } else {
+    const fragment = range.extractContents();
+    const span = document.createElement("span");
+    span.dataset.noteFontSize = "true";
+    span.style.fontSize = `${size}px`;
+    span.appendChild(fragment);
+    range.insertNode(span);
+    const nextRange = document.createRange();
+    nextRange.selectNodeContents(span);
+    selection.removeAllRanges();
+    selection.addRange(nextRange);
+  }
+  noteEditorSelectionRange = selection.getRangeAt(0).cloneRange();
+  return true;
 }
 
 function askAiAboutVerse() {
@@ -3974,6 +4268,7 @@ function toggleAiBookmark(button) {
 
   if (savedState.aiBookmarks[messageId]) {
     delete savedState.aiBookmarks[messageId];
+    article.querySelector(".ai-bookmark-picker")?.remove();
     button.classList.remove("is-active");
     triggerAiActionAnimation(button, "is-success");
     setFeedback("AI bookmark removed.");
@@ -3981,6 +4276,7 @@ function toggleAiBookmark(button) {
     savedState.aiBookmarks[messageId] = {
       id: messageId,
       text,
+      folderId: "",
       createdAt: new Date().toISOString(),
     };
     button.classList.add("is-active");
@@ -3989,6 +4285,53 @@ function toggleAiBookmark(button) {
   }
 
   writeJson(aiBookmarksKey, savedState.aiBookmarks);
+  if (savedState.aiBookmarks[messageId]) {
+    showAiBookmarkPicker(button);
+  }
+}
+
+function showAiBookmarkPicker(button, selectedFolderId = null) {
+  const article = button.closest("[data-ai-message-id]");
+  const messageId = article?.dataset.aiMessageId;
+  const bookmark = messageId ? savedState.aiBookmarks[messageId] : null;
+  if (!article || !bookmark) return;
+
+  article.querySelector(".ai-bookmark-picker")?.remove();
+  const options = [
+    '<option value="">No tag</option>',
+    ...getSavedFolders("bookmarks").map((folder) => `<option value="${escapeAttr(folder.id)}">${escapeHtml(folder.name)}</option>`),
+  ].join("");
+  const picker = document.createElement("div");
+  picker.className = "ai-bookmark-picker";
+  picker.innerHTML = `
+      <label>Tag
+        <select data-ai-bookmark-folder>${options}</select>
+      </label>
+      <form data-ai-bookmark-folder-form>
+        <input name="folder" placeholder="New tag" aria-label="New bookmark tag" />
+        <button type="submit" aria-label="Create tag">+</button>
+      </form>
+      <button type="button" class="ai-bookmark-done" data-ai-bookmark-folder-done aria-label="Validate tag" title="Save tag">✓</button>
+  `;
+  article.querySelector(".ai-message-actions")?.append(picker);
+  const select = picker.querySelector("[data-ai-bookmark-folder]");
+  select.value = selectedFolderId === null ? (bookmark.folderId || "") : selectedFolderId;
+  picker.querySelector("[data-ai-bookmark-folder-done]")?.addEventListener("click", () => {
+    bookmark.folderId = select.value;
+    writeJson(aiBookmarksKey, savedState.aiBookmarks);
+    picker.remove();
+    setFeedback(`AI bookmark filed in ${getFolderName("bookmarks", select.value)}.`);
+  });
+  picker.querySelector("[data-ai-bookmark-folder-form]")?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const name = event.currentTarget.elements.folder.value.trim();
+    const folderId = createSavedFolder("bookmarks", name, { renderProfile: false });
+    if (!folderId) return;
+    bookmark.folderId = folderId;
+    writeJson(aiBookmarksKey, savedState.aiBookmarks);
+    showAiBookmarkPicker(button, folderId);
+    setFeedback(`AI bookmark filed in ${getFolderName("bookmarks", folderId)}.`);
+  });
 }
 
 function triggerAiActionAnimation(button, effectClass) {
@@ -4229,6 +4572,22 @@ function assignSavedFolder(type, storageKey, folderId) {
   refreshProfilePanel();
 }
 
+function bindFolderSelectInteractions(container) {
+  container?.querySelectorAll(".saved-folder-select").forEach((label) => {
+    const select = label.querySelector("select");
+    if (!select) return;
+    label.addEventListener("click", (event) => {
+      if (event.target === select) return;
+      event.preventDefault();
+      if (typeof select.showPicker === "function") {
+        select.showPicker();
+      } else {
+        select.focus();
+      }
+    });
+  });
+}
+
 function getSavedRows(type, folderId = activeProfileFolders[type] || "") {
   const source = type === "highlights" ? savedState.highlights : savedState.bookmarks;
   return Object.entries(source)
@@ -4236,6 +4595,31 @@ function getSavedRows(type, folderId = activeProfileFolders[type] || "") {
     .filter((item) => item?.bookId && item?.chapter && item?.number)
     .filter((item) => !folderId || (folderId === "unfiled" ? !item.folderId : item.folderId === folderId))
     .sort((a, b) => String(b.createdAt || b.updatedAt || "").localeCompare(String(a.createdAt || a.updatedAt || "")));
+}
+
+function getSavedNoteRows() {
+  const groups = new Map();
+  Object.values(savedState.notes)
+    .filter((note) => note?.key && (note.noteHtml || note.note))
+    .forEach((note) => {
+      const groupId = note.noteGroupId || note.key;
+      const group = groups.get(groupId) || {
+        id: groupId,
+        items: [],
+        note: note.note || "",
+        title: note.noteTitle || "",
+        noteHtml: note.noteHtml || "",
+        noteFontSize: note.noteFontSize || 17,
+        updatedAt: note.updatedAt || "",
+      };
+      group.items.push({ ...note });
+      if (String(note.updatedAt || "") > String(group.updatedAt || "")) {
+        group.updatedAt = note.updatedAt;
+      }
+      if (!group.title && note.noteTitle) group.title = note.noteTitle;
+      groups.set(groupId, group);
+    });
+  return [...groups.values()].sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt)));
 }
 
 function refreshProfilePanel() {
@@ -4259,15 +4643,13 @@ function setProfileTab(tab) {
   });
 
   if (profileSettingsPanel) {
-    profileSettingsPanel.hidden = tab !== "settings";
+    profileSettingsPanel.hidden = false;
+    profileSettingsPanel.querySelectorAll("[data-profile-section]").forEach((section) => {
+      section.hidden = section.dataset.profileSection !== tab;
+    });
   }
 
-  if (tab === "settings") {
-    closeProfileSavedPanel();
-    return;
-  }
-
-  renderProfileSavedPanel(tab);
+  closeProfileSavedPanel();
 }
 
 function renderProfileSavedPanel(type) {
@@ -4280,10 +4662,54 @@ function renderProfileSavedPanel(type) {
     button.classList.toggle("is-active", button.dataset.profileView === type);
   });
 
+  if (type === "notes") {
+    const rows = getSavedNoteRows();
+    profileSavedPanel.hidden = false;
+    profileSavedPanel.innerHTML = `
+      <div class="saved-panel-title">
+        <h3>Notes</h3>
+        <span>${rows.length}</span>
+      </div>
+      <label class="saved-notes-search">
+        <i data-lucide="search"></i>
+        <input type="search" data-notes-search placeholder="Search notes..." aria-label="Search notes" />
+      </label>
+      ${rows.length ? rows.map((row, index) => `
+        <article class="saved-note-card" data-note-searchable="${escapeAttr(`${row.title || "Untitled note"} ${row.items.map((item) => item.reference || "").join(" ")} ${row.note || ""}`.toLowerCase())}">
+          <button class="saved-note-open" data-saved-note="${index}">
+            <strong class="saved-note-card-title">${escapeHtml(row.title || "Untitled note")}</strong>
+            <span class="saved-note-card-heading">
+              <i data-lucide="notebook-pen"></i>
+              <strong>${row.items.length} verse${row.items.length === 1 ? "" : "s"}</strong>
+            </span>
+            <span class="saved-note-references">${row.items.map((item) => escapeHtml(item.reference || "")).join(" · ")}</span>
+            <p>${escapeHtml(row.note || "No preview available")}</p>
+          </button>
+        </article>
+      `).join("") : '<p class="saved-empty">No notes yet. Create a note from the Bible tab and it will appear here.</p>'}
+    `;
+    profileSavedPanel.querySelector("[data-notes-search]")?.addEventListener("input", (event) => {
+      const query = event.target.value.trim().toLowerCase();
+      profileSavedPanel.querySelectorAll("[data-note-searchable]").forEach((card) => {
+        card.hidden = Boolean(query) && !card.dataset.noteSearchable.includes(query);
+      });
+    });
+    profileSavedPanel.querySelectorAll("[data-saved-note]").forEach((button) => {
+      button.addEventListener("click", () => openSavedNote(rows[Number(button.dataset.savedNote)]));
+    });
+    refreshIcons();
+    return;
+  }
+
   const folders = getSavedFolders(type);
   const activeFolder = activeProfileFolders[type] || "";
   const rows = getSavedRows(type, activeFolder);
-  const totalRows = getSavedRows(type, "").length;
+  const aiRows = type === "bookmarks"
+    ? Object.values(savedState.aiBookmarks)
+      .filter((item) => !activeFolder || (activeFolder === "unfiled" ? !item.folderId : item.folderId === activeFolder))
+      .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")))
+    : [];
+  const totalRows = getSavedRows(type, "").length + (type === "bookmarks" ? Object.keys(savedState.aiBookmarks).length : 0);
   const title = type === "highlights" ? "Highlights" : "Bookmarks";
   const empty = type === "highlights"
     ? "No highlights yet. Highlight a verse from the Bible tab and it will appear here."
@@ -4316,8 +4742,8 @@ function renderProfileSavedPanel(type) {
       </form>
     </div>
     ${
-      rows.length
-        ? rows.map((row, index) => `
+      rows.length || aiRows.length
+        ? `${rows.map((row, index) => `
             <article class="saved-verse-row">
               <button class="saved-verse-open" data-saved-row="${index}">
                 ${type === "highlights" ? `<span class="saved-color-dot" style="--saved-color: ${escapeAttr(row.colorValue || "var(--beige)")}" aria-hidden="true"></span>` : '<i data-lucide="bookmark"></i>'}
@@ -4328,13 +4754,23 @@ function renderProfileSavedPanel(type) {
                 </span>
               </button>
               <label class="saved-folder-select">
-                <span>Folder</span>
+                <i data-lucide="folder"></i>
                 <select data-saved-folder="${escapeAttr(row.storageKey)}">
                   ${folderOptions}
                 </select>
               </label>
             </article>
-          `).join("")
+          `).join("")}
+          ${aiRows.map((row) => `
+            <article class="saved-ai-row">
+              <div class="saved-ai-row-heading"><i data-lucide="sparkles"></i><strong>AI response</strong></div>
+              <p>${escapeHtml(row.text || "")}</p>
+              <label class="saved-folder-select">
+                <i data-lucide="folder"></i>
+                <select data-ai-saved-folder="${escapeAttr(row.id)}">${folderOptions}</select>
+              </label>
+            </article>
+          `).join("")}`
         : `<p class="saved-empty">${folderEmpty}</p>`
     }
   `;
@@ -4360,6 +4796,17 @@ function renderProfileSavedPanel(type) {
     select.value = row?.folderId || "";
     select.addEventListener("change", () => assignSavedFolder(type, select.dataset.savedFolder, select.value));
   });
+  profileSavedPanel.querySelectorAll("[data-ai-saved-folder]").forEach((select) => {
+    const bookmark = savedState.aiBookmarks[select.dataset.aiSavedFolder];
+    select.value = bookmark?.folderId || "";
+    select.addEventListener("change", () => {
+      if (!bookmark) return;
+      bookmark.folderId = select.value;
+      writeJson(aiBookmarksKey, savedState.aiBookmarks);
+      setFeedback(`AI bookmark filed in ${getFolderName("bookmarks", select.value)}.`);
+    });
+  });
+  bindFolderSelectInteractions(profileSavedPanel);
   refreshIcons();
 }
 
@@ -4396,6 +4843,24 @@ async function openSavedVerse(row) {
     line.classList.add("is-selected");
     line.scrollIntoView({ behavior: "smooth", block: "center" });
   }, 80);
+}
+
+async function openSavedNote(row) {
+  const firstVerse = row?.items?.[0];
+  if (!firstVerse) {
+    return;
+  }
+  await openSavedVerse(firstVerse);
+  window.setTimeout(() => {
+    const line = document.querySelector(`[data-verse-key="${CSS.escape(firstVerse.key)}"]`)
+      || document.querySelector(`[data-verse-number="${CSS.escape(String(firstVerse.number))}"]`);
+    if (!line) {
+      return;
+    }
+    selectedVerseData = getVerseDataFromElement(line);
+    line.classList.add("is-selected");
+    openRichNoteEditor();
+  }, 180);
 }
 
 function escapeHtml(value) {
@@ -4556,8 +5021,7 @@ async function handleVerseAction(action) {
       if (isMultiAction) clearMultiSelectionVisuals();
     }
     if (action === "note") {
-      showNoteEditor();
-      if (isMultiAction) clearMultiSelectionVisuals();
+      openRichNoteEditor();
     }
     if (action === "ask-ai") askAiAboutVerse();
     if (action === "original-language") await showOriginalLanguagePanel();
@@ -4678,6 +5142,47 @@ profileTabButtons.forEach((button) => {
   button.addEventListener("click", () => setProfileTab(button.dataset.profileTab));
 });
 
+function renderHomeLibraryTab(tab) {
+  homeLibraryTabButtons.forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.homeLibraryTab === tab);
+  });
+  if (!homeLibraryPanel) return;
+  renderProfileSavedPanel(tab);
+  homeLibraryPanel.innerHTML = profileSavedPanel.innerHTML;
+  profileSavedPanel.innerHTML = "";
+  profileSavedPanel.hidden = true;
+  homeLibraryPanel.querySelectorAll("[data-saved-row]").forEach((button) => {
+    button.addEventListener("click", () => openSavedVerse(getSavedRows(tab)[Number(button.dataset.savedRow)]));
+  });
+  homeLibraryPanel.querySelectorAll("[data-folder-filter]").forEach((button) => {
+    button.addEventListener("click", () => {
+      activeProfileFolders[tab] = button.dataset.folderFilter;
+      renderHomeLibraryTab(tab);
+    });
+  });
+  homeLibraryPanel.querySelectorAll("[data-saved-note]").forEach((button) => {
+    button.addEventListener("click", () => openSavedNote(getSavedNoteRows()[Number(button.dataset.savedNote)]));
+  });
+  homeLibraryPanel.querySelectorAll("[data-nav]").forEach((button) => {
+    button.addEventListener("click", () => setScreen(button.dataset.nav));
+  });
+  bindFolderSelectInteractions(homeLibraryPanel);
+  refreshIcons();
+}
+
+function refreshHomeLibraryPanel() {
+  const activeButton = homeLibraryTabButtons.find((button) => button.classList.contains("is-active"));
+  if (activeButton && homeLibraryPanel) {
+    renderHomeLibraryTab(activeButton.dataset.homeLibraryTab);
+  }
+}
+
+homeLibraryTabButtons.forEach((button) => {
+  button.addEventListener("click", () => renderHomeLibraryTab(button.dataset.homeLibraryTab));
+});
+
+renderHomeLibraryTab("notes");
+
 document.querySelectorAll("[data-verse-action]").forEach((button) => {
   button.addEventListener("click", () => {
     button.classList.add("is-pressed");
@@ -4690,20 +5195,55 @@ document.querySelectorAll("[data-note-command]").forEach((button) => {
   button.addEventListener("click", () => {
     noteEditorContent?.focus();
     document.execCommand(button.dataset.noteCommand, false, button.dataset.noteValue || null);
+    markNoteEditorDirty();
   });
 });
 
 document.querySelector("[data-note-color]")?.addEventListener("input", (event) => {
+  restoreNoteSelection();
   noteEditorContent?.focus();
   document.execCommand("foreColor", false, event.target.value);
+  captureNoteSelection();
+  markNoteEditorDirty();
 });
 
 document.querySelector("[data-note-highlight]")?.addEventListener("input", (event) => {
+  restoreNoteSelection();
   noteEditorContent?.focus();
   document.execCommand("hiliteColor", false, event.target.value);
+  captureNoteSelection();
+  markNoteEditorDirty();
 });
 
-document.querySelector("[data-save-rich-note]")?.addEventListener("click", saveRichNote);
+noteFontSizeInput?.addEventListener("input", (event) => {
+  noteEditorFontSize = Number(event.target.value);
+  markNoteEditorDirty();
+  if (noteFontSizeValue) noteFontSizeValue.textContent = `${noteEditorFontSize} px`;
+  const hasSelection = restoreNoteSelection() && noteEditorSelectionRange && !noteEditorSelectionRange.collapsed;
+  if (hasSelection) {
+    noteEditorContent?.focus();
+    applySelectedNoteFontSize(noteEditorFontSize);
+    captureNoteSelection();
+  } else {
+    noteEditorContent?.style.setProperty("--note-editor-font-size", `${noteEditorFontSize}px`);
+  }
+});
+
+noteEditorContent?.addEventListener("input", markNoteEditorDirty);
+noteEditorTitle?.addEventListener("input", (event) => {
+  noteEditorNoteTitle = event.target.value;
+  markNoteEditorDirty();
+});
+noteEditorContent?.addEventListener("mouseup", captureNoteSelection);
+noteEditorContent?.addEventListener("keyup", captureNoteSelection);
+noteFontSizeInput?.addEventListener("pointerdown", captureNoteSelection);
+
+saveRichNoteButton?.addEventListener("click", () => {
+  saveRichNote();
+  resetNoteEditorDirty();
+});
+noteAddSaveButton?.addEventListener("click", saveAddedNoteVerses);
+document.querySelector("[data-delete-rich-note]")?.addEventListener("click", deleteRichNote);
 
 multiSelectMenuToggle?.addEventListener("click", () => {
   if (!multiSelectMode || !multiSelectedVerseData.length) {
@@ -4930,7 +5470,6 @@ modalLayer.addEventListener("click", (event) => {
 
 window.addEventListener("load", refreshIcons);
 appShell.dataset.activeScreen = document.querySelector(".screen.is-active")?.id || "home";
-profileSettingsPanel?.prepend(profilePreferenceSection);
 initHomeStats();
 initPrayerPage();
 initProfile();

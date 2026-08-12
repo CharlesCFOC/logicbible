@@ -42,9 +42,11 @@
           <article class="home-hero-image">
             <img src="assets/home-card-sunset.png" alt="Sunrise over a mountain lake" />
             <div class="home-hero-image-copy">
-              <span>Daily Scripture</span>
-              <h1>Make space for faith today.</h1>
-              <p>Read, reflect, and keep moving with a little more peace.</p>
+              <div class="home-hero-verse">
+                <span>Verse of the day</span>
+                <strong>“The Lord is my shepherd; I shall not want.”</strong>
+                <small>Psalm 23:1</small>
+              </div>
               <button type="button" data-nav="bible">Start reading <i data-lucide="arrow-up-right"></i></button>
             </div>
           </article>
@@ -53,36 +55,37 @@
             <article class="home-stat-card">
               <span>Connected streak</span>
               <strong data-home-streak>1 day</strong>
-              <small>Keep coming back</small>
             </article>
             <article class="home-stat-card home-stat-card--online">
               <span>People online</span>
               <strong data-people-online>128</strong>
-              <small>Reading right now</small>
             </article>
+            <button class="home-stat-card home-stat-card--continue" type="button" data-nav="bible">
+              <span>Continue reading</span>
+              <strong data-home-continue-reading>John 15</strong>
+              <i data-lucide="arrow-up-right"></i>
+            </button>
           </section>
 
-          <section class="home-content-cards" aria-label="Home reading">
-            <article class="home-content-card home-content-card--continue">
-              <div>
-                <span class="home-content-label">Continue to read</span>
-                <strong>Galatians 6:16</strong>
-                <small>Pick up where you left off</small>
+          <button class="home-prayer-card" type="button" data-nav="prayer">
+            <span class="home-prayer-card-icon"><i data-lucide="hand-heart"></i></span>
+            <span><small>Prayer requests</small><strong><span data-home-prayer-count>0</span> people are waiting for prayer</strong></span>
+            <i data-lucide="arrow-up-right"></i>
+          </button>
+
+          <section class="home-library-section" aria-label="Your library">
+            <nav class="profile-tabs home-library-tabs" aria-label="Home library sections">
+              <button type="button" data-home-library-tab="highlights"><i data-lucide="highlighter"></i><span>Highlight</span></button>
+              <button type="button" data-home-library-tab="bookmarks"><i data-lucide="bookmark"></i><span>Bookmark</span></button>
+              <button class="is-active" type="button" data-home-library-tab="notes"><i data-lucide="notebook-pen"></i><span>Notes</span></button>
+            </nav>
+            <section class="home-library-panel" data-home-library-panel>
+              <div class="home-library-placeholder">
+                <span>Personal library</span>
+                <strong>Manage your saved Scripture</strong>
+                <button type="button" data-nav="profile">Open profile settings <i data-lucide="arrow-up-right"></i></button>
               </div>
-              <button type="button" data-nav="bible" aria-label="Continue reading">
-                <i data-lucide="arrow-up-right"></i>
-              </button>
-            </article>
-            <article class="home-content-card home-content-card--verse">
-              <div>
-                <span class="home-content-label">Verse of the day</span>
-                <strong>“The Lord is my shepherd; I shall not want.”</strong>
-                <small>Psalm 23:1</small>
-              </div>
-              <button type="button" data-nav="bible" aria-label="Read today's verse">
-                <i data-lucide="book-open"></i>
-              </button>
-            </article>
+            </section>
           </section>
 
         </section>
@@ -281,17 +284,6 @@
         </section>
 
         <section id="prayer" class="screen prayer-screen" data-screen>
-          <header class="page-header prayer-header">
-            <button class="icon-button" data-nav="home" aria-label="Back to Home">
-              <i data-lucide="arrow-left"></i>
-            </button>
-            <div>
-              <p class="eyebrow">Community</p>
-              <h1>Prayer</h1>
-            </div>
-            <span class="prayer-header-mark" aria-hidden="true"><i data-lucide="hand-heart"></i></span>
-          </header>
-
           <div class="prayer-page-tabs" role="tablist" aria-label="Prayer sections">
             <button class="is-active" type="button" data-prayer-page-tab="board">Prayer</button>
             <button type="button" data-prayer-page-tab="request">Prayer request</button>
@@ -344,13 +336,13 @@
           </article>
 
           <nav class="profile-tabs" data-profile-tabs aria-label="Profile sections">
-            <button class="is-active" type="button" data-profile-tab="settings"><i data-lucide="sliders-horizontal"></i><span>Paramètre</span></button>
-            <button type="button" data-profile-tab="bookmarks"><i data-lucide="bookmark"></i><span>Bookmark</span></button>
-            <button type="button" data-profile-tab="highlights"><i data-lucide="highlighter"></i><span>Highlight</span></button>
+            <button class="is-active" type="button" data-profile-tab="preferences"><i data-lucide="sliders-horizontal"></i><span>Preference</span></button>
+            <button type="button" data-profile-tab="information"><i data-lucide="id-card"></i><span>Information</span></button>
+            <button type="button" data-profile-tab="cloud"><i data-lucide="cloud"></i><span>Cloud account</span></button>
           </nav>
 
           <div class="profile-settings-panel" data-profile-panel="settings">
-          <section class="profile-auth-card" aria-labelledby="profile-auth-title">
+          <section class="profile-auth-card" data-profile-section="cloud" aria-labelledby="profile-auth-title" hidden>
             <div class="preference-heading">
               <h2 id="profile-auth-title">Cloud account</h2>
               <span data-auth-mode-label>Not connected</span>
@@ -379,7 +371,7 @@
             </form>
           </section>
 
-          <section class="profile-info-section" aria-labelledby="profile-info-title">
+          <section class="profile-info-section" data-profile-section="information" aria-labelledby="profile-info-title" hidden>
             <div class="preference-heading">
               <h2 id="profile-info-title">Informations</h2>
               <span>Identity</span>
@@ -410,7 +402,7 @@
             </div>
           </section>
 
-          <section class="preference-section" aria-labelledby="appearance-title">
+          <section class="preference-section" data-profile-section="preferences" aria-labelledby="appearance-title">
             <div class="preference-heading">
               <h2 id="appearance-title">Preferences</h2>
               <span>Contrast</span>
@@ -460,6 +452,7 @@
         <button class="multi-select-menu-toggle" data-multi-select-toggle type="button" aria-label="Open selected verse actions" hidden>
           <i data-lucide="chevron-up"></i>
         </button>
+        <button class="note-add-save-button" data-note-add-save type="button" hidden>Save</button>
 
         <nav class="bottom-nav" aria-label="Primary navigation">
           <button class="is-active" data-nav="home"><i data-lucide="home"></i><span>Home</span></button>
@@ -544,6 +537,8 @@
             </div>
             <button data-close-modal aria-label="Close note editor"><i data-lucide="x"></i></button>
           </header>
+          <input class="note-editor-title" data-note-title type="text" maxlength="100" placeholder="Note title" aria-label="Note title" />
+          <div class="note-editor-verse-chips" data-note-editor-verse-chips aria-label="Verses attached to this note"></div>
           <div class="note-editor-toolbar" role="toolbar" aria-label="Note formatting">
             <button type="button" data-note-command="bold" aria-label="Bold"><b>B</b></button>
             <button type="button" data-note-command="italic" aria-label="Italic"><i>I</i></button>
@@ -563,10 +558,19 @@
               <input type="color" data-note-highlight value="#facc15" />
             </label>
           </div>
+          <div class="note-editor-size-row">
+            <span aria-hidden="true">A</span>
+            <input type="range" data-note-font-size min="14" max="30" step="1" value="17" aria-label="Note text size" />
+            <strong data-note-font-size-value>17 px</strong>
+            <span aria-hidden="true" class="note-editor-size-large">A</span>
+          </div>
           <div class="note-editor-content" data-note-editor-content contenteditable="true" role="textbox" aria-label="Write your note"></div>
           <div class="note-editor-footer">
             <span data-note-editor-status>Notes are saved to the selected verses.</span>
-            <button type="button" class="primary-button" data-save-rich-note>Save note</button>
+            <div class="note-editor-footer-actions">
+              <button type="button" class="note-delete-button" data-delete-rich-note aria-label="Delete note" title="Delete note"><i data-lucide="trash-2"></i></button>
+              <button type="button" class="primary-button" data-save-rich-note>Save note</button>
+            </div>
           </div>
         </section>
 
