@@ -56,12 +56,16 @@ const apologeticsGateForm = document.querySelector("[data-apologetics-gate-form]
 const apologeticsGateInput = apologeticsGateForm?.querySelector("input");
 const apologeticsGateFeedback = document.querySelector("[data-apologetics-gate-feedback]");
 const aiMemoryKey = "brother.aiMemory";
+const aiConversationsKey = "brother.aiConversations";
 const aiBookmarksKey = "brother.aiBookmarks";
 const apologeticsChatKey = "brother.apologeticsChat";
 const apologeticsProgressKey = "brother.apologeticsProgress";
 const apologeticsGateSessionKey = "brother.apologeticsUnlocked";
 const aiMemoryTtlMs = 24 * 60 * 60 * 1000;
 const maxAiMemoryMessages = 24;
+const aiTabs = [...document.querySelectorAll("[data-ai-tab]")];
+const aiHistoryPanel = document.querySelector("[data-ai-history-panel]");
+let currentAiConversationId = localStorage.getItem("brother.aiConversationId") || `chat-${Date.now()}`;
 
 let supabaseClient = null;
 let supabaseUser = null;
@@ -1484,10 +1488,58 @@ function rememberAiMessage(role, text) {
     createdAt: Date.now(),
   });
   writeJson(aiMemoryKey, memory.slice(-maxAiMemoryMessages));
+  const conversations = readJson(aiConversationsKey, []);
+  let conversation = conversations.find((item) => item.id === currentAiConversationId);
+  if (!conversation) {
+    conversation = { id: currentAiConversationId, createdAt: Date.now(), updatedAt: Date.now(), messages: [] };
+    conversations.unshift(conversation);
+  }
+  conversation.messages.push({ role, text: cleanText.slice(0, 4000), createdAt: Date.now() });
+  conversation.messages = conversation.messages.slice(-maxAiMemoryMessages);
+  conversation.updatedAt = Date.now();
+  writeJson(aiConversationsKey, conversations.filter((item) => Date.now() - item.updatedAt < aiMemoryTtlMs).slice(0, 20));
 }
 
 function clearAiMemory() {
   removeLocalValue(aiMemoryKey);
+}
+
+function startNewAiConversation() {
+  currentAiConversationId = `chat-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+  localStorage.setItem("brother.aiConversationId", currentAiConversationId);
+  clearAiMemory();
+  if (aiThread) {
+    aiThread.innerHTML = `<article class="message ai-message"><div class="ai-message-stack"><div class="message-body rich-text"><p>Ask me about a verse, doctrine, original language, cross references, or biblical context.</p></div></div></article>`;
+  }
+}
+
+function renderAiHistory() {
+  if (!aiHistoryPanel) return;
+  const conversations = readJson(aiConversationsKey, [])
+    .filter((item) => Date.now() - Number(item.updatedAt || item.createdAt || 0) < aiMemoryTtlMs)
+    .sort((a, b) => Number(b.updatedAt) - Number(a.updatedAt));
+  writeJson(aiConversationsKey, conversations);
+  aiHistoryPanel.innerHTML = `${conversations.length ? conversations.map((conversation) => {
+    const firstUser = conversation.messages?.find((message) => message.role === "user");
+    const preview = firstUser?.text || "New conversation";
+    const shortPreview = preview.length > 30 ? `${preview.slice(0, 30).trim()}...` : preview;
+    return `<button type="button" class="ai-history-item" data-ai-history-id="${escapeAttr(conversation.id)}"><span>${escapeHtml(shortPreview)}</span><i data-lucide="square-arrow-out-up-right" aria-hidden="true"></i></button>`;
+  }).join("") : '<p class="ai-history-empty">No conversations in the last 24 hours.</p>'}<p class="ai-history-retention">Conversations are saved for 24 hours after your last message.</p>`;
+  aiHistoryPanel.querySelectorAll("[data-ai-history-id]").forEach((button) => {
+    button.addEventListener("click", () => loadAiConversation(button.dataset.aiHistoryId));
+  });
+  refreshIcons();
+}
+
+function loadAiConversation(id) {
+  const conversation = readJson(aiConversationsKey, []).find((item) => item.id === id);
+  if (!conversation || !aiThread) return;
+  currentAiConversationId = id;
+  localStorage.setItem("brother.aiConversationId", id);
+  writeJson(aiMemoryKey, conversation.messages || []);
+  aiThread.innerHTML = "";
+  (conversation.messages || []).forEach((item) => appendAiMessage(item.role, item.text));
+  setAiTab("chat");
 }
 
 function savePreferences() {
@@ -3995,6 +4047,7 @@ function applySelectedNoteFontSize(size) {
 }
 
 function askAiAboutVerse() {
+  startNewAiConversation();
   closeModal();
   setScreen("ai");
   if (aiComposerInput) {
@@ -4002,6 +4055,16 @@ function askAiAboutVerse() {
     resizeAiComposerInput();
     aiComposerInput.focus();
   }
+}
+
+function setAiTab(tab) {
+  aiTabs.forEach((button) => button.classList.toggle("is-active", button.dataset.aiTab === tab));
+  document.querySelector("#ai")?.classList.toggle("is-history", tab === "history");
+  if (!aiThread || !aiHistoryPanel) return;
+  const isHistory = tab === "history";
+  aiThread.hidden = isHistory;
+  aiHistoryPanel.hidden = !isHistory;
+  if (isHistory) renderAiHistory();
 }
 
 function openVerseAiChat(verseData) {
@@ -4213,7 +4276,7 @@ function resetAiChat() {
     return;
   }
 
-  clearAiMemory();
+  startNewAiConversation();
   aiThread.innerHTML = `
     <article class="message ai-message">
       <div class="ai-message-stack">
@@ -5093,17 +5156,15 @@ if (aiForm) {
 if (aiComposerInput) {
   resizeAiComposerInput();
   aiComposerInput.addEventListener("input", resizeAiComposerInput);
-  aiComposerInput.addEventListener("keydown", (event) => {
-    if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault();
-      aiForm?.requestSubmit();
-    }
-  });
 }
 
 if (newAiChatButton) {
   newAiChatButton.addEventListener("click", resetAiChat);
 }
+
+aiTabs.forEach((button) => {
+  button.addEventListener("click", () => setAiTab(button.dataset.aiTab));
+});
 
 if (verseAiForm) {
   verseAiForm.addEventListener("submit", handleVerseAiSubmit);

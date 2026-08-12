@@ -138,6 +138,11 @@
             </button>
           </header>
 
+          <nav class="ai-tabs" aria-label="AI sections">
+            <button class="is-active" type="button" data-ai-tab="chat">Chat</button>
+            <button type="button" data-ai-tab="history">History</button>
+          </nav>
+
           <div class="chat-thread" data-ai-thread>
             <article class="message ai-message">
               <div class="ai-message-stack">
@@ -146,8 +151,10 @@
             </article>
           </div>
 
+          <section class="ai-history-panel" data-ai-history-panel hidden aria-label="Conversation history"></section>
+
           <form class="composer" data-ai-form>
-            <textarea rows="1" placeholder="Message Brother AI..." aria-label="Message Brother AI"></textarea>
+            <textarea rows="1" placeholder="" aria-label="Message Brother AI"></textarea>
             <button aria-label="Send message"><i data-lucide="send"></i></button>
           </form>
         </section>
