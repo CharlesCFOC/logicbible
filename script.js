@@ -18,6 +18,7 @@ const selectedVerse = document.querySelector("[data-selected-verse]");
 const sheetFeedback = document.querySelector("[data-sheet-feedback]");
 const verseDetail = document.querySelector("[data-verse-detail]");
 const readerScreen = document.querySelector("#bible");
+const bottomNav = document.querySelector(".bottom-nav");
 const verseAiReference = document.querySelector("[data-verse-ai-reference]");
 const verseAiContext = document.querySelector("[data-verse-ai-context]");
 const verseAiThread = document.querySelector("[data-verse-ai-thread]");
@@ -194,6 +195,7 @@ const readerChapter = document.querySelector("[data-reader-chapter]");
 const copyrightNote = document.querySelector("[data-copyright-note]");
 const originalLanguageLabel = document.querySelector('[data-verse-action="original-language"] span');
 const parallelToggle = document.querySelector("[data-parallel-toggle]");
+const readerTargetToggle = document.querySelector("[data-reader-target]");
 const parallelSelects = document.querySelector("[data-parallel-selects]");
 const parallelVersionOne = document.querySelector("[data-parallel-version-one]");
 const backgroundOptionsTrack = document.querySelector("[data-background-options]");
@@ -329,7 +331,7 @@ const savedFolders = {
   ...readJson("brother.savedFolders", {}),
 };
 const defaultPreferences = {
-  background: "paper",
+  background: "black",
   textSize: "medium",
   accent: "taupe",
 };
@@ -1291,9 +1293,9 @@ function renderPrayerPage() {
             ${expanded ? `<div class="prayer-card-expanded"><p>${escapeHtml(request.text)}</p></div>` : ""}
             <div class="prayer-card-meta">
               <span>${request.demo ? "Example" : "Anonymous"} · ${date}</span>
-              <button type="button" class="${hasPrayed ? "is-prayed" : ""}" data-prayer-action="pray" data-prayer-id="${escapeAttr(request.id)}">
-                <i data-lucide="hand-heart"></i>
-                <span>${hasPrayed ? "I prayed" : "I prayed"} · ${request.prayerCount}</span>
+              <button type="button" class="prayer-action${hasPrayed ? " is-prayed" : ""}" data-prayer-action="pray" data-prayer-id="${escapeAttr(request.id)}" aria-label="${hasPrayed ? "Prayer count" : "I prayed"}">
+                <i data-lucide="${hasPrayed ? "heart" : "hand-heart"}"></i>
+                ${hasPrayed ? `<span>${request.prayerCount}</span>` : `<span>I prayed · ${request.prayerCount}</span>`}
               </button>
             </div>
           </article>
@@ -1656,8 +1658,9 @@ function applyPreferences() {
   savedPreferences.accent = normalizeAccentKey(savedPreferences.accent);
   const accent = accentOptions[savedPreferences.accent] || accentOptions[defaultPreferences.accent];
   const textSize = textSizeOptions[savedPreferences.textSize] || textSizeOptions[defaultPreferences.textSize];
-  savedPreferences.background = "paper";
-  const background = "paper";
+  savedPreferences.background = "black";
+  const background = "black";
+  savedPreferences.background = background;
 
   appShell.dataset.appBackground = background;
   appShell.style.setProperty("--gold", accent.value);
@@ -2597,6 +2600,7 @@ function setScreen(id) {
     exitMultiSelectMode();
   }
   appShell.dataset.activeScreen = id;
+  bottomNav?.classList.remove("is-scroll-hidden");
   screens.forEach((screen) => {
     screen.classList.toggle("is-active", screen.id === id);
     if (screen.id === id) {
@@ -2624,6 +2628,30 @@ function setScreen(id) {
 
   renderApologeticsBeginButton();
 }
+
+let lastReaderScrollTop = 0;
+let readerScrollFrame = 0;
+
+readerScreen?.addEventListener("scroll", () => {
+  if (readerScrollFrame) return;
+
+  readerScrollFrame = window.requestAnimationFrame(() => {
+    const currentScrollTop = readerScreen.scrollTop;
+    const scrollingDown = currentScrollTop > lastReaderScrollTop + 4;
+    const scrollingUp = currentScrollTop < lastReaderScrollTop - 4;
+
+    if (currentScrollTop <= 4 || scrollingUp) {
+      bottomNav?.classList.remove("is-scroll-hidden");
+    } else if (scrollingDown) {
+      bottomNav?.classList.add("is-scroll-hidden");
+    }
+
+    updateFocusedVerseFromScroll();
+
+    lastReaderScrollTop = currentScrollTop;
+    readerScrollFrame = 0;
+  });
+});
 
 function showModal(panel) {
   const isNotePanel = panel === noteEditorPanel;
@@ -2760,6 +2788,60 @@ function centerSelectedVerse() {
 
   readerScreen.scrollBy({ top: scrollDelta, behavior: "smooth" });
 }
+
+function updateFocusedVerseFromScroll() {
+  if (appShell?.dataset.modal !== "verse" || !verseSheet?.classList.contains("is-visible")) {
+    return;
+  }
+
+  const verses = [...readerScreen.querySelectorAll(".scripture-line, .parallel-scripture-line")];
+  if (!verses.length) return;
+
+  const screenRect = readerScreen.getBoundingClientRect();
+  const sheetRect = verseSheet.getBoundingClientRect();
+  const focusTop = screenRect.top + 18;
+  const focusBottom = Math.max(focusTop, sheetRect.top - 18);
+  const focusCenter = focusTop + (focusBottom - focusTop) / 2;
+  const nextVerse = verses.reduce((closest, verse) => {
+    const distance = Math.abs(verse.getBoundingClientRect().top + verse.getBoundingClientRect().height / 2 - focusCenter);
+    return !closest || distance < closest.distance ? { verse, distance } : closest;
+  }, null)?.verse;
+
+  if (!nextVerse || nextVerse.classList.contains("is-selected")) return;
+
+  document.querySelectorAll(".scripture-line.is-selected, .parallel-scripture-line.is-selected")
+    .forEach((line) => line.classList.remove("is-selected"));
+  nextVerse.classList.add("is-selected");
+  selectedVerseData = getVerseDataFromElement(nextVerse);
+  if (selectedVerse) selectedVerse.textContent = selectedVerseData.reference;
+  syncVerseActionStates();
+  navigator.vibrate?.(8);
+}
+
+let verseSheetTouchStartY = 0;
+let verseSheetTouchOnPanel = false;
+
+modalLayer?.addEventListener("wheel", (event) => {
+  if (appShell?.dataset.modal !== "verse" || event.target.closest(".bottom-sheet")) return;
+  event.preventDefault();
+  readerScreen.scrollBy({ top: event.deltaY, behavior: "auto" });
+});
+
+modalLayer?.addEventListener("touchstart", (event) => {
+  if (appShell?.dataset.modal !== "verse") return;
+  verseSheetTouchOnPanel = Boolean(event.target.closest(".bottom-sheet"));
+  if (!verseSheetTouchOnPanel) verseSheetTouchStartY = event.touches[0]?.clientY || 0;
+}, { passive: true });
+
+modalLayer?.addEventListener("touchmove", (event) => {
+  if (appShell?.dataset.modal !== "verse" || verseSheetTouchOnPanel) return;
+  const currentY = event.touches[0]?.clientY || verseSheetTouchStartY;
+  const delta = verseSheetTouchStartY - currentY;
+  if (Math.abs(delta) < 1) return;
+  event.preventDefault();
+  readerScreen.scrollBy({ top: delta, behavior: "auto" });
+  verseSheetTouchStartY = currentY;
+}, { passive: false });
 
 function getBook(bookId) {
   return BOOKS.find((book) => book.id === bookId) || BOOKS.find((book) => book.id === "JHN");
@@ -2994,14 +3076,9 @@ function renderChapter(chapter, parallelChapters = []) {
   const visibleVerses = readerState.showHighlightsOnly
     ? chapter.verses.filter((verse) => savedState.highlights[getCanonicalVerseKey(book.id, readerState.chapter, verse.number || 0)])
     : chapter.verses;
-  const filterNotice = readerState.showHighlightsOnly
-    ? `
-      <div class="reader-filter-banner">
-        <span>Versets highlightés</span>
-        <button data-clear-highlight-filter>Tout afficher</button>
-      </div>
-    `
-    : "";
+  // The active Cible button already indicates that the highlight filter is on.
+  // Keep the reading area clear instead of adding a second filter banner.
+  const filterNotice = "";
 
   if (!visibleVerses.length) {
     versesList.innerHTML = `
@@ -3274,6 +3351,7 @@ function renderParallelOptions() {
   parallelVersionOne.innerHTML = options;
   parallelVersionOne.value = readerState.parallelVersionIds[0];
   parallelToggle.classList.toggle("is-active", readerState.parallelEnabled);
+  readerTargetToggle?.classList.toggle("is-active", readerState.showHighlightsOnly);
   parallelSelects.hidden = !readerState.parallelEnabled;
 }
 
@@ -4051,6 +4129,7 @@ function askAiAboutVerse() {
   closeModal();
   setScreen("ai");
   if (aiComposerInput) {
+    stopAiComposerPromptRotation();
     aiComposerInput.value = `Explain ${selectedVerseData.reference} (${selectedVerseData.version}) with biblical context, original language, cross references, and application. Verse: "${selectedVerseData.text}"`;
     resizeAiComposerInput();
     aiComposerInput.focus();
@@ -4144,6 +4223,42 @@ function resizeAiComposerInput() {
   const nextHeight = Math.min(aiComposerInput.scrollHeight, 168);
   aiComposerInput.style.height = `${nextHeight}px`;
   aiComposerInput.style.overflowY = aiComposerInput.scrollHeight > nextHeight ? "auto" : "hidden";
+}
+
+const aiComposerPrompts = [
+  "Tu as une question ?",
+  "Tu cherches un verset ?",
+  "Tu veux comparer le sens d’un mot ?",
+];
+let aiComposerPromptIndex = 0;
+let aiComposerPromptTimer = null;
+let aiComposerPromptFadeTimer = null;
+
+function stopAiComposerPromptRotation() {
+  window.clearInterval(aiComposerPromptTimer);
+  window.clearTimeout(aiComposerPromptFadeTimer);
+  aiComposerPromptTimer = null;
+  aiComposerPromptFadeTimer = null;
+  aiComposerInput?.classList.remove("is-placeholder-fading");
+  if (aiComposerInput) aiComposerInput.placeholder = "";
+}
+
+function startAiComposerPromptRotation() {
+  if (!aiComposerInput || aiComposerInput.value.trim()) return;
+  stopAiComposerPromptRotation();
+  aiComposerInput.placeholder = aiComposerPrompts[aiComposerPromptIndex];
+  aiComposerPromptTimer = window.setInterval(() => {
+    if (aiComposerInput.value.trim()) {
+      stopAiComposerPromptRotation();
+      return;
+    }
+    aiComposerInput.classList.add("is-placeholder-fading");
+    aiComposerPromptFadeTimer = window.setTimeout(() => {
+      aiComposerPromptIndex = (aiComposerPromptIndex + 1) % aiComposerPrompts.length;
+      aiComposerInput.placeholder = aiComposerPrompts[aiComposerPromptIndex];
+      aiComposerInput.classList.remove("is-placeholder-fading");
+    }, 260);
+  }, 2000);
 }
 
 function appendAiMessage(role, text) {
@@ -4296,6 +4411,7 @@ function handleAiSubmit(event) {
 
   const history = getRecentAiMemory();
   aiComposerInput.value = "";
+  startAiComposerPromptRotation();
   resizeAiComposerInput();
   appendAiMessage("user", prompt);
   appendAiMessage("ai", "Brother AI is thinking...");
@@ -5128,6 +5244,16 @@ function initReader() {
     loadChapter();
   });
 
+  readerTargetToggle?.addEventListener("click", () => {
+    readerState.showHighlightsOnly = !readerState.showHighlightsOnly;
+    readerTargetToggle.classList.toggle("is-active", readerState.showHighlightsOnly);
+    if (readerState.parallelEnabled) {
+      loadChapter();
+    } else if (currentChapterData) {
+      renderChapter(currentChapterData);
+    }
+  });
+
   parallelVersionOne?.addEventListener("change", () => {
     readerState.parallelVersionIds = [parallelVersionOne.value];
     loadChapter();
@@ -5155,7 +5281,15 @@ if (aiForm) {
 
 if (aiComposerInput) {
   resizeAiComposerInput();
-  aiComposerInput.addEventListener("input", resizeAiComposerInput);
+  startAiComposerPromptRotation();
+  aiComposerInput.addEventListener("input", () => {
+    resizeAiComposerInput();
+    if (aiComposerInput.value.trim()) {
+      stopAiComposerPromptRotation();
+    } else {
+      startAiComposerPromptRotation();
+    }
+  });
 }
 
 if (newAiChatButton) {
