@@ -450,6 +450,287 @@ svg {
   color: #d5adff !important;
 }
 
+/* Brighter library cards on Home: highlights, bookmarks and notes. */
+.app-shell[data-app-background="black"] .home-library-panel .saved-note-card,
+.app-shell[data-app-background="black"] .home-library-panel .saved-verse-row,
+.app-shell[data-app-background="black"] .home-library-panel .saved-ai-row {
+  background: linear-gradient(135deg, rgba(74, 145, 183, 0.88), rgba(43, 88, 116, 0.9)) !important;
+  border-color: rgba(136, 218, 255, 0.52) !important;
+  box-shadow: inset 0 1px 0 rgba(236, 250, 255, 0.24), 0 12px 26px rgba(0, 0, 0, 0.32) !important;
+}
+
+.app-shell[data-app-background="black"] .home-library-panel .saved-note-card:nth-of-type(2n),
+.app-shell[data-app-background="black"] .home-library-panel .saved-verse-row:nth-of-type(2n),
+.app-shell[data-app-background="black"] .home-library-panel .saved-ai-row:nth-of-type(2n) {
+  background: linear-gradient(135deg, rgba(59, 151, 128, 0.86), rgba(38, 91, 91, 0.92)) !important;
+  border-color: rgba(126, 239, 195, 0.48) !important;
+}
+
+.app-shell[data-app-background="black"] .home-library-panel .saved-note-card:nth-of-type(3n),
+.app-shell[data-app-background="black"] .home-library-panel .saved-verse-row:nth-of-type(3n),
+.app-shell[data-app-background="black"] .home-library-panel .saved-ai-row:nth-of-type(3n) {
+  background: linear-gradient(135deg, rgba(112, 91, 169, 0.86), rgba(59, 65, 111, 0.92)) !important;
+  border-color: rgba(207, 173, 255, 0.5) !important;
+}
+
+/* Keep the Home library treatment ahead of the generic card theme. */
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-verse-row,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-ai-row {
+  background: rgba(62, 96, 121, 0.68) !important;
+  border-color: rgba(170, 215, 238, 0.34) !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card:nth-of-type(2n),
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-verse-row:nth-of-type(2n),
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-ai-row:nth-of-type(2n),
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card:nth-of-type(3n),
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-verse-row:nth-of-type(3n),
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-ai-row:nth-of-type(3n) {
+  background: rgba(62, 96, 121, 0.68) !important;
+  border-color: rgba(170, 215, 238, 0.34) !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card::before,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-verse-row::before,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-ai-row::before {
+  background: #55caff !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card:nth-of-type(2n)::before,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-verse-row:nth-of-type(2n)::before,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-ai-row:nth-of-type(2n)::before {
+  background: #68e4b2 !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card:nth-of-type(3n)::before,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-verse-row:nth-of-type(3n)::before,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-ai-row:nth-of-type(3n)::before {
+  background: #c08cff !important;
+}
+
+/* Profile: high-contrast hero, tabs and fields for the anthracite theme. */
+@keyframes profileRoseAtmosphere {
+  0% {
+    background-position: 0% 12%, 100% 88%, 0 0;
+  }
+  50% {
+    background-position: 52% 42%, 42% 56%, 0 0;
+  }
+  100% {
+    background-position: 100% 78%, 0% 18%, 0 0;
+  }
+}
+
+.app-shell[data-app-background="black"] #profile .profile-hero {
+  min-height: 286px !important;
+  border: 1px solid rgba(190, 227, 246, 0.34) !important;
+  border-radius: 28px !important;
+  background:
+    radial-gradient(circle at 14% 22%, rgba(255, 106, 184, 0.88), transparent 35%),
+    radial-gradient(circle at 88% 78%, rgba(214, 84, 224, 0.76), transparent 40%),
+    linear-gradient(135deg, #3b1834 0%, #241b35 48%, #35143a 100%) !important;
+  background-size: 180% 180%, 175% 175%, 100% 100% !important;
+  animation: profileRoseAtmosphere 12s ease-in-out infinite alternate;
+  will-change: background-position;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.32) !important;
+}
+
+.app-shell[data-app-background] #profile.profile-screen .profile-hero {
+  background-image:
+    linear-gradient(180deg, rgba(12, 24, 32, 0.2), rgba(10, 17, 23, 0.72)),
+    url("assets/cloud-account-zen.png") !important;
+  background-position: center !important;
+  background-size: cover !important;
+  animation: none !important;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-hero img {
+  display: none !important;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-hero::after {
+  background: linear-gradient(180deg, rgba(18, 12, 24, 0.04) 20%, rgba(18, 12, 24, 0.58) 100%) !important;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-hero-overlay {
+  border-color: rgba(190, 227, 246, 0.3) !important;
+  border-radius: 20px !important;
+  background: rgba(24, 39, 49, 0.74) !important;
+  box-shadow: inset 0 1px 0 rgba(236, 250, 255, 0.16), 0 8px 20px rgba(0, 0, 0, 0.28) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(125%);
+  backdrop-filter: blur(18px) saturate(125%);
+}
+
+.app-shell[data-app-background="black"] #profile .profile-avatar {
+  width: 92px !important;
+  height: 92px !important;
+  overflow: hidden !important;
+  border-color: rgba(139, 220, 255, 0.8) !important;
+  background: #254b61 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 0 4px rgba(139, 220, 255, 0.14) !important;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-avatar img {
+  position: static !important;
+  inset: auto !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  object-fit: cover !important;
+  object-position: center top !important;
+  filter: none !important;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-hero h1,
+.app-shell[data-app-background="black"] #profile .profile-hero p:not(.eyebrow),
+.app-shell[data-app-background="black"] #profile .profile-hero .eyebrow {
+  color: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-hero p:not(.eyebrow) {
+  opacity: 0.82;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-tabs {
+  border-color: rgba(190, 227, 246, 0.3) !important;
+  background: rgba(54, 82, 103, 0.46) !important;
+  box-shadow: inset 0 1px 0 rgba(236, 250, 255, 0.1) !important;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-tabs button {
+  color: #c9d5dd !important;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-tabs button svg {
+  color: currentColor !important;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-tabs button.is-active,
+.app-shell[data-app-background="black"] #profile .profile-tabs button.is-active:hover {
+  border: 1px solid rgba(139, 220, 255, 0.8) !important;
+  background: linear-gradient(135deg, #3c9dcc, #327fa8) !important;
+  color: #ffffff !important;
+  box-shadow: 0 5px 14px rgba(60, 157, 204, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+.app-shell[data-app-background="black"] #profile .preference-heading h2,
+.app-shell[data-app-background="black"] #profile .preference-heading span,
+.app-shell[data-app-background="black"] #profile .profile-info-section h2,
+.app-shell[data-app-background="black"] #profile .profile-auth-card h2 {
+  color: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] #profile .preference-heading span {
+  color: #b9d9e8 !important;
+}
+
+.app-shell[data-app-background="black"] #profile .preference-card,
+.app-shell[data-app-background="black"] #profile .profile-info-card,
+.app-shell[data-app-background="black"] #profile .profile-auth-card {
+  border-color: rgba(190, 227, 246, 0.3) !important;
+  background: rgba(44, 68, 84, 0.72) !important;
+  color: #ffffff !important;
+  box-shadow: inset 0 1px 0 rgba(236, 250, 255, 0.12), 0 9px 20px rgba(0, 0, 0, 0.24) !important;
+}
+
+.app-shell[data-app-background="black"] #profile .preference-copy strong,
+.app-shell[data-app-background="black"] #profile .preference-copy p,
+.app-shell[data-app-background="black"] #profile .profile-field span,
+.app-shell[data-app-background="black"] #profile .profile-info-actions p,
+.app-shell[data-app-background="black"] #profile .profile-auth-form p {
+  color: #e1edf3 !important;
+}
+
+.app-shell[data-app-background="black"] #profile .preference-copy > svg {
+  color: #9edcff !important;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-field input,
+.app-shell[data-app-background="black"] #profile .profile-field textarea,
+.app-shell[data-app-background="black"] #profile .profile-auth-form input {
+  border-color: rgba(190, 227, 246, 0.52) !important;
+  background: rgba(17, 27, 34, 0.82) !important;
+  color: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-field input::placeholder,
+.app-shell[data-app-background="black"] #profile .profile-field textarea::placeholder,
+.app-shell[data-app-background="black"] #profile .profile-auth-form input::placeholder {
+  color: #aebfca !important;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-save-button {
+  border-color: rgba(139, 220, 255, 0.82) !important;
+  background: #3c9dcc !important;
+  color: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] #profile .auth-connected-email {
+  border: 1px solid rgba(190, 227, 246, 0.42) !important;
+  border-radius: 16px !important;
+  background: rgba(17, 27, 34, 0.72) !important;
+  color: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] #profile .auth-connected-email span,
+.app-shell[data-app-background="black"] #profile .auth-connected-email strong {
+  color: #e1edf3 !important;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-auth-actions button[data-auth-action="sign-out"] {
+  border: 1px solid rgba(190, 227, 246, 0.42) !important;
+  border-radius: 14px !important;
+  background: rgba(54, 82, 103, 0.7) !important;
+  color: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-auth-actions button[data-auth-action="sign-out"]:hover {
+  border-color: rgba(139, 220, 255, 0.78) !important;
+  background: rgba(60, 157, 204, 0.7) !important;
+}
+
+.app-shell[data-app-background="black"] #profile .auth-forgot-button {
+  color: #9edcff !important;
+}
+
+.app-shell[data-app-background] #profile.profile-screen .profile-auth-card {
+  overflow: hidden;
+  border-color: rgba(190, 227, 246, 0.38) !important;
+  background-image:
+    linear-gradient(180deg, rgba(15, 27, 36, 0.58), rgba(10, 17, 23, 0.82)),
+    url("assets/cloud-account-zen.png") !important;
+  background-position: center !important;
+  background-size: cover !important;
+  color: #ffffff !important;
+  box-shadow: inset 0 1px 0 rgba(236, 250, 255, 0.16), 0 12px 26px rgba(0, 0, 0, 0.28) !important;
+}
+
+.app-shell[data-app-background="black"] #profile .segmented-control,
+.app-shell[data-app-background="black"] #profile .text-size-preview {
+  border-color: rgba(190, 227, 246, 0.34) !important;
+  background: rgba(17, 27, 34, 0.72) !important;
+}
+
+.app-shell[data-app-background="black"] #profile .segmented-control button {
+  color: #c9d5dd !important;
+}
+
+.app-shell[data-app-background="black"] #profile .segmented-control button.is-active {
+  border: 1px solid rgba(139, 220, 255, 0.78) !important;
+  background: #3c9dcc !important;
+  color: #ffffff !important;
+  box-shadow: 0 3px 10px rgba(60, 157, 204, 0.3) !important;
+}
+
+.app-shell[data-app-background="black"] #profile .text-size-preview span,
+.app-shell[data-app-background="black"] #profile .text-size-preview p,
+.app-shell[data-app-background="black"] #profile .text-size-preview sup {
+  color: #e1edf3 !important;
+}
+
 /* AI composer: squared input and a clearly visible send control. */
 .app-shell[data-app-background="black"] .ai-screen .composer {
   gap: 8px !important;
@@ -503,10 +784,388 @@ svg {
 /* Home hero: full-width image with a clean edge-to-edge treatment. */
 .app-shell[data-app-background="black"] .home-hero-image {
   width: calc(100% + 28px) !important;
-  min-height: 390px;
+  height: clamp(480px, 70vh, 620px) !important;
+  min-height: 0 !important;
   margin: -18px -14px 18px !important;
   border: 0 !important;
   border-radius: 0 !important;
+}
+
+.app-shell[data-app-background="black"] #home > .home-hero {
+  min-height: 0 !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Device frame: square outer corners. */
+.app-shell .phone-frame,
+.app-shell[data-app-background] .phone-frame {
+  border-radius: 0 !important;
+}
+
+/* Fade the Home hero image into the phone background at the bottom. */
+.app-shell[data-app-background="black"] .home-hero-image {
+  background: transparent !important;
+}
+
+.app-shell[data-app-background="black"] .home-hero-image img {
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 48%, rgba(0, 0, 0, 0.76) 64%, rgba(0, 0, 0, 0.26) 82%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 48%, rgba(0, 0, 0, 0.76) 64%, rgba(0, 0, 0, 0.26) 82%, transparent 100%);
+}
+
+.app-shell[data-app-background="black"] .home-hero-image::after {
+  background: linear-gradient(180deg, rgba(17, 18, 18, 0.04) 0%, rgba(17, 18, 18, 0.02) 55%, transparent 100%);
+}
+
+/* Home metrics float at the top of the hero image. */
+.app-shell[data-app-background="black"] #home {
+  position: relative;
+}
+
+.app-shell[data-app-background="black"] #home .home-stats {
+  position: absolute;
+  z-index: 3;
+  top: 24px;
+  right: auto;
+  left: 22px;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  width: 170px;
+  margin: 0 !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-stat-card {
+  min-height: 76px;
+  padding: 13px 14px !important;
+  border: 1px solid rgba(190, 227, 246, 0.3) !important;
+  border-radius: 16px !important;
+  background: rgba(54, 82, 103, 0.28) !important;
+  color: #ffffff !important;
+  box-shadow: inset 0 1px 0 rgba(220, 242, 255, 0.16), 0 8px 18px rgba(0, 0, 0, 0.18) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(125%);
+  backdrop-filter: blur(16px) saturate(125%);
+}
+
+.app-shell[data-app-background="black"] #home .home-stat-card span,
+.app-shell[data-app-background="black"] #home .home-stat-card strong {
+  color: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-stat-card strong {
+  font-size: 22px !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-stat-card--online {
+  background: rgba(79, 112, 119, 0.25) !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-stat-card--continue {
+  background: rgba(77, 98, 126, 0.28) !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-bible-timeline {
+  position: absolute;
+  z-index: 3;
+  top: 278px;
+  right: 22px;
+  left: 22px;
+  overflow: hidden;
+  height: 146px;
+  padding: 0;
+}
+
+.app-shell[data-app-background="black"] #home .home-bible-timeline-track {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  min-height: 146px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-wrap: nowrap;
+  padding: 0 14px;
+  scroll-padding-inline: 14px;
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
+  background:
+    linear-gradient(90deg, transparent, rgba(139, 220, 255, 0.78) 6%, rgba(139, 220, 255, 0.78) 94%, transparent)
+      0 73px / 100% 2px no-repeat,
+    linear-gradient(90deg, transparent, rgba(139, 220, 255, 0.18), transparent)
+      0 70px / 100% 8px no-repeat;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.app-shell[data-app-background="black"] #home .home-bible-timeline-track::before {
+  display: none;
+}
+
+.app-shell[data-app-background="black"] #home .home-bible-timeline-track::-webkit-scrollbar {
+  display: none;
+}
+
+.app-shell[data-app-background="black"] #home .home-bible-timeline-track button {
+  position: relative;
+  display: grid;
+  flex: 0 0 auto;
+  align-self: flex-start;
+  gap: 3px;
+  width: 124px;
+  min-width: 124px;
+  height: 56px;
+  min-height: 56px;
+  padding: 8px 11px;
+  border: 1px solid rgba(190, 227, 246, 0.28);
+  border-radius: 12px;
+  background: rgba(54, 82, 103, 0.28);
+  color: #dcecf5;
+  text-align: left;
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  backdrop-filter: blur(14px) saturate(120%);
+}
+
+.app-shell[data-app-background="black"] #home .home-bible-timeline-track button:nth-of-type(even) {
+  margin-top: 84px;
+}
+
+.app-shell[data-app-background="black"] #home .home-bible-timeline-track button::after {
+  position: absolute;
+  left: 50%;
+  width: 1px;
+  height: 17px;
+  content: "";
+  background: rgba(139, 220, 255, 0.72);
+  transform: translateX(-50%);
+}
+
+.app-shell[data-app-background="black"] #home .home-bible-timeline-track button:nth-of-type(odd)::after {
+  top: 100%;
+}
+
+.app-shell[data-app-background="black"] #home .home-bible-timeline-track button:nth-of-type(even)::after {
+  bottom: 100%;
+}
+
+.app-shell[data-app-background="black"] #home .home-bible-timeline-track button:hover {
+  border-color: rgba(139, 220, 255, 0.76);
+  background: rgba(60, 157, 204, 0.34);
+}
+
+.app-shell[data-app-background="black"] #home .home-bible-timeline-track button span {
+  color: #8bdcff;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.app-shell[data-app-background="black"] #home .home-bible-timeline-track button strong {
+  color: #ffffff;
+  font-size: 11px;
+  line-height: 1.15;
+  display: -webkit-box;
+  overflow: hidden;
+  white-space: normal;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+/* Bible reading content: add a little more breathing room at both edges. */
+.app-shell[data-app-background="black"] .reader-screen .scripture-page {
+  padding-right: 10px !important;
+  padding-left: 10px !important;
+}
+
+.app-shell[data-app-background="black"] .reader-screen .scripture-line,
+.app-shell[data-app-background="black"] .reader-screen .parallel-scripture-line {
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+}
+
+/* Notes editor: stronger contrast and a wider writing area. */
+.app-shell[data-app-background="black"] .note-editor-panel {
+  padding: 14px !important;
+  background: rgba(36, 38, 41, 0.96) !important;
+  color: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] .note-editor-title {
+  min-height: 42px !important;
+  margin: -2px 0 8px !important;
+  border: 1px solid rgba(139, 220, 255, 0.56) !important;
+  border-radius: 10px !important;
+  background: rgba(10, 14, 18, 0.72) !important;
+  color: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] .note-editor-title::placeholder {
+  color: #b8c6d0 !important;
+}
+
+.app-shell[data-app-background="black"] .note-editor-verse-chip {
+  border-color: rgba(190, 227, 246, 0.34) !important;
+  background: rgba(54, 82, 103, 0.68) !important;
+  color: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] .note-editor-verse-chip button {
+  background: rgba(255, 255, 255, 0.14) !important;
+  color: #d9f2ff !important;
+}
+
+.app-shell[data-app-background="black"] .note-editor-add-verse {
+  border-color: rgba(139, 220, 255, 0.66) !important;
+  background: rgba(60, 157, 204, 0.24) !important;
+  color: #a9e6ff !important;
+}
+
+.app-shell[data-app-background="black"] .note-editor-toolbar {
+  border-color: rgba(190, 227, 246, 0.42) !important;
+}
+
+.app-shell[data-app-background="black"] .note-editor-toolbar button,
+.app-shell[data-app-background="black"] .note-format-select {
+  width: 44px !important;
+  min-height: 44px !important;
+  border: 1px solid rgba(190, 227, 246, 0.28) !important;
+  border-radius: 11px !important;
+  background: rgba(54, 82, 103, 0.62) !important;
+  color: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] .note-editor-toolbar button svg,
+.app-shell[data-app-background="black"] .note-format-select svg {
+  width: 21px !important;
+  height: 21px !important;
+}
+
+.note-color-swatch {
+  width: 9px;
+  height: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  background: #201c17;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.18);
+}
+
+[data-note-highlight-swatch] {
+  background: #facc15;
+}
+
+.app-shell[data-app-background="black"] .note-editor-toolbar button:hover,
+.app-shell[data-app-background="black"] .note-format-select:hover {
+  background: rgba(60, 157, 204, 0.52) !important;
+}
+
+.note-editor-toolbar button svg {
+  width: 17px;
+  height: 17px;
+}
+
+.app-shell[data-app-background="black"] .note-editor-size-row,
+.app-shell[data-app-background="black"] .note-editor-size-row strong {
+  color: #e4f5ff !important;
+}
+
+.app-shell[data-app-background="black"] .note-editor-content {
+  width: 100% !important;
+  min-width: 0 !important;
+  margin: 10px 0 !important;
+  padding: 18px !important;
+  border: 1px solid rgba(190, 227, 246, 0.5) !important;
+  border-radius: 16px !important;
+  background: rgba(10, 14, 18, 0.22) !important;
+  color: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] .note-editor-content:focus {
+  border-color: #8bdcff !important;
+  box-shadow: 0 0 0 3px rgba(139, 220, 255, 0.16) !important;
+}
+
+.app-shell[data-app-background="black"] .note-editor-footer span {
+  color: #c8d6df !important;
+}
+
+.app-shell[data-app-background="black"] .note-editor-footer .primary-button {
+  min-height: 48px !important;
+  border: 1px solid #8bdcff !important;
+  border-radius: 13px !important;
+  background: #3c9dcc !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(60, 157, 204, 0.28) !important;
+}
+
+.app-shell[data-app-background="black"] .note-editor-footer .primary-button:not(.is-dirty) {
+  border-color: rgba(190, 227, 246, 0.34) !important;
+  background: transparent !important;
+  color: #d6e2e9 !important;
+  box-shadow: none !important;
+}
+
+.app-shell[data-app-background="black"] .note-editor-footer .primary-button.is-dirty {
+  background: #77d7a6 !important;
+  border-color: #a9f0c9 !important;
+  color: #123c2b !important;
+}
+
+/* Notes layout: balanced edges while preserving the bottom navigation. */
+.app-shell[data-app-background="black"][data-modal="note"] .modal-layer {
+  align-items: flex-start !important;
+  justify-items: stretch !important;
+  padding: 0 !important;
+  background: rgba(10, 13, 16, 0.16) !important;
+}
+
+.app-shell[data-app-background="black"][data-modal="note"] .note-editor-panel {
+  width: 100% !important;
+  height: calc(100% - var(--bottom-nav-height)) !important;
+  max-height: calc(100% - var(--bottom-nav-height)) !important;
+  margin: 0 !important;
+  padding: 18px !important;
+  border-radius: 0 !important;
+  background: rgba(54, 82, 103, 0.24) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(135%);
+  backdrop-filter: blur(24px) saturate(135%);
+}
+
+.app-shell[data-app-background="black"][data-modal="note"] .note-editor-panel-header button {
+  border: 1px solid rgba(190, 227, 246, 0.42) !important;
+  background: rgba(54, 82, 103, 0.72) !important;
+  color: #d9f2ff !important;
+  box-shadow: inset 0 1px 0 rgba(220, 242, 255, 0.14) !important;
+}
+
+.app-shell[data-app-background="black"][data-modal="note"] .bottom-nav {
+  z-index: 2000 !important;
+  display: grid !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  transform: none !important;
+  pointer-events: auto !important;
+}
+
+.app-shell[data-app-background="black"] .note-undo-button {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  min-height: 42px;
+  padding: 0;
+  border: 1px solid rgba(139, 220, 255, 0.46) !important;
+  border-radius: 13px;
+  background: rgba(60, 157, 204, 0.22) !important;
+  color: #a9e6ff !important;
+}
+
+.app-shell[data-app-background="black"] .note-undo-button:hover {
+  background: rgba(60, 157, 204, 0.5) !important;
+  color: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] .note-undo-button svg {
+  width: 18px;
+  height: 18px;
 }
 
 /* AI dark theme: user bubble, tabs and response actions. */

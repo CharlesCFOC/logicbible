@@ -62,6 +62,7 @@ const aiBookmarksKey = "brother.aiBookmarks";
 const apologeticsChatKey = "brother.apologeticsChat";
 const apologeticsProgressKey = "brother.apologeticsProgress";
 const apologeticsGateSessionKey = "brother.apologeticsUnlocked";
+const pendingSyncKey = "app.pendingSync";
 const aiMemoryTtlMs = 24 * 60 * 60 * 1000;
 const maxAiMemoryMessages = 24;
 const aiTabs = [...document.querySelectorAll("[data-ai-tab]")];
@@ -301,13 +302,22 @@ let noteEditorGroupId = "";
 let noteEditorSelectionRange = null;
 let noteEditorAddingVerses = false;
 let noteEditorNoteTitle = "";
+let noteAutosaveTimer = null;
 
 function markNoteEditorDirty() {
   saveRichNoteButton?.classList.add("is-dirty");
+  window.clearTimeout(noteAutosaveTimer);
+  noteAutosaveTimer = window.setTimeout(() => {
+    if (noteEditorPanel?.classList.contains("is-visible") && saveRichNoteButton?.classList.contains("is-dirty")) {
+      saveRichNote();
+    }
+  }, 2000);
 }
 
 function resetNoteEditorDirty() {
   saveRichNoteButton?.classList.remove("is-dirty");
+  window.clearTimeout(noteAutosaveTimer);
+  noteAutosaveTimer = null;
 }
 let multiLongPressTimer = null;
 let suppressVerseClickUntil = 0;
@@ -823,6 +833,10 @@ function readJson(key, fallback) {
 
 function writeJson(key, value) {
   localStorage.setItem(key, JSON.stringify(value));
+  if (key === "brother.notes") {
+    markPendingSync(key);
+    return;
+  }
   syncStateKey(key, value);
 }
 
@@ -862,6 +876,26 @@ function decodeRemotePayload(payload) {
   return typeof payload === "string" ? payload : JSON.stringify(payload);
 }
 
+function getPendingSyncKeys() {
+  return new Set(readJson(pendingSyncKey, []));
+}
+
+function markPendingSync(key) {
+  const pendingKeys = getPendingSyncKeys();
+  pendingKeys.add(key);
+  localStorage.setItem(pendingSyncKey, JSON.stringify([...pendingKeys]));
+}
+
+function clearPendingSync(key) {
+  const pendingKeys = getPendingSyncKeys();
+  pendingKeys.delete(key);
+  if (pendingKeys.size) {
+    localStorage.setItem(pendingSyncKey, JSON.stringify([...pendingKeys]));
+  } else {
+    localStorage.removeItem(pendingSyncKey);
+  }
+}
+
 async function syncStateKey(key, value) {
   if (key === "brother.prayerRequests" || !supabaseClient || !supabaseUser || isHydratingSupabase || !key.startsWith("brother.")) {
     return;
@@ -876,7 +910,34 @@ async function syncStateKey(key, value) {
 
   if (error) {
     console.warn("Supabase state sync failed:", error.message);
+    return false;
   }
+  clearPendingSync(key);
+  return true;
+}
+
+let pendingSyncPromise = null;
+
+async function syncPendingState() {
+  if (!supabaseClient || !supabaseUser || isHydratingSupabase || !getPendingSyncKeys().size) {
+    return;
+  }
+  if (pendingSyncPromise) {
+    return pendingSyncPromise;
+  }
+
+  pendingSyncPromise = (async () => {
+    const pendingKeys = [...getPendingSyncKeys()];
+    for (const key of pendingKeys) {
+      if (key === "brother.notes") {
+        await syncStateKey(key, readJson(key, {}));
+      }
+    }
+  })().finally(() => {
+    pendingSyncPromise = null;
+  });
+
+  return pendingSyncPromise;
 }
 
 function setAuthFeedback(message, isError = false) {
@@ -927,8 +988,11 @@ async function hydrateSupabaseState() {
     const remoteRows = new Map((rows || []).map((row) => [row.state_key, row.payload]));
     const missingRows = [];
 
+    const pendingKeys = getPendingSyncKeys();
     remoteRows.forEach((payload, key) => {
-      localStorage.setItem(key, decodeRemotePayload(payload));
+      if (!pendingKeys.has(key)) {
+        localStorage.setItem(key, decodeRemotePayload(payload));
+      }
     });
 
     localRows.forEach((payload, key) => {
@@ -997,6 +1061,7 @@ async function handleSupabaseSession(session) {
   }
 
   try {
+    await syncPendingState();
     const hydrated = await hydrateSupabaseState();
     await loadPrayerFromSupabase();
     const marker = sessionStorage.getItem("brother.supabaseHydratedUser");
@@ -1616,7 +1681,10 @@ function applyProfile() {
   savedProfile.avatarInitials = avatarInitials;
 
   if (profileAvatar) {
-    profileAvatar.textContent = avatarInitials;
+    const profilePhoto = profileAvatar.querySelector("img");
+    if (!profilePhoto) {
+      profileAvatar.textContent = avatarInitials;
+    }
   }
   if (profileName) {
     profileName.textContent = displayName;
@@ -2595,6 +2663,9 @@ function initApologeticsGate() {
 }
 
 function setScreen(id) {
+  if (noteEditorPanel?.classList.contains("is-visible")) {
+    closeModal();
+  }
   const activeNavId = id.startsWith("apologetics") ? "apologetics" : id;
   if (id !== "bible" && multiSelectMode) {
     exitMultiSelectMode();
@@ -2665,6 +2736,7 @@ function showModal(panel) {
   modalLayer.hidden = false;
   panel.classList.add("is-visible");
   appShell.dataset.modal = panel === verseSheet ? "verse" : panel === verseAiPanel ? "verse-ai" : isNotePanel ? "note" : "standard";
+  if (isNotePanel) bottomNav?.classList.remove("is-scroll-hidden");
   if (panel === verseSheet) {
     readerScreen?.classList.add("is-verse-focused");
     window.requestAnimationFrame(centerSelectedVerse);
@@ -2676,6 +2748,9 @@ function showModal(panel) {
 }
 
 function closeModal(options = {}) {
+  if (noteEditorPanel?.classList.contains("is-visible")) {
+    saveRichNote();
+  }
   if (noteEditorPanel?.classList.contains("is-visible") && !options.preserveNoteAddMode) {
     noteEditorAddingVerses = false;
   }
@@ -3929,9 +4004,11 @@ function renderNoteEditorVerseChips() {
       noteEditorReference.textContent = noteEditorVerseItems.length === 1
         ? noteEditorVerseItems[0].reference
         : `${noteEditorVerseItems.length} verses selected`;
-      noteEditorStatus.textContent = noteEditorVerseItems.length
-        ? `This note will be saved to ${noteEditorVerseItems.length} verse${noteEditorVerseItems.length === 1 ? "" : "s"}.`
-        : "Add a verse before saving this note.";
+      if (noteEditorStatus) {
+        noteEditorStatus.textContent = noteEditorVerseItems.length
+          ? `This note will be saved to ${noteEditorVerseItems.length} verse${noteEditorVerseItems.length === 1 ? "" : "s"}.`
+          : "";
+      }
       setFeedback(removed ? `${removed.reference} removed from the note.` : "Verse removed from the note.");
     });
   });
@@ -3992,7 +4069,9 @@ function openRichNoteEditor() {
   if (wasAddingVerses) {
     markNoteEditorDirty();
   }
-  noteEditorStatus.textContent = `This note will be saved to ${items.length} verse${items.length === 1 ? "" : "s"}.`;
+  if (noteEditorStatus) {
+    noteEditorStatus.textContent = `This note will be saved to ${items.length} verse${items.length === 1 ? "" : "s"}.`;
+  }
   showModal(noteEditorPanel);
   noteEditorContent.focus();
 }
@@ -5376,6 +5455,21 @@ homeLibraryTabButtons.forEach((button) => {
   button.addEventListener("click", () => renderHomeLibraryTab(button.dataset.homeLibraryTab));
 });
 
+document.querySelectorAll("[data-home-era-book]").forEach((button) => {
+  button.addEventListener("click", () => {
+    const bookId = button.dataset.homeEraBook;
+    if (!BOOKS.some((book) => book.id === bookId)) return;
+    readerState.bookId = bookId;
+    readerState.chapter = 1;
+    setLocalValue("brother.book", bookId);
+    setLocalValue("brother.chapter", "1");
+    renderBookOptions();
+    renderChapterOptions();
+    setScreen("bible");
+    loadChapter();
+  });
+});
+
 renderHomeLibraryTab("notes");
 
 document.querySelectorAll("[data-verse-action]").forEach((button) => {
@@ -5394,7 +5488,17 @@ document.querySelectorAll("[data-note-command]").forEach((button) => {
   });
 });
 
-document.querySelector("[data-note-color]")?.addEventListener("input", (event) => {
+function updateNoteColorSwatch(input, selector) {
+  input?.closest("label")?.querySelector(selector)?.style.setProperty("background", input.value);
+}
+
+const noteColorInput = document.querySelector("[data-note-color]");
+const noteHighlightInput = document.querySelector("[data-note-highlight]");
+updateNoteColorSwatch(noteColorInput, "[data-note-color-swatch]");
+updateNoteColorSwatch(noteHighlightInput, "[data-note-highlight-swatch]");
+
+noteColorInput?.addEventListener("input", (event) => {
+  updateNoteColorSwatch(event.target, "[data-note-color-swatch]");
   restoreNoteSelection();
   noteEditorContent?.focus();
   document.execCommand("foreColor", false, event.target.value);
@@ -5402,7 +5506,8 @@ document.querySelector("[data-note-color]")?.addEventListener("input", (event) =
   markNoteEditorDirty();
 });
 
-document.querySelector("[data-note-highlight]")?.addEventListener("input", (event) => {
+noteHighlightInput?.addEventListener("input", (event) => {
+  updateNoteColorSwatch(event.target, "[data-note-highlight-swatch]");
   restoreNoteSelection();
   noteEditorContent?.focus();
   document.execCommand("hiliteColor", false, event.target.value);
@@ -5656,6 +5761,23 @@ document.addEventListener("keydown", (event) => {
     showModal(searchPanel);
   }
 });
+
+function persistNotesBeforeBackground() {
+  if (noteEditorPanel?.classList.contains("is-visible")) {
+    saveRichNote();
+  }
+  syncPendingState();
+}
+
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden") {
+    persistNotesBeforeBackground();
+  } else {
+    syncPendingState();
+  }
+});
+
+window.addEventListener("pagehide", persistNotesBeforeBackground);
 
 modalLayer.addEventListener("click", (event) => {
   if (event.target === modalLayer) {
