@@ -826,18 +826,18 @@ svg {
 .app-shell[data-app-background="black"] #home .home-stats {
   position: absolute;
   z-index: 3;
-  top: 24px;
+  top: 18px;
   right: auto;
   left: 22px;
   grid-template-columns: 1fr;
-  gap: 8px;
-  width: 170px;
+  gap: 6px;
+  width: 145px;
   margin: 0 !important;
 }
 
 .app-shell[data-app-background="black"] #home .home-stat-card {
-  min-height: 76px;
-  padding: 13px 14px !important;
+  min-height: 56px;
+  padding: 10px 11px !important;
   border: 1px solid rgba(190, 227, 246, 0.3) !important;
   border-radius: 16px !important;
   background: rgba(54, 82, 103, 0.28) !important;
@@ -853,7 +853,7 @@ svg {
 }
 
 .app-shell[data-app-background="black"] #home .home-stat-card strong {
-  font-size: 22px !important;
+  font-size: 18px !important;
 }
 
 .app-shell[data-app-background="black"] #home .home-stat-card--online {
@@ -867,11 +867,11 @@ svg {
 .app-shell[data-app-background="black"] #home .home-bible-timeline {
   position: absolute;
   z-index: 3;
-  top: 278px;
+  top: 214px;
   right: 22px;
   left: 22px;
   overflow: hidden;
-  height: 146px;
+  height: 132px;
   padding: 0;
 }
 
@@ -882,7 +882,7 @@ svg {
   gap: 8px;
   width: 100%;
   min-width: 0;
-  min-height: 146px;
+  min-height: 132px;
   overflow-x: auto;
   overflow-y: hidden;
   flex-wrap: nowrap;
@@ -892,9 +892,9 @@ svg {
   overscroll-behavior-x: contain;
   background:
     linear-gradient(90deg, transparent, rgba(139, 220, 255, 0.78) 6%, rgba(139, 220, 255, 0.78) 94%, transparent)
-      0 73px / 100% 2px no-repeat,
+      0 66px / 100% 2px no-repeat,
     linear-gradient(90deg, transparent, rgba(139, 220, 255, 0.18), transparent)
-      0 70px / 100% 8px no-repeat;
+      0 63px / 100% 8px no-repeat;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
 }
@@ -913,10 +913,10 @@ svg {
   flex: 0 0 auto;
   align-self: flex-start;
   gap: 3px;
-  width: 124px;
-  min-width: 124px;
-  height: 56px;
-  min-height: 56px;
+  width: 112px;
+  min-width: 112px;
+  height: 50px;
+  min-height: 50px;
   padding: 8px 11px;
   border: 1px solid rgba(190, 227, 246, 0.28);
   border-radius: 12px;
@@ -928,14 +928,14 @@ svg {
 }
 
 .app-shell[data-app-background="black"] #home .home-bible-timeline-track button:nth-of-type(even) {
-  margin-top: 84px;
+  margin-top: 76px;
 }
 
 .app-shell[data-app-background="black"] #home .home-bible-timeline-track button::after {
   position: absolute;
   left: 50%;
   width: 1px;
-  height: 17px;
+  height: 13px;
   content: "";
   background: rgba(139, 220, 255, 0.72);
   transform: translateX(-50%);
