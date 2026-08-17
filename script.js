@@ -204,6 +204,12 @@ const backgroundOptionButtons = [...document.querySelectorAll("[data-background-
 const textSizeOptionButtons = [...document.querySelectorAll("[data-text-size-option]")];
 const accentOptionButtons = [...document.querySelectorAll("[data-accent-option]")];
 const profileAvatar = document.querySelector("[data-profile-avatar]");
+const profileCover = document.querySelector("[data-profile-cover]");
+const profileStyleToggle = document.querySelector("[data-profile-style-toggle]");
+const profileStyleEditor = document.querySelector("[data-profile-style-editor]");
+const profileCoverInput = document.querySelector("[data-profile-cover-input]");
+const profileCoverReset = document.querySelector("[data-profile-cover-reset]");
+const profileStyleFeedback = document.querySelector("[data-profile-style-feedback]");
 const profileName = document.querySelector("[data-profile-name]");
 const profileStreak = document.querySelector("[data-profile-streak]");
 const profileForm = document.querySelector("[data-profile-form]");
@@ -231,6 +237,9 @@ const homeStreak = document.querySelector("[data-home-streak]");
 const peopleOnline = document.querySelector("[data-people-online]");
 const homeContinueReading = document.querySelector("[data-home-continue-reading]");
 const homePrayerCount = document.querySelector("[data-home-prayer-count]");
+let peopleOnlineValue = Number(peopleOnline?.textContent) || 128;
+let peopleOnlineInterval = null;
+let peopleOnlineAnimationFrame = null;
 const prayerForm = document.querySelector("[data-prayer-form]");
 const prayerRequestPanel = document.querySelector("[data-prayer-request-panel]");
 const prayerList = document.querySelector("[data-prayer-list]");
@@ -289,7 +298,7 @@ const readerState = {
   versions: [...LOCAL_VERSIONS],
   showHighlightsOnly: false,
   parallelEnabled: localStorage.getItem("brother.parallel") === "true",
-  parallelVersionIds: readJson("brother.parallelVersions", ["local-web"]),
+  parallelVersionIds: readJson("brother.parallelVersions", ["local-kjv"]),
 };
 let chapterRequestId = 0;
 let selectedVerseData = null;
@@ -347,9 +356,10 @@ const defaultPreferences = {
 };
 const defaultProfile = {
   displayName: "Charles",
+  coverImage: "assets/profile-hero-v2.png",
   email: "",
   country: "",
-  age: "",
+  dateOfBirth: "",
   avatarInitials: "CB",
   bio: "Focused on Scripture, apologetics, and daily spiritual growth.",
   streakLabel: "18 days in Scripture",
@@ -417,9 +427,8 @@ const greekInsights = {
 
 const compareVersions = {
   KJV: "King James Version",
-  WEB: "World English Bible",
 };
-const popularVersionOrder = ["KJV", "NKJV", "NLT", "CSB", "WEB"];
+const popularVersionOrder = ["KJV", "NKJV", "NLT", "CSB"];
 const textSizeOptions = {
   xs: "15px",
   small: "17px",
@@ -1020,7 +1029,7 @@ async function hydrateSupabaseState() {
         email: profile.email || supabaseUser.email || "",
         displayName: profile.display_name || localProfile.displayName || "Charles",
         country: profile.country || localProfile.country || "",
-        age: profile.age || localProfile.age || "",
+        dateOfBirth: localProfile.dateOfBirth || "",
         avatarInitials: localProfile.avatarInitials || getProfileInitials(profile.display_name),
         bio: profile.bio || localProfile.bio || "",
         accountId: profile.id,
@@ -1214,6 +1223,50 @@ function getTodayKey() {
   }).format(new Date());
 }
 
+function animatePeopleOnline(nextValue) {
+  if (!peopleOnline) return;
+  const startValue = peopleOnlineValue;
+  const startedAt = performance.now();
+  const duration = 1700;
+
+  window.cancelAnimationFrame(peopleOnlineAnimationFrame);
+  const step = (now) => {
+    const progress = Math.min(1, (now - startedAt) / duration);
+    const eased = 1 - ((1 - progress) ** 3);
+    peopleOnline.textContent = String(Math.round(startValue + ((nextValue - startValue) * eased)));
+    if (progress < 1) {
+      peopleOnlineAnimationFrame = window.requestAnimationFrame(step);
+    } else {
+      peopleOnlineValue = nextValue;
+    }
+  };
+  peopleOnlineAnimationFrame = window.requestAnimationFrame(step);
+}
+
+function updatePeopleOnline() {
+  if (!peopleOnline) return;
+  const hour = new Date().getHours();
+  const targetByHour = hour < 7
+    ? 135
+    : hour < 11
+      ? 210
+      : hour < 17
+        ? 310
+        : hour < 20
+          ? 430
+          : hour < 22
+            ? 525
+            : 600;
+  const step = Math.floor(Math.random() * 3) + 3;
+  let direction = Math.random() > 0.5 ? 1 : -1;
+
+  if (peopleOnlineValue < targetByHour - 8) direction = 1;
+  if (peopleOnlineValue > targetByHour + 8) direction = -1;
+
+  const nextValue = Math.max(100, Math.min(640, peopleOnlineValue + (step * direction)));
+  animatePeopleOnline(nextValue);
+}
+
 function initHomeStats() {
   const storageKey = "brother.homeActivity";
   const activity = readJson(storageKey, { lastDate: "", streak: 0 });
@@ -1238,7 +1291,11 @@ function initHomeStats() {
   }
 
   if (peopleOnline) {
-    peopleOnline.textContent = String(Math.floor(Math.random() * 91) + 120);
+    peopleOnlineValue = Number(peopleOnline.textContent) || peopleOnlineValue;
+    peopleOnline.textContent = String(peopleOnlineValue);
+    if (!peopleOnlineInterval) {
+      peopleOnlineInterval = window.setInterval(updatePeopleOnline, 2000);
+    }
   }
   updateHomeContinueReading();
   updateHomePrayerCount();
@@ -1636,6 +1693,34 @@ function saveProfile() {
   syncProfileRecord();
 }
 
+function setProfileStyleFeedback(message, isError = false) {
+  if (!profileStyleFeedback) return;
+  profileStyleFeedback.textContent = message;
+  profileStyleFeedback.dataset.state = isError ? "error" : "success";
+}
+
+function compressProfileCover(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const image = new Image();
+      image.onload = () => {
+        const maxWidth = 1200;
+        const scale = Math.min(1, maxWidth / image.width);
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.max(1, Math.round(image.width * scale));
+        canvas.height = Math.max(1, Math.round(image.height * scale));
+        canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL("image/jpeg", 0.82));
+      };
+      image.onerror = () => reject(new Error("Unable to read this image."));
+      image.src = reader.result;
+    };
+    reader.onerror = () => reject(new Error("Unable to read this image."));
+    reader.readAsDataURL(file);
+  });
+}
+
 async function syncProfileRecord() {
   if (!supabaseClient || !supabaseUser) return;
   const { error } = await supabaseClient.from("profiles").upsert({
@@ -1673,12 +1758,16 @@ function applyProfile() {
 
   savedProfile.displayName = displayName;
   savedProfile.country = String(savedProfile.country || "").trim();
-  savedProfile.age = savedProfile.age ? String(savedProfile.age) : "";
+  savedProfile.dateOfBirth = String(savedProfile.dateOfBirth || "").trim();
   savedProfile.streakLabel = streakLabel;
   savedProfile.authStatus = authStatus;
   savedProfile.storageStatus = storageStatus;
   savedProfile.accountId = accountId;
   savedProfile.avatarInitials = avatarInitials;
+
+  if (profileCover) {
+    profileCover.src = savedProfile.coverImage || defaultProfile.coverImage;
+  }
 
   if (profileAvatar) {
     const profilePhoto = profileAvatar.querySelector("img");
@@ -1710,8 +1799,8 @@ function applyProfile() {
     if (formData.get("country") !== (savedProfile.country || "")) {
       profileForm.elements.country.value = savedProfile.country || "";
     }
-    if (formData.get("age") !== String(savedProfile.age || "")) {
-      profileForm.elements.age.value = savedProfile.age || "";
+    if (formData.get("dateOfBirth") !== savedProfile.dateOfBirth) {
+      profileForm.elements.dateOfBirth.value = savedProfile.dateOfBirth;
     }
   }
 }
@@ -1815,6 +1904,46 @@ function initPreferences() {
 function initProfile() {
   applyProfile();
 
+  let profileCoverDraft = savedProfile.coverImage || defaultProfile.coverImage;
+
+  profileStyleToggle?.addEventListener("click", () => {
+    const willOpen = profileStyleEditor?.hidden !== false;
+    if (profileStyleEditor) profileStyleEditor.hidden = !willOpen;
+    profileStyleToggle.setAttribute("aria-expanded", String(willOpen));
+    if (!willOpen) {
+      profileCoverDraft = savedProfile.coverImage || defaultProfile.coverImage;
+      if (profileCover) profileCover.src = profileCoverDraft;
+      if (profileCoverInput) profileCoverInput.value = "";
+    }
+  });
+
+  profileCoverInput?.addEventListener("change", async () => {
+    const file = profileCoverInput.files?.[0];
+    if (!file) return;
+    try {
+      profileCoverDraft = await compressProfileCover(file);
+      if (profileCover) profileCover.src = profileCoverDraft;
+      setProfileStyleFeedback("Cover preview ready. Save to apply it.");
+    } catch (error) {
+      setProfileStyleFeedback(error.message, true);
+    }
+  });
+
+  profileCoverReset?.addEventListener("click", () => {
+    profileCoverDraft = defaultProfile.coverImage;
+    if (profileCover) profileCover.src = profileCoverDraft;
+    if (profileCoverInput) profileCoverInput.value = "";
+    setProfileStyleFeedback("Default cover restored. Save to apply it.");
+  });
+
+  profileStyleEditor?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    savedProfile.coverImage = profileCoverDraft;
+    saveProfile();
+    applyProfile();
+    setProfileStyleFeedback(supabaseUser ? "Style saved and synced." : "Style saved on this device.");
+  });
+
   if (!profileForm) {
     return;
   }
@@ -1824,11 +1953,11 @@ function initProfile() {
 
     const displayName = String(profileForm.elements.displayName.value || "").trim();
     const country = String(profileForm.elements.country.value || "").trim();
-    const age = String(profileForm.elements.age.value || "").trim();
+    const dateOfBirth = String(profileForm.elements.dateOfBirth.value || "").trim();
 
     savedProfile.displayName = displayName || defaultProfile.displayName;
     savedProfile.country = country;
-    savedProfile.age = age;
+    savedProfile.dateOfBirth = dateOfBirth;
 
     saveProfile();
     applyProfile();
@@ -2755,6 +2884,7 @@ function closeModal(options = {}) {
     noteEditorAddingVerses = false;
   }
   [searchPanel, verseSheet, verseAiPanel, noteEditorPanel].forEach((item) => item?.classList.remove("is-visible"));
+  verseSheet?.classList.remove("is-original-language");
   modalLayer.hidden = true;
   delete appShell.dataset.modal;
   readerScreen?.classList.remove("is-verse-focused");
@@ -2946,7 +3076,6 @@ function dedupeVersions(versions) {
 
 function getPopularVersionKey(version) {
   if (version.id === "local-kjv") return "KJV";
-  if (version.id === "local-web") return "WEB";
   return String(version.abbreviation || "").toUpperCase().replace(/\s+/g, "");
 }
 
@@ -2989,9 +3118,6 @@ function getRemoteFallbackVersion(localVersionId) {
     );
   }
 
-  if (localVersionId === "local-web") {
-    return remoteVersions.find((version) => /World English Bible|WEB/i.test(`${version.abbreviation} ${version.name}`));
-  }
 
   return null;
 }
@@ -3203,8 +3329,26 @@ function getVerseTextFromChapter(chapter, verseNumber) {
 }
 
 function renderParallelVerses(visibleVerses, chapter, parallelChapters, book, version) {
+  const activeVersion = chapter.version || version.abbreviation;
+  const activeVersionName = chapter.versionName || version.name || activeVersion;
+  const comparisonChapter = parallelChapters[0];
+  const comparisonVersion = comparisonChapter?.version || getVersion(readerState.parallelVersionIds[0])?.abbreviation || "Compare";
+  const comparisonVersionName = comparisonChapter?.versionName || getVersion(readerState.parallelVersionIds[0])?.name || comparisonVersion;
+
   return `
     <div class="parallel-scripture-grid">
+      <div class="parallel-version-headers" aria-label="Bible versions">
+        <div class="parallel-version-header is-primary">
+          <span>Current version</span>
+          <strong>${escapeHtml(`${getVersionLanguageFlag(version)} ${activeVersion}`)}</strong>
+          <small>${escapeHtml(activeVersionName)}</small>
+        </div>
+        <div class="parallel-version-header is-compare">
+          <span>Compared version</span>
+          <strong>${escapeHtml(`${getVersionLanguageFlag(getVersion(readerState.parallelVersionIds[0]) || version)} ${comparisonVersion}`)}</strong>
+          <small>${escapeHtml(comparisonVersionName)}</small>
+        </div>
+      </div>
       ${visibleVerses
     .map((verse) => {
       const reference = `${book.name} ${readerState.chapter}${verse.number ? `:${verse.number}` : ""}`;
@@ -3217,8 +3361,6 @@ function renderParallelVerses(visibleVerses, chapter, parallelChapters, book, ve
       const bookmarked = savedState.bookmarks[versionedKey] ? " is-bookmarked" : "";
       const noted = note ? " is-noted" : "";
       const colorStyle = highlight?.colorValue ? ` style="--highlight-color: ${highlight.colorValue}"` : "";
-      const comparisonChapter = parallelChapters[0];
-      const comparisonVersion = comparisonChapter?.version || getVersion(readerState.parallelVersionIds[0])?.abbreviation || "Compare";
       const comparisonText = comparisonChapter
         ? getVerseTextFromChapter(comparisonChapter, verse.number) || "Verse not available in this version."
         : "Choose a version to compare.";
@@ -3463,7 +3605,7 @@ async function loadRemoteVersions() {
 
     readerState.versions = dedupeVersions([
       ...LOCAL_VERSIONS,
-      ...remoteVersions,
+      ...remoteVersions.filter((version) => !/\bWEB\b|World English Bible/i.test(`${version.abbreviation || ""} ${version.name || ""}`)),
     ]);
     renderVersionOptions();
     loadChapter();
@@ -4636,13 +4778,18 @@ function getAiMessageId(text) {
 
 async function showOriginalLanguagePanel() {
   const language = getOriginalLanguage(selectedVerseData.bookId);
+  verseSheet?.classList.add("is-original-language");
+  appShell.dataset.modal = "original-language";
   verseDetail.hidden = false;
   verseDetail.innerHTML = `
     <div class="detail-stack">
+      <button type="button" class="original-language-close" data-original-language-close aria-label="Close original language panel"><i data-lucide="x"></i></button>
       <h3>${language.title}</h3>
       <p>Loading original-language data...</p>
     </div>
   `;
+  verseDetail.querySelector("[data-original-language-close]")?.addEventListener("click", closeModal);
+  refreshIcons();
 
   try {
     const params = new URLSearchParams({
@@ -4657,31 +4804,146 @@ async function showOriginalLanguagePanel() {
       throw new Error(payload.error || "Original-language data is not available for this verse.");
     }
 
+    const isHebrew = payload.language === "hebrew";
+    const translationWords = String(selectedVerseData.text || "").split(/(\s+)/);
+    let translationWordIndex = 0;
+    let translationTokenOrdinal = 0;
+    const translationTokens = translationWords
+      .map((part, index) => ({
+        index,
+        wordIndex: /^\s+$/.test(part) ? null : translationTokenOrdinal++,
+        value: part,
+        normalized: part.toLowerCase().replace(/[^a-z0-9]/g, ""),
+      }))
+      .filter((part) => part.normalized && part.wordIndex !== null);
+    const translationMarkup = translationWords.map((part) => {
+      if (/^\s+$/.test(part)) return part;
+      const markup = `<span data-interlinear-verse-word="${translationWordIndex}">${escapeHtml(part)}</span>`;
+      translationWordIndex += 1;
+      return markup;
+    }).join("");
+    const wordAliases = {
+      one: ["first"],
+      two: ["second"],
+      three: ["third"],
+      four: ["fourth"],
+      yahweh: ["lord"],
+      lord: ["yahweh"],
+      "to be": ["came", "was", "is"],
+      repen: ["returned", "repent", "return"],
+      repent: ["returned", "repent", "return"],
+      say: ["said", "says"],
+      says: ["said", "says"],
+    };
+    const usedTranslationIndexes = new Set();
+    let translationCursor = 0;
+    const matchesToken = (token, candidate) => {
+      const aliases = [candidate, ...(wordAliases[candidate] || [])];
+      return aliases.some((value) => {
+        const normalized = String(value).replace(/[^a-z0-9]/g, "");
+        return token.normalized === normalized
+          || token.normalized === `${normalized}s`
+          || normalized === `${token.normalized}s`;
+      });
+    };
+    const findTranslationWordIndexes = (word) => {
+      const phraseTerms = String(word.english || "")
+        .toLowerCase()
+        .split(/[^a-z0-9]+/)
+        .filter(Boolean);
+      const fallbackTerms = [word.gloss, word.lexicalGloss]
+        .filter(Boolean)
+        .flatMap((value) => String(value).toLowerCase().split(/[^a-z0-9]+/).filter(Boolean));
+      const terms = phraseTerms.length ? phraseTerms : fallbackTerms;
+      const matched = [];
+      let searchFrom = translationCursor;
+
+      terms.forEach((term) => {
+        const match = translationTokens.find((token) => token.wordIndex >= searchFrom && !usedTranslationIndexes.has(token.wordIndex) && matchesToken(token, term));
+        if (match) {
+          matched.push(match.wordIndex);
+          usedTranslationIndexes.add(match.wordIndex);
+          searchFrom = match.wordIndex + 1;
+        }
+      });
+
+      if (!matched.length && fallbackTerms.length && terms !== fallbackTerms) {
+        const fallbackMatch = translationTokens.find((token) => token.wordIndex >= translationCursor && !usedTranslationIndexes.has(token.wordIndex) && fallbackTerms.some((term) => matchesToken(token, term)));
+        if (fallbackMatch) {
+          matched.push(fallbackMatch.wordIndex);
+          usedTranslationIndexes.add(fallbackMatch.wordIndex);
+        }
+      }
+
+      if (!matched.length) return null;
+      const start = Math.min(...matched);
+      const end = Math.max(...matched);
+      const group = Array.from({ length: end - start + 1 }, (_, offset) => start + offset);
+      group.forEach((index) => usedTranslationIndexes.add(index));
+      translationCursor = end + 1;
+      return group;
+    };
+    const wordTranslationIndexes = payload.words.map(findTranslationWordIndexes);
+    const orderedWords = payload.words
+      .map((word, index) => ({ word, translationIndexes: wordTranslationIndexes[index], sourceIndex: index }))
+      .sort((a, b) => (a.translationIndexes?.[0] ?? Number.MAX_SAFE_INTEGER) - (b.translationIndexes?.[0] ?? Number.MAX_SAFE_INTEGER) || a.sourceIndex - b.sourceIndex);
     verseDetail.innerHTML = `
-      <div class="detail-stack">
-        <h3>${payload.language === "hebrew" ? "Original Hebrew" : "Original Greek"}</h3>
+      <div class="detail-stack interlinear-panel">
+        <div class="interlinear-heading">
+          <div>
+            <span>Word study</span>
+            <h3>${isHebrew ? "Hebrew" : "Greek"} interlinear</h3>
+          </div>
+          <button type="button" class="original-language-close" data-original-language-close aria-label="Close original language panel"><i data-lucide="x"></i></button>
+        </div>
+        <div class="interlinear-verse-card">
+          <p data-interlinear-verse dir="ltr">${translationMarkup}</p>
+        </div>
+        <div class="interlinear-list" aria-label="Word by word study">
+          ${orderedWords.map(({ word, translationIndexes }, index) => `
+            <article class="interlinear-row"${translationIndexes?.length ? ` data-interlinear-words="${translationIndexes.join(",")}"` : ""} tabindex="0" role="button" aria-label="Highlight word ${index + 1}">
+              <div class="interlinear-translation">
+                <strong>${escapeHtml(word.english || word.translation || "—")}</strong>
+              </div>
+              <div class="interlinear-original" dir="${isHebrew ? "rtl" : "ltr"}">
+                <strong>${escapeHtml(word.original || "—")}</strong>
+                <span>${escapeHtml(word.transliteration || word.lemma || "")}</span>
+              </div>
+              <p class="interlinear-meaning">${escapeHtml(word.gloss || word.lexicalGloss || word.english || "Meaning unavailable")}</p>
+            </article>
+          `).join("")}
+        </div>
         <div class="source-credit">STEP Bible · Tyndale House · ${escapeHtml(payload.source?.license || "CC BY 4.0")}</div>
-        ${payload.words.map((word) => `
-          <article class="original-word-card">
-            <div>
-              <strong>${escapeHtml(word.original)}</strong>
-              <span>${escapeHtml(word.transliteration || word.lemma || "")}</span>
-            </div>
-            <p>${escapeHtml(word.english || word.gloss || "")}</p>
-            <dl>
-              <dt>Lemma</dt><dd>${escapeHtml(word.lemma || "—")}</dd>
-              <dt>Strong</dt><dd>${escapeHtml(word.strong || "—")}</dd>
-              <dt>Morph</dt><dd>${escapeHtml(word.morphology || "—")}</dd>
-              <dt>Gloss</dt><dd>${escapeHtml(word.gloss || word.lexicalGloss || "—")}</dd>
-            </dl>
-          </article>
-        `).join("")}
       </div>
     `;
+    verseDetail.querySelector("[data-original-language-close]")?.addEventListener("click", closeModal);
+    verseDetail.querySelectorAll("[data-interlinear-words]").forEach((card) => {
+      const activateWord = () => {
+        const indexes = card.dataset.interlinearWords.split(",").filter(Boolean);
+        const wasActive = card.classList.contains("is-active");
+        verseDetail.querySelectorAll("[data-interlinear-words]").forEach((item) => item.classList.remove("is-active"));
+        verseDetail.querySelectorAll("[data-interlinear-verse-word]").forEach((item) => item.classList.remove("is-active"));
+        if (!wasActive) {
+          card.classList.add("is-active");
+          indexes.forEach((index) => {
+            verseDetail.querySelector(`[data-interlinear-verse-word="${index}"]`)?.classList.add("is-active");
+          });
+        }
+      };
+      card.addEventListener("click", activateWord);
+      card.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          activateWord();
+        }
+      });
+    });
+    refreshIcons();
   } catch (error) {
     const insights = greekInsights[selectedVerseData.bookId]?.[selectedVerseData.chapter]?.[selectedVerseData.number] || [];
     verseDetail.innerHTML = `
       <div class="detail-stack">
+        <button type="button" class="original-language-close" data-original-language-close aria-label="Close original language panel"><i data-lucide="x"></i></button>
         <h3>${language.title}</h3>
         ${
           insights.length
@@ -4696,6 +4958,8 @@ async function showOriginalLanguagePanel() {
         }
       </div>
     `;
+    verseDetail.querySelector("[data-original-language-close]")?.addEventListener("click", closeModal);
+    refreshIcons();
   }
 }
 
@@ -5456,6 +5720,21 @@ homeLibraryTabButtons.forEach((button) => {
 });
 
 document.querySelectorAll("[data-home-era-book]").forEach((button) => {
+  const detail = button.querySelector("strong");
+  if (detail && !detail.dataset.formatted) {
+    const items = detail.textContent
+      .split("·")
+      .map((item) => item.trim())
+      .filter(Boolean);
+    detail.replaceChildren(...items.map((item) => {
+      const line = document.createElement("span");
+      line.className = "timeline-detail-item";
+      line.textContent = item;
+      return line;
+    }));
+    detail.dataset.formatted = "true";
+  }
+
   button.addEventListener("click", () => {
     const bookId = button.dataset.homeEraBook;
     if (!BOOKS.some((book) => book.id === bookId)) return;

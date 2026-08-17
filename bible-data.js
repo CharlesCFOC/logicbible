@@ -69,7 +69,6 @@ const BOOKS = [
 
 const LOCAL_VERSIONS = [
   { id: "local-kjv", abbreviation: "KJV", name: "King James Version", language: "eng", languageName: "English", source: "local" },
-  { id: "local-web", abbreviation: "WEB", name: "World English Bible", language: "eng", languageName: "English", source: "local" },
 ];
 
 const LOCAL_BIBLE = {
@@ -109,45 +108,6 @@ const LOCAL_BIBLE = {
         "Yea, though I walk through the valley of the shadow of death, I will fear no evil: for thou art with me.",
         "Thou preparest a table before me in the presence of mine enemies.",
         "Surely goodness and mercy shall follow me all the days of my life.",
-      ],
-    },
-  },
-  "local-web": {
-    "JHN.15": {
-      title: "The True Vine",
-      copyright: "World English Bible, public domain.",
-      verses: [
-        "I am the true vine, and my Father is the farmer.",
-        "Every branch in me that doesn't bear fruit, he takes away. Every branch that bears fruit, he prunes, that it may bear more fruit.",
-        "You are already pruned clean because of the word which I have spoken to you.",
-        "Remain in me, and I in you. As the branch can't bear fruit by itself unless it remains in the vine, so neither can you, unless you remain in me.",
-        "I am the vine. You are the branches. He who remains in me and I in him bears much fruit, for apart from me you can do nothing.",
-        "If a man doesn't remain in me, he is thrown out as a branch and is withered.",
-        "If you remain in me, and my words remain in you, you will ask whatever you desire, and it will be done for you.",
-        "In this my Father is glorified, that you bear much fruit; and so you will be my disciples.",
-      ],
-    },
-    "ROM.8": {
-      title: "Life in the Spirit",
-      copyright: "World English Bible, public domain.",
-      verses: [
-        "There is therefore now no condemnation to those who are in Christ Jesus.",
-        "For the law of the Spirit of life in Christ Jesus made me free from the law of sin and of death.",
-        "For what the law couldn't do, in that it was weak through the flesh, God did, sending his own Son in the likeness of sinful flesh and for sin.",
-        "That the ordinance of the law might be fulfilled in us, who walk not after the flesh, but after the Spirit.",
-        "For those who live according to the flesh set their minds on the things of the flesh, but those who live according to the Spirit, the things of the Spirit.",
-      ],
-    },
-    "PSA.23": {
-      title: "Yahweh Is My Shepherd",
-      copyright: "World English Bible, public domain.",
-      verses: [
-        "Yahweh is my shepherd: I shall lack nothing.",
-        "He makes me lie down in green pastures. He leads me beside still waters.",
-        "He restores my soul. He guides me in the paths of righteousness for his name's sake.",
-        "Even though I walk through the valley of the shadow of death, I will fear no evil, for you are with me.",
-        "You prepare a table before me in the presence of my enemies.",
-        "Surely goodness and loving kindness shall follow me all the days of my life.",
       ],
     },
   },

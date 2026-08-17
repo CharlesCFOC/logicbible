@@ -67,7 +67,7 @@ Data model included in the initial schema:
 
 ## How Bible versions work
 
-- `KJV` and `WEB` are local/offline samples in `bible-data.js`.
+- `KJV` is the local/offline sample in `bible-data.js`.
 - When `API_BIBLE_KEY` is present, `server.mjs` calls API.Bible from the backend.
 - The browser calls `/api/bible/versions` to list available English Bible versions from your API.Bible account.
 - The browser calls `/api/bible/chapter?bibleId=...&bookId=JHN&chapter=15` to load a chapter.

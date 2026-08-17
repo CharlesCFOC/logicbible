@@ -406,11 +406,22 @@
 
         <section id="profile" class="screen profile-screen" data-screen>
           <article class="profile-hero">
-            <img src="assets/profile-hero-v2.png" alt="Profile background" />
-            <div class="profile-hero-overlay">
-              <div class="profile-avatar" data-profile-avatar>
-                <img src="assets/profile-avatar.png" alt="Profile photo" />
+            <img src="assets/profile-hero-v2.png" alt="Profile background" data-profile-cover />
+            <button class="profile-style-button" type="button" data-profile-style-toggle aria-expanded="false">
+              <i data-lucide="pencil"></i><span>Edit style</span>
+            </button>
+            <form class="profile-style-editor" data-profile-style-editor hidden>
+              <label>
+                <span>Cover image</span>
+                <input type="file" accept="image/*" data-profile-cover-input />
+              </label>
+              <div class="profile-style-actions">
+                <button type="button" class="profile-style-reset" data-profile-cover-reset>Reset</button>
+                <button type="submit" class="profile-style-save" data-profile-style-save>Save style</button>
               </div>
+              <p class="profile-style-feedback" data-profile-style-feedback role="status" aria-live="polite"></p>
+            </form>
+            <div class="profile-hero-overlay">
               <div>
                 <p class="eyebrow">Profile</p>
                 <h1 data-profile-name>Charles</h1>
@@ -474,8 +485,8 @@
                 </label>
 
                 <label class="profile-field">
-                  <span>Age</span>
-                  <input type="number" name="age" min="13" max="120" placeholder="28" />
+                  <span>Date de naissance</span>
+                  <input type="date" name="dateOfBirth" autocomplete="bday" />
                 </label>
 
                 <div class="profile-info-actions">
