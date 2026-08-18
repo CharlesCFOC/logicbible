@@ -20,6 +20,9 @@
         <button class="rail-button" data-nav="bible" aria-label="Bible">
           <i data-lucide="book-open"></i>
         </button>
+        <button class="rail-button" data-nav="kids-bible" aria-label="Kids Bible">
+          <i data-lucide="book-image"></i>
+        </button>
         <button class="rail-button" data-nav="prayer" aria-label="Prayer">
           <i data-lucide="hand-heart"></i>
         </button>
@@ -159,6 +162,47 @@
             </section>
           </section>
 
+        </section>
+
+        <section id="kids-bible" class="screen kids-bible-screen" data-screen>
+          <header class="kids-bible-header">
+            <div>
+              <span class="eyebrow">For curious hearts</span>
+              <h1>Kids Bible</h1>
+              <p>Discover Bible stories, one picture at a time.</p>
+            </div>
+            <i data-lucide="book-image" aria-hidden="true"></i>
+          </header>
+          <div class="kids-bible-library" data-kids-library>
+            <div class="kids-bible-section-heading">
+              <h2>Choose a book</h2>
+              <span>1 story</span>
+            </div>
+            <button class="kids-book-card" type="button" data-kids-book="matthew">
+              <img src="assets/kids-bible/matthew/01_Matthew_Comic_Page_Modern_English.jpg" alt="Matthew comic preview" />
+              <span>
+                <strong>Matthew</strong>
+                <small>37 illustrated pages</small>
+              </span>
+              <i data-lucide="arrow-up-right" aria-hidden="true"></i>
+            </button>
+          </div>
+          <section class="kids-bible-reader" data-kids-reader hidden aria-label="Kids Bible reader">
+            <header class="kids-reader-topbar">
+              <button type="button" data-kids-reader-back aria-label="Back to Kids Bible books"><i data-lucide="arrow-left"></i></button>
+              <div>
+                <span>Kids Bible</span>
+                <strong data-kids-reader-title>Matthew</strong>
+              </div>
+              <span data-kids-page-label>1 / 37</span>
+            </header>
+            <div class="kids-reader-progress" aria-hidden="true"><span data-kids-progress></span></div>
+            <div class="kids-reader-image-wrap">
+              <img data-kids-page-image alt="Kids Bible illustrated page" />
+            </div>
+            <button class="kids-reader-arrow is-previous" type="button" data-kids-previous aria-label="Previous page"><i data-lucide="chevron-left"></i></button>
+            <button class="kids-reader-arrow is-next" type="button" data-kids-next aria-label="Next page"><i data-lucide="chevron-right"></i></button>
+          </section>
         </section>
 
         <section id="bible" class="screen reader-screen" data-screen>
@@ -552,6 +596,7 @@
         <nav class="bottom-nav" aria-label="Primary navigation">
           <button class="is-active" data-nav="home"><i data-lucide="home"></i><span>Home</span></button>
           <button data-nav="bible"><i data-lucide="book-open"></i><span>Bible</span></button>
+          <button data-nav="kids-bible"><i data-lucide="book-image"></i><span>Kids Bible</span></button>
           <button data-nav="prayer"><i data-lucide="hand-heart"></i><span>Prayer</span></button>
           <button data-nav="ai"><i data-lucide="sparkles"></i><span>AI</span></button>
           <button data-nav="apologetics"><i data-lucide="shield"></i><span>Apologetics</span></button>

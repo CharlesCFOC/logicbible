@@ -1,5 +1,15 @@
 const screens = [...document.querySelectorAll("[data-screen]")];
 const navButtons = [...document.querySelectorAll("[data-nav]")];
+const kidsBibleLibrary = document.querySelector("[data-kids-library]");
+const kidsBibleReader = document.querySelector("[data-kids-reader]");
+const kidsBiblePageImage = document.querySelector("[data-kids-page-image]");
+const kidsBiblePageLabel = document.querySelector("[data-kids-page-label]");
+const kidsBibleProgress = document.querySelector("[data-kids-progress]");
+const kidsBibleReaderTitle = document.querySelector("[data-kids-reader-title]");
+const kidsBibleState = {
+  bookId: localStorage.getItem("brother.kidsBibleBook") || "matthew",
+  page: Math.max(1, Math.min(37, Number(localStorage.getItem("brother.kidsBiblePage") || 1))),
+};
 const appShell = document.querySelector(".app-shell");
 const modalLayer = document.querySelector("[data-modal-layer]");
 const searchPanel = document.querySelector("[data-search-panel]");
@@ -2789,6 +2799,37 @@ function initApologeticsGate() {
       apologeticsGateFeedback.textContent = "";
     }
   });
+}
+
+function getKidsBiblePagePath(page) {
+  const number = String(page).padStart(2, "0");
+  return `assets/kids-bible/matthew/${number}_Matthew_Comic_Page_Modern_English.jpg`;
+}
+
+function renderKidsBiblePage() {
+  if (!kidsBiblePageImage) return;
+  kidsBiblePageImage.src = getKidsBiblePagePath(kidsBibleState.page);
+  kidsBiblePageImage.alt = `Matthew illustrated page ${kidsBibleState.page}`;
+  if (kidsBiblePageLabel) kidsBiblePageLabel.textContent = `${kidsBibleState.page} / 37`;
+  if (kidsBibleProgress) kidsBibleProgress.style.width = `${(kidsBibleState.page / 37) * 100}%`;
+  if (kidsBibleReaderTitle) kidsBibleReaderTitle.textContent = "Matthew";
+  setLocalValue("brother.kidsBibleBook", kidsBibleState.bookId);
+  setLocalValue("brother.kidsBiblePage", String(kidsBibleState.page));
+}
+
+function openKidsBibleBook(bookId) {
+  kidsBibleState.bookId = bookId;
+  kidsBibleState.page = Math.max(1, Math.min(37, Number(localStorage.getItem("brother.kidsBiblePage") || 1)));
+  if (kidsBibleLibrary) kidsBibleLibrary.hidden = true;
+  if (kidsBibleReader) kidsBibleReader.hidden = false;
+  appShell.dataset.kidsReader = "true";
+  renderKidsBiblePage();
+}
+
+function closeKidsBibleReader() {
+  if (kidsBibleReader) kidsBibleReader.hidden = true;
+  if (kidsBibleLibrary) kidsBibleLibrary.hidden = false;
+  delete appShell.dataset.kidsReader;
 }
 
 function setScreen(id) {
@@ -5608,6 +5649,22 @@ function initReader() {
 
 navButtons.forEach((button) => {
   button.addEventListener("click", () => setScreen(button.dataset.nav));
+});
+
+document.querySelectorAll("[data-kids-book]").forEach((button) => {
+  button.addEventListener("click", () => openKidsBibleBook(button.dataset.kidsBook));
+});
+
+document.querySelector("[data-kids-reader-back]")?.addEventListener("click", closeKidsBibleReader);
+document.querySelector("[data-kids-previous]")?.addEventListener("click", () => {
+  if (kidsBibleState.page <= 1) return;
+  kidsBibleState.page -= 1;
+  renderKidsBiblePage();
+});
+document.querySelector("[data-kids-next]")?.addEventListener("click", () => {
+  if (kidsBibleState.page >= 37) return;
+  kidsBibleState.page += 1;
+  renderKidsBiblePage();
 });
 
 document.querySelectorAll("[data-open-search]").forEach((button) => {
