@@ -3,12 +3,52 @@ const navButtons = [...document.querySelectorAll("[data-nav]")];
 const kidsBibleLibrary = document.querySelector("[data-kids-library]");
 const kidsBibleReader = document.querySelector("[data-kids-reader]");
 const kidsBiblePageImage = document.querySelector("[data-kids-page-image]");
+const kidsBibleImageWrap = document.querySelector(".kids-reader-image-wrap");
 const kidsBiblePageLabel = document.querySelector("[data-kids-page-label]");
+const kidsBiblePageSelect = document.querySelector("[data-kids-page-select]");
 const kidsBibleProgress = document.querySelector("[data-kids-progress]");
 const kidsBibleReaderTitle = document.querySelector("[data-kids-reader-title]");
+const kidsBibleBooks = {
+  matthew: {
+    title: "Matthew",
+    totalPages: 37,
+    imageDir: "assets/kids-bible/matthew",
+    getFileName: (number) => `${number}_Matthew_Comic_Page_Modern_English.jpg`,
+  },
+  mark: {
+    title: "Mark",
+    totalPages: 16,
+    imageDir: "assets/kids-bible/mark",
+    getFileName: (number) => `${number}.webp`,
+  },
+  luke: {
+    title: "Luke",
+    totalPages: 21,
+    imageDir: "assets/kids-bible/luke",
+    getFileName: (number) => `${number}.webp`,
+  },
+};
+const initialKidsBibleBookId = kidsBibleBooks[localStorage.getItem("brother.kidsBibleBook")] ? localStorage.getItem("brother.kidsBibleBook") : "matthew";
+
+function getKidsBibleBook(bookId = initialKidsBibleBookId) {
+  return kidsBibleBooks[bookId] || kidsBibleBooks.matthew;
+}
+
+function getKidsBiblePageStorageKey(bookId) {
+  return `brother.kidsBiblePage.${bookId}`;
+}
+
+function readKidsBiblePage(bookId) {
+  const book = getKidsBibleBook(bookId);
+  const storedPage = localStorage.getItem(getKidsBiblePageStorageKey(bookId))
+    || (bookId === "matthew" ? localStorage.getItem("brother.kidsBiblePage") : null)
+    || "1";
+  return Math.max(1, Math.min(book.totalPages, Number(storedPage) || 1));
+}
+
 const kidsBibleState = {
-  bookId: localStorage.getItem("brother.kidsBibleBook") || "matthew",
-  page: Math.max(1, Math.min(37, Number(localStorage.getItem("brother.kidsBiblePage") || 1))),
+  bookId: initialKidsBibleBookId,
+  page: readKidsBiblePage(initialKidsBibleBookId),
 };
 const appShell = document.querySelector(".app-shell");
 const modalLayer = document.querySelector("[data-modal-layer]");
@@ -253,52 +293,37 @@ let peopleOnlineAnimationFrame = null;
 const prayerForm = document.querySelector("[data-prayer-form]");
 const prayerRequestPanel = document.querySelector("[data-prayer-request-panel]");
 const prayerList = document.querySelector("[data-prayer-list]");
+const prayerBoardContent = document.querySelector("[data-prayer-board-content]");
+const prayerBoardToggle = document.querySelector("[data-prayer-board-toggle]");
+const prayerBoardLabel = document.querySelector("[data-prayer-board-label]");
 const prayerFeedback = document.querySelector("[data-prayer-feedback]");
 const prayerWordCount = document.querySelector("[data-prayer-word-count]");
+const prayerCategory = document.querySelector("[data-prayer-category]");
+const prayerCategoryOptions = [...document.querySelectorAll("[data-prayer-category-option]")];
+const prayerUrgent = document.querySelector("[data-prayer-urgent]");
 const prayerRequestInput = prayerForm?.querySelector("textarea");
+const prayerSubmitButton = prayerForm?.querySelector('button[type="submit"]');
+const prayerSubmitLabel = prayerSubmitButton?.querySelector("span");
+let prayerSubmitResetTimer = null;
 const prayerUserId = localStorage.getItem("brother.prayerUserId") || (() => {
   const id = `local-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
   localStorage.setItem("brother.prayerUserId", id);
   return id;
 })();
+const storedPrayerRequests = readJson("brother.prayerRequests", []);
+const cleanedPrayerRequests = Array.isArray(storedPrayerRequests)
+  ? storedPrayerRequests.filter((request) => !request.demo)
+  : [];
+if (cleanedPrayerRequests.length !== (Array.isArray(storedPrayerRequests) ? storedPrayerRequests.length : 0)) {
+  writeJson("brother.prayerRequests", cleanedPrayerRequests);
+}
 const prayerState = {
-  requests: readJson("brother.prayerRequests", [
-    {
-      id: "demo-prayer-1",
-      text: "Please pray for peace and wisdom as I make an important decision for my family.",
-      prayerCount: 12,
-      prayedBy: [],
-      createdAt: "2026-08-10T09:00:00.000Z",
-      demo: true,
-    },
-    {
-      id: "demo-prayer-2",
-      text: "Pray for my friend who is going through a difficult season and needs hope, strength, and good people around them.",
-      prayerCount: 8,
-      prayedBy: [],
-      createdAt: "2026-08-09T14:30:00.000Z",
-      demo: true,
-    },
-    {
-      id: "demo-prayer-3",
-      text: "I am starting a new job this week. Please pray that I would stay grounded, kind, and confident.",
-      prayerCount: 4,
-      prayedBy: [],
-      createdAt: "2026-08-08T11:15:00.000Z",
-      demo: true,
-    },
-    {
-      id: "demo-prayer-4",
-      text: "Please pray for healing and comfort for someone close to me who has been unwell.",
-      prayerCount: 0,
-      prayedBy: [],
-      createdAt: "2026-08-07T17:45:00.000Z",
-      demo: true,
-    },
-  ]),
+  requests: cleanedPrayerRequests,
   tab: "all",
   sort: "most",
+  filter: "all",
   pageTab: "board",
+  myWallExpanded: false,
 };
 
 const readerState = {
@@ -1318,11 +1343,82 @@ function updateHomeContinueReading() {
 }
 
 function updateHomePrayerCount() {
-  if (homePrayerCount) homePrayerCount.textContent = String(prayerState.requests.length);
+  if (homePrayerCount) {
+    homePrayerCount.textContent = String(prayerState.requests.filter((request) => getPrayerStatus(request) === "active").length);
+  }
 }
 
 function countPrayerWords(value) {
   return String(value || "").trim() ? String(value).trim().split(/\s+/).length : 0;
+}
+
+function getPrayerModerationMessage(text) {
+  const links = String(text || "").match(/https?:\/\/\S+/gi) || [];
+  if (links.length > 1) return "Please remove extra links from your request.";
+  if (/(.)\1{9,}/.test(String(text || ""))) return "Please check your request and remove repeated characters.";
+  return "";
+}
+
+function getPrayerStatus(request) {
+  return request.status === "answered" ? "answered" : "active";
+}
+
+function getPrayerPreview(text, wordLimit = 6) {
+  const words = String(text || "").trim().split(/\s+/).filter(Boolean);
+  return words.length > wordLimit ? `${words.slice(0, wordLimit).join(" ")}...` : words.join(" ");
+}
+
+const prayerPrompts = [
+  "What would you like us to pray for?",
+  "What is on your heart today?",
+  "How can the community pray with you?",
+];
+let prayerPromptIndex = 0;
+let prayerPromptTimer = null;
+let prayerPromptFadeTimer = null;
+
+function stopPrayerPromptRotation() {
+  window.clearInterval(prayerPromptTimer);
+  window.clearTimeout(prayerPromptFadeTimer);
+  prayerPromptTimer = null;
+  prayerPromptFadeTimer = null;
+  prayerRequestInput?.classList.remove("is-placeholder-fading");
+}
+
+function startPrayerPromptRotation() {
+  if (!prayerRequestInput || prayerRequestInput.value.trim()) return;
+  stopPrayerPromptRotation();
+  prayerRequestInput.placeholder = prayerPrompts[prayerPromptIndex];
+  prayerPromptTimer = window.setInterval(() => {
+    if (prayerRequestInput.value.trim()) {
+      stopPrayerPromptRotation();
+      return;
+    }
+    prayerRequestInput.classList.add("is-placeholder-fading");
+    prayerPromptFadeTimer = window.setTimeout(() => {
+      prayerPromptIndex = (prayerPromptIndex + 1) % prayerPrompts.length;
+      prayerRequestInput.placeholder = prayerPrompts[prayerPromptIndex];
+      prayerRequestInput.classList.remove("is-placeholder-fading");
+    }, 260);
+  }, 2200);
+}
+
+function setPrayerCategory(value) {
+  if (prayerCategory) prayerCategory.value = value;
+  prayerCategoryOptions.forEach((option) => {
+    option.classList.toggle("is-active", option.dataset.prayerCategoryOption === value);
+  });
+}
+
+function showPrayerSentState() {
+  if (!prayerSubmitButton || !prayerSubmitLabel) return;
+  window.clearTimeout(prayerSubmitResetTimer);
+  prayerSubmitButton.classList.add("is-sent");
+  prayerSubmitLabel.textContent = "Sent";
+  prayerSubmitResetTimer = window.setTimeout(() => {
+    prayerSubmitButton.classList.remove("is-sent");
+    prayerSubmitLabel.textContent = "Send prayer request";
+  }, 1800);
 }
 
 function savePrayerRequests() {
@@ -1335,10 +1431,15 @@ async function loadPrayerFromSupabase() {
     return;
   }
 
+  if (!supabaseUser) {
+    prayerState.requests = [];
+    renderPrayerPage();
+    return;
+  }
+
   const { data: requests, error } = await supabaseClient
     .from("prayer_requests")
-    .select("id,content,prayer_count,created_at")
-    .eq("status", "active");
+    .select("id,author_id,content,prayer_count,status,category,urgent,created_at");
   if (error) {
     console.warn("Prayer requests could not be loaded:", error.message);
     return;
@@ -1350,32 +1451,34 @@ async function loadPrayerFromSupabase() {
     return;
   }
 
-  let ownInteractions = [];
-  if (supabaseUser) {
-    const { data } = await supabaseClient
-      .from("prayer_interactions")
-      .select("request_id")
-      .eq("user_id", supabaseUser.id);
-    ownInteractions = data || [];
-  }
+  const { data: ownInteractions = [] } = await supabaseClient
+    .from("prayer_interactions")
+    .select("request_id")
+    .eq("user_id", supabaseUser.id);
   const prayedIds = new Set(ownInteractions.map((item) => item.request_id));
   prayerState.requests = (requests || []).map((request) => ({
     id: request.id,
+    ownerId: request.author_id,
     text: request.content,
     prayerCount: request.prayer_count || 0,
     prayedBy: prayedIds.has(request.id) && supabaseUser ? [supabaseUser.id] : [],
     createdAt: request.created_at,
+    status: request.status || "active",
+    category: request.category || "general",
+    urgent: Boolean(request.urgent),
   }));
   renderPrayerPage();
 }
 
-async function createPrayerRequest(text) {
+async function createPrayerRequest(text, category, urgent) {
   if (!supabaseClient || !supabaseUser) {
     return false;
   }
   const { error } = await supabaseClient.from("prayer_requests").insert({
     author_id: supabaseUser.id,
     content: text,
+    category,
+    urgent,
   });
   if (error) {
     prayerFeedback.textContent = error.message;
@@ -1391,15 +1494,32 @@ function renderPrayerPage() {
   }
 
   if (prayerRequestPanel) prayerRequestPanel.hidden = prayerState.pageTab !== "request";
-  prayerList.hidden = prayerState.pageTab !== "board";
+  prayerList.hidden = false;
+  const isMyWall = prayerState.pageTab === "request";
+  if (prayerBoardLabel) prayerBoardLabel.textContent = isMyWall ? "MyPrayers Wall" : "Prayer board";
+  if (prayerBoardContent) prayerBoardContent.hidden = isMyWall && !prayerState.myWallExpanded;
+  if (prayerBoardToggle) {
+    prayerBoardToggle.setAttribute("aria-expanded", String(!isMyWall || prayerState.myWallExpanded));
+    prayerBoardToggle.classList.toggle("is-collapsed", isMyWall && !prayerState.myWallExpanded);
+  }
   document.querySelectorAll("[data-prayer-page-tab]").forEach((button) => {
     button.classList.toggle("is-active", button.dataset.prayerPageTab === prayerState.pageTab);
   });
 
   const requests = prayerState.requests
-    .filter(() => prayerState.pageTab === "board")
+    .filter((request) => {
+      if (prayerState.pageTab === "request") {
+        const isOwnRequest = supabaseClient
+          ? request.ownerId === supabaseUser?.id
+          : true;
+        if (!isOwnRequest) return false;
+      }
+      if (prayerState.filter === "unanswered") return getPrayerStatus(request) === "active";
+      if (prayerState.filter === "urgent") return Boolean(request.urgent) && getPrayerStatus(request) === "active";
+      return true;
+    })
     .sort((a, b) => {
-      if (prayerState.sort === "recent") {
+      if (prayerState.filter === "recent" || prayerState.sort === "recent") {
         return String(b.createdAt).localeCompare(String(a.createdAt));
       }
       const difference = prayerState.sort === "least"
@@ -1408,36 +1528,43 @@ function renderPrayerPage() {
       return difference || String(b.createdAt).localeCompare(String(a.createdAt));
     });
 
+  const emptyMessage = prayerState.pageTab === "request"
+    ? "You have not posted any prayer requests yet."
+    : "No prayer requests have been posted yet.";
   prayerList.innerHTML = requests.length
     ? requests.map((request) => {
-        const hasPrayed = request.prayedBy?.includes(prayerUserId);
-        const date = new Intl.DateTimeFormat("en-CA", { month: "short", day: "numeric" }).format(new Date(request.createdAt));
+        const currentPrayerUserId = supabaseUser?.id || prayerUserId;
+        const hasPrayed = request.prayedBy?.includes(currentPrayerUserId);
+        const isNewlyPrayed = hasPrayed && request.prayerCount === 1;
         const expanded = Boolean(request.expanded);
         return `
-          <article class="prayer-card${expanded ? " is-expanded" : ""}">
+          <article class="prayer-card${expanded ? " is-expanded" : ""}${request.urgent ? " is-urgent" : ""}${isNewlyPrayed ? " is-prayed" : ""}">
             <button type="button" class="prayer-card-toggle" data-prayer-toggle data-prayer-id="${escapeAttr(request.id)}" aria-expanded="${expanded}">
               <span>
-                <strong>${request.demo ? "Example request" : "Anonymous request"}</strong>
-                <p>${escapeHtml(request.text)}</p>
+                <p>${escapeHtml(expanded ? request.text : getPrayerPreview(request.text))}</p>
               </span>
               <i data-lucide="chevron-down"></i>
             </button>
-            ${expanded ? `<div class="prayer-card-expanded"><p>${escapeHtml(request.text)}</p></div>` : ""}
             <div class="prayer-card-meta">
-              <span>${request.demo ? "Example" : "Anonymous"} · ${date}</span>
-              <button type="button" class="prayer-action${hasPrayed ? " is-prayed" : ""}" data-prayer-action="pray" data-prayer-id="${escapeAttr(request.id)}" aria-label="${hasPrayed ? "Prayer count" : "I prayed"}">
-                <i data-lucide="${hasPrayed ? "heart" : "hand-heart"}"></i>
-                ${hasPrayed ? `<span>${request.prayerCount}</span>` : `<span>I prayed · ${request.prayerCount}</span>`}
-              </button>
+              <div class="prayer-card-actions">
+                <button type="button" class="prayer-action prayer-action-secondary" data-prayer-action="share" data-prayer-id="${escapeAttr(request.id)}" aria-label="Share prayer request" title="Share"><i data-lucide="share-2"></i></button>
+                <button type="button" class="prayer-action${hasPrayed ? " is-prayed" : ""}" data-prayer-action="pray" data-prayer-id="${escapeAttr(request.id)}" aria-label="${hasPrayed ? "Prayer count" : "I prayed"}">
+                  <i data-lucide="${hasPrayed ? "heart" : "hand-heart"}"></i>
+                  <span>${request.prayerCount}</span>
+                </button>
+              </div>
             </div>
           </article>
         `;
       }).join("")
-    : `<p class="prayer-empty">No prayer requests have been posted yet.</p>`;
+    : `<p class="prayer-empty">${emptyMessage}</p>`;
   const sortSelect = document.querySelector("[data-prayer-sort]");
   if (sortSelect) {
     sortSelect.value = prayerState.sort;
   }
+  document.querySelectorAll("[data-prayer-filter]").forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.prayerFilter === prayerState.filter);
+  });
   refreshIcons();
 }
 
@@ -1447,6 +1574,7 @@ function initPrayerPage() {
   }
 
   prayerRequestInput?.addEventListener("input", () => {
+    if (prayerRequestInput.value.trim()) stopPrayerPromptRotation();
     const count = countPrayerWords(prayerRequestInput.value);
     if (prayerWordCount) {
       prayerWordCount.textContent = `${count} / 300 words`;
@@ -1454,12 +1582,25 @@ function initPrayerPage() {
     }
   });
 
+  prayerCategoryOptions.forEach((option) => {
+    option.addEventListener("click", () => {
+      setPrayerCategory(option.dataset.prayerCategoryOption || "general");
+    });
+  });
+
   prayerForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const text = prayerRequestInput.value.trim();
     const wordCount = countPrayerWords(text);
+    const category = prayerCategory?.value || "general";
+    const urgent = Boolean(prayerUrgent?.checked);
+    const moderationMessage = getPrayerModerationMessage(text);
     if (!text || wordCount > 300) {
       prayerFeedback.textContent = wordCount > 300 ? "Please keep your request under 300 words." : "Write a prayer request first.";
+      return;
+    }
+    if (moderationMessage) {
+      prayerFeedback.textContent = moderationMessage;
       return;
     }
 
@@ -1469,31 +1610,45 @@ function initPrayerPage() {
     }
 
     if (supabaseClient && supabaseUser) {
-      const created = await createPrayerRequest(text);
+      const created = await createPrayerRequest(text, category, urgent);
       if (!created) return;
     } else {
       prayerState.requests.unshift({
-      id: `prayer-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-      text,
-      prayerCount: 0,
-      prayedBy: [],
-      createdAt: new Date().toISOString(),
+        id: `prayer-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        ownerId: prayerUserId,
+        text,
+        prayerCount: 0,
+        prayedBy: [],
+        createdAt: new Date().toISOString(),
+        category,
+        urgent,
+        status: "active",
       });
       savePrayerRequests();
     }
     prayerRequestInput.value = "";
+    setPrayerCategory("general");
+    if (prayerUrgent) prayerUrgent.checked = false;
     prayerWordCount.textContent = "0 / 300 words";
     prayerFeedback.textContent = "Your request was shared anonymously.";
-    prayerState.pageTab = "board";
+    showPrayerSentState();
+    prayerState.pageTab = "request";
+    prayerState.myWallExpanded = true;
     prayerState.tab = "all";
+    startPrayerPromptRotation();
     renderPrayerPage();
   });
 
   document.querySelectorAll("[data-prayer-page-tab]").forEach((button) => {
     button.addEventListener("click", () => {
       prayerState.pageTab = button.dataset.prayerPageTab;
+      if (prayerState.pageTab === "request") {
+        startPrayerPromptRotation();
+      } else {
+        stopPrayerPromptRotation();
+      }
       if (prayerRequestPanel) prayerRequestPanel.hidden = prayerState.pageTab !== "request";
-      prayerList.hidden = prayerState.pageTab !== "board";
+      prayerList.hidden = false;
       document.querySelectorAll("[data-prayer-page-tab]").forEach((item) => {
         item.classList.toggle("is-active", item === button);
       });
@@ -1501,9 +1656,22 @@ function initPrayerPage() {
     });
   });
 
+  prayerBoardToggle?.addEventListener("click", () => {
+    if (prayerState.pageTab !== "request") return;
+    prayerState.myWallExpanded = !prayerState.myWallExpanded;
+    renderPrayerPage();
+  });
+
   document.querySelector("[data-prayer-sort]")?.addEventListener("change", (event) => {
     prayerState.sort = event.target.value;
     renderPrayerPage();
+  });
+
+  document.querySelectorAll("[data-prayer-filter]").forEach((button) => {
+    button.addEventListener("click", () => {
+      prayerState.filter = button.dataset.prayerFilter || "all";
+      renderPrayerPage();
+    });
   });
 
   prayerList.addEventListener("click", async (event) => {
@@ -1516,12 +1684,29 @@ function initPrayerPage() {
       }
       return;
     }
-    const button = event.target.closest("[data-prayer-action=\"pray\"]");
+    const button = event.target.closest("[data-prayer-action]");
     if (!button) {
       return;
     }
     const request = prayerState.requests.find((item) => item.id === button.dataset.prayerId);
     if (!request) {
+      return;
+    }
+    if (button.dataset.prayerAction === "share") {
+      const shareText = `Prayer request: ${request.text}`;
+      try {
+        if (navigator.share) {
+          await navigator.share({ title: "Prayer request", text: shareText });
+        } else if (navigator.clipboard) {
+          await navigator.clipboard.writeText(shareText);
+          if (prayerFeedback) prayerFeedback.textContent = "Prayer request copied to your clipboard.";
+        }
+      } catch (error) {
+        if (error?.name !== "AbortError" && prayerFeedback) prayerFeedback.textContent = "This request could not be shared.";
+      }
+      return;
+    }
+    if (button.dataset.prayerAction !== "pray") {
       return;
     }
     if (supabaseClient && !supabaseUser) {
@@ -2802,24 +2987,69 @@ function initApologeticsGate() {
 }
 
 function getKidsBiblePagePath(page) {
+  const book = getKidsBibleBook(kidsBibleState.bookId);
   const number = String(page).padStart(2, "0");
-  return `assets/kids-bible/matthew/${number}_Matthew_Comic_Page_Modern_English.jpg`;
+  return `${book.imageDir}/${book.getFileName(number)}`;
 }
 
 function renderKidsBiblePage() {
   if (!kidsBiblePageImage) return;
+  const book = getKidsBibleBook(kidsBibleState.bookId);
   kidsBiblePageImage.src = getKidsBiblePagePath(kidsBibleState.page);
-  kidsBiblePageImage.alt = `Matthew illustrated page ${kidsBibleState.page}`;
-  if (kidsBiblePageLabel) kidsBiblePageLabel.textContent = `${kidsBibleState.page} / 37`;
-  if (kidsBibleProgress) kidsBibleProgress.style.width = `${(kidsBibleState.page / 37) * 100}%`;
-  if (kidsBibleReaderTitle) kidsBibleReaderTitle.textContent = "Matthew";
+  kidsBiblePageImage.alt = `${book.title} illustrated page ${kidsBibleState.page}`;
+  if (kidsBiblePageLabel) kidsBiblePageLabel.textContent = `${kidsBibleState.page} / ${book.totalPages}`;
+  if (kidsBiblePageSelect) {
+    if (kidsBiblePageSelect.dataset.bookId !== kidsBibleState.bookId) {
+      kidsBiblePageSelect.innerHTML = Array.from({ length: book.totalPages }, (_, index) => `<option value="${index + 1}">Page ${index + 1}</option>`).join("");
+      kidsBiblePageSelect.dataset.bookId = kidsBibleState.bookId;
+    }
+    kidsBiblePageSelect.value = String(kidsBibleState.page);
+  }
+  if (kidsBibleProgress) kidsBibleProgress.style.width = `${(kidsBibleState.page / book.totalPages) * 100}%`;
+  if (kidsBibleReaderTitle) kidsBibleReaderTitle.textContent = book.title;
+  renderKidsBibleLibraryProgress();
   setLocalValue("brother.kidsBibleBook", kidsBibleState.bookId);
+  setLocalValue(getKidsBiblePageStorageKey(kidsBibleState.bookId), String(kidsBibleState.page));
   setLocalValue("brother.kidsBiblePage", String(kidsBibleState.page));
 }
 
+function renderKidsBibleLibraryProgress() {
+  document.querySelectorAll("[data-kids-book]").forEach((card) => {
+    const bookId = card.dataset.kidsBook;
+    const book = getKidsBibleBook(bookId);
+    const currentPage = bookId === kidsBibleState.bookId ? kidsBibleState.page : readKidsBiblePage(bookId);
+    const percentage = Math.round((currentPage / book.totalPages) * 100);
+    const progressFill = card.querySelector("[data-kids-book-progress-fill]");
+    const progressLabel = card.querySelector("[data-kids-book-progress-label]");
+    const progressBar = progressFill?.parentElement;
+    if (progressFill) progressFill.style.width = `${percentage}%`;
+    if (progressLabel) progressLabel.textContent = `Page ${currentPage} of ${book.totalPages} · ${percentage}%`;
+    if (progressBar) {
+      progressBar.setAttribute("aria-valuemax", String(book.totalPages));
+      progressBar.setAttribute("aria-valuenow", String(currentPage));
+    }
+  });
+}
+
+function changeKidsBiblePage(delta) {
+  const book = getKidsBibleBook(kidsBibleState.bookId);
+  const nextPage = kidsBibleState.page + delta;
+  if (nextPage < 1 || nextPage > book.totalPages) return;
+  kidsBibleState.page = nextPage;
+  renderKidsBiblePage();
+  if (kidsBibleImageWrap) {
+    const animationClass = delta > 0 ? "is-slide-next" : "is-slide-previous";
+    kidsBibleImageWrap.classList.remove("is-slide-next", "is-slide-previous");
+    window.requestAnimationFrame(() => {
+      kidsBibleImageWrap.classList.add(animationClass);
+      window.setTimeout(() => kidsBibleImageWrap.classList.remove(animationClass), 280);
+    });
+  }
+}
+
 function openKidsBibleBook(bookId) {
-  kidsBibleState.bookId = bookId;
-  kidsBibleState.page = Math.max(1, Math.min(37, Number(localStorage.getItem("brother.kidsBiblePage") || 1)));
+  kidsBibleState.bookId = kidsBibleBooks[bookId] ? bookId : "matthew";
+  kidsBibleState.page = readKidsBiblePage(kidsBibleState.bookId);
   if (kidsBibleLibrary) kidsBibleLibrary.hidden = true;
   if (kidsBibleReader) kidsBibleReader.hidden = false;
   appShell.dataset.kidsReader = "true";
@@ -2831,6 +3061,8 @@ function closeKidsBibleReader() {
   if (kidsBibleLibrary) kidsBibleLibrary.hidden = false;
   delete appShell.dataset.kidsReader;
 }
+
+renderKidsBibleLibraryProgress();
 
 function setScreen(id) {
   if (noteEditorPanel?.classList.contains("is-visible")) {
@@ -5656,16 +5888,37 @@ document.querySelectorAll("[data-kids-book]").forEach((button) => {
 });
 
 document.querySelector("[data-kids-reader-back]")?.addEventListener("click", closeKidsBibleReader);
-document.querySelector("[data-kids-previous]")?.addEventListener("click", () => {
-  if (kidsBibleState.page <= 1) return;
-  kidsBibleState.page -= 1;
+document.querySelector("[data-kids-first-page]")?.addEventListener("click", () => {
+  kidsBibleState.page = 1;
   renderKidsBiblePage();
+});
+if (kidsBiblePageSelect) {
+  kidsBiblePageSelect.addEventListener("change", () => {
+    kidsBibleState.page = Number(kidsBiblePageSelect.value);
+    renderKidsBiblePage();
+  });
+}
+document.querySelector("[data-kids-previous]")?.addEventListener("click", () => {
+  changeKidsBiblePage(-1);
 });
 document.querySelector("[data-kids-next]")?.addEventListener("click", () => {
-  if (kidsBibleState.page >= 37) return;
-  kidsBibleState.page += 1;
-  renderKidsBiblePage();
+  changeKidsBiblePage(1);
 });
+
+let kidsSwipeStartX = 0;
+let kidsSwipeStartY = 0;
+kidsBibleImageWrap?.addEventListener("touchstart", (event) => {
+  const touch = event.touches[0];
+  kidsSwipeStartX = touch?.clientX || 0;
+  kidsSwipeStartY = touch?.clientY || 0;
+}, { passive: true });
+kidsBibleImageWrap?.addEventListener("touchend", (event) => {
+  const touch = event.changedTouches[0];
+  const deltaX = (touch?.clientX || 0) - kidsSwipeStartX;
+  const deltaY = (touch?.clientY || 0) - kidsSwipeStartY;
+  if (Math.abs(deltaX) < 45 || Math.abs(deltaX) < Math.abs(deltaY)) return;
+  changeKidsBiblePage(deltaX < 0 ? 1 : -1);
+}, { passive: true });
 
 document.querySelectorAll("[data-open-search]").forEach((button) => {
   button.addEventListener("click", () => showModal(searchPanel));

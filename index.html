@@ -43,7 +43,7 @@
           </header>
 
           <article class="home-hero-image">
-            <img src="assets/home-card-sunset.png" alt="Sunrise over a mountain lake" />
+            <img src="assets/home-card-prayer.webp" alt="A dove above a person praying beneath a starry sky" />
             <div class="home-hero-image-copy">
               <div class="home-hero-verse">
                 <span>Verse of the day</span>
@@ -176,14 +176,39 @@
           <div class="kids-bible-library" data-kids-library>
             <div class="kids-bible-section-heading">
               <h2>Choose a book</h2>
-              <span>1 story</span>
+              <span>3 stories</span>
             </div>
             <button class="kids-book-card" type="button" data-kids-book="matthew">
               <img src="assets/kids-bible/matthew/01_Matthew_Comic_Page_Modern_English.jpg" alt="Matthew comic preview" />
-              <span>
+              <div class="kids-book-card-copy">
                 <strong>Matthew</strong>
-                <small>37 illustrated pages</small>
-              </span>
+                <small data-kids-book-progress-label>Page 1 of 37 · 3%</small>
+                <div class="kids-book-progress" role="progressbar" aria-label="Matthew reading progress" aria-valuemin="1" aria-valuemax="37" aria-valuenow="1">
+                  <span data-kids-book-progress-fill></span>
+                </div>
+              </div>
+              <i data-lucide="arrow-up-right" aria-hidden="true"></i>
+            </button>
+            <button class="kids-book-card" type="button" data-kids-book="mark">
+              <img src="assets/kids-bible/mark/01.webp" alt="Mark comic preview" />
+              <div class="kids-book-card-copy">
+                <strong>Mark</strong>
+                <small data-kids-book-progress-label>Page 1 of 16 · 6%</small>
+                <div class="kids-book-progress" role="progressbar" aria-label="Mark reading progress" aria-valuemin="1" aria-valuemax="16" aria-valuenow="1">
+                  <span data-kids-book-progress-fill></span>
+                </div>
+              </div>
+              <i data-lucide="arrow-up-right" aria-hidden="true"></i>
+            </button>
+            <button class="kids-book-card" type="button" data-kids-book="luke">
+              <img src="assets/kids-bible/luke/01.webp" alt="Luke comic preview" />
+              <div class="kids-book-card-copy">
+                <strong>Luke</strong>
+                <small data-kids-book-progress-label>Page 1 of 21 · 5%</small>
+                <div class="kids-book-progress" role="progressbar" aria-label="Luke reading progress" aria-valuemin="1" aria-valuemax="21" aria-valuenow="1">
+                  <span data-kids-book-progress-fill></span>
+                </div>
+              </div>
               <i data-lucide="arrow-up-right" aria-hidden="true"></i>
             </button>
           </div>
@@ -194,12 +219,19 @@
                 <span>Kids Bible</span>
                 <strong data-kids-reader-title>Matthew</strong>
               </div>
-              <span data-kids-page-label>1 / 37</span>
+              <div class="kids-reader-page-tools">
+                <label>
+                  <span class="sr-only">Page</span>
+                  <select data-kids-page-select aria-label="Choose page"></select>
+                </label>
+                <span data-kids-page-label>1 / 37</span>
+              </div>
             </header>
             <div class="kids-reader-progress" aria-hidden="true"><span data-kids-progress></span></div>
             <div class="kids-reader-image-wrap">
               <img data-kids-page-image alt="Kids Bible illustrated page" />
             </div>
+            <button class="kids-reader-first-page" type="button" data-kids-first-page aria-label="Go to first page"><i data-lucide="house"></i></button>
             <button class="kids-reader-arrow is-previous" type="button" data-kids-previous aria-label="Previous page"><i data-lucide="chevron-left"></i></button>
             <button class="kids-reader-arrow is-next" type="button" data-kids-next aria-label="Next page"><i data-lucide="chevron-right"></i></button>
           </section>
@@ -410,6 +442,11 @@
         </section>
 
         <section id="prayer" class="screen prayer-screen" data-screen>
+          <header class="prayer-header">
+            <div>
+              <h1>Prayer community</h1>
+            </div>
+          </header>
           <div class="prayer-page-tabs" role="tablist" aria-label="Prayer sections">
             <button class="is-active" type="button" data-prayer-page-tab="board">Prayer</button>
             <button type="button" data-prayer-page-tab="request">Prayer request</button>
@@ -417,35 +454,64 @@
 
           <section class="prayer-request-panel" data-prayer-request-panel hidden>
             <article class="prayer-intro">
-              <span class="label">Carry one another</span>
-              <h2>Someone may need your prayer today.</h2>
-              <p>Share a request anonymously and let the community stand with you.</p>
+              <h2>What would you like us to pray for?</h2>
+              <p>Share your request anonymously and let the community pray with you.</p>
             </article>
 
             <form class="prayer-compose" data-prayer-form>
-              <label for="prayer-request">Share a prayer request</label>
               <textarea id="prayer-request" name="request" rows="5" maxlength="2200" placeholder="What would you like us to pray for?" required></textarea>
+              <div class="prayer-compose-options">
+                <select class="sr-only" data-prayer-category aria-label="Prayer request category">
+                  <option value="general">General</option>
+                  <option value="family">Family</option>
+                  <option value="health">Health</option>
+                  <option value="work">Work and decisions</option>
+                  <option value="faith">Faith and growth</option>
+                  <option value="other">Other</option>
+                </select>
+                <div class="prayer-category-picker" role="group" aria-label="Prayer request category">
+                  <span class="sr-only">Category</span>
+                  <button class="is-active" type="button" data-prayer-category-option="general">General</button>
+                  <button type="button" data-prayer-category-option="family">Family</button>
+                  <button type="button" data-prayer-category-option="health">Health</button>
+                  <button type="button" data-prayer-category-option="work">Work</button>
+                  <button type="button" data-prayer-category-option="faith">Faith</button>
+                  <button type="button" data-prayer-category-option="other">Other</button>
+                </div>
+              </div>
               <div class="prayer-compose-footer">
                 <small data-prayer-word-count>0 / 300 words</small>
-                <button type="submit"><i data-lucide="send"></i><span>Post anonymously</span></button>
+                <button type="submit"><i data-lucide="send"></i><span>Send prayer request</span></button>
               </div>
               <p class="prayer-form-feedback" data-prayer-feedback aria-live="polite"></p>
             </form>
           </section>
 
-          <div class="prayer-toolbar">
-            <span class="prayer-board-label">Prayer board</span>
-            <label class="prayer-sort">
-              <span class="sr-only">Sort prayers</span>
-              <select data-prayer-sort>
-                <option value="most">Most prayed</option>
-                <option value="least">Least prayed</option>
-                <option value="recent">Most recent</option>
-              </select>
-            </label>
-          </div>
+          <section class="prayer-board-section" data-prayer-board-section>
+            <div class="prayer-toolbar">
+              <button class="prayer-board-toggle" type="button" data-prayer-board-toggle aria-expanded="true">
+                <span class="prayer-board-label" data-prayer-board-label>Prayer board</span>
+                <i data-lucide="chevron-down" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="prayer-board-content" data-prayer-board-content>
+              <label class="prayer-sort">
+                <span class="sr-only">Sort prayers</span>
+                <select data-prayer-sort>
+                  <option value="most">Most prayed</option>
+                  <option value="least">Least prayed</option>
+                  <option value="recent">Most recent</option>
+                </select>
+              </label>
+              <div class="prayer-filter-row" role="group" aria-label="Prayer filters">
+                <button class="is-active" type="button" data-prayer-filter="all">All</button>
+                <button type="button" data-prayer-filter="unanswered">Needs prayer</button>
+                <button type="button" data-prayer-filter="urgent">Urgent</button>
+              </div>
 
-          <section class="prayer-list" data-prayer-list aria-live="polite"></section>
+              <section class="prayer-list" data-prayer-list aria-live="polite"></section>
+            </div>
+          </section>
         </section>
 
         <section id="profile" class="screen profile-screen" data-screen>

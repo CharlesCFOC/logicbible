@@ -45,7 +45,7 @@ SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 Recommended order:
 
 1. Create a Supabase project.
-2. Run the SQL files in order: [supabase/001_init.sql](supabase/001_init.sql), [supabase/002_prayers.sql](supabase/002_prayers.sql), then [supabase/003_user_sync.sql](supabase/003_user_sync.sql).
+2. Run the SQL files in order: [supabase/001_init.sql](supabase/001_init.sql), [supabase/002_prayers.sql](supabase/002_prayers.sql), [supabase/003_user_sync.sql](supabase/003_user_sync.sql), [supabase/004_profile_details.sql](supabase/004_profile_details.sql), [supabase/005_prayer_metadata.sql](supabase/005_prayer_metadata.sql), then [supabase/006_private_prayer_board.sql](supabase/006_private_prayer_board.sql).
 3. Fill `.env.local`.
 4. Restart `npm run dev`.
 
@@ -56,6 +56,9 @@ Files added for the backend foundation:
 - [supabase/001_init.sql](supabase/001_init.sql)
 - [supabase/002_prayers.sql](supabase/002_prayers.sql)
 - [supabase/003_user_sync.sql](supabase/003_user_sync.sql)
+- [supabase/004_profile_details.sql](supabase/004_profile_details.sql)
+- [supabase/005_prayer_metadata.sql](supabase/005_prayer_metadata.sql)
+- [supabase/006_private_prayer_board.sql](supabase/006_private_prayer_board.sql)
 
 Data model included in the initial schema:
 
