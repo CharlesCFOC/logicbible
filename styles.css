@@ -330,7 +330,7 @@ svg {
 .app-shell[data-app-background="black"] .action-grid button,
 .app-shell[data-app-background="black"] .detail-stack article {
   border: 1px solid rgba(170, 215, 238, 0.2) !important;
-  background: rgba(54, 82, 103, 0.42) !important;
+  background: rgba(54, 82, 103, 0.28) !important;
   box-shadow:
     inset 0 1px 0 rgba(220, 242, 255, 0.14),
     0 8px 22px rgba(0, 0, 0, 0.22) !important;
@@ -338,17 +338,20 @@ svg {
   backdrop-filter: blur(18px) saturate(118%);
 }
 
-/* Compact verse actions: keep every option available without oversized controls. */
+/* Verse actions: show every option in a compact two-row grid. */
 .app-shell .bottom-sheet .action-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: 6px;
-  max-height: 74px;
+  max-height: none;
   padding: 0 1px 5px;
+  overflow: visible;
 }
 
 .app-shell .bottom-sheet .action-grid button {
-  flex: 0 0 66px;
-  width: 66px;
-  min-height: 64px;
+  width: 100%;
+  min-width: 0;
+  min-height: 58px;
   gap: 4px;
   padding: 6px 4px;
   border-radius: 18px;
@@ -356,11 +359,89 @@ svg {
   font-weight: 750;
 }
 
+.app-shell .bottom-sheet .action-grid button.action-secondary {
+  min-height: 48px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.app-shell .bottom-sheet .action-grid button.action-secondary svg {
+  width: 15px;
+  height: 15px;
+}
+
+.app-shell .bottom-sheet .action-grid button.action-featured {
+  grid-column: span 4;
+}
+
+.app-shell .bottom-sheet .action-grid button.action-secondary {
+  grid-column: span 3;
+}
+
 .app-shell .bottom-sheet .action-grid button svg {
   width: 16px;
   height: 16px;
   stroke-width: 1.65;
   opacity: 0.78;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button.action-primary {
+  border-color: rgba(139, 220, 255, 0.58) !important;
+  background: rgba(60, 157, 204, 0.24) !important;
+  color: #dff7ff !important;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button.action-secondary {
+  border-color: rgba(170, 215, 238, 0.22) !important;
+  background: rgba(54, 82, 103, 0.24) !important;
+  color: #b7c8d4 !important;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button.action-primary:hover,
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button.action-primary.is-active {
+  border-color: #8bdcff !important;
+  background: rgba(60, 157, 204, 0.5) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 0 2px rgba(139, 220, 255, 0.14), 0 8px 18px rgba(0, 0, 0, 0.18) !important;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button.action-secondary:hover {
+  border-color: rgba(170, 215, 238, 0.48) !important;
+  color: #e4f5ff !important;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button.action-featured[data-verse-action="highlight"] {
+  border-color: #ffd166 !important;
+  background: linear-gradient(135deg, #ffc857, #ff7b54) !important;
+  color: #111b22 !important;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button.action-featured[data-verse-action="ask-ai"] {
+  border-color: #d7a7ff !important;
+  background: linear-gradient(135deg, #c86bff, #6f7cff) !important;
+  color: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button.action-featured[data-verse-action="note"] {
+  border-color: #ff9eb7 !important;
+  background: linear-gradient(135deg, #ff5f9e, #ff8a5b) !important;
+  color: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button.action-featured:hover,
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button.action-featured.is-active {
+  filter: brightness(1.12);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08), 0 8px 18px rgba(0, 0, 0, 0.18) !important;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button svg {
+  color: #9edcff !important;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button.action-featured[data-verse-action="highlight"] svg,
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button.action-featured[data-verse-action="ask-ai"] svg,
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button.action-featured[data-verse-action="note"] svg {
+  color: currentColor !important;
 }
 
 /* Home library card finishing pass */
@@ -889,7 +970,7 @@ body:has(.app-shell[data-app-background="black"]) .prayer-intro {
 
 .app-shell[data-app-background="black"] #home .home-stats {
   position: absolute;
-  z-index: 3;
+  z-index: 5;
   top: 18px;
   right: auto;
   left: 22px;
@@ -930,7 +1011,7 @@ body:has(.app-shell[data-app-background="black"]) .prayer-intro {
 
 .app-shell[data-app-background="black"] #home .home-bible-timeline {
   position: absolute;
-  z-index: 3;
+  z-index: 2;
   top: 260px;
   right: 22px;
   left: 22px;
@@ -944,8 +1025,8 @@ body:has(.app-shell[data-app-background="black"]) .prayer-intro {
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  width: 100%;
-  min-width: 0;
+  width: max-content;
+  min-width: 100%;
   min-height: 190px;
   overflow-x: auto;
   overflow-y: hidden;
@@ -961,6 +1042,24 @@ body:has(.app-shell[data-app-background="black"]) .prayer-intro {
       0 87px / 100% 8px no-repeat;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
+  animation: homeTimelineDrift 60s linear infinite;
+  will-change: transform;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+}
+
+.app-shell[data-app-background="black"] #home .home-bible-timeline-track:hover,
+.app-shell[data-app-background="black"] #home .home-bible-timeline-track:focus-within {
+  animation-play-state: paused;
+}
+
+@keyframes homeTimelineDrift {
+  from {
+    transform: translateX(-28%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 
 .app-shell[data-app-background="black"] #home .home-bible-timeline-track::before {
@@ -1016,6 +1115,18 @@ body:has(.app-shell[data-app-background="black"]) .prayer-intro {
 .app-shell[data-app-background="black"] #home .home-bible-timeline-track button:hover {
   border-color: rgba(139, 220, 255, 0.76);
   background: rgba(60, 157, 204, 0.34);
+}
+
+.app-shell[data-app-background="black"] #home .home-hero-image-copy {
+  z-index: 6;
+  bottom: 50px !important;
+}
+
+.app-shell[data-app-background="black"] #home > .home-prayer-card,
+.app-shell[data-app-background="black"] #home > .home-content-card,
+.app-shell[data-app-background="black"] #home > .home-library-section {
+  position: relative;
+  z-index: 4;
 }
 
 .app-shell[data-app-background="black"] #home .home-bible-timeline-track button > span {
@@ -1310,7 +1421,7 @@ body:has(.app-shell[data-app-background="black"]) .prayer-intro {
 .app-shell[data-app-background="black"] .bottom-sheet {
   width: 100% !important;
   max-height: min(52vh, 430px) !important;
-  padding: 8px 12px 10px !important;
+  padding: 8px 12px 4px !important;
   border-radius: 0 !important;
   border: 1px solid rgba(190, 227, 246, 0.42) !important;
   background: rgba(36, 38, 41, 0.78) !important;
@@ -1511,13 +1622,13 @@ body:has(.app-shell[data-app-background="black"]) .prayer-intro {
   justify-content: space-between;
   gap: 14px;
   margin-bottom: 24px;
-  padding: 18px;
-  border: 1px solid rgba(139, 220, 255, 0.28);
-  border-radius: 24px;
-  background: rgba(54, 82, 103, 0.3);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
   color: #ffffff;
-  -webkit-backdrop-filter: blur(16px) saturate(125%);
-  backdrop-filter: blur(16px) saturate(125%);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
 .kids-bible-header h1,
@@ -2348,7 +2459,7 @@ html:has(.app-shell[data-app-background="black"]) {
 
 .home-stats {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
   margin: 0 0 18px;
 }
@@ -9074,6 +9185,21 @@ html:has(.app-shell[data-app-background="black"]) {
   color: var(--muted);
 }
 
+.bottom-sheet .sheet-title button {
+  width: 32px;
+  min-height: 32px;
+  opacity: 0.72;
+}
+
+.bottom-sheet .sheet-title button:hover {
+  opacity: 1;
+  background: rgba(139, 220, 255, 0.1);
+}
+
+.bottom-sheet.is-dragging {
+  transition: none !important;
+}
+
 .search-suggestions {
   display: flex;
   flex-wrap: wrap;
@@ -9133,30 +9259,21 @@ html:has(.app-shell[data-app-background="black"]) {
 }
 
 .action-grid {
-  display: flex;
-  flex-wrap: nowrap;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: 8px;
-  max-height: 90px;
+  max-height: none;
   width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow: visible;
   padding: 0 2px 8px;
-  scroll-padding: 2px;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-}
-
-.action-grid::-webkit-scrollbar {
-  display: none;
 }
 
 .action-grid button {
   display: grid;
   place-items: center;
   gap: 5px;
-  flex: 0 0 78px;
-  width: 78px;
+  width: 100%;
+  min-width: 0;
   min-height: 82px;
   padding: 8px;
   border: 1px solid rgba(221, 227, 234, 0.01);
@@ -9165,9 +9282,16 @@ html:has(.app-shell[data-app-background="black"]) {
   color: var(--muted);
   font-size: 11px;
   font-weight: 700;
-  scroll-snap-align: start;
   text-align: center;
   transition: transform 120ms ease, background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+.action-grid button.action-featured {
+  grid-column: span 4;
+}
+
+.action-grid button.action-secondary {
+  grid-column: span 3;
 }
 
 .action-grid button:hover,
@@ -9192,6 +9316,10 @@ html:has(.app-shell[data-app-background="black"]) {
   font-size: 13px;
   font-weight: 700;
   text-align: center;
+}
+
+.sheet-feedback:empty {
+  display: none;
 }
 
 .verse-detail-panel {
@@ -9706,8 +9834,10 @@ html:has(.app-shell[data-app-background="black"]) {
 
   .reader-topbar {
     top: -24px;
-    margin: -24px -18px 0;
-    padding: 20px 18px 12px;
+    width: calc(100% + 32px);
+    margin: -24px -16px 0;
+    padding: 20px 16px 12px;
+    border-radius: 0;
   }
 
   .apologetics-hero-stats {
@@ -9942,6 +10072,57 @@ html:has(.app-shell[data-app-background="black"]) {
   }
 }
 
+@media (min-width: 681px) and (max-width: 760px) {
+  .app-shell[data-app-background="black"] #home .home-bible-timeline {
+    top: 110px !important;
+  }
+
+  .app-shell[data-app-background="black"] #home .home-hero-image {
+    width: calc(100% + 28px) !important;
+    max-width: none !important;
+    margin-right: -14px !important;
+    margin-left: -14px !important;
+  }
+
+  .app-shell[data-app-background="black"] #home .home-bible-timeline {
+    top: 110px !important;
+  }
+}
+
+@media (max-width: 760px) {
+  /* Keep the Bible timeline inside the hero, between the stats and verse. */
+  .app-shell[data-app-background="black"] #home .home-bible-timeline {
+    position: absolute !important;
+    top: 250px !important;
+    right: 0 !important;
+    left: 0 !important;
+    width: auto !important;
+    height: 190px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .app-shell[data-app-background="black"] #home .home-hero-image {
+    height: 640px !important;
+  }
+
+  .app-shell[data-app-background="black"] #home .home-bible-timeline-track {
+    min-height: 190px;
+    padding-inline: 6px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-shell[data-app-background="black"] #home .home-bible-timeline-track {
+    animation: none !important;
+  }
+}
+
 /* Prayer request intro keeps its copy without the card treatment. */
 body:has(.app-shell[data-app-background="black"]) .prayer-intro {
   background: transparent !important;
@@ -9985,6 +10166,13 @@ body:has(.app-shell[data-app-background="black"]) .prayer-intro {
 
   .screen > * {
     min-width: 0;
+  }
+
+  .app-shell[data-app-background="black"] #home .home-hero-image {
+    width: calc(100% + 28px) !important;
+    max-width: none !important;
+    margin-right: -14px !important;
+    margin-left: -14px !important;
   }
 
   .screen img,
@@ -10093,6 +10281,97 @@ body:has(.app-shell[data-app-background="black"]) .prayer-compose textarea:focus
   box-shadow: 0 0 0 3px rgba(139, 220, 255, 0.18), inset 0 1px 0 rgba(220, 248, 255, 0.1) !important;
 }
 
+/* Compact dark styling for the highlight picker. */
+body:has(.app-shell[data-app-background="black"]) .bottom-sheet .verse-detail-panel {
+  margin-top: 8px !important;
+}
+
+body:has(.app-shell[data-app-background="black"]) .bottom-sheet {
+  scrollbar-width: none;
+}
+
+body:has(.app-shell[data-app-background="black"]) .bottom-sheet::-webkit-scrollbar {
+  display: none;
+}
+
+body:has(.app-shell[data-app-background="black"]) .bottom-sheet .verse-detail-panel .detail-stack {
+  gap: 7px;
+}
+
+body:has(.app-shell[data-app-background="black"]) .bottom-sheet .highlight-palette {
+  gap: 6px;
+  padding: 0 0 3px;
+  overflow: visible;
+}
+
+body:has(.app-shell[data-app-background="black"]) .bottom-sheet .highlight-palette button {
+  flex: 0 0 44px;
+  width: 44px;
+  min-height: 44px;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+body:has(.app-shell[data-app-background="black"]) .bottom-sheet .highlight-palette span {
+  width: 32px;
+  height: 32px;
+  border: 0;
+}
+
+body:has(.app-shell[data-app-background="black"]) .bottom-sheet .highlight-palette button.is-selected {
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+body:has(.app-shell[data-app-background="black"]) .bottom-sheet .highlight-palette button.is-selected::after {
+  inset: 15px;
+  background: #f4fbff;
+}
+
+body:has(.app-shell[data-app-background="black"]) .bottom-sheet .highlight-folder-select {
+  gap: 4px;
+}
+
+body:has(.app-shell[data-app-background="black"]) .bottom-sheet .highlight-folder-select select,
+body:has(.app-shell[data-app-background="black"]) .bottom-sheet .highlight-folder-form {
+  border-color: rgba(170, 215, 238, 0.34) !important;
+  background: rgba(31, 33, 36, 0.72) !important;
+  box-shadow: none !important;
+}
+
+body:has(.app-shell[data-app-background="black"]) .bottom-sheet .highlight-folder-select select {
+  min-height: 38px;
+  color: #f4fbff !important;
+}
+
+body:has(.app-shell[data-app-background="black"]) .bottom-sheet .highlight-folder-form {
+  grid-template-columns: 1fr 34px;
+  gap: 5px;
+  padding: 4px;
+}
+
+body:has(.app-shell[data-app-background="black"]) .bottom-sheet .highlight-folder-form button {
+  width: 34px;
+  min-height: 34px;
+  background: #8bdcff !important;
+  color: #102b38 !important;
+}
+
+body:has(.app-shell[data-app-background="black"]) .bottom-sheet .secondary-button {
+  min-height: 38px;
+  border-color: rgba(170, 215, 238, 0.28) !important;
+  background: rgba(54, 82, 103, 0.34) !important;
+  color: #b7c8d4 !important;
+}
+
+body:has(.app-shell[data-app-background="black"]) .bottom-sheet .secondary-button.is-highlight-active {
+  border-color: #ff7b9b !important;
+  background: linear-gradient(135deg, #ff5f87, #ff8a5b) !important;
+  color: #17151a !important;
+  box-shadow: 0 5px 16px rgba(255, 95, 135, 0.28) !important;
+}
+
 /* Final glass treatment for all cards in the dark phone */
 .app-shell[data-app-background="black"] .home-stat-card,
 .app-shell[data-app-background="black"] .home-prayer-card,
@@ -10164,4 +10443,314 @@ body:has(.app-shell[data-app-background="black"]) .prayer-compose textarea:focus
 .app-shell[data-app-background="black"] .home-library-panel .saved-note-card:nth-of-type(3n) .saved-note-card-heading,
 .app-shell[data-app-background="black"] .home-library-panel .saved-note-card:nth-of-type(3n) .saved-note-card-heading svg {
   color: #d5adff !important;
+}
+
+/* Prayer categories: one-line, touch-friendly horizontal carousel. */
+.prayer-category-picker {
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  gap: 12px;
+  padding: 3px 2px 7px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.prayer-category-picker button {
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+  white-space: nowrap;
+}
+
+.prayer-category-picker::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 680px) {
+  .prayer-category-picker {
+    width: 100%;
+  }
+}
+
+/* Keep the carousel inside the existing page margins. */
+.prayer-compose,
+.prayer-compose-options {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Slowly moving ambient color around the dark app background. */
+body:has(.app-shell[data-app-background="black"]) {
+  position: relative;
+  isolation: isolate;
+  overflow-x: hidden;
+  background: #4b3543 !important;
+}
+
+body:has(.app-shell[data-app-background="black"])::before {
+  position: fixed;
+  z-index: 0;
+  inset: -24%;
+  pointer-events: none;
+  content: "";
+  background:
+    radial-gradient(ellipse 34% 46% at 18% 18%, rgba(150, 104, 145, 0.78), transparent 72%),
+    radial-gradient(ellipse 42% 34% at 84% 72%, rgba(74, 121, 160, 0.58), transparent 72%),
+    radial-gradient(ellipse 30% 38% at 64% 12%, rgba(195, 112, 139, 0.34), transparent 70%);
+  filter: blur(18px);
+  animation: appAmbientFlow 28s ease-in-out infinite alternate;
+}
+
+body:has(.app-shell[data-app-background="black"]) > .app-shell {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes appAmbientFlow {
+  0% {
+    transform: translate3d(-4%, -2%, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(3%, 4%, 0) scale(1.08);
+  }
+  100% {
+    transform: translate3d(-1%, -3%, 0) scale(1.02);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body:has(.app-shell[data-app-background="black"])::before {
+    animation: none;
+  }
+}
+
+/* Fade timeline items as they enter and leave the fixed hero viewport. */
+.app-shell[data-app-background="black"] #home .home-bible-timeline {
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    #000 12%,
+    #000 88%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    #000 12%,
+    #000 88%,
+    transparent 100%
+  );
+}
+
+.app-shell[data-app-background="black"] #home .home-bible-timeline-track {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+/* Reverse the timeline drift direction. */
+.app-shell[data-app-background="black"] #home .home-bible-timeline-track {
+  animation-direction: reverse;
+}
+
+/* Bible reader: let the frosted top section span the full screen width. */
+@media (max-width: 760px) {
+  .reader-screen .reader-topbar {
+    width: calc(100% + 32px) !important;
+    max-width: none !important;
+    margin-right: -16px !important;
+    margin-left: -16px !important;
+  }
+}
+
+/* Smaller controls for the parallel and target actions. */
+.reader-screen .parallel-toggle {
+  min-height: 36px !important;
+  gap: 6px;
+  font-size: 11px;
+}
+
+.reader-screen .parallel-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Match the Bible header's transparent frosted-glass treatment. */
+.app-shell .bottom-nav {
+  border-color: rgba(170, 215, 238, 0.34) !important;
+  background: rgba(54, 82, 103, 0.42) !important;
+  background-image: none !important;
+  box-shadow:
+    inset 0 1px 0 rgba(220, 242, 255, 0.14),
+    0 -8px 22px rgba(0, 0, 0, 0.2) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
+  backdrop-filter: blur(18px) saturate(135%) !important;
+}
+
+.app-shell[data-app-background] .bottom-nav,
+.app-shell[data-theme="dark"][data-app-background] .bottom-nav {
+  border-color: rgba(170, 215, 238, 0.34) !important;
+  background-color: rgba(54, 82, 103, 0.28) !important;
+  background-image: none !important;
+  -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
+  backdrop-filter: blur(18px) saturate(135%) !important;
+}
+
+.app-shell[data-app-background] .bottom-nav button.is-active,
+.app-shell[data-theme="dark"][data-app-background] .bottom-nav button.is-active {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #5edcff 0%, #4f9dff 48%, #956cff 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    0 5px 18px rgba(83, 157, 255, 0.42) !important;
+}
+
+.app-shell[data-app-background] .bottom-nav button.is-active svg,
+.app-shell[data-theme="dark"][data-app-background] .bottom-nav button.is-active svg {
+  color: #ffffff !important;
+  filter: drop-shadow(0 1px 3px rgba(15, 45, 100, 0.28));
+}
+
+.app-shell[data-app-background] .bottom-nav,
+.app-shell[data-theme="dark"][data-app-background] .bottom-nav {
+  border-right: 0 !important;
+  border-bottom: 0 !important;
+  border-left: 0 !important;
+}
+
+/* Move the large blue atmospheric mass across the Bible/app background. */
+.app-shell[data-app-background="black"] .phone-frame {
+  background-size: 180% 180%, 175% 175%, 100% 100% !important;
+  animation: appPhoneAtmosphere 16s ease-in-out infinite alternate !important;
+}
+
+@keyframes appPhoneAtmosphere {
+  0% {
+    background-position: -32% 12%, 132% 88%, 0 0;
+  }
+  50% {
+    background-position: 48% 34%, 52% 58%, 0 0;
+  }
+  100% {
+    background-position: 128% 76%, -28% 18%, 0 0;
+  }
+}
+
+/* Small glowing orb moving irregularly behind the app content. */
+.app-shell[data-app-background="black"] .phone-frame {
+  isolation: isolate;
+}
+
+.app-shell[data-app-background="black"] .phone-frame::before {
+  position: absolute;
+  z-index: 0;
+  top: 16%;
+  left: 0;
+  width: 280px;
+  height: 280px;
+  pointer-events: none;
+  content: "";
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 36% 34%,
+    rgba(224, 249, 255, 0.96) 0%,
+    rgba(133, 222, 255, 0.88) 12%,
+    rgba(71, 165, 222, 0.62) 38%,
+    rgba(50, 112, 177, 0.22) 62%,
+    transparent 76%
+  );
+  filter: blur(42px);
+  opacity: 0.8;
+  mix-blend-mode: screen;
+  animation: appFloatingOrb 34s ease-in-out infinite alternate !important;
+}
+
+.app-shell[data-app-background="black"] .phone-frame::after {
+  position: absolute;
+  z-index: 0;
+  top: 68%;
+  left: 72%;
+  width: 230px;
+  height: 230px;
+  pointer-events: none;
+  content: "";
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 38% 32%,
+    rgba(255, 226, 246, 0.94) 0%,
+    rgba(224, 132, 255, 0.8) 14%,
+    rgba(148, 87, 220, 0.58) 40%,
+    rgba(94, 67, 165, 0.2) 64%,
+    transparent 78%
+  );
+  filter: blur(38px);
+  opacity: 0.74;
+  mix-blend-mode: screen;
+  animation: appFloatingOrbViolet 43s ease-in-out 2s infinite alternate !important;
+}
+
+.app-shell[data-app-background="black"] .phone-frame > .screen {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes appFloatingOrb {
+  0% {
+    top: 16%;
+    left: -8%;
+    transform: scale(0.82) rotate(0deg);
+  }
+  22% {
+    top: 9%;
+    left: 76%;
+    transform: scale(1.04) rotate(28deg);
+  }
+  48% {
+    top: 48%;
+    left: 69%;
+    transform: scale(0.88) rotate(72deg);
+  }
+  73% {
+    top: 72%;
+    left: -6%;
+    transform: scale(1.12) rotate(122deg);
+  }
+  100% {
+    top: 31%;
+    left: 42%;
+    transform: scale(0.9) rotate(168deg);
+  }
+}
+
+@keyframes appFloatingOrbViolet {
+  0% {
+    top: 68%;
+    left: 72%;
+    transform: scale(0.86) rotate(0deg);
+  }
+  24% {
+    top: 42%;
+    left: 8%;
+    transform: scale(1.08) rotate(-32deg);
+  }
+  51% {
+    top: 12%;
+    left: 52%;
+    transform: scale(0.78) rotate(-70deg);
+  }
+  76% {
+    top: 76%;
+    left: 38%;
+    transform: scale(1.14) rotate(-112deg);
+  }
+  100% {
+    top: 24%;
+    left: 84%;
+    transform: scale(0.9) rotate(-156deg);
+  }
 }

@@ -412,13 +412,13 @@ const savedPreferences = {
 };
 
 const highlightColors = [
-  { id: "gold", label: "Yellow", value: "rgba(250, 204, 21, 0.34)" },
-  { id: "sage", label: "Green", value: "rgba(74, 222, 128, 0.30)" },
-  { id: "sky", label: "Blue", value: "rgba(56, 189, 248, 0.30)" },
-  { id: "violet", label: "Purple", value: "rgba(167, 139, 250, 0.30)" },
-  { id: "rose", label: "Pink", value: "rgba(251, 113, 133, 0.28)" },
-  { id: "orange", label: "Orange", value: "rgba(251, 146, 60, 0.32)" },
-  { id: "charcoal", label: "Slate", value: "rgba(100, 116, 139, 0.28)" },
+  { id: "gold", label: "Yellow", value: "rgba(255, 209, 102, 0.58)" },
+  { id: "sage", label: "Green", value: "rgba(94, 225, 162, 0.52)" },
+  { id: "sky", label: "Blue", value: "rgba(92, 200, 255, 0.54)" },
+  { id: "violet", label: "Purple", value: "rgba(181, 140, 255, 0.54)" },
+  { id: "rose", label: "Pink", value: "rgba(255, 120, 150, 0.52)" },
+  { id: "orange", label: "Orange", value: "rgba(255, 155, 95, 0.56)" },
+  { id: "charcoal", label: "Slate", value: "rgba(148, 163, 184, 0.48)" },
 ];
 
 const greekInsights = {
@@ -465,11 +465,11 @@ const compareVersions = {
 };
 const popularVersionOrder = ["KJV", "NKJV", "NLT", "CSB"];
 const textSizeOptions = {
-  xs: "15px",
-  small: "17px",
-  medium: "19px",
-  large: "22px",
-  xl: "25px",
+  xs: "13px",
+  small: "15px",
+  medium: "17px",
+  large: "19px",
+  xl: "21px",
 };
 const accentOptions = {
   bronze: { value: "#6b7f93", soft: "rgba(107, 127, 147, 0.16)", contrast: "#ffffff" },
@@ -1408,6 +1408,9 @@ function setPrayerCategory(value) {
   prayerCategoryOptions.forEach((option) => {
     option.classList.toggle("is-active", option.dataset.prayerCategoryOption === value);
   });
+  prayerCategoryOptions
+    .find((option) => option.dataset.prayerCategoryOption === value)
+    ?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
 }
 
 function showPrayerSentState() {
@@ -3298,6 +3301,39 @@ function updateFocusedVerseFromScroll() {
 
 let verseSheetTouchStartY = 0;
 let verseSheetTouchOnPanel = false;
+let verseSheetPanelTouchStartY = 0;
+let verseSheetPanelDragging = false;
+
+verseSheet?.addEventListener("touchstart", (event) => {
+  if (appShell?.dataset.modal !== "verse" || !event.target.closest(".modal-handle, .sheet-title")) return;
+  verseSheetPanelTouchStartY = event.touches[0]?.clientY || 0;
+  verseSheetPanelDragging = true;
+  verseSheet.classList.add("is-dragging");
+}, { passive: true });
+
+verseSheet?.addEventListener("touchmove", (event) => {
+  if (!verseSheetPanelDragging) return;
+  const currentY = event.touches[0]?.clientY || verseSheetPanelTouchStartY;
+  const delta = Math.max(0, currentY - verseSheetPanelTouchStartY);
+  if (!delta) return;
+  event.preventDefault();
+  verseSheet.style.transform = `translateY(${Math.min(delta, 180)}px)`;
+}, { passive: false });
+
+verseSheet?.addEventListener("touchend", () => {
+  if (!verseSheetPanelDragging) return;
+  const delta = Number.parseFloat(verseSheet.style.transform.match(/[-\d.]+/)?.[0] || "0");
+  verseSheetPanelDragging = false;
+  verseSheet.classList.remove("is-dragging");
+  verseSheet.style.transform = "";
+  if (delta > 72) closeModal();
+});
+
+verseSheet?.addEventListener("touchcancel", () => {
+  verseSheetPanelDragging = false;
+  verseSheet.classList.remove("is-dragging");
+  verseSheet.style.transform = "";
+}, { passive: true });
 
 modalLayer?.addEventListener("wheel", (event) => {
   if (appShell?.dataset.modal !== "verse" || event.target.closest(".bottom-sheet")) return;
@@ -4032,7 +4068,7 @@ function showHighlightPicker(selectedFolderId = null) {
           <button aria-label="Create highlight folder"><i data-lucide="plus"></i></button>
         </form>
       </div>
-      <button class="secondary-button" data-remove-highlight>Remove Highlight</button>
+      <button class="secondary-button${currentHighlight ? " is-highlight-active" : ""}" data-remove-highlight>Remove Highlight</button>
     </div>
   `;
 
