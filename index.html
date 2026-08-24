@@ -4,11 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Brother Bible AI</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=note-layout-14" />
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="bible-data.js" defer></script>
-    <script src="script.js" defer></script>
+    <script src="script.js?v=note-layout-14" defer></script>
   </head>
   <body>
     <div class="app-shell" data-theme="light" data-app-background="paper">
@@ -477,6 +477,29 @@
                   <button type="button" data-prayer-category-option="other">Other</button>
                 </div>
               </div>
+              <div class="prayer-background-picker" role="group" aria-label="Choose prayer card background">
+                <span class="prayer-background-picker-label">Choose a background</span>
+                <div class="prayer-background-options">
+                  <button class="is-active" type="button" data-prayer-background-option="0" aria-label="Choose prayer background 1" aria-pressed="true">
+                    <img src="assets/prayer-backgrounds/prayer-1.png" alt="" />
+                  </button>
+                  <button type="button" data-prayer-background-option="1" aria-label="Choose prayer background 2" aria-pressed="false">
+                    <img src="assets/prayer-backgrounds/prayer-2.png" alt="" />
+                  </button>
+                  <button type="button" data-prayer-background-option="2" aria-label="Choose prayer background 3" aria-pressed="false">
+                    <img src="assets/prayer-backgrounds/prayer-3.png" alt="" />
+                  </button>
+                  <button type="button" data-prayer-background-option="3" aria-label="Choose prayer background 4" aria-pressed="false">
+                    <img src="assets/prayer-backgrounds/prayer-4.png" alt="" />
+                  </button>
+                  <button type="button" data-prayer-background-option="4" aria-label="Choose prayer background 5" aria-pressed="false">
+                    <img src="assets/prayer-backgrounds/prayer-5.png" alt="" />
+                  </button>
+                  <button type="button" data-prayer-background-option="5" aria-label="Choose prayer background 6" aria-pressed="false">
+                    <img src="assets/prayer-backgrounds/prayer-6.png" alt="" />
+                  </button>
+                </div>
+              </div>
               <div class="prayer-compose-footer">
                 <small data-prayer-word-count>0 / 300 words</small>
                 <button type="submit"><i data-lucide="send"></i><span>Send prayer request</span></button>
@@ -486,25 +509,24 @@
           </section>
 
           <section class="prayer-board-section" data-prayer-board-section>
-            <div class="prayer-toolbar">
-              <button class="prayer-board-toggle" type="button" data-prayer-board-toggle aria-expanded="true">
-                <span class="prayer-board-label" data-prayer-board-label>Prayer board</span>
-                <i data-lucide="chevron-down" aria-hidden="true"></i>
-              </button>
-            </div>
             <div class="prayer-board-content" data-prayer-board-content>
-              <label class="prayer-sort">
-                <span class="sr-only">Sort prayers</span>
-                <select data-prayer-sort>
-                  <option value="most">Most prayed</option>
-                  <option value="least">Least prayed</option>
-                  <option value="recent">Most recent</option>
-                </select>
-              </label>
-              <div class="prayer-filter-row" role="group" aria-label="Prayer filters">
-                <button class="is-active" type="button" data-prayer-filter="all">All</button>
-                <button type="button" data-prayer-filter="unanswered">Needs prayer</button>
-                <button type="button" data-prayer-filter="urgent">Urgent</button>
+              <div class="prayer-board-controls">
+                <label class="prayer-sort">
+                  <span class="sr-only">Sort prayers</span>
+                  <select data-prayer-sort>
+                    <option value="most">Most prayed</option>
+                    <option value="least">Least prayed</option>
+                    <option value="recent">Most recent</option>
+                  </select>
+                </label>
+                <div class="prayer-filter-row prayer-category-picker" role="group" aria-label="Prayer filters">
+                  <button class="is-active" type="button" data-prayer-filter="general">General</button>
+                  <button type="button" data-prayer-filter="family">Family</button>
+                  <button type="button" data-prayer-filter="health">Health</button>
+                  <button type="button" data-prayer-filter="work">Work</button>
+                  <button type="button" data-prayer-filter="faith">Faith</button>
+                  <button type="button" data-prayer-filter="other">Other</button>
+                </div>
               </div>
 
               <section class="prayer-list" data-prayer-list aria-live="polite"></section>
@@ -737,7 +759,12 @@
               <span>Notes</span>
               <strong data-note-editor-reference>Selected verses</strong>
             </div>
-            <button data-close-modal aria-label="Close note editor"><i data-lucide="x"></i></button>
+            <div class="note-editor-header-actions">
+              <button type="button" class="note-undo-button" data-note-command="undo" aria-label="Undo" title="Undo"><i data-lucide="undo-2"></i></button>
+              <button type="button" class="note-delete-button" data-delete-rich-note aria-label="Delete note" title="Delete note"><i data-lucide="trash-2"></i></button>
+              <button type="button" class="primary-button note-save-button" data-save-rich-note aria-label="Save note" title="Save note"><i data-lucide="save"></i></button>
+              <button type="button" class="note-close-button" data-close-modal aria-label="Close note editor" title="Close"><i data-lucide="x"></i></button>
+            </div>
           </header>
           <input class="note-editor-title" data-note-title type="text" maxlength="100" placeholder="Note title" aria-label="Note title" />
           <div class="note-editor-verse-chips" data-note-editor-verse-chips aria-label="Verses attached to this note"></div>
@@ -746,11 +773,10 @@
             <button type="button" data-note-command="italic" aria-label="Italic"><i>I</i></button>
             <button type="button" data-note-command="underline" aria-label="Underline"><u>U</u></button>
             <button type="button" data-note-command="formatBlock" data-note-value="h2" aria-label="Title">H</button>
+            <span class="note-toolbar-divider" aria-hidden="true"></span>
             <button type="button" data-note-command="insertUnorderedList" aria-label="Bulleted list">•</button>
             <button type="button" data-note-command="insertOrderedList" aria-label="Numbered list">1.</button>
-            <button type="button" data-note-command="justifyLeft" aria-label="Align left">≡</button>
-            <button type="button" data-note-command="justifyCenter" aria-label="Center">≡</button>
-            <button type="button" data-note-command="justifyFull" aria-label="Justify">☰</button>
+            <span class="note-toolbar-divider" aria-hidden="true"></span>
             <label class="note-format-select" aria-label="Text color">
               <i data-lucide="palette"></i>
               <span class="note-color-swatch" data-note-color-swatch></span>
@@ -761,21 +787,14 @@
               <span class="note-color-swatch" data-note-highlight-swatch></span>
               <input type="color" data-note-highlight value="#facc15" />
             </label>
-          </div>
-          <div class="note-editor-size-row">
-            <span aria-hidden="true">A</span>
-            <input type="range" data-note-font-size min="14" max="30" step="1" value="17" aria-label="Note text size" />
-            <strong data-note-font-size-value>17 px</strong>
-            <span aria-hidden="true" class="note-editor-size-large">A</span>
+            <button type="button" data-note-size-decrease aria-label="Make text smaller" title="Make text smaller">A−</button>
+            <button type="button" data-note-size-increase aria-label="Make text larger" title="Make text larger">A+</button>
+            <span class="note-toolbar-divider" aria-hidden="true"></span>
+            <button type="button" data-note-command="justifyLeft" aria-label="Align left">≡</button>
+            <button type="button" data-note-command="justifyCenter" aria-label="Center">≡</button>
+            <button type="button" data-note-command="justifyFull" aria-label="Justify">☰</button>
           </div>
           <div class="note-editor-content" data-note-editor-content contenteditable="true" role="textbox" aria-label="Write your note"></div>
-          <div class="note-editor-footer">
-            <div class="note-editor-footer-actions">
-              <button type="button" class="note-undo-button" data-note-command="undo" aria-label="Undo" title="Undo"><i data-lucide="undo-2"></i></button>
-              <button type="button" class="note-delete-button" data-delete-rich-note aria-label="Delete note" title="Delete note"><i data-lucide="trash-2"></i></button>
-              <button type="button" class="primary-button" data-save-rich-note>Save note</button>
-            </div>
-          </div>
         </section>
 
       </div>

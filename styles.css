@@ -1313,18 +1313,136 @@ body:has(.app-shell[data-app-background="black"]) .prayer-intro {
   height: calc(100% - var(--bottom-nav-height)) !important;
   max-height: calc(100% - var(--bottom-nav-height)) !important;
   margin: 0 !important;
-  padding: 18px !important;
+  padding: 18px 0 0 !important;
   border-radius: 0 !important;
   background: rgba(54, 82, 103, 0.24) !important;
   -webkit-backdrop-filter: blur(24px) saturate(135%);
   backdrop-filter: blur(24px) saturate(135%);
 }
 
-.app-shell[data-app-background="black"][data-modal="note"] .note-editor-panel-header button {
+.app-shell[data-app-background="black"][data-modal="note"] .note-editor-panel-header button,
+.app-shell[data-app-background="black"][data-modal="note"] .note-close-button {
   border: 1px solid rgba(190, 227, 246, 0.42) !important;
   background: rgba(54, 82, 103, 0.72) !important;
   color: #d9f2ff !important;
   box-shadow: inset 0 1px 0 rgba(220, 242, 255, 0.14) !important;
+}
+
+.app-shell[data-app-background="black"][data-modal="note"] .note-editor-panel-header,
+.app-shell[data-app-background="black"][data-modal="note"] .note-editor-title,
+.app-shell[data-app-background="black"][data-modal="note"] .note-editor-verse-chips,
+.app-shell[data-app-background="black"][data-modal="note"] .note-editor-toolbar,
+.app-shell[data-app-background="black"][data-modal="note"] .note-editor-size-row {
+  margin-right: 18px;
+  margin-left: 18px;
+}
+
+.app-shell[data-app-background="black"][data-modal="note"] .note-editor-header-actions {
+  display: flex !important;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 5px;
+}
+
+.app-shell[data-app-background="black"][data-modal="note"] .note-editor-header-actions .note-undo-button,
+.app-shell[data-app-background="black"][data-modal="note"] .note-editor-header-actions .note-delete-button,
+.app-shell[data-app-background="black"][data-modal="note"] .note-editor-header-actions .note-close-button {
+  width: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  border-radius: 10px !important;
+}
+
+.app-shell[data-app-background="black"][data-modal="note"] .note-editor-header-actions .primary-button {
+  min-width: 0 !important;
+  min-height: 32px !important;
+  padding: 0 9px !important;
+  border-radius: 10px !important;
+  font-size: 11px !important;
+}
+
+.note-editor-header-actions .note-save-button {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  min-width: 32px !important;
+  padding: 0 !important;
+}
+
+.note-editor-header-actions .note-save-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.note-editor-header-actions .note-save-button.is-saved {
+  color: #163d2a !important;
+  background: #9fe4b5 !important;
+}
+
+.app-shell[data-app-background="black"][data-modal="note"] .note-editor-header-actions .note-close-button {
+  border-color: #ff7d86 !important;
+  background: #e65360 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 10px rgba(230, 83, 96, 0.28) !important;
+}
+
+.app-shell[data-app-background="black"][data-modal="note"] .note-editor-header-actions .note-close-button:hover {
+  background: #f46670 !important;
+}
+
+/* Compact text-formatting controls. */
+body .app-shell[data-app-background="black"] .note-editor-toolbar {
+  gap: 3px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+}
+
+body .app-shell[data-app-background="black"] .note-editor-toolbar button,
+body .app-shell[data-app-background="black"] .note-editor-toolbar .note-format-select {
+  width: 24px !important;
+  min-width: 24px !important;
+  min-height: 24px !important;
+  border-radius: 7px !important;
+  font-size: 10px !important;
+}
+
+body .app-shell[data-app-background="black"] .note-editor-toolbar [data-note-size-decrease],
+body .app-shell[data-app-background="black"] .note-editor-toolbar [data-note-size-increase] {
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.04em;
+}
+
+body .app-shell[data-app-background="black"] .note-editor-toolbar button svg,
+body .app-shell[data-app-background="black"] .note-editor-toolbar .note-format-select svg {
+  width: 12px !important;
+  height: 12px !important;
+}
+
+.note-toolbar-divider {
+  flex: 0 0 2px;
+  width: 2px;
+  height: 28px;
+  margin: 0 5px;
+  border-radius: 999px;
+  background: rgba(190, 227, 246, 0.62);
+}
+
+.app-shell[data-app-background="black"][data-modal="note"] .note-editor-title {
+  box-sizing: border-box;
+  width: calc(100% - 36px) !important;
+  margin: -4px 18px 8px !important;
+}
+
+.app-shell[data-app-background="black"][data-modal="note"] .note-editor-content {
+  width: 100% !important;
+  margin: 14px 0 0 !important;
+  background: transparent !important;
+  border: 1px solid rgba(190, 227, 246, 0.34) !important;
+  box-shadow: none !important;
+  border-radius: 16px 16px 0 0 !important;
 }
 
 .app-shell[data-app-background="black"][data-modal="note"] .bottom-nav {
@@ -2510,6 +2628,8 @@ html:has(.app-shell[data-app-background="black"]) {
 }
 
 .home-prayer-card {
+  position: relative;
+  z-index: 0;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -2523,6 +2643,29 @@ html:has(.app-shell[data-app-background="black"]) {
   background: #f3f5f2;
   box-shadow: 0 4px 14px rgba(71, 78, 86, 0.06);
   text-align: left;
+}
+
+/* Mirror the hero's bottom fade into the first section below it. */
+.app-shell[data-app-background="black"] #home > .home-prayer-card::before {
+  display: none;
+}
+
+.app-shell[data-app-background="black"] #home > .home-prayer-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Continue the hero fade on the homepage background, behind the sections below. */
+.app-shell[data-app-background="black"] #home::before {
+  position: absolute;
+  z-index: 0;
+  top: clamp(480px, 70vh, 620px);
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(180deg, #000000 0%, rgba(0, 0, 0, 0.78) 14%, rgba(0, 0, 0, 0.28) 38%, transparent 68%);
+  content: "";
+  pointer-events: none;
 }
 
 .home-prayer-card-icon {
@@ -8653,7 +8796,7 @@ html:has(.app-shell[data-app-background="black"]) {
 
 .note-editor-panel {
   display: grid;
-  grid-template-rows: auto auto auto auto auto minmax(0, 1fr) auto;
+  grid-template-rows: auto auto auto auto minmax(0, 1fr);
   width: 90%;
   height: 100%;
   max-height: 100%;
@@ -8679,6 +8822,21 @@ html:has(.app-shell[data-app-background="black"]) {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+}
+
+.note-editor-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.note-editor-header-actions .primary-button {
+  min-height: 42px;
+  padding: 0 14px;
+  border-radius: 13px;
+  white-space: nowrap;
 }
 
 .note-editor-panel-header {
@@ -8800,6 +8958,17 @@ html:has(.app-shell[data-app-background="black"]) {
   background: #f1ece1;
 }
 
+.note-close-button {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  min-height: 42px;
+  padding: 0;
+  border-radius: 13px;
+  color: var(--muted);
+  background: #f1ece1;
+}
+
 .note-editor-title {
   width: 100%;
   min-height: 34px;
@@ -8882,6 +9051,11 @@ html:has(.app-shell[data-app-background="black"]) {
   color: var(--ink);
   font-size: var(--note-editor-font-size, 17px);
   line-height: 1.65;
+  scrollbar-width: none;
+}
+
+.note-editor-content::-webkit-scrollbar {
+  display: none;
 }
 
 .note-editor-size-row {
@@ -10651,8 +10825,8 @@ body:has(.app-shell[data-app-background="black"]) > .app-shell {
   z-index: 0;
   top: 16%;
   left: 0;
-  width: 280px;
-  height: 280px;
+  width: 1400px;
+  height: 1400px;
   pointer-events: none;
   content: "";
   border-radius: 50%;
@@ -10664,7 +10838,7 @@ body:has(.app-shell[data-app-background="black"]) > .app-shell {
     rgba(50, 112, 177, 0.22) 62%,
     transparent 76%
   );
-  filter: blur(42px);
+  filter: blur(210px);
   opacity: 0.8;
   mix-blend-mode: screen;
   animation: appFloatingOrb 34s ease-in-out infinite alternate !important;
@@ -10675,8 +10849,8 @@ body:has(.app-shell[data-app-background="black"]) > .app-shell {
   z-index: 0;
   top: 68%;
   left: 72%;
-  width: 230px;
-  height: 230px;
+  width: 1150px;
+  height: 1150px;
   pointer-events: none;
   content: "";
   border-radius: 50%;
@@ -10688,7 +10862,7 @@ body:has(.app-shell[data-app-background="black"]) > .app-shell {
     rgba(94, 67, 165, 0.2) 64%,
     transparent 78%
   );
-  filter: blur(38px);
+  filter: blur(190px);
   opacity: 0.74;
   mix-blend-mode: screen;
   animation: appFloatingOrbViolet 43s ease-in-out 2s infinite alternate !important;
@@ -10753,4 +10927,382 @@ body:has(.app-shell[data-app-background="black"]) > .app-shell {
     left: 84%;
     transform: scale(0.9) rotate(-156deg);
   }
+}
+
+/* Prayer cards use a calm generated scene instead of a flat status color. */
+.prayer-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 126px;
+  border-left-width: 1px;
+  background-color: #152a39 !important;
+  background-image: linear-gradient(90deg, rgba(7, 18, 27, 0.9) 0%, rgba(9, 25, 37, 0.68) 48%, rgba(9, 25, 37, 0.28) 100%), var(--prayer-card-image) !important;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 8px 22px rgba(0, 0, 0, 0.16);
+}
+
+.prayer-card::before {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: linear-gradient(90deg, rgba(7, 18, 27, 0.86) 0%, rgba(9, 25, 37, 0.58) 52%, rgba(9, 25, 37, 0.18) 100%), var(--prayer-card-image);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  content: "";
+  pointer-events: none;
+}
+
+.prayer-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.prayer-card.is-prayed {
+  border-color: rgba(119, 215, 166, 0.72);
+  border-left-color: rgba(119, 215, 166, 0.9);
+  background-color: #163a3c !important;
+  background-image: linear-gradient(90deg, rgba(5, 24, 30, 0.82) 0%, rgba(8, 37, 39, 0.62) 48%, rgba(9, 30, 36, 0.24) 100%), var(--prayer-card-image) !important;
+}
+
+.prayer-card p,
+.prayer-card-toggle,
+.prayer-card-toggle svg {
+  color: #ffffff !important;
+}
+
+.prayer-card .prayer-action-secondary {
+  background: rgba(17, 39, 53, 0.5);
+  color: rgba(232, 247, 255, 0.82);
+}
+
+.prayer-card .prayer-action {
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.app-shell .prayer-card,
+.app-shell .prayer-card.is-prayed,
+.app-shell .prayer-card.is-urgent {
+  border: 0 !important;
+  border-left: 0 !important;
+  border-color: transparent !important;
+  outline: 0 !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16) !important;
+}
+
+body .app-shell .prayer-card::before {
+  display: block;
+  z-index: 0;
+  background-image: var(--prayer-card-image) !important;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.prayer-background-picker {
+  display: grid;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.prayer-background-picker-label {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.prayer-background-options {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.prayer-background-options button {
+  position: relative;
+  overflow: hidden;
+  height: 42px;
+  padding: 0;
+  border: 1px solid rgba(139, 220, 255, 0.28);
+  border-radius: 10px;
+  background: rgba(14, 32, 44, 0.7);
+  opacity: 0.7;
+  transition: opacity 160ms ease, transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.prayer-background-options button:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.prayer-background-options button.is-active {
+  border-color: #9be6ff;
+  opacity: 1;
+  box-shadow: 0 0 0 2px rgba(155, 230, 255, 0.28), 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+.prayer-background-options img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.prayer-filter-row button[data-prayer-filter="general"],
+.prayer-filter-row button[data-prayer-filter="family"],
+.prayer-filter-row button[data-prayer-filter="health"],
+.prayer-filter-row button[data-prayer-filter="work"],
+.prayer-filter-row button[data-prayer-filter="faith"],
+.prayer-filter-row button[data-prayer-filter="other"] {
+  border-color: currentColor;
+  background: transparent;
+}
+
+.prayer-filter-row button[data-prayer-filter="general"] { color: #8bdcff; }
+.prayer-filter-row button[data-prayer-filter="family"] { color: #78e6b0; }
+.prayer-filter-row button[data-prayer-filter="health"] { color: #ff9b9b; }
+.prayer-filter-row button[data-prayer-filter="work"] { color: #ffd36e; }
+.prayer-filter-row button[data-prayer-filter="faith"] { color: #c6a0ff; }
+.prayer-filter-row button[data-prayer-filter="other"] { color: #ffab7a; }
+
+.prayer-filter-row button[data-prayer-filter="general"].is-active,
+.prayer-filter-row button[data-prayer-filter="general"]:hover { background: #8bdcff; color: #102b38; }
+.prayer-filter-row button[data-prayer-filter="family"].is-active,
+.prayer-filter-row button[data-prayer-filter="family"]:hover { background: #78e6b0; color: #102b38; }
+.prayer-filter-row button[data-prayer-filter="health"].is-active,
+.prayer-filter-row button[data-prayer-filter="health"]:hover { background: #ff9b9b; color: #102b38; }
+.prayer-filter-row button[data-prayer-filter="work"].is-active,
+.prayer-filter-row button[data-prayer-filter="work"]:hover { background: #ffd36e; color: #102b38; }
+.prayer-filter-row button[data-prayer-filter="faith"].is-active,
+.prayer-filter-row button[data-prayer-filter="faith"]:hover { background: #c6a0ff; color: #102b38; }
+.prayer-filter-row button[data-prayer-filter="other"].is-active,
+.prayer-filter-row button[data-prayer-filter="other"]:hover { background: #ffab7a; color: #102b38; }
+
+/* Filled category filters with soft gradients. */
+.prayer-filter-row button[data-prayer-filter="all"],
+.prayer-filter-row button[data-prayer-filter="general"],
+.prayer-filter-row button[data-prayer-filter="family"],
+.prayer-filter-row button[data-prayer-filter="health"],
+.prayer-filter-row button[data-prayer-filter="work"],
+.prayer-filter-row button[data-prayer-filter="faith"],
+.prayer-filter-row button[data-prayer-filter="other"] {
+  border-color: transparent;
+  color: #ffffff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 3px 10px rgba(0, 0, 0, 0.12);
+}
+
+.prayer-filter-row button[data-prayer-filter="all"] {
+  background: linear-gradient(135deg, #43b8ec, #6579f4);
+}
+
+.prayer-filter-row button[data-prayer-filter="general"] {
+  background: linear-gradient(135deg, rgba(58, 169, 214, 0.78), rgba(71, 115, 210, 0.78));
+}
+
+.prayer-filter-row button[data-prayer-filter="family"] {
+  background: linear-gradient(135deg, rgba(48, 190, 142, 0.78), rgba(74, 157, 185, 0.78));
+}
+
+.prayer-filter-row button[data-prayer-filter="health"] {
+  background: linear-gradient(135deg, rgba(240, 111, 137, 0.82), rgba(190, 101, 177, 0.8));
+}
+
+.prayer-filter-row button[data-prayer-filter="work"] {
+  background: linear-gradient(135deg, rgba(221, 157, 48, 0.84), rgba(203, 112, 84, 0.8));
+}
+
+.prayer-filter-row button[data-prayer-filter="faith"] {
+  background: linear-gradient(135deg, rgba(139, 104, 220, 0.84), rgba(94, 111, 202, 0.82));
+}
+
+.prayer-filter-row button[data-prayer-filter="other"] {
+  background: linear-gradient(135deg, rgba(231, 129, 77, 0.84), rgba(198, 89, 135, 0.8));
+}
+
+.prayer-filter-row button[data-prayer-filter].is-active,
+.prayer-filter-row button[data-prayer-filter]:hover {
+  border-color: rgba(255, 255, 255, 0.72);
+  color: #ffffff;
+  filter: brightness(1.14) saturate(1.08);
+  transform: translateY(-1px);
+}
+
+/* Higher-specificity override for the dark glass theme. */
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="all"] {
+  border-color: transparent !important;
+  background: linear-gradient(135deg, #43b8ec, #6579f4) !important;
+  color: #ffffff !important;
+}
+
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="general"] {
+  border-color: transparent !important;
+  background: linear-gradient(135deg, rgba(58, 169, 214, 0.88), rgba(71, 115, 210, 0.88)) !important;
+  color: #ffffff !important;
+}
+
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="family"] {
+  border-color: transparent !important;
+  background: linear-gradient(135deg, rgba(48, 190, 142, 0.88), rgba(74, 157, 185, 0.88)) !important;
+  color: #ffffff !important;
+}
+
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="health"] {
+  border-color: transparent !important;
+  background: linear-gradient(135deg, rgba(240, 111, 137, 0.9), rgba(190, 101, 177, 0.88)) !important;
+  color: #ffffff !important;
+}
+
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="work"] {
+  border-color: transparent !important;
+  background: linear-gradient(135deg, rgba(221, 157, 48, 0.92), rgba(203, 112, 84, 0.88)) !important;
+  color: #ffffff !important;
+}
+
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="faith"] {
+  border-color: transparent !important;
+  background: linear-gradient(135deg, rgba(139, 104, 220, 0.9), rgba(94, 111, 202, 0.88)) !important;
+  color: #ffffff !important;
+}
+
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="other"] {
+  border-color: transparent !important;
+  background: linear-gradient(135deg, rgba(231, 129, 77, 0.9), rgba(198, 89, 135, 0.88)) !important;
+  color: #ffffff !important;
+}
+
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter] {
+  filter: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  border-color: currentColor !important;
+}
+
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="all"].is-active,
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="general"].is-active {
+  background: #8bdcff !important;
+  border-color: #8bdcff !important;
+  color: #102b38 !important;
+}
+
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="family"].is-active {
+  background: #78e6b0 !important;
+  border-color: #78e6b0 !important;
+  color: #102b38 !important;
+}
+
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="health"].is-active {
+  background: #ff9b9b !important;
+  border-color: #ff9b9b !important;
+  color: #102b38 !important;
+}
+
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="work"].is-active {
+  background: #ffd36e !important;
+  border-color: #ffd36e !important;
+  color: #102b38 !important;
+}
+
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="faith"].is-active {
+  background: #c6a0ff !important;
+  border-color: #c6a0ff !important;
+  color: #102b38 !important;
+}
+
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="other"].is-active {
+  background: #ffab7a !important;
+  border-color: #ffab7a !important;
+  color: #102b38 !important;
+}
+
+/* Keep the Prayer filters identical to the request category picker. */
+.prayer-filter-row.prayer-category-picker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-width: 100%;
+  margin: 0 auto 12px;
+  padding: 0;
+  overflow: visible;
+}
+
+.prayer-filter-row.prayer-category-picker button {
+  min-height: 30px;
+  padding: 0 11px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.prayer-board-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 2px;
+}
+
+.prayer-board-controls .prayer-sort {
+  display: flex;
+  justify-content: center;
+}
+
+.prayer-board-controls .prayer-filter-row {
+  margin: 0;
+}
+
+body .app-shell[data-app-background="black"] .prayer-filter-row {
+  flex-wrap: wrap;
+  overflow-x: visible;
+  padding: 2px 0 4px;
+}
+
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="general"] {
+  color: #8bdcff !important;
+}
+
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="family"] {
+  color: #78e6b0 !important;
+}
+
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="health"] {
+  color: #ff9b9b !important;
+}
+
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="work"] {
+  color: #ffd36e !important;
+}
+
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="faith"] {
+  color: #c6a0ff !important;
+}
+
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="other"] {
+  color: #ffab7a !important;
+}
+
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="all"] {
+  color: #ffffff !important;
+}
+
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="all"].is-active {
+  color: #102b38 !important;
+}
+
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="general"].is-active,
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="family"].is-active,
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="health"].is-active,
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="work"].is-active,
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="faith"].is-active,
+body .app-shell[data-app-background="black"] .prayer-filter-row button[data-prayer-filter="other"].is-active {
+  color: #102b38 !important;
 }

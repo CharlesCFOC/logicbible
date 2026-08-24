@@ -64,6 +64,9 @@ const noteEditorTitle = document.querySelector("[data-note-title]");
 const saveRichNoteButton = document.querySelector("[data-save-rich-note]");
 const noteFontSizeInput = document.querySelector("[data-note-font-size]");
 const noteFontSizeValue = document.querySelector("[data-note-font-size-value]");
+const noteFontSizeDecreaseButton = document.querySelector("[data-note-size-decrease]");
+const noteFontSizeIncreaseButton = document.querySelector("[data-note-size-increase]");
+let noteEditorCursorLine = null;
 const selectedVerse = document.querySelector("[data-selected-verse]");
 const sheetFeedback = document.querySelector("[data-sheet-feedback]");
 const verseDetail = document.querySelector("[data-verse-detail]");
@@ -300,6 +303,8 @@ const prayerFeedback = document.querySelector("[data-prayer-feedback]");
 const prayerWordCount = document.querySelector("[data-prayer-word-count]");
 const prayerCategory = document.querySelector("[data-prayer-category]");
 const prayerCategoryOptions = [...document.querySelectorAll("[data-prayer-category-option]")];
+const prayerBackgroundOptions = [...document.querySelectorAll("[data-prayer-background-option]")];
+let selectedPrayerBackgroundIndex = 0;
 const prayerUrgent = document.querySelector("[data-prayer-urgent]");
 const prayerRequestInput = prayerForm?.querySelector("textarea");
 const prayerSubmitButton = prayerForm?.querySelector('button[type="submit"]');
@@ -321,10 +326,35 @@ const prayerState = {
   requests: cleanedPrayerRequests,
   tab: "all",
   sort: "most",
-  filter: "all",
+  filter: "general",
   pageTab: "board",
   myWallExpanded: false,
 };
+
+const PRAYER_BACKGROUND_COUNT = 6;
+const prayerBackgroundAssignments = readJson("brother.prayerBackgrounds", {});
+
+function getPrayerBackgroundIndex(request) {
+  if (Number.isInteger(request.backgroundIndex)) {
+    return request.backgroundIndex % PRAYER_BACKGROUND_COUNT;
+  }
+
+  const requestId = String(request.id || "");
+  if (requestId && Number.isInteger(prayerBackgroundAssignments[requestId])) {
+    return prayerBackgroundAssignments[requestId];
+  }
+
+  let hash = 0;
+  for (const character of requestId) {
+    hash = (hash * 31 + character.charCodeAt(0)) | 0;
+  }
+  const index = Math.abs(hash || Math.floor(Math.random() * PRAYER_BACKGROUND_COUNT)) % PRAYER_BACKGROUND_COUNT;
+  if (requestId) {
+    prayerBackgroundAssignments[requestId] = index;
+    writeJson("brother.prayerBackgrounds", prayerBackgroundAssignments);
+  }
+  return index;
+}
 
 const readerState = {
   versionId: localStorage.getItem("brother.version") || "local-kjv",
@@ -1473,19 +1503,23 @@ async function loadPrayerFromSupabase() {
   renderPrayerPage();
 }
 
-async function createPrayerRequest(text, category, urgent) {
+async function createPrayerRequest(text, category, urgent, backgroundIndex) {
   if (!supabaseClient || !supabaseUser) {
     return false;
   }
-  const { error } = await supabaseClient.from("prayer_requests").insert({
+  const { data, error } = await supabaseClient.from("prayer_requests").insert({
     author_id: supabaseUser.id,
     content: text,
     category,
     urgent,
-  });
+  }).select("id").single();
   if (error) {
     prayerFeedback.textContent = error.message;
     return false;
+  }
+  if (data?.id) {
+    prayerBackgroundAssignments[data.id] = backgroundIndex;
+    writeJson("brother.prayerBackgrounds", prayerBackgroundAssignments);
   }
   await loadPrayerFromSupabase();
   return true;
@@ -1517,8 +1551,9 @@ function renderPrayerPage() {
           : true;
         if (!isOwnRequest) return false;
       }
-      if (prayerState.filter === "unanswered") return getPrayerStatus(request) === "active";
-      if (prayerState.filter === "urgent") return Boolean(request.urgent) && getPrayerStatus(request) === "active";
+      if (prayerState.pageTab === "board") {
+        return (request.category || "general") === prayerState.filter;
+      }
       return true;
     })
     .sort((a, b) => {
@@ -1540,8 +1575,9 @@ function renderPrayerPage() {
         const hasPrayed = request.prayedBy?.includes(currentPrayerUserId);
         const isNewlyPrayed = hasPrayed && request.prayerCount === 1;
         const expanded = Boolean(request.expanded);
+        const prayerBackgroundIndex = getPrayerBackgroundIndex(request);
         return `
-          <article class="prayer-card${expanded ? " is-expanded" : ""}${request.urgent ? " is-urgent" : ""}${isNewlyPrayed ? " is-prayed" : ""}">
+          <article class="prayer-card${expanded ? " is-expanded" : ""}${request.urgent ? " is-urgent" : ""}${isNewlyPrayed ? " is-prayed" : ""}" style="--prayer-card-image: url('assets/prayer-backgrounds/prayer-${prayerBackgroundIndex + 1}.png')">
             <button type="button" class="prayer-card-toggle" data-prayer-toggle data-prayer-id="${escapeAttr(request.id)}" aria-expanded="${expanded}">
               <span>
                 <p>${escapeHtml(expanded ? request.text : getPrayerPreview(request.text))}</p>
@@ -1591,6 +1627,17 @@ function initPrayerPage() {
     });
   });
 
+  prayerBackgroundOptions.forEach((option) => {
+    option.addEventListener("click", () => {
+      selectedPrayerBackgroundIndex = Number(option.dataset.prayerBackgroundOption) || 0;
+      prayerBackgroundOptions.forEach((item) => {
+        const isActive = item === option;
+        item.classList.toggle("is-active", isActive);
+        item.setAttribute("aria-pressed", String(isActive));
+      });
+    });
+  });
+
   prayerForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const text = prayerRequestInput.value.trim();
@@ -1613,7 +1660,7 @@ function initPrayerPage() {
     }
 
     if (supabaseClient && supabaseUser) {
-      const created = await createPrayerRequest(text, category, urgent);
+      const created = await createPrayerRequest(text, category, urgent, selectedPrayerBackgroundIndex);
       if (!created) return;
     } else {
       prayerState.requests.unshift({
@@ -1625,12 +1672,19 @@ function initPrayerPage() {
         createdAt: new Date().toISOString(),
         category,
         urgent,
+        backgroundIndex: selectedPrayerBackgroundIndex,
         status: "active",
       });
       savePrayerRequests();
     }
     prayerRequestInput.value = "";
     setPrayerCategory("general");
+    selectedPrayerBackgroundIndex = 0;
+    prayerBackgroundOptions.forEach((option, index) => {
+      const isActive = index === selectedPrayerBackgroundIndex;
+      option.classList.toggle("is-active", isActive);
+      option.setAttribute("aria-pressed", String(isActive));
+    });
     if (prayerUrgent) prayerUrgent.checked = false;
     prayerWordCount.textContent = "0 / 300 words";
     prayerFeedback.textContent = "Your request was shared anonymously.";
@@ -1672,7 +1726,7 @@ function initPrayerPage() {
 
   document.querySelectorAll("[data-prayer-filter]").forEach((button) => {
     button.addEventListener("click", () => {
-      prayerState.filter = button.dataset.prayerFilter || "all";
+      prayerState.filter = button.dataset.prayerFilter || "general";
       renderPrayerPage();
     });
   });
@@ -4515,7 +4569,10 @@ function openRichNoteEditor() {
   noteEditorContent.style.setProperty("--note-editor-font-size", `${noteEditorFontSize}px`);
   noteEditorReference.textContent = items.length === 1 ? items[0].reference : `${items.length} verses selected`;
   noteEditorContent.innerHTML = sanitizeNoteHtml(note?.noteHtml || (note?.note ? `<p>${escapeHtml(note.note)}</p>` : "<p><br></p>"));
-  if (saveRichNoteButton) saveRichNoteButton.textContent = "Save note";
+  if (saveRichNoteButton) {
+    saveRichNoteButton.setAttribute("aria-label", "Save note");
+    saveRichNoteButton.title = "Save note";
+  }
   resetNoteEditorDirty();
   if (wasAddingVerses) {
     markNoteEditorDirty();
@@ -4565,9 +4622,15 @@ function saveRichNote() {
   refreshProfilePanel();
   setFeedback(`Note saved to ${items.length} verse${items.length === 1 ? "" : "s"}.`);
   if (saveRichNoteButton) {
-    saveRichNoteButton.textContent = "Saved";
+    saveRichNoteButton.setAttribute("aria-label", "Saved");
+    saveRichNoteButton.title = "Saved";
+    saveRichNoteButton.classList.add("is-saved");
     window.setTimeout(() => {
-      if (saveRichNoteButton) saveRichNoteButton.textContent = "Save note";
+      if (saveRichNoteButton) {
+        saveRichNoteButton.setAttribute("aria-label", "Save note");
+        saveRichNoteButton.title = "Save note";
+        saveRichNoteButton.classList.remove("is-saved");
+      }
     }, 1600);
   }
   noteEditorRemovedVerseKeys = new Set();
@@ -6117,6 +6180,39 @@ function updateNoteColorSwatch(input, selector) {
   input?.closest("label")?.querySelector(selector)?.style.setProperty("background", input.value);
 }
 
+function getNoteCaretElement() {
+  const selection = window.getSelection();
+  if (!selection?.rangeCount || !noteEditorContent?.contains(selection.anchorNode)) return null;
+  return selection.anchorNode.nodeType === Node.ELEMENT_NODE
+    ? selection.anchorNode
+    : selection.anchorNode.parentElement;
+}
+
+function getNoteHighlightColor(element) {
+  let current = element;
+  while (current && current !== noteEditorContent) {
+    const color = window.getComputedStyle(current).backgroundColor;
+    if (color && color !== "transparent" && color !== "rgba(0, 0, 0, 0)") return color;
+    current = current.parentElement;
+  }
+  return "transparent";
+}
+
+function updateNoteToolbarColors() {
+  const element = getNoteCaretElement();
+  if (!element) return;
+  const textColor = window.getComputedStyle(element).color || "#ffffff";
+  const highlightColor = getNoteHighlightColor(element);
+  const textLabel = noteColorInput?.closest("label");
+  const highlightLabel = noteHighlightInput?.closest("label");
+  const textSwatch = textLabel?.querySelector("[data-note-color-swatch]");
+  const highlightSwatch = highlightLabel?.querySelector("[data-note-highlight-swatch]");
+  textSwatch?.style.setProperty("background", textColor);
+  highlightSwatch?.style.setProperty("background", highlightColor);
+  textLabel?.style.setProperty("color", textColor);
+  highlightLabel?.style.setProperty("color", highlightColor === "transparent" ? "#d9f2ff" : highlightColor);
+}
+
 const noteColorInput = document.querySelector("[data-note-color]");
 const noteHighlightInput = document.querySelector("[data-note-highlight]");
 updateNoteColorSwatch(noteColorInput, "[data-note-color-swatch]");
@@ -6154,6 +6250,66 @@ noteFontSizeInput?.addEventListener("input", (event) => {
   }
 });
 
+function getNoteCursorLine() {
+  const selection = window.getSelection();
+  if (!selection?.rangeCount || !noteEditorContent?.contains(selection.anchorNode)) return null;
+  const node = selection.anchorNode.nodeType === Node.ELEMENT_NODE
+    ? selection.anchorNode
+    : selection.anchorNode.parentElement;
+  const line = node?.closest("p, li, h1, h2, h3, h4, h5, h6, div");
+  return line && line !== noteEditorContent ? line : null;
+}
+
+function applyNoteFontSizeToLine(line, size) {
+  if (!line) return;
+  const computed = window.getComputedStyle(line);
+  const marginTop = computed.marginTop;
+  const marginBottom = computed.marginBottom;
+  line.style.fontSize = `${size}px`;
+  line.style.lineHeight = "1.2";
+  line.style.marginTop = marginTop;
+  line.style.marginBottom = marginBottom;
+  line.querySelectorAll("*").forEach((element) => {
+    if (element.tagName !== "BR") element.style.fontSize = `${size}px`;
+  });
+}
+
+function changeNoteFontSize(delta, trigger) {
+  const hasSelection = restoreNoteSelection() && noteEditorSelectionRange && !noteEditorSelectionRange.collapsed;
+  const line = hasSelection ? null : (noteEditorCursorLine || getNoteCursorLine());
+  const currentSize = line ? Number.parseFloat(window.getComputedStyle(line).fontSize) || noteEditorFontSize : noteEditorFontSize;
+  noteEditorFontSize = Math.min(30, Math.max(14, currentSize + delta * 3));
+  markNoteEditorDirty();
+  trigger?.setAttribute("aria-label", `Text size ${noteEditorFontSize} pixels`);
+  trigger?.setAttribute("title", `Text size: ${noteEditorFontSize}px`);
+
+  if (hasSelection) {
+    noteEditorContent?.focus();
+    applySelectedNoteFontSize(noteEditorFontSize);
+    captureNoteSelection();
+  } else if (line) {
+    applyNoteFontSizeToLine(line, noteEditorFontSize);
+  } else {
+    noteEditorContent?.style.setProperty("--note-editor-font-size", `${noteEditorFontSize}px`);
+  }
+  noteEditorCursorLine = null;
+}
+
+noteFontSizeDecreaseButton?.addEventListener("click", (event) => {
+  changeNoteFontSize(-1, event.currentTarget);
+});
+
+noteFontSizeIncreaseButton?.addEventListener("click", (event) => {
+  changeNoteFontSize(1, event.currentTarget);
+});
+
+[noteFontSizeDecreaseButton, noteFontSizeIncreaseButton].forEach((button) => {
+  button?.addEventListener("pointerdown", (event) => {
+    noteEditorCursorLine = getNoteCursorLine();
+    captureNoteSelection();
+  });
+});
+
 noteEditorContent?.addEventListener("input", markNoteEditorDirty);
 noteEditorTitle?.addEventListener("input", (event) => {
   noteEditorNoteTitle = event.target.value;
@@ -6161,6 +6317,9 @@ noteEditorTitle?.addEventListener("input", (event) => {
 });
 noteEditorContent?.addEventListener("mouseup", captureNoteSelection);
 noteEditorContent?.addEventListener("keyup", captureNoteSelection);
+noteEditorContent?.addEventListener("mouseup", updateNoteToolbarColors);
+noteEditorContent?.addEventListener("keyup", updateNoteToolbarColors);
+document.addEventListener("selectionchange", updateNoteToolbarColors);
 noteFontSizeInput?.addEventListener("pointerdown", captureNoteSelection);
 
 saveRichNoteButton?.addEventListener("click", () => {
