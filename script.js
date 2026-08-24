@@ -366,6 +366,7 @@ const readerState = {
   parallelVersionIds: readJson("brother.parallelVersions", ["local-kjv"]),
 };
 let chapterRequestId = 0;
+const bibleChapterCache = new Map();
 let selectedVerseData = null;
 let multiSelectMode = false;
 let multiSelectedVerseData = [];
@@ -1577,7 +1578,7 @@ function renderPrayerPage() {
         const expanded = Boolean(request.expanded);
         const prayerBackgroundIndex = getPrayerBackgroundIndex(request);
         return `
-          <article class="prayer-card${expanded ? " is-expanded" : ""}${request.urgent ? " is-urgent" : ""}${isNewlyPrayed ? " is-prayed" : ""}" style="--prayer-card-image: url('assets/prayer-backgrounds/prayer-${prayerBackgroundIndex + 1}.png')">
+          <article class="prayer-card${expanded ? " is-expanded" : ""}${request.urgent ? " is-urgent" : ""}${isNewlyPrayed ? " is-prayed" : ""}" style="--prayer-card-image: url('assets/prayer-backgrounds/prayer-${prayerBackgroundIndex + 1}.jpg')">
             <button type="button" class="prayer-card-toggle" data-prayer-toggle data-prayer-id="${escapeAttr(request.id)}" aria-expanded="${expanded}">
               <span>
                 <p>${escapeHtml(expanded ? request.text : getPrayerPreview(request.text))}</p>
@@ -1605,191 +1606,6 @@ function renderPrayerPage() {
     button.classList.toggle("is-active", button.dataset.prayerFilter === prayerState.filter);
   });
   refreshIcons();
-}
-
-function initPrayerPage() {
-  if (!prayerForm || !prayerList) {
-    return;
-  }
-
-  prayerRequestInput?.addEventListener("input", () => {
-    if (prayerRequestInput.value.trim()) stopPrayerPromptRotation();
-    const count = countPrayerWords(prayerRequestInput.value);
-    if (prayerWordCount) {
-      prayerWordCount.textContent = `${count} / 300 words`;
-      prayerWordCount.classList.toggle("is-over-limit", count > 300);
-    }
-  });
-
-  prayerCategoryOptions.forEach((option) => {
-    option.addEventListener("click", () => {
-      setPrayerCategory(option.dataset.prayerCategoryOption || "general");
-    });
-  });
-
-  prayerBackgroundOptions.forEach((option) => {
-    option.addEventListener("click", () => {
-      selectedPrayerBackgroundIndex = Number(option.dataset.prayerBackgroundOption) || 0;
-      prayerBackgroundOptions.forEach((item) => {
-        const isActive = item === option;
-        item.classList.toggle("is-active", isActive);
-        item.setAttribute("aria-pressed", String(isActive));
-      });
-    });
-  });
-
-  prayerForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const text = prayerRequestInput.value.trim();
-    const wordCount = countPrayerWords(text);
-    const category = prayerCategory?.value || "general";
-    const urgent = Boolean(prayerUrgent?.checked);
-    const moderationMessage = getPrayerModerationMessage(text);
-    if (!text || wordCount > 300) {
-      prayerFeedback.textContent = wordCount > 300 ? "Please keep your request under 300 words." : "Write a prayer request first.";
-      return;
-    }
-    if (moderationMessage) {
-      prayerFeedback.textContent = moderationMessage;
-      return;
-    }
-
-    if (supabaseClient && !supabaseUser) {
-      prayerFeedback.textContent = "Sign in to share a prayer request with the community.";
-      return;
-    }
-
-    if (supabaseClient && supabaseUser) {
-      const created = await createPrayerRequest(text, category, urgent, selectedPrayerBackgroundIndex);
-      if (!created) return;
-    } else {
-      prayerState.requests.unshift({
-        id: `prayer-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-        ownerId: prayerUserId,
-        text,
-        prayerCount: 0,
-        prayedBy: [],
-        createdAt: new Date().toISOString(),
-        category,
-        urgent,
-        backgroundIndex: selectedPrayerBackgroundIndex,
-        status: "active",
-      });
-      savePrayerRequests();
-    }
-    prayerRequestInput.value = "";
-    setPrayerCategory("general");
-    selectedPrayerBackgroundIndex = 0;
-    prayerBackgroundOptions.forEach((option, index) => {
-      const isActive = index === selectedPrayerBackgroundIndex;
-      option.classList.toggle("is-active", isActive);
-      option.setAttribute("aria-pressed", String(isActive));
-    });
-    if (prayerUrgent) prayerUrgent.checked = false;
-    prayerWordCount.textContent = "0 / 300 words";
-    prayerFeedback.textContent = "Your request was shared anonymously.";
-    showPrayerSentState();
-    prayerState.pageTab = "request";
-    prayerState.myWallExpanded = true;
-    prayerState.tab = "all";
-    startPrayerPromptRotation();
-    renderPrayerPage();
-  });
-
-  document.querySelectorAll("[data-prayer-page-tab]").forEach((button) => {
-    button.addEventListener("click", () => {
-      prayerState.pageTab = button.dataset.prayerPageTab;
-      if (prayerState.pageTab === "request") {
-        startPrayerPromptRotation();
-      } else {
-        stopPrayerPromptRotation();
-      }
-      if (prayerRequestPanel) prayerRequestPanel.hidden = prayerState.pageTab !== "request";
-      prayerList.hidden = false;
-      document.querySelectorAll("[data-prayer-page-tab]").forEach((item) => {
-        item.classList.toggle("is-active", item === button);
-      });
-      renderPrayerPage();
-    });
-  });
-
-  prayerBoardToggle?.addEventListener("click", () => {
-    if (prayerState.pageTab !== "request") return;
-    prayerState.myWallExpanded = !prayerState.myWallExpanded;
-    renderPrayerPage();
-  });
-
-  document.querySelector("[data-prayer-sort]")?.addEventListener("change", (event) => {
-    prayerState.sort = event.target.value;
-    renderPrayerPage();
-  });
-
-  document.querySelectorAll("[data-prayer-filter]").forEach((button) => {
-    button.addEventListener("click", () => {
-      prayerState.filter = button.dataset.prayerFilter || "general";
-      renderPrayerPage();
-    });
-  });
-
-  prayerList.addEventListener("click", async (event) => {
-    const toggle = event.target.closest("[data-prayer-toggle]");
-    if (toggle) {
-      const request = prayerState.requests.find((item) => item.id === toggle.dataset.prayerId);
-      if (request) {
-        request.expanded = !request.expanded;
-        renderPrayerPage();
-      }
-      return;
-    }
-    const button = event.target.closest("[data-prayer-action]");
-    if (!button) {
-      return;
-    }
-    const request = prayerState.requests.find((item) => item.id === button.dataset.prayerId);
-    if (!request) {
-      return;
-    }
-    if (button.dataset.prayerAction === "share") {
-      const shareText = `Prayer request: ${request.text}`;
-      try {
-        if (navigator.share) {
-          await navigator.share({ title: "Prayer request", text: shareText });
-        } else if (navigator.clipboard) {
-          await navigator.clipboard.writeText(shareText);
-          if (prayerFeedback) prayerFeedback.textContent = "Prayer request copied to your clipboard.";
-        }
-      } catch (error) {
-        if (error?.name !== "AbortError" && prayerFeedback) prayerFeedback.textContent = "This request could not be shared.";
-      }
-      return;
-    }
-    if (button.dataset.prayerAction !== "pray") {
-      return;
-    }
-    if (supabaseClient && !supabaseUser) {
-      prayerFeedback.textContent = "Sign in to record your prayer.";
-      return;
-    }
-    if (supabaseClient && supabaseUser) {
-      const { error } = await supabaseClient.rpc("pray_for_request", { request_uuid: request.id });
-      if (error) {
-        prayerFeedback.textContent = error.message;
-        return;
-      }
-      await loadPrayerFromSupabase();
-      return;
-    }
-    request.prayedBy ||= [];
-    if (request.prayedBy.includes(prayerUserId)) {
-      return;
-    }
-    request.prayedBy.push(prayerUserId);
-    request.prayerCount += 1;
-    savePrayerRequests();
-    renderPrayerPage();
-  });
-
-  renderPrayerPage();
 }
 
 function normalizeApologeticsProgress() {
@@ -2117,105 +1933,6 @@ function initLoopingBackgroundCarousel() {
       window.requestAnimationFrame(() => {
         isLooping = false;
       });
-    }
-  });
-}
-
-function initPreferences() {
-  initLoopingBackgroundCarousel();
-
-  backgroundOptionButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      savedPreferences.background = button.dataset.backgroundOption;
-      savePreferences();
-      applyPreferences();
-      centerBackgroundOption(savedPreferences.background);
-    });
-  });
-
-  textSizeOptionButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      savedPreferences.textSize = button.dataset.textSizeOption;
-      savePreferences();
-      applyPreferences();
-    });
-  });
-
-  accentOptionButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      savedPreferences.accent = button.dataset.accentOption;
-      savePreferences();
-      applyPreferences();
-    });
-  });
-
-  applyPreferences();
-  window.requestAnimationFrame(() => centerBackgroundOption(savedPreferences.background, "auto"));
-}
-
-function initProfile() {
-  applyProfile();
-
-  let profileCoverDraft = savedProfile.coverImage || defaultProfile.coverImage;
-
-  profileStyleToggle?.addEventListener("click", () => {
-    const willOpen = profileStyleEditor?.hidden !== false;
-    if (profileStyleEditor) profileStyleEditor.hidden = !willOpen;
-    profileStyleToggle.setAttribute("aria-expanded", String(willOpen));
-    if (!willOpen) {
-      profileCoverDraft = savedProfile.coverImage || defaultProfile.coverImage;
-      if (profileCover) profileCover.src = profileCoverDraft;
-      if (profileCoverInput) profileCoverInput.value = "";
-    }
-  });
-
-  profileCoverInput?.addEventListener("change", async () => {
-    const file = profileCoverInput.files?.[0];
-    if (!file) return;
-    try {
-      profileCoverDraft = await compressProfileCover(file);
-      if (profileCover) profileCover.src = profileCoverDraft;
-      setProfileStyleFeedback("Cover preview ready. Save to apply it.");
-    } catch (error) {
-      setProfileStyleFeedback(error.message, true);
-    }
-  });
-
-  profileCoverReset?.addEventListener("click", () => {
-    profileCoverDraft = defaultProfile.coverImage;
-    if (profileCover) profileCover.src = profileCoverDraft;
-    if (profileCoverInput) profileCoverInput.value = "";
-    setProfileStyleFeedback("Default cover restored. Save to apply it.");
-  });
-
-  profileStyleEditor?.addEventListener("submit", (event) => {
-    event.preventDefault();
-    savedProfile.coverImage = profileCoverDraft;
-    saveProfile();
-    applyProfile();
-    setProfileStyleFeedback(supabaseUser ? "Style saved and synced." : "Style saved on this device.");
-  });
-
-  if (!profileForm) {
-    return;
-  }
-
-  profileForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    const displayName = String(profileForm.elements.displayName.value || "").trim();
-    const country = String(profileForm.elements.country.value || "").trim();
-    const dateOfBirth = String(profileForm.elements.dateOfBirth.value || "").trim();
-
-    savedProfile.displayName = displayName || defaultProfile.displayName;
-    savedProfile.country = country;
-    savedProfile.dateOfBirth = dateOfBirth;
-
-    saveProfile();
-    applyProfile();
-
-    if (profileFormFeedback) {
-      profileFormFeedback.textContent = "Information saved locally. It will be ready to sync once Supabase auth is connected.";
     }
   });
 }
@@ -3015,34 +2732,6 @@ function refreshIcons() {
   }
 }
 
-function initApologeticsGate() {
-  if (!apologeticsGateForm || !apologeticsGate) {
-    return;
-  }
-
-  // The gate should only appear after the user opens Apologetics.
-  // Never let it cover the Home screen during app startup.
-  apologeticsGate.hidden = true;
-
-  apologeticsGateForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    if (apologeticsGateInput?.value.trim() !== "158") {
-      if (apologeticsGateFeedback) {
-        apologeticsGateFeedback.textContent = "Invalid access code.";
-      }
-      apologeticsGateInput?.select();
-      return;
-    }
-
-    sessionStorage.setItem(apologeticsGateSessionKey, "true");
-    apologeticsGate.hidden = true;
-    apologeticsGateInput.value = "";
-    if (apologeticsGateFeedback) {
-      apologeticsGateFeedback.textContent = "";
-    }
-  });
-}
-
 function getKidsBiblePagePath(page) {
   const book = getKidsBibleBook(kidsBibleState.bookId);
   const number = String(page).padStart(2, "0");
@@ -3589,6 +3278,21 @@ async function fetchChapterForVersion(version) {
 }
 
 async function fetchRemoteChapter(version, options = {}) {
+  const cacheKey = `${version.id}.${readerState.bookId}.${readerState.chapter}`;
+  const cachedChapter = bibleChapterCache.get(cacheKey);
+  if (cachedChapter) {
+    const cached = {
+      ...cachedChapter,
+      verses: cachedChapter.verses.map((verse) => ({ ...verse })),
+    };
+    if (options.displayVersion) {
+      cached.version = options.displayVersion;
+      cached.versionName = options.displayName;
+      cached.remoteName = options.fallbackName;
+    }
+    return cached;
+  }
+
   const params = new URLSearchParams({
     bibleId: version.id,
     bookId: readerState.bookId,
@@ -3602,6 +3306,10 @@ async function fetchRemoteChapter(version, options = {}) {
   }
 
   const chapter = normalizeApiChapter(payload.data, version);
+  bibleChapterCache.set(cacheKey, {
+    ...chapter,
+    verses: chapter.verses.map((verse) => ({ ...verse })),
+  });
   if (options.displayVersion) {
     chapter.version = options.displayVersion;
     chapter.versionName = options.displayName;
@@ -4480,18 +4188,39 @@ function renderNoteEditorVerseChips() {
   if (!noteEditorVerseChips) {
     return;
   }
+  const verseCount = noteEditorVerseItems.length;
   noteEditorVerseChips.innerHTML = `
-    <button type="button" class="note-editor-add-verse" data-add-note-verse><span aria-hidden="true">+</span> Add verse</button>
-    ${noteEditorVerseItems.length
-      ? noteEditorVerseItems.map((item) => `
-        <span class="note-editor-verse-chip">
-          <span>${escapeHtml(item.reference)}</span>
-          <button type="button" data-remove-note-verse="${escapeAttr(item.key)}" aria-label="Remove ${escapeAttr(item.reference)} from note">×</button>
-        </span>
-      `).join("")
-      : '<span class="note-editor-no-verses">No verses attached</span>'}
+    <button type="button" class="note-editor-verse-summary" data-note-verses-toggle aria-expanded="false">
+      <span class="note-editor-verse-summary-copy">
+        <strong>Voir les versets</strong>
+      </span>
+      <i data-lucide="chevron-down" aria-hidden="true"></i>
+    </button>
+    <div class="note-editor-verse-menu" data-note-verse-menu hidden>
+      <button type="button" class="note-editor-add-verse" data-add-note-verse><span aria-hidden="true">+</span> Add verse</button>
+      ${noteEditorVerseItems.length
+        ? noteEditorVerseItems.map((item) => `
+          <article class="note-editor-verse-item">
+            <div class="note-editor-verse-item-heading">
+              <strong>${escapeHtml(item.reference)}</strong>
+              <button type="button" data-remove-note-verse="${escapeAttr(item.key)}" aria-label="Remove ${escapeAttr(item.reference)} from note">×</button>
+            </div>
+            <p>${escapeHtml(item.text || "Verse text unavailable.")}</p>
+          </article>
+        `).join("")
+        : '<span class="note-editor-no-verses">No verses attached</span>'}
+    </div>
   `;
+  refreshIcons();
 
+  noteEditorVerseChips.querySelector("[data-note-verses-toggle]")?.addEventListener("click", () => {
+    const toggle = noteEditorVerseChips.querySelector("[data-note-verses-toggle]");
+    const menu = noteEditorVerseChips.querySelector("[data-note-verse-menu]");
+    const isExpanded = toggle?.getAttribute("aria-expanded") === "true";
+    toggle?.setAttribute("aria-expanded", String(!isExpanded));
+    if (menu) menu.hidden = isExpanded;
+    toggle?.querySelector("svg")?.classList.toggle("is-open", !isExpanded);
+  });
   noteEditorVerseChips.querySelector("[data-add-note-verse]")?.addEventListener("click", startAddingNoteVerses);
 
   noteEditorVerseChips.querySelectorAll("[data-remove-note-verse]").forEach((button) => {
@@ -4506,9 +4235,7 @@ function renderNoteEditorVerseChips() {
         selectedVerseData = noteEditorVerseItems[0] || null;
       }
       renderNoteEditorVerseChips();
-      noteEditorReference.textContent = noteEditorVerseItems.length === 1
-        ? noteEditorVerseItems[0].reference
-        : `${noteEditorVerseItems.length} verses selected`;
+      if (noteEditorReference) noteEditorReference.value = noteEditorNoteTitle;
       if (noteEditorStatus) {
         noteEditorStatus.textContent = noteEditorVerseItems.length
           ? `This note will be saved to ${noteEditorVerseItems.length} verse${noteEditorVerseItems.length === 1 ? "" : "s"}.`
@@ -4567,7 +4294,7 @@ function openRichNoteEditor() {
   if (noteFontSizeInput) noteFontSizeInput.value = String(noteEditorFontSize);
   if (noteFontSizeValue) noteFontSizeValue.textContent = `${noteEditorFontSize} px`;
   noteEditorContent.style.setProperty("--note-editor-font-size", `${noteEditorFontSize}px`);
-  noteEditorReference.textContent = items.length === 1 ? items[0].reference : `${items.length} verses selected`;
+  if (noteEditorReference) noteEditorReference.value = noteEditorNoteTitle;
   noteEditorContent.innerHTML = sanitizeNoteHtml(note?.noteHtml || (note?.note ? `<p>${escapeHtml(note.note)}</p>` : "<p><br></p>"));
   if (saveRichNoteButton) {
     saveRichNoteButton.setAttribute("aria-label", "Save note");
@@ -5930,58 +5657,6 @@ async function handleVerseAction(action) {
   }
 }
 
-function initReader() {
-  renderVersionOptions();
-  renderBookOptions();
-  renderChapterOptions();
-
-  versionSelect.addEventListener("change", () => {
-    readerState.versionId = versionSelect.value;
-    renderParallelOptions();
-    loadChapter();
-  });
-
-  bookSelect.addEventListener("change", () => {
-    readerState.bookId = bookSelect.value;
-    readerState.chapter = 1;
-    renderChapterOptions();
-    loadChapter();
-  });
-
-  chapterSelect.addEventListener("change", () => {
-    readerState.chapter = Number(chapterSelect.value);
-    loadChapter();
-  });
-
-  parallelToggle?.addEventListener("click", () => {
-    readerState.parallelEnabled = !readerState.parallelEnabled;
-    renderParallelOptions();
-    loadChapter();
-  });
-
-  readerTargetToggle?.addEventListener("click", () => {
-    readerState.showHighlightsOnly = !readerState.showHighlightsOnly;
-    readerTargetToggle.classList.toggle("is-active", readerState.showHighlightsOnly);
-    if (readerState.parallelEnabled) {
-      loadChapter();
-    } else if (currentChapterData) {
-      renderChapter(currentChapterData);
-    }
-  });
-
-  parallelVersionOne?.addEventListener("change", () => {
-    readerState.parallelVersionIds = [parallelVersionOne.value];
-    loadChapter();
-  });
-
-  loadChapter();
-  loadRemoteVersions();
-}
-
-navButtons.forEach((button) => {
-  button.addEventListener("click", () => setScreen(button.dataset.nav));
-});
-
 document.querySelectorAll("[data-kids-book]").forEach((button) => {
   button.addEventListener("click", () => openKidsBibleBook(button.dataset.kidsBook));
 });
@@ -6160,22 +5835,6 @@ document.querySelectorAll("[data-home-era-book]").forEach((button) => {
 
 renderHomeLibraryTab("notes");
 
-document.querySelectorAll("[data-verse-action]").forEach((button) => {
-  button.addEventListener("click", () => {
-    button.classList.add("is-pressed");
-    window.setTimeout(() => button.classList.remove("is-pressed"), 180);
-    handleVerseAction(button.dataset.verseAction);
-  });
-});
-
-document.querySelectorAll("[data-note-command]").forEach((button) => {
-  button.addEventListener("click", () => {
-    noteEditorContent?.focus();
-    document.execCommand(button.dataset.noteCommand, false, button.dataset.noteValue || null);
-    markNoteEditorDirty();
-  });
-});
-
 function updateNoteColorSwatch(input, selector) {
   input?.closest("label")?.querySelector(selector)?.style.setProperty("background", input.value);
 }
@@ -6212,43 +5871,6 @@ function updateNoteToolbarColors() {
   textLabel?.style.setProperty("color", textColor);
   highlightLabel?.style.setProperty("color", highlightColor === "transparent" ? "#d9f2ff" : highlightColor);
 }
-
-const noteColorInput = document.querySelector("[data-note-color]");
-const noteHighlightInput = document.querySelector("[data-note-highlight]");
-updateNoteColorSwatch(noteColorInput, "[data-note-color-swatch]");
-updateNoteColorSwatch(noteHighlightInput, "[data-note-highlight-swatch]");
-
-noteColorInput?.addEventListener("input", (event) => {
-  updateNoteColorSwatch(event.target, "[data-note-color-swatch]");
-  restoreNoteSelection();
-  noteEditorContent?.focus();
-  document.execCommand("foreColor", false, event.target.value);
-  captureNoteSelection();
-  markNoteEditorDirty();
-});
-
-noteHighlightInput?.addEventListener("input", (event) => {
-  updateNoteColorSwatch(event.target, "[data-note-highlight-swatch]");
-  restoreNoteSelection();
-  noteEditorContent?.focus();
-  document.execCommand("hiliteColor", false, event.target.value);
-  captureNoteSelection();
-  markNoteEditorDirty();
-});
-
-noteFontSizeInput?.addEventListener("input", (event) => {
-  noteEditorFontSize = Number(event.target.value);
-  markNoteEditorDirty();
-  if (noteFontSizeValue) noteFontSizeValue.textContent = `${noteEditorFontSize} px`;
-  const hasSelection = restoreNoteSelection() && noteEditorSelectionRange && !noteEditorSelectionRange.collapsed;
-  if (hasSelection) {
-    noteEditorContent?.focus();
-    applySelectedNoteFontSize(noteEditorFontSize);
-    captureNoteSelection();
-  } else {
-    noteEditorContent?.style.setProperty("--note-editor-font-size", `${noteEditorFontSize}px`);
-  }
-});
 
 function getNoteCursorLine() {
   const selection = window.getSelection();
@@ -6294,40 +5916,6 @@ function changeNoteFontSize(delta, trigger) {
   }
   noteEditorCursorLine = null;
 }
-
-noteFontSizeDecreaseButton?.addEventListener("click", (event) => {
-  changeNoteFontSize(-1, event.currentTarget);
-});
-
-noteFontSizeIncreaseButton?.addEventListener("click", (event) => {
-  changeNoteFontSize(1, event.currentTarget);
-});
-
-[noteFontSizeDecreaseButton, noteFontSizeIncreaseButton].forEach((button) => {
-  button?.addEventListener("pointerdown", (event) => {
-    noteEditorCursorLine = getNoteCursorLine();
-    captureNoteSelection();
-  });
-});
-
-noteEditorContent?.addEventListener("input", markNoteEditorDirty);
-noteEditorTitle?.addEventListener("input", (event) => {
-  noteEditorNoteTitle = event.target.value;
-  markNoteEditorDirty();
-});
-noteEditorContent?.addEventListener("mouseup", captureNoteSelection);
-noteEditorContent?.addEventListener("keyup", captureNoteSelection);
-noteEditorContent?.addEventListener("mouseup", updateNoteToolbarColors);
-noteEditorContent?.addEventListener("keyup", updateNoteToolbarColors);
-document.addEventListener("selectionchange", updateNoteToolbarColors);
-noteFontSizeInput?.addEventListener("pointerdown", captureNoteSelection);
-
-saveRichNoteButton?.addEventListener("click", () => {
-  saveRichNote();
-  resetNoteEditorDirty();
-});
-noteAddSaveButton?.addEventListener("click", saveAddedNoteVerses);
-document.querySelector("[data-delete-rich-note]")?.addEventListener("click", deleteRichNote);
 
 multiSelectMenuToggle?.addEventListener("click", () => {
   if (!multiSelectMode || !multiSelectedVerseData.length) {
@@ -6572,11 +6160,6 @@ modalLayer.addEventListener("click", (event) => {
 window.addEventListener("load", refreshIcons);
 appShell.dataset.activeScreen = document.querySelector(".screen.is-active")?.id || "home";
 initHomeStats();
-initPrayerPage();
-initProfile();
-initPreferences();
-initReader();
-initApologeticsGate();
 initAuthForm();
 initSupabase();
 restoreAiMemory();

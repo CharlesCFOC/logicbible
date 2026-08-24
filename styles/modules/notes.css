@@ -1,0 +1,39 @@
+/* Notes module: final editor proportions and compact controls. */
+
+body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-panel {
+  grid-template-rows: auto auto auto minmax(0, 1fr) !important;
+}
+
+body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-heading-title {
+  font-size: 20px !important;
+  line-height: 1.2 !important;
+}
+
+body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-verse-summary {
+  width: fit-content !important;
+  min-width: 0 !important;
+  min-height: 30px !important;
+  margin: 0 auto !important;
+  padding: 4px 10px !important;
+  border-radius: 8px !important;
+}
+
+body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-verse-summary-copy strong {
+  font-size: 10px !important;
+}
+
+body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-verse-summary > svg {
+  width: 14px !important;
+  height: 14px !important;
+  margin-left: 8px;
+}
+
+body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-content {
+  min-height: 0 !important;
+  height: auto !important;
+  margin: 4px 0 0 !important;
+  border: 0 !important;
+  border-top: 1px solid rgba(190, 227, 246, 0.42) !important;
+  border-radius: 0 !important;
+  background: rgba(11, 25, 36, 0.24) !important;
+}

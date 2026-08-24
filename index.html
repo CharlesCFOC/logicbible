@@ -4,11 +4,22 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Brother Bible AI</title>
-    <link rel="stylesheet" href="styles.css?v=note-layout-14" />
+    <link rel="stylesheet" href="styles.css?v=modules-03" />
+    <link rel="stylesheet" href="styles/modules/tokens.css?v=modules-01" />
+    <link rel="stylesheet" href="styles/modules/navigation.css?v=modules-01" />
+    <link rel="stylesheet" href="styles/modules/prayer.css?v=modules-01" />
+    <link rel="stylesheet" href="styles/modules/notes.css?v=modules-01" />
+    <link rel="stylesheet" href="styles/modules/theme-black.css?v=modules-01" />
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="bible-data.js" defer></script>
-    <script src="script.js?v=note-layout-14" defer></script>
+    <script src="script.js?v=modules-05" defer></script>
+    <script src="scripts/navigation.js?v=modules-05" defer></script>
+    <script src="scripts/prayer.js?v=modules-05" defer></script>
+    <script src="scripts/notes.js?v=modules-05" defer></script>
+    <script src="scripts/bible.js?v=modules-05" defer></script>
+    <script src="scripts/profile.js?v=modules-06" defer></script>
+    <script src="scripts/apologetics.js?v=modules-06" defer></script>
   </head>
   <body>
     <div class="app-shell" data-theme="light" data-app-background="paper">
@@ -177,7 +188,7 @@
               <span>3 stories</span>
             </div>
             <button class="kids-book-card" type="button" data-kids-book="matthew">
-              <img src="assets/kids-bible/matthew/01_Matthew_Comic_Page_Modern_English.jpg" alt="Matthew comic preview" />
+              <img src="assets/kids-bible/matthew/01_Matthew_Comic_Page_Modern_English.jpg" alt="Matthew comic preview" loading="lazy" decoding="async" />
               <div class="kids-book-card-copy">
                 <strong>Matthew</strong>
                 <small data-kids-book-progress-label>Page 1 of 37 · 3%</small>
@@ -188,7 +199,7 @@
               <i data-lucide="arrow-up-right" aria-hidden="true"></i>
             </button>
             <button class="kids-book-card" type="button" data-kids-book="mark">
-              <img src="assets/kids-bible/mark/01.webp" alt="Mark comic preview" />
+              <img src="assets/kids-bible/mark/01.webp" alt="Mark comic preview" loading="lazy" decoding="async" />
               <div class="kids-book-card-copy">
                 <strong>Mark</strong>
                 <small data-kids-book-progress-label>Page 1 of 16 · 6%</small>
@@ -199,7 +210,7 @@
               <i data-lucide="arrow-up-right" aria-hidden="true"></i>
             </button>
             <button class="kids-book-card" type="button" data-kids-book="luke">
-              <img src="assets/kids-bible/luke/01.webp" alt="Luke comic preview" />
+              <img src="assets/kids-bible/luke/01.webp" alt="Luke comic preview" loading="lazy" decoding="async" />
               <div class="kids-book-card-copy">
                 <strong>Luke</strong>
                 <small data-kids-book-progress-label>Page 1 of 21 · 5%</small>
@@ -227,7 +238,7 @@
             </header>
             <div class="kids-reader-progress" aria-hidden="true"><span data-kids-progress></span></div>
             <div class="kids-reader-image-wrap">
-              <img data-kids-page-image alt="Kids Bible illustrated page" />
+              <img data-kids-page-image alt="Kids Bible illustrated page" loading="lazy" decoding="async" />
             </div>
             <button class="kids-reader-first-page" type="button" data-kids-first-page aria-label="Go to first page"><i data-lucide="house"></i></button>
             <button class="kids-reader-arrow is-previous" type="button" data-kids-previous aria-label="Previous page"><i data-lucide="chevron-left"></i></button>
@@ -481,22 +492,22 @@
                 <span class="prayer-background-picker-label">Choose a background</span>
                 <div class="prayer-background-options">
                   <button class="is-active" type="button" data-prayer-background-option="0" aria-label="Choose prayer background 1" aria-pressed="true">
-                    <img src="assets/prayer-backgrounds/prayer-1.png" alt="" />
+                    <img src="assets/prayer-backgrounds/prayer-1.jpg" alt="" loading="lazy" decoding="async" />
                   </button>
                   <button type="button" data-prayer-background-option="1" aria-label="Choose prayer background 2" aria-pressed="false">
-                    <img src="assets/prayer-backgrounds/prayer-2.png" alt="" />
+                    <img src="assets/prayer-backgrounds/prayer-2.jpg" alt="" loading="lazy" decoding="async" />
                   </button>
                   <button type="button" data-prayer-background-option="2" aria-label="Choose prayer background 3" aria-pressed="false">
-                    <img src="assets/prayer-backgrounds/prayer-3.png" alt="" />
+                    <img src="assets/prayer-backgrounds/prayer-3.jpg" alt="" loading="lazy" decoding="async" />
                   </button>
                   <button type="button" data-prayer-background-option="3" aria-label="Choose prayer background 4" aria-pressed="false">
-                    <img src="assets/prayer-backgrounds/prayer-4.png" alt="" />
+                    <img src="assets/prayer-backgrounds/prayer-4.jpg" alt="" loading="lazy" decoding="async" />
                   </button>
                   <button type="button" data-prayer-background-option="4" aria-label="Choose prayer background 5" aria-pressed="false">
-                    <img src="assets/prayer-backgrounds/prayer-5.png" alt="" />
+                    <img src="assets/prayer-backgrounds/prayer-5.jpg" alt="" loading="lazy" decoding="async" />
                   </button>
                   <button type="button" data-prayer-background-option="5" aria-label="Choose prayer background 6" aria-pressed="false">
-                    <img src="assets/prayer-backgrounds/prayer-6.png" alt="" />
+                    <img src="assets/prayer-backgrounds/prayer-6.jpg" alt="" loading="lazy" decoding="async" />
                   </button>
                 </div>
               </div>
@@ -536,7 +547,7 @@
 
         <section id="profile" class="screen profile-screen" data-screen>
           <article class="profile-hero">
-            <img src="assets/profile-hero-v2.png" alt="Profile background" data-profile-cover />
+            <img src="assets/profile-hero-v2.png" alt="Profile background" data-profile-cover loading="lazy" decoding="async" />
             <button class="profile-style-button" type="button" data-profile-style-toggle aria-expanded="false">
               <i data-lucide="pencil"></i><span>Edit style</span>
             </button>
@@ -757,7 +768,7 @@
           <header class="note-editor-panel-header">
             <div>
               <span>Notes</span>
-              <strong data-note-editor-reference>Selected verses</strong>
+              <input class="note-editor-title note-editor-heading-title" data-note-title data-note-editor-reference type="text" maxlength="100" placeholder="Note title" aria-label="Note title" />
             </div>
             <div class="note-editor-header-actions">
               <button type="button" class="note-undo-button" data-note-command="undo" aria-label="Undo" title="Undo"><i data-lucide="undo-2"></i></button>
@@ -766,7 +777,6 @@
               <button type="button" class="note-close-button" data-close-modal aria-label="Close note editor" title="Close"><i data-lucide="x"></i></button>
             </div>
           </header>
-          <input class="note-editor-title" data-note-title type="text" maxlength="100" placeholder="Note title" aria-label="Note title" />
           <div class="note-editor-verse-chips" data-note-editor-verse-chips aria-label="Verses attached to this note"></div>
           <div class="note-editor-toolbar" role="toolbar" aria-label="Note formatting">
             <button type="button" data-note-command="bold" aria-label="Bold"><b>B</b></button>
