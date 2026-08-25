@@ -1,0 +1,508 @@
+/* components/navigation.css */
+
+.bottom-nav [data-react-navigation-root] {
+  display: contents;
+}
+
+/* Final navigation override */
+.app-shell .bottom-nav,
+.app-shell[data-app-background] .bottom-nav,
+.app-shell[data-theme="dark"] .bottom-nav,
+.app-shell[data-theme="dark"][data-app-background] .bottom-nav {
+  border-color: rgba(139, 220, 255, 0.32) !important;
+  background: rgba(18, 43, 59, 0.78) !important;
+  background-image: linear-gradient(180deg, rgba(53, 91, 116, 0.42), rgba(10, 27, 39, 0.78)) !important;
+  box-shadow: 0 -8px 22px rgba(0, 0, 0, 0.26), inset 0 1px 0 rgba(201, 239, 255, 0.14) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
+  backdrop-filter: blur(18px) saturate(135%) !important;
+}
+
+.app-shell .bottom-nav button,
+.app-shell[data-app-background] .bottom-nav button,
+.app-shell[data-theme="dark"] .bottom-nav button {
+  color: #fff !important;
+}
+
+.app-shell .bottom-nav button.is-active,
+.app-shell[data-app-background] .bottom-nav button.is-active,
+.app-shell[data-theme="dark"] .bottom-nav button.is-active {
+  color: #9edcff !important;
+  background: rgba(76, 153, 194, 0.48) !important;
+  background-image: linear-gradient(180deg, rgba(125, 210, 247, 0.3), rgba(33, 87, 116, 0.5)) !important;
+  box-shadow: inset 0 1px 0 rgba(236, 250, 255, 0.24), 0 3px 10px rgba(0, 0, 0, 0.2) !important;
+}
+
+.home-hero,
+.page-header,
+.reader-topbar,
+.section-heading,
+.sheet-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.home-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 32px;
+  padding: 6px 2px 0;
+}
+
+.home-hero .icon-button {
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  box-shadow: none;
+  color: rgba(114, 101, 90, 0.72);
+}
+
+.home-hero .icon-button:hover {
+  background: transparent;
+  box-shadow: none;
+  color: var(--ink);
+}
+
+.home-title {
+  margin: 0;
+  padding: 12px 2px 16px;
+  text-align: center;
+  color: #232526;
+  font-family: var(--font-display);
+  font-size: clamp(40px, 5.4vw, 58px);
+  line-height: 0.88;
+  letter-spacing: -0.04em;
+  font-weight: 600;
+}
+
+.home-hero-image {
+  position: relative;
+  min-height: 390px;
+  margin: -18px 0 18px;
+  overflow: hidden;
+  border: 3px solid #fff;
+  border-radius: 42px;
+  background: #c7b49d;
+}
+
+.home-hero-image img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(0.84) brightness(0.94) contrast(0.94);
+}
+
+.home-hero-image::after {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(17, 18, 18, 0.04) 0%, rgba(17, 18, 18, 0.03) 42%, rgba(17, 18, 18, 0.62) 100%),
+    linear-gradient(90deg, rgba(17, 18, 18, 0.18), transparent 62%);
+  content: "";
+}
+
+.home-hero-image-copy {
+  position: absolute;
+  right: 22px;
+  bottom: 26px;
+  left: 22px;
+  z-index: 1;
+  display: grid;
+  gap: 7px;
+  align-content: end;
+  max-width: 300px;
+  color: #fffdf8;
+}
+
+.home-hero-image-copy span {
+  color: rgba(255, 253, 248, 0.78);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.home-hero-image-copy h1 {
+  margin: 0;
+  color: #fffdf8;
+  font-family: var(--font-body);
+  font-size: clamp(28px, 7vw, 38px);
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+}
+
+.home-hero-image-copy p {
+  max-width: 27ch;
+  margin: 0;
+  color: rgba(255, 253, 248, 0.82);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.home-hero-verse {
+  display: grid;
+  gap: 3px;
+  max-width: 31ch;
+  margin-top: 3px;
+  padding-left: 10px;
+  border-left: 2px solid rgba(255, 253, 248, 0.7);
+}
+
+.home-hero-verse span,
+.home-hero-verse small {
+  color: rgba(255, 253, 248, 0.72);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+
+.home-hero-verse strong {
+  color: #fffdf8;
+  font-family: var(--font-display);
+  font-size: 15px;
+  line-height: 1.12;
+}
+
+.home-hero-image-copy button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: max-content;
+  min-height: 40px;
+  margin-top: 5px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: #fffdf8;
+  color: #29251f;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.home-hero-image-copy button svg {
+  width: 15px;
+  height: 15px;
+}
+
+.home-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0 0 18px;
+}
+
+.home-stat-card--continue {
+  position: relative;
+  display: grid;
+  align-content: center;
+  gap: 5px;
+  border: 0;
+  color: var(--ink);
+  background: #e8edf1;
+  text-align: left;
+}
+
+.home-stat-card--continue span {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.home-stat-card--continue strong {
+  font-size: 16px;
+}
+
+.home-stat-card--continue svg {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  width: 16px;
+  height: 16px;
+  animation: metallicArrow 2.8s ease-in-out infinite;
+}
+
+@keyframes metallicArrow {
+  0%, 100% {
+    color: #6f7d89;
+    filter: drop-shadow(0 0 0 rgba(255, 255, 255, 0));
+  }
+  45% {
+    color: #fff;
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.9));
+  }
+  62% {
+    color: #71808c;
+    filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.5));
+  }
+}
+
+.home-prayer-card {
+  position: relative;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 66px;
+  margin: 0 0 14px;
+  padding: 11px 13px;
+  border: 0;
+  border-radius: 18px;
+  color: var(--ink);
+  background: #f3f5f2;
+  box-shadow: 0 4px 14px rgba(71, 78, 86, 0.06);
+  text-align: left;
+}
+
+
+/* Match the Bible header's transparent frosted-glass treatment. */
+.app-shell .bottom-nav {
+  border-color: rgba(170, 215, 238, 0.34) !important;
+  background: rgba(54, 82, 103, 0.42) !important;
+  background-image: none !important;
+  box-shadow:
+    inset 0 1px 0 rgba(220, 242, 255, 0.14),
+    0 -8px 22px rgba(0, 0, 0, 0.2) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
+  backdrop-filter: blur(18px) saturate(135%) !important;
+}
+
+.app-shell[data-app-background] .bottom-nav,
+.app-shell[data-theme="dark"][data-app-background] .bottom-nav {
+  border-color: rgba(170, 215, 238, 0.34) !important;
+  background-color: rgba(54, 82, 103, 0.28) !important;
+  background-image: none !important;
+  -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
+  backdrop-filter: blur(18px) saturate(135%) !important;
+}
+
+.app-shell[data-app-background] .bottom-nav button.is-active,
+.app-shell[data-theme="dark"][data-app-background] .bottom-nav button.is-active {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #5edcff 0%, #4f9dff 48%, #956cff 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    0 5px 18px rgba(83, 157, 255, 0.42) !important;
+}
+
+.app-shell[data-app-background] .bottom-nav button.is-active svg,
+.app-shell[data-theme="dark"][data-app-background] .bottom-nav button.is-active svg {
+  color: #ffffff !important;
+  filter: drop-shadow(0 1px 3px rgba(15, 45, 100, 0.28));
+}
+
+.app-shell[data-app-background] .bottom-nav,
+.app-shell[data-theme="dark"][data-app-background] .bottom-nav {
+  border-right: 0 !important;
+  border-bottom: 0 !important;
+  border-left: 0 !important;
+}
+
+
+/* Navigation and screen-level interaction rules. */
+
+.screen {
+  overscroll-behavior-y: contain;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .screen.is-active {
+    will-change: opacity, transform;
+  }
+}
+
+/* Migrated shared rules */
+
+/* Hide the primary navigation softly while reading, then restore it on upward scroll. */
+.bottom-nav {
+  transition: opacity 520ms ease, transform 520ms ease;
+}
+
+.bottom-nav.is-scroll-hidden {
+  opacity: 0;
+  transform: translateY(110%);
+  pointer-events: none;
+}
+
+.multi-select-menu-toggle {
+  position: absolute;
+  right: 50%;
+  bottom: calc(var(--bottom-nav-height) + 8px);
+  z-index: 12;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  min-height: 34px;
+  border: 1px solid rgba(181, 159, 131, 0.24);
+  border-radius: 14px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 5px 14px rgba(47, 60, 74, 0.12);
+  transform: translateX(50%);
+}
+
+.note-add-save-button {
+  position: absolute;
+  right: 14px;
+  bottom: calc(var(--bottom-nav-offset) + 18px);
+  z-index: 1003;
+  min-height: 36px;
+  padding: 0 13px;
+  border-radius: 999px;
+  color: #245b3a;
+  background: #c9efd5;
+  box-shadow: 0 5px 14px rgba(48, 103, 70, 0.16);
+  font-size: 11px;
+  font-weight: 850;
+}
+
+/* Consolidated shared rules */
+
+.app-shell[data-app-background] .phone-frame {
+  border-color: rgba(221, 227, 234, 0.18);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.999), rgba(255, 255, 255, 0) 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(250, 252, 254, 0.994));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    0 20px 40px rgba(47, 60, 74, 0.05),
+    0 0 0 1px rgba(255, 255, 255, 0.18);
+  border-radius: 24px;
+}
+
+.app-shell[data-app-background] .bottom-nav {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 7px 9px calc(7px + env(safe-area-inset-bottom));
+  border: 1px solid rgba(221, 227, 234, 0.016);
+  border-radius: 18px 18px 0 0;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0) 68%),
+    linear-gradient(180deg, rgba(255, 253, 249, 0.999), rgba(247, 241, 232, 0.992));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.985),
+    0 1px 0 rgba(255, 255, 255, 0.985);
+  backdrop-filter: blur(10px);
+}
+
+.app-shell[data-app-background] .bottom-nav button {
+  color: rgba(108, 102, 94, 0.88);
+}
+
+.app-shell[data-app-background] .bottom-nav button.is-active {
+  color: var(--ink);
+  background: linear-gradient(180deg, rgba(242, 228, 210, 0.96), rgba(255, 255, 255, 0.84));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    0 1px 2px rgba(181, 159, 131, 0.02);
+}
+
+.composer {
+  position: absolute;
+  right: 0;
+  bottom: var(--bottom-nav-offset);
+  left: 0;
+  z-index: 11;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 0;
+  padding: 10px 18px;
+  border: 1px solid #cfc4b7;
+  border-radius: 28px;
+  background: linear-gradient(180deg, #fffdfb, #f6f1e9);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 8px 18px rgba(47, 60, 74, 0.006);
+  backdrop-filter: blur(18px);
+}
+
+.bottom-nav {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 1px;
+  min-height: var(--bottom-nav-height);
+  padding: 5px 5px calc(5px + env(safe-area-inset-bottom));
+  border: 1px solid rgba(221, 227, 234, 0.02);
+  border-radius: 18px 18px 0 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(251, 248, 241, 0.992)),
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0) 68%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.995),
+    0 1px 0 rgba(255, 255, 255, 0.995);
+  backdrop-filter: blur(12px);
+}
+
+.bottom-nav button {
+  display: grid;
+  place-items: center;
+  gap: 3px;
+  min-height: 34px;
+  padding: 2px 0 1px;
+  border-radius: 17px;
+  background: transparent;
+  color: rgba(118, 107, 96, 0.88);
+  font-size: 8.5px;
+  font-weight: 700;
+}
+
+.bottom-nav button.is-active {
+  transform: translateY(-1px) scale(1.01);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(242, 228, 210, 0.96), rgba(255, 255, 255, 0.84));
+  color: var(--ink);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 1px 2px rgba(181, 159, 131, 0.02);
+}
+
+.bottom-nav svg {
+  width: 19px;
+  height: 19px;
+}
+
+.bottom-nav {
+  border-color: #171717;
+  background: #111111;
+  box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.16);
+  backdrop-filter: none;
+}
+
+.bottom-nav button,
+.app-shell[data-app-background] .bottom-nav button {
+  color: #fff;
+}
+
+.bottom-nav button.is-active,
+.app-shell[data-app-background] .bottom-nav button.is-active {
+  color: #fff;
+  background: #2b2b2b;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* Keep primary navigation available after screen changes and scrolling. */
+.app-shell .bottom-nav {
+  display: grid !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  transform: none !important;
+  pointer-events: auto !important;
+  z-index: 20;
+}
+
+.app-shell[data-active-screen="kids-bible"][data-kids-reader="true"] .bottom-nav {
+  display: none !important;
+}

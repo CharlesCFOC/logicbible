@@ -1,0 +1,17 @@
+[
+  "core/base.css",
+  "components/navigation.css",
+  "components/buttons.css",
+  "components/cards.css",
+  "components/forms-modals.css",
+  "pages/home.css",
+  "pages/bible.css",
+  "pages/prayer.css",
+  "pages/notes.css",
+  "pages/profile.css",
+  "pages/ai.css",
+  "pages/kids-bible.css",
+  "pages/apologetics.css",
+  "themes/black.css",
+  "responsive.css"
+]

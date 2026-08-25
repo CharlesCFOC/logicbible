@@ -1,0 +1,783 @@
+/* pages/bible.css */
+
+/* Bible reading content: add a little more breathing room at both edges. */
+.app-shell[data-app-background="black"] .reader-screen .scripture-page {
+  padding-right: 10px !important;
+  padding-left: 10px !important;
+}
+
+.app-shell[data-app-background="black"] .reader-screen .scripture-line,
+.app-shell[data-app-background="black"] .reader-screen .parallel-scripture-line {
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+}
+
+
+/* The selected verse stays sharp; nearby lines transition gradually into blur. */
+.app-shell[data-app-background="black"] .reader-screen.is-verse-focused .scripture-line:not(.is-selected),
+.app-shell[data-app-background="black"] .reader-screen.is-verse-focused .parallel-scripture-line:not(.is-selected) {
+  filter: blur(7px) !important;
+  opacity: 0.38 !important;
+}
+
+.app-shell[data-app-background="black"] .reader-screen.is-verse-focused .scripture-line.is-selected,
+.app-shell[data-app-background="black"] .reader-screen.is-verse-focused .parallel-scripture-line.is-selected {
+  filter: none !important;
+  opacity: 1 !important;
+  background: transparent !important;
+}
+
+.app-shell[data-app-background="black"] .reader-screen.is-verse-focused .scripture-line.is-selected + .scripture-line,
+.app-shell[data-app-background="black"] .reader-screen.is-verse-focused .parallel-scripture-line.is-selected + .parallel-scripture-line,
+.app-shell[data-app-background="black"] .reader-screen.is-verse-focused .scripture-line:has(+ .scripture-line.is-selected),
+.app-shell[data-app-background="black"] .reader-screen.is-verse-focused .parallel-scripture-line:has(+ .parallel-scripture-line.is-selected) {
+  filter: blur(3px) !important;
+  opacity: 0.66 !important;
+}
+
+.app-shell[data-app-background="black"] .reader-screen.is-verse-focused .scripture-line.is-selected + .scripture-line + .scripture-line,
+.app-shell[data-app-background="black"] .reader-screen.is-verse-focused .parallel-scripture-line.is-selected + .parallel-scripture-line + .parallel-scripture-line,
+.app-shell[data-app-background="black"] .reader-screen.is-verse-focused .scripture-line:has(+ .scripture-line + .scripture-line.is-selected),
+.app-shell[data-app-background="black"] .reader-screen.is-verse-focused .parallel-scripture-line:has(+ .parallel-scripture-line + .parallel-scripture-line.is-selected) {
+  filter: blur(8px) !important;
+  opacity: 0.38 !important;
+}
+
+.app-shell[data-app-background="black"] .reader-screen.is-verse-focused .scripture-line.is-selected + .scripture-line + .scripture-line + .scripture-line,
+.app-shell[data-app-background="black"] .reader-screen.is-verse-focused .parallel-scripture-line.is-selected + .parallel-scripture-line + .parallel-scripture-line + .parallel-scripture-line,
+.app-shell[data-app-background="black"] .reader-screen.is-verse-focused .scripture-line:has(+ .scripture-line + .scripture-line + .scripture-line.is-selected),
+.app-shell[data-app-background="black"] .reader-screen.is-verse-focused .parallel-scripture-line:has(+ .parallel-scripture-line + .parallel-scripture-line + .parallel-scripture-line.is-selected) {
+  filter: blur(11px) !important;
+  opacity: 0.22 !important;
+}
+
+
+/* The black background is limited to the reading surface. Keep the
+   Scripture content readable even while the surrounding shell stays light. */
+.app-shell[data-app-background="black"] .reader-screen .chapter-number,
+.app-shell[data-app-background="black"] .reader-screen .scripture-line,
+.app-shell[data-app-background="black"] .reader-screen .parallel-scripture-line {
+  color: #f2eee6;
+}
+
+.app-shell[data-app-background="black"] .reader-screen .scripture-line sup,
+.app-shell[data-app-background="black"] .reader-screen .parallel-scripture-line sup,
+.app-shell[data-app-background="black"] .reader-screen .section-title,
+.app-shell[data-app-background="black"] .reader-screen .copyright-note {
+  color: #b8aa98;
+}
+
+.app-shell[data-theme="dark"][data-app-background="black"] .phone-frame,
+.app-shell[data-theme="dark"][data-app-background="black"] .reader-screen,
+.app-shell[data-theme="dark"][data-app-background="black"] .reader-topbar,
+.app-shell[data-theme="dark"][data-app-background="black"] .ai-topbar {
+  background: #141414;
+}
+
+.app-shell[data-app-background="warm"] {
+  --bg: #171310;
+  --bg-soft: #211b16;
+  --line: #332a22;
+}
+
+.app-shell[data-app-background="navy"] {
+  --bg: #07121f;
+  --bg-soft: #101b2a;
+  --ink: #f2f7ff;
+  --muted: #9fb0c5;
+  --line: #223149;
+}
+
+.app-shell[data-app-background="forest"] {
+  --bg: #081712;
+  --bg-soft: #13251d;
+  --ink: #f0f8f2;
+  --muted: #a8b9ad;
+  --line: #26382e;
+}
+
+
+/* Smaller controls for the parallel and target actions. */
+.reader-screen .parallel-toggle {
+  min-height: 36px !important;
+  gap: 6px;
+  font-size: 11px;
+}
+
+.reader-screen .parallel-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Migrated shared rules */
+
+.reader-screen.is-verse-focused .scripture-line:not(.is-selected),
+.reader-screen.is-verse-focused .parallel-scripture-line:not(.is-selected) {
+  filter: blur(7px);
+  opacity: 0.42;
+  transition: filter 180ms ease, opacity 180ms ease;
+}
+
+.app-shell[data-modal="verse"] .reader-screen .scripture-line:not(.is-selected),
+.app-shell[data-modal="verse"] .reader-screen .parallel-scripture-line:not(.is-selected) {
+  filter: blur(7px) !important;
+  opacity: 0.48 !important;
+}
+
+.reader-screen.is-verse-focused .scripture-line.is-multi-selected,
+.reader-screen.is-verse-focused .parallel-scripture-line.is-multi-selected {
+  position: relative;
+  z-index: 1;
+  opacity: 1;
+  filter: none;
+}
+
+.scripture-line.is-multi-selected,
+.parallel-scripture-line.is-multi-selected {
+  font-style: italic;
+  color: var(--ink);
+  background: rgba(242, 228, 210, 0.48);
+  box-shadow: inset 3px 0 0 var(--cool);
+}
+
+.scripture-line.is-noted,
+.parallel-scripture-line.is-noted {
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 1.5px;
+  text-decoration-color: var(--cool);
+  text-underline-offset: 4px;
+}
+
+.reader-screen.is-verse-focused .scripture-line.is-selected,
+.reader-screen.is-verse-focused .parallel-scripture-line.is-selected {
+  position: relative;
+  z-index: 1;
+}
+
+.app-shell[data-modal="verse"] .reader-screen .scripture-line.is-selected,
+.app-shell[data-modal="verse"] .reader-screen .parallel-scripture-line.is-selected {
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+.bottom-sheet .sheet-title button {
+  width: 32px;
+  min-height: 32px;
+  opacity: 0.72;
+}
+
+.bottom-sheet .sheet-title button:hover {
+  opacity: 1;
+  background: rgba(139, 220, 255, 0.1);
+}
+
+.bottom-sheet.is-dragging {
+  transition: none !important;
+}
+
+.verse-detail-panel {
+  margin-top: 12px;
+}
+
+.app-shell[data-modal="original-language"] .bottom-sheet.is-original-language {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  max-height: none !important;
+  overflow-y: auto;
+  padding: 20px 16px 28px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background:
+    radial-gradient(ellipse 62% 38% at 12% 18%, rgba(94, 143, 174, 0.62), transparent 70%),
+    radial-gradient(ellipse 66% 42% at 88% 82%, rgba(74, 105, 139, 0.58), transparent 70%),
+    linear-gradient(135deg, #07090b 0%, #11161b 48%, #050607 100%) !important;
+  background-size: 145% 145%, 140% 140%, 100% 100% !important;
+  animation: anthraciteAtmosphere 24s ease-in-out infinite alternate;
+}
+
+.app-shell[data-modal="original-language"] .bottom-sheet.is-original-language > .modal-handle,
+.app-shell[data-modal="original-language"] .bottom-sheet.is-original-language > .sheet-title,
+.app-shell[data-modal="original-language"] .bottom-sheet.is-original-language > .action-grid,
+.app-shell[data-modal="original-language"] .bottom-sheet.is-original-language > .sheet-feedback {
+  display: none;
+}
+
+.app-shell[data-modal="original-language"] .bottom-sheet.is-original-language .verse-detail-panel {
+  margin: 0;
+}
+
+.app-shell[data-modal="original-language"] .interlinear-verse-card,
+.app-shell[data-modal="original-language"] .interlinear-row {
+  border-color: rgba(170, 215, 238, 0.3) !important;
+  background: rgba(54, 82, 103, 0.3) !important;
+  box-shadow: inset 0 1px 0 rgba(220, 242, 255, 0.12), 0 8px 20px rgba(0, 0, 0, 0.2) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(125%) !important;
+  backdrop-filter: blur(18px) saturate(125%) !important;
+}
+
+.app-shell[data-modal="original-language"] .interlinear-verse-card {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  box-shadow:
+    inset 0 1px 0 rgba(220, 242, 255, 0.16),
+    0 10px 24px rgba(0, 0, 0, 0.28) !important;
+}
+
+.interlinear-heading span,
+.interlinear-verse-card > span,
+.interlinear-translation span,
+.interlinear-original span {
+  margin: 0;
+  color: var(--cool);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.interlinear-verse-card {
+  display: grid;
+  gap: 7px;
+  padding: 13px;
+  border: 1px solid rgba(139, 220, 255, 0.3);
+  border-radius: 16px;
+  background: rgba(54, 82, 103, 0.28);
+}
+
+.interlinear-verse-card p {
+  color: var(--ink);
+  font-size: 14px;
+}
+
+.interlinear-verse-card p span {
+  display: inline;
+  margin: 0;
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: normal;
+  text-transform: none;
+  transition: color 160ms ease, background-color 160ms ease;
+}
+
+.interlinear-verse-card p span.is-active {
+  border-radius: 4px;
+  background: rgba(119, 215, 166, 0.22);
+  color: #77d7a6;
+}
+
+.interlinear-verse-card strong {
+  padding-top: 7px;
+  border-top: 1px solid rgba(190, 227, 246, 0.2);
+  color: #bdeaff;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Consolidated shared rules */
+
+/* components/forms-modals.css */
+
+/* Verse sheet: edge-to-edge, compact and translucent over the reader. */
+.app-shell[data-app-background="black"] .modal-layer {
+  align-items: end !important;
+  justify-items: stretch !important;
+  padding: 0 !important;
+  background: rgba(10, 13, 16, 0.12) !important;
+  backdrop-filter: none !important;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet {
+  width: 100% !important;
+  max-height: min(52vh, 430px) !important;
+  padding: 8px 12px 4px !important;
+  border-radius: 0 !important;
+  border: 1px solid rgba(190, 227, 246, 0.42) !important;
+  background: rgba(36, 38, 41, 0.78) !important;
+  box-shadow: 0 -12px 28px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(125%);
+  backdrop-filter: blur(18px) saturate(125%);
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .sheet-title {
+  margin-bottom: 10px !important;
+}
+
+/* Keep the Bible verse sheet translucent so the blurred Scripture remains visible. */
+.app-shell[data-app-background="black"][data-modal="verse"] .modal-layer {
+  background: rgba(36, 38, 41, 0.18) !important;
+  backdrop-filter: none !important;
+}
+
+.app-shell[data-app-background] .reader-select-label select,
+.app-shell[data-app-background] .parallel-toggle,
+.app-shell[data-app-background] .parallel-selects select {
+  border-color: #ded8cf;
+  background: #eeeae4;
+  color: #2b2926;
+}
+
+.app-shell[data-app-background] .reader-topbar {
+  background: rgba(252, 253, 255, 0.98);
+}
+
+.app-shell[data-app-background] .reader-select-label select {
+  background-image: none;
+}
+
+.app-shell[data-app-background="ivory"] .chapter-number,
+.app-shell[data-app-background="ivory"] .scripture-line,
+.app-shell[data-app-background="ivory"] .parallel-scripture-line,
+.app-shell[data-app-background="paper"] .chapter-number,
+.app-shell[data-app-background="paper"] .scripture-line,
+.app-shell[data-app-background="paper"] .parallel-scripture-line {
+  color: var(--ink);
+}
+
+.reader-screen {
+  background: #fcfdff;
+}
+
+.reader-topbar {
+  position: sticky;
+  z-index: 4;
+  top: -28px;
+  margin: -28px -22px 0;
+  padding: 18px 20px 12px;
+  background: linear-gradient(180deg, rgba(252, 253, 255, 0.97), rgba(250, 251, 253, 0.88));
+  backdrop-filter: blur(12px);
+  gap: 8px;
+}
+
+.reader-select-label {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 760;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.reader-select-label:first-child {
+  flex: 0 0 88px;
+}
+
+.reader-select-label:first-child select {
+  text-align: left;
+  text-align-last: left;
+}
+
+.reader-select-label.compact {
+  flex: 0 0 68px;
+}
+
+.reader-select-label select {
+  width: 100%;
+  min-height: 42px;
+  padding: 0 30px;
+  border: 1px solid #ded8cf;
+  border-radius: 999px;
+  outline: 0;
+  color: #2b2926;
+  background: #eeeae4;
+  background-image: none;
+  font-size: 12px;
+  font-weight: 760;
+  text-align: center;
+  text-align-last: center;
+  appearance: none;
+}
+
+.reader-topbar .reader-select-label:first-child select {
+  padding-right: 12px;
+  padding-left: 12px;
+  text-align: left;
+  text-align-last: left;
+}
+
+.parallel-controls {
+  position: sticky;
+  top: 58px;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 12px 0 8px;
+  padding: 6px 0;
+  border-radius: 14px;
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.app-shell[data-app-background="black"] .reader-screen .parallel-controls {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.parallel-controls .parallel-selects {
+  grid-column: 1 / -1;
+}
+
+.parallel-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid rgba(221, 227, 234, 0.02);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(249, 251, 253, 0.986));
+  -webkit-backdrop-filter: blur(12px) saturate(135%);
+  backdrop-filter: blur(12px) saturate(135%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 3px 8px rgba(47, 60, 74, 0.0014);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 760;
+}
+
+.parallel-toggle.is-active {
+  border-color: var(--cool);
+  background: var(--cool-soft);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--cool-soft);
+}
+
+.parallel-selects {
+  display: grid;
+  gap: 8px;
+}
+
+.parallel-selects[hidden] {
+  display: none;
+}
+
+.parallel-selects select {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 28px 0 12px;
+  border: 1px solid rgba(221, 227, 234, 0.02);
+  border-radius: 999px;
+  outline: 0;
+  color: var(--ink);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(249, 251, 253, 0.986));
+  font-size: 12px;
+  font-weight: 760;
+}
+
+.scripture-page {
+  padding-top: 26px;
+}
+
+.reader-screen [data-reader-source] {
+  display: none !important;
+}
+
+.scripture-line {
+  position: relative;
+  margin: 0 -4px 18px;
+  padding: 5px 4px;
+  border-radius: 18px;
+  color: #24211c;
+  font-family: var(--font-body);
+  font-size: var(--reader-text-size, 19px);
+  line-height: 1.85;
+  transition: opacity 160ms ease, filter 160ms ease, background-color 160ms ease;
+}
+
+.app-shell[data-theme="dark"] .chapter-number,
+.app-shell[data-theme="dark"] .scripture-line {
+  color: #f2eee6;
+}
+
+.scripture-line sup {
+  margin-right: 6px;
+  color: var(--cool);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-size: 11px;
+  font-weight: 760;
+}
+
+.scripture-line.is-highlighted {
+  background: var(--highlight-color, var(--beige));
+}
+
+.scripture-line.is-selected,
+.parallel-scripture-line.is-selected {
+  background: var(--cool-soft);
+}
+
+.parallel-scripture-grid {
+  display: grid;
+  gap: 0;
+}
+
+.parallel-version-headers {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  margin: 0 0 12px;
+}
+
+.parallel-version-header {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  padding: 9px 12px;
+  border: 1px solid rgba(139, 220, 255, 0.3);
+  border-radius: 12px;
+  background: rgba(54, 82, 103, 0.34);
+  color: #dcecf5;
+  -webkit-backdrop-filter: blur(12px) saturate(125%);
+  backdrop-filter: blur(12px) saturate(125%);
+}
+
+.parallel-version-header.is-compare {
+  border-color: rgba(190, 227, 246, 0.26);
+  background: rgba(27, 48, 63, 0.48);
+}
+
+.parallel-version-header span {
+  color: #9dddf8;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.parallel-version-header strong {
+  overflow: hidden;
+  color: #ffffff;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.parallel-version-header small {
+  overflow: hidden;
+  color: rgba(220, 236, 245, 0.72);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.parallel-scripture-line {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 22px;
+  margin: 0 -4px 18px;
+  padding: 5px 4px;
+  border-radius: 18px;
+  color: #24211c;
+  transition: opacity 160ms ease, filter 160ms ease, background-color 160ms ease;
+}
+
+.parallel-scripture-line.is-highlighted {
+  background: var(--highlight-color, var(--beige));
+}
+
+.parallel-scripture-line.is-bookmarked::after {
+  position: absolute;
+  top: 10px;
+  right: 2px;
+  width: 7px;
+  height: 22px;
+  border-radius: 0 0 4px 4px;
+  background: var(--cool);
+  content: "";
+}
+
+.parallel-scripture-column {
+  margin: 0;
+  min-width: 0;
+  color: inherit;
+  font-family: var(--font-body);
+  font-size: max(14px, calc(var(--reader-text-size, 19px) - 4px));
+  line-height: 1.85;
+}
+
+.parallel-scripture-column[data-parallel-role="primary"] {
+  padding-right: 8px;
+}
+
+.parallel-scripture-column[data-parallel-role="compare"] {
+  padding-left: 18px;
+  border-left: 1px solid color-mix(in srgb, var(--line) 76%, var(--cool));
+}
+
+.parallel-scripture-column sup {
+  margin-right: 6px;
+  color: var(--cool);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-size: 11px;
+  font-weight: 760;
+}
+
+.app-shell[data-theme="dark"] .parallel-scripture-line {
+  color: #f2eee6;
+}
+
+.reader-filter-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 18px;
+  padding: 10px 12px;
+  border: 1px solid var(--cool);
+  border-radius: 18px;
+  background: var(--cool-soft);
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 760;
+}
+
+.reader-filter-banner button {
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: var(--cool);
+  color: var(--accent-contrast, #fff);
+  font-size: 11px;
+  font-weight: 760;
+}
+
+.app-shell[data-modal="verse"] .scripture-line,
+.app-shell[data-modal="verse"] .parallel-scripture-line {
+  opacity: 0.28;
+  filter: blur(2px);
+}
+
+.app-shell[data-modal="verse"] .scripture-line.is-selected,
+.app-shell[data-modal="verse"] .parallel-scripture-line.is-selected {
+  z-index: 1;
+  opacity: 1;
+  filter: none;
+  background: var(--cool-soft);
+}
+
+.scripture-line.is-bookmarked::after {
+  position: absolute;
+  top: 10px;
+  right: 4px;
+  width: 7px;
+  height: 22px;
+  border-radius: 0 0 4px 4px;
+  background: var(--cool);
+  content: "";
+}
+
+.reader-empty {
+  display: grid;
+  gap: 8px;
+  margin: 18px 0;
+  padding: 18px;
+  border: 1px solid rgba(221, 227, 234, 0.02);
+  border-radius: 24px;
+  color: var(--muted);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(249, 251, 253, 0.986));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.985),
+    0 3px 8px rgba(47, 60, 74, 0.0014);
+  line-height: 1.45;
+}
+
+.reader-empty strong {
+  color: var(--ink);
+}
+
+.text-size-preview p {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--reader-text-size, 19px);
+  line-height: 1.55;
+}
+
+.saved-verse-row {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  gap: 10px;
+  min-height: 108px;
+  padding: 12px 12px 12px 16px;
+  border: 0;
+  border-radius: 18px;
+  background: #fbfaf8;
+  box-shadow: 0 4px 14px rgba(71, 78, 86, 0.07);
+  color: var(--muted);
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+.saved-verse-row:nth-of-type(2n) {
+  background: #f8fafb;
+}
+
+.saved-verse-row:nth-of-type(3n) {
+  background: #faf9fb;
+}
+
+.saved-verse-row:nth-of-type(2n)::before {
+  background: #9bb4a7;
+}
+
+.saved-verse-row:nth-of-type(3n)::before {
+  background: #aaa1bd;
+}
+
+.saved-verse-open {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  align-items: flex-start;
+  gap: 12px;
+  min-height: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+.saved-verse-open svg {
+  margin-top: 2px;
+  color: var(--cool);
+}
+
+.saved-verse-open strong,
+.saved-verse-open small,
+.saved-verse-open p {
+  display: block;
+}
+
+.saved-verse-open strong {
+  color: var(--ink);
+  font-size: 14px;
+}
+
+.saved-verse-open small {
+  margin-top: 1px;
+  color: var(--cool);
+  font-size: 11px;
+  font-weight: 760;
+}
+
+.saved-verse-open p {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 7px 0 0;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: var(--muted);
+  font-size: 13px;
+}

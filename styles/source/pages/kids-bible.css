@@ -1,0 +1,311 @@
+/* pages/kids-bible.css */
+
+/* Kids Bible */
+.kids-bible-screen {
+  position: relative;
+  padding: 22px 16px 118px;
+}
+
+.kids-bible-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #ffffff;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.kids-bible-header h1,
+.kids-bible-header p {
+  margin: 0;
+}
+
+.kids-bible-header h1 {
+  color: #ffffff;
+  font-size: 28px;
+}
+
+.kids-bible-header p {
+  margin-top: 5px;
+  color: rgba(220, 236, 245, 0.76);
+  font-size: 12px;
+}
+
+.kids-bible-header > svg {
+  width: 42px;
+  height: 42px;
+  color: #9edcff;
+}
+
+.kids-bible-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.kids-bible-section-heading h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 18px;
+}
+
+.kids-bible-section-heading span {
+  color: #9edcff;
+  font-size: 11px;
+  font-weight: 760;
+}
+
+.kids-book-card + .kids-book-card {
+  margin-top: 12px;
+}
+
+.kids-book-card {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) 22px;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid rgba(170, 215, 238, 0.3);
+  border-radius: 20px;
+  background: rgba(54, 82, 103, 0.38);
+  color: #ffffff;
+  text-align: left;
+  -webkit-backdrop-filter: blur(16px) saturate(125%);
+  backdrop-filter: blur(16px) saturate(125%);
+}
+
+.kids-book-card-copy {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.kids-book-card img {
+  width: 72px;
+  height: 96px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.kids-book-card strong {
+  font-size: 17px;
+}
+
+.kids-book-card small {
+  color: rgba(220, 236, 245, 0.72);
+  font-size: 11px;
+}
+
+.kids-book-progress {
+  overflow: hidden;
+  width: 100%;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(190, 227, 246, 0.18);
+}
+
+.kids-book-progress > span {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: #77d7a6;
+  transition: width 220ms ease;
+}
+
+.kids-book-card > svg {
+  color: #9edcff;
+}
+
+.kids-bible-reader[hidden],
+.kids-bible-library[hidden] {
+  display: none;
+}
+
+.kids-bible-reader {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: grid;
+  grid-template-rows: auto 3px minmax(0, 1fr);
+  overflow: hidden;
+  background: #07090b;
+}
+
+.kids-reader-topbar {
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 16px 12px;
+  color: #ffffff;
+  background: rgba(7, 9, 11, 0.82);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+.kids-reader-topbar button {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  min-height: 36px;
+  border: 1px solid rgba(170, 215, 238, 0.28);
+  border-radius: 50%;
+  background: transparent;
+  color: #dff4ff;
+}
+
+.kids-reader-topbar div {
+  display: grid;
+  gap: 2px;
+}
+
+.kids-reader-topbar span {
+  color: #9edcff;
+  font-size: 10px;
+  font-weight: 760;
+}
+
+.kids-reader-topbar strong {
+  color: #ffffff;
+  font-size: 17px;
+}
+
+.kids-reader-topbar > span:last-child {
+  color: rgba(220, 236, 245, 0.78);
+  font-size: 11px;
+}
+
+.kids-reader-topbar .kids-reader-page-tools {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.kids-reader-page-tools > button {
+  width: 30px;
+  height: 30px;
+  min-height: 30px;
+  border: 0;
+  color: #9edcff;
+}
+
+.kids-reader-page-tools label {
+  display: block;
+}
+
+.kids-reader-page-tools select {
+  min-height: 30px;
+  padding: 0 4px;
+  border: 1px solid rgba(170, 215, 238, 0.28);
+  border-radius: 8px;
+  background: rgba(54, 82, 103, 0.5);
+  color: #ffffff;
+  font-size: 10px;
+}
+
+.kids-reader-page-tools > span {
+  color: rgba(220, 236, 245, 0.78);
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.kids-reader-progress {
+  overflow: hidden;
+  background: rgba(190, 227, 246, 0.18);
+}
+
+.kids-reader-progress span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: #77d7a6;
+  transition: width 220ms ease;
+}
+
+.kids-reader-image-wrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  padding: 12px 38px 72px;
+  touch-action: pan-y;
+}
+
+.kids-reader-image-wrap img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.kids-reader-arrow {
+  position: absolute;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  min-height: 38px;
+  border: 1px solid rgba(170, 215, 238, 0.36);
+  border-radius: 50%;
+  background: rgba(18, 43, 59, 0.72);
+  color: #ffffff;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.kids-reader-arrow.is-previous { left: 10px; }
+.kids-reader-arrow.is-next { right: 10px; }
+
+.kids-reader-first-page {
+  position: absolute;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  left: 50%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  min-height: 38px;
+  border: 1px solid rgba(170, 215, 238, 0.36);
+  border-radius: 50%;
+  background: rgba(18, 43, 59, 0.72);
+  color: #ffffff;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  transform: translateX(-50%);
+}
+
+.kids-reader-image-wrap.is-slide-next {
+  animation: kidsPageSlideNext 280ms ease both;
+}
+
+.kids-reader-image-wrap.is-slide-previous {
+  animation: kidsPageSlidePrevious 280ms ease both;
+}
+
+@keyframes kidsPageSlideNext {
+  0% { opacity: 0.55; transform: translateX(24px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes kidsPageSlidePrevious {
+  0% { opacity: 0.55; transform: translateX(-24px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+.app-shell[data-active-screen="kids-bible"][data-kids-reader="true"] .bottom-nav {
+  display: none;
+}

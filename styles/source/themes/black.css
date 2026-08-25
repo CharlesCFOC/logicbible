@@ -1,3 +1,338 @@
+/* themes/black.css */
+
+/* Anthracite theme final pass */
+body:has(.app-shell[data-app-background="black"]),
+html:has(.app-shell[data-app-background="black"]) {
+  background: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] {
+  background: transparent !important;
+}
+
+.app-shell[data-app-background="black"]::before {
+  display: none !important;
+}
+
+.app-shell[data-app-background="black"] .phone-frame,
+.app-shell[data-app-background="black"] .screen,
+.app-shell[data-app-background="black"] .reader-topbar,
+.app-shell[data-app-background="black"] .ai-topbar,
+.app-shell[data-app-background="black"] .page-header {
+  background: transparent !important;
+  color: #fff !important;
+}
+
+.app-shell[data-app-background="black"] .phone-frame {
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 62% 38% at 12% 18%, rgba(94, 143, 174, 0.62), transparent 70%),
+    radial-gradient(ellipse 66% 42% at 88% 82%, rgba(74, 105, 139, 0.58), transparent 70%),
+    linear-gradient(135deg, #07090b 0%, #11161b 48%, #050607 100%) !important;
+  background-size: 145% 145%, 140% 140%, 100% 100%;
+  animation: anthraciteAtmosphere 24s ease-in-out infinite alternate;
+}
+
+@keyframes anthraciteAtmosphere {
+  0% {
+    background-position: 0% 0%, 100% 100%, 0% 0%;
+  }
+  50% {
+    background-position: 72% 28%, 24% 62%, 0% 0%;
+  }
+  100% {
+    background-position: 100% 78%, 0% 16%, 0% 0%;
+  }
+}
+
+.app-shell[data-app-background="black"] .home-stat-card,
+.app-shell[data-app-background="black"] .home-prayer-card,
+.app-shell[data-app-background="black"] .saved-note-card,
+.app-shell[data-app-background="black"] .saved-verse-row,
+.app-shell[data-app-background="black"] .saved-ai-row,
+.app-shell[data-app-background="black"] .ai-history-item,
+.app-shell[data-app-background="black"] .preference-card,
+.app-shell[data-app-background="black"] .profile-info-card,
+.app-shell[data-app-background="black"] .profile-auth-card,
+.app-shell[data-app-background="black"] .prayer-card,
+.app-shell[data-app-background="black"] .prayer-compose,
+.app-shell[data-app-background="black"] .prayer-intro {
+  background: #303338 !important;
+  border-color: #454a50 !important;
+  color: #fff !important;
+}
+
+.app-shell[data-app-background="black"] input,
+.app-shell[data-app-background="black"] textarea,
+.app-shell[data-app-background="black"] select,
+.app-shell[data-app-background="black"] .note-editor-content,
+.app-shell[data-app-background="black"] .note-editor-title {
+  background: #1f2124 !important;
+  border-color: #59616a !important;
+  color: #fff !important;
+}
+
+.app-shell[data-app-background="black"] .prayer-toolbar,
+.app-shell[data-app-background="black"] .prayer-board-label {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.app-shell[data-app-background="black"] .prayer-sort select {
+  background: rgba(54, 82, 103, 0.5) !important;
+  border-color: rgba(170, 215, 238, 0.34) !important;
+  color: #d9f2ff !important;
+}
+
+.app-shell[data-app-background="black"] .reader-screen .parallel-toggle,
+.app-shell[data-app-background="black"] .reader-screen .parallel-toggle:hover {
+  border-color: rgba(170, 215, 238, 0.34) !important;
+  background: rgba(54, 82, 103, 0.5) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(135%) !important;
+  backdrop-filter: blur(12px) saturate(135%) !important;
+  color: #d9f2ff !important;
+  box-shadow: inset 0 1px 0 rgba(220, 242, 255, 0.12), 0 4px 12px rgba(0, 0, 0, 0.16) !important;
+}
+
+.app-shell[data-app-background="black"] .reader-screen .parallel-toggle.is-active,
+.app-shell[data-app-background="black"] .reader-screen .parallel-toggle.is-active:hover {
+  border-color: rgba(139, 220, 255, 0.72) !important;
+  background: rgba(60, 157, 204, 0.42) !important;
+  color: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] h1,
+.app-shell[data-app-background="black"] h2,
+.app-shell[data-app-background="black"] h3,
+.app-shell[data-app-background="black"] h4,
+.app-shell[data-app-background="black"] p,
+.app-shell[data-app-background="black"] span,
+.app-shell[data-app-background="black"] strong,
+.app-shell[data-app-background="black"] label,
+.app-shell[data-app-background="black"] .saved-note-open,
+.app-shell[data-app-background="black"] .saved-verse-open {
+  color: #fff;
+}
+
+.app-shell[data-app-background="black"] small,
+.app-shell[data-app-background="black"] .eyebrow,
+.app-shell[data-app-background="black"] .muted,
+.app-shell[data-app-background="black"] .saved-note-references {
+  color: #b8bec5 !important;
+}
+
+
+/* Anthracite application surface */
+.app-shell[data-app-background="black"] {
+  --bg: #242629;
+  --bg-soft: #2d3034;
+  --ink: #ffffff;
+  --muted: #b8bec5;
+  --line: #454a50;
+  --cool: #9edcff;
+  --cool-soft: rgba(158, 220, 255, 0.16);
+  --gold: #c6b08e;
+  --beige: #35393e;
+  --accent-contrast: #151719;
+  color: var(--ink);
+}
+
+.app-shell[data-app-background="black"] .phone-frame,
+.app-shell[data-app-background="black"] .screen,
+.app-shell[data-app-background="black"] .reader-screen,
+.app-shell[data-app-background="black"] .reader-topbar,
+.app-shell[data-app-background="black"] .ai-topbar,
+.app-shell[data-app-background="black"] .page-header {
+  background: transparent !important;
+  color: #fff;
+}
+
+.app-shell[data-app-background="black"] .app-shell::before,
+.app-shell[data-app-background="black"]::before {
+  border: 0;
+  background: #242629;
+  box-shadow: none;
+}
+
+.app-shell[data-app-background="black"] .home-stat-card,
+.app-shell[data-app-background="black"] .home-prayer-card,
+.app-shell[data-app-background="black"] .saved-note-card,
+.app-shell[data-app-background="black"] .saved-verse-row,
+.app-shell[data-app-background="black"] .saved-ai-row,
+.app-shell[data-app-background="black"] .ai-history-item,
+.app-shell[data-app-background="black"] .preference-card,
+.app-shell[data-app-background="black"] .profile-info-card,
+.app-shell[data-app-background="black"] .profile-auth-card,
+.app-shell[data-app-background="black"] .prayer-card,
+.app-shell[data-app-background="black"] .prayer-compose,
+.app-shell[data-app-background="black"] .prayer-intro {
+  border-color: #454a50 !important;
+  background: #303338 !important;
+  color: #fff;
+  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
+}
+
+.app-shell[data-app-background="black"] input,
+.app-shell[data-app-background="black"] textarea,
+.app-shell[data-app-background="black"] select,
+.app-shell[data-app-background="black"] .composer,
+.app-shell[data-app-background="black"] .note-editor-content,
+.app-shell[data-app-background="black"] .note-editor-title,
+.app-shell[data-app-background="black"] .search-field {
+  border-color: #59616a !important;
+  background: #1f2124 !important;
+  color: #fff !important;
+}
+
+.app-shell[data-app-background="black"] input::placeholder,
+.app-shell[data-app-background="black"] textarea::placeholder {
+  color: #aeb6bf !important;
+}
+
+.app-shell[data-app-background="black"] .home-hero-image,
+.app-shell[data-app-background="black"] .bottom-sheet,
+.app-shell[data-app-background="black"] .note-editor-panel,
+.app-shell[data-app-background="black"] .search-panel,
+.app-shell[data-app-background="black"] .verse-ai-panel,
+.app-shell[data-app-background="black"] .modal-layer {
+  background: #242629 !important;
+  color: #fff;
+}
+
+
+/* Move the large blue atmospheric mass across the Bible/app background. */
+.app-shell[data-app-background="black"] .phone-frame {
+  background-size: 180% 180%, 175% 175%, 100% 100% !important;
+  animation: appPhoneAtmosphere 16s ease-in-out infinite alternate !important;
+}
+
+@keyframes appPhoneAtmosphere {
+  0% {
+    background-position: -32% 12%, 132% 88%, 0 0;
+  }
+  50% {
+    background-position: 48% 34%, 52% 58%, 0 0;
+  }
+  100% {
+    background-position: 128% 76%, -28% 18%, 0 0;
+  }
+}
+
+/* Small glowing orb moving irregularly behind the app content. */
+.app-shell[data-app-background="black"] .phone-frame {
+  isolation: isolate;
+}
+
+.app-shell[data-app-background="black"] .phone-frame::before {
+  position: absolute;
+  z-index: 0;
+  top: 16%;
+  left: 0;
+  width: 1400px;
+  height: 1400px;
+  pointer-events: none;
+  content: "";
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 36% 34%,
+    rgba(224, 249, 255, 0.96) 0%,
+    rgba(133, 222, 255, 0.88) 12%,
+    rgba(71, 165, 222, 0.62) 38%,
+    rgba(50, 112, 177, 0.22) 62%,
+    transparent 76%
+  );
+  filter: blur(210px);
+  opacity: 0.8;
+  mix-blend-mode: screen;
+  animation: appFloatingOrb 34s ease-in-out infinite alternate !important;
+}
+
+.app-shell[data-app-background="black"] .phone-frame::after {
+  position: absolute;
+  z-index: 0;
+  top: 68%;
+  left: 72%;
+  width: 1150px;
+  height: 1150px;
+  pointer-events: none;
+  content: "";
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 38% 32%,
+    rgba(255, 226, 246, 0.94) 0%,
+    rgba(224, 132, 255, 0.8) 14%,
+    rgba(148, 87, 220, 0.58) 40%,
+    rgba(94, 67, 165, 0.2) 64%,
+    transparent 78%
+  );
+  filter: blur(190px);
+  opacity: 0.74;
+  mix-blend-mode: screen;
+  animation: appFloatingOrbViolet 43s ease-in-out 2s infinite alternate !important;
+}
+
+.app-shell[data-app-background="black"] .phone-frame > .screen {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes appFloatingOrb {
+  0% {
+    top: 16%;
+    left: -8%;
+    transform: scale(0.82) rotate(0deg);
+  }
+  22% {
+    top: 9%;
+    left: 76%;
+    transform: scale(1.04) rotate(28deg);
+  }
+  48% {
+    top: 48%;
+    left: 69%;
+    transform: scale(0.88) rotate(72deg);
+  }
+  73% {
+    top: 72%;
+    left: -6%;
+    transform: scale(1.12) rotate(122deg);
+  }
+  100% {
+    top: 31%;
+    left: 42%;
+    transform: scale(0.9) rotate(168deg);
+  }
+}
+
+@keyframes appFloatingOrbViolet {
+  0% {
+    top: 68%;
+    left: 72%;
+    transform: scale(0.86) rotate(0deg);
+  }
+  24% {
+    top: 42%;
+    left: 8%;
+    transform: scale(1.08) rotate(-32deg);
+  }
+  51% {
+    top: 12%;
+    left: 52%;
+    transform: scale(0.78) rotate(-70deg);
+  }
+  76% {
+    top: 76%;
+    left: 38%;
+    transform: scale(1.14) rotate(-112deg);
+  }
+  100% {
+    top: 24%;
+    left: 84%;
+    transform: scale(0.9) rotate(-156deg);
+  }
+}
+
+
 /* Shared anthracite theme overrides. Loaded after screen modules so these
    intentional final rules stay in one place. */
 
@@ -472,4 +807,216 @@ html:has(.app-shell[data-app-background="black"]) {
   grid-column: 2;
   grid-row: 1;
   color: #a8e6ff !important;
+}
+
+/* Consolidated shared rules */
+
+body:has(.app-shell[data-app-background="black"]),
+html:has(.app-shell[data-app-background="black"]) {
+  background: #ffffff !important;
+}
+
+.app-shell[data-app-background="wine"] {
+  --bg: #180811;
+  --bg-soft: #26101c;
+  --ink: #fff1f7;
+  --muted: #c1a7b3;
+  --line: #3a2230;
+}
+
+.app-shell[data-app-background="slate"] {
+  --bg: #111417;
+  --bg-soft: #1b2025;
+  --ink: #f1f4f5;
+  --muted: #a7b0b5;
+  --line: #2d353b;
+}
+
+.app-shell[data-app-background="ivory"] {
+  --bg: #fcfdff;
+  --bg-soft: #f4f6f8;
+  --ink: #181714;
+  --muted: #6f6a60;
+  --line: #dde3ea;
+}
+
+.app-shell[data-app-background="paper"] {
+  --bg: #fcfdff;
+  --bg-soft: #f4f6f8;
+  --ink: #18212b;
+  --muted: #776b5e;
+  --line: #dde3ea;
+  --gold: #8a7764;
+  --gold-soft: rgba(181, 159, 131, 0.12);
+  --cool: #8a7764;
+  --cool-soft: rgba(181, 159, 131, 0.16);
+  --green: #6f7d6a;
+  --green-soft: rgba(111, 125, 106, 0.14);
+  --warning: #8d6a42;
+  --beige: rgba(239, 243, 247, 0.98);
+  --accent-contrast: #0f1720;
+}
+
+.app-shell[data-app-background] .composer {
+  border: 1px solid rgba(221, 227, 234, 0.015);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(250, 251, 253, 0.8));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 3px 8px rgba(47, 60, 74, 0.0008);
+  backdrop-filter: blur(16px);
+}
+
+.app-shell[data-app-background] .tabs {
+  border: 1px solid rgba(221, 227, 234, 0.02);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(249, 251, 253, 0.985));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.97),
+    0 3px 8px rgba(47, 60, 74, 0.0014);
+}
+
+.app-shell[data-app-background] .tabs button.is-active {
+  color: var(--ink);
+  background: rgba(242, 228, 210, 0.88);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    0 4px 8px rgba(181, 159, 131, 0.015);
+}
+
+.app-shell[data-app-background] .composer textarea {
+  color: var(--ink);
+  caret-color: var(--cool);
+  background: transparent;
+}
+
+.app-shell[data-app-background] .composer textarea::placeholder {
+  color: rgba(124, 113, 101, 0.65);
+}
+
+.app-shell[data-app-background] .highlight-palette button {
+  border-color: rgba(221, 227, 234, 0.96);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(247, 249, 252, 0.948));
+}
+
+.app-shell[data-app-background] .highlight-palette span {
+  border-color: rgba(255, 255, 255, 0.82);
+}
+
+.app-shell[data-app-background] .highlight-palette button.is-selected {
+  border-color: rgba(181, 159, 131, 0.42);
+  box-shadow: 0 0 0 3px rgba(181, 159, 131, 0.12);
+}
+
+.app-shell[data-theme="dark"] .tabs button,
+.app-shell[data-theme="dark"] .topic-list button {
+  color: #e9e4dc;
+}
+
+.app-shell[data-theme="dark"] .rich-text {
+  color: var(--ink);
+}
+
+.app-shell[data-theme="dark"][data-app-background] .rich-text {
+  color: var(--ink);
+}
+
+.app-shell[data-theme="dark"][data-app-background] .rich-text h2,
+.app-shell[data-theme="dark"][data-app-background] .rich-text h3,
+.app-shell[data-theme="dark"][data-app-background] .rich-text h4 {
+  color: var(--cool);
+}
+
+.app-shell[data-theme="dark"][data-app-background] .rich-text strong {
+  color: color-mix(in srgb, var(--ink) 84%, #000);
+}
+
+.app-shell[data-theme="dark"][data-app-background] .rich-text code {
+  background: rgba(242, 228, 210, 0.12);
+}
+
+.app-shell[data-theme="dark"][data-app-background] .rich-text blockquote {
+  border-left-color: rgba(181, 159, 131, 0.92);
+  color: color-mix(in srgb, var(--ink) 84%, var(--muted));
+  background: rgba(242, 228, 210, 0.12);
+}
+
+.app-shell[data-theme="dark"] .rich-text h2,
+.app-shell[data-theme="dark"] .rich-text h3,
+.app-shell[data-theme="dark"] .rich-text h4 {
+  color: var(--cool);
+}
+
+.app-shell[data-theme="dark"] .rich-text h4 {
+  color: var(--cool);
+}
+
+.app-shell[data-theme="dark"][data-app-background] .rich-text h2,
+.app-shell[data-theme="dark"][data-app-background] .rich-text h3,
+.app-shell[data-theme="dark"][data-app-background] .rich-text h4 {
+  color: var(--cool);
+}
+
+.app-shell[data-theme="dark"] .rich-text strong {
+  color: #ffffff;
+}
+
+.app-shell[data-theme="dark"][data-app-background] .rich-text strong {
+  color: color-mix(in srgb, var(--ink) 84%, #000);
+}
+
+.app-shell[data-theme="dark"] .rich-text code {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.app-shell[data-theme="dark"][data-app-background] .rich-text code {
+  background: rgba(242, 228, 210, 0.12);
+}
+
+.app-shell[data-theme="dark"] .rich-text blockquote {
+  color: #e3edf7;
+  background: rgba(242, 228, 210, 0.12);
+}
+
+.app-shell[data-theme="dark"][data-app-background] .rich-text blockquote {
+  border-left-color: rgba(181, 159, 131, 0.92);
+  color: color-mix(in srgb, var(--ink) 84%, var(--muted));
+  background: rgba(242, 228, 210, 0.12);
+}
+
+.app-shell[data-theme="dark"][data-app-background] .rich-text blockquote {
+  border-left-color: rgba(181, 159, 131, 0.92);
+  color: color-mix(in srgb, var(--ink) 84%, var(--muted));
+  background: rgba(242, 228, 210, 0.12);
+}
+
+.app-shell[data-modal="verse"] .modal-layer {
+  background: rgba(255, 252, 247, 0.14);
+  backdrop-filter: none;
+}
+
+.app-shell[data-theme="dark"] .search-field {
+  border-color: var(--line);
+  background: linear-gradient(180deg, rgba(35, 30, 25, 0.96), rgba(26, 22, 18, 0.96));
+}
+
+.app-shell[data-modal="original-language"] .modal-layer {
+  align-items: stretch;
+  justify-items: stretch;
+  padding: 0;
+  background: rgba(10, 13, 16, 0.34);
+  backdrop-filter: blur(8px);
+}
+
+.app-shell[data-modal="original-language"] .interlinear-heading {
+  align-items: center;
+  padding-right: 2px;
+}
+
+.app-shell[data-modal="original-language"] .interlinear-heading small {
+  display: none;
+}
+
+.app-shell[data-modal="original-language"] .interlinear-row:hover,
+.app-shell[data-modal="original-language"] .interlinear-row:focus-visible,
+.app-shell[data-modal="original-language"] .interlinear-row.is-active {
+  background: rgba(64, 119, 94, 0.42) !important;
 }

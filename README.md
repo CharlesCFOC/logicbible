@@ -8,6 +8,8 @@ Local prototype with a real Bible reader data layer.
 npm run dev
 ```
 
+The production build now compiles the CSS modules and the React bridge before starting the server. React screens are being migrated incrementally while the remaining legacy screens stay available during the transition.
+
 Open:
 
 ```txt

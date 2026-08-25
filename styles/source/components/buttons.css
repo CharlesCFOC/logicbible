@@ -1,0 +1,115 @@
+/* components/buttons.css */
+
+/* Verse actions: show every option in a compact two-row grid. */
+.app-shell .bottom-sheet .action-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 6px;
+  max-height: none;
+  padding: 0 1px 5px;
+  overflow: visible;
+}
+
+.app-shell .bottom-sheet .action-grid button {
+  width: 100%;
+  min-width: 0;
+  min-height: 58px;
+  gap: 4px;
+  padding: 6px 4px;
+  border-radius: 18px;
+  font-size: 9px;
+  font-weight: 750;
+}
+
+.app-shell .bottom-sheet .action-grid button.action-secondary {
+  min-height: 48px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.app-shell .bottom-sheet .action-grid button.action-secondary svg {
+  width: 15px;
+  height: 15px;
+}
+
+.app-shell .bottom-sheet .action-grid button.action-featured {
+  grid-column: span 4;
+}
+
+.app-shell .bottom-sheet .action-grid button.action-secondary {
+  grid-column: span 3;
+}
+
+.app-shell .bottom-sheet .action-grid button svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 1.65;
+  opacity: 0.78;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button.action-primary {
+  border-color: rgba(139, 220, 255, 0.58) !important;
+  background: rgba(60, 157, 204, 0.24) !important;
+  color: #dff7ff !important;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button.action-secondary {
+  border-color: rgba(170, 215, 238, 0.22) !important;
+  background: rgba(54, 82, 103, 0.24) !important;
+  color: #b7c8d4 !important;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button.action-primary:hover,
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button.action-primary.is-active {
+  border-color: #8bdcff !important;
+  background: rgba(60, 157, 204, 0.5) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 0 2px rgba(139, 220, 255, 0.14), 0 8px 18px rgba(0, 0, 0, 0.18) !important;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button.action-secondary:hover {
+  border-color: rgba(170, 215, 238, 0.48) !important;
+  color: #e4f5ff !important;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button.action-featured[data-verse-action="highlight"] {
+  border-color: #ffd166 !important;
+  background: linear-gradient(135deg, #ffc857, #ff7b54) !important;
+  color: #111b22 !important;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button.action-featured[data-verse-action="ask-ai"] {
+  border-color: #d7a7ff !important;
+  background: linear-gradient(135deg, #c86bff, #6f7cff) !important;
+  color: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button.action-featured[data-verse-action="note"] {
+  border-color: #ff9eb7 !important;
+  background: linear-gradient(135deg, #ff5f9e, #ff8a5b) !important;
+  color: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button.action-featured:hover,
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button.action-featured.is-active {
+  filter: brightness(1.12);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08), 0 8px 18px rgba(0, 0, 0, 0.18) !important;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button svg {
+  color: #9edcff !important;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button.action-featured[data-verse-action="highlight"] svg,
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button.action-featured[data-verse-action="ask-ai"] svg,
+.app-shell[data-app-background="black"] .bottom-sheet .action-grid button.action-featured[data-verse-action="note"] svg {
+  color: currentColor !important;
+}
+
+
+/* Final contrast override for the prayer request submit control. */
+body:has(.app-shell[data-app-background="black"]) .prayer-compose-footer button,
+body:has(.app-shell[data-app-background="black"]) .prayer-compose-footer button span,
+body:has(.app-shell[data-app-background="black"]) .prayer-compose-footer button svg {
+  color: #000000 !important;
+}

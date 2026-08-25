@@ -1,0 +1,1617 @@
+/* pages/apologetics.css */
+
+/* Consolidated shared rules */
+
+.app-shell[data-app-background] .preference-card,
+.app-shell[data-app-background] .profile-library button,
+.app-shell[data-app-background] .saved-verse-row,
+.app-shell[data-app-background] .saved-folder-form,
+.app-shell[data-app-background] .saved-empty,
+.app-shell[data-app-background] .apologetics-panel,
+.app-shell[data-app-background] .topic-list button,
+.app-shell[data-app-background] .explore-grid button,
+.app-shell[data-app-background] .result-list article,
+.app-shell[data-app-background] .action-grid button {
+  border-color: rgba(221, 227, 234, 0.018);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(250, 252, 254, 0.988));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.985),
+    0 2px 5px rgba(47, 60, 74, 0.0009);
+}
+
+.app-shell[data-app-background] .apologetics-breadcrumbs {
+  color: rgba(116, 109, 98, 0.8);
+}
+
+.app-shell[data-app-background] .apologetics-breadcrumb-link {
+  color: var(--cool);
+}
+
+.app-shell[data-app-background] .apologetics-breadcrumb-current {
+  color: var(--ink);
+}
+
+.app-shell[data-app-background] .apologetics-verse-tags span {
+  border-color: rgba(221, 227, 234, 0.96);
+  color: var(--cool);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(247, 249, 252, 0.92));
+}
+
+.app-shell[data-app-background="ivory"] .apologetics-breadcrumbs,
+.app-shell[data-app-background="paper"] .apologetics-breadcrumbs {
+  color: rgba(124, 113, 101, 0.78);
+}
+
+.app-shell[data-app-background="ivory"] .apologetics-breadcrumb-current,
+.app-shell[data-app-background="paper"] .apologetics-breadcrumb-current {
+  color: var(--ink);
+}
+
+.app-shell[data-app-background="ivory"] .apologetics-challenge-button,
+.app-shell[data-app-background="paper"] .apologetics-challenge-button,
+.app-shell[data-app-background="ivory"] .apologetics-progress-card,
+.app-shell[data-app-background="paper"] .apologetics-progress-card,
+.app-shell[data-app-background="ivory"] .apologetics-track-progress-panel,
+.app-shell[data-app-background="paper"] .apologetics-track-progress-panel,
+.app-shell[data-app-background="ivory"] .apologetics-track-rewards,
+.app-shell[data-app-background="paper"] .apologetics-track-rewards,
+.app-shell[data-app-background="ivory"] .apologetics-track-quick,
+.app-shell[data-app-background="paper"] .apologetics-track-quick,
+.app-shell[data-app-background="ivory"] .apologetics-framework-grid section,
+.app-shell[data-app-background="paper"] .apologetics-framework-grid section,
+.app-shell[data-app-background="ivory"] .apologetics-rewards-grid span,
+.app-shell[data-app-background="paper"] .apologetics-rewards-grid span,
+.app-shell[data-app-background="ivory"] .apologetics-topic-card,
+.app-shell[data-app-background="paper"] .apologetics-topic-card,
+.app-shell[data-app-background="ivory"] .apologetics-chat-empty,
+.app-shell[data-app-background="paper"] .apologetics-chat-empty,
+.app-shell[data-app-background="ivory"] .apologetics-chat-composer,
+.app-shell[data-app-background="paper"] .apologetics-chat-composer {
+  border-color: rgba(221, 227, 234, 0.02);
+  background: linear-gradient(180deg, rgba(255, 253, 249, 0.998), rgba(247, 243, 236, 0.986));
+}
+
+.app-shell[data-app-background="ivory"] .apologetics-progress-card,
+.app-shell[data-app-background="paper"] .apologetics-progress-card {
+  background: linear-gradient(180deg, rgba(255, 253, 249, 0.998), rgba(247, 243, 236, 0.988));
+}
+
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-challenge-top small,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-challenge-top small,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-challenge-meta span,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-challenge-meta span,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-progress-card small,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-progress-card small,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-progress-card span,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-progress-card span,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-hero-progress-top span,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-hero-progress-top span,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-rewards-head span,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-rewards-head span,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-progress-copy p,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-progress-copy p,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-framework-grid p,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-framework-grid p,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-rewards-grid small,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-rewards-grid small,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-selection-line,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-selection-line,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-card-top,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-card-top,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-card-top small,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-card-top small,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-card p,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-card p,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-card-metrics small,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-card-metrics small,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-topic-meta-row small,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-topic-meta-row small,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-topic-status,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-topic-status,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-intro-header .apologetics-summary,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-intro-header .apologetics-summary,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-intro-block p,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-intro-block p {
+  color: var(--muted);
+}
+
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-challenge-button h3,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-challenge-button h3,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-challenge-button p,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-challenge-button p,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-progress-card strong,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-progress-card strong,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-hero-copy h2,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-hero-copy h2,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-hero-copy p,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-hero-copy p,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-hero-progress-top strong,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-hero-progress-top strong,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-progress-copy strong,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-progress-copy strong,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-rewards-head strong,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-rewards-head strong,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-quick-head strong,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-quick-head strong,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-framework-detail h3,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-framework-detail h3,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-framework-grid strong,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-framework-grid strong,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-rewards-grid strong,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-rewards-grid strong,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-selection-line.is-active,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-selection-line.is-active,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-card > strong,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-card > strong,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-card-metrics strong,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-card-metrics strong,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-topic-card > strong,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-topic-card > strong,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-chat-empty strong,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-chat-empty strong,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-intro-header h2,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-intro-header h2,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-intro-block strong,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-intro-block strong {
+  color: var(--ink);
+}
+
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-card,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-card,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-topic-card {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    0 6px 14px rgba(47, 60, 74, 0.02);
+}
+
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-track-card,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-track-card,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-topic-card,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-topic-card,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-hero--track,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-hero--track {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(247, 249, 252, 0.994));
+}
+
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-topic-meta-row small,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-topic-meta-row small,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-topic-status,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-topic-status,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-quick-steps button,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-quick-steps button,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-chat-tabs,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-chat-tabs,
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-topic-tabs,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-topic-tabs {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(247, 249, 252, 0.94));
+}
+
+.app-shell[data-theme="dark"][data-app-background="ivory"] .apologetics-quick-steps button,
+.app-shell[data-theme="dark"][data-app-background="paper"] .apologetics-quick-steps button {
+  color: var(--ink);
+  border-color: var(--line);
+}
+
+.apologetics-screen {
+  position: relative;
+  padding-top: 14px;
+}
+
+#apologetics-track {
+  padding-bottom: calc(var(--bottom-nav-offset) + 132px);
+}
+
+.apologetics-subheader {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+}
+
+.apologetics-track-header {
+  align-items: center;
+}
+
+.apologetics-breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: rgba(201, 214, 231, 0.66);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.apologetics-breadcrumb-link {
+  min-height: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--cool);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.app-shell[data-theme="dark"][data-app-background] .apologetics-breadcrumb-link {
+  color: var(--cool);
+}
+
+.apologetics-breadcrumb-current {
+  min-width: 0;
+  color: var(--ink);
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.app-shell[data-theme="dark"][data-app-background] .apologetics-breadcrumb-current {
+  color: var(--ink);
+}
+
+.apologetics-hero-image {
+  position: relative;
+  overflow: hidden;
+  min-height: 60dvh;
+  max-height: 500px;
+  margin: -18px -18px 16px;
+  border: 0;
+  border-radius: 0 0 48px 48px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.apologetics-hero-image img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.88) brightness(1.03) contrast(0.9);
+}
+
+.apologetics-hero-image::after {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0) 20%, rgba(8, 10, 12, 0.18) 100%),
+    radial-gradient(circle at 50% 100%, rgba(247, 241, 232, 0.16), rgba(247, 249, 252, 0) 68%);
+  content: "";
+}
+
+.apologetics-hero-image-copy {
+  position: absolute;
+  top: 28px;
+  right: 22px;
+  left: 22px;
+  z-index: 1;
+  display: grid;
+  gap: 6px;
+  align-content: start;
+  justify-items: center;
+  max-width: 62%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  backdrop-filter: none;
+}
+
+.apologetics-hero-image-copy h2 {
+  margin: 0;
+  color: rgba(255, 253, 248, 0.98);
+  font-family: var(--font-body);
+  font-size: clamp(24px, 4vw, 32px);
+  line-height: 1.02;
+  font-weight: 700;
+  letter-spacing: -0.038em;
+  text-wrap: balance;
+  text-align: center;
+  text-shadow: 0 3px 16px rgba(7, 10, 14, 0.24);
+}
+
+.apologetics-hero-image-copy p {
+  margin: 0;
+  padding: 0;
+  border-left: 0;
+  border-right: 0;
+  color: rgba(255, 253, 249, 0.9);
+  font-size: 10px;
+  line-height: 1.55;
+  text-align: center;
+  text-shadow: 0 1px 8px rgba(7, 10, 14, 0.18);
+}
+
+.apologetics-challenge-card {
+  margin-bottom: 20px;
+}
+
+.apologetics-primary-heading {
+  display: grid;
+  gap: 8px;
+  padding: 0 4px 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.apologetics-primary-heading .eyebrow {
+  margin-bottom: 0;
+}
+
+.apologetics-primary-heading h2 {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 24px;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  font-weight: 760;
+}
+
+.apologetics-primary-heading p {
+  max-width: 34ch;
+  margin: 0;
+  color: rgba(124, 113, 101, 0.84);
+  font-size: 12px;
+  line-height: 1.58;
+}
+
+.apologetics-secondary-heading {
+  display: grid;
+  gap: 8px;
+  padding: 2px 4px 0;
+}
+
+.apologetics-secondary-heading h2 {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 22px;
+  line-height: 1.03;
+  letter-spacing: -0.04em;
+  font-weight: 760;
+}
+
+.apologetics-secondary-heading p {
+  max-width: 36ch;
+  margin: 0;
+  color: rgba(124, 113, 101, 0.82);
+  font-size: 12px;
+  line-height: 1.58;
+}
+
+.apologetics-challenge-button {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+  padding: 13px;
+  border: 1px solid rgba(221, 227, 234, 0.028);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(247, 249, 252, 0.996));
+  color: var(--ink);
+  text-align: justify;
+  text-justify: inter-word;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 1px 3px rgba(47, 60, 74, 0.0008);
+}
+
+.apologetics-challenge-top,
+.apologetics-challenge-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.apologetics-challenge-top small,
+.apologetics-challenge-meta span {
+  color: rgba(124, 113, 101, 0.78);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.apologetics-challenge-top strong {
+  color: var(--cool);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.apologetics-challenge-button h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 20px;
+  line-height: 1.12;
+}
+
+.apologetics-challenge-button p {
+  margin: 0;
+  color: rgba(124, 113, 101, 0.84);
+  line-height: 1.58;
+}
+
+.apologetics-overview-strip {
+  margin-top: 6px;
+  margin-bottom: 14px;
+}
+
+.apologetics-progress-carousel {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 2px 0 4px;
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
+}
+
+.apologetics-progress-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.apologetics-progress-card {
+  flex: 0 0 min(26%, 92px);
+  position: relative;
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  padding: 8px 8px 7px;
+  border: 1px solid rgba(221, 227, 234, 0.014);
+  border-radius: 15px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.985));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.985),
+    0 4px 10px rgba(47, 60, 74, 0.003);
+  scroll-snap-align: start;
+}
+
+.apologetics-progress-card::before {
+  position: absolute;
+  top: 0;
+  right: 12px;
+  left: 12px;
+  height: 2px;
+  border-radius: 999px;
+  background: rgba(181, 159, 131, 0.42);
+  content: "";
+}
+
+.apologetics-progress-card--cyan::before {
+  background: linear-gradient(90deg, rgba(166, 140, 112, 0.86), rgba(231, 219, 206, 0.74));
+}
+
+.apologetics-progress-card--green::before {
+  background: linear-gradient(90deg, rgba(145, 126, 104, 0.8), rgba(226, 214, 201, 0.72));
+}
+
+.apologetics-progress-card--violet::before {
+  background: linear-gradient(90deg, rgba(166, 140, 112, 0.8), rgba(231, 219, 206, 0.74));
+}
+
+.apologetics-progress-card--amber::before {
+  background: linear-gradient(90deg, rgba(166, 140, 112, 0.8), rgba(231, 219, 206, 0.74));
+}
+
+.apologetics-progress-card small {
+  color: rgba(124, 113, 101, 0.78);
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.apologetics-progress-card strong {
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1;
+}
+
+.apologetics-progress-card span {
+  color: rgba(124, 113, 101, 0.76);
+  font-size: 8px;
+  line-height: 1.4;
+}
+
+.apologetics-hero {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 8px;
+  padding: 9px;
+  border: 1px solid rgba(221, 227, 234, 0.002);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.995));
+}
+
+.apologetics-hero--track {
+  gap: 8px;
+  padding: 4px 4px 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.apologetics-hero--track-islam {
+  border-color: rgba(221, 227, 234, 0.03);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(247, 249, 252, 0.992));
+}
+
+.apologetics-hero--track-jehovahs-witnesses {
+  border-color: rgba(221, 227, 234, 0.03);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(247, 249, 252, 0.992));
+}
+
+.apologetics-hero--track-atheism {
+  border-color: rgba(221, 227, 234, 0.03);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(247, 249, 252, 0.992));
+}
+
+.apologetics-hero-copy h2 {
+  margin-bottom: 8px;
+}
+
+.apologetics-hero-copy p {
+  max-width: 320px;
+  margin-bottom: 0;
+}
+
+.apologetics-hero--track .apologetics-hero-copy h2 {
+  margin: 0 0 4px;
+  font-size: 22px;
+  line-height: 1.05;
+  font-family: var(--font-body);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+}
+
+.apologetics-hero--track .apologetics-hero-copy p {
+  color: rgba(124, 113, 101, 0.8);
+  font-size: 14px;
+  line-height: 1.56;
+}
+
+.apologetics-hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.apologetics-hero-stats span {
+  display: grid;
+  gap: 2px;
+  padding: 8px 9px;
+  border: 1px solid rgba(221, 227, 234, 0.006);
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(247, 249, 252, 0.96));
+}
+
+.apologetics-hero-stats strong {
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1;
+}
+
+.apologetics-hero-stats small {
+  color: rgba(124, 113, 101, 0.78);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.apologetics-track-hero-progress,
+.apologetics-track-progress-panel,
+.apologetics-track-rewards {
+  display: grid;
+  gap: 10px;
+}
+
+.apologetics-track-hero-progress-top,
+.apologetics-rewards-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.apologetics-track-hero-progress-top strong,
+.apologetics-track-progress-copy strong,
+.apologetics-rewards-head strong {
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 760;
+}
+
+.apologetics-track-hero-progress-top span,
+.apologetics-rewards-head span {
+  color: rgba(124, 113, 101, 0.78);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.apologetics-track-progress-panel,
+.apologetics-track-rewards {
+  margin-bottom: 12px;
+  padding: 10px;
+  border: 1px solid rgba(221, 227, 234, 0.003);
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.992));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 3px 8px rgba(47, 60, 74, 0.0025);
+}
+
+.apologetics-track-progress-copy p {
+  margin: 0;
+  color: rgba(124, 113, 101, 0.82);
+  font-size: 13px;
+  line-height: 1.58;
+}
+
+.apologetics-track-progress-bar--large {
+  height: 8px;
+}
+
+.apologetics-track-quick {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 10px;
+  border: 1px solid rgba(221, 227, 234, 0.003);
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.992));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 3px 8px rgba(47, 60, 74, 0.0025);
+}
+
+.apologetics-quick-head strong {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 760;
+  letter-spacing: 0.01em;
+}
+
+.apologetics-quick-steps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.apologetics-quick-steps button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 30px;
+  padding: 0 9px;
+  border: 1px solid rgba(221, 227, 234, 0.028);
+  border-radius: 18px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.92);
+  font-size: 12px;
+  font-weight: 650;
+  text-align: left;
+}
+
+.apologetics-quick-steps button.is-active {
+  border-color: rgba(221, 227, 234, 0.08);
+  background: rgba(241, 234, 223, 0.66);
+  box-shadow: inset 0 0 0 1px rgba(221, 227, 234, 0.04);
+}
+
+.apologetics-quick-steps small {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  min-width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  color: var(--accent-contrast);
+  background: var(--cool);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.apologetics-framework-detail {
+  display: grid;
+  gap: 12px;
+  padding-top: 2px;
+}
+
+.apologetics-framework-detail h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 18px;
+}
+
+.apologetics-framework-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.apologetics-framework-grid section {
+  display: grid;
+  gap: 6px;
+  padding: 9px;
+  border: 1px solid rgba(221, 227, 234, 0.012);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(247, 249, 252, 0.992));
+}
+
+.apologetics-framework-grid strong {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 760;
+}
+
+.apologetics-framework-grid p {
+  margin: 0;
+  color: rgba(124, 113, 101, 0.82);
+  font-size: 13px;
+  line-height: 1.58;
+}
+
+.apologetics-rewards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.apologetics-rewards-grid span {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  padding: 9px;
+  border: 1px solid rgba(221, 227, 234, 0.012);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(247, 249, 252, 0.992));
+}
+
+.apologetics-rewards-grid span.is-unlocked {
+  border-color: rgba(181, 159, 131, 0.16);
+  background: rgba(242, 228, 210, 0.72);
+}
+
+.apologetics-rewards-grid small {
+  color: rgba(124, 113, 101, 0.78);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.apologetics-rewards-grid strong {
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.apologetics-selection-line {
+  margin: 0 0 14px;
+  color: rgba(124, 113, 101, 0.78);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.apologetics-selection-line.is-active {
+  color: var(--cool);
+}
+
+.apologetics-track-carousel {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 4px 0 9px;
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
+}
+
+.apologetics-track-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.apologetics-track-card {
+  flex: 0 0 min(74%, 206px);
+  display: grid;
+  gap: 8px;
+  padding: 12px 12px 11px;
+  border: 1px solid rgba(221, 227, 234, 0.006);
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.996));
+  color: var(--ink);
+  text-align: justify;
+  text-justify: inter-word;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.985),
+    0 1px 2px rgba(47, 60, 74, 0.00022);
+  scroll-snap-align: start;
+}
+
+.apologetics-track-card--islam {
+  border-color: rgba(221, 227, 234, 0.03);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(252, 247, 240, 0.985));
+}
+
+.apologetics-track-card--jehovahs-witnesses {
+  border-color: rgba(221, 227, 234, 0.03);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(252, 249, 243, 0.985));
+}
+
+.apologetics-track-card--atheism {
+  border-color: rgba(221, 227, 234, 0.03);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(253, 249, 244, 0.985));
+}
+
+.apologetics-track-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: rgba(124, 113, 101, 0.88);
+}
+
+.apologetics-track-card-top small {
+  color: rgba(118, 107, 96, 0.88);
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.apologetics-track-card > strong {
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 760;
+}
+
+.apologetics-track-card p {
+  color: rgba(124, 113, 101, 0.84);
+  margin-bottom: 0;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.apologetics-track-card-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.apologetics-track-card-metrics span {
+  display: grid;
+  gap: 2px;
+  padding: 7px 0 4px;
+  border-top: 1px solid rgba(221, 227, 234, 0.02);
+}
+
+.apologetics-track-card-metrics strong {
+  color: var(--ink);
+  font-size: 12px;
+  line-height: 1;
+}
+
+.apologetics-track-card-metrics small {
+  color: rgba(124, 113, 101, 0.76);
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.apologetics-track-card-footer {
+  display: grid;
+  gap: 8px;
+}
+
+.apologetics-track-progress-bar {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(221, 227, 234, 0.55);
+}
+
+.apologetics-track-progress-bar span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(181, 159, 131, 0.96), rgba(216, 201, 183, 0.94));
+}
+
+.apologetics-track-card-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 26px;
+  width: fit-content;
+  padding: 0 11px;
+  border-radius: 18px;
+  color: var(--ink);
+  background: rgba(242, 228, 210, 0.88);
+  font-size: 9.5px;
+  font-weight: 800;
+}
+
+.apologetics-verse-tags span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid rgba(221, 227, 234, 0.028);
+  border-radius: 999px;
+  color: #5d6672;
+  background: rgba(255, 255, 255, 0.92);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.apologetics-filter-row {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+
+.apologetics-filter-row::-webkit-scrollbar {
+  display: none;
+}
+
+.apologetics-filter-row {
+  margin-bottom: 18px;
+}
+
+.apologetics-filter-row button {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid rgba(221, 227, 234, 0.022);
+  border-radius: 999px;
+  background:
+    rgba(255, 255, 255, 0.996);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    0 3px 8px rgba(47, 60, 74, 0.005);
+  color: rgba(124, 113, 101, 0.8);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.apologetics-filter-row button.is-active {
+  border-color: rgba(181, 159, 131, 0.26);
+  background: rgba(242, 228, 210, 0.88);
+  color: var(--ink);
+}
+
+.apologetics-panel {
+  margin-top: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.apologetics-topic-count {
+  color: var(--cool);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.apologetics-topic-list {
+  display: grid;
+  gap: 7px;
+  padding: 2px 0 92px;
+}
+
+.apologetics-featured-group {
+  display: grid;
+  gap: 12px;
+}
+
+.apologetics-featured-group > button,
+.apologetics-featured-group > summary {
+  appearance: none;
+  border: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.apologetics-featured-group > summary {
+  list-style: none;
+}
+
+.apologetics-featured-group > summary::-webkit-details-marker {
+  display: none;
+}
+
+.apologetics-featured-group + .apologetics-featured-group {
+  margin-top: 2px;
+}
+
+.apologetics-featured-group-heading {
+  width: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 9px;
+  padding: 10px 10px 9px;
+  border: 1px solid rgba(221, 227, 234, 0.008);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.996), rgba(247, 249, 252, 0.94));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 2px 6px rgba(47, 60, 74, 0.0012);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease, transform 140ms ease;
+}
+
+.apologetics-featured-group-heading:hover,
+.apologetics-featured-group-heading:focus-visible {
+  border-color: rgba(181, 159, 131, 0.22);
+  transform: translateY(-1px);
+}
+
+.apologetics-featured-group-heading-copy {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.apologetics-featured-group-heading-copy small {
+  color: var(--cool);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.apologetics-featured-group-heading h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+}
+
+.apologetics-featured-group-heading p {
+  margin: 0;
+  color: rgba(124, 113, 101, 0.76);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.apologetics-featured-group-heading-side {
+  display: inline-grid;
+  justify-items: end;
+  align-items: center;
+  gap: 10px;
+  align-self: start;
+}
+
+.apologetics-featured-group-heading-side span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  min-height: 26px;
+  padding: 0 9px;
+  border-radius: 999px;
+  background: rgba(242, 228, 210, 0.88);
+  color: var(--cool);
+  font-size: 10px;
+  font-weight: 760;
+}
+
+.apologetics-featured-group.is-expanded .apologetics-featured-group-heading,
+.apologetics-featured-group[open] .apologetics-featured-group-heading {
+  border-color: rgba(181, 159, 131, 0.12);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(247, 249, 252, 0.995));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 2px 6px rgba(181, 159, 131, 0.012);
+}
+
+.apologetics-featured-group.is-expanded .apologetics-featured-group-heading-side span,
+.apologetics-featured-group[open] .apologetics-featured-group-heading-side span {
+  background: rgba(242, 228, 210, 0.9);
+}
+
+.apologetics-featured-group-heading-state {
+  min-width: 0;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: rgba(124, 113, 101, 0.76);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.apologetics-featured-group-heading svg {
+  width: 18px;
+  height: 18px;
+  color: rgba(124, 113, 101, 0.76);
+  transition: transform 180ms ease, color 180ms ease, opacity 180ms ease;
+}
+
+.apologetics-featured-group.is-expanded .apologetics-featured-group-heading svg,
+.apologetics-featured-group[open] .apologetics-featured-group-heading svg {
+  color: var(--ink);
+  transform: rotate(180deg);
+}
+
+.apologetics-topic-dropdown[hidden] {
+  display: none;
+}
+
+.apologetics-topic-dropdown-list {
+  display: grid;
+  gap: 6px;
+}
+
+.apologetics-topic-card {
+  position: relative;
+  display: grid;
+  gap: 7px;
+  padding: 11px 40px 11px 12px;
+  border: 1px solid rgba(226, 219, 209, 0.018);
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(247, 249, 252, 0.986));
+  color: var(--ink);
+  text-align: justify;
+  text-justify: inter-word;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.985),
+    0 2px 5px rgba(47, 60, 74, 0.0009);
+  transition: transform 140ms ease, border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
+}
+
+.apologetics-topic-card--bible {
+  border-color: rgba(187, 164, 135, 0.16);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(253, 249, 243, 0.97));
+}
+
+.apologetics-topic-card--jesus {
+  border-color: rgba(187, 164, 135, 0.18);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(253, 248, 241, 0.97));
+}
+
+.apologetics-topic-card--doctrine {
+  border-color: rgba(187, 164, 135, 0.18);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(253, 248, 241, 0.97));
+}
+
+.apologetics-topic-card--history {
+  border-color: rgba(187, 164, 135, 0.18);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(252, 247, 240, 0.97));
+}
+
+.apologetics-topic-card--bible .apologetics-topic-meta small {
+  color: var(--cool);
+}
+
+.apologetics-topic-card--jesus .apologetics-topic-meta small {
+  color: var(--cool);
+}
+
+.apologetics-topic-card--doctrine .apologetics-topic-meta small {
+  color: var(--cool);
+}
+
+.apologetics-topic-card--history .apologetics-topic-meta small {
+  color: var(--cool);
+}
+
+.apologetics-topic-card.is-selected {
+  border-color: rgba(221, 227, 234, 0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(245, 247, 250, 0.992));
+  box-shadow:
+    inset 0 0 0 1px rgba(221, 227, 234, 0.05),
+    0 0 0 1px rgba(221, 227, 234, 0.02),
+    0 2px 6px rgba(47, 60, 74, 0.004);
+  transform: translateY(0);
+}
+
+.apologetics-topic-card--carousel {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(247, 249, 252, 0.995));
+}
+
+.apologetics-topic-open {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 24px;
+  padding: 0 10px;
+  border-radius: 999px;
+  color: #5b625d;
+  background: rgba(241, 234, 223, 0.92);
+  font-size: 10px;
+  font-weight: 760;
+}
+
+.apologetics-topic-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.apologetics-topic-meta-row small {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 0 7px;
+  border: 1px solid rgba(226, 219, 209, 0.04);
+  border-radius: 999px;
+  color: rgba(124, 113, 101, 0.78);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(247, 249, 252, 0.96));
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.apologetics-topic-plus {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(181, 159, 131, 0.12);
+  border-radius: 50%;
+  color: rgba(124, 113, 101, 0.9);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(247, 249, 252, 0.982));
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.84),
+    0 0 0 1px rgba(181, 159, 131, 0.02),
+    0 0 7px rgba(181, 159, 131, 0.022);
+}
+
+.apologetics-topic-plus svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2.2;
+}
+
+.apologetics-topic-card.is-selected .apologetics-topic-plus {
+  border-color: rgba(221, 227, 234, 0.08);
+  background: rgba(247, 249, 252, 0.98);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 0 0 1px rgba(221, 227, 234, 0.03),
+    0 0 8px rgba(181, 159, 131, 0.015);
+  transform: rotate(45deg);
+}
+
+.apologetics-topic-card > strong {
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.3;
+  font-family: var(--font-body);
+  font-weight: 760;
+}
+
+.apologetics-topic-card p,
+.apologetics-summary {
+  margin-bottom: 0;
+}
+
+.apologetics-topic-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.apologetics-topic-meta small {
+  color: rgba(124, 113, 101, 0.78);
+  font-size: 11px;
+  font-weight: 750;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.apologetics-topic-status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 0 10px;
+  border: 1px solid rgba(221, 227, 234, 0.022);
+  border-radius: 999px;
+  color: rgba(124, 113, 101, 0.8);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.996), rgba(247, 249, 252, 0.99));
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.apologetics-topic-status.is-progress {
+  color: var(--cool);
+}
+
+.apologetics-topic-status.is-completed {
+  color: var(--cool);
+}
+
+.apologetics-detail-panel {
+  margin-top: 12px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.apologetics-topic-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  padding: 3px;
+  border: 1px solid rgba(221, 227, 234, 0.022);
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.997), rgba(247, 249, 252, 0.993));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 4px 10px rgba(47, 60, 74, 0.0025);
+}
+
+.apologetics-topic-tabs button {
+  min-height: 42px;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(124, 113, 101, 0.8);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.apologetics-topic-tabs button.is-active {
+  color: var(--ink);
+  background: rgba(242, 228, 210, 0.88);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.96);
+}
+
+.apologetics-topic-tabs button[data-apologetics-topic-tab="chat"] {
+  color: var(--cool);
+}
+
+.apologetics-topic-tabs button[data-apologetics-topic-tab="chat"].is-active {
+  color: var(--ink);
+  background: rgba(242, 228, 210, 0.88);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    0 2px 3px rgba(181, 159, 131, 0.015);
+}
+
+.apologetics-chat-panel {
+  margin-top: 16px;
+}
+
+.apologetics-intro-header {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.apologetics-intro-kicker {
+  color: var(--cool);
+  font-size: 12px;
+  font-weight: 760;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.apologetics-intro-header h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 24px;
+  line-height: 1.08;
+}
+
+.apologetics-intro-header .apologetics-summary {
+  max-width: 36ch;
+  color: rgba(124, 113, 101, 0.84);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.apologetics-intro-flow {
+  display: grid;
+  gap: 18px;
+}
+
+.apologetics-intro-block {
+  display: grid;
+  gap: 10px;
+}
+
+.apologetics-intro-block strong {
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 760;
+}
+
+.apologetics-intro-block p {
+  margin: 0;
+  color: rgba(124, 113, 101, 0.82);
+  line-height: 1.7;
+}
+
+.apologetics-begin-button {
+  position: sticky;
+  bottom: calc(var(--bottom-nav-height) - 1px);
+  z-index: 8;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  margin: 18px 0 0;
+  min-height: 58px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.992), rgba(247, 249, 252, 0.972));
+  color: transparent;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  box-shadow: 0 -8px 18px rgba(46, 58, 74, 0.05);
+  transition: filter 180ms ease, opacity 180ms ease, transform 160ms ease;
+}
+
+.apologetics-begin-button[hidden] {
+  display: none;
+}
+
+.apologetics-begin-button.is-disabled {
+  background: rgba(251, 252, 254, 0.985);
+  box-shadow: 0 -8px 18px rgba(46, 58, 74, 0.05);
+  pointer-events: none;
+}
+
+.apologetics-begin-button::after {
+  content: attr(data-label);
+  color: rgba(24, 33, 43, 0.86);
+}
+
+.apologetics-begin-button.is-disabled::after {
+  filter: blur(1.8px);
+  opacity: 0.74;
+}
+
+.apologetics-begin-button:not(.is-disabled):active {
+  transform: scale(0.985);
+}
+
+.apologetics-chat-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+  padding: 4px;
+  border: 1px solid rgba(221, 227, 234, 0.015);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(250, 251, 253, 0.993));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.98),
+    0 2px 5px rgba(47, 60, 74, 0.0008);
+}
+
+.apologetics-chat-tabs button {
+  min-height: 40px;
+  border-radius: 999px;
+  color: rgba(124, 113, 101, 0.8);
+  background: transparent;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.apologetics-chat-tabs button.is-active {
+  color: var(--ink);
+  background: rgba(242, 228, 210, 0.88);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.98);
+}
+
+.apologetics-chat-thread {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 220px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 4px 0 14px;
+  scrollbar-width: none;
+}
+
+.apologetics-chat-thread::-webkit-scrollbar {
+  display: none;
+}
+
+.apologetics-chat-empty {
+  padding: 18px 16px;
+  border: 1px solid rgba(221, 227, 234, 0.015);
+  border-radius: 26px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(247, 249, 252, 0.99));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    0 3px 8px rgba(47, 60, 74, 0.0012);
+}
+
+.apologetics-chat-empty strong {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+
+.apologetics-chat-empty p {
+  margin-bottom: 0;
+  color: rgba(124, 113, 101, 0.82);
+}
+
+.apologetics-chat-composer {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+  padding: 10px 12px 11px;
+  border: 1px solid rgba(221, 227, 234, 0.015);
+  border-radius: 26px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(247, 249, 252, 0.99));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    0 3px 8px rgba(47, 60, 74, 0.001);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.apologetics-chat-composer textarea {
+  min-width: 0;
+  flex: 1;
+  min-height: 48px;
+  max-height: 144px;
+  padding: 8px 0;
+  border: 0;
+  outline: 0;
+  resize: none;
+  color: var(--ink);
+  background: transparent;
+  line-height: 1.45;
+}
+
+.apologetics-chat-composer textarea::placeholder {
+  color: rgba(124, 113, 101, 0.74);
+  opacity: 0.9;
+}
+
+.apologetics-chat-composer button {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  min-width: 42px;
+  min-height: 42px;
+  border-radius: 50%;
+  background: var(--cool);
+  color: var(--accent-contrast, #fff);
+}
+
+.apologetics-chat-composer button[disabled],
+.apologetics-chat-composer textarea[disabled] {
+  opacity: 0.6;
+}
+
+.apologetics-bullet-list {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  color: rgba(124, 113, 101, 0.82);
+}
+
+.apologetics-bullet-list li + li {
+  margin-top: 8px;
+}
+
+.apologetics-verse-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}

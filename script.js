@@ -56,7 +56,7 @@ const searchPanel = document.querySelector("[data-search-panel]");
 const verseSheet = document.querySelector("[data-verse-sheet]");
 const verseAiPanel = document.querySelector("[data-verse-ai-panel]");
 const noteEditorPanel = document.querySelector("[data-note-editor-panel]");
-const noteEditorContent = document.querySelector("[data-note-editor-content]");
+let noteEditorContent = document.querySelector("[data-note-editor-content]");
 const noteEditorReference = document.querySelector("[data-note-editor-reference]");
 const noteEditorStatus = document.querySelector("[data-note-editor-status]");
 const noteEditorVerseChips = document.querySelector("[data-note-editor-verse-chips]");
@@ -271,8 +271,6 @@ const profileAuthStatus = document.querySelector("[data-profile-auth-status]");
 const profileStorageStatus = document.querySelector("[data-profile-storage-status]");
 const profileAccountId = document.querySelector("[data-profile-account-id]");
 const profileViewButtons = [...document.querySelectorAll("[data-profile-view]")];
-const profileTabButtons = [...document.querySelectorAll("[data-profile-tab]")];
-const homeLibraryTabButtons = [...document.querySelectorAll("[data-home-library-tab]")];
 const homeLibraryPanel = document.querySelector("[data-home-library-panel]");
 const profileSettingsPanel = document.querySelector('[data-profile-panel="settings"]');
 const profileSavedPanel = document.querySelector("[data-profile-saved-panel]");
@@ -293,6 +291,7 @@ const homePrayerCount = document.querySelector("[data-home-prayer-count]");
 let peopleOnlineValue = Number(peopleOnline?.textContent) || 128;
 let peopleOnlineInterval = null;
 let peopleOnlineAnimationFrame = null;
+let homeStatsEmitTimer = null;
 const prayerForm = document.querySelector("[data-prayer-form]");
 const prayerRequestPanel = document.querySelector("[data-prayer-request-panel]");
 const prayerList = document.querySelector("[data-prayer-list]");
@@ -330,6 +329,8 @@ const prayerState = {
   pageTab: "board",
   myWallExpanded: false,
 };
+let prayerBridgeFeedback = "";
+let prayerBridgeSent = false;
 
 const PRAYER_BACKGROUND_COUNT = 6;
 const prayerBackgroundAssignments = readJson("brother.prayerBackgrounds", {});
@@ -379,18 +380,22 @@ let noteEditorAddingVerses = false;
 let noteEditorNoteTitle = "";
 let noteAutosaveTimer = null;
 
+function getSaveRichNoteButton() {
+  return document.querySelector("[data-save-rich-note]") || saveRichNoteButton;
+}
+
 function markNoteEditorDirty() {
-  saveRichNoteButton?.classList.add("is-dirty");
+  getSaveRichNoteButton()?.classList.add("is-dirty");
   window.clearTimeout(noteAutosaveTimer);
   noteAutosaveTimer = window.setTimeout(() => {
-    if (noteEditorPanel?.classList.contains("is-visible") && saveRichNoteButton?.classList.contains("is-dirty")) {
+    if (noteEditorPanel?.classList.contains("is-visible") && getSaveRichNoteButton()?.classList.contains("is-dirty")) {
       saveRichNote();
     }
   }, 2000);
 }
 
 function resetNoteEditorDirty() {
-  saveRichNoteButton?.classList.remove("is-dirty");
+  getSaveRichNoteButton()?.classList.remove("is-dirty");
   window.clearTimeout(noteAutosaveTimer);
   noteAutosaveTimer = null;
 }
@@ -398,7 +403,11 @@ let multiLongPressTimer = null;
 let suppressVerseClickUntil = 0;
 let verseAiContextData = null;
 let currentChapterData = null;
+let currentParallelChapterData = [];
+let bibleChapterLoading = true;
+let bibleChapterError = "";
 let activeProfileView = "";
+let profileAuthBridgeFeedback = "";
 const activeProfileFolders = {
   bookmarks: "",
   highlights: "",
@@ -1016,11 +1025,14 @@ async function syncPendingState() {
 }
 
 function setAuthFeedback(message, isError = false) {
+  profileAuthBridgeFeedback = message;
   if (!authFeedback) {
+    document.dispatchEvent(new CustomEvent("profile:auth-change"));
     return;
   }
   authFeedback.textContent = message;
   authFeedback.dataset.state = isError ? "error" : "success";
+  document.dispatchEvent(new CustomEvent("profile:auth-change"));
 }
 
 function updateAuthUi() {
@@ -1040,6 +1052,7 @@ function updateAuthUi() {
   if (profileAuthStatus) profileAuthStatus.textContent = connected ? "Supabase account" : "Local profile";
   if (profileStorageStatus) profileStorageStatus.textContent = connected ? "Synced" : "Local only";
   if (profileAccountId && connected) profileAccountId.textContent = supabaseUser.id;
+  document.dispatchEvent(new CustomEvent("profile:auth-change"));
 }
 
 async function hydrateSupabaseState() {
@@ -1302,6 +1315,7 @@ function animatePeopleOnline(nextValue) {
     const progress = Math.min(1, (now - startedAt) / duration);
     const eased = 1 - ((1 - progress) ** 3);
     peopleOnline.textContent = String(Math.round(startValue + ((nextValue - startValue) * eased)));
+    emitHomeStatsChange();
     if (progress < 1) {
       peopleOnlineAnimationFrame = window.requestAnimationFrame(step);
     } else {
@@ -1309,6 +1323,21 @@ function animatePeopleOnline(nextValue) {
     }
   };
   peopleOnlineAnimationFrame = window.requestAnimationFrame(step);
+}
+
+function emitHomeStatsChange() {
+  if (homeStatsEmitTimer) return;
+  homeStatsEmitTimer = window.setTimeout(() => {
+    homeStatsEmitTimer = null;
+    window.dispatchEvent(new CustomEvent("home:stats-change", {
+      detail: {
+        streak: homeStreak?.textContent?.trim() || "1 day",
+        peopleOnline: peopleOnline?.textContent?.trim() || String(peopleOnlineValue),
+        continueReading: homeContinueReading?.textContent?.trim() || "John 15",
+        prayerCount: homePrayerCount?.textContent?.trim() || "0",
+      },
+    }));
+  }, 80);
 }
 
 function updatePeopleOnline() {
@@ -1367,17 +1396,20 @@ function initHomeStats() {
   }
   updateHomeContinueReading();
   updateHomePrayerCount();
+  emitHomeStatsChange();
 }
 
 function updateHomeContinueReading() {
   if (!homeContinueReading) return;
   const book = BOOKS.find((item) => item.id === readerState.bookId);
   homeContinueReading.textContent = `${book?.name || readerState.bookId} ${readerState.chapter}`;
+  emitHomeStatsChange();
 }
 
 function updateHomePrayerCount() {
   if (homePrayerCount) {
     homePrayerCount.textContent = String(prayerState.requests.filter((request) => getPrayerStatus(request) === "active").length);
+    emitHomeStatsChange();
   }
 }
 
@@ -1608,6 +1640,17 @@ function renderPrayerPage() {
     button.classList.toggle("is-active", button.dataset.prayerFilter === prayerState.filter);
   });
   refreshIcons();
+  emitPrayerStateChange();
+}
+
+function emitPrayerStateChange() {
+  document.dispatchEvent(new CustomEvent("prayer:state-change"));
+}
+
+function setPrayerBridgeFeedback(message) {
+  prayerBridgeFeedback = message;
+  if (prayerFeedback) prayerFeedback.textContent = message;
+  emitPrayerStateChange();
 }
 
 function normalizeApologeticsProgress() {
@@ -2734,8 +2777,8 @@ function refreshIcons() {
   }
 }
 
-function getKidsBiblePagePath(page) {
-  const book = getKidsBibleBook(kidsBibleState.bookId);
+function getKidsBiblePagePath(page, bookId = kidsBibleState.bookId) {
+  const book = getKidsBibleBook(bookId);
   const number = String(page).padStart(2, "0");
   return `${book.imageDir}/${book.getFileName(number)}`;
 }
@@ -2810,6 +2853,10 @@ function closeKidsBibleReader() {
   delete appShell.dataset.kidsReader;
 }
 
+function emitKidsBibleChange() {
+  window.dispatchEvent(new CustomEvent("kids-bible:state-change"));
+}
+
 renderKidsBibleLibraryProgress();
 
 function setScreen(id) {
@@ -2820,6 +2867,9 @@ function setScreen(id) {
   if (id !== "bible" && multiSelectMode) {
     exitMultiSelectMode();
   }
+  if (id !== "kids-bible") {
+    delete appShell.dataset.kidsReader;
+  }
   appShell.dataset.activeScreen = id;
   bottomNav?.classList.remove("is-scroll-hidden");
   screens.forEach((screen) => {
@@ -2829,7 +2879,7 @@ function setScreen(id) {
     }
   });
 
-  navButtons.forEach((button) => {
+  document.querySelectorAll("[data-nav]").forEach((button) => {
     button.classList.toggle("is-active", button.dataset.nav === activeNavId);
   });
 
@@ -2848,6 +2898,9 @@ function setScreen(id) {
   }
 
   renderApologeticsBeginButton();
+  window.dispatchEvent(new CustomEvent("app:screen-change", {
+    detail: { id, activeNavId },
+  }));
 }
 
 let lastReaderScrollTop = 0;
@@ -2927,6 +2980,7 @@ function updateMultiSelectionUi() {
   if (multiSelectMode && selectedVerse) {
     selectedVerse.textContent = `${multiSelectedVerseData.length} verses selected`;
   }
+  emitBibleVerseUiChange();
 }
 
 function startMultiSelect(verse) {
@@ -2939,6 +2993,10 @@ function startMultiSelect(verse) {
 
 function toggleMultiSelectedVerse(verse) {
   const data = getVerseDataFromElement(verse);
+  toggleMultiSelectedData(data);
+}
+
+function toggleMultiSelectedData(data) {
   const existingIndex = multiSelectedVerseData.findIndex((item) => item.highlightKey === data.highlightKey);
   if (existingIndex >= 0) {
     multiSelectedVerseData.splice(existingIndex, 1);
@@ -3323,6 +3381,10 @@ async function fetchRemoteChapter(version, options = {}) {
 function renderLoading() {
   readerSource.textContent = "Loading Scripture";
   readerChapter.textContent = readerState.chapter;
+  if (window.reactBibleChapterMounted) {
+    emitBibleChapterChange();
+    return;
+  }
   versesList.innerHTML = '<p class="reader-empty">Loading chapter...</p>';
   copyrightNote.textContent = "";
 }
@@ -3336,6 +3398,11 @@ function renderChapter(chapter, parallelChapters = []) {
   readerChapter.textContent = readerState.chapter;
   originalLanguageLabel.textContent = getOriginalLanguage(book.id).label;
   copyrightNote.textContent = chapter.copyright || "";
+
+  if (window.reactBibleChapterMounted) {
+    emitBibleChapterChange();
+    return;
+  }
 
   if (!chapter.verses.length) {
     versesList.innerHTML = `
@@ -3473,9 +3540,11 @@ function getVersionedVerseKey(bookId, chapter, verse, version) {
 
 function setFeedback(message) {
   sheetFeedback.textContent = message;
+  emitBibleVerseUiChange();
   window.setTimeout(() => {
     if (sheetFeedback.textContent === message) {
       sheetFeedback.textContent = "";
+      emitBibleVerseUiChange();
     }
   }, 2600);
 }
@@ -3513,6 +3582,10 @@ function getSelectedVerseShareText() {
   return `${selectedVerseData.reference} ${selectedVerseData.version}\n${selectedVerseData.text}`;
 }
 
+function emitBibleVerseUiChange() {
+  document.dispatchEvent(new CustomEvent("bible:verse-ui-change"));
+}
+
 function setVerseActionActive(action, active) {
   const button = verseSheet.querySelector(`[data-verse-action="${CSS.escape(action)}"]`);
   button?.classList.toggle("is-active", active);
@@ -3520,12 +3593,14 @@ function setVerseActionActive(action, active) {
 
 function syncVerseActionStates() {
   if (!selectedVerseData) {
+    emitBibleVerseUiChange();
     return;
   }
 
   setVerseActionActive("highlight", Boolean(savedState.highlights[selectedVerseData.highlightKey]));
   setVerseActionActive("bookmark", Boolean(savedState.bookmarks[selectedVerseData.key]));
   setVerseActionActive("parallel", readerState.parallelEnabled);
+  emitBibleVerseUiChange();
 }
 
 async function loadChapter() {
@@ -3533,6 +3608,8 @@ async function loadChapter() {
     exitMultiSelectMode();
   }
   const requestId = ++chapterRequestId;
+  bibleChapterLoading = true;
+  bibleChapterError = "";
   renderLoading();
   setLocalValue("brother.version", readerState.versionId);
   setLocalValue("brother.book", readerState.bookId);
@@ -3551,10 +3628,20 @@ async function loadChapter() {
     if (requestId !== chapterRequestId) {
       return;
     }
+    currentParallelChapterData = parallelChapters;
     renderChapter(chapter, parallelChapters);
+    bibleChapterLoading = false;
+    emitBibleChapterChange();
     return chapter;
   } catch (error) {
     if (requestId !== chapterRequestId) {
+      return;
+    }
+    bibleChapterLoading = false;
+    bibleChapterError = error.message || "Unable to load this chapter.";
+    currentParallelChapterData = [];
+    if (window.reactBibleChapterMounted) {
+      emitBibleChapterChange();
       return;
     }
     versesList.innerHTML = `
@@ -3607,6 +3694,7 @@ function renderVersionOptions() {
   }
   versionSelect.value = readerState.versionId;
   renderParallelOptions();
+  emitBibleReaderChange();
 }
 
 function getDefaultParallelVersionIds() {
@@ -3643,11 +3731,13 @@ function renderParallelOptions() {
   parallelToggle.classList.toggle("is-active", readerState.parallelEnabled);
   readerTargetToggle?.classList.toggle("is-active", readerState.showHighlightsOnly);
   parallelSelects.hidden = !readerState.parallelEnabled;
+  emitBibleReaderChange();
 }
 
 function renderBookOptions() {
   bookSelect.innerHTML = BOOKS.map((book) => `<option value="${book.id}">${book.name}</option>`).join("");
   bookSelect.value = readerState.bookId;
+  emitBibleReaderChange();
 }
 
 function renderChapterOptions() {
@@ -3661,6 +3751,15 @@ function renderChapterOptions() {
     (_, index) => `<option value="${index + 1}">${index + 1}</option>`,
   ).join("");
   chapterSelect.value = String(readerState.chapter);
+  emitBibleReaderChange();
+}
+
+function emitBibleReaderChange() {
+  document.dispatchEvent(new CustomEvent("bible:reader-change"));
+}
+
+function emitBibleChapterChange() {
+  document.dispatchEvent(new CustomEvent("bible:chapter-change"));
 }
 
 async function loadRemoteVersions() {
@@ -4186,6 +4285,30 @@ function getNoteGroupItems(item) {
   return groupItems.length ? groupItems : [item].filter(Boolean);
 }
 
+function emitNoteEditorChange() {
+  document.dispatchEvent(new CustomEvent("note:editor-change"));
+}
+
+function removeNoteEditorVerse(key) {
+  const removed = noteEditorVerseItems.find((item) => item.key === key);
+  noteEditorVerseItems = noteEditorVerseItems.filter((item) => item.key !== key);
+  noteEditorRemovedVerseKeys.add(key);
+  markNoteEditorDirty();
+  multiSelectedVerseData = multiSelectedVerseData.filter((item) => item.key !== key);
+  if (selectedVerseData?.key === key) {
+    selectedVerseData = noteEditorVerseItems[0] || null;
+  }
+  renderNoteEditorVerseChips();
+  if (noteEditorReference) noteEditorReference.value = noteEditorNoteTitle;
+  if (noteEditorStatus) {
+    noteEditorStatus.textContent = noteEditorVerseItems.length
+      ? `This note will be saved to ${noteEditorVerseItems.length} verse${noteEditorVerseItems.length === 1 ? "" : "s"}.`
+      : "";
+  }
+  emitNoteEditorChange();
+  setFeedback(removed ? `${removed.reference} removed from the note.` : "Verse removed from the note.");
+}
+
 function renderNoteEditorVerseChips() {
   if (!noteEditorVerseChips) {
     return;
@@ -4214,6 +4337,7 @@ function renderNoteEditorVerseChips() {
     </div>
   `;
   refreshIcons();
+  emitNoteEditorChange();
 
   noteEditorVerseChips.querySelector("[data-note-verses-toggle]")?.addEventListener("click", () => {
     const toggle = noteEditorVerseChips.querySelector("[data-note-verses-toggle]");
@@ -4227,23 +4351,7 @@ function renderNoteEditorVerseChips() {
 
   noteEditorVerseChips.querySelectorAll("[data-remove-note-verse]").forEach((button) => {
     button.addEventListener("click", () => {
-      const key = button.dataset.removeNoteVerse;
-      const removed = noteEditorVerseItems.find((item) => item.key === key);
-      noteEditorVerseItems = noteEditorVerseItems.filter((item) => item.key !== key);
-      noteEditorRemovedVerseKeys.add(key);
-      markNoteEditorDirty();
-      multiSelectedVerseData = multiSelectedVerseData.filter((item) => item.key !== key);
-      if (selectedVerseData?.key === key) {
-        selectedVerseData = noteEditorVerseItems[0] || null;
-      }
-      renderNoteEditorVerseChips();
-      if (noteEditorReference) noteEditorReference.value = noteEditorNoteTitle;
-      if (noteEditorStatus) {
-        noteEditorStatus.textContent = noteEditorVerseItems.length
-          ? `This note will be saved to ${noteEditorVerseItems.length} verse${noteEditorVerseItems.length === 1 ? "" : "s"}.`
-          : "";
-      }
-      setFeedback(removed ? `${removed.reference} removed from the note.` : "Verse removed from the note.");
+      removeNoteEditorVerse(button.dataset.removeNoteVerse);
     });
   });
 }
@@ -4298,9 +4406,9 @@ function openRichNoteEditor() {
   noteEditorContent.style.setProperty("--note-editor-font-size", `${noteEditorFontSize}px`);
   if (noteEditorReference) noteEditorReference.value = noteEditorNoteTitle;
   noteEditorContent.innerHTML = sanitizeNoteHtml(note?.noteHtml || (note?.note ? `<p>${escapeHtml(note.note)}</p>` : "<p><br></p>"));
-  if (saveRichNoteButton) {
-    saveRichNoteButton.setAttribute("aria-label", "Save note");
-    saveRichNoteButton.title = "Save note";
+  if (getSaveRichNoteButton()) {
+    getSaveRichNoteButton().setAttribute("aria-label", "Save note");
+    getSaveRichNoteButton().title = "Save note";
   }
   resetNoteEditorDirty();
   if (wasAddingVerses) {
@@ -4311,6 +4419,7 @@ function openRichNoteEditor() {
   }
   showModal(noteEditorPanel);
   noteEditorContent.focus();
+  emitNoteEditorChange();
 }
 
 function saveRichNote() {
@@ -4350,15 +4459,15 @@ function saveRichNote() {
   writeJson("brother.notes", savedState.notes);
   refreshProfilePanel();
   setFeedback(`Note saved to ${items.length} verse${items.length === 1 ? "" : "s"}.`);
-  if (saveRichNoteButton) {
-    saveRichNoteButton.setAttribute("aria-label", "Saved");
-    saveRichNoteButton.title = "Saved";
-    saveRichNoteButton.classList.add("is-saved");
+  if (getSaveRichNoteButton()) {
+    getSaveRichNoteButton().setAttribute("aria-label", "Saved");
+    getSaveRichNoteButton().title = "Saved";
+    getSaveRichNoteButton().classList.add("is-saved");
     window.setTimeout(() => {
-      if (saveRichNoteButton) {
-        saveRichNoteButton.setAttribute("aria-label", "Save note");
-        saveRichNoteButton.title = "Save note";
-        saveRichNoteButton.classList.remove("is-saved");
+      if (getSaveRichNoteButton()) {
+        getSaveRichNoteButton().setAttribute("aria-label", "Save note");
+        getSaveRichNoteButton().title = "Save note";
+        getSaveRichNoteButton().classList.remove("is-saved");
       }
     }, 1600);
   }
@@ -4450,9 +4559,11 @@ function askAiAboutVerse() {
   startNewAiConversation();
   closeModal();
   setScreen("ai");
+  const versePrompt = `Explain ${selectedVerseData.reference} (${selectedVerseData.version}) with biblical context, original language, cross references, and application. Verse: "${selectedVerseData.text}"`;
+  document.dispatchEvent(new CustomEvent("ai:prefill", { detail: { prompt: versePrompt } }));
   if (aiComposerInput) {
     stopAiComposerPromptRotation();
-    aiComposerInput.value = `Explain ${selectedVerseData.reference} (${selectedVerseData.version}) with biblical context, original language, cross references, and application. Verse: "${selectedVerseData.text}"`;
+    aiComposerInput.value = versePrompt;
     resizeAiComposerInput();
     aiComposerInput.focus();
   }
@@ -5269,6 +5380,13 @@ function openSavedFolderPopover(trigger) {
   });
 }
 
+document.addEventListener("click", (event) => {
+  const trigger = event.target.closest("[data-saved-folder-trigger]");
+  if (!trigger || !trigger.closest("[data-react-home-library-panel-root]")) return;
+  event.stopPropagation();
+  openSavedFolderPopover(trigger);
+});
+
 function bindSavedFolderTriggers(container) {
   container?.querySelectorAll("[data-saved-folder-trigger]").forEach((trigger) => {
     trigger.addEventListener("click", (event) => {
@@ -5328,13 +5446,14 @@ function closeProfileSavedPanel() {
 }
 
 function setProfileTab(tab) {
-  profileTabButtons.forEach((button) => {
+  document.querySelectorAll("[data-profile-tab]").forEach((button) => {
     button.classList.toggle("is-active", button.dataset.profileTab === tab);
   });
+  document.dispatchEvent(new CustomEvent("profile:tab-active", { detail: { tab } }));
 
   if (profileSettingsPanel) {
     profileSettingsPanel.hidden = false;
-    profileSettingsPanel.querySelectorAll("[data-profile-section]").forEach((section) => {
+    document.querySelectorAll("[data-profile-section]").forEach((section) => {
       section.hidden = section.dataset.profileSection !== tab;
     });
   }
@@ -5811,16 +5930,25 @@ profileViewButtons.forEach((button) => {
   });
 });
 
-profileTabButtons.forEach((button) => {
-  button.addEventListener("click", () => setProfileTab(button.dataset.profileTab));
+document.addEventListener("profile:tab-change", (event) => {
+  const tab = event.detail?.tab;
+  if (["preferences", "information", "cloud"].includes(tab)) {
+    setProfileTab(tab);
+  }
 });
 
 function renderHomeLibraryTab(tab) {
-  homeLibraryTabButtons.forEach((button) => {
+  document.querySelectorAll("[data-home-library-tab]").forEach((button) => {
     button.classList.toggle("is-active", button.dataset.homeLibraryTab === tab);
   });
+  document.dispatchEvent(new CustomEvent("home:library-tab-active", { detail: { tab } }));
   if (!homeLibraryPanel) return;
   homeLibraryPanel.dataset.homeLibraryView = tab;
+
+  if (window.reactHomeLibraryPanelMounted) {
+    document.dispatchEvent(new CustomEvent("home:library-data-change", { detail: { tab } }));
+    return;
+  }
 
   const hasSavedContent = tab === "notes"
     ? getSavedNoteRows().length > 0
@@ -5873,34 +6001,22 @@ function renderHomeLibraryTab(tab) {
 }
 
 function refreshHomeLibraryPanel() {
-  const activeButton = homeLibraryTabButtons.find((button) => button.classList.contains("is-active"));
+  const activeButton = [...document.querySelectorAll("[data-home-library-tab]")]
+    .find((button) => button.classList.contains("is-active"));
   if (activeButton && homeLibraryPanel) {
     renderHomeLibraryTab(activeButton.dataset.homeLibraryTab);
   }
 }
 
-homeLibraryTabButtons.forEach((button) => {
-  button.addEventListener("click", () => renderHomeLibraryTab(button.dataset.homeLibraryTab));
+document.addEventListener("home:library-tab-change", (event) => {
+  const tab = event.detail?.tab;
+  if (["highlights", "bookmarks", "notes"].includes(tab)) {
+    renderHomeLibraryTab(tab);
+  }
 });
 
-document.querySelectorAll("[data-home-era-book]").forEach((button) => {
-  const detail = button.querySelector("strong");
-  if (detail && !detail.dataset.formatted) {
-    const items = detail.textContent
-      .split("·")
-      .map((item) => item.trim())
-      .filter(Boolean);
-    detail.replaceChildren(...items.map((item) => {
-      const line = document.createElement("span");
-      line.className = "timeline-detail-item";
-      line.textContent = item;
-      return line;
-    }));
-    detail.dataset.formatted = "true";
-  }
-
-  button.addEventListener("click", () => {
-    const bookId = button.dataset.homeEraBook;
+window.homeTimelineBridge = {
+  open(bookId) {
     if (!BOOKS.some((book) => book.id === bookId)) return;
     readerState.bookId = bookId;
     readerState.chapter = 1;
@@ -5910,8 +6026,46 @@ document.querySelectorAll("[data-home-era-book]").forEach((button) => {
     renderChapterOptions();
     setScreen("bible");
     loadChapter();
-  });
-});
+  },
+};
+
+window.homeLibraryBridge = {
+  selectTab(tab) {
+    if (!["highlights", "bookmarks", "notes"].includes(tab)) return;
+    renderHomeLibraryTab(tab);
+  },
+  getSnapshot(tab = "notes") {
+    const activeFolder = activeProfileFolders[tab] || "";
+    const folders = tab === "notes" ? [] : getSavedFolders(tab).map((folder) => ({ ...folder }));
+    const rows = tab === "notes" ? getSavedNoteRows() : getSavedRows(tab, activeFolder);
+    const aiRows = tab === "bookmarks"
+      ? Object.values(savedState.aiBookmarks)
+        .filter((item) => !activeFolder || (activeFolder === "unfiled" ? !item.folderId : item.folderId === activeFolder))
+        .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")))
+        .map((item) => ({ ...item }))
+      : [];
+    return {
+      tab,
+      isConnected: Boolean(supabaseUser),
+      activeFolder,
+      folders,
+      rows: rows.map((row) => ({ ...row, items: row.items?.map((item) => ({ ...item })) })),
+      aiRows,
+      totalRows: tab === "notes"
+        ? rows.length
+        : getSavedRows(tab, "").length + (tab === "bookmarks" ? Object.keys(savedState.aiBookmarks).length : 0),
+    };
+  },
+  openSavedVerse,
+  openSavedNote,
+  setFolder(type, folderId) {
+    activeProfileFolders[type] = folderId || "";
+    document.dispatchEvent(new CustomEvent("home:library-data-change", { detail: { tab: type } }));
+  },
+  createFolder(type, name) {
+    return createSavedFolder(type, name, { renderProfile: false });
+  },
+};
 
 renderHomeLibraryTab("notes");
 
@@ -5939,7 +6093,10 @@ function getNoteHighlightColor(element) {
 
 function updateNoteToolbarColors() {
   const element = getNoteCaretElement();
-  if (!element) return;
+  if (!element) {
+    emitNoteToolbarChange();
+    return;
+  }
   const textColor = window.getComputedStyle(element).color || "#ffffff";
   const highlightColor = getNoteHighlightColor(element);
   const textLabel = noteColorInput?.closest("label");
@@ -5950,6 +6107,11 @@ function updateNoteToolbarColors() {
   highlightSwatch?.style.setProperty("background", highlightColor);
   textLabel?.style.setProperty("color", textColor);
   highlightLabel?.style.setProperty("color", highlightColor === "transparent" ? "#d9f2ff" : highlightColor);
+  emitNoteToolbarChange();
+}
+
+function emitNoteToolbarChange() {
+  document.dispatchEvent(new CustomEvent("note:toolbar-change"));
 }
 
 function getNoteCursorLine() {
@@ -6229,6 +6391,13 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
+document.addEventListener("click", (event) => {
+  const searchButton = event.target.closest("[data-open-search]");
+  if (searchButton) {
+    showModal(searchPanel);
+  }
+});
+
 window.addEventListener("pagehide", persistNotesBeforeBackground);
 
 modalLayer.addEventListener("click", (event) => {
@@ -6239,6 +6408,610 @@ modalLayer.addEventListener("click", (event) => {
 
 window.addEventListener("load", refreshIcons);
 appShell.dataset.activeScreen = document.querySelector(".screen.is-active")?.id || "home";
+window.appNavigate = setScreen;
+function getBibleVerseSnapshot(verse, chapter = currentChapterData, version = getVersion(readerState.versionId)) {
+  const book = getBook(readerState.bookId);
+  const number = Number(verse.number || 0);
+  const highlightKey = getCanonicalVerseKey(book.id, readerState.chapter, number);
+  const key = getVersionedVerseKey(book.id, readerState.chapter, number, version.abbreviation);
+  const highlight = savedState.highlights[highlightKey];
+  return {
+    number,
+    text: verse.text || "",
+    reference: `${book.name} ${readerState.chapter}${number ? `:${number}` : ""}`,
+    bookId: book.id,
+    chapter: readerState.chapter,
+    highlightKey,
+    key,
+    version: chapter?.version || version.abbreviation,
+    highlighted: Boolean(highlight),
+    highlightColor: highlight?.colorValue || "",
+    bookmarked: Boolean(savedState.bookmarks[key]),
+    noted: Boolean(savedState.notes[key]),
+  };
+}
+
+function getBibleChapterSnapshot() {
+  const book = getBook(readerState.bookId);
+  const version = getVersion(readerState.versionId);
+  const chapter = currentChapterData;
+  const visibleVerses = chapter?.verses?.filter((verse) => !readerState.showHighlightsOnly || savedState.highlights[getCanonicalVerseKey(book.id, readerState.chapter, Number(verse.number || 0))]) || [];
+  const primaryVerses = visibleVerses.map((verse) => getBibleVerseSnapshot(verse, chapter, version));
+  const comparisonChapter = currentParallelChapterData[0];
+  const comparisonVersion = getVersion(readerState.parallelVersionIds[0]) || version;
+  return {
+    status: bibleChapterError ? "error" : bibleChapterLoading ? "loading" : "ready",
+    error: bibleChapterError,
+    chapter: readerState.chapter,
+    bookName: book.name,
+    sourceLabel: `${book.name} ${readerState.chapter} · ${readerState.parallelEnabled ? "Parallel" : `${getVersionLanguageFlag(version)} ${chapter?.versionName || version.name}`}`,
+    copyright: chapter?.copyright || "",
+    title: chapter?.title || "",
+    parallelEnabled: readerState.parallelEnabled,
+    showHighlightsOnly: readerState.showHighlightsOnly,
+    verses: primaryVerses,
+    parallel: readerState.parallelEnabled
+      ? {
+        primary: { label: chapter?.version || version.abbreviation, name: chapter?.versionName || version.name },
+        compare: { label: comparisonChapter?.version || comparisonVersion.abbreviation, name: comparisonChapter?.versionName || comparisonVersion.name },
+        rows: primaryVerses.map((verse) => ({
+          ...verse,
+          comparisonText: comparisonChapter ? getVerseTextFromChapter(comparisonChapter, verse.number) || "Verse not available in this version." : "Choose a version to compare.",
+        })),
+      }
+      : null,
+  };
+}
+
+window.kidsBibleBridge = {
+  getSnapshot() {
+    const books = Object.entries(kidsBibleBooks).map(([id, book]) => {
+      const page = id === kidsBibleState.bookId ? kidsBibleState.page : readKidsBiblePage(id);
+      return {
+        id,
+        title: book.title,
+        totalPages: book.totalPages,
+        page,
+        progress: Math.round((page / book.totalPages) * 100),
+        previewSrc: getKidsBiblePagePath(1, id),
+      };
+    });
+    const currentBook = books.find((book) => book.id === kidsBibleState.bookId) || books[0];
+    return {
+      reader: appShell.dataset.kidsReader === "true",
+      bookId: currentBook.id,
+      page: kidsBibleState.page,
+      progress: Math.round((kidsBibleState.page / currentBook.totalPages) * 100),
+      imageSrc: getKidsBiblePagePath(kidsBibleState.page, currentBook.id),
+      currentBook,
+      books,
+    };
+  },
+  open(bookId) {
+    openKidsBibleBook(bookId);
+    emitKidsBibleChange();
+  },
+  close() {
+    closeKidsBibleReader();
+    emitKidsBibleChange();
+  },
+  setPage(page) {
+    const book = getKidsBibleBook(kidsBibleState.bookId);
+    kidsBibleState.page = Math.max(1, Math.min(book.totalPages, Number(page) || 1));
+    renderKidsBiblePage();
+    emitKidsBibleChange();
+  },
+  changePage(delta) {
+    const book = getKidsBibleBook(kidsBibleState.bookId);
+    const nextPage = kidsBibleState.page + Number(delta || 0);
+    if (nextPage < 1 || nextPage > book.totalPages) return;
+    kidsBibleState.page = nextPage;
+    renderKidsBiblePage();
+    emitKidsBibleChange();
+  },
+};
+window.bibleReaderBridge = {
+  getChapterSnapshot() {
+    return getBibleChapterSnapshot();
+  },
+  getSnapshot() {
+    const { popular, rest } = sortVersionsForMenu(readerState.versions);
+    const versionOptions = [
+      ...popular.map((version) => ({ id: version.id, label: getVersionMenuLabel(version) })),
+      ...(popular.length && rest.length ? [{ separator: true }] : []),
+      ...rest.map((version) => ({ id: version.id, label: getVersionMenuLabel(version) })),
+    ];
+    const parallelOptions = readerState.versions
+      .filter((version) => version.id !== readerState.versionId)
+      .map((version) => ({ id: version.id, label: getVersionMenuLabel(version) }));
+    return {
+      versionId: readerState.versionId,
+      bookId: readerState.bookId,
+      chapter: readerState.chapter,
+      parallelEnabled: readerState.parallelEnabled,
+      showHighlightsOnly: readerState.showHighlightsOnly,
+      parallelVersionId: readerState.parallelVersionIds[0] || "",
+      versionOptions,
+      parallelOptions,
+      books: BOOKS.map((book) => ({ id: book.id, name: book.name, chapters: book.chapters })),
+      chapters: Array.from({ length: getBook(readerState.bookId).chapters }, (_, index) => index + 1),
+    };
+  },
+  setVersion(value) {
+    readerState.versionId = value;
+    renderParallelOptions();
+    loadChapter();
+  },
+  setBook(value) {
+    readerState.bookId = value;
+    readerState.chapter = 1;
+    renderChapterOptions();
+    loadChapter();
+  },
+  setChapter(value) {
+    readerState.chapter = Number(value);
+    loadChapter();
+  },
+  toggleParallel() {
+    readerState.parallelEnabled = !readerState.parallelEnabled;
+    renderParallelOptions();
+    loadChapter();
+  },
+  toggleTarget() {
+    readerState.showHighlightsOnly = !readerState.showHighlightsOnly;
+    renderParallelOptions();
+    if (readerState.parallelEnabled) {
+      loadChapter();
+    } else if (currentChapterData) {
+      renderChapter(currentChapterData);
+    }
+  },
+  setParallelVersion(value) {
+    readerState.parallelVersionIds = [value];
+    loadChapter();
+  },
+  getVerseSnapshot() {
+    return {
+      reference: selectedVerseData
+        ? (multiSelectedVerseData.length > 1 ? `${multiSelectedVerseData.length} verses selected` : selectedVerseData.reference)
+        : "John 15:5",
+      feedback: sheetFeedback?.textContent || "",
+      languageLabel: getOriginalLanguage(readerState.bookId).label,
+      active: {
+        highlight: Boolean(selectedVerseData && savedState.highlights[selectedVerseData.highlightKey]),
+        bookmark: Boolean(selectedVerseData && savedState.bookmarks[selectedVerseData.key]),
+        parallel: readerState.parallelEnabled,
+      },
+      selectedKey: selectedVerseData?.key || "",
+      selectedKeys: multiSelectedVerseData.map((item) => item.key),
+      multiSelectMode,
+    };
+  },
+  selectVerse(data) {
+    if (!data) return;
+    if (multiSelectMode) {
+      toggleMultiSelectedData(data);
+      return;
+    }
+    multiSelectedVerseData = [];
+    closeNoteTooltips();
+    selectedVerseData = { ...data };
+    document.querySelectorAll(".scripture-line.is-selected, .parallel-scripture-line.is-selected").forEach((line) => line.classList.remove("is-selected"));
+    const selectedLine = document.querySelector(`[data-verse-key="${CSS.escape(data.key)}"]`);
+    selectedLine?.classList.add("is-selected");
+    hideVerseDetail();
+    sheetFeedback.textContent = "";
+    syncVerseActionStates();
+    showModal(verseSheet);
+    emitBibleVerseUiChange();
+  },
+  startMultiSelect(data) {
+    if (!data) return;
+    multiSelectMode = true;
+    multiSelectedVerseData = [{ ...data }];
+    selectedVerseData = multiSelectedVerseData[0];
+    updateMultiSelectionUi();
+    setFeedback("Tap other verses to select them.");
+  },
+  toggleMultiSelect(data) {
+    if (data) toggleMultiSelectedData(data);
+  },
+  runAction(action) {
+    return handleVerseAction(action);
+  },
+};
+window.noteEditorBridge = {
+  attachContent(element) {
+    noteEditorContent = element;
+  },
+  getContentHtml() {
+    return noteEditorContent?.innerHTML || "<p><br></p>";
+  },
+  contentChanged(html) {
+    if (noteEditorContent && noteEditorContent.innerHTML !== html) noteEditorContent.innerHTML = html;
+    markNoteEditorDirty();
+    captureNoteSelection();
+    updateNoteToolbarColors();
+    emitNoteEditorChange();
+  },
+  getSnapshot() {
+    const textInput = document.querySelector("[data-note-color]");
+    const highlightInput = document.querySelector("[data-note-highlight]");
+    const element = getNoteCaretElement();
+    const textColor = element ? window.getComputedStyle(element).color : (textInput?.value || "#ffffff");
+    const backgroundColor = element ? getNoteHighlightColor(element) : (highlightInput?.value || "#facc15");
+    return {
+      textColor,
+      highlightColor: backgroundColor === "transparent" ? (highlightInput?.value || "#facc15") : backgroundColor,
+      fontSize: noteEditorFontSize,
+    };
+  },
+  command(name, value = null) {
+    noteEditorContent?.focus();
+    document.execCommand(name, false, value);
+    markNoteEditorDirty();
+    updateNoteToolbarColors();
+  },
+  color(type, value) {
+    const selector = type === "highlight" ? "[data-note-highlight]" : "[data-note-color]";
+    const input = document.querySelector(selector);
+    if (input) input.value = value;
+    restoreNoteSelection();
+    noteEditorContent?.focus();
+    document.execCommand(type === "highlight" ? "hiliteColor" : "foreColor", false, value);
+    captureNoteSelection();
+    markNoteEditorDirty();
+    updateNoteToolbarColors();
+  },
+  changeSize(delta) {
+    changeNoteFontSize(delta);
+    emitNoteToolbarChange();
+  },
+  getEditorSnapshot() {
+    return {
+      title: noteEditorNoteTitle,
+      items: noteEditorVerseItems.map((item) => ({ ...item })),
+      addingVerses: noteEditorAddingVerses,
+    };
+  },
+  setTitle(value) {
+    noteEditorNoteTitle = value;
+    markNoteEditorDirty();
+    emitNoteEditorChange();
+  },
+  save() {
+    saveRichNote();
+    resetNoteEditorDirty();
+    emitNoteEditorChange();
+  },
+  delete() {
+    deleteRichNote();
+    emitNoteEditorChange();
+  },
+  close() {
+    closeModal();
+    emitNoteEditorChange();
+  },
+  startAdding() {
+    startAddingNoteVerses();
+    emitNoteEditorChange();
+  },
+  removeVerse(key) {
+    removeNoteEditorVerse(key);
+  },
+};
+window.profileBridge = {
+  selectTab(tab) {
+    if (!["preferences", "information", "cloud"].includes(tab)) return;
+    setProfileTab(tab);
+  },
+  getHero() {
+    return { displayName: savedProfile.displayName || defaultProfile.displayName, streakLabel: savedProfile.streakLabel || defaultProfile.streakLabel, coverImage: savedProfile.coverImage || defaultProfile.coverImage };
+  },
+  async prepareCover(file) {
+    return compressProfileCover(file);
+  },
+  saveCover(coverImage) {
+    savedProfile.coverImage = coverImage || defaultProfile.coverImage;
+    saveProfile();
+    applyProfile();
+    document.dispatchEvent(new CustomEvent("profile:hero-change"));
+  },
+  getAuth() {
+    return {
+      connected: Boolean(supabaseUser),
+      email: supabaseUser?.email || "",
+      feedback: profileAuthBridgeFeedback || "Connect to sync your profile and app data across devices.",
+    };
+  },
+  async submitAuth(mode, email, password, passwordConfirm) {
+    if (!supabaseClient) {
+      setAuthFeedback("Supabase is not configured yet.", true);
+      return;
+    }
+    if (mode === "sign-up") {
+      if (!passwordConfirm) {
+        setAuthFeedback("Confirm your password to create the account.", true);
+        return;
+      }
+      if (password !== passwordConfirm) {
+        setAuthFeedback("Passwords do not match.", true);
+        return;
+      }
+      const { error } = await supabaseClient.auth.signUp({ email, password });
+      setAuthFeedback(error ? error.message : "Account created. Check your email if confirmation is enabled.", Boolean(error));
+      return;
+    }
+    const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+    setAuthFeedback(error ? error.message : "Signed in. Syncing your data...", Boolean(error));
+  },
+  async forgotPassword(email) {
+    if (!supabaseClient) {
+      setAuthFeedback("Supabase is not configured yet.", true);
+      return;
+    }
+    if (!email) {
+      setAuthFeedback("Enter your email first to reset your password.", true);
+      return;
+    }
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}${window.location.pathname}` });
+    setAuthFeedback(error ? error.message : "Password reset email sent. Check your inbox.", Boolean(error));
+  },
+  async signOut() {
+    await supabaseClient?.auth.signOut();
+    sessionStorage.removeItem("brother.supabaseHydratedUser");
+    setAuthFeedback("Signed out. The app is now local-only.");
+  },
+  getInfo() {
+    return {
+      displayName: savedProfile.displayName || "",
+      country: savedProfile.country || "",
+      dateOfBirth: savedProfile.dateOfBirth || "",
+    };
+  },
+  saveInfo(info) {
+    savedProfile.displayName = String(info.displayName || "").trim() || defaultProfile.displayName;
+    savedProfile.country = String(info.country || "").trim();
+    savedProfile.dateOfBirth = String(info.dateOfBirth || "").trim();
+    saveProfile();
+    applyProfile();
+    document.dispatchEvent(new CustomEvent("profile:info-change"));
+    document.dispatchEvent(new CustomEvent("profile:hero-change"));
+  },
+  getPreferences() {
+    return {
+      background: savedPreferences.background,
+      textSize: savedPreferences.textSize,
+      accent: savedPreferences.accent,
+      textSizes: Object.keys(textSizeOptions),
+      accents: Object.keys(accentOptions),
+    };
+  },
+  setPreference(type, value) {
+    if (type === "background") savedPreferences.background = value;
+    if (type === "textSize" && textSizeOptions[value]) savedPreferences.textSize = value;
+    if (type === "accent" && accentOptions[value]) savedPreferences.accent = value;
+    savePreferences();
+    applyPreferences();
+    if (type === "background") centerBackgroundOption(savedPreferences.background);
+    document.dispatchEvent(new CustomEvent("profile:preferences-change"));
+  },
+};
+window.prayerBridge = {
+  getSnapshot() {
+    const currentPrayerUserId = supabaseUser?.id || prayerUserId;
+    const requests = prayerState.requests
+      .filter((request) => {
+        if (prayerState.pageTab === "request") {
+          const isOwnRequest = supabaseClient ? request.ownerId === supabaseUser?.id : true;
+          if (!isOwnRequest) return false;
+        }
+        if (prayerState.pageTab === "board") {
+          return (request.category || "general") === prayerState.filter;
+        }
+        return true;
+      })
+      .sort((a, b) => {
+        if (prayerState.sort === "recent") return String(b.createdAt).localeCompare(String(a.createdAt));
+        const difference = prayerState.sort === "least" ? a.prayerCount - b.prayerCount : b.prayerCount - a.prayerCount;
+        return difference || String(b.createdAt).localeCompare(String(a.createdAt));
+      })
+      .map((request) => ({
+        ...request,
+        preview: getPrayerPreview(request.text),
+        hasPrayed: request.prayedBy?.includes(currentPrayerUserId),
+        isNewlyPrayed: request.prayedBy?.includes(currentPrayerUserId) && request.prayerCount === 1,
+        backgroundIndex: getPrayerBackgroundIndex(request),
+      }));
+    return {
+      pageTab: prayerState.pageTab,
+      filter: prayerState.filter,
+      sort: prayerState.sort,
+      myWallExpanded: prayerState.myWallExpanded,
+      requestCategory: prayerCategory?.value || "general",
+      backgroundIndex: selectedPrayerBackgroundIndex,
+      feedback: prayerBridgeFeedback || prayerFeedback?.textContent || "",
+      sent: prayerBridgeSent,
+      requests,
+    };
+  },
+  setPageTab(tab) {
+    prayerState.pageTab = tab === "request" ? "request" : "board";
+    if (prayerState.pageTab === "request") startPrayerPromptRotation();
+    else stopPrayerPromptRotation();
+    renderPrayerPage();
+  },
+  setFilter(filter) {
+    prayerState.filter = ["general", "family", "health", "work", "faith", "other"].includes(filter) ? filter : "general";
+    renderPrayerPage();
+  },
+  setSort(sort) {
+    prayerState.sort = ["most", "least", "recent"].includes(sort) ? sort : "most";
+    renderPrayerPage();
+  },
+  toggle(requestId) {
+    const request = prayerState.requests.find((item) => item.id === requestId);
+    if (!request) return;
+    request.expanded = !request.expanded;
+    renderPrayerPage();
+  },
+  async share(requestId) {
+    const request = prayerState.requests.find((item) => item.id === requestId);
+    if (!request) return;
+    const shareText = `Prayer request: ${request.text}`;
+    try {
+      if (navigator.share) await navigator.share({ title: "Prayer request", text: shareText });
+      else if (navigator.clipboard) {
+        await navigator.clipboard.writeText(shareText);
+        setPrayerBridgeFeedback("Prayer request copied to your clipboard.");
+      }
+    } catch (error) {
+      if (error?.name !== "AbortError") setPrayerBridgeFeedback("This request could not be shared.");
+    }
+  },
+  async pray(requestId) {
+    const request = prayerState.requests.find((item) => item.id === requestId);
+    if (!request) return;
+    if (supabaseClient && !supabaseUser) {
+      setPrayerBridgeFeedback("Sign in to record your prayer.");
+      return;
+    }
+    if (supabaseClient && supabaseUser) {
+      const { error } = await supabaseClient.rpc("pray_for_request", { request_uuid: request.id });
+      if (error) {
+        setPrayerBridgeFeedback(error.message);
+        return;
+      }
+      await loadPrayerFromSupabase();
+      return;
+    }
+    request.prayedBy ||= [];
+    if (request.prayedBy.includes(prayerUserId)) return;
+    request.prayedBy.push(prayerUserId);
+    request.prayerCount += 1;
+    savePrayerRequests();
+    renderPrayerPage();
+  },
+  setCategory(category) {
+    setPrayerCategory(category);
+    emitPrayerStateChange();
+  },
+  async submit(text, category, backgroundIndex) {
+    const cleanText = String(text || "").trim();
+    const wordCount = countPrayerWords(cleanText);
+    const moderationMessage = getPrayerModerationMessage(cleanText);
+    if (!cleanText || wordCount > 300) {
+      setPrayerBridgeFeedback(wordCount > 300 ? "Please keep your request under 300 words." : "Write a prayer request first.");
+      return false;
+    }
+    if (moderationMessage) {
+      setPrayerBridgeFeedback(moderationMessage);
+      return false;
+    }
+    if (supabaseClient && !supabaseUser) {
+      setPrayerBridgeFeedback("Sign in to share a prayer request with the community.");
+      return false;
+    }
+    if (supabaseClient && supabaseUser) {
+      const created = await createPrayerRequest(cleanText, category, false, backgroundIndex);
+      if (!created) return false;
+    } else {
+      prayerState.requests.unshift({
+        id: `prayer-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        ownerId: prayerUserId,
+        text: cleanText,
+        prayerCount: 0,
+        prayedBy: [],
+        createdAt: new Date().toISOString(),
+        category,
+        urgent: false,
+        backgroundIndex,
+        status: "active",
+      });
+      savePrayerRequests();
+    }
+    setPrayerCategory("general");
+    selectedPrayerBackgroundIndex = 0;
+    prayerState.pageTab = "request";
+    prayerState.myWallExpanded = true;
+    prayerState.filter = "general";
+    prayerBridgeFeedback = "Your request was shared anonymously.";
+    prayerBridgeSent = true;
+    window.setTimeout(() => {
+      prayerBridgeSent = false;
+      emitPrayerStateChange();
+    }, 1800);
+    renderPrayerPage();
+    return true;
+  },
+};
+window.aiBridge = {
+  getSnapshot() {
+    const memory = getRecentAiMemory();
+    const messages = memory.length ? memory.map((item) => ({ ...item })) : [{ role: "assistant", text: "Ask me about a verse, doctrine, original language, cross references, or biblical context." }];
+    const histories = readJson(aiConversationsKey, [])
+      .filter((item) => Date.now() - Number(item.updatedAt || item.createdAt || 0) < aiMemoryTtlMs)
+      .sort((a, b) => Number(b.updatedAt || b.createdAt) - Number(a.updatedAt || a.createdAt))
+      .map((conversation) => {
+        const firstUser = conversation.messages?.find((message) => message.role === "user");
+        const preview = firstUser?.text || "New conversation";
+        return { id: conversation.id, preview: preview.length > 30 ? `${preview.slice(0, 30).trim()}...` : preview };
+      });
+    return { tab: "chat", messages, histories };
+  },
+  format(text) {
+    return renderRichText(text);
+  },
+  messageId(text) {
+    return getAiMessageId(text);
+  },
+  bookmarked(text) {
+    return Boolean(savedState.aiBookmarks[getAiMessageId(text)]);
+  },
+  async send(prompt, history = []) {
+    const response = await fetch("/api/ai/chat", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ prompt, history }),
+    });
+    const payload = await response.json();
+    if (!response.ok) throw new Error(payload.error || "AI request failed.");
+    const responseText = payload.text || "No response text returned.";
+    rememberAiMessage("user", prompt);
+    rememberAiMessage("assistant", responseText);
+    document.dispatchEvent(new CustomEvent("ai:state-change"));
+    return responseText;
+  },
+  newConversation() {
+    currentAiConversationId = `chat-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    localStorage.setItem("brother.aiConversationId", currentAiConversationId);
+    clearAiMemory();
+    document.dispatchEvent(new CustomEvent("ai:state-change"));
+  },
+  loadConversation(id) {
+    const conversation = readJson(aiConversationsKey, []).find((item) => item.id === id);
+    if (!conversation) return null;
+    currentAiConversationId = id;
+    localStorage.setItem("brother.aiConversationId", id);
+    writeJson(aiMemoryKey, conversation.messages || []);
+    return (conversation.messages || []).map((item) => ({ ...item }));
+  },
+  async copy(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      // Clipboard access is optional on mobile browsers.
+    }
+  },
+  bookmark(text) {
+    const messageId = getAiMessageId(text);
+    if (savedState.aiBookmarks[messageId]) delete savedState.aiBookmarks[messageId];
+    else savedState.aiBookmarks[messageId] = { id: messageId, text, folderId: "", createdAt: new Date().toISOString() };
+    writeJson(aiBookmarksKey, savedState.aiBookmarks);
+    document.dispatchEvent(new CustomEvent("ai:state-change"));
+    document.dispatchEvent(new CustomEvent("home:library-data-change", { detail: { tab: "bookmarks" } }));
+  },
+};
 initHomeStats();
 initAuthForm();
 initSupabase();

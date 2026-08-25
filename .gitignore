@@ -1,5 +1,6 @@
 .env.local
 node_modules/
+assets/react/
 .cache/
 .DS_Store
 test-results/

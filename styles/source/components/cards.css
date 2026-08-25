@@ -1,0 +1,101 @@
+/* components/cards.css */
+
+/* Frosted blue glass cards inside the dark phone */
+.app-shell[data-app-background="black"] .home-stat-card,
+.app-shell[data-app-background="black"] .home-prayer-card,
+.app-shell[data-app-background="black"] .home-content-card,
+.app-shell[data-app-background="black"] .preference-card,
+.app-shell[data-app-background="black"] .profile-auth-card,
+.app-shell[data-app-background="black"] .profile-info-card,
+.app-shell[data-app-background="black"] .prayer-card,
+.app-shell[data-app-background="black"] .prayer-compose,
+.app-shell[data-app-background="black"] .saved-note-card,
+.app-shell[data-app-background="black"] .saved-verse-row,
+.app-shell[data-app-background="black"] .saved-ai-row,
+.app-shell[data-app-background="black"] .ai-history-item,
+.app-shell[data-app-background="black"] .apologetics-challenge-card,
+.app-shell[data-app-background="black"] .apologetics-gate-card,
+.app-shell[data-app-background="black"] .action-grid button,
+.app-shell[data-app-background="black"] .detail-stack article {
+  border: 1px solid rgba(170, 215, 238, 0.2) !important;
+  background: rgba(54, 82, 103, 0.28) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(220, 242, 255, 0.14),
+    0 8px 22px rgba(0, 0, 0, 0.22) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(118%);
+  backdrop-filter: blur(18px) saturate(118%);
+}
+
+
+/* Final glass treatment for all cards in the dark phone */
+.app-shell[data-app-background="black"] .home-stat-card,
+.app-shell[data-app-background="black"] .home-prayer-card,
+.app-shell[data-app-background="black"] .home-content-card,
+.app-shell[data-app-background="black"] .preference-card,
+.app-shell[data-app-background="black"] .profile-auth-card,
+.app-shell[data-app-background="black"] .profile-info-card,
+.app-shell[data-app-background="black"] .prayer-card,
+.app-shell[data-app-background="black"] .prayer-intro,
+.app-shell[data-app-background="black"] .saved-note-card,
+.app-shell[data-app-background="black"] .saved-verse-row,
+.app-shell[data-app-background="black"] .saved-ai-row,
+.app-shell[data-app-background="black"] .ai-history-item,
+.app-shell[data-app-background="black"] .apologetics-challenge-card,
+.app-shell[data-app-background="black"] .apologetics-gate-card,
+.app-shell[data-app-background="black"] .action-grid button,
+.app-shell[data-app-background="black"] .detail-stack article {
+  border: 1px solid rgba(170, 215, 238, 0.2) !important;
+  background: rgba(54, 82, 103, 0.42) !important;
+  box-shadow: inset 0 1px 0 rgba(220, 242, 255, 0.14), 0 8px 22px rgba(0, 0, 0, 0.22) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(118%);
+  backdrop-filter: blur(18px) saturate(118%);
+}
+
+.app-shell[data-app-background="black"] .home-library-panel {
+  display: grid;
+  gap: 14px !important;
+}
+
+.app-shell[data-app-background="black"] .home-library-panel .saved-note-card,
+.app-shell[data-app-background="black"] .home-library-panel .saved-verse-row,
+.app-shell[data-app-background="black"] .home-library-panel .saved-ai-row {
+  margin: 0 0 2px !important;
+  border-radius: 22px !important;
+  border: 1px solid rgba(170, 215, 238, 0.34) !important;
+  background: rgba(62, 96, 121, 0.68) !important;
+  box-shadow: inset 0 1px 0 rgba(235, 249, 255, 0.22), 0 10px 24px rgba(0, 0, 0, 0.3) !important;
+}
+
+.app-shell[data-app-background="black"] .home-library-panel .saved-note-card::before,
+.app-shell[data-app-background="black"] .home-library-panel .saved-verse-row::before,
+.app-shell[data-app-background="black"] .home-library-panel .saved-ai-row::before {
+  width: 6px !important;
+  opacity: 1 !important;
+}
+
+.app-shell[data-app-background="black"] .home-library-panel .saved-note-card::before {
+  background: #55caff !important;
+}
+
+.app-shell[data-app-background="black"] .home-library-panel .saved-note-card:nth-of-type(2n)::before {
+  background: #68e4b2 !important;
+}
+
+.app-shell[data-app-background="black"] .home-library-panel .saved-note-card:nth-of-type(3n)::before {
+  background: #c08cff !important;
+}
+
+.app-shell[data-app-background="black"] .home-library-panel .saved-note-card-heading,
+.app-shell[data-app-background="black"] .home-library-panel .saved-note-card-heading svg {
+  color: #b8eaff !important;
+}
+
+.app-shell[data-app-background="black"] .home-library-panel .saved-note-card:nth-of-type(2n) .saved-note-card-heading,
+.app-shell[data-app-background="black"] .home-library-panel .saved-note-card:nth-of-type(2n) .saved-note-card-heading svg {
+  color: #8affca !important;
+}
+
+.app-shell[data-app-background="black"] .home-library-panel .saved-note-card:nth-of-type(3n) .saved-note-card-heading,
+.app-shell[data-app-background="black"] .home-library-panel .saved-note-card:nth-of-type(3n) .saved-note-card-heading svg {
+  color: #d5adff !important;
+}

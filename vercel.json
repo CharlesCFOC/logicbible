@@ -1,4 +1,5 @@
 {
+  "buildCommand": "npm run build",
   "functions": {
     "server.mjs": {
       "includeFiles": "{assets/**,lib/**,index.html,styles.css,script.js,bible-data.js}"

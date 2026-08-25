@@ -4,23 +4,18 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Brother Bible AI</title>
-    <link rel="stylesheet" href="styles.css?v=modules-05" />
-    <link rel="stylesheet" href="styles/modules/tokens.css?v=modules-02" />
-    <link rel="stylesheet" href="styles/modules/navigation.css?v=modules-02" />
-    <link rel="stylesheet" href="styles/modules/prayer.css?v=modules-02" />
-    <link rel="stylesheet" href="styles/modules/notes.css?v=modules-02" />
-    <link rel="stylesheet" href="styles/modules/theme-black.css?v=modules-20" />
-    <link rel="stylesheet" href="styles/modules/home.css?v=modules-02" />
+    <link rel="stylesheet" href="styles.css?v=refactor-04" />
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="bible-data.js" defer></script>
-    <script src="script.js?v=modules-05" defer></script>
-    <script src="scripts/navigation.js?v=modules-05" defer></script>
+    <script src="script.js?v=modules-07" defer></script>
+    <script src="scripts/navigation.js?v=modules-06" defer></script>
     <script src="scripts/prayer.js?v=modules-05" defer></script>
     <script src="scripts/notes.js?v=modules-05" defer></script>
     <script src="scripts/bible.js?v=modules-05" defer></script>
     <script src="scripts/profile.js?v=modules-06" defer></script>
     <script src="scripts/apologetics.js?v=modules-06" defer></script>
+    <script src="assets/react/navigation.js?v=react-06" defer></script>
   </head>
   <body>
     <div class="app-shell" data-theme="light" data-app-background="black">
@@ -54,7 +49,7 @@
           <header class="home-hero">
           </header>
 
-          <article class="home-hero-image">
+          <article class="home-hero-image" data-react-home-hero-root>
             <img src="assets/home-card-forest.webp" alt="A peaceful natural forest landscape" />
             <div class="home-hero-image-copy">
               <div class="home-hero-verse">
@@ -66,7 +61,7 @@
             </div>
           </article>
 
-          <section class="home-stats" aria-label="Daily activity">
+          <section class="home-stats" aria-label="Daily activity" data-react-home-stats-root>
             <article class="home-stat-card">
               <span>Connected streak</span>
               <strong data-home-streak>1 day</strong>
@@ -82,7 +77,7 @@
             </button>
           </section>
 
-          <section class="home-bible-timeline" aria-label="Bible timeline">
+          <section class="home-bible-timeline" aria-label="Bible timeline" data-react-home-timeline-root>
             <div class="home-bible-timeline-track">
               <button type="button" data-home-era-book="GEN" title="Création · chute · patriarches"><span>01 · Genèse</span><strong>Création · chute · patriarches</strong></button>
               <button type="button" data-home-era-book="JOB" title="Épreuve de Job · souffrance · restauration"><span>02 · Job</span><strong>Épreuve · souffrance · restauration</strong></button>
@@ -153,19 +148,19 @@
             </div>
           </section>
 
-          <button class="home-prayer-card" type="button" data-nav="prayer">
+          <button class="home-prayer-card" type="button" data-nav="prayer" data-react-home-prayer-root>
             <span class="home-prayer-card-icon"><i data-lucide="hand-heart"></i></span>
             <span><small>Prayer requests</small><strong><span data-home-prayer-count>0</span> people are waiting for prayer</strong></span>
             <i data-lucide="arrow-up-right"></i>
           </button>
 
           <section class="home-library-section" aria-label="Your library">
-            <nav class="profile-tabs home-library-tabs" aria-label="Home library sections">
+            <nav class="profile-tabs home-library-tabs" aria-label="Home library sections" data-react-home-library-tabs-root>
               <button type="button" data-home-library-tab="highlights"><i data-lucide="highlighter"></i><span>Highlight</span></button>
               <button type="button" data-home-library-tab="bookmarks"><i data-lucide="bookmark"></i><span>Bookmark</span></button>
               <button class="is-active" type="button" data-home-library-tab="notes"><i data-lucide="notebook-pen"></i><span>Notes</span></button>
             </nav>
-            <section class="home-library-panel" data-home-library-panel>
+            <section class="home-library-panel" data-home-library-panel data-react-home-library-panel-root>
               <div class="home-library-placeholder">
                 <span>Personal library</span>
                 <strong>Manage your saved Scripture</strong>
@@ -176,7 +171,7 @@
 
         </section>
 
-        <section id="kids-bible" class="screen kids-bible-screen" data-screen>
+        <section id="kids-bible" class="screen kids-bible-screen" data-screen data-react-kids-bible-root>
           <header class="kids-bible-header">
             <div>
               <span class="eyebrow">For curious hearts</span>
@@ -248,7 +243,7 @@
         </section>
 
         <section id="bible" class="screen reader-screen" data-screen>
-          <header class="reader-topbar">
+          <header class="reader-topbar" data-react-bible-controls-root>
             <label class="reader-select-label" aria-label="Bible version">
               <select data-version-select></select>
             </label>
@@ -263,7 +258,7 @@
             </button>
           </header>
 
-          <section class="parallel-controls" data-parallel-controls>
+          <section class="parallel-controls" data-parallel-controls data-react-bible-parallel-root>
             <button class="parallel-toggle" data-parallel-toggle>
               <i data-lucide="columns-3"></i>
               <span>Parallèle</span>
@@ -282,13 +277,13 @@
           <article class="scripture-page" data-scripture-page>
             <p class="section-title" data-reader-source>Loading Scripture</p>
             <div class="chapter-number" data-reader-chapter>15</div>
-            <div data-verses-list></div>
+            <div data-verses-list data-react-bible-chapter-root></div>
             <p class="copyright-note" data-copyright-note></p>
           </article>
 
         </section>
 
-        <section id="ai" class="screen ai-screen" data-screen>
+        <section id="ai" class="screen ai-screen" data-screen data-react-ai-root>
           <header class="ai-topbar">
             <div>
               <strong>Brother AI</strong>
@@ -451,7 +446,7 @@
           </div>
         </section>
 
-        <section id="prayer" class="screen prayer-screen" data-screen>
+        <section id="prayer" class="screen prayer-screen" data-screen data-react-prayer-root>
           <header class="prayer-header">
             <div>
               <h1>Prayer community</h1>
@@ -547,7 +542,7 @@
         </section>
 
         <section id="profile" class="screen profile-screen" data-screen>
-          <article class="profile-hero">
+          <article class="profile-hero" data-react-profile-hero-root>
             <img src="assets/profile-hero-v2.png" alt="Profile background" data-profile-cover loading="lazy" decoding="async" />
             <button class="profile-style-button" type="button" data-profile-style-toggle aria-expanded="false">
               <i data-lucide="pencil"></i><span>Edit style</span>
@@ -572,14 +567,14 @@
             </div>
           </article>
 
-          <nav class="profile-tabs" data-profile-tabs aria-label="Profile sections">
+          <nav class="profile-tabs" data-profile-tabs data-react-profile-tabs-root aria-label="Profile sections">
             <button class="is-active" type="button" data-profile-tab="preferences"><i data-lucide="sliders-horizontal"></i><span>Preference</span></button>
             <button type="button" data-profile-tab="information"><i data-lucide="id-card"></i><span>Information</span></button>
             <button type="button" data-profile-tab="cloud"><i data-lucide="cloud"></i><span>Cloud account</span></button>
           </nav>
 
           <div class="profile-settings-panel" data-profile-panel="settings">
-          <section class="profile-auth-card" data-profile-section="cloud" aria-labelledby="profile-auth-title" hidden>
+          <section class="profile-auth-card" data-profile-section="cloud" data-react-profile-cloud-root aria-labelledby="profile-auth-title" hidden>
             <div class="preference-heading">
               <h2 id="profile-auth-title">Cloud account</h2>
               <span data-auth-mode-label>Not connected</span>
@@ -608,7 +603,7 @@
             </form>
           </section>
 
-          <section class="profile-info-section" data-profile-section="information" aria-labelledby="profile-info-title" hidden>
+          <section class="profile-info-section" data-profile-section="information" data-react-profile-information-root aria-labelledby="profile-info-title" hidden>
             <div class="preference-heading">
               <h2 id="profile-info-title">Informations</h2>
               <span>Identity</span>
@@ -639,7 +634,7 @@
             </div>
           </section>
 
-          <section class="preference-section" data-profile-section="preferences" aria-labelledby="appearance-title">
+          <section class="preference-section" data-profile-section="preferences" data-react-profile-preferences-root aria-labelledby="appearance-title">
             <div class="preference-heading">
               <h2 id="appearance-title">Preferences</h2>
               <span>Contrast</span>
@@ -692,13 +687,15 @@
         <button class="note-add-save-button" data-note-add-save type="button" hidden>Save</button>
 
         <nav class="bottom-nav" aria-label="Primary navigation">
-          <button class="is-active" data-nav="home"><i data-lucide="home"></i><span>Home</span></button>
-          <button data-nav="bible"><i data-lucide="book-open"></i><span>Bible</span></button>
-          <button data-nav="kids-bible"><i data-lucide="book-image"></i><span>Kids Bible</span></button>
-          <button data-nav="prayer"><i data-lucide="hand-heart"></i><span>Prayer</span></button>
-          <button data-nav="ai"><i data-lucide="sparkles"></i><span>AI</span></button>
-          <button data-nav="apologetics"><i data-lucide="shield"></i><span>Apologetics</span></button>
-          <button data-nav="profile"><i data-lucide="user-round"></i><span>Profile</span></button>
+          <div data-react-navigation-root>
+            <button class="is-active" data-nav="home" type="button"><i data-lucide="home"></i><span>Home</span></button>
+            <button data-nav="bible" type="button"><i data-lucide="book-open"></i><span>Bible</span></button>
+            <button data-nav="kids-bible" type="button"><i data-lucide="book-image"></i><span>Kids Bible</span></button>
+            <button data-nav="prayer" type="button"><i data-lucide="hand-heart"></i><span>Prayer</span></button>
+            <button data-nav="ai" type="button"><i data-lucide="sparkles"></i><span>AI</span></button>
+            <button data-nav="apologetics" type="button"><i data-lucide="shield"></i><span>Apologetics</span></button>
+            <button data-nav="profile" type="button"><i data-lucide="user-round"></i><span>Profile</span></button>
+          </div>
         </nav>
 
       <div class="modal-layer" data-modal-layer hidden>
@@ -733,10 +730,10 @@
         <section class="bottom-sheet" data-verse-sheet role="dialog" aria-modal="true" aria-label="Verse Actions">
           <div class="modal-handle" aria-hidden="true"></div>
           <div class="sheet-title">
-            <span data-selected-verse>John 15:5</span>
+            <span data-selected-verse data-react-selected-verse-root>John 15:5</span>
             <button data-close-modal aria-label="Close"><i data-lucide="x"></i></button>
           </div>
-          <div class="action-grid">
+          <div class="action-grid" data-react-verse-actions-root>
             <button class="action-featured action-primary" data-verse-action="highlight"><i data-lucide="highlighter"></i><span>Highlight</span></button>
             <button class="action-featured action-primary" data-verse-action="ask-ai"><i data-lucide="sparkles"></i><span>Ask AI</span></button>
             <button class="action-featured action-primary" data-verse-action="note"><i data-lucide="notebook-pen"></i><span>Note</span></button>
@@ -745,7 +742,7 @@
             <button class="action-secondary" data-verse-action="bookmark"><i data-lucide="bookmark"></i><span>Bookmark</span></button>
             <button class="action-secondary" data-verse-action="original-language"><i data-lucide="languages"></i><span>Greek</span></button>
           </div>
-          <p class="sheet-feedback" data-sheet-feedback aria-live="polite"></p>
+          <p class="sheet-feedback" data-sheet-feedback data-react-sheet-feedback-root aria-live="polite"></p>
           <div class="verse-detail-panel" data-verse-detail hidden></div>
         </section>
 
@@ -766,7 +763,7 @@
         </section>
 
         <section class="note-editor-panel" data-note-editor-panel role="dialog" aria-modal="true" aria-label="Verse note editor">
-          <header class="note-editor-panel-header">
+          <header class="note-editor-panel-header" data-react-note-header-root>
             <div>
               <span>Notes</span>
               <input class="note-editor-title note-editor-heading-title" data-note-title data-note-editor-reference type="text" maxlength="100" placeholder="Note title" aria-label="Note title" />
@@ -778,8 +775,8 @@
               <button type="button" class="note-close-button" data-close-modal aria-label="Close note editor" title="Close"><i data-lucide="x"></i></button>
             </div>
           </header>
-          <div class="note-editor-verse-chips" data-note-editor-verse-chips aria-label="Verses attached to this note"></div>
-          <div class="note-editor-toolbar" role="toolbar" aria-label="Note formatting">
+          <div class="note-editor-verse-chips" data-note-editor-verse-chips data-react-note-chips-root aria-label="Verses attached to this note"></div>
+          <div class="note-editor-toolbar" data-react-note-toolbar-root role="toolbar" aria-label="Note formatting">
             <button type="button" data-note-command="bold" aria-label="Bold"><b>B</b></button>
             <button type="button" data-note-command="italic" aria-label="Italic"><i>I</i></button>
             <button type="button" data-note-command="underline" aria-label="Underline"><u>U</u></button>
@@ -805,7 +802,7 @@
             <button type="button" data-note-command="justifyCenter" aria-label="Center">≡</button>
             <button type="button" data-note-command="justifyFull" aria-label="Justify">☰</button>
           </div>
-          <div class="note-editor-content" data-note-editor-content contenteditable="true" role="textbox" aria-label="Write your note"></div>
+          <div class="note-editor-content-shell" data-react-note-content-root></div>
         </section>
 
       </div>
