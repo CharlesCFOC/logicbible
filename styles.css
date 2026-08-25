@@ -916,6 +916,88 @@ body:has(.app-shell[data-app-background="black"]) .prayer-compose-footer button 
   background: rgba(77, 98, 126, 0.28) !important;
 }
 
+/* Home timeline fallback: keep the component styled before the selected
+   background preference is applied. */
+.app-shell #home .home-bible-timeline {
+  position: absolute;
+  z-index: 2;
+  top: 260px;
+  right: 22px;
+  left: 22px;
+  height: 190px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.app-shell #home .home-bible-timeline-track {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 190px;
+  padding: 0 14px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-wrap: nowrap;
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.app-shell #home .home-bible-timeline-track::-webkit-scrollbar {
+  display: none;
+}
+
+.app-shell #home .home-bible-timeline-track button {
+  display: grid;
+  flex: 0 0 auto;
+  align-self: flex-start;
+  gap: 3px;
+  width: 112px;
+  min-width: 112px;
+  height: 76px;
+  min-height: 76px;
+  padding: 9px 11px;
+  border: 1px solid rgba(65, 91, 108, 0.3);
+  border-radius: 12px;
+  background: rgba(235, 241, 245, 0.88);
+  color: #17202a;
+  text-align: left;
+}
+
+.app-shell #home .home-bible-timeline-track button:nth-of-type(even) {
+  margin-top: 104px;
+}
+
+.app-shell #home .home-bible-timeline-track button > span {
+  color: #367b9d;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.app-shell #home .home-bible-timeline-track button strong {
+  display: grid;
+  gap: 1px;
+  overflow: hidden;
+  color: #17202a;
+  font-size: 11px;
+  line-height: 1.15;
+  white-space: normal;
+}
+
+.app-shell #home .home-bible-timeline-track .timeline-detail-item {
+  display: block;
+  overflow: hidden;
+  color: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .app-shell[data-app-background="black"] #home .home-bible-timeline {
   position: absolute;
   z-index: 2;
@@ -7333,6 +7415,57 @@ html:has(.app-shell[data-app-background="black"]) {
   font-weight: 800;
 }
 
+.home-library-empty-state {
+  display: grid;
+  justify-items: start;
+  gap: 7px;
+  min-height: 126px;
+  padding: 18px;
+  border: 1px solid rgba(139, 220, 255, 0.2);
+  border-radius: 18px;
+  background: rgba(54, 82, 103, 0.28);
+  color: var(--ink);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.home-library-empty-state > svg {
+  width: 20px;
+  height: 20px;
+  color: #8bdcff;
+}
+
+.home-library-empty-state strong {
+  color: inherit;
+  font-size: 14px;
+}
+
+.home-library-empty-state p {
+  max-width: 34ch;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.home-library-empty-state button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  margin-top: 3px;
+  padding: 0 11px;
+  border-radius: 10px;
+  background: rgba(60, 157, 204, 0.72);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.home-library-empty-state button svg {
+  width: 14px;
+  height: 14px;
+}
+
 .profile-settings-panel[hidden] {
   display: none;
 }
@@ -8307,6 +8440,90 @@ html:has(.app-shell[data-app-background="black"]) {
 .saved-folder-select select:focus {
   background: rgba(255, 255, 255, 0.7);
   color: var(--ink);
+}
+
+.saved-folder-trigger {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  min-height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+}
+
+.saved-folder-trigger svg {
+  width: 16px;
+  height: 16px;
+}
+
+.saved-folder-trigger:hover,
+.saved-folder-trigger:focus-visible {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--cool);
+}
+
+.saved-folder-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 4000;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  overflow: auto;
+  background: rgba(4, 12, 18, 0.58);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
+  backdrop-filter: blur(12px) saturate(120%);
+  animation: savedFolderModalIn 160ms ease-out;
+}
+
+.saved-folder-popover {
+  position: relative;
+  display: grid;
+  width: min(100%, 340px);
+  max-width: 340px;
+  gap: 3px;
+  padding: 20px;
+  border: 1px solid rgba(173, 231, 255, 0.34);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 15% 8%, rgba(104, 215, 255, 0.18), transparent 38%),
+    linear-gradient(145deg, rgba(35, 71, 91, 0.98), rgba(20, 34, 52, 0.98) 58%, rgba(56, 43, 93, 0.96));
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(239, 251, 255, 0.16);
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+  backdrop-filter: blur(18px) saturate(135%);
+}
+
+.saved-folder-popover strong {
+  padding: 2px 2px 10px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 850;
+  letter-spacing: 0.04em;
+}
+
+.saved-folder-popover button {
+  min-height: 42px;
+  padding: 0 12px;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #e8f7ff;
+  font-size: 12px;
+  font-weight: 750;
+  text-align: left;
+}
+
+.saved-folder-popover button:hover,
+.saved-folder-popover button.is-active {
+  background: linear-gradient(135deg, rgba(91, 213, 255, 0.72), rgba(102, 95, 242, 0.72));
+  color: #ffffff;
+}
+
+@keyframes savedFolderModalIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .saved-color-dot {

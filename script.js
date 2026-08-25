@@ -1130,6 +1130,7 @@ function writeLocalWithoutSync(key, value) {
 async function handleSupabaseSession(session) {
   supabaseUser = session?.user || null;
   updateAuthUi();
+  refreshHomeLibraryPanel();
   if (!supabaseUser) {
     await loadPrayerFromSupabase();
     return;
@@ -1139,6 +1140,7 @@ async function handleSupabaseSession(session) {
     await syncPendingState();
     const hydrated = await hydrateSupabaseState();
     await loadPrayerFromSupabase();
+    refreshHomeLibraryPanel();
     const marker = sessionStorage.getItem("brother.supabaseHydratedUser");
     if (hydrated && marker !== supabaseUser.id) {
       sessionStorage.setItem("brother.supabaseHydratedUser", supabaseUser.id);
@@ -5135,6 +5137,9 @@ function writeSavedSource(type) {
 }
 
 function getSavedFolders(type) {
+  if (type === "ai-bookmarks") {
+    type = "bookmarks";
+  }
   if (!Array.isArray(savedFolders[type])) {
     savedFolders[type] = [];
   }
@@ -5183,6 +5188,14 @@ function createSavedFolder(type, name, options = {}) {
 }
 
 function assignSavedFolder(type, storageKey, folderId) {
+  if (type === "ai-bookmarks") {
+    const bookmark = savedState.aiBookmarks[storageKey];
+    if (!bookmark) return;
+    bookmark.folderId = folderId || "";
+    writeJson(aiBookmarksKey, savedState.aiBookmarks);
+    refreshProfilePanel();
+    return;
+  }
   const source = getSavedSource(type);
   if (!source[storageKey]) {
     return;
@@ -5205,6 +5218,62 @@ function bindFolderSelectInteractions(container) {
       } else {
         select.focus();
       }
+    });
+  });
+}
+
+let activeSavedFolderPopover = null;
+
+function closeSavedFolderPopover() {
+  activeSavedFolderPopover?.remove();
+  activeSavedFolderPopover = null;
+}
+
+function openSavedFolderPopover(trigger) {
+  closeSavedFolderPopover();
+  const type = trigger.dataset.savedFolderType;
+  const storageKey = trigger.dataset.savedFolderKey;
+  if (!type || !storageKey) return;
+
+  const currentFolder = trigger.dataset.savedFolderCurrent || "";
+  const folders = getSavedFolders(type);
+  const modal = document.createElement("div");
+  modal.className = "saved-folder-modal";
+  modal.setAttribute("role", "dialog");
+  modal.setAttribute("aria-modal", "true");
+  const popover = document.createElement("div");
+  popover.className = "saved-folder-popover";
+  popover.setAttribute("role", "document");
+  popover.innerHTML = `
+    <strong>Move to folder</strong>
+    <button type="button" data-folder-choice="" class="${currentFolder ? "" : "is-active"}" role="menuitem">No folder</button>
+    ${folders.map((folder) => `
+      <button type="button" data-folder-choice="${escapeAttr(folder.id)}" class="${currentFolder === folder.id ? "is-active" : ""}" role="menuitem">
+        ${escapeHtml(folder.name)}
+      </button>
+      `).join("")}
+  `;
+  modal.appendChild(popover);
+  document.body.appendChild(modal);
+  activeSavedFolderPopover = modal;
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal) closeSavedFolderPopover();
+  });
+
+  popover.querySelectorAll("[data-folder-choice]").forEach((button) => {
+    button.addEventListener("click", () => {
+      assignSavedFolder(type, storageKey, button.dataset.folderChoice || "");
+      closeSavedFolderPopover();
+      refreshHomeLibraryPanel();
+    });
+  });
+}
+
+function bindSavedFolderTriggers(container) {
+  container?.querySelectorAll("[data-saved-folder-trigger]").forEach((trigger) => {
+    trigger.addEventListener("click", (event) => {
+      event.stopPropagation();
+      openSavedFolderPopover(trigger);
     });
   });
 }
@@ -5374,22 +5443,18 @@ function renderProfileSavedPanel(type) {
                   <p>${escapeHtml(row.text || "")}</p>
                 </span>
               </button>
-              <label class="saved-folder-select">
+              <button class="saved-folder-trigger" type="button" data-saved-folder-trigger data-saved-folder-type="${escapeAttr(type)}" data-saved-folder-key="${escapeAttr(row.storageKey)}" data-saved-folder-current="${escapeAttr(row.folderId || "")}" aria-label="Choose folder" title="Choose folder">
                 <i data-lucide="folder"></i>
-                <select data-saved-folder="${escapeAttr(row.storageKey)}">
-                  ${folderOptions}
-                </select>
-              </label>
+              </button>
             </article>
           `).join("")}
           ${aiRows.map((row) => `
             <article class="saved-ai-row">
               <div class="saved-ai-row-heading"><i data-lucide="sparkles"></i><strong>AI response</strong></div>
               <p>${escapeHtml(row.text || "")}</p>
-              <label class="saved-folder-select">
+              <button class="saved-folder-trigger" type="button" data-saved-folder-trigger data-saved-folder-type="ai-bookmarks" data-saved-folder-key="${escapeAttr(row.id)}" data-saved-folder-current="${escapeAttr(row.folderId || "")}" aria-label="Choose folder" title="Choose folder">
                 <i data-lucide="folder"></i>
-                <select data-ai-saved-folder="${escapeAttr(row.id)}">${folderOptions}</select>
-              </label>
+              </button>
             </article>
           `).join("")}`
         : `<p class="saved-empty">${folderEmpty}</p>`
@@ -5412,21 +5477,7 @@ function renderProfileSavedPanel(type) {
   profileSavedPanel.querySelectorAll("[data-saved-row]").forEach((button) => {
     button.addEventListener("click", () => openSavedVerse(rows[Number(button.dataset.savedRow)]));
   });
-  profileSavedPanel.querySelectorAll("[data-saved-folder]").forEach((select) => {
-    const row = rows.find((item) => item.storageKey === select.dataset.savedFolder);
-    select.value = row?.folderId || "";
-    select.addEventListener("change", () => assignSavedFolder(type, select.dataset.savedFolder, select.value));
-  });
-  profileSavedPanel.querySelectorAll("[data-ai-saved-folder]").forEach((select) => {
-    const bookmark = savedState.aiBookmarks[select.dataset.aiSavedFolder];
-    select.value = bookmark?.folderId || "";
-    select.addEventListener("change", () => {
-      if (!bookmark) return;
-      bookmark.folderId = select.value;
-      writeJson(aiBookmarksKey, savedState.aiBookmarks);
-      setFeedback(`AI bookmark filed in ${getFolderName("bookmarks", select.value)}.`);
-    });
-  });
+  bindSavedFolderTriggers(profileSavedPanel);
   bindFolderSelectInteractions(profileSavedPanel);
   refreshIcons();
 }
@@ -5769,6 +5820,34 @@ function renderHomeLibraryTab(tab) {
     button.classList.toggle("is-active", button.dataset.homeLibraryTab === tab);
   });
   if (!homeLibraryPanel) return;
+  homeLibraryPanel.dataset.homeLibraryView = tab;
+
+  const hasSavedContent = tab === "notes"
+    ? getSavedNoteRows().length > 0
+    : getSavedRows(tab, "").length > 0 || (tab === "bookmarks" && Object.keys(savedState.aiBookmarks).length > 0);
+
+  if (!hasSavedContent) {
+    const isConnected = Boolean(supabaseUser);
+    homeLibraryPanel.innerHTML = `
+      <div class="home-library-empty-state">
+        <i data-lucide="${isConnected ? "book-open" : "log-in"}"></i>
+        <strong>${isConnected ? "Your library is empty" : "Sign in to see more"}</strong>
+        <p>${isConnected
+          ? "Save highlights, bookmarks and notes from the Bible tab to find them here."
+          : "Sign in to sync your notes, bookmarks and highlights across your devices."}</p>
+        <button type="button" data-nav="${isConnected ? "bible" : "profile"}">
+          ${isConnected ? "Start reading" : "Sign in or create an account"}
+          <i data-lucide="arrow-up-right"></i>
+        </button>
+      </div>
+    `;
+    homeLibraryPanel.querySelector("[data-nav]")?.addEventListener("click", (event) => {
+      setScreen(event.currentTarget.dataset.nav);
+    });
+    refreshIcons();
+    return;
+  }
+
   renderProfileSavedPanel(tab);
   homeLibraryPanel.innerHTML = profileSavedPanel.innerHTML;
   profileSavedPanel.innerHTML = "";
@@ -5788,6 +5867,7 @@ function renderHomeLibraryTab(tab) {
   homeLibraryPanel.querySelectorAll("[data-nav]").forEach((button) => {
     button.addEventListener("click", () => setScreen(button.dataset.nav));
   });
+  bindSavedFolderTriggers(homeLibraryPanel);
   bindFolderSelectInteractions(homeLibraryPanel);
   refreshIcons();
 }

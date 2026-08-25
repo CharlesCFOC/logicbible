@@ -6,11 +6,13 @@
 .app-shell[data-theme="dark"] .bottom-nav,
 .app-shell[data-theme="dark"][data-app-background] .bottom-nav {
   border-color: rgba(139, 220, 255, 0.32) !important;
-  background: rgba(18, 43, 59, 0.78) !important;
-  background-image: linear-gradient(180deg, rgba(53, 91, 116, 0.42), rgba(10, 27, 39, 0.78)) !important;
+  border-radius: 0 !important;
+  background: rgba(18, 43, 59, 0.42) !important;
+  background-image: linear-gradient(180deg, rgba(87, 151, 183, 0.18), rgba(8, 22, 31, 0.38)) !important;
   box-shadow: 0 -8px 22px rgba(0, 0, 0, 0.26), inset 0 1px 0 rgba(201, 239, 255, 0.14) !important;
   -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
   backdrop-filter: blur(18px) saturate(135%) !important;
+  overflow: hidden;
 }
 
 .app-shell .bottom-nav button,
@@ -76,6 +78,170 @@ html:has(.app-shell[data-app-background="black"]) {
   color: var(--theme-text) !important;
 }
 
+.app-shell[data-app-background="black"] #home .home-prayer-card {
+  border: 0 !important;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.28), transparent 32%),
+    linear-gradient(135deg, #22cfa2 0%, #258fd8 48%, #8062f2 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 24px rgba(35, 148, 190, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-prayer-card small,
+.app-shell[data-app-background="black"] #home .home-prayer-card strong,
+.app-shell[data-app-background="black"] #home .home-prayer-card svg {
+  color: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-prayer-card:hover {
+  filter: brightness(1.08) saturate(1.08);
+}
+
+.app-shell[data-app-background="black"] #home .home-hero-image-copy button {
+  border: 0 !important;
+  border-radius: 14px !important;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(255, 255, 255, 0.34), transparent 30%),
+    linear-gradient(135deg, #ffb3c7 0%, #f878a5 48%, #d94f88 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 22px rgba(217, 79, 136, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.48) !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-hero-image-copy button:hover {
+  filter: brightness(1.06) saturate(1.08);
+}
+
+.app-shell[data-app-background="black"] #home .home-library-tabs button span,
+.app-shell[data-app-background="black"] #home .home-library-tabs button svg {
+  color: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-color-dot {
+  display: none !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="highlights"] .saved-verse-row {
+  padding: 14px 16px !important;
+  background: linear-gradient(135deg, rgba(38, 104, 135, 0.88), rgba(57, 60, 119, 0.9)) !important;
+  border-color: rgba(139, 220, 255, 0.42) !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="highlights"] .saved-verse-open {
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 0 !important;
+  text-align: left !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="highlights"] .saved-verse-open strong {
+  color: #ffffff !important;
+  font-size: 14px !important;
+  line-height: 1.2;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="highlights"] .saved-verse-open small {
+  margin-top: 4px;
+  color: #a8e6ff !important;
+  font-size: 10px !important;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="highlights"] .saved-verse-open p {
+  margin-top: 8px !important;
+  color: rgba(255, 255, 255, 0.86) !important;
+  font-size: 12px !important;
+  line-height: 1.45;
+  text-align: left !important;
+  -webkit-line-clamp: 3;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="highlights"] .saved-folder-select {
+  margin-left: 0;
+  width: auto;
+  justify-self: end;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="highlights"] .saved-verse-row {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="highlights"] .saved-folder-trigger {
+  grid-column: 2;
+  grid-row: 1;
+  color: #a8e6ff !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="highlights"] .saved-folder-trigger:hover,
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="highlights"] .saved-folder-trigger:focus-visible {
+  background: rgba(139, 220, 255, 0.16);
+  color: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-auth-actions button[data-auth-action="sign-in"],
+.app-shell[data-app-background="black"] #profile .profile-auth-actions button[data-auth-action="sign-up"] {
+  min-height: 44px;
+  border: 0 !important;
+  border-radius: 14px !important;
+  font-size: 12px;
+  font-weight: 850;
+  text-shadow: none;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-auth-actions button[data-auth-action="sign-in"] {
+  background: linear-gradient(135deg, #5bd5ff 0%, #4a9df3 52%, #665ff2 100%) !important;
+  color: #071b2b !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42), 0 7px 16px rgba(55, 137, 221, 0.28) !important;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-auth-actions button[data-auth-action="sign-up"] {
+  background: linear-gradient(135deg, #fff7e9 0%, #f2dfc8 100%) !important;
+  color: #1c2631 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78), 0 7px 16px rgba(0, 0, 0, 0.18) !important;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-auth-actions button[data-auth-action="sign-in"]:hover,
+.app-shell[data-app-background="black"] #profile .profile-auth-actions button[data-auth-action="sign-up"]:hover {
+  filter: brightness(1.06) saturate(1.05);
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet {
+  border: 0 !important;
+  background:
+    linear-gradient(180deg, rgba(39, 75, 96, 0.38), rgba(8, 21, 30, 0.5)) !important;
+  box-shadow: 0 -14px 32px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(214, 243, 255, 0.1) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(135%) !important;
+  backdrop-filter: blur(24px) saturate(135%) !important;
+}
+
+.app-shell[data-app-background="black"][data-modal="note"] .note-save-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 28px !important;
+  width: 28px !important;
+  min-width: 28px !important;
+  height: 28px !important;
+  min-height: 28px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 8px !important;
+  background: linear-gradient(135deg, #65d8ff, #4a91e8) !important;
+  color: #071b2b !important;
+  line-height: 0 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42), 0 4px 10px rgba(55, 137, 221, 0.24) !important;
+}
+
+.app-shell[data-app-background="black"][data-modal="note"] .note-save-button svg {
+  display: block !important;
+  width: 15px !important;
+  height: 15px !important;
+  margin: 0 !important;
+  stroke: currentColor !important;
+  stroke-width: 2.25 !important;
+}
+
 .app-shell[data-app-background="black"] input,
 .app-shell[data-app-background="black"] textarea,
 .app-shell[data-app-background="black"] select,
@@ -104,4 +270,206 @@ html:has(.app-shell[data-app-background="black"]) {
 .app-shell[data-app-background="black"] .muted,
 .app-shell[data-app-background="black"] .saved-note-references {
   color: var(--theme-muted) !important;
+}
+
+/* Home library: keep Bookmarks and Notes visually aligned with Highlights. */
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="bookmarks"] .saved-verse-row,
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="notes"] .saved-note-card {
+  min-height: 96px;
+  padding: 14px 16px !important;
+  border: 1px solid rgba(139, 220, 255, 0.42) !important;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(38, 104, 135, 0.88), rgba(57, 60, 119, 0.9)) !important;
+  box-shadow: inset 0 1px 0 rgba(236, 250, 255, 0.18), 0 10px 24px rgba(0, 0, 0, 0.24) !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="bookmarks"] .saved-verse-row:nth-of-type(2n),
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="notes"] .saved-note-card:nth-of-type(2n) {
+  background: linear-gradient(135deg, rgba(38, 119, 119, 0.88), rgba(45, 79, 105, 0.92)) !important;
+  border-color: rgba(126, 239, 195, 0.42) !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="bookmarks"] .saved-verse-row:nth-of-type(3n),
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="notes"] .saved-note-card:nth-of-type(3n) {
+  background: linear-gradient(135deg, rgba(91, 70, 151, 0.88), rgba(59, 65, 111, 0.92)) !important;
+  border-color: rgba(207, 173, 255, 0.48) !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="bookmarks"] .saved-verse-row {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="bookmarks"] .saved-verse-open {
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 0 !important;
+  text-align: left !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="bookmarks"] .saved-verse-open > svg {
+  display: none;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="bookmarks"] .saved-folder-trigger {
+  grid-column: 2;
+  grid-row: 1;
+  color: #a8e6ff !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="notes"] .saved-note-open {
+  gap: 6px;
+  text-align: left;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="notes"] .saved-note-card-title {
+  color: #ffffff !important;
+  font-size: 14px !important;
+  line-height: 1.2;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="notes"] .saved-note-card-heading {
+  color: #a8e6ff !important;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="notes"] .saved-note-card-heading svg {
+  color: #a8e6ff !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="notes"] .saved-note-references {
+  color: #a8e6ff !important;
+  font-size: 10px;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="notes"] .saved-note-open p {
+  margin-top: 2px;
+  color: rgba(255, 255, 255, 0.86) !important;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+/* One shared card language across all three Home library tabs. */
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="highlights"] .saved-verse-row,
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="bookmarks"] .saved-verse-row,
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="notes"] .saved-note-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 96px;
+  padding: 14px 16px !important;
+  border: 1px solid rgba(139, 220, 255, 0.42) !important;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(38, 104, 135, 0.88), rgba(57, 60, 119, 0.9)) !important;
+  box-shadow: inset 0 1px 0 rgba(236, 250, 255, 0.18), 0 10px 24px rgba(0, 0, 0, 0.24) !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="highlights"] .saved-verse-row::before,
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="bookmarks"] .saved-verse-row::before,
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="notes"] .saved-note-card::before {
+  width: 4px;
+  background: #55caff !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="highlights"] .saved-verse-row:nth-of-type(2n),
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="bookmarks"] .saved-verse-row:nth-of-type(2n),
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="notes"] .saved-note-card:nth-of-type(2n) {
+  background: linear-gradient(135deg, rgba(38, 119, 119, 0.88), rgba(45, 79, 105, 0.92)) !important;
+  border-color: rgba(126, 239, 195, 0.42) !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="highlights"] .saved-verse-row:nth-of-type(2n)::before,
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="bookmarks"] .saved-verse-row:nth-of-type(2n)::before,
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="notes"] .saved-note-card:nth-of-type(2n)::before {
+  background: #68e4b2 !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="highlights"] .saved-verse-row:nth-of-type(3n),
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="bookmarks"] .saved-verse-row:nth-of-type(3n),
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="notes"] .saved-note-card:nth-of-type(3n) {
+  background: linear-gradient(135deg, rgba(91, 70, 151, 0.88), rgba(59, 65, 111, 0.92)) !important;
+  border-color: rgba(207, 173, 255, 0.48) !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="highlights"] .saved-verse-row:nth-of-type(3n)::before,
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="bookmarks"] .saved-verse-row:nth-of-type(3n)::before,
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="notes"] .saved-note-card:nth-of-type(3n)::before {
+  background: #c08cff !important;
+}
+
+/* Fallback selector for dynamically refreshed Home tabs (including Bookmarks). */
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-verse-row,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-ai-row {
+  min-height: 96px !important;
+  padding: 14px 16px !important;
+  border-radius: 18px !important;
+  border: 1px solid rgba(139, 220, 255, 0.42) !important;
+  background: linear-gradient(135deg, rgba(38, 104, 135, 0.88), rgba(57, 60, 119, 0.9)) !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-verse-row::before,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card::before,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-ai-row::before {
+  width: 4px !important;
+  background: #55caff !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-verse-row:nth-of-type(2n),
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card:nth-of-type(2n),
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-ai-row:nth-of-type(2n) {
+  border-color: rgba(126, 239, 195, 0.42) !important;
+  background: linear-gradient(135deg, rgba(38, 119, 119, 0.88), rgba(45, 79, 105, 0.92)) !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-verse-row:nth-of-type(2n)::before,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card:nth-of-type(2n)::before,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-ai-row:nth-of-type(2n)::before {
+  background: #68e4b2 !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-verse-row:nth-of-type(3n),
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card:nth-of-type(3n),
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-ai-row:nth-of-type(3n) {
+  border-color: rgba(207, 173, 255, 0.48) !important;
+  background: linear-gradient(135deg, rgba(91, 70, 151, 0.88), rgba(59, 65, 111, 0.92)) !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-verse-row:nth-of-type(3n)::before,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card:nth-of-type(3n)::before,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-ai-row:nth-of-type(3n)::before {
+  background: #c08cff !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="bookmarks"] .saved-ai-row {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="bookmarks"] .saved-ai-row-heading,
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="bookmarks"] .saved-ai-row p {
+  grid-column: 1;
+}
+
+.app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="bookmarks"] .saved-ai-row .saved-folder-trigger {
+  grid-column: 2;
+  grid-row: 1;
+  color: #a8e6ff !important;
+}
+
+.app-shell[data-app-background="black"] .saved-ai-row {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+}
+
+.app-shell[data-app-background="black"] .saved-ai-row-heading,
+.app-shell[data-app-background="black"] .saved-ai-row p {
+  grid-column: 1;
+}
+
+.app-shell[data-app-background="black"] .saved-ai-row .saved-folder-trigger {
+  grid-column: 2;
+  grid-row: 1;
+  color: #a8e6ff !important;
 }
