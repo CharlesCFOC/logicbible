@@ -366,3 +366,22 @@ body:has(.app-shell[data-app-background="black"]) .prayer-intro {
     grid-template-columns: 1fr;
   }
 }
+
+/* Mobile performance: keep the atmosphere, but avoid animating huge blurred
+   layers and a continuously repainted phone background on small devices. */
+@media (max-width: 680px) {
+  .app-shell[data-app-background="black"] .phone-frame {
+    animation: none !important;
+    background-position: 24% 18%, 76% 82%, 0 0 !important;
+  }
+
+  .app-shell[data-app-background="black"] .phone-frame::before,
+  .app-shell[data-app-background="black"] .phone-frame::after {
+    width: 620px;
+    height: 620px;
+    filter: blur(92px);
+    mix-blend-mode: normal;
+    animation: none !important;
+    opacity: 0.3;
+  }
+}

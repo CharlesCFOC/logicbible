@@ -1020,3 +1020,35 @@ html:has(.app-shell[data-app-background="black"]) {
 .app-shell[data-modal="original-language"] .interlinear-row.is-active {
   background: rgba(64, 119, 94, 0.42) !important;
 }
+
+/* Stable blue atmosphere: no background movement or repaint loop. */
+.app-shell[data-app-background="black"] .phone-frame {
+  background:
+    linear-gradient(135deg, #071722 0%, #123b53 46%, #08131f 100%) !important;
+  background-position: 0 0 !important;
+  background-size: 100% 100% !important;
+  animation: none !important;
+}
+
+.app-shell[data-app-background="black"] .phone-frame::before {
+  top: -20%;
+  left: -18%;
+  width: 1180px;
+  height: 1180px;
+  background: radial-gradient(
+    circle at 42% 42%,
+    rgba(104, 211, 245, 0.72) 0%,
+    rgba(61, 157, 204, 0.52) 28%,
+    rgba(31, 104, 145, 0.22) 58%,
+    transparent 76%
+  );
+  filter: blur(150px);
+  opacity: 0.72;
+  mix-blend-mode: screen;
+  animation: none !important;
+}
+
+.app-shell[data-app-background="black"] .phone-frame::after {
+  display: none !important;
+  animation: none !important;
+}
