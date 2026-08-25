@@ -56,7 +56,7 @@ function BottomNavigation() {
   };
 
   return navigationItems.map(([id, label, icon]) => (
-    <button key={id} className={activeScreen === id ? "is-active" : ""} type="button" onClick={() => navigate(id)}>
+    <button key={id} className={activeScreen === id ? "is-active" : ""} data-nav={id} type="button" onClick={() => navigate(id)}>
       <NavigationIcon name={icon} />
       <span>{label}</span>
     </button>
