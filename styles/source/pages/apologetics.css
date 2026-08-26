@@ -2010,8 +2010,10 @@
   min-width: 0;
   overflow-x: auto;
   padding: 2px 2px 8px;
-  scrollbar-width: thin;
+  scrollbar-width: none;
 }
+
+.apologetics-debate-carousel::-webkit-scrollbar { display: none; }
 
 .apologetics-debate-context-card,
 .apologetics-debate-tools button {
@@ -2029,7 +2031,7 @@
 .apologetics-debate-context-card--theme { background: linear-gradient(135deg, #ff6988, #c22bd3); }
 .apologetics-debate-context-card--question { flex-basis: 218px; background: linear-gradient(135deg, #2dd5e9, #3567ff); }
 .apologetics-debate-context-card small {
-  color: rgba(255, 255, 255, 0.78);
+  color: #ffffff !important;
   font-size: 9px;
   font-weight: 900;
   letter-spacing: 0.08em;
