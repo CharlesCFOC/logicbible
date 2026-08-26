@@ -92,6 +92,13 @@
   color: #e8f7ff;
 }
 
+.saved-folder-modal {
+  z-index: 10000;
+  background: rgba(4, 12, 18, 0.68);
+  -webkit-backdrop-filter: blur(16px) saturate(120%);
+  backdrop-filter: blur(16px) saturate(120%);
+}
+
 .saved-folder-create-heading {
   display: flex;
   align-items: flex-start;

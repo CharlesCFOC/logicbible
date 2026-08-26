@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 const arrowIcon = (
   <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -246,7 +247,7 @@ function HomeLibraryFolderTools({ snapshot, tab, onChange }) {
           <button className={snapshot.activeFolder === folder.id ? "is-active" : ""} key={folder.id} type="button" onClick={() => onChange(folder.id)}>{folder.name}</button>
         ))}
       </div>
-      {isCreateOpen && (
+      {isCreateOpen && createPortal(
         <div className="saved-folder-modal" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && setCreateOpen(false)}>
           <form className="saved-folder-popover saved-folder-create-popover" onSubmit={editingFolder ? renameFolder : createFolder} role="dialog" aria-modal="true" aria-labelledby="new-folder-title">
             <div className="saved-folder-create-heading">
@@ -272,7 +273,8 @@ function HomeLibraryFolderTools({ snapshot, tab, onChange }) {
               </div>
             )}
           </form>
-        </div>
+        </div>,
+        document.body,
       )}
     </div>
   );
