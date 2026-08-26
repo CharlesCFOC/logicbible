@@ -345,6 +345,11 @@
   font-weight: 600;
 }
 
+.app-shell[data-app-background="black"] .apologetics-room-button .apologetics-room-copy small {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
 @keyframes apologeticsRoomIn {
   from {
     opacity: 0;
