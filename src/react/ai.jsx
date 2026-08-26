@@ -14,7 +14,7 @@ const aiComposerPrompts = [
   "Tu veux comparer le sens d’un mot ?",
 ];
 
-function AiIcon({ name }) {
+export function AiIcon({ name }) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       {aiIcons[name].map((path) => <path key={path} d={path} />)}
@@ -22,7 +22,7 @@ function AiIcon({ name }) {
   );
 }
 
-function AiMessage({ message, bridge }) {
+export function AiMessage({ message, bridge }) {
   if (message.role === "user") return <article className="message user-message"><p>{message.text}</p></article>;
   const messageId = bridge.messageId(message.text);
   return (

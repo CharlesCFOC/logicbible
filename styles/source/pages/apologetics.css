@@ -2060,6 +2060,12 @@
   backdrop-filter: blur(14px);
 }
 
+.apologetics-debate-chat-thread {
+  min-height: 220px;
+  max-height: 420px;
+  padding: 20px 4px 8px;
+}
+
 .apologetics-debate-message {
   display: flex;
   gap: 10px;
@@ -2179,9 +2185,10 @@
 }
 
 .apologetics-debate-composer > span { color: #ffffff; font-size: 24px; }
-.apologetics-debate-composer input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; color: #ffffff; font-size: 13px; }
-.apologetics-debate-composer input:disabled,
+.apologetics-debate-composer textarea { min-width: 0; flex: 1; min-height: 42px; max-height: 120px; padding: 10px 0; border: 0; outline: 0; resize: none; background: transparent; color: #ffffff; font-size: 13px; line-height: 1.4; }
+.apologetics-debate-composer textarea::placeholder { color: rgba(224, 239, 248, 0.7); }
+.apologetics-debate-composer textarea:disabled,
 .apologetics-debate-composer button:disabled { opacity: 0.6; }
-.apologetics-debate-message-content p.is-pending { color: rgba(224, 239, 248, 0.68); font-style: italic; }
+.apologetics-debate-composer button svg { width: 20px; height: 20px; }
 .apologetics-debate-composer input::placeholder { color: rgba(224, 239, 248, 0.7); }
 .apologetics-debate-composer button { display: grid; place-items: center; width: 42px; min-width: 42px; min-height: 42px; border-radius: 50%; background: linear-gradient(135deg, #34d5ed, #2774eb); color: #ffffff; font-size: 22px; }

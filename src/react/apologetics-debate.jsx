@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { AiIcon, AiMessage } from "./ai.jsx";
 
 const debateThemes = [
   {
@@ -92,11 +93,12 @@ const generalQuestion = "What is the strongest reason to believe the Christian m
 function DebateRoomView({ theme, question, onBack }) {
   const bridge = window.aiBridge;
   const [messages, setMessages] = useState([
-    { role: "ai", text: question || generalQuestion, time: "Now" },
-    { role: "ai", text: "Take your time, make your best case, and I’ll help you sharpen the answer.", time: "Now" },
+    { role: "assistant", text: question || generalQuestion },
+    { role: "assistant", text: "Take your time, make your best case, and I’ll help you sharpen the answer." },
   ]);
   const [draft, setDraft] = useState("");
   const [pending, setPending] = useState(false);
+  const threadRef = useRef(null);
 
   useEffect(() => {
     const appShell = document.querySelector(".app-shell");
@@ -104,24 +106,28 @@ function DebateRoomView({ theme, question, onBack }) {
     return () => appShell?.classList.remove("is-debate-room");
   }, []);
 
+  useEffect(() => {
+    if (threadRef.current) threadRef.current.scrollTop = threadRef.current.scrollHeight;
+  }, [messages]);
+
   const sendMessage = async (event) => {
     event.preventDefault();
     const text = draft.trim();
     if (!text || pending || !bridge) return;
-    const history = messages.map((message) => ({ role: message.role === "ai" ? "assistant" : "user", text: message.text })).slice(-24);
+    const history = messages.filter((message) => !message.pending).slice(-24);
     setMessages((current) => [
       ...current,
       { role: "user", text, time: "Now" },
-      { role: "ai", text: "Brother AI is thinking...", time: "Now", pending: true },
+      { role: "assistant", text: "", pending: true },
     ]);
     setDraft("");
     setPending(true);
     try {
       const context = `You are the AI debate partner in a Christian apologetics debate room. Debate theme: ${theme?.label || "General"}. Central question: ${question || generalQuestion}. Give a clear, respectful, evidence-based response that helps the user practice apologetics.`;
       const responseText = await bridge.send(`${context}\n\nUser response: ${text}`, history);
-      setMessages((current) => [...current.slice(0, -1), { role: "ai", text: responseText, time: "Now" }]);
+      setMessages((current) => [...current.slice(0, -1), { role: "assistant", text: responseText }]);
     } catch (error) {
-      setMessages((current) => [...current.slice(0, -1), { role: "ai", text: error.message || "AI is not available yet.", time: "Now" }]);
+      setMessages((current) => [...current.slice(0, -1), { role: "assistant", text: error.message || "AI is not available yet." }]);
     } finally {
       setPending(false);
     }
@@ -160,23 +166,13 @@ function DebateRoomView({ theme, question, onBack }) {
         </div>
       </div>
 
-      <section className="apologetics-debate-thread" aria-label="Debate conversation">
-        {messages.map((message, index) => (
-          <article className={`apologetics-debate-message apologetics-debate-message--${message.role}`} key={`${message.text}-${index}`}>
-            <div className="apologetics-debate-avatar">{message.role === "ai" ? "AI" : "●"}</div>
-            <div className="apologetics-debate-message-content">
-              <div className="apologetics-debate-message-meta"><strong>{message.role === "ai" ? "AI Debate Partner" : "You"}</strong><span>{message.time}</span></div>
-              <p className={message.pending ? "is-pending" : ""}>{message.text}</p>
-            </div>
-          </article>
-        ))}
-        <div className="apologetics-debate-dots" aria-hidden="true"><i></i><i></i><i></i></div>
-      </section>
+      <div className="chat-thread apologetics-debate-chat-thread" ref={threadRef} aria-label="Debate conversation">
+        {messages.map((message, index) => <AiMessage key={`${message.role}-${index}-${message.text}`} message={message} bridge={bridge} />)}
+      </div>
 
-      <form className="apologetics-debate-composer" onSubmit={sendMessage}>
-        <span aria-hidden="true">◯</span>
-        <input value={draft} onChange={(event) => setDraft(event.target.value)} placeholder="Type your response..." aria-label="Type your response" disabled={pending} />
-        <button type="submit" aria-label="Send response" disabled={pending}>➤</button>
+      <form className="composer apologetics-debate-composer" onSubmit={sendMessage}>
+        <textarea value={draft} onChange={(event) => setDraft(event.target.value)} rows="1" placeholder="Type your response..." aria-label="Type your response" disabled={pending} />
+        <button type="submit" aria-label="Send response" disabled={pending}><AiIcon name="send" /></button>
       </form>
     </div>
   );
