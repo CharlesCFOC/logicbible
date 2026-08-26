@@ -22,13 +22,13 @@ export function AiIcon({ name }) {
   );
 }
 
-export function AiMessage({ message, bridge, formatText }) {
+export function AiMessage({ message, bridge, formatText, pendingLabel = "Brother AI is thinking..." }) {
   if (message.role === "user") return <article className="message user-message"><p>{message.text}</p></article>;
   const messageId = bridge.messageId(message.text);
   return (
     <article className="message ai-message" data-ai-message-id={messageId}>
       <div className="ai-message-stack">
-        <div className={`message-body rich-text${message.pending ? " shining-text" : ""}`} dangerouslySetInnerHTML={{ __html: message.pending ? "Brother AI is thinking..." : (formatText ? formatText(message.text) : bridge.format(message.text)) }} />
+        <div className={`message-body rich-text${message.pending ? " shining-text" : ""}`} dangerouslySetInnerHTML={{ __html: message.pending ? pendingLabel : (formatText ? formatText(message.text) : bridge.format(message.text)) }} />
         {!message.pending && (
           <div className="ai-message-actions">
             <button type="button" className="ai-action-button" onClick={() => bridge.copy(message.text)} aria-label="Copy response" title="Copy"><AiIcon name="copy" /></button>

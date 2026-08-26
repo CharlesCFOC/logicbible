@@ -320,7 +320,7 @@ function DebateRoomView({ theme, question, difficulty, factCheck, onBack }) {
       </div>
 
       <div className="chat-thread apologetics-debate-chat-thread" ref={threadRef} aria-label="Debate conversation">
-        {messages.map((message, index) => <AiMessage key={`${message.role}-${index}-${message.text}`} message={message} bridge={bridge} formatText={formatDebateText} />)}
+        {messages.map((message, index) => <AiMessage key={`${message.role}-${index}-${message.text}`} message={message} bridge={bridge} formatText={formatDebateText} pendingLabel="Your debat partner is thinking..." />)}
       </div>
 
     </div>
