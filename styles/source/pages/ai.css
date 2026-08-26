@@ -1,5 +1,10 @@
 /* pages/ai.css */
 
+/* Rotating AI prompts should stay secondary to the user's message. */
+.ai-screen .composer textarea::placeholder {
+  font-size: 13px;
+}
+
 /* AI composer: squared input and a clearly visible send control. */
 .app-shell[data-app-background="black"] .ai-screen .composer {
   gap: 8px !important;
