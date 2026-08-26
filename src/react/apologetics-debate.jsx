@@ -102,9 +102,7 @@ export function ApologeticsDebatePage() {
       <header className="apologetics-debate-header">
         <button className="apologetics-debate-back" type="button" onClick={goBack} aria-label="Back to Apologetics">←</button>
         <div>
-          <span className="eyebrow">Debat room</span>
-          <h1>Program your room</h1>
-          <p>Choose a theme and a central question to guide the conversation.</p>
+          <h1>Debat room</h1>
         </div>
       </header>
 
