@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const debateThemes = [
   {
@@ -97,6 +97,12 @@ function DebateRoomView({ theme, question, onBack }) {
   ]);
   const [draft, setDraft] = useState("");
   const [pending, setPending] = useState(false);
+
+  useEffect(() => {
+    const appShell = document.querySelector(".app-shell");
+    appShell?.classList.add("is-debate-room");
+    return () => appShell?.classList.remove("is-debate-room");
+  }, []);
 
   const sendMessage = async (event) => {
     event.preventDefault();

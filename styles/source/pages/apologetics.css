@@ -1951,6 +1951,14 @@
   color: #ffffff;
 }
 
+.app-shell.is-debate-room .bottom-nav {
+  display: none;
+}
+
+.app-shell.is-debate-room .apologetics-debate-screen {
+  padding-bottom: 24px;
+}
+
 .apologetics-debate-room-header {
   position: relative;
   display: grid;
