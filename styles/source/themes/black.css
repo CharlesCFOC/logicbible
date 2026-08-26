@@ -82,7 +82,7 @@ html:has(.app-shell[data-app-background="black"]) {
 
 .app-shell[data-app-background="black"] .reader-screen .reader-select-label select {
   border-color: rgba(170, 215, 238, 0.42) !important;
-  background: rgba(54, 82, 103, 0.7) !important;
+  background: rgba(54, 82, 103, 0.85) !important;
   background-image: none !important;
   -webkit-backdrop-filter: blur(36px) saturate(135%) !important;
   backdrop-filter: blur(36px) saturate(135%) !important;
@@ -105,7 +105,7 @@ html:has(.app-shell[data-app-background="black"]) {
 .app-shell[data-app-background="black"] .reader-screen .parallel-toggle,
 .app-shell[data-app-background="black"] .reader-screen .parallel-toggle:hover {
   border-color: rgba(139, 220, 255, 0.32) !important;
-  background: rgba(18, 43, 59, 0.7) !important;
+  background: rgba(18, 43, 59, 0.85) !important;
   background-image: none !important;
   -webkit-backdrop-filter: blur(36px) saturate(135%) !important;
   backdrop-filter: blur(36px) saturate(135%) !important;
@@ -116,7 +116,7 @@ html:has(.app-shell[data-app-background="black"]) {
 .app-shell[data-app-background="black"] .reader-screen .parallel-toggle.is-active,
 .app-shell[data-app-background="black"] .reader-screen .parallel-toggle.is-active:hover {
   border-color: rgba(139, 220, 255, 0.72) !important;
-  background: rgba(76, 153, 194, 0.7) !important;
+  background: rgba(76, 153, 194, 0.85) !important;
   background-image: none !important;
   -webkit-backdrop-filter: blur(36px) saturate(135%) !important;
   backdrop-filter: blur(36px) saturate(135%) !important;
