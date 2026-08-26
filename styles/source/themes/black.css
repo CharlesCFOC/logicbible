@@ -23,6 +23,12 @@ html:has(.app-shell[data-app-background="black"]) {
   color: #fff !important;
 }
 
+.app-shell[data-app-background="black"] .reader-screen .reader-topbar {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
 .app-shell[data-app-background="black"] .phone-frame {
   overflow: hidden;
   background:
