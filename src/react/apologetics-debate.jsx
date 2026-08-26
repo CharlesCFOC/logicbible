@@ -139,7 +139,7 @@ function DebateRoomView({ theme, question, onBack }) {
   const bridge = window.aiBridge;
   const initialMessages = [
     { role: "assistant", text: question || generalQuestion },
-    { role: "assistant", text: "Take your time, make your best case, and I’ll help you sharpen the answer." },
+    { role: "assistant", text: "I’ll take the opposing side. Make your best case, and I’ll challenge it fairly." },
   ];
   const [messages, setMessages] = useState(() => readDebateConversation(theme, question) || initialMessages);
   const [draft, setDraft] = useState("");
@@ -218,7 +218,7 @@ function DebateRoomView({ theme, question, onBack }) {
     setDraft("");
     setPending(true);
     try {
-      const context = `You are the AI debate partner in a Christian apologetics debate room. Debate theme: ${theme?.label || "General"}. Central question: ${question || generalQuestion}. Give a clear, respectful, evidence-based response that helps the user practice apologetics.`;
+      const context = `You are the user's respectful but serious opponent in a Christian apologetics debate room. Debate theme: ${theme?.label || "General"}. Central question: ${question || generalQuestion}. Your role is to try to defeat the user's position: identify assumptions, expose weaknesses, ask precise follow-up questions, and present the strongest reasonable counter-argument. Respond directly to the user's latest argument and keep the debate moving. Do not agree just to be encouraging. However, if the user's point is logically strong, well-supported, or difficult to refute, explicitly acknowledge that strength before continuing. Never invent evidence or Bible quotations. Stay charitable, calm, and intellectually honest. Do not give a complete replacement answer for the user; make the user defend and improve their own case.`;
       const responseText = await bridge.sendDebate(`${context}\n\nUser response: ${text}`, history);
       setMessages((current) => [...current.slice(0, -1), { role: "assistant", text: responseText }]);
     } catch (error) {
