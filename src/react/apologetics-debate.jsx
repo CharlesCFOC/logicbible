@@ -161,6 +161,7 @@ function DebateRoomView({ theme, question, difficulty, factCheck, onBack }) {
   const [betterAnswerLoading, setBetterAnswerLoading] = useState(false);
   const [betterAnswerText, setBetterAnswerText] = useState("");
   const [roomFactCheck, setRoomFactCheck] = useState(factCheck);
+  const [confidenceOpen, setConfidenceOpen] = useState(false);
   const threadRef = useRef(null);
 
   useEffect(() => {
@@ -297,9 +298,18 @@ function DebateRoomView({ theme, question, difficulty, factCheck, onBack }) {
       </div>
 
       <section className="apologetics-debate-progress" aria-label="Debate progress">
-        <div className="apologetics-debate-progress-ring">72%</div>
-        <div><strong>Confidence</strong><p>Keep going! You’re building stronger answers.</p></div>
-        <div className="apologetics-debate-level"><strong>Level 3</strong><span>120 / 200 XP</span><i><b></b></i></div>
+        <button className="apologetics-debate-progress-main" type="button" onClick={() => setConfidenceOpen((current) => !current)} aria-expanded={confidenceOpen}>
+          <div className="apologetics-debate-progress-ring">50%</div>
+          <div><strong>Confidence</strong><p>Neutral starting point. Build your case.</p></div>
+          <div className="apologetics-debate-level"><strong>Level 1</strong><span>0 / 100 XP</span><i><b></b></i></div>
+        </button>
+        {confidenceOpen && (
+          <div className="apologetics-debate-confidence-journal">
+            <div className="apologetics-debate-confidence-journal-heading"><strong>Score journal</strong><span>Tap the card to close</span></div>
+            <div className="apologetics-debate-confidence-entry"><b>50%</b><div><strong>Neutral baseline</strong><p>Every debate starts here. Your score changes as your answers are evaluated.</p></div></div>
+            <div className="apologetics-debate-confidence-criteria"><span>Logic</span><span>Evidence</span><span>Clarity</span><span>Response</span></div>
+          </div>
+        )}
       </section>
 
       <div className="apologetics-debate-carousel" aria-label="Debate context and tools">
