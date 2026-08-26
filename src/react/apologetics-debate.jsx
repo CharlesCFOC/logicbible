@@ -296,9 +296,6 @@ function DebateRoomView({ theme, question, difficulty, factCheck, onBack }) {
           <span>Theme: <strong>{theme?.label || "General"}</strong></span>
           <span>Question: <strong>{question || generalQuestion}</strong></span>
         </div>
-        <button type="button" className={roomFactCheck ? "is-on" : ""} onClick={() => setRoomFactCheck((current) => !current)} aria-pressed={roomFactCheck}>
-          Fact-check <b>{roomFactCheck ? "On" : "Off"}</b>
-        </button>
       </div>
 
       <section className="apologetics-debate-progress" aria-label="Debate progress">
@@ -312,6 +309,7 @@ function DebateRoomView({ theme, question, difficulty, factCheck, onBack }) {
           <button type="button" onClick={openHints}><span>♧</span><strong>Hints</strong><b>›</b></button>
           <button type="button" onClick={openVerseSupport}><span>▢</span><strong>Verse support</strong><b>›</b></button>
           <button type="button" onClick={openBetterAnswer}><span>☆</span><strong>Better answer</strong><b>›</b></button>
+          <button className={roomFactCheck ? "is-on" : ""} type="button" onClick={() => setRoomFactCheck((current) => !current)} aria-pressed={roomFactCheck}><span>✓</span><strong>Fact-check</strong><b>{roomFactCheck ? "On" : "Off"}</b></button>
         </div>
       </div>
 

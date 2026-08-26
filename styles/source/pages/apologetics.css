@@ -2254,6 +2254,8 @@
 
 .apologetics-debate-tools button:nth-child(2) { background: linear-gradient(135deg, #2ed4e9, #2866ee); }
 .apologetics-debate-tools button:nth-child(3) { background: linear-gradient(135deg, #ffbd58, #ed5e6f); }
+.apologetics-debate-tools button:nth-child(4) { background: linear-gradient(135deg, #596777, #263b4d); }
+.apologetics-debate-tools button:nth-child(4).is-on { background: linear-gradient(135deg, #55e9a0, #078c62); }
 .apologetics-debate-tools button strong { font-size: 11px; }
 .apologetics-debate-tools button b { grid-column: 3; font-size: 22px; }
 
