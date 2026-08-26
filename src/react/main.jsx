@@ -55,8 +55,14 @@ function BottomNavigation() {
     }
   };
 
+  const triggerNavigationHaptic = (event) => {
+    if (event.pointerType === "touch") {
+      navigator.vibrate?.(8);
+    }
+  };
+
   return navigationItems.map(([id, label, icon]) => (
-    <button key={id} className={activeScreen === id ? "is-active" : ""} data-nav={id} type="button" onClick={() => navigate(id)}>
+    <button key={id} className={activeScreen === id ? "is-active" : ""} data-nav={id} type="button" onPointerDown={triggerNavigationHaptic} onClick={() => navigate(id)}>
       <NavigationIcon name={icon} />
       <span>{label}</span>
     </button>

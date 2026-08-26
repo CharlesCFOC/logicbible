@@ -457,6 +457,12 @@
   color: rgba(118, 107, 96, 0.88);
   font-size: 8.5px;
   font-weight: 700;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 100ms ease;
+}
+
+.bottom-nav button:active {
+  transform: scale(0.96);
 }
 
 .bottom-nav button.is-active {
