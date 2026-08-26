@@ -185,9 +185,7 @@ function DebateRoomView({ theme, question, onBack }) {
     }
   };
 
-  const sendMessage = async (event) => {
-    event.preventDefault();
-    const text = draft.trim();
+  const sendText = async (text) => {
     if (!text || pending || !bridge) return;
     const history = messages.filter((message) => !message.pending).slice(-24);
     setMessages((current) => [
@@ -207,6 +205,16 @@ function DebateRoomView({ theme, question, onBack }) {
       setPending(false);
     }
   };
+
+  const sendMessage = async (event) => {
+    event.preventDefault();
+    const text = draft.trim();
+    if (!text) return;
+    setDraft("");
+    await sendText(text);
+  };
+
+  const verseBlocks = verseSupportText.split(/(?=\b\d+\.\s)/).map((block) => block.trim()).filter(Boolean);
 
   return (
     <>
@@ -261,7 +269,12 @@ function DebateRoomView({ theme, question, onBack }) {
               <h2 id="verse-support-title">Verse support</h2>
               <p className="apologetics-debate-verse-intro">Passages connected to your question and recent discussion.</p>
               <div className="apologetics-debate-verse-results">
-                {verseSupportLoading ? <p className="apologetics-debate-verse-loading">Brother AI is finding relevant passages...</p> : <div className="rich-text" dangerouslySetInnerHTML={{ __html: bridge.format(verseSupportText) }} />}
+                {verseSupportLoading ? <p className="apologetics-debate-verse-loading shining-text">Brother AI is finding relevant passages...</p> : verseBlocks.map((verse, index) => (
+                  <article className="apologetics-debate-verse-item" key={`${verse.slice(0, 30)}-${index}`}>
+                    <div className="rich-text" dangerouslySetInnerHTML={{ __html: bridge.format(verse) }} />
+                    <button type="button" onClick={() => { setVerseSupportOpen(false); sendText(`Use this Bible passage in our debate and help me apply it:\n\n${verse}`); }}>Use in debate</button>
+                  </article>
+                ))}
               </div>
             </section>
           </div>

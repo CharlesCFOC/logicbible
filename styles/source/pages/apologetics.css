@@ -2283,6 +2283,22 @@
 .apologetics-debate-verse-results .rich-text h3,
 .apologetics-debate-verse-results .rich-text strong { color: #a8e5ff !important; }
 .apologetics-debate-verse-loading { margin: 0; color: rgba(235, 248, 255, 0.82); font-size: 12px; }
+.apologetics-debate-verse-item + .apologetics-debate-verse-item {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+.apologetics-debate-verse-item button {
+  min-height: 34px;
+  margin-top: 10px;
+  padding: 0 12px;
+  border: 1px solid rgba(168, 229, 255, 0.6);
+  border-radius: 12px;
+  background: rgba(60, 157, 204, 0.42);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 800;
+}
 
 .app-shell.is-debate-room .apologetics-debate-composer textarea {
   min-height: 58px;
