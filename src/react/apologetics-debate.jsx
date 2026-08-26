@@ -136,7 +136,6 @@ function DebateRoomView({ theme, question, onBack }) {
           <p>Practice real conversations with AI.</p>
           <small>{theme?.label || "General"} · {question || generalQuestion}</small>
         </div>
-        <span className="apologetics-debate-ai-badge">✦ AI powered</span>
       </header>
 
       <div className="apologetics-debate-carousel" aria-label="Debate context and tools">

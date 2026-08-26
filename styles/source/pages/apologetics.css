@@ -2004,23 +2004,6 @@
   white-space: nowrap;
 }
 
-.apologetics-debate-ai-badge {
-  position: absolute;
-  top: 18px;
-  right: 0;
-  max-width: 108px;
-  overflow: hidden;
-  align-self: center;
-  padding: 10px 12px;
-  border: 1px solid rgba(255, 166, 224, 0.72);
-  border-radius: 22px;
-  background: linear-gradient(135deg, #ff6f91, #c238d4);
-  color: #ffffff;
-  font-size: 11px;
-  font-weight: 800;
-  white-space: nowrap;
-}
-
 .apologetics-debate-carousel {
   display: flex;
   gap: 8px;
