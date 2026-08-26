@@ -2032,6 +2032,8 @@
 .apologetics-debate-context-card--question { flex-basis: 218px; background: linear-gradient(135deg, #2dd5e9, #3567ff); }
 .apologetics-debate-context-card small {
   color: #ffffff !important;
+  opacity: 1 !important;
+  -webkit-text-fill-color: #ffffff !important;
   font-size: 9px;
   font-weight: 900;
   letter-spacing: 0.08em;
