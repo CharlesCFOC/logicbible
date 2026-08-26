@@ -88,7 +88,7 @@ html:has(.app-shell[data-app-background="black"]) {
 .app-shell[data-app-background="black"] .reader-screen .parallel-toggle:hover {
   border-color: rgba(139, 220, 255, 0.32) !important;
   background: rgba(18, 43, 59, 0.78) !important;
-  background-image: linear-gradient(180deg, rgba(53, 91, 116, 0.42), rgba(10, 27, 39, 0.78)) !important;
+  background-image: none !important;
   -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
   backdrop-filter: blur(18px) saturate(135%) !important;
   color: #ffffff !important;
@@ -99,7 +99,7 @@ html:has(.app-shell[data-app-background="black"]) {
 .app-shell[data-app-background="black"] .reader-screen .parallel-toggle.is-active:hover {
   border-color: rgba(139, 220, 255, 0.72) !important;
   background: rgba(76, 153, 194, 0.48) !important;
-  background-image: linear-gradient(180deg, rgba(125, 210, 247, 0.3), rgba(33, 87, 116, 0.5)) !important;
+  background-image: none !important;
   -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
   backdrop-filter: blur(18px) saturate(135%) !important;
   color: #9edcff !important;
