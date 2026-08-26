@@ -91,6 +91,7 @@ const debateThemes = [
 
 const generalQuestion = "What is the strongest reason to believe the Christian message is true?";
 const debateConversationTtl = 30 * 24 * 60 * 60 * 1000;
+const debateDifficulties = ["Beginner", "Intermediate", "Advanced", "Hostile"];
 
 function getDebateConversationKey(theme, question) {
   return `brother.debateConversation.${theme?.id || "general"}.${encodeURIComponent(question || generalQuestion)}`;
@@ -109,9 +110,9 @@ function readDebateConversation(theme, question) {
   }
 }
 
-function saveDebateConversation(theme, question, messages) {
+function saveDebateConversation(theme, question, messages, difficulty = "Intermediate", factCheck = false) {
   const cleanMessages = messages.filter((message) => !message.pending && message.text).slice(-40);
-  localStorage.setItem(getDebateConversationKey(theme, question), JSON.stringify({ themeId: theme?.id, question, updatedAt: Date.now(), messages: cleanMessages }));
+  localStorage.setItem(getDebateConversationKey(theme, question), JSON.stringify({ themeId: theme?.id, question, difficulty, factCheck, updatedAt: Date.now(), messages: cleanMessages }));
 }
 
 function getLatestDebateConversation() {
@@ -135,7 +136,7 @@ function getLatestDebateConversation() {
   return latest;
 }
 
-function DebateRoomView({ theme, question, onBack }) {
+function DebateRoomView({ theme, question, difficulty, factCheck, onBack }) {
   const bridge = window.aiBridge;
   const initialMessages = [
     { role: "assistant", text: question || generalQuestion },
@@ -150,6 +151,7 @@ function DebateRoomView({ theme, question, onBack }) {
   const [hintsOpen, setHintsOpen] = useState(false);
   const [hintsLoading, setHintsLoading] = useState(false);
   const [hintsText, setHintsText] = useState("");
+  const [roomFactCheck, setRoomFactCheck] = useState(factCheck);
   const threadRef = useRef(null);
 
   useEffect(() => {
@@ -160,8 +162,8 @@ function DebateRoomView({ theme, question, onBack }) {
 
   useEffect(() => {
     if (threadRef.current) threadRef.current.scrollTop = threadRef.current.scrollHeight;
-    saveDebateConversation(theme, question, messages);
-  }, [messages]);
+    saveDebateConversation(theme, question, messages, difficulty, roomFactCheck);
+  }, [messages, roomFactCheck]);
 
   useEffect(() => {
     if (!verseSupportOpen && !hintsOpen) return undefined;
@@ -218,7 +220,8 @@ function DebateRoomView({ theme, question, onBack }) {
     setDraft("");
     setPending(true);
     try {
-      const context = `You are the user's respectful but serious opponent in a Christian apologetics debate room. Debate theme: ${theme?.label || "General"}. Central question: ${question || generalQuestion}. Your role is to try to defeat the user's position: identify assumptions, expose weaknesses, ask precise follow-up questions, and present the strongest reasonable counter-argument. Respond directly to the user's latest argument and keep the debate moving. Do not agree just to be encouraging. However, if the user's point is logically strong, well-supported, or difficult to refute, explicitly acknowledge that strength before continuing. Never invent evidence or Bible quotations. Stay charitable, calm, and intellectually honest. Do not give a complete replacement answer for the user; make the user defend and improve their own case.`;
+      const factCheckInstruction = roomFactCheck ? "Wrap any claim you believe is false, invented, or needs verification in [[FACT]] and [[/FACT]] markers so the app can highlight it." : "Do not use fact-check markers.";
+      const context = `You are the user's respectful but serious opponent in a Christian apologetics debate room. Debate theme: ${theme?.label || "General"}. Central question: ${question || generalQuestion}. Difficulty: ${difficulty}. ${difficulty === "Hostile" ? "You may use plausible but intentionally flawed objections, but never fabricate a Bible quotation." : "Keep objections accurate and fair."} Your role is to try to defeat the user's position: identify assumptions, expose weaknesses, ask precise follow-up questions, and present the strongest reasonable counter-argument. Respond directly to the user's latest argument and keep the debate moving. Do not agree just to be encouraging. However, if the user's point is logically strong, well-supported, or difficult to refute, explicitly acknowledge that strength before continuing. Never invent evidence or Bible quotations. Stay charitable, calm, and intellectually honest. Do not give a complete replacement answer for the user; make the user defend and improve their own case. ${factCheckInstruction}`;
       const responseText = await bridge.sendDebate(`${context}\n\nUser response: ${text}`, history);
       setMessages((current) => [...current.slice(0, -1), { role: "assistant", text: responseText }]);
     } catch (error) {
@@ -238,6 +241,12 @@ function DebateRoomView({ theme, question, onBack }) {
 
   const verseBlocks = verseSupportText.split(/(?=\b\d+\.\s)/).map((block) => block.trim()).filter(Boolean);
   const hintBlocks = hintsText.split(/(?=\b\d+\.\s)/).map((block) => block.trim()).filter(Boolean);
+  const formatDebateText = (text) => {
+    const html = bridge.format(text);
+    return roomFactCheck
+      ? html.replace(/\[\[FACT\]\]([\s\S]*?)\[\[\/FACT\]\]/g, '<mark class="debate-fact-check">$1</mark>')
+      : html.replace(/\[\[FACT\]\]|\[\[\/FACT\]\]/g, "");
+  };
 
   return (
     <>
@@ -250,6 +259,13 @@ function DebateRoomView({ theme, question, onBack }) {
           <small>{theme?.label || "General"} · {question || generalQuestion}</small>
         </div>
       </header>
+
+      <div className="apologetics-debate-room-settings">
+        <span>Difficulty: <strong>{difficulty}</strong></span>
+        <button type="button" className={roomFactCheck ? "is-on" : ""} onClick={() => setRoomFactCheck((current) => !current)} aria-pressed={roomFactCheck}>
+          Fact-check <b>{roomFactCheck ? "On" : "Off"}</b>
+        </button>
+      </div>
 
       <section className="apologetics-debate-progress" aria-label="Debate progress">
         <div className="apologetics-debate-progress-ring">72%</div>
@@ -274,7 +290,7 @@ function DebateRoomView({ theme, question, onBack }) {
       </div>
 
       <div className="chat-thread apologetics-debate-chat-thread" ref={threadRef} aria-label="Debate conversation">
-        {messages.map((message, index) => <AiMessage key={`${message.role}-${index}-${message.text}`} message={message} bridge={bridge} />)}
+        {messages.map((message, index) => <AiMessage key={`${message.role}-${index}-${message.text}`} message={message} bridge={bridge} formatText={formatDebateText} />)}
       </div>
 
     </div>
@@ -330,6 +346,8 @@ function DebateRoomView({ theme, question, onBack }) {
 export function ApologeticsDebatePage() {
   const [themeId, setThemeId] = useState("");
   const [question, setQuestion] = useState("");
+  const [difficulty, setDifficulty] = useState("Intermediate");
+  const [factCheck, setFactCheck] = useState(false);
   const [isRoomOpen, setIsRoomOpen] = useState(false);
   const [savedDebate, setSavedDebate] = useState(() => getLatestDebateConversation());
   const theme = debateThemes.find((item) => item.id === themeId);
@@ -338,7 +356,7 @@ export function ApologeticsDebatePage() {
   const questions = theme ? [generalQuestion, ...theme.questions] : [];
 
   if (isRoomOpen) {
-    return <DebateRoomView theme={theme} question={question} onBack={() => { setSavedDebate(getLatestDebateConversation()); setIsRoomOpen(false); }} />;
+    return <DebateRoomView theme={theme} question={question} difficulty={difficulty} factCheck={factCheck} onBack={() => { setSavedDebate(getLatestDebateConversation()); setIsRoomOpen(false); }} />;
   }
 
   return (
@@ -364,6 +382,10 @@ export function ApologeticsDebatePage() {
               {item.label}
             </button>
           ))}
+        </div>
+        <div className="apologetics-debate-setup-settings">
+          <div><span>Difficulty</span><div className="apologetics-debate-difficulty-list">{debateDifficulties.map((level) => <button className={difficulty === level ? "is-selected" : ""} type="button" key={level} onClick={() => setDifficulty(level)}>{level}</button>)}</div></div>
+          <button className={`apologetics-debate-fact-toggle${factCheck ? " is-on" : ""}`} type="button" onClick={() => setFactCheck((current) => !current)} aria-pressed={factCheck}>Fact-check <b>{factCheck ? "On" : "Off"}</b></button>
         </div>
       </section>
 
@@ -398,6 +420,8 @@ export function ApologeticsDebatePage() {
           if (!savedTheme) return;
           setThemeId(savedTheme.id);
           setQuestion(savedDebate.question || generalQuestion);
+          setDifficulty(savedDebate.difficulty || "Intermediate");
+          setFactCheck(Boolean(savedDebate.factCheck));
           setIsRoomOpen(true);
         }}>
           Continuer mon debat
