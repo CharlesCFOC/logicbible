@@ -6354,6 +6354,10 @@ document.querySelectorAll("[data-apologetics-coach]").forEach((button) => {
   button.addEventListener("click", () => launchApologeticsCoach(button.dataset.apologeticsCoach));
 });
 
+document.querySelectorAll("[data-apologetics-room='debate']").forEach((button) => {
+  button.addEventListener("click", () => setScreen("apologetics-debate"));
+});
+
 document.querySelectorAll("[data-apologetics-copy]").forEach((button) => {
   button.addEventListener("click", copyApologeticsShortAnswer);
 });

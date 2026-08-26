@@ -7,6 +7,7 @@ import { NoteEditorContent, NoteEditorHeader, NoteEditorVerseChips, NoteToolbar 
 import { PrayerPage } from "./prayer.jsx";
 import { AiPage } from "./ai.jsx";
 import { KidsBiblePage } from "./kids-bible.jsx";
+import { ApologeticsDebatePage } from "./apologetics-debate.jsx";
 
 const navigationItems = [
   ["home", "Home", "home"],
@@ -194,4 +195,9 @@ if (aiNode && window.aiBridge) {
 const kidsBibleNode = document.querySelector("[data-react-kids-bible-root]");
 if (kidsBibleNode && window.kidsBibleBridge) {
   createRoot(kidsBibleNode).render(<KidsBiblePage />);
+}
+
+const apologeticsDebateNode = document.querySelector("[data-react-apologetics-debate-root]");
+if (apologeticsDebateNode) {
+  createRoot(apologeticsDebateNode).render(<ApologeticsDebatePage />);
 }
