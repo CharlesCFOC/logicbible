@@ -325,7 +325,7 @@ const prayerState = {
   requests: cleanedPrayerRequests,
   tab: "all",
   sort: "most",
-  filter: "general",
+  filter: "all",
   pageTab: "board",
   myWallExpanded: false,
 };
@@ -1587,7 +1587,7 @@ function renderPrayerPage() {
         if (!isOwnRequest) return false;
       }
       if (prayerState.pageTab === "board") {
-        return (request.category || "general") === prayerState.filter;
+        return prayerState.filter === "all" || (request.category || "general") === prayerState.filter;
       }
       return true;
     })
@@ -6840,7 +6840,7 @@ window.prayerBridge = {
           if (!isOwnRequest) return false;
         }
         if (prayerState.pageTab === "board") {
-          return (request.category || "general") === prayerState.filter;
+          return prayerState.filter === "all" || (request.category || "general") === prayerState.filter;
         }
         return true;
       })
@@ -6875,7 +6875,7 @@ window.prayerBridge = {
     renderPrayerPage();
   },
   setFilter(filter) {
-    prayerState.filter = ["general", "family", "health", "work", "faith", "other"].includes(filter) ? filter : "general";
+    prayerState.filter = ["all", "general", "family", "health", "work", "faith", "other"].includes(filter) ? filter : "all";
     renderPrayerPage();
   },
   setSort(sort) {
@@ -6967,7 +6967,7 @@ window.prayerBridge = {
     selectedPrayerBackgroundIndex = 0;
     prayerState.pageTab = "request";
     prayerState.myWallExpanded = true;
-    prayerState.filter = "general";
+    prayerState.filter = "all";
     prayerBridgeFeedback = "Your request was shared anonymously.";
     prayerBridgeSent = true;
     window.setTimeout(() => {

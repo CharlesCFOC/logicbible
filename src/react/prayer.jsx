@@ -8,6 +8,7 @@ const categories = [
   ["faith", "Faith"],
   ["other", "Other"],
 ];
+const filterCategories = [["all", "All"], ...categories];
 
 const backgrounds = [1, 2, 3, 4, 5, 6];
 
@@ -41,7 +42,7 @@ function usePrayerState() {
 function PrayerCategories({ active, onChange, filter = false }) {
   return (
     <div className={filter ? "prayer-filter-row prayer-category-picker" : "prayer-category-picker"} role="group" aria-label="Prayer categories">
-      {categories.map(([id, label]) => (
+      {(filter ? filterCategories : categories).map(([id, label]) => (
         <button className={active === id ? "is-active" : ""} key={id} type="button" onClick={() => onChange(id)}>
           {label}
         </button>
