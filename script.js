@@ -2883,7 +2883,7 @@ function setScreen(id) {
     button.classList.toggle("is-active", button.dataset.nav === activeNavId);
   });
 
-  if (id.startsWith("apologetics")) {
+  if (id.startsWith("apologetics") && id !== "apologetics" && id !== "apologetics-debate") {
     renderApologetics();
     if (sessionStorage.getItem(apologeticsGateSessionKey) !== "true" && apologeticsGate) {
       apologeticsGate.hidden = false;
