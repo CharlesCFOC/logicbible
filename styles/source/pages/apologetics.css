@@ -2230,10 +2230,11 @@
 
 /* Match the full-width mobile AI composer; the debate room has no bottom nav. */
 .app-shell.is-debate-room .apologetics-debate-composer {
+  position: absolute !important;
   right: 0;
-  bottom: 14px;
+  bottom: 0;
   left: 0;
-  width: 100vw;
+  width: 100%;
   transform: none;
   padding: 10px 18px;
 }

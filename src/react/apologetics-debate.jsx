@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { createPortal, useEffect, useRef, useState } from "react";
 import { AiIcon, AiMessage } from "./ai.jsx";
 
 const debateThemes = [
@@ -134,6 +134,7 @@ function DebateRoomView({ theme, question, onBack }) {
   };
 
   return (
+    <>
     <div className="apologetics-debate-room">
       <header className="apologetics-debate-room-header">
         <button className="apologetics-debate-room-back" type="button" onClick={onBack} aria-label="Back to debate setup">←</button>
@@ -170,11 +171,15 @@ function DebateRoomView({ theme, question, onBack }) {
         {messages.map((message, index) => <AiMessage key={`${message.role}-${index}-${message.text}`} message={message} bridge={bridge} />)}
       </div>
 
+    </div>
+    {createPortal(
       <form className="composer apologetics-debate-composer" onSubmit={sendMessage}>
         <textarea value={draft} onChange={(event) => setDraft(event.target.value)} rows="1" placeholder="Type your response..." aria-label="Type your response" disabled={pending} />
         <button type="submit" aria-label="Send response" disabled={pending}><AiIcon name="send" /></button>
-      </form>
-    </div>
+      </form>,
+      document.querySelector(".phone-frame"),
+    )}
+    </>
   );
 }
 
