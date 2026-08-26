@@ -107,7 +107,6 @@ export function KidsBiblePage() {
     <>
       <header className="kids-bible-header">
         <div>
-          <span className="eyebrow">For curious hearts</span>
           <h1>Kids Bible</h1>
         </div>
       </header>
