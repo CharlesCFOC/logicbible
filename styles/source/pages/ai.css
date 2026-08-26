@@ -402,8 +402,10 @@
 }
 
 .ai-topbar .icon-button {
-  flex: 0 0 auto;
-  margin-left: auto;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
 }
 
 .ai-topbar span {

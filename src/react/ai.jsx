@@ -8,6 +8,12 @@ const aiIcons = {
   arrow: ["M5 19 19 5", "M9 5h10v10"],
 };
 
+const aiComposerPrompts = [
+  "Tu as une question ?",
+  "Tu cherches un verset ?",
+  "Tu veux comparer le sens d’un mot ?",
+];
+
 function AiIcon({ name }) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -41,8 +47,22 @@ export function AiPage() {
   const [messages, setMessages] = useState(initial.messages);
   const [histories, setHistories] = useState(initial.histories);
   const [prompt, setPrompt] = useState("");
+  const [promptIndex, setPromptIndex] = useState(0);
+  const [promptFading, setPromptFading] = useState(false);
   const [pending, setPending] = useState(false);
   const threadRef = useRef(null);
+
+  useEffect(() => {
+    if (prompt.trim()) return undefined;
+    const timer = window.setInterval(() => {
+      setPromptFading(true);
+      window.setTimeout(() => {
+        setPromptIndex((current) => (current + 1) % aiComposerPrompts.length);
+        setPromptFading(false);
+      }, 260);
+    }, 2000);
+    return () => window.clearInterval(timer);
+  }, [prompt]);
 
   useEffect(() => {
     const handleChange = () => {
@@ -123,7 +143,7 @@ export function AiPage() {
         <p className="ai-history-retention">Conversations are saved for 24 hours after your last message.</p>
       </section>
       <form className="composer" onSubmit={send}>
-        <textarea value={prompt} onChange={(event) => setPrompt(event.target.value)} rows="1" placeholder="Ask Brother AI..." aria-label="Message Brother AI" />
+        <textarea className={promptFading ? "is-placeholder-fading" : ""} value={prompt} onChange={(event) => setPrompt(event.target.value)} rows="1" placeholder={aiComposerPrompts[promptIndex]} aria-label="Message Brother AI" />
         <button type="submit" disabled={pending} aria-label="Send message"><AiIcon name="send" /></button>
       </form>
     </>
