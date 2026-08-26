@@ -111,7 +111,28 @@ function readDebateConversation(theme, question) {
 
 function saveDebateConversation(theme, question, messages) {
   const cleanMessages = messages.filter((message) => !message.pending && message.text).slice(-40);
-  localStorage.setItem(getDebateConversationKey(theme, question), JSON.stringify({ updatedAt: Date.now(), messages: cleanMessages }));
+  localStorage.setItem(getDebateConversationKey(theme, question), JSON.stringify({ themeId: theme?.id, question, updatedAt: Date.now(), messages: cleanMessages }));
+}
+
+function getLatestDebateConversation() {
+  let latest = null;
+  const expiredKeys = [];
+  for (let index = 0; index < localStorage.length; index += 1) {
+    const key = localStorage.key(index);
+    if (!key?.startsWith("brother.debateConversation.")) continue;
+    try {
+      const stored = JSON.parse(localStorage.getItem(key) || "null");
+      if (!stored?.messages?.length || Date.now() - Number(stored.updatedAt || 0) > debateConversationTtl) {
+        expiredKeys.push(key);
+        continue;
+      }
+      if (!latest || Number(stored.updatedAt) > Number(latest.updatedAt)) latest = stored;
+    } catch {
+      expiredKeys.push(key);
+    }
+  }
+  expiredKeys.forEach((key) => localStorage.removeItem(key));
+  return latest;
 }
 
 function DebateRoomView({ theme, question, onBack }) {
@@ -213,13 +234,14 @@ export function ApologeticsDebatePage() {
   const [themeId, setThemeId] = useState("");
   const [question, setQuestion] = useState("");
   const [isRoomOpen, setIsRoomOpen] = useState(false);
+  const [savedDebate, setSavedDebate] = useState(() => getLatestDebateConversation());
   const theme = debateThemes.find((item) => item.id === themeId);
 
   const goBack = () => window.appNavigate?.("apologetics");
   const questions = theme ? [generalQuestion, ...theme.questions] : [];
 
   if (isRoomOpen) {
-    return <DebateRoomView theme={theme} question={question} onBack={() => setIsRoomOpen(false)} />;
+    return <DebateRoomView theme={theme} question={question} onBack={() => { setSavedDebate(getLatestDebateConversation()); setIsRoomOpen(false); }} />;
   }
 
   return (
@@ -273,6 +295,17 @@ export function ApologeticsDebatePage() {
       <button className="apologetics-debate-launch" type="button" disabled={!theme || !question} onClick={() => setIsRoomOpen(true)}>
         Lancer le debat
       </button>
+      {savedDebate && (
+        <button className="apologetics-debate-continue" type="button" onClick={() => {
+          const savedTheme = debateThemes.find((item) => item.id === savedDebate.themeId);
+          if (!savedTheme) return;
+          setThemeId(savedTheme.id);
+          setQuestion(savedDebate.question || generalQuestion);
+          setIsRoomOpen(true);
+        }}>
+          Continuer mon debat
+        </button>
+      )}
     </div>
   );
 }

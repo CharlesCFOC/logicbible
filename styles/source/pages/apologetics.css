@@ -526,6 +526,17 @@
   opacity: 0.55;
 }
 
+.apologetics-debate-continue {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid rgba(158, 220, 255, 0.52);
+  border-radius: 16px;
+  background: rgba(54, 82, 103, 0.48);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+}
+
 .apologetics-debate-question-list {
   display: grid;
   gap: 8px;
