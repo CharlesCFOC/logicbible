@@ -381,6 +381,8 @@
   top: -28px;
   z-index: 4;
   display: flex;
+  width: calc(100% + 44px);
+  box-sizing: border-box;
   align-items: center;
   justify-content: space-between;
   gap: 14px;
