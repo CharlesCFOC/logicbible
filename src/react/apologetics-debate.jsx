@@ -147,6 +147,9 @@ function DebateRoomView({ theme, question, onBack }) {
   const [verseSupportOpen, setVerseSupportOpen] = useState(false);
   const [verseSupportLoading, setVerseSupportLoading] = useState(false);
   const [verseSupportText, setVerseSupportText] = useState("");
+  const [hintsOpen, setHintsOpen] = useState(false);
+  const [hintsLoading, setHintsLoading] = useState(false);
+  const [hintsText, setHintsText] = useState("");
   const threadRef = useRef(null);
 
   useEffect(() => {
@@ -161,13 +164,16 @@ function DebateRoomView({ theme, question, onBack }) {
   }, [messages]);
 
   useEffect(() => {
-    if (!verseSupportOpen) return undefined;
+    if (!verseSupportOpen && !hintsOpen) return undefined;
     const closeOnEscape = (event) => {
-      if (event.key === "Escape") setVerseSupportOpen(false);
+      if (event.key === "Escape") {
+        setVerseSupportOpen(false);
+        setHintsOpen(false);
+      }
     };
     document.addEventListener("keydown", closeOnEscape);
     return () => document.removeEventListener("keydown", closeOnEscape);
-  }, [verseSupportOpen]);
+  }, [verseSupportOpen, hintsOpen]);
 
   const openVerseSupport = async () => {
     setVerseSupportOpen(true);
@@ -182,6 +188,22 @@ function DebateRoomView({ theme, question, onBack }) {
       setVerseSupportText(error.message || "Unable to find verse support right now.");
     } finally {
       setVerseSupportLoading(false);
+    }
+  };
+
+  const openHints = async () => {
+    setHintsOpen(true);
+    setHintsLoading(true);
+    setHintsText("");
+    try {
+      const history = messages.filter((message) => !message.pending).slice(-8);
+      const context = `You are coaching a Christian apologetics debate. Theme: ${theme?.label || "General"}. Central question: ${question || generalQuestion}. Based on the recent discussion below, provide exactly 3 short, progressive hints to help the user build their own answer. Hint 1 should suggest an angle, hint 2 an argument or distinction, and hint 3 a useful biblical or historical direction. Do not write the complete answer. Number each hint clearly.\n\nRecent discussion:\n${history.map((message) => `${message.role}: ${message.text}`).join("\n")}`;
+      const responseText = await bridge.sendDebate(context, history);
+      setHintsText(responseText);
+    } catch (error) {
+      setHintsText(error.message || "Unable to find hints right now.");
+    } finally {
+      setHintsLoading(false);
     }
   };
 
@@ -215,6 +237,7 @@ function DebateRoomView({ theme, question, onBack }) {
   };
 
   const verseBlocks = verseSupportText.split(/(?=\b\d+\.\s)/).map((block) => block.trim()).filter(Boolean);
+  const hintBlocks = hintsText.split(/(?=\b\d+\.\s)/).map((block) => block.trim()).filter(Boolean);
 
   return (
     <>
@@ -244,7 +267,7 @@ function DebateRoomView({ theme, question, onBack }) {
           <strong>{question || generalQuestion}</strong>
         </div>
         <div className="apologetics-debate-tools" aria-label="Debate tools">
-          <button type="button" onClick={() => setDraft("Can you give me a helpful hint?")}><span>♧</span><strong>Hints</strong><b>›</b></button>
+          <button type="button" onClick={openHints}><span>♧</span><strong>Hints</strong><b>›</b></button>
           <button type="button" onClick={openVerseSupport}><span>▢</span><strong>Verse support</strong><b>›</b></button>
           <button type="button" onClick={() => setDraft("Help me improve my answer.")}><span>☆</span><strong>Better answer</strong><b>›</b></button>
         </div>
@@ -273,6 +296,24 @@ function DebateRoomView({ theme, question, onBack }) {
                   <article className="apologetics-debate-verse-item" key={`${verse.slice(0, 30)}-${index}`}>
                     <div className="rich-text" dangerouslySetInnerHTML={{ __html: bridge.format(verse) }} />
                     <button type="button" onClick={() => { setVerseSupportOpen(false); sendText(`Use this Bible passage in our debate and help me apply it:\n\n${verse}`); }}>Use in debate</button>
+                  </article>
+                ))}
+              </div>
+            </section>
+          </div>
+        )}
+        {hintsOpen && (
+          <div className="apologetics-debate-verse-overlay" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setHintsOpen(false); }}>
+            <section className="apologetics-debate-verse-modal" role="dialog" aria-modal="true" aria-labelledby="hints-title">
+              <button className="apologetics-debate-verse-close" type="button" onClick={() => setHintsOpen(false)} aria-label="Close hints">×</button>
+              <span className="apologetics-debate-verse-eyebrow">DEBATE COACH</span>
+              <h2 id="hints-title">Hints</h2>
+              <p className="apologetics-debate-verse-intro">Build your own answer one step at a time.</p>
+              <div className="apologetics-debate-verse-results">
+                {hintsLoading ? <p className="apologetics-debate-verse-loading shining-text">Brother AI is preparing helpful hints...</p> : hintBlocks.map((hint, index) => (
+                  <article className="apologetics-debate-verse-item" key={`${hint.slice(0, 30)}-${index}`}>
+                    <div className="rich-text" dangerouslySetInnerHTML={{ __html: bridge.format(hint) }} />
+                    <button type="button" onClick={() => { setHintsOpen(false); sendText(`Use this coaching hint in our debate and help me apply it:\n\n${hint}`); }}>Use in debate</button>
                   </article>
                 ))}
               </div>
