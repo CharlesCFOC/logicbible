@@ -6065,6 +6065,39 @@ window.homeLibraryBridge = {
   createFolder(type, name) {
     return createSavedFolder(type, name, { renderProfile: false });
   },
+  renameFolder(type, folderId, name) {
+    const cleanName = String(name || "").trim().replace(/\s+/g, " ");
+    const folders = getSavedFolders(type);
+    const folder = folders.find((item) => item.id === folderId);
+    if (!folder || !cleanName || folders.some((item) => item.id !== folderId && item.name.toLowerCase() === cleanName.toLowerCase())) {
+      return false;
+    }
+    folder.name = cleanName;
+    writeSavedFolders();
+    refreshProfilePanel();
+    return true;
+  },
+  deleteFolder(type, folderId) {
+    const folders = getSavedFolders(type);
+    const index = folders.findIndex((item) => item.id === folderId);
+    if (index < 0) return false;
+    folders.splice(index, 1);
+    const source = getSavedSource(type);
+    Object.values(source).forEach((item) => {
+      if (item.folderId === folderId) item.folderId = "";
+    });
+    writeSavedFolders();
+    writeSavedSource(type);
+    if (type === "bookmarks") {
+      Object.values(savedState.aiBookmarks).forEach((item) => {
+        if (item.folderId === folderId) item.folderId = "";
+      });
+      writeJson(aiBookmarksKey, savedState.aiBookmarks);
+    }
+    if (activeProfileFolders[type] === folderId) activeProfileFolders[type] = "";
+    refreshProfilePanel();
+    return true;
+  },
 };
 
 renderHomeLibraryTab("notes");

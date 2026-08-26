@@ -193,6 +193,7 @@ const sparkleIcon = (
 function HomeLibraryFolderTools({ snapshot, tab, onChange }) {
   const [folderName, setFolderName] = useState("");
   const [isCreateOpen, setCreateOpen] = useState(false);
+  const [managedFolder, setManagedFolder] = useState(null);
   if (tab === "notes") return null;
 
   const createFolder = (event) => {
@@ -205,6 +206,31 @@ function HomeLibraryFolderTools({ snapshot, tab, onChange }) {
     if (folderId) onChange(folderId);
   };
 
+  const openFolderManager = (folder) => {
+    setManagedFolder(folder);
+    setFolderName(folder.name);
+  };
+
+  const renameFolder = (event) => {
+    event.preventDefault();
+    const name = folderName.trim();
+    if (!managedFolder || !name) return;
+    if (!window.homeLibraryBridge.renameFolder(tab, managedFolder.id, name)) return;
+    setManagedFolder(null);
+    setFolderName("");
+    onChange(snapshot.activeFolder);
+  };
+
+  const deleteFolder = () => {
+    if (!managedFolder || !window.confirm(`Delete the folder “${managedFolder.name}”? Saved items will move to No folder.`)) return;
+    const deleted = window.homeLibraryBridge.deleteFolder(tab, managedFolder.id);
+    if (!deleted) return;
+    const nextFolder = snapshot.activeFolder === managedFolder.id ? "" : snapshot.activeFolder;
+    setManagedFolder(null);
+    setFolderName("");
+    onChange(nextFolder);
+  };
+
   return (
     <div className="saved-folder-tools">
       <button className="saved-folder-create-trigger" type="button" onClick={() => setCreateOpen(true)} aria-label="New folder" title="New folder">+</button>
@@ -212,14 +238,15 @@ function HomeLibraryFolderTools({ snapshot, tab, onChange }) {
         <button className={snapshot.activeFolder === "" ? "is-active" : ""} type="button" onClick={() => onChange("")}>All</button>
         <button className={snapshot.activeFolder === "unfiled" ? "is-active" : ""} type="button" onClick={() => onChange("unfiled")}>No folder</button>
         {snapshot.folders.map((folder) => (
-          <button className={snapshot.activeFolder === folder.id ? "is-active" : ""} key={folder.id} type="button" onClick={() => onChange(folder.id)}>
-            {folder.name}
-          </button>
+          <span className="saved-folder-chip" key={folder.id}>
+            <button className={snapshot.activeFolder === folder.id ? "is-active" : ""} type="button" onClick={() => onChange(folder.id)}>{folder.name}</button>
+            <button className="saved-folder-manage-trigger" type="button" onClick={() => openFolderManager(folder)} aria-label={`Manage folder ${folder.name}`} title="Manage folder">•••</button>
+          </span>
         ))}
       </div>
       {isCreateOpen && (
-        <div className="saved-folder-create-modal" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && setCreateOpen(false)}>
-          <form className="saved-folder-create-dialog" onSubmit={createFolder} role="dialog" aria-modal="true" aria-labelledby="new-folder-title">
+        <div className="saved-folder-modal" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && setCreateOpen(false)}>
+          <form className="saved-folder-popover saved-folder-create-popover" onSubmit={createFolder} role="dialog" aria-modal="true" aria-labelledby="new-folder-title">
             <div className="saved-folder-create-heading">
               <div><span>Organize your library</span><h3 id="new-folder-title">New folder</h3></div>
               <button type="button" className="saved-folder-create-close" onClick={() => setCreateOpen(false)} aria-label="Close">×</button>
@@ -229,6 +256,22 @@ function HomeLibraryFolderTools({ snapshot, tab, onChange }) {
             <div className="saved-folder-create-actions">
               <button type="button" onClick={() => setCreateOpen(false)}>Cancel</button>
               <button type="submit">Create folder</button>
+            </div>
+          </form>
+        </div>
+      )}
+      {managedFolder && (
+        <div className="saved-folder-modal" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && setManagedFolder(null)}>
+          <form className="saved-folder-popover saved-folder-editor-popover" onSubmit={renameFolder} role="dialog" aria-modal="true" aria-labelledby="manage-folder-title">
+            <div className="saved-folder-editor-heading">
+              <strong id="manage-folder-title">Manage folder</strong>
+              <button type="button" className="saved-folder-editor-close" onClick={() => setManagedFolder(null)} aria-label="Close">×</button>
+            </div>
+            <label htmlFor="managed-folder-name">Folder name</label>
+            <input id="managed-folder-name" autoFocus value={folderName} onChange={(event) => setFolderName(event.target.value)} type="text" maxLength="40" />
+            <div className="saved-folder-editor-actions">
+              <button type="button" className="saved-folder-delete" onClick={deleteFolder}>Delete folder</button>
+              <button type="submit">Save changes</button>
             </div>
           </form>
         </div>

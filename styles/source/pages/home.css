@@ -64,6 +64,36 @@
   flex: 1;
 }
 
+.saved-folder-chip {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.999);
+}
+
+.saved-folder-chip > button:first-child {
+  border: 0;
+  border-radius: 999px 0 0 999px;
+}
+
+.saved-folder-manage-trigger {
+  width: 28px;
+  min-height: 34px;
+  padding: 0;
+  border: 0 !important;
+  border-radius: 0 999px 999px 0 !important;
+  background: transparent !important;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.saved-folder-manage-trigger:hover,
+.saved-folder-manage-trigger:focus-visible {
+  color: var(--cool);
+}
+
 .saved-folder-create-trigger {
   display: grid;
   flex: 0 0 34px;
@@ -86,26 +116,10 @@
   box-shadow: 0 7px 15px rgba(47, 60, 74, 0.18);
 }
 
-.saved-folder-create-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: grid;
-  place-items: center;
-  padding: 20px;
-  background: rgba(19, 27, 34, 0.34);
-  backdrop-filter: blur(12px);
-}
-
-.saved-folder-create-dialog {
-  display: grid;
+.saved-folder-create-popover {
   gap: 14px;
-  width: min(100%, 340px);
-  padding: 22px;
-  border: 1px solid rgba(255, 255, 255, 0.65);
-  border-radius: 26px;
-  background: linear-gradient(145deg, #ffffff, #f3f7f9);
-  box-shadow: 0 22px 55px rgba(20, 31, 40, 0.24), inset 0 1px 0 #fff;
+  padding: 20px;
+  color: #e8f7ff;
 }
 
 .saved-folder-create-heading {
@@ -116,7 +130,7 @@
 }
 
 .saved-folder-create-heading span {
-  color: var(--cool);
+  color: #9edcff;
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -125,7 +139,7 @@
 
 .saved-folder-create-heading h3 {
   margin: 3px 0 0;
-  color: var(--ink);
+  color: #fff;
   font-family: var(--font-display);
   font-size: 27px;
   line-height: 1;
@@ -137,77 +151,145 @@
   width: 34px;
   min-height: 34px;
   border-radius: 50%;
-  background: rgba(138, 119, 100, 0.1);
-  color: var(--muted);
+  background: rgba(255, 255, 255, 0.06);
+  color: #e8f7ff;
   font-size: 22px;
   line-height: 1;
 }
 
-.saved-folder-create-dialog > p {
+.saved-folder-create-popover > p {
   margin: 0;
-  color: var(--muted);
+  color: #d5e8f2;
   font-size: 12px;
   line-height: 1.5;
 }
 
-.saved-folder-create-dialog > input {
+.saved-folder-create-popover > input,
+.saved-folder-editor-popover > input {
   min-height: 48px;
   padding: 0 14px;
-  border: 1px solid var(--line);
+  border: 1px solid rgba(173, 231, 255, 0.34);
   border-radius: 14px;
   outline: 0;
-  background: #fff;
-  color: var(--ink);
+  background: rgba(4, 12, 18, 0.42);
+  color: #fff;
+  font-size: 14px;
 }
 
-.saved-folder-create-dialog > input:focus {
-  border-color: var(--cool);
-  box-shadow: 0 0 0 3px var(--cool-soft);
+.saved-folder-create-popover > input:focus,
+.saved-folder-editor-popover > input:focus {
+  border-color: rgba(139, 220, 255, 0.85);
+  box-shadow: 0 0 0 3px rgba(139, 220, 255, 0.16);
 }
 
-.saved-folder-create-actions {
+.saved-folder-create-actions,
+.saved-folder-editor-actions {
   display: grid;
   grid-template-columns: 1fr 1.3fr;
   gap: 8px;
 }
 
-.saved-folder-create-actions button {
+.saved-folder-create-actions button,
+.saved-folder-editor-actions button {
   min-height: 42px;
-  border-radius: 13px;
+  border-radius: 11px;
   font-size: 12px;
   font-weight: 800;
 }
 
-.saved-folder-create-actions button:first-child {
-  border: 1px solid var(--line);
+.saved-folder-create-actions button:first-child,
+.saved-folder-editor-actions button:first-child {
+  border: 1px solid rgba(173, 231, 255, 0.26);
+  background: rgba(255, 255, 255, 0.04);
+  color: #d5e8f2;
+}
+
+.saved-folder-create-actions button:last-child,
+.saved-folder-editor-actions button:last-child {
+  background: linear-gradient(135deg, rgba(91, 213, 255, 0.82), rgba(102, 95, 242, 0.82));
+  color: #fff;
+}
+
+.saved-folder-create-actions button:hover,
+.saved-folder-editor-actions button:hover {
+  filter: brightness(1.08);
+}
+
+.saved-folder-editor-popover {
+  gap: 14px;
+}
+
+.saved-folder-editor-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.saved-folder-editor-heading strong {
+  padding: 0;
+  color: #fff;
+  font-size: 15px;
+}
+
+.saved-folder-editor-close {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  min-height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  color: #e8f7ff;
+  font-size: 21px;
+}
+
+.saved-folder-editor-popover label {
+  margin-bottom: -7px;
+  color: #9edcff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.saved-folder-editor-actions .saved-folder-delete {
+  border-color: rgba(255, 148, 148, 0.34);
+  color: #ffb7b7;
+}
+
+/* Keep the editor aligned with the existing Move to folder popup. */
+.saved-folder-create-popover,
+.saved-folder-editor-popover {
+  border-color: rgba(173, 231, 255, 0.34);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 15% 8%, rgba(104, 215, 255, 0.18), transparent 38%),
+    linear-gradient(145deg, rgba(35, 71, 91, 0.98), rgba(20, 34, 52, 0.98) 58%, rgba(56, 43, 93, 0.96));
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(239, 251, 255, 0.16);
+}
+
+.saved-folder-editor-popover > label {
+  color: #9edcff;
+}
+
+.saved-folder-editor-popover > input {
+  background: rgba(4, 12, 18, 0.42);
+}
+
+.saved-folder-editor-actions .saved-folder-delete:hover {
+  background: rgba(255, 103, 103, 0.16);
+}
+
+.app-shell[data-app-background="black"] .saved-folder-chip {
   background: transparent;
-  color: var(--muted);
 }
 
-.saved-folder-create-actions button:last-child {
-  background: var(--cool);
-  color: var(--accent-contrast, #fff);
+.app-shell[data-app-background="black"] .saved-folder-manage-trigger {
+  color: #b8eaff;
 }
 
-.app-shell[data-app-background="black"] .saved-folder-create-trigger {
-  border-color: #8bdcff;
-  background: #3c9dcc;
-  color: #fff;
-}
-
-.app-shell[data-app-background="black"] .saved-folder-create-dialog {
-  border-color: rgba(139, 220, 255, 0.45);
-  background: linear-gradient(145deg, #1c2b35, #0e171e);
-}
-
-.app-shell[data-app-background="black"] .saved-folder-create-heading h3,
-.app-shell[data-app-background="black"] .saved-folder-create-dialog > p {
-  color: #fff;
-}
-
-.app-shell[data-app-background="black"] .saved-folder-create-dialog > input {
-  border-color: rgba(139, 220, 255, 0.45);
-  background: #1f2124;
+.app-shell[data-app-background="black"] .saved-folder-manage-trigger:hover,
+.app-shell[data-app-background="black"] .saved-folder-manage-trigger:focus-visible {
   color: #fff;
 }
 
