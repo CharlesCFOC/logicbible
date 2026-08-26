@@ -381,13 +381,12 @@
   top: -28px;
   z-index: 4;
   display: flex;
-  width: calc(100% + 44px);
-  box-sizing: border-box;
   align-items: center;
   justify-content: space-between;
   gap: 14px;
-  margin: -28px -22px 0;
-  padding: 18px 20px 10px;
+  width: 100%;
+  margin: -28px 0 0;
+  padding: 18px 0 10px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.992), rgba(251, 248, 241, 0.82));
   backdrop-filter: blur(16px);
 }
@@ -404,10 +403,9 @@
 }
 
 .ai-topbar .icon-button {
-  position: absolute;
-  top: 50%;
-  right: 22px;
-  transform: translateY(-50%);
+  position: static;
+  flex: 0 0 auto;
+  margin-left: auto;
 }
 
 .ai-topbar span {
