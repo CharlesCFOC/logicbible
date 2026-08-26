@@ -496,7 +496,16 @@
 
 .apologetics-debate-theme-list button.is-selected {
   border: 0;
-  background: linear-gradient(135deg, #42dc91 0%, #118c69 100%);
+  background: linear-gradient(135deg, #72ffb1 0%, #00bd70 100%);
+  box-shadow: 0 0 22px rgba(47, 255, 154, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.36);
+}
+
+.apologetics-debate-step--questions {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
 .apologetics-debate-launch {
@@ -530,6 +539,20 @@
   gap: 5px;
   min-height: 68px;
   padding: 11px 12px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.apologetics-debate-question-list button.is-selected,
+.apologetics-debate-question-list button:hover {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.apologetics-debate-question-list button.is-selected > strong {
+  color: #8dffc1;
 }
 
 .apologetics-debate-question-list button > span {

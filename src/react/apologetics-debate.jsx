@@ -124,7 +124,7 @@ export function ApologeticsDebatePage() {
       </section>
 
       {theme ? (
-        <section className="apologetics-debate-step" aria-labelledby="debate-question-title">
+        <section className="apologetics-debate-step apologetics-debate-step--questions" aria-labelledby="debate-question-title">
           <div className="apologetics-debate-step-heading">
             <span>02</span>
             <div>
