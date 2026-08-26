@@ -1,0 +1,131 @@
+        <section id="apologetics" class="screen apologetics-screen" data-screen>
+          <header class="page-header apologetics-track-header">
+            <nav class="apologetics-breadcrumbs" aria-label="Breadcrumb">
+              <span class="apologetics-breadcrumb-current">Apologetics</span>
+            </nav>
+            <button class="icon-button" data-apologetics-coach="overview" aria-label="Open apologetics coach">
+              <i data-lucide="sparkles"></i>
+            </button>
+          </header>
+
+          <article class="apologetics-hero-image">
+            <img src="assets/profile-hero.png" alt="" />
+            <div class="apologetics-hero-image-copy">
+              <h2>Train to defend your faith with confidence.</h2>
+              <p>Learn to answer real objections through guided lessons, structured practice, and AI conversations built for apologetics training.</p>
+            </div>
+          </article>
+
+          <section class="apologetics-overview-strip" aria-label="Apologetics progress overview">
+            <div class="apologetics-progress-carousel" data-apologetics-progress></div>
+          </section>
+
+          <section>
+            <div class="section-heading">
+              <div class="apologetics-primary-heading">
+                <span class="eyebrow">Main Path</span>
+                <h2>Training Paths</h2>
+                <p>Choose a track and build your response step by step through the biggest objections.</p>
+              </div>
+            </div>
+            <div class="apologetics-track-carousel" data-apologetics-tracks></div>
+          </section>
+
+          <section>
+            <div class="section-heading">
+              <h2>Today's Challenge</h2>
+            </div>
+            <article class="apologetics-challenge-card" data-apologetics-challenge></article>
+          </section>
+
+          <section>
+            <div class="section-heading">
+              <div class="apologetics-secondary-heading">
+                <h2>Featured Topics</h2>
+                <p>Browse the key objections inside each track and open the ones you want to study next.</p>
+              </div>
+            </div>
+            <div class="apologetics-topic-list" data-apologetics-topics></div>
+          </section>
+        </section>
+
+        <section id="apologetics-track" class="screen apologetics-screen" data-screen>
+          <header class="page-header apologetics-track-header">
+            <nav class="apologetics-breadcrumbs" aria-label="Breadcrumb">
+              <button class="apologetics-breadcrumb-link" data-apologetics-back="apologetics">Apologetics</button>
+              <span>/</span>
+              <span class="apologetics-breadcrumb-current" data-apologetics-track-title>Islam</span>
+            </nav>
+            <button class="icon-button" data-apologetics-coach="overview" aria-label="Open apologetics coach">
+              <i data-lucide="sparkles"></i>
+            </button>
+          </header>
+
+          <article class="apologetics-hero" data-apologetics-track-hero></article>
+          <section class="apologetics-track-progress-panel" data-apologetics-track-progress></section>
+          <section class="apologetics-track-quick" data-apologetics-track-quick></section>
+          <section class="apologetics-track-rewards" data-apologetics-track-rewards></section>
+          <p class="apologetics-selection-line" data-apologetics-selection-line></p>
+          <section>
+            <div class="section-heading">
+              <h2>Topics</h2>
+              <span class="apologetics-topic-count" data-apologetics-topic-count>0</span>
+            </div>
+            <div class="apologetics-filter-row" data-apologetics-filters aria-label="Apologetics filters"></div>
+            <div class="apologetics-topic-list" data-apologetics-track-topics></div>
+          </section>
+        </section>
+
+        <section id="apologetics-topic" class="screen apologetics-screen" data-screen>
+          <header class="page-header apologetics-track-header">
+            <nav class="apologetics-breadcrumbs" aria-label="Breadcrumb">
+              <button class="apologetics-breadcrumb-link" data-apologetics-back="apologetics">Apologetics</button>
+              <span>/</span>
+              <button class="apologetics-breadcrumb-link" data-apologetics-back="apologetics-track" data-apologetics-topic-breadcrumb>Islam</button>
+              <span>/</span>
+              <span class="apologetics-breadcrumb-current" data-apologetics-topic-title>Topic</span>
+            </nav>
+            <button class="icon-button" data-apologetics-copy aria-label="Copy short answer">
+              <i data-lucide="copy"></i>
+            </button>
+          </header>
+
+          <div class="apologetics-topic-tabs" data-apologetics-topic-tabs>
+            <button class="is-active" type="button" data-apologetics-topic-tab="introduction">Introduction</button>
+            <button type="button" data-apologetics-topic-tab="chat">Start Debate</button>
+          </div>
+
+          <section class="apologetics-detail-panel" data-apologetics-detail></section>
+          <section class="apologetics-panel apologetics-chat-panel" hidden>
+            <div class="section-heading">
+              <h2>Start Debate</h2>
+            </div>
+            <div class="apologetics-chat-tabs" data-apologetics-chat-tabs>
+              <button class="is-active" type="button" data-apologetics-chat-tab="muslim">From Muslim</button>
+              <button type="button" data-apologetics-chat-tab="coach">From Coach</button>
+            </div>
+            <div class="apologetics-chat-thread" data-apologetics-chat-thread></div>
+            <form class="apologetics-chat-composer" data-apologetics-chat-form>
+              <textarea rows="1" placeholder="Write your argument..." aria-label="Write your apologetics response"></textarea>
+              <button type="button" aria-label="Send apologetics message"><i data-lucide="send"></i></button>
+            </form>
+          </section>
+        </section>
+
+        <section class="apologetics-coming-soon-gate" data-apologetics-gate hidden aria-labelledby="apologetics-gate-title">
+          <div class="apologetics-gate-card">
+            <div class="apologetics-gate-icon" aria-hidden="true"><i data-lucide="shield-lock"></i></div>
+            <span class="eyebrow">Apologetics</span>
+            <h2 id="apologetics-gate-title">Coming soon</h2>
+            <p>This training space is almost ready. Enter the access code to preview it.</p>
+            <form data-apologetics-gate-form>
+              <label>
+                <span>Access code</span>
+                <input type="password" inputmode="numeric" autocomplete="off" maxlength="3" placeholder="•••" aria-label="Apologetics access code" />
+              </label>
+              <button type="submit">Access</button>
+              <p class="apologetics-gate-feedback" data-apologetics-gate-feedback role="status" aria-live="polite"></p>
+            </form>
+          </div>
+        </section>
+

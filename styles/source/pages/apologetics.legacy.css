@@ -260,65 +260,6 @@
   box-shadow: none;
 }
 
-/* Fresh Apologetics landing screen. */
-.apologetics-page-header {
-  margin: 0 0 28px;
-  padding: 0;
-  background: transparent;
-}
-
-.apologetics-page-header h1 {
-  margin: 0;
-  color: #ffffff;
-  font-size: 28px;
-  line-height: 1.1;
-}
-
-.apologetics-room-list {
-  display: grid;
-  gap: 16px;
-}
-
-.apologetics-room-button {
-  display: flex;
-  align-items: flex-end;
-  width: 100%;
-  min-height: 138px;
-  padding: 22px;
-  border: 1px solid rgba(255, 255, 255, 0.24);
-  border-radius: 28px;
-  color: #ffffff;
-  text-align: left;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.26), 0 12px 26px rgba(5, 13, 21, 0.2);
-  transition: transform 140ms ease, filter 140ms ease;
-}
-
-.apologetics-room-button:active {
-  transform: scale(0.98);
-}
-
-.apologetics-room-button:hover {
-  filter: brightness(1.08);
-}
-
-.apologetics-room-button span {
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-}
-
-.apologetics-room-button--debate {
-  background: linear-gradient(135deg, #e8798f, #a947a5);
-}
-
-.apologetics-room-button--coach {
-  background: linear-gradient(135deg, #56c8df, #3976d7);
-}
-
-.apologetics-room-button--theory {
-  background: linear-gradient(135deg, #f0ae63, #d96674);
-}
-
 .apologetics-hero-image img {
   position: absolute;
   inset: 0;
@@ -1675,3 +1616,4 @@
   gap: 8px;
   margin-top: 10px;
 }
+
