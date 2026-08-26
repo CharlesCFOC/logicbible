@@ -157,6 +157,9 @@ function DebateRoomView({ theme, question, difficulty, factCheck, onBack }) {
   const [hintsOpen, setHintsOpen] = useState(false);
   const [hintsLoading, setHintsLoading] = useState(false);
   const [hintsText, setHintsText] = useState("");
+  const [betterAnswerOpen, setBetterAnswerOpen] = useState(false);
+  const [betterAnswerLoading, setBetterAnswerLoading] = useState(false);
+  const [betterAnswerText, setBetterAnswerText] = useState("");
   const [roomFactCheck, setRoomFactCheck] = useState(factCheck);
   const threadRef = useRef(null);
 
@@ -172,16 +175,17 @@ function DebateRoomView({ theme, question, difficulty, factCheck, onBack }) {
   }, [messages, roomFactCheck]);
 
   useEffect(() => {
-    if (!verseSupportOpen && !hintsOpen) return undefined;
+    if (!verseSupportOpen && !hintsOpen && !betterAnswerOpen) return undefined;
     const closeOnEscape = (event) => {
       if (event.key === "Escape") {
         setVerseSupportOpen(false);
         setHintsOpen(false);
+        setBetterAnswerOpen(false);
       }
     };
     document.addEventListener("keydown", closeOnEscape);
     return () => document.removeEventListener("keydown", closeOnEscape);
-  }, [verseSupportOpen, hintsOpen]);
+  }, [verseSupportOpen, hintsOpen, betterAnswerOpen]);
 
   const openVerseSupport = async () => {
     setVerseSupportOpen(true);
@@ -212,6 +216,26 @@ function DebateRoomView({ theme, question, difficulty, factCheck, onBack }) {
       setHintsText(error.message || "Unable to find hints right now.");
     } finally {
       setHintsLoading(false);
+    }
+  };
+
+  const openBetterAnswer = async () => {
+    const latestArgument = [...messages].reverse().find((message) => message.role === "user")?.text;
+    if (!latestArgument) {
+      setDraft("Write an argument first, then I can help improve it.");
+      return;
+    }
+    setBetterAnswerOpen(true);
+    setBetterAnswerLoading(true);
+    setBetterAnswerText("");
+    try {
+      const context = `You are a Christian apologetics debate coach. Theme: ${theme?.label || "General"}. Central question: ${question || generalQuestion}. Analyze the user's latest argument below. Explain the main improvement opportunities, then provide a stronger rewritten version that remains faithful to the user's position. Use exactly these headings: What to improve, Better answer, Why it is stronger. Do not send the answer in the debate; this is only a coaching preview.\n\nUser's latest argument:\n${latestArgument}`;
+      const responseText = await bridge.sendDebate(context, messages.filter((message) => !message.pending).slice(-8));
+      setBetterAnswerText(responseText);
+    } catch (error) {
+      setBetterAnswerText(error.message || "Unable to improve this answer right now.");
+    } finally {
+      setBetterAnswerLoading(false);
     }
   };
 
@@ -291,7 +315,7 @@ function DebateRoomView({ theme, question, difficulty, factCheck, onBack }) {
         <div className="apologetics-debate-tools" aria-label="Debate tools">
           <button type="button" onClick={openHints}><span>♧</span><strong>Hints</strong><b>›</b></button>
           <button type="button" onClick={openVerseSupport}><span>▢</span><strong>Verse support</strong><b>›</b></button>
-          <button type="button" onClick={() => setDraft("Help me improve my answer.")}><span>☆</span><strong>Better answer</strong><b>›</b></button>
+          <button type="button" onClick={openBetterAnswer}><span>☆</span><strong>Better answer</strong><b>›</b></button>
         </div>
       </div>
 
@@ -338,6 +362,28 @@ function DebateRoomView({ theme, question, difficulty, factCheck, onBack }) {
                     <button type="button" onClick={() => { setHintsOpen(false); sendText(`Use this coaching hint in our debate and help me apply it:\n\n${hint}`); }}>Use in debate</button>
                   </article>
                 ))}
+              </div>
+            </section>
+          </div>
+        )}
+        {betterAnswerOpen && (
+          <div className="apologetics-debate-verse-overlay" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setBetterAnswerOpen(false); }}>
+            <section className="apologetics-debate-verse-modal" role="dialog" aria-modal="true" aria-labelledby="better-answer-title">
+              <button className="apologetics-debate-verse-close" type="button" onClick={() => setBetterAnswerOpen(false)} aria-label="Close better answer">×</button>
+              <span className="apologetics-debate-verse-eyebrow">DEBATE COACH</span>
+              <h2 id="better-answer-title">Better answer</h2>
+              <p className="apologetics-debate-verse-intro">Strengthen your argument before sending it back to your opponent.</p>
+              <div className="apologetics-debate-verse-results">
+                {betterAnswerLoading ? <p className="apologetics-debate-verse-loading shining-text">Brother AI is improving your answer...</p> : (
+                  <>
+                    <div className="rich-text" dangerouslySetInnerHTML={{ __html: bridge.format(betterAnswerText) }} />
+                    <button className="apologetics-debate-use-answer" type="button" onClick={() => {
+                      const improvedAnswer = betterAnswerText.match(/Better answer\s*:?\s*([\s\S]*?)(?=\n\s*(?:Why it is stronger|What to improve)\s*:|$)/i)?.[1]?.trim() || betterAnswerText;
+                      setDraft(improvedAnswer);
+                      setBetterAnswerOpen(false);
+                    }}>Use this answer</button>
+                  </>
+                )}
               </div>
             </section>
           </div>
