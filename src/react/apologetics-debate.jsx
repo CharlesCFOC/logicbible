@@ -89,13 +89,92 @@ const debateThemes = [
 
 const generalQuestion = "What is the strongest reason to believe the Christian message is true?";
 
+function DebateRoomView({ theme, question, onBack }) {
+  const [messages, setMessages] = useState([
+    { role: "ai", text: question || generalQuestion, time: "Now" },
+    { role: "ai", text: "Take your time, make your best case, and I’ll help you sharpen the answer.", time: "Now" },
+  ]);
+  const [draft, setDraft] = useState("");
+
+  const sendMessage = (event) => {
+    event.preventDefault();
+    const text = draft.trim();
+    if (!text) return;
+    setMessages((current) => [
+      ...current,
+      { role: "user", text, time: "Now" },
+      { role: "ai", text: "That’s a thoughtful starting point. What evidence or passage would you use to support it?", time: "Now" },
+    ]);
+    setDraft("");
+  };
+
+  return (
+    <div className="apologetics-debate-room">
+      <header className="apologetics-debate-room-header">
+        <button className="apologetics-debate-room-back" type="button" onClick={onBack} aria-label="Back to debate setup">←</button>
+        <div>
+          <h1>Debat room</h1>
+          <p>Practice real conversations with AI.</p>
+          <small>{theme?.label || "General"} · {question || generalQuestion}</small>
+        </div>
+        <span className="apologetics-debate-ai-badge">✦ AI powered</span>
+      </header>
+
+      <div className="apologetics-debate-prompts" aria-label="Suggested debate prompts">
+        {["Does God exist?", "Why does God allow suffering?", "Is the Bible reliable?"].map((prompt, index) => (
+          <button className={`apologetics-debate-prompt apologetics-debate-prompt--${index + 1}`} key={prompt} type="button" onClick={() => setDraft(prompt)}>
+            <span aria-hidden="true">{["?", "◌", "▢"][index]}</span>
+            <strong>{prompt}</strong>
+          </button>
+        ))}
+      </div>
+
+      <section className="apologetics-debate-thread" aria-label="Debate conversation">
+        {messages.map((message, index) => (
+          <article className={`apologetics-debate-message apologetics-debate-message--${message.role}`} key={`${message.text}-${index}`}>
+            <div className="apologetics-debate-avatar">{message.role === "ai" ? "AI" : "●"}</div>
+            <div className="apologetics-debate-message-content">
+              <div className="apologetics-debate-message-meta"><strong>{message.role === "ai" ? "AI Debate Partner" : "You"}</strong><span>{message.time}</span></div>
+              <p>{message.text}</p>
+            </div>
+          </article>
+        ))}
+        <div className="apologetics-debate-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+      </section>
+
+      <div className="apologetics-debate-tools" aria-label="Debate tools">
+        <button type="button" onClick={() => setDraft("Can you give me a helpful hint?")}><span>♧</span><strong>Hints</strong><small>Get a helpful nudge</small><b>›</b></button>
+        <button type="button" onClick={() => setDraft("Show me a supporting Bible verse.")}><span>▢</span><strong>Verse support</strong><small>Find Bible verses</small><b>›</b></button>
+        <button type="button" onClick={() => setDraft("Help me improve my answer.")}><span>☆</span><strong>Better answer</strong><small>Improve your reply</small><b>›</b></button>
+      </div>
+
+      <section className="apologetics-debate-progress" aria-label="Debate progress">
+        <div className="apologetics-debate-progress-ring">72%</div>
+        <div><strong>Confidence</strong><p>Keep going! You’re building stronger answers.</p></div>
+        <div className="apologetics-debate-level"><strong>Level 3</strong><span>120 / 200 XP</span><i><b></b></i></div>
+      </section>
+
+      <form className="apologetics-debate-composer" onSubmit={sendMessage}>
+        <span aria-hidden="true">◯</span>
+        <input value={draft} onChange={(event) => setDraft(event.target.value)} placeholder="Type your response..." aria-label="Type your response" />
+        <button type="submit" aria-label="Send response">➤</button>
+      </form>
+    </div>
+  );
+}
+
 export function ApologeticsDebatePage() {
   const [themeId, setThemeId] = useState("");
   const [question, setQuestion] = useState("");
+  const [isRoomOpen, setIsRoomOpen] = useState(false);
   const theme = debateThemes.find((item) => item.id === themeId);
 
   const goBack = () => window.appNavigate?.("apologetics");
   const questions = theme ? [generalQuestion, ...theme.questions] : [];
+
+  if (isRoomOpen) {
+    return <DebateRoomView theme={theme} question={question} onBack={() => setIsRoomOpen(false)} />;
+  }
 
   return (
     <div className="apologetics-debate-content">
@@ -145,7 +224,7 @@ export function ApologeticsDebatePage() {
         <p className="apologetics-debate-empty">Choose a theme to unlock the debate questions.</p>
       )}
 
-      <button className="apologetics-debate-launch" type="button" disabled={!theme || !question}>
+      <button className="apologetics-debate-launch" type="button" disabled={!theme || !question} onClick={() => setIsRoomOpen(true)}>
         Lancer le debat
       </button>
     </div>
