@@ -285,8 +285,6 @@ function DebateRoomView({ theme, question, difficulty, factCheck, onBack }) {
         <button className="apologetics-debate-room-back" type="button" onClick={onBack} aria-label="Back to debate setup">←</button>
         <div>
           <h1>Debat room</h1>
-          <p>Practice real conversations with AI.</p>
-          <small>{theme?.label || "General"} · {question || generalQuestion}</small>
         </div>
       </header>
 
