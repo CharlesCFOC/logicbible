@@ -144,6 +144,9 @@ function DebateRoomView({ theme, question, onBack }) {
   const [messages, setMessages] = useState(() => readDebateConversation(theme, question) || initialMessages);
   const [draft, setDraft] = useState("");
   const [pending, setPending] = useState(false);
+  const [verseSupportOpen, setVerseSupportOpen] = useState(false);
+  const [verseSupportLoading, setVerseSupportLoading] = useState(false);
+  const [verseSupportText, setVerseSupportText] = useState("");
   const threadRef = useRef(null);
 
   useEffect(() => {
@@ -156,6 +159,31 @@ function DebateRoomView({ theme, question, onBack }) {
     if (threadRef.current) threadRef.current.scrollTop = threadRef.current.scrollHeight;
     saveDebateConversation(theme, question, messages);
   }, [messages]);
+
+  useEffect(() => {
+    if (!verseSupportOpen) return undefined;
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") setVerseSupportOpen(false);
+    };
+    document.addEventListener("keydown", closeOnEscape);
+    return () => document.removeEventListener("keydown", closeOnEscape);
+  }, [verseSupportOpen]);
+
+  const openVerseSupport = async () => {
+    setVerseSupportOpen(true);
+    setVerseSupportLoading(true);
+    setVerseSupportText("");
+    try {
+      const history = messages.filter((message) => !message.pending).slice(-8);
+      const context = `You are supporting a Christian apologetics debate. Theme: ${theme?.label || "General"}. Central question: ${question || generalQuestion}. Based on the recent discussion below, suggest exactly 3 relevant Bible passages. For each, provide the reference, the exact passage text if you know it reliably, and one short sentence explaining its connection. Never invent a quotation; if unsure, give only the reference and say that the full text should be checked in the Bible.\n\nRecent discussion:\n${history.map((message) => `${message.role}: ${message.text}`).join("\n")}`;
+      const responseText = await bridge.sendDebate(context, history);
+      setVerseSupportText(responseText);
+    } catch (error) {
+      setVerseSupportText(error.message || "Unable to find verse support right now.");
+    } finally {
+      setVerseSupportLoading(false);
+    }
+  };
 
   const sendMessage = async (event) => {
     event.preventDefault();
@@ -209,7 +237,7 @@ function DebateRoomView({ theme, question, onBack }) {
         </div>
         <div className="apologetics-debate-tools" aria-label="Debate tools">
           <button type="button" onClick={() => setDraft("Can you give me a helpful hint?")}><span>♧</span><strong>Hints</strong><b>›</b></button>
-          <button type="button" onClick={() => setDraft("Show me a supporting Bible verse.")}><span>▢</span><strong>Verse support</strong><b>›</b></button>
+          <button type="button" onClick={openVerseSupport}><span>▢</span><strong>Verse support</strong><b>›</b></button>
           <button type="button" onClick={() => setDraft("Help me improve my answer.")}><span>☆</span><strong>Better answer</strong><b>›</b></button>
         </div>
       </div>
@@ -220,10 +248,25 @@ function DebateRoomView({ theme, question, onBack }) {
 
     </div>
     {createPortal(
-      <form className="composer apologetics-debate-composer" onSubmit={sendMessage}>
-        <textarea value={draft} onChange={(event) => setDraft(event.target.value)} rows="1" placeholder="Type your response..." aria-label="Type your response" disabled={pending} />
-        <button type="submit" aria-label="Send response" disabled={pending}><AiIcon name="send" /></button>
-      </form>,
+      <>
+        <form className="composer apologetics-debate-composer" onSubmit={sendMessage}>
+          <textarea value={draft} onChange={(event) => setDraft(event.target.value)} rows="1" placeholder="Type your response..." aria-label="Type your response" disabled={pending} />
+          <button type="submit" aria-label="Send response" disabled={pending}><AiIcon name="send" /></button>
+        </form>
+        {verseSupportOpen && (
+          <div className="apologetics-debate-verse-overlay" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setVerseSupportOpen(false); }}>
+            <section className="apologetics-debate-verse-modal" role="dialog" aria-modal="true" aria-labelledby="verse-support-title">
+              <button className="apologetics-debate-verse-close" type="button" onClick={() => setVerseSupportOpen(false)} aria-label="Close verse support">×</button>
+              <span className="apologetics-debate-verse-eyebrow">DEBATE SUPPORT</span>
+              <h2 id="verse-support-title">Verse support</h2>
+              <p className="apologetics-debate-verse-intro">Passages connected to your question and recent discussion.</p>
+              <div className="apologetics-debate-verse-results">
+                {verseSupportLoading ? <p className="apologetics-debate-verse-loading">Brother AI is finding relevant passages...</p> : <div className="rich-text" dangerouslySetInnerHTML={{ __html: bridge.format(verseSupportText) }} />}
+              </div>
+            </section>
+          </div>
+        )}
+      </>,
       document.querySelector(".phone-frame"),
     )}
     </>
