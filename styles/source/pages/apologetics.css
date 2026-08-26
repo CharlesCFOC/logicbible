@@ -542,6 +542,13 @@
 
 .apologetics-debate-fact-toggle { justify-self: start; }
 
+.apologetics-debate-difficulty-description {
+  margin: 7px 0 0;
+  color: rgba(224, 239, 248, 0.78);
+  font-size: 10px;
+  line-height: 1.4;
+}
+
 .apologetics-debate-room-settings {
   display: flex;
   justify-content: space-between;

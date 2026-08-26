@@ -92,6 +92,12 @@ const debateThemes = [
 const generalQuestion = "What is the strongest reason to believe the Christian message is true?";
 const debateConversationTtl = 30 * 24 * 60 * 60 * 1000;
 const debateDifficulties = ["Beginner", "Intermediate", "Advanced", "Hostile"];
+const debateDifficultyDescriptions = {
+  Beginner: "Simple objections and clear questions to help you learn the basics.",
+  Intermediate: "Balanced counter-arguments that test your reasoning and biblical support.",
+  Advanced: "Stronger objections, subtle assumptions, and challenging follow-up questions.",
+  Hostile: "A highly persuasive opponent who may use flawed or misleading arguments to test your discernment.",
+};
 
 function getDebateConversationKey(theme, question) {
   return `brother.debateConversation.${theme?.id || "general"}.${encodeURIComponent(question || generalQuestion)}`;
@@ -384,8 +390,7 @@ export function ApologeticsDebatePage() {
           ))}
         </div>
         <div className="apologetics-debate-setup-settings">
-          <div><span>Difficulty</span><div className="apologetics-debate-difficulty-list">{debateDifficulties.map((level) => <button className={difficulty === level ? "is-selected" : ""} type="button" key={level} onClick={() => setDifficulty(level)}>{level}</button>)}</div></div>
-          <button className={`apologetics-debate-fact-toggle${factCheck ? " is-on" : ""}`} type="button" onClick={() => setFactCheck((current) => !current)} aria-pressed={factCheck}>Fact-check <b>{factCheck ? "On" : "Off"}</b></button>
+          <div><span>Difficulty</span><div className="apologetics-debate-difficulty-list">{debateDifficulties.map((level) => <button className={difficulty === level ? "is-selected" : ""} type="button" key={level} onClick={() => setDifficulty(level)}>{level}</button>)}</div><p className="apologetics-debate-difficulty-description">{debateDifficultyDescriptions[difficulty]}</p></div>
         </div>
       </section>
 
