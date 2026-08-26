@@ -401,6 +401,11 @@
   line-height: 1.1;
 }
 
+.ai-topbar .icon-button {
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
 .ai-topbar span {
   color: var(--muted);
   font-size: 12px;
