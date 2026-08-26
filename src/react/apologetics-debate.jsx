@@ -188,6 +188,15 @@ function DebateRoomView({ theme, question, difficulty, factCheck, onBack }) {
   }, [messages, roomFactCheck, confidence, confidenceJournal]);
 
   useEffect(() => {
+    const persistBeforeLeaving = () => saveDebateConversation(theme, question, messages, difficulty, roomFactCheck, confidence, confidenceJournal);
+    window.addEventListener("pagehide", persistBeforeLeaving);
+    return () => {
+      persistBeforeLeaving();
+      window.removeEventListener("pagehide", persistBeforeLeaving);
+    };
+  }, [messages, roomFactCheck, confidence, confidenceJournal]);
+
+  useEffect(() => {
     if (!verseSupportOpen && !hintsOpen && !betterAnswerOpen) return undefined;
     const closeOnEscape = (event) => {
       if (event.key === "Escape") {
