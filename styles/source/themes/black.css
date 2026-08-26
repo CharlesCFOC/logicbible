@@ -92,7 +92,7 @@ html:has(.app-shell[data-app-background="black"]) {
   -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
   backdrop-filter: blur(18px) saturate(135%) !important;
   color: #ffffff !important;
-  box-shadow: inset 0 1px 0 rgba(201, 239, 255, 0.14), 0 3px 10px rgba(0, 0, 0, 0.2) !important;
+  box-shadow: inset 0 1px 0 rgba(201, 239, 255, 0.14) !important;
 }
 
 .app-shell[data-app-background="black"] .reader-screen .parallel-toggle.is-active,
@@ -103,7 +103,7 @@ html:has(.app-shell[data-app-background="black"]) {
   -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
   backdrop-filter: blur(18px) saturate(135%) !important;
   color: #9edcff !important;
-  box-shadow: inset 0 1px 0 rgba(236, 250, 255, 0.24), 0 3px 10px rgba(0, 0, 0, 0.2) !important;
+  box-shadow: inset 0 1px 0 rgba(236, 250, 255, 0.24) !important;
 }
 
 .app-shell[data-app-background="black"] h1,
