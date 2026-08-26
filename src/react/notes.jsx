@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const noteToolbarIcons = {
   text: ["M4 5h16", "M12 5v14", "M8 19h8"],
