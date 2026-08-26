@@ -551,10 +551,6 @@
   box-shadow: none;
 }
 
-.apologetics-debate-question-list button.is-selected > strong {
-  color: #8dffc1;
-}
-
 .apologetics-debate-question-list button > span {
   color: #9edcff;
   font-size: 10px;
@@ -562,10 +558,26 @@
   text-transform: uppercase;
 }
 
+.app-shell[data-app-background="black"] .apologetics-debate-question-list button > span {
+  color: #9edcff !important;
+}
+
 .apologetics-debate-question-list button > strong {
   color: #ffffff;
   font-size: 12px;
   line-height: 1.35;
+}
+
+.apologetics-debate-question-list button.is-selected {
+  border: 0;
+  border-radius: 16px;
+  background: #3c9dcc;
+  box-shadow: inset 0 1px 0 rgba(236, 250, 255, 0.24), 0 6px 14px rgba(22, 91, 137, 0.22);
+}
+
+.apologetics-debate-question-list button.is-selected > span,
+.apologetics-debate-question-list button.is-selected > strong {
+  color: #ffffff !important;
 }
 
 .apologetics-hero-image img {
