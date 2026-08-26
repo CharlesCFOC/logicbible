@@ -90,22 +90,35 @@ const debateThemes = [
 const generalQuestion = "What is the strongest reason to believe the Christian message is true?";
 
 function DebateRoomView({ theme, question, onBack }) {
+  const bridge = window.aiBridge;
   const [messages, setMessages] = useState([
     { role: "ai", text: question || generalQuestion, time: "Now" },
     { role: "ai", text: "Take your time, make your best case, and I’ll help you sharpen the answer.", time: "Now" },
   ]);
   const [draft, setDraft] = useState("");
+  const [pending, setPending] = useState(false);
 
-  const sendMessage = (event) => {
+  const sendMessage = async (event) => {
     event.preventDefault();
     const text = draft.trim();
-    if (!text) return;
+    if (!text || pending || !bridge) return;
+    const history = messages.map((message) => ({ role: message.role === "ai" ? "assistant" : "user", text: message.text })).slice(-24);
     setMessages((current) => [
       ...current,
       { role: "user", text, time: "Now" },
-      { role: "ai", text: "That’s a thoughtful starting point. What evidence or passage would you use to support it?", time: "Now" },
+      { role: "ai", text: "Brother AI is thinking...", time: "Now", pending: true },
     ]);
     setDraft("");
+    setPending(true);
+    try {
+      const context = `You are the AI debate partner in a Christian apologetics debate room. Debate theme: ${theme?.label || "General"}. Central question: ${question || generalQuestion}. Give a clear, respectful, evidence-based response that helps the user practice apologetics.`;
+      const responseText = await bridge.send(`${context}\n\nUser response: ${text}`, history);
+      setMessages((current) => [...current.slice(0, -1), { role: "ai", text: responseText, time: "Now" }]);
+    } catch (error) {
+      setMessages((current) => [...current.slice(0, -1), { role: "ai", text: error.message || "AI is not available yet.", time: "Now" }]);
+    } finally {
+      setPending(false);
+    }
   };
 
   return (
@@ -135,7 +148,7 @@ function DebateRoomView({ theme, question, onBack }) {
             <div className="apologetics-debate-avatar">{message.role === "ai" ? "AI" : "●"}</div>
             <div className="apologetics-debate-message-content">
               <div className="apologetics-debate-message-meta"><strong>{message.role === "ai" ? "AI Debate Partner" : "You"}</strong><span>{message.time}</span></div>
-              <p>{message.text}</p>
+              <p className={message.pending ? "is-pending" : ""}>{message.text}</p>
             </div>
           </article>
         ))}
@@ -156,8 +169,8 @@ function DebateRoomView({ theme, question, onBack }) {
 
       <form className="apologetics-debate-composer" onSubmit={sendMessage}>
         <span aria-hidden="true">◯</span>
-        <input value={draft} onChange={(event) => setDraft(event.target.value)} placeholder="Type your response..." aria-label="Type your response" />
-        <button type="submit" aria-label="Send response">➤</button>
+        <input value={draft} onChange={(event) => setDraft(event.target.value)} placeholder="Type your response..." aria-label="Type your response" disabled={pending} />
+        <button type="submit" aria-label="Send response" disabled={pending}>➤</button>
       </form>
     </div>
   );

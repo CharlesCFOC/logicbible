@@ -1942,14 +1942,19 @@
 .apologetics-debate-room {
   display: grid;
   gap: 16px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
   min-height: 100%;
   padding: 22px 10px 132px;
   color: #ffffff;
 }
 
 .apologetics-debate-room-header {
+  position: relative;
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto minmax(0, 1fr);
   gap: 12px;
   align-items: start;
 }
@@ -1992,6 +1997,11 @@
 }
 
 .apologetics-debate-ai-badge {
+  position: absolute;
+  top: 18px;
+  right: 0;
+  max-width: 108px;
+  overflow: hidden;
   align-self: center;
   padding: 10px 12px;
   border: 1px solid rgba(255, 166, 224, 0.72);
@@ -2038,8 +2048,10 @@
 }
 
 .apologetics-debate-prompt strong {
+  min-width: 0;
   font-size: 11px;
   line-height: 1.2;
+  overflow-wrap: anywhere;
 }
 
 .apologetics-debate-thread {
@@ -2097,6 +2109,7 @@
   color: #ffffff;
   font-size: 13px;
   line-height: 1.42;
+  overflow-wrap: anywhere;
 }
 
 .apologetics-debate-message--user .apologetics-debate-message-content p {
@@ -2167,5 +2180,8 @@
 
 .apologetics-debate-composer > span { color: #ffffff; font-size: 24px; }
 .apologetics-debate-composer input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; color: #ffffff; font-size: 13px; }
+.apologetics-debate-composer input:disabled,
+.apologetics-debate-composer button:disabled { opacity: 0.6; }
+.apologetics-debate-message-content p.is-pending { color: rgba(224, 239, 248, 0.68); font-style: italic; }
 .apologetics-debate-composer input::placeholder { color: rgba(224, 239, 248, 0.7); }
 .apologetics-debate-composer button { display: grid; place-items: center; width: 42px; min-width: 42px; min-height: 42px; border-radius: 50%; background: linear-gradient(135deg, #34d5ed, #2774eb); color: #ffffff; font-size: 22px; }
