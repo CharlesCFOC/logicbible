@@ -139,13 +139,20 @@ function DebateRoomView({ theme, question, onBack }) {
         <span className="apologetics-debate-ai-badge">✦ AI powered</span>
       </header>
 
-      <div className="apologetics-debate-prompts" aria-label="Suggested debate prompts">
-        {["Does God exist?", "Why does God allow suffering?", "Is the Bible reliable?"].map((prompt, index) => (
-          <button className={`apologetics-debate-prompt apologetics-debate-prompt--${index + 1}`} key={prompt} type="button" onClick={() => setDraft(prompt)}>
-            <span aria-hidden="true">{["?", "◌", "▢"][index]}</span>
-            <strong>{prompt}</strong>
-          </button>
-        ))}
+      <div className="apologetics-debate-carousel" aria-label="Debate context and tools">
+        <div className="apologetics-debate-context-card apologetics-debate-context-card--theme">
+          <small>THEME</small>
+          <strong>{theme?.label || "General"}</strong>
+        </div>
+        <div className="apologetics-debate-context-card apologetics-debate-context-card--question">
+          <small>QUESTION</small>
+          <strong>{question || generalQuestion}</strong>
+        </div>
+        <div className="apologetics-debate-tools" aria-label="Debate tools">
+          <button type="button" onClick={() => setDraft("Can you give me a helpful hint?")}><span>♧</span><strong>Hints</strong><b>›</b></button>
+          <button type="button" onClick={() => setDraft("Show me a supporting Bible verse.")}><span>▢</span><strong>Verse support</strong><b>›</b></button>
+          <button type="button" onClick={() => setDraft("Help me improve my answer.")}><span>☆</span><strong>Better answer</strong><b>›</b></button>
+        </div>
       </div>
 
       <section className="apologetics-debate-thread" aria-label="Debate conversation">
@@ -160,12 +167,6 @@ function DebateRoomView({ theme, question, onBack }) {
         ))}
         <div className="apologetics-debate-dots" aria-hidden="true"><i></i><i></i><i></i></div>
       </section>
-
-      <div className="apologetics-debate-tools" aria-label="Debate tools">
-        <button type="button" onClick={() => setDraft("Can you give me a helpful hint?")}><span>♧</span><strong>Hints</strong><small>Get a helpful nudge</small><b>›</b></button>
-        <button type="button" onClick={() => setDraft("Show me a supporting Bible verse.")}><span>▢</span><strong>Verse support</strong><small>Find Bible verses</small><b>›</b></button>
-        <button type="button" onClick={() => setDraft("Help me improve my answer.")}><span>☆</span><strong>Better answer</strong><small>Improve your reply</small><b>›</b></button>
-      </div>
 
       <section className="apologetics-debate-progress" aria-label="Debate progress">
         <div className="apologetics-debate-progress-ring">72%</div>

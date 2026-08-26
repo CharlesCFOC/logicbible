@@ -1947,7 +1947,7 @@
   max-width: 100%;
   overflow-x: hidden;
   min-height: 100%;
-  padding: 22px 10px 132px;
+  padding: 22px 10px 104px;
   color: #ffffff;
 }
 
@@ -2021,15 +2021,18 @@
   white-space: nowrap;
 }
 
-.apologetics-debate-prompts,
-.apologetics-debate-tools {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+.apologetics-debate-carousel {
+  display: flex;
   gap: 8px;
+  min-width: 0;
+  overflow-x: auto;
+  padding: 2px 2px 8px;
+  scrollbar-width: thin;
 }
 
-.apologetics-debate-prompt,
+.apologetics-debate-context-card,
 .apologetics-debate-tools button {
+  flex: 0 0 138px;
   display: grid;
   gap: 5px;
   min-width: 0;
@@ -2040,27 +2043,28 @@
   text-align: left;
 }
 
-.apologetics-debate-prompt {
-  align-items: center;
-  grid-template-columns: auto 1fr;
-  background: linear-gradient(135deg, #ff6988, #c22bd3);
+.apologetics-debate-context-card--theme { background: linear-gradient(135deg, #ff6988, #c22bd3); }
+.apologetics-debate-context-card--question { flex-basis: 218px; background: linear-gradient(135deg, #2dd5e9, #3567ff); }
+.apologetics-debate-context-card small {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
 }
 
-.apologetics-debate-prompt--2 { background: linear-gradient(135deg, #2dd5e9, #3567ff); }
-.apologetics-debate-prompt--3 { background: linear-gradient(135deg, #ffc15a, #ed526d); }
-
-.apologetics-debate-prompt span,
 .apologetics-debate-tools button > span {
   font-size: 24px;
   line-height: 1;
 }
 
-.apologetics-debate-prompt strong {
+.apologetics-debate-context-card strong {
   min-width: 0;
-  font-size: 11px;
-  line-height: 1.2;
+  font-size: 13px;
+  line-height: 1.25;
   overflow-wrap: anywhere;
 }
+
+.apologetics-debate-tools { display: contents; }
 
 .apologetics-debate-thread {
   display: grid;
@@ -2140,8 +2144,7 @@
 .apologetics-debate-tools button:nth-child(2) { background: linear-gradient(135deg, #2ed4e9, #2866ee); }
 .apologetics-debate-tools button:nth-child(3) { background: linear-gradient(135deg, #ffbd58, #ed5e6f); }
 .apologetics-debate-tools button strong { font-size: 11px; }
-.apologetics-debate-tools button small { grid-column: 2; font-size: 9px; }
-.apologetics-debate-tools button b { grid-column: 3; grid-row: 1 / span 2; font-size: 22px; }
+.apologetics-debate-tools button b { grid-column: 3; font-size: 22px; }
 
 .apologetics-debate-progress {
   display: grid;
@@ -2175,6 +2178,12 @@
 .apologetics-debate-level i b { display: block; width: 60%; height: 100%; border-radius: inherit; background: #2798ed; }
 
 .apologetics-debate-composer {
+  position: fixed;
+  z-index: 20;
+  left: 50%;
+  bottom: 16px;
+  width: min(calc(100% - 32px), 720px);
+  transform: translateX(-50%);
   display: flex;
   gap: 9px;
   align-items: center;
