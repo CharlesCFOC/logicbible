@@ -2275,12 +2275,13 @@
   place-items: center;
   width: 58px;
   height: 58px;
-  border: 7px solid #5966ed;
-  border-left-color: #2b9aea;
+  border: 0;
   border-radius: 50%;
+  background: radial-gradient(circle, #123b53 57%, transparent 59%), conic-gradient(#5966ed calc(var(--confidence, 50) * 1%), rgba(43, 154, 234, 0.25) 0);
   color: #ffffff;
   font-size: 14px;
   font-weight: 900;
+  transition: background 300ms ease;
 }
 
 .apologetics-debate-progress strong { font-size: 13px; }

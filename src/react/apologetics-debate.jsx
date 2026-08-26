@@ -116,9 +116,18 @@ function readDebateConversation(theme, question) {
   }
 }
 
-function saveDebateConversation(theme, question, messages, difficulty = "Intermediate", factCheck = false) {
+function readDebateProgress(theme, question) {
+  try {
+    const stored = JSON.parse(localStorage.getItem(getDebateConversationKey(theme, question)) || "null");
+    return stored?.confidence ? { confidence: stored.confidence, journal: stored.journal || [] } : { confidence: 50, journal: [] };
+  } catch {
+    return { confidence: 50, journal: [] };
+  }
+}
+
+function saveDebateConversation(theme, question, messages, difficulty = "Intermediate", factCheck = false, confidence = 50, journal = []) {
   const cleanMessages = messages.filter((message) => !message.pending && message.text).slice(-40);
-  localStorage.setItem(getDebateConversationKey(theme, question), JSON.stringify({ themeId: theme?.id, question, difficulty, factCheck, updatedAt: Date.now(), messages: cleanMessages }));
+  localStorage.setItem(getDebateConversationKey(theme, question), JSON.stringify({ themeId: theme?.id, question, difficulty, factCheck, confidence, journal: journal.slice(-20), updatedAt: Date.now(), messages: cleanMessages }));
 }
 
 function getLatestDebateConversation() {
@@ -161,6 +170,9 @@ function DebateRoomView({ theme, question, difficulty, factCheck, onBack }) {
   const [betterAnswerLoading, setBetterAnswerLoading] = useState(false);
   const [betterAnswerText, setBetterAnswerText] = useState("");
   const [roomFactCheck, setRoomFactCheck] = useState(factCheck);
+  const savedProgress = readDebateProgress(theme, question);
+  const [confidence, setConfidence] = useState(savedProgress.confidence);
+  const [confidenceJournal, setConfidenceJournal] = useState(savedProgress.journal);
   const [confidenceOpen, setConfidenceOpen] = useState(false);
   const threadRef = useRef(null);
 
@@ -172,8 +184,8 @@ function DebateRoomView({ theme, question, difficulty, factCheck, onBack }) {
 
   useEffect(() => {
     if (threadRef.current) threadRef.current.scrollTop = threadRef.current.scrollHeight;
-    saveDebateConversation(theme, question, messages, difficulty, roomFactCheck);
-  }, [messages, roomFactCheck]);
+    saveDebateConversation(theme, question, messages, difficulty, roomFactCheck, confidence, confidenceJournal);
+  }, [messages, roomFactCheck, confidence, confidenceJournal]);
 
   useEffect(() => {
     if (!verseSupportOpen && !hintsOpen && !betterAnswerOpen) return undefined;
@@ -255,6 +267,16 @@ function DebateRoomView({ theme, question, difficulty, factCheck, onBack }) {
       const context = `You are the user's respectful but serious opponent in a Christian apologetics debate room. Debate theme: ${theme?.label || "General"}. Central question: ${question || generalQuestion}. Difficulty: ${difficulty}. ${difficulty === "Hostile" ? "You may use plausible but intentionally flawed objections, but never fabricate a Bible quotation." : "Keep objections accurate and fair."} Your role is to try to defeat the user's position: identify assumptions, expose weaknesses, ask precise follow-up questions, and present the strongest reasonable counter-argument. Respond directly to the user's latest argument and keep the debate moving. Do not agree just to be encouraging. However, if the user's point is logically strong, well-supported, or difficult to refute, explicitly acknowledge that strength before continuing. Never invent evidence or Bible quotations. Stay charitable, calm, and intellectually honest. Do not give a complete replacement answer for the user; make the user defend and improve their own case. ${factCheckInstruction}`;
       const responseText = await bridge.sendDebate(`${context}\n\nUser response: ${text}`, history);
       setMessages((current) => [...current.slice(0, -1), { role: "assistant", text: responseText }]);
+      try {
+        const evaluation = await bridge.evaluateDebate(`Evaluate this user's latest debate response for a Christian apologetics practice session. Current confidence score: ${confidence}%. User response: ${text}. Return JSON only with this shape: {"change": number from -8 to 8, "reason": "one short explanation", "criteria": {"logic": 0-100, "evidence": 0-100, "clarity": 0-100, "response": 0-100}}. Judge the quality of reasoning, not whether the position agrees with you.`);
+        const parsed = JSON.parse(evaluation.match(/\{[\s\S]*\}/)?.[0] || "{}");
+        const change = Math.max(-8, Math.min(8, Number(parsed.change) || 0));
+        const nextScore = Math.max(0, Math.min(100, confidence + change));
+        setConfidence(nextScore);
+        setConfidenceJournal((current) => [...current, { score: nextScore, change, reason: parsed.reason || "Your response was evaluated by the debate coach." }]);
+      } catch {
+        // The debate continues even if the optional score evaluation is unavailable.
+      }
     } catch (error) {
       setMessages((current) => [...current.slice(0, -1), { role: "assistant", text: error.message || "AI is not available yet." }]);
     } finally {
@@ -299,14 +321,14 @@ function DebateRoomView({ theme, question, difficulty, factCheck, onBack }) {
 
       <section className="apologetics-debate-progress" aria-label="Debate progress">
         <button className="apologetics-debate-progress-main" type="button" onClick={() => setConfidenceOpen((current) => !current)} aria-expanded={confidenceOpen}>
-          <div className="apologetics-debate-progress-ring">50%</div>
+          <div className="apologetics-debate-progress-ring" style={{ "--confidence": confidence }}>{confidence}%</div>
           <div><strong>Confidence</strong><p>Neutral starting point. Build your case.</p></div>
           <div className="apologetics-debate-level"><strong>Level 1</strong><span>0 / 100 XP</span><i><b></b></i></div>
         </button>
         {confidenceOpen && (
           <div className="apologetics-debate-confidence-journal">
             <div className="apologetics-debate-confidence-journal-heading"><strong>Score journal</strong><span>Tap the card to close</span></div>
-            <div className="apologetics-debate-confidence-entry"><b>50%</b><div><strong>Neutral baseline</strong><p>Every debate starts here. Your score changes as your answers are evaluated.</p></div></div>
+            {confidenceJournal.length ? confidenceJournal.slice().reverse().map((entry, index) => <div className="apologetics-debate-confidence-entry" key={`${entry.score}-${index}`}><b>{entry.score}%</b><div><strong>{entry.change >= 0 ? `+${entry.change}` : entry.change}%</strong><p>{entry.reason}</p></div></div>) : <div className="apologetics-debate-confidence-entry"><b>50%</b><div><strong>Neutral baseline</strong><p>Every debate starts here. Your score changes as your answers are evaluated.</p></div></div>}
             <div className="apologetics-debate-confidence-criteria"><span>Logic</span><span>Evidence</span><span>Clarity</span><span>Response</span></div>
           </div>
         )}
