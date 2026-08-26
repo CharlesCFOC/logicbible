@@ -72,6 +72,16 @@ html:has(.app-shell[data-app-background="black"]) {
   color: #fff !important;
 }
 
+.app-shell[data-app-background="black"] .reader-screen .reader-select-label select {
+  border-color: rgba(170, 215, 238, 0.42) !important;
+  background: rgba(54, 82, 103, 0.52) !important;
+  background-image: none !important;
+  -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
+  backdrop-filter: blur(18px) saturate(135%) !important;
+  box-shadow: inset 0 1px 0 rgba(220, 242, 255, 0.14) !important;
+  color: #ffffff !important;
+}
+
 .app-shell[data-app-background="black"] .prayer-toolbar,
 .app-shell[data-app-background="black"] .prayer-board-label {
   background: transparent !important;
