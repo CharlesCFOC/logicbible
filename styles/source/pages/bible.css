@@ -404,21 +404,25 @@
 .parallel-controls {
   position: sticky;
   top: 58px;
-  z-index: 5;
+  z-index: 20;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
   margin: 12px 0 8px;
   padding: 6px 0;
   border-radius: 14px;
-  background: transparent;
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
+  background: rgba(18, 45, 61, 0.34);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  backdrop-filter: blur(18px) saturate(150%);
+  isolation: isolate;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
 }
 
 .app-shell[data-app-background="black"] .reader-screen .parallel-controls {
-  background: transparent !important;
-  box-shadow: none !important;
+  background: rgba(18, 45, 61, 0.34) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(155%) !important;
+  backdrop-filter: blur(20px) saturate(155%) !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18) !important;
 }
 
 .parallel-controls .parallel-selects {
