@@ -7019,6 +7019,16 @@ window.aiBridge = {
     document.dispatchEvent(new CustomEvent("ai:state-change"));
     return responseText;
   },
+  async sendDebate(prompt, history = []) {
+    const response = await fetch("/api/ai/chat", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ prompt, history }),
+    });
+    const payload = await response.json();
+    if (!response.ok) throw new Error(payload.error || "AI request failed.");
+    return payload.text || "No response text returned.";
+  },
   newConversation() {
     currentAiConversationId = `chat-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     localStorage.setItem("brother.aiConversationId", currentAiConversationId);

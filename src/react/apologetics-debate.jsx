@@ -90,13 +90,37 @@ const debateThemes = [
 ];
 
 const generalQuestion = "What is the strongest reason to believe the Christian message is true?";
+const debateConversationTtl = 30 * 24 * 60 * 60 * 1000;
+
+function getDebateConversationKey(theme, question) {
+  return `brother.debateConversation.${theme?.id || "general"}.${encodeURIComponent(question || generalQuestion)}`;
+}
+
+function readDebateConversation(theme, question) {
+  try {
+    const stored = JSON.parse(localStorage.getItem(getDebateConversationKey(theme, question)) || "null");
+    if (!stored || Date.now() - Number(stored.updatedAt || 0) > debateConversationTtl) {
+      localStorage.removeItem(getDebateConversationKey(theme, question));
+      return null;
+    }
+    return stored.messages?.length ? stored.messages : null;
+  } catch {
+    return null;
+  }
+}
+
+function saveDebateConversation(theme, question, messages) {
+  const cleanMessages = messages.filter((message) => !message.pending && message.text).slice(-40);
+  localStorage.setItem(getDebateConversationKey(theme, question), JSON.stringify({ updatedAt: Date.now(), messages: cleanMessages }));
+}
 
 function DebateRoomView({ theme, question, onBack }) {
   const bridge = window.aiBridge;
-  const [messages, setMessages] = useState([
+  const initialMessages = [
     { role: "assistant", text: question || generalQuestion },
     { role: "assistant", text: "Take your time, make your best case, and I’ll help you sharpen the answer." },
-  ]);
+  ];
+  const [messages, setMessages] = useState(() => readDebateConversation(theme, question) || initialMessages);
   const [draft, setDraft] = useState("");
   const [pending, setPending] = useState(false);
   const threadRef = useRef(null);
@@ -109,6 +133,7 @@ function DebateRoomView({ theme, question, onBack }) {
 
   useEffect(() => {
     if (threadRef.current) threadRef.current.scrollTop = threadRef.current.scrollHeight;
+    saveDebateConversation(theme, question, messages);
   }, [messages]);
 
   const sendMessage = async (event) => {
@@ -125,7 +150,7 @@ function DebateRoomView({ theme, question, onBack }) {
     setPending(true);
     try {
       const context = `You are the AI debate partner in a Christian apologetics debate room. Debate theme: ${theme?.label || "General"}. Central question: ${question || generalQuestion}. Give a clear, respectful, evidence-based response that helps the user practice apologetics.`;
-      const responseText = await bridge.send(`${context}\n\nUser response: ${text}`, history);
+      const responseText = await bridge.sendDebate(`${context}\n\nUser response: ${text}`, history);
       setMessages((current) => [...current.slice(0, -1), { role: "assistant", text: responseText }]);
     } catch (error) {
       setMessages((current) => [...current.slice(0, -1), { role: "assistant", text: error.message || "AI is not available yet." }]);
