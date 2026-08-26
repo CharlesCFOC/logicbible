@@ -104,7 +104,7 @@ export function AiPage() {
   return (
     <>
       <header className="ai-topbar">
-        <div><strong>Brother AI</strong><span>Scripture chat</span></div>
+        <div><strong>Brother AI</strong></div>
         <button className="icon-button" type="button" onClick={newChat} aria-label="New chat"><AiIcon name="edit" /></button>
       </header>
       <nav className="ai-tabs" aria-label="AI sections">
