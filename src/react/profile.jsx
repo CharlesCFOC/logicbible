@@ -127,12 +127,12 @@ export function ProfilePreferences() {
       </div>
       <div className="preference-card">
         <div className="preference-copy"><PreferenceIcon name="type" /><div><strong>Text size</strong><p>Adjust the Scripture reading size.</p></div></div>
-        <div className="text-size-preview"><span>Preview</span><p><sup>1</sup> In the beginning was the Word.</p></div>
-        <div className="segmented-control">
+        <div className="segmented-control" data-text-size-options>
           {[["xs", "A−", "Extra small text"], ["small", "A", "Small text"], ["medium", "A", "Medium text"], ["large", "A", "Large text"], ["xl", "A+", "Extra large text"]].map(([id, label, ariaLabel]) => (
             <button className={state.textSize === id ? "is-active" : ""} type="button" key={id} onClick={() => bridge.setPreference("textSize", id)} aria-label={ariaLabel}>{label}</button>
           ))}
         </div>
+        <div className="text-size-preview"><span>Preview</span><p><sup>1</sup> In the beginning was the Word.</p></div>
       </div>
     </>
   );
