@@ -429,15 +429,12 @@
 }
 
 .parallel-toggle {
-  position: relative;
-  isolation: isolate;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   width: 100%;
   min-height: 44px;
-  overflow: hidden;
   border: 1px solid rgba(221, 227, 234, 0.02);
   border-radius: 999px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(249, 251, 253, 0.986));
@@ -449,24 +446,6 @@
   color: var(--muted);
   font-size: 13px;
   font-weight: 760;
-}
-
-.parallel-toggle::before {
-  position: absolute;
-  z-index: 0;
-  inset: 0;
-  border-radius: inherit;
-  background: rgba(255, 255, 255, 0.08);
-  -webkit-backdrop-filter: blur(28px) saturate(160%);
-  backdrop-filter: blur(28px) saturate(160%);
-  content: "";
-  pointer-events: none;
-}
-
-.parallel-toggle > svg,
-.parallel-toggle > span {
-  position: relative;
-  z-index: 1;
 }
 
 .parallel-toggle.is-active {
