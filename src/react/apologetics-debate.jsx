@@ -138,6 +138,12 @@ function DebateRoomView({ theme, question, onBack }) {
         </div>
       </header>
 
+      <section className="apologetics-debate-progress" aria-label="Debate progress">
+        <div className="apologetics-debate-progress-ring">72%</div>
+        <div><strong>Confidence</strong><p>Keep going! You’re building stronger answers.</p></div>
+        <div className="apologetics-debate-level"><strong>Level 3</strong><span>120 / 200 XP</span><i><b></b></i></div>
+      </section>
+
       <div className="apologetics-debate-carousel" aria-label="Debate context and tools">
         <div className="apologetics-debate-context-card apologetics-debate-context-card--theme">
           <small>THEME</small>
@@ -165,12 +171,6 @@ function DebateRoomView({ theme, question, onBack }) {
           </article>
         ))}
         <div className="apologetics-debate-dots" aria-hidden="true"><i></i><i></i><i></i></div>
-      </section>
-
-      <section className="apologetics-debate-progress" aria-label="Debate progress">
-        <div className="apologetics-debate-progress-ring">72%</div>
-        <div><strong>Confidence</strong><p>Keep going! You’re building stronger answers.</p></div>
-        <div className="apologetics-debate-level"><strong>Level 3</strong><span>120 / 200 XP</span><i><b></b></i></div>
       </section>
 
       <form className="apologetics-debate-composer" onSubmit={sendMessage}>
