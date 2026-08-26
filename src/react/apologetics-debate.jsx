@@ -291,7 +291,11 @@ function DebateRoomView({ theme, question, difficulty, factCheck, onBack }) {
       </header>
 
       <div className="apologetics-debate-room-settings">
-        <span>Difficulty: <strong>{difficulty}</strong></span>
+        <div className="apologetics-debate-room-context">
+          <span>Difficulty: <strong>{difficulty}</strong></span>
+          <span>Theme: <strong>{theme?.label || "General"}</strong></span>
+          <span>Question: <strong>{question || generalQuestion}</strong></span>
+        </div>
         <button type="button" className={roomFactCheck ? "is-on" : ""} onClick={() => setRoomFactCheck((current) => !current)} aria-pressed={roomFactCheck}>
           Fact-check <b>{roomFactCheck ? "On" : "Off"}</b>
         </button>
@@ -304,14 +308,6 @@ function DebateRoomView({ theme, question, difficulty, factCheck, onBack }) {
       </section>
 
       <div className="apologetics-debate-carousel" aria-label="Debate context and tools">
-        <div className="apologetics-debate-context-card apologetics-debate-context-card--theme">
-          <small>THEME</small>
-          <strong>{theme?.label || "General"}</strong>
-        </div>
-        <div className="apologetics-debate-context-card apologetics-debate-context-card--question">
-          <small>QUESTION</small>
-          <strong>{question || generalQuestion}</strong>
-        </div>
         <div className="apologetics-debate-tools" aria-label="Debate tools">
           <button type="button" onClick={openHints}><span>♧</span><strong>Hints</strong><b>›</b></button>
           <button type="button" onClick={openVerseSupport}><span>▢</span><strong>Verse support</strong><b>›</b></button>
