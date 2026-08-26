@@ -26,6 +26,8 @@ html:has(.app-shell[data-app-background="black"]) {
 .app-shell[data-app-background="black"] .reader-screen .reader-topbar {
   background: transparent !important;
   background-image: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
   box-shadow: none !important;
 }
 
