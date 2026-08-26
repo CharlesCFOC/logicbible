@@ -134,7 +134,7 @@ export function ApologeticsDebatePage() {
           </div>
           <div className="apologetics-debate-question-list">
             {questions.map((item, index) => (
-              <button className={question === item ? "is-selected" : ""} key={item} type="button" onClick={() => setQuestion(item)} aria-pressed={question === item}>
+              <button className={`${index === 0 ? "apologetics-debate-question--general " : ""}${question === item ? "is-selected" : ""}`} key={item} type="button" onClick={() => setQuestion(item)} aria-pressed={question === item}>
                 <span>{index === 0 ? "General" : `Question ${index}`}</span>
                 <strong>{item}</strong>
               </button>

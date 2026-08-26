@@ -544,6 +544,11 @@
   background: transparent;
 }
 
+.apologetics-debate-question-list button.apologetics-debate-question--general {
+  border: 1px solid rgba(255, 255, 255, 0.86) !important;
+  border-radius: 16px;
+}
+
 .apologetics-debate-question-list button.is-selected,
 .apologetics-debate-question-list button:hover {
   border: 0;
