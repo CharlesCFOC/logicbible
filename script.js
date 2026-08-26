@@ -4737,7 +4737,7 @@ async function requestAiResponse(prompt, history = []) {
     const response = await fetch("/api/ai/chat", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ prompt, history }),
+      body: JSON.stringify({ prompt, history, mode: "debate" }),
     });
     const payload = await response.json();
     if (!response.ok) {
@@ -7023,7 +7023,7 @@ window.aiBridge = {
     const response = await fetch("/api/ai/chat", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ prompt, history }),
+      body: JSON.stringify({ prompt, history, mode: "debate" }),
     });
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.error || "AI request failed.");
@@ -7033,7 +7033,7 @@ window.aiBridge = {
     const response = await fetch("/api/ai/chat", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ prompt, history: [] }),
+      body: JSON.stringify({ prompt, history: [], mode: "evaluation" }),
     });
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.error || "AI evaluation failed.");

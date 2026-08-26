@@ -187,6 +187,7 @@ async function openAiResponse({ instructions, input, maxOutputTokens = 700 }) {
 async function handleAiChat(req, res) {
   const body = await readJsonBody(req);
   const prompt = String(body.prompt || "").trim();
+  const mode = String(body.mode || "general");
   const history = Array.isArray(body.history)
     ? body.history
       .filter((item) => item && ["user", "assistant"].includes(item.role) && item.text)
@@ -212,13 +213,27 @@ async function handleAiChat(req, res) {
     ].join("\n")
     : prompt;
 
+  const instructions = mode === "debate"
+    ? [
+      "You are Brother AI acting as the user's serious but fair debate opponent in a Christian apologetics debate.",
+      "Do not coach the user and do not simply encourage them. Challenge their latest argument directly with the strongest reasonable counter-argument.",
+      "Identify assumptions, weaknesses, unanswered questions, and conflicting evidence. Make the user defend their position.",
+      "If an argument is genuinely strong or difficult to refute, explicitly acknowledge that before continuing the challenge.",
+      "Stay respectful and intellectually honest. Never invent Bible quotations or present made-up evidence as fact.",
+    ]
+    : mode === "evaluation"
+      ? [
+        "You are Brother AI evaluating a user's Christian apologetics debate response.",
+        "Return only the requested JSON. Judge reasoning quality, not whether the position agrees with you.",
+      ]
+      : [
+        "You are Brother AI, a concise Bible study assistant.",
+        "Use the recent conversation context when the user refers to something mentioned earlier.",
+        "Do not claim you lack context if the answer can be inferred from the provided recent context.",
+        "Give biblically grounded, clear, helpful answers. When interpretation is uncertain, say so plainly.",
+      ];
   const result = await openAiResponse({
-    instructions: [
-      "You are Brother AI, a concise Bible study assistant.",
-      "Use the recent conversation context when the user refers to something mentioned earlier.",
-      "Do not claim you lack context if the answer can be inferred from the provided recent context.",
-      "Give biblically grounded, clear, helpful answers. When interpretation is uncertain, say so plainly.",
-    ].join(" "),
+    instructions: instructions.join(" "),
     input: context,
   });
   sendJson(res, 200, result);
