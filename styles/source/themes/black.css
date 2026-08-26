@@ -87,9 +87,9 @@ html:has(.app-shell[data-app-background="black"]) {
 .app-shell[data-app-background="black"] .reader-screen .parallel-toggle,
 .app-shell[data-app-background="black"] .reader-screen .parallel-toggle:hover {
   border-color: rgba(170, 215, 238, 0.34) !important;
-  background: rgba(54, 82, 103, 0.5) !important;
-  -webkit-backdrop-filter: blur(12px) saturate(135%) !important;
-  backdrop-filter: blur(12px) saturate(135%) !important;
+  background: rgba(54, 82, 103, 0.32) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(145%) !important;
+  backdrop-filter: blur(18px) saturate(145%) !important;
   color: #d9f2ff !important;
   box-shadow: inset 0 1px 0 rgba(220, 242, 255, 0.12), 0 4px 12px rgba(0, 0, 0, 0.16) !important;
 }
@@ -97,7 +97,7 @@ html:has(.app-shell[data-app-background="black"]) {
 .app-shell[data-app-background="black"] .reader-screen .parallel-toggle.is-active,
 .app-shell[data-app-background="black"] .reader-screen .parallel-toggle.is-active:hover {
   border-color: rgba(139, 220, 255, 0.72) !important;
-  background: rgba(60, 157, 204, 0.42) !important;
+  background: rgba(60, 157, 204, 0.36) !important;
   color: #ffffff !important;
 }
 
