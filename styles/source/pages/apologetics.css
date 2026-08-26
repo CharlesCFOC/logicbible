@@ -2190,5 +2190,42 @@
 .apologetics-debate-composer textarea:disabled,
 .apologetics-debate-composer button:disabled { opacity: 0.6; }
 .apologetics-debate-composer button svg { width: 20px; height: 20px; }
+
+/* Debate room composer mirrors the AI composer exactly. */
+.app-shell.is-debate-room .apologetics-debate-composer {
+  gap: 8px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.app-shell.is-debate-room .apologetics-debate-composer textarea {
+  min-height: 58px;
+  padding: 12px 14px;
+  border: 1px solid rgba(139, 220, 255, 0.58);
+  border-radius: 10px;
+  background: transparent !important;
+  color: #f4fbff;
+  box-shadow: none;
+}
+
+.app-shell.is-debate-room .apologetics-debate-composer textarea:focus {
+  border-color: #8bdcff;
+  box-shadow: none;
+}
+
+.app-shell.is-debate-room .apologetics-debate-composer button {
+  flex: 0 0 44px;
+  width: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid #8bdcff;
+  border-radius: 12px;
+  background: #3c9dcc;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(60, 157, 204, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
 .apologetics-debate-composer input::placeholder { color: rgba(224, 239, 248, 0.7); }
 .apologetics-debate-composer button { display: grid; place-items: center; width: 42px; min-width: 42px; min-height: 42px; border-radius: 50%; background: linear-gradient(135deg, #34d5ed, #2774eb); color: #ffffff; font-size: 22px; }
