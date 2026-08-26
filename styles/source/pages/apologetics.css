@@ -531,7 +531,9 @@
   gap: 8px;
   max-height: 430px;
   overflow-y: auto;
-  padding-right: 2px;
+  padding: 8px 10px 8px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.86);
+  border-radius: 20px;
 }
 
 .apologetics-debate-question-list button {
@@ -542,11 +544,6 @@
   border: 0;
   border-radius: 0;
   background: transparent;
-}
-
-.apologetics-debate-question-list button.apologetics-debate-question--general {
-  border: 1px solid rgba(255, 255, 255, 0.86) !important;
-  border-radius: 16px;
 }
 
 .apologetics-debate-question-list button.is-selected,
