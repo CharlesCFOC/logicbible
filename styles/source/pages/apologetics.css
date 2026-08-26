@@ -2224,9 +2224,11 @@
   padding: 12px 14px;
   border: 1px solid rgba(139, 220, 255, 0.58);
   border-radius: 10px;
-  background: transparent !important;
+  background: rgba(38, 87, 117, 0.42) !important;
   color: #f4fbff;
   box-shadow: none;
+  -webkit-backdrop-filter: blur(16px) saturate(125%);
+  backdrop-filter: blur(16px) saturate(125%);
 }
 
 .app-shell.is-debate-room .apologetics-debate-composer textarea:focus {
