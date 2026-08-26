@@ -250,9 +250,10 @@
 .apologetics-hero-image {
   position: relative;
   overflow: hidden;
+  width: calc(100% + 28px);
   min-height: 60dvh;
   max-height: 500px;
-  margin: -18px -18px 16px;
+  margin: -14px -14px 16px;
   border: 0;
   border-radius: 0 0 48px 48px;
   background: transparent;

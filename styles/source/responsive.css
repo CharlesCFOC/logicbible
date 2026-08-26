@@ -259,6 +259,7 @@ body:has(.app-shell[data-app-background="black"]) .prayer-intro {
   }
 
   .apologetics-hero-image {
+    width: calc(100% + 36px);
     margin-right: -18px;
     margin-left: -18px;
   }
