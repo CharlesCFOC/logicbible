@@ -146,6 +146,10 @@ export function ApologeticsDebatePage() {
       ) : (
         <p className="apologetics-debate-empty">Choose a theme to unlock the debate questions.</p>
       )}
+
+      <button className="apologetics-debate-launch" type="button" disabled={!theme || !question}>
+        Lancer le debat
+      </button>
     </div>
   );
 }
