@@ -192,6 +192,7 @@ const sparkleIcon = (
 
 function HomeLibraryFolderTools({ snapshot, tab, onChange }) {
   const [folderName, setFolderName] = useState("");
+  const [isCreateOpen, setCreateOpen] = useState(false);
   if (tab === "notes") return null;
 
   const createFolder = (event) => {
@@ -200,11 +201,13 @@ function HomeLibraryFolderTools({ snapshot, tab, onChange }) {
     if (!name) return;
     const folderId = window.homeLibraryBridge.createFolder(tab, name);
     setFolderName("");
+    setCreateOpen(false);
     if (folderId) onChange(folderId);
   };
 
   return (
     <div className="saved-folder-tools">
+      <button className="saved-folder-create-trigger" type="button" onClick={() => setCreateOpen(true)} aria-label="New folder" title="New folder">+</button>
       <div className="saved-folder-chips" aria-label={`${tab} folders`}>
         <button className={snapshot.activeFolder === "" ? "is-active" : ""} type="button" onClick={() => onChange("")}>All</button>
         <button className={snapshot.activeFolder === "unfiled" ? "is-active" : ""} type="button" onClick={() => onChange("unfiled")}>No folder</button>
@@ -214,10 +217,22 @@ function HomeLibraryFolderTools({ snapshot, tab, onChange }) {
           </button>
         ))}
       </div>
-      <form className="saved-folder-form" onSubmit={createFolder}>
-        <input value={folderName} onChange={(event) => setFolderName(event.target.value)} type="text" name="folder" placeholder="New folder" aria-label="New folder name" />
-        <button type="submit" aria-label="Create folder">+</button>
-      </form>
+      {isCreateOpen && (
+        <div className="saved-folder-create-modal" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && setCreateOpen(false)}>
+          <form className="saved-folder-create-dialog" onSubmit={createFolder} role="dialog" aria-modal="true" aria-labelledby="new-folder-title">
+            <div className="saved-folder-create-heading">
+              <div><span>Organize your library</span><h3 id="new-folder-title">New folder</h3></div>
+              <button type="button" className="saved-folder-create-close" onClick={() => setCreateOpen(false)} aria-label="Close">×</button>
+            </div>
+            <p>Give your {tab === "highlights" ? "highlights" : "bookmarks"} a place to call home.</p>
+            <input autoFocus value={folderName} onChange={(event) => setFolderName(event.target.value)} type="text" name="folder" placeholder="Folder name" aria-label="New folder name" maxLength="40" />
+            <div className="saved-folder-create-actions">
+              <button type="button" onClick={() => setCreateOpen(false)}>Cancel</button>
+              <button type="submit">Create folder</button>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 }
