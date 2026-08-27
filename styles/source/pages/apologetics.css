@@ -280,15 +280,86 @@
   line-height: 1.1;
 }
 
+.apologetics-xp-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px 10px;
+  padding: 4px 2px 2px;
+  margin-bottom: 14px;
+}
+
+.apologetics-xp-badge {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  background: linear-gradient(135deg, #72ffb1, #00bd70);
+  color: #073b2b;
+  font-size: 19px;
+  font-weight: 800;
+}
+
+#apologetics .apologetics-xp-badge {
+  border: 0;
+  background: #ffffff;
+  color: #000000;
+  box-shadow: none;
+}
+
+.apologetics-xp-copy { min-width: 0; }
+.apologetics-xp-copy span { color: #a8e5ff; font-size: 8px; font-weight: 800; letter-spacing: 0.08em; }
+.apologetics-xp-copy strong { display: block; color: #ffffff; font-size: 15px; }
+.apologetics-xp-copy p { margin: 2px 0 0; color: rgba(255, 255, 255, 0.78); font-size: 9px; }
+.apologetics-xp-total { display: grid; justify-items: end; }
+.apologetics-xp-total strong { color: #ffffff; font-size: 19px; }
+.apologetics-xp-total span,.apologetics-xp-card > small { color: rgba(235, 248, 255, 0.78); font-size: 8px; }
+.apologetics-xp-track { grid-column: 1 / -1; height: 7px; overflow: hidden; border-radius: 99px; background: rgba(7, 35, 57, 0.52); }
+.apologetics-xp-track i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #72ffb1, #00bd70); transition: width 240ms ease; }
+.apologetics-xp-card > small { grid-column: 1 / -1; }
+
 .apologetics-room-list {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
+}
+
+.apologetics-room-button:first-child {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 680px) {
+  .apologetics-room-button {
+    gap: 9px;
+    min-height: 92px;
+    padding: 14px;
+    border-radius: 22px;
+  }
+
+  .apologetics-room-button > svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .apologetics-room-button:not(:first-child) .apologetics-room-copy strong {
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .apologetics-room-button:not(:first-child) .apologetics-room-copy small {
+    font-size: 9px;
+    white-space: nowrap;
+  }
 }
 
 .apologetics-room-button {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 16px;
+  justify-content: center;
+  gap: 8px;
   width: 100%;
   min-height: 108px;
   padding: 22px;
@@ -331,6 +402,8 @@
 .apologetics-room-copy {
   display: grid !important;
   gap: 4px;
+  justify-items: center;
+  text-align: center;
 }
 
 .apologetics-room-copy strong {
@@ -343,6 +416,23 @@
   color: #ffffff !important;
   font-size: 11px;
   font-weight: 600;
+}
+
+@media (max-width: 680px) {
+  .apologetics-room-button:not(:first-child) {
+    min-height: 116px;
+    padding: 12px;
+  }
+
+  .apologetics-room-button:not(:first-child) .apologetics-room-copy strong {
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  .apologetics-room-button:not(:first-child) .apologetics-room-copy small {
+    font-size: 9px;
+    white-space: nowrap;
+  }
 }
 
 .app-shell[data-app-background="black"] .apologetics-room-button .apologetics-room-copy small {
@@ -377,6 +467,86 @@
 
 .apologetics-room-button--theory {
   background: linear-gradient(135deg, #ffc15a 0%, #ed526d 100%);
+}
+
+/* Apologetics landing page: soft glassmorphism treatment. */
+#apologetics {
+  background:
+    radial-gradient(ellipse 74% 40% at 0% 10%, rgba(173, 219, 232, 0.3), transparent 68%),
+    radial-gradient(ellipse 68% 46% at 100% 42%, rgba(77, 125, 190, 0.32), transparent 66%),
+    radial-gradient(ellipse 80% 36% at 42% 100%, rgba(37, 137, 164, 0.3), transparent 70%);
+  background-color: #103d55;
+}
+
+#apologetics .apologetics-page-header h1 {
+  letter-spacing: -0.045em;
+  text-shadow: 0 2px 14px rgba(160, 236, 255, 0.14);
+}
+
+#apologetics .apologetics-page-header p {
+  color: rgba(235, 250, 255, 0.82);
+}
+
+#apologetics .apologetics-room-list {
+  gap: 14px;
+}
+
+#apologetics .apologetics-room-button {
+  position: relative;
+  border: 0 !important;
+  background-clip: padding-box;
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+  backdrop-filter: blur(18px) saturate(135%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    inset 0 -1px 0 rgba(8, 35, 55, 0.16),
+    10px 10px 28px rgba(0, 0, 0, 0.42);
+}
+
+#apologetics .apologetics-room-button::after {
+  display: none;
+}
+
+#apologetics .apologetics-room-button > * {
+  position: relative;
+  z-index: 1;
+}
+
+#apologetics .apologetics-room-button > svg {
+  filter: none;
+}
+
+#apologetics .apologetics-room-button--debate {
+  background: linear-gradient(135deg, rgba(255, 105, 151, 0.84), rgba(195, 48, 210, 0.78));
+}
+
+#apologetics .apologetics-room-button--coach {
+  background: linear-gradient(135deg, rgba(45, 216, 238, 0.84), rgba(53, 103, 255, 0.8));
+}
+
+#apologetics .apologetics-room-button--theory {
+  background: linear-gradient(135deg, rgba(255, 193, 90, 0.86), rgba(237, 82, 109, 0.8));
+}
+
+#apologetics .apologetics-room-button:hover {
+  filter: brightness(1.1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.52),
+    18px 18px 34px rgba(0, 0, 0, 0.5);
+}
+
+#apologetics .apologetics-room-button:active,
+#apologetics .apologetics-room-button:focus-visible {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.56),
+    12px 12px 32px rgba(0, 0, 0, 0.62);
+}
+
+#apologetics .apologetics-room-button:first-child {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.48),
+    inset -7px -7px 18px rgba(90, 235, 255, 0.16),
+    15px 15px 34px rgba(0, 0, 0, 0.52);
 }
 
 .apologetics-debate-screen {
@@ -463,10 +633,16 @@
 }
 
 .apologetics-debate-theme-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  display: flex;
   gap: 8px;
+  max-width: 100%;
+  padding: 2px 2px 8px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
 }
+
+.apologetics-debate-theme-list::-webkit-scrollbar { display: none; }
 
 .apologetics-debate-theme-list button,
 .apologetics-debate-question-list button {
@@ -478,20 +654,30 @@
 }
 
 .apologetics-debate-theme-list button {
-  min-height: 48px;
-  padding: 0 12px;
+  flex: 0 0 min(62%, 190px);
+  min-height: 42px;
+  padding: 0 11px;
   font-size: 12px;
   font-weight: 800;
   border: 0;
   background: linear-gradient(135deg, #ff4f81 0%, #c82fd3 100%);
   color: #ffffff;
+  scroll-snap-align: start;
+}
+
+.apologetics-coach-setup .apologetics-debate-theme-list button:not(.is-selected) {
+  background: linear-gradient(135deg, #31d8ee 0%, #3567ff 100%);
+}
+
+.apologetics-coach-setup .apologetics-debate-theme-list button.is-selected {
+  background: linear-gradient(135deg, #72ffb1 0%, #00bd70 100%);
 }
 
 .apologetics-debate-theme-list button.is-selected,
 .apologetics-debate-question-list button.is-selected {
-  border-color: rgba(139, 220, 255, 0.82);
-  background: rgba(60, 157, 204, 0.62);
-  box-shadow: inset 0 1px 0 rgba(236, 250, 255, 0.2);
+  border-color: rgba(163, 255, 208, 0.86);
+  background: linear-gradient(135deg, #72ffb1 0%, #00bd70 100%);
+  box-shadow: 0 0 22px rgba(47, 255, 154, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.36);
 }
 
 .apologetics-debate-theme-list button.is-selected {
@@ -549,10 +735,6 @@
 }
 
 .apologetics-debate-difficulty-list button:hover { filter: brightness(1.14); transform: translateY(-1px); }
-.apologetics-debate-difficulty-list button:nth-child(1).is-selected { background: linear-gradient(135deg, #65c7ff, #287bd8); border-color: #a8e5ff; box-shadow: 0 5px 14px rgba(40, 123, 216, 0.3); }
-.apologetics-debate-difficulty-list button:nth-child(3).is-selected { background: linear-gradient(135deg, #a980ff, #5a42d7); border-color: #d2c2ff; box-shadow: 0 5px 14px rgba(90, 66, 215, 0.3); }
-.apologetics-debate-difficulty-list button:nth-child(4).is-selected { background: linear-gradient(135deg, #ff7d9a, #d83072); border-color: #ffc0d0; box-shadow: 0 5px 14px rgba(216, 48, 114, 0.3); }
-
 .apologetics-debate-fact-toggle { justify-self: start; }
 
 .apologetics-debate-difficulty-description {
@@ -691,8 +873,8 @@
 .apologetics-debate-question-list button.is-selected {
   border: 0;
   border-radius: 16px;
-  background: #3c9dcc;
-  box-shadow: inset 0 1px 0 rgba(236, 250, 255, 0.24), 0 6px 14px rgba(22, 91, 137, 0.22);
+  background: linear-gradient(135deg, #72ffb1 0%, #00bd70 100%);
+  box-shadow: 0 0 22px rgba(47, 255, 154, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.36);
 }
 
 .apologetics-debate-question-list button.is-selected > span,
@@ -2075,6 +2257,74 @@
 
 .app-shell.is-debate-room .apologetics-debate-screen {
   padding-bottom: 24px;
+}
+
+.app-shell.is-coach-room .bottom-nav {
+  display: none !important;
+}
+
+.app-shell.is-coach-room .apologetics-debate-screen {
+  padding-bottom: 24px;
+}
+
+.apologetics-coach-room {
+  display: grid;
+  gap: 16px;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 100%;
+  padding: 22px 10px 24px;
+  color: #ffffff;
+}
+
+.apologetics-coach-context {
+  display: grid;
+  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+  gap: 8px;
+}
+
+.apologetics-coach-context article {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+  min-height: 82px;
+  padding: 13px;
+  border: 1px solid rgba(139, 220, 255, 0.55);
+  border-radius: 18px;
+  background: linear-gradient(135deg, #f04f9a, #bf2ed0);
+}
+
+.apologetics-coach-context article + article {
+  background: linear-gradient(135deg, #2ed4e9, #3269f4);
+}
+
+.apologetics-coach-context small {
+  color: #bdeaff;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.apologetics-coach-context strong {
+  color: #ffffff;
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.apologetics-coach-thread {
+  min-height: 320px;
+  padding: 4px 2px 120px;
+}
+
+.app-shell.is-coach-room .apologetics-coach-composer {
+  position: fixed;
+  z-index: 20;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  border-radius: 0;
+  background: rgba(8, 30, 45, 0.82);
+  backdrop-filter: blur(16px);
 }
 
 .apologetics-debate-room-header {

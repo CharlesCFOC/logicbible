@@ -523,6 +523,12 @@
     0 3px 8px rgba(47, 60, 74, 0.003);
 }
 
+/* Home library tabs should switch instantly without the brief panel flash. */
+.app-shell #home .home-library-tabs button.is-active,
+.app-shell #home .home-library-panel {
+  animation: none !important;
+}
+
 .profile-info-section,
 .profile-auth-card,
 .preference-section {

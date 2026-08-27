@@ -50,7 +50,7 @@
           </header>
 
           <article class="home-hero-image" data-react-home-hero-root>
-            <img src="assets/home-card-forest.webp" alt="A peaceful natural forest landscape" />
+            <img src="assets/home-hero-community.png" alt="A worship gathering in prayer" />
             <div class="home-hero-image-copy">
               <div class="home-hero-verse">
                 <span>Verse of the day</span>
@@ -318,24 +318,26 @@
             <h1>Apologetics</h1>
             <p>Choose how you want to grow.</p>
           </header>
+          <div data-react-apologetics-xp-root></div>
 
           <div class="apologetics-room-list" aria-label="Apologetics rooms">
             <button class="apologetics-room-button apologetics-room-button--debate" type="button" data-apologetics-room="debate">
               <i data-lucide="message-circle" aria-hidden="true"></i>
               <span class="apologetics-room-copy"><strong>Debat room</strong><small>Practice real conversations</small></span>
             </button>
-            <button class="apologetics-room-button apologetics-room-button--coach" type="button">
+            <button class="apologetics-room-button apologetics-room-button--coach" type="button" data-apologetics-room="coach">
               <i data-lucide="sparkles" aria-hidden="true"></i>
               <span class="apologetics-room-copy"><strong>Coach room</strong><small>Improve your answers</small></span>
             </button>
             <button class="apologetics-room-button apologetics-room-button--theory" type="button">
               <i data-lucide="book-open" aria-hidden="true"></i>
-              <span class="apologetics-room-copy"><strong>Theorique</strong><small>Learn the essentials</small></span>
+              <span class="apologetics-room-copy"><strong>Theorique room</strong><small>Learn the essentials</small></span>
             </button>
           </div>
         </section>
 
         <section id="apologetics-debate" class="screen apologetics-screen apologetics-debate-screen" data-screen data-react-apologetics-debate-root></section>
+        <section id="apologetics-coach" class="screen apologetics-screen apologetics-debate-screen" data-screen data-react-apologetics-coach-root></section>
 
         <section id="apologetics-track" class="screen apologetics-screen" data-screen>
           <header class="page-header apologetics-track-header">

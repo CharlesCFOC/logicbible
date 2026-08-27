@@ -548,7 +548,7 @@ body:has(.app-shell[data-app-background="black"]) .prayer-compose textarea:focus
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 8px 22px rgba(0, 0, 0, 0.16);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 10px 10px 28px rgba(0, 0, 0, 0.42) !important;
 }
 
 .prayer-card::before {

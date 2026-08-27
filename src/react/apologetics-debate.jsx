@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { AiIcon, AiMessage } from "./ai.jsx";
 
-const debateThemes = [
+export const debateThemes = [
   {
     id: "islam",
     label: "Islam",
@@ -89,10 +89,31 @@ const debateThemes = [
   },
 ];
 
-const generalQuestion = "What is the strongest reason to believe the Christian message is true?";
+export const generalQuestion = "What is the strongest reason to believe the Christian message is true?";
 const debateConversationTtl = 30 * 24 * 60 * 60 * 1000;
-const debateDifficulties = ["Beginner", "Intermediate", "Advanced", "Hostile"];
-const debateDifficultyDescriptions = {
+const debateXpThresholds = [0, 150, 450, 900, 1600, 2600, 4000, 6000, 8500, 11500];
+
+export function getDebateLevelProgress(totalXp) {
+  const xp = Math.max(0, Number(totalXp) || 0);
+  let levelIndex = debateXpThresholds.length - 1;
+  for (let index = 0; index < debateXpThresholds.length; index += 1) {
+    if (xp < debateXpThresholds[index]) {
+      levelIndex = Math.max(0, index - 1);
+      break;
+    }
+  }
+  const currentThreshold = debateXpThresholds[levelIndex];
+  const nextThreshold = debateXpThresholds[levelIndex + 1];
+  const levelSpan = nextThreshold ? nextThreshold - currentThreshold : 1;
+  return {
+    level: levelIndex + 1,
+    currentXp: nextThreshold ? xp - currentThreshold : xp,
+    requiredXp: nextThreshold ? levelSpan : 0,
+    progress: nextThreshold ? Math.min(100, ((xp - currentThreshold) / levelSpan) * 100) : 100,
+  };
+}
+export const debateDifficulties = ["Beginner", "Intermediate", "Advanced", "Hostile"];
+export const debateDifficultyDescriptions = {
   Beginner: "Simple objections and clear questions to help you learn the basics.",
   Intermediate: "Balanced counter-arguments that test your reasoning and biblical support.",
   Advanced: "Stronger objections, subtle assumptions, and challenging follow-up questions.",
@@ -126,8 +147,9 @@ function readDebateProgress(theme, question) {
 }
 
 function saveDebateConversation(theme, question, messages, difficulty = "Intermediate", factCheck = false, confidence = 50, journal = []) {
-  const cleanMessages = messages.filter((message) => !message.pending && message.text).slice(-40);
+  const cleanMessages = messages.filter((message) => !message.pending && message.text);
   localStorage.setItem(getDebateConversationKey(theme, question), JSON.stringify({ themeId: theme?.id, question, difficulty, factCheck, confidence, journal: journal.slice(-20), updatedAt: Date.now(), messages: cleanMessages }));
+  document.dispatchEvent(new CustomEvent("debate:conversation-change"));
 }
 
 function getLatestDebateConversation() {
@@ -151,13 +173,13 @@ function getLatestDebateConversation() {
   return latest;
 }
 
-function DebateRoomView({ theme, question, difficulty, factCheck, onBack }) {
+function DebateRoomView({ theme, question, difficulty, factCheck, savedMessages, onBack }) {
   const bridge = window.aiBridge;
   const initialMessages = [
     { role: "assistant", text: question || generalQuestion },
     { role: "assistant", text: "I’ll take the opposing side. Make your best case, and I’ll challenge it fairly." },
   ];
-  const [messages, setMessages] = useState(() => readDebateConversation(theme, question) || initialMessages);
+  const [messages, setMessages] = useState(() => savedMessages?.length ? savedMessages : readDebateConversation(theme, question) || initialMessages);
   const [draft, setDraft] = useState("");
   const [pending, setPending] = useState(false);
   const [verseSupportOpen, setVerseSupportOpen] = useState(false);
@@ -174,6 +196,7 @@ function DebateRoomView({ theme, question, difficulty, factCheck, onBack }) {
   const [confidence, setConfidence] = useState(savedProgress.confidence);
   const [confidenceJournal, setConfidenceJournal] = useState(savedProgress.journal);
   const [confidenceOpen, setConfidenceOpen] = useState(false);
+  const [totalXp, setTotalXp] = useState(() => bridge.getDebateXp?.() || 0);
   const threadRef = useRef(null);
 
   useEffect(() => {
@@ -283,6 +306,10 @@ function DebateRoomView({ theme, question, difficulty, factCheck, onBack }) {
         const nextScore = Math.max(0, Math.min(100, confidence + change));
         setConfidence(nextScore);
         setConfidenceJournal((current) => [...current, { score: nextScore, change, reason: parsed.reason || "Your response was evaluated by the debate coach." }]);
+        const criteriaValues = Object.values(parsed.criteria || {}).map(Number).filter((value) => Number.isFinite(value));
+        const averageCriteria = criteriaValues.length ? criteriaValues.reduce((sum, value) => sum + value, 0) / criteriaValues.length : 0;
+        const xpReward = averageCriteria >= 90 ? 20 : averageCriteria >= 75 ? 15 : averageCriteria >= 55 ? 10 : averageCriteria >= 40 ? 5 : 0;
+        if (xpReward && bridge.addDebateXp) setTotalXp(bridge.addDebateXp(xpReward));
       } catch {
         // The debate continues even if the optional score evaluation is unavailable.
       }
@@ -292,6 +319,8 @@ function DebateRoomView({ theme, question, difficulty, factCheck, onBack }) {
       setPending(false);
     }
   };
+
+  const levelProgress = getDebateLevelProgress(totalXp);
 
   const sendMessage = async (event) => {
     event.preventDefault();
@@ -304,7 +333,8 @@ function DebateRoomView({ theme, question, difficulty, factCheck, onBack }) {
   const verseBlocks = verseSupportText.split(/(?=\b\d+\.\s)/).map((block) => block.trim()).filter(Boolean);
   const hintBlocks = hintsText.split(/(?=\b\d+\.\s)/).map((block) => block.trim()).filter(Boolean);
   const formatDebateText = (text) => {
-    const html = bridge.format(text);
+    const spacedText = String(text || "").replace(/\r\n/g, "\n").split(/\n+/).join("\n\n");
+    const html = bridge.format(spacedText);
     return roomFactCheck
       ? html.replace(/\[\[FACT\]\]([\s\S]*?)\[\[\/FACT\]\]/g, '<mark class="debate-fact-check">$1</mark>')
       : html.replace(/\[\[FACT\]\]|\[\[\/FACT\]\]/g, "");
@@ -332,7 +362,7 @@ function DebateRoomView({ theme, question, difficulty, factCheck, onBack }) {
         <button className="apologetics-debate-progress-main" type="button" onClick={() => setConfidenceOpen((current) => !current)} aria-expanded={confidenceOpen}>
           <div className="apologetics-debate-progress-ring" style={{ "--confidence": confidence }}>{confidence}%</div>
           <div><strong>Confidence</strong><p>Neutral starting point. Build your case.</p></div>
-          <div className="apologetics-debate-level"><strong>Level 1</strong><span>0 / 100 XP</span><i><b></b></i></div>
+          <div className="apologetics-debate-level"><strong>Level {levelProgress.level}</strong><span>{levelProgress.requiredXp ? `${levelProgress.currentXp} / ${levelProgress.requiredXp} XP` : `${levelProgress.currentXp} XP`}</span><i><b style={{ width: `${levelProgress.progress}%` }}></b></i></div>
         </button>
         {confidenceOpen && (
           <div className="apologetics-debate-confidence-journal">
@@ -431,17 +461,35 @@ function DebateRoomView({ theme, question, difficulty, factCheck, onBack }) {
 export function ApologeticsDebatePage() {
   const [themeId, setThemeId] = useState("");
   const [question, setQuestion] = useState("");
-  const [difficulty, setDifficulty] = useState("Intermediate");
+  const [difficulty, setDifficulty] = useState("");
   const [factCheck, setFactCheck] = useState(false);
   const [isRoomOpen, setIsRoomOpen] = useState(false);
   const [savedDebate, setSavedDebate] = useState(() => getLatestDebateConversation());
+  const [resumeDebate, setResumeDebate] = useState(null);
   const theme = debateThemes.find((item) => item.id === themeId);
+
+  useEffect(() => {
+    const openLatestDebate = () => {
+      const latest = getLatestDebateConversation();
+      const savedTheme = debateThemes.find((item) => item.id === latest?.themeId);
+      if (!latest || !savedTheme) return;
+      setSavedDebate(latest);
+      setThemeId(savedTheme.id);
+      setQuestion(latest.question || generalQuestion);
+      setDifficulty(latest.difficulty || "Intermediate");
+      setFactCheck(Boolean(latest.factCheck));
+      setResumeDebate(latest);
+      setIsRoomOpen(true);
+    };
+    document.addEventListener("debate:open-latest", openLatestDebate);
+    return () => document.removeEventListener("debate:open-latest", openLatestDebate);
+  }, []);
 
   const goBack = () => window.appNavigate?.("apologetics");
   const questions = theme ? [generalQuestion, ...theme.questions] : [];
 
   if (isRoomOpen) {
-    return <DebateRoomView theme={theme} question={question} difficulty={difficulty} factCheck={factCheck} onBack={() => { setSavedDebate(getLatestDebateConversation()); setIsRoomOpen(false); }} />;
+    return <DebateRoomView theme={theme} question={question} difficulty={difficulty} factCheck={factCheck} savedMessages={resumeDebate?.messages} onBack={() => { setSavedDebate(getLatestDebateConversation()); setResumeDebate(null); setIsRoomOpen(false); }} />;
   }
 
   return (
@@ -469,7 +517,7 @@ export function ApologeticsDebatePage() {
           ))}
         </div>
         <div className="apologetics-debate-setup-settings">
-          <div><span>Difficulty</span><div className="apologetics-debate-difficulty-list">{debateDifficulties.map((level) => <button className={difficulty === level ? "is-selected" : ""} type="button" key={level} onClick={() => setDifficulty(level)}>{level}</button>)}</div><p className="apologetics-debate-difficulty-description">{debateDifficultyDescriptions[difficulty]}</p></div>
+          <div><span>Difficulty</span><div className="apologetics-debate-difficulty-list">{debateDifficulties.map((level) => <button className={difficulty === level ? "is-selected" : ""} type="button" key={level} onClick={() => setDifficulty(level)}>{level}</button>)}</div>{difficulty && <p className="apologetics-debate-difficulty-description">{debateDifficultyDescriptions[difficulty]}</p>}</div>
         </div>
       </section>
 
@@ -495,7 +543,7 @@ export function ApologeticsDebatePage() {
         <p className="apologetics-debate-empty">Choose a theme to unlock the debate questions.</p>
       )}
 
-      <button className="apologetics-debate-launch" type="button" disabled={!theme || !question} onClick={() => setIsRoomOpen(true)}>
+      <button className="apologetics-debate-launch" type="button" disabled={!theme || !question || !difficulty} onClick={() => { setResumeDebate(null); setIsRoomOpen(true); }}>
         Lancer le debat
       </button>
       {savedDebate && (
@@ -506,6 +554,7 @@ export function ApologeticsDebatePage() {
           setQuestion(savedDebate.question || generalQuestion);
           setDifficulty(savedDebate.difficulty || "Intermediate");
           setFactCheck(Boolean(savedDebate.factCheck));
+          setResumeDebate(savedDebate);
           setIsRoomOpen(true);
         }}>
           Continuer mon debat

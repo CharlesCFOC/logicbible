@@ -8,14 +8,15 @@ import { PrayerPage } from "./prayer.jsx";
 import { AiPage } from "./ai.jsx";
 import { KidsBiblePage } from "./kids-bible.jsx";
 import { ApologeticsDebatePage } from "./apologetics-debate.jsx";
+import { ApologeticsCoachPage, ApologeticsXpCard } from "./apologetics-coach.jsx";
 
 const navigationItems = [
-  ["home", "Home", "home"],
-  ["bible", "Bible", "book"],
-  ["kids-bible", "Kids Bible", "image"],
   ["prayer", "Prayer", "heart"],
+  ["kids-bible", "Kids Bible", "image"],
+  ["bible", "Bible", "book"],
+  ["home", "Home", "home"],
+  ["apologetics", "Debat", "shield"],
   ["ai", "AI", "sparkles"],
-  ["apologetics", "Apologetics", "shield"],
   ["profile", "Profile", "user"],
 ];
 
@@ -200,4 +201,14 @@ if (kidsBibleNode && window.kidsBibleBridge) {
 const apologeticsDebateNode = document.querySelector("[data-react-apologetics-debate-root]");
 if (apologeticsDebateNode) {
   createRoot(apologeticsDebateNode).render(<ApologeticsDebatePage />);
+}
+
+const apologeticsCoachNode = document.querySelector("[data-react-apologetics-coach-root]");
+if (apologeticsCoachNode) {
+  createRoot(apologeticsCoachNode).render(<ApologeticsCoachPage />);
+}
+
+const apologeticsXpNode = document.querySelector("[data-react-apologetics-xp-root]");
+if (apologeticsXpNode && window.aiBridge) {
+  createRoot(apologeticsXpNode).render(<ApologeticsXpCard />);
 }

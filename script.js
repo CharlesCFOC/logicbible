@@ -115,6 +115,7 @@ const aiBookmarksKey = "brother.aiBookmarks";
 const apologeticsChatKey = "brother.apologeticsChat";
 const apologeticsProgressKey = "brother.apologeticsProgress";
 const apologeticsGateSessionKey = "brother.apologeticsUnlocked";
+const debateXpKey = "brother.debateXp";
 const pendingSyncKey = "app.pendingSync";
 const aiMemoryTtlMs = 24 * 60 * 60 * 1000;
 const maxAiMemoryMessages = 24;
@@ -6358,6 +6359,10 @@ document.querySelectorAll("[data-apologetics-room='debate']").forEach((button) =
   button.addEventListener("click", () => setScreen("apologetics-debate"));
 });
 
+document.querySelectorAll("[data-apologetics-room='coach']").forEach((button) => {
+  button.addEventListener("click", () => setScreen("apologetics-coach"));
+});
+
 document.querySelectorAll("[data-apologetics-copy]").forEach((button) => {
   button.addEventListener("click", copyApologeticsShortAnswer);
 });
@@ -7029,6 +7034,16 @@ window.aiBridge = {
     if (!response.ok) throw new Error(payload.error || "AI request failed.");
     return payload.text || "No response text returned.";
   },
+  async sendCoach(prompt, history = []) {
+    const response = await fetch("/api/ai/chat", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ prompt, history, mode: "coach" }),
+    });
+    const payload = await response.json();
+    if (!response.ok) throw new Error(payload.error || "AI request failed.");
+    return payload.text || "No response text returned.";
+  },
   async evaluateDebate(prompt) {
     const response = await fetch("/api/ai/chat", {
       method: "POST",
@@ -7038,6 +7053,15 @@ window.aiBridge = {
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.error || "AI evaluation failed.");
     return payload.text || "{}";
+  },
+  getDebateXp() {
+    return Math.max(0, Number(readJson(debateXpKey, 0)) || 0);
+  },
+  addDebateXp(amount) {
+    const nextXp = this.getDebateXp() + Math.max(0, Number(amount) || 0);
+    writeJson(debateXpKey, nextXp);
+    document.dispatchEvent(new CustomEvent("debate:xp-change"));
+    return nextXp;
   },
   newConversation() {
     currentAiConversationId = `chat-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;

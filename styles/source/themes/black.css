@@ -480,14 +480,13 @@ html:has(.app-shell[data-app-background="black"]) {
 .app-shell[data-app-background="black"] #home .home-hero-image-copy button {
   border: 0 !important;
   border-radius: 14px !important;
-  background:
-    radial-gradient(circle at 18% 20%, rgba(255, 255, 255, 0.34), transparent 30%),
-    linear-gradient(135deg, #ffb3c7 0%, #f878a5 48%, #d94f88 100%) !important;
+  background: linear-gradient(135deg, #ff9d00 0%, #ff6a00 52%, #e84a00 100%) !important;
   color: #ffffff !important;
-  box-shadow: 0 10px 22px rgba(217, 79, 136, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.48) !important;
+  box-shadow: 0 10px 22px rgba(255, 106, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;
 }
 
 .app-shell[data-app-background="black"] #home .home-hero-image-copy button:hover {
+  background: linear-gradient(135deg, #ffb52e 0%, #ff7a1a 52%, #f05217 100%) !important;
   filter: brightness(1.06) saturate(1.08);
 }
 
@@ -1069,7 +1068,10 @@ html:has(.app-shell[data-app-background="black"]) {
 /* Stable blue atmosphere: no background movement or repaint loop. */
 .app-shell[data-app-background="black"] .phone-frame {
   background:
-    linear-gradient(135deg, #071722 0%, #123b53 46%, #08131f 100%) !important;
+    radial-gradient(ellipse 68% 44% at 4% 8%, rgba(166, 214, 231, 0.62), transparent 68%),
+    radial-gradient(ellipse 62% 48% at 98% 34%, rgba(76, 121, 188, 0.58), transparent 66%),
+    radial-gradient(ellipse 76% 42% at 34% 102%, rgba(30, 126, 158, 0.54), transparent 70%),
+    linear-gradient(135deg, #06121d 0%, #164b67 44%, #081b2c 100%) !important;
   background-position: 0 0 !important;
   background-size: 100% 100% !important;
   animation: none !important;
@@ -1096,4 +1098,33 @@ html:has(.app-shell[data-app-background="black"]) {
 .app-shell[data-app-background="black"] .phone-frame::after {
   display: none !important;
   animation: none !important;
+}
+
+/* Homepage blue controls share the Prayer requests card palette. */
+.app-shell[data-app-background="black"] #home .home-stats .home-stat-card,
+.app-shell[data-app-background="black"] #home .home-library-tabs button.is-active,
+.app-shell[data-app-background="black"] #home .saved-folder-chips button.is-active,
+.app-shell[data-app-background="black"] #home .saved-folder-create-trigger,
+.app-shell[data-app-background="black"] #home .saved-folder-create-actions button:last-child {
+  border: 0 !important;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.28), transparent 32%),
+    linear-gradient(135deg, #22cfa2 0%, #258fd8 48%, #8062f2 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 24px rgba(35, 148, 190, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-stats .home-stat-card:hover,
+.app-shell[data-app-background="black"] #home .home-library-tabs button.is-active:hover,
+.app-shell[data-app-background="black"] #home .saved-folder-chips button.is-active:hover,
+.app-shell[data-app-background="black"] #home .saved-folder-create-trigger:hover,
+.app-shell[data-app-background="black"] #home .saved-folder-create-actions button:last-child:hover {
+  filter: brightness(1.08) saturate(1.08);
+}
+
+.app-shell[data-app-background="black"] #home .home-stats .home-stat-card span,
+.app-shell[data-app-background="black"] #home .home-stats .home-stat-card strong,
+.app-shell[data-app-background="black"] #home .home-library-tabs button.is-active span,
+.app-shell[data-app-background="black"] #home .home-library-tabs button.is-active svg {
+  color: #ffffff !important;
 }

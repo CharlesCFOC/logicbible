@@ -32,6 +32,61 @@
   box-shadow: inset 0 1px 0 rgba(236, 250, 255, 0.24), 0 3px 10px rgba(0, 0, 0, 0.2) !important;
 }
 
+/* Keep Home centered and visually prominent in the seven-item navigation. */
+.app-shell .bottom-nav button[data-nav="home"],
+.app-shell[data-app-background] .bottom-nav button[data-nav="home"] {
+  z-index: 1;
+  transform: translateY(-7px) scale(1.06) !important;
+  border-radius: 20px;
+  background: rgba(76, 153, 194, 0.3) !important;
+  background-image: linear-gradient(180deg, rgba(125, 210, 247, 0.2), rgba(33, 87, 116, 0.34)) !important;
+  box-shadow: inset 0 1px 0 rgba(236, 250, 255, 0.2), 0 4px 12px rgba(0, 0, 0, 0.16) !important;
+}
+
+.app-shell .bottom-nav button[data-nav="home"].is-active,
+.app-shell[data-app-background] .bottom-nav button[data-nav="home"].is-active {
+  background: linear-gradient(135deg, #5edcff 0%, #4f9dff 52%, #6f7cff 100%) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42), 0 5px 18px rgba(83, 157, 255, 0.42) !important;
+}
+
+.app-shell .bottom-nav button:not([data-nav="home"]).is-active,
+.app-shell[data-app-background] .bottom-nav button:not([data-nav="home"]).is-active,
+.app-shell[data-theme="dark"] .bottom-nav button:not([data-nav="home"]).is-active {
+  transform: none !important;
+  border-color: transparent !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  color: #5edcff !important;
+}
+
+.app-shell .bottom-nav button:not([data-nav="home"]).is-active svg,
+.app-shell[data-app-background] .bottom-nav button:not([data-nav="home"]).is-active svg,
+.app-shell[data-theme="dark"] .bottom-nav button:not([data-nav="home"]).is-active svg {
+  color: #5edcff !important;
+}
+
+.app-shell .bottom-nav button:not([data-nav="home"]).is-active > span,
+.app-shell[data-app-background] .bottom-nav button:not([data-nav="home"]).is-active > span,
+.app-shell[data-theme="dark"] .bottom-nav button:not([data-nav="home"]).is-active > span {
+  color: #5edcff !important;
+}
+
+.app-shell .bottom-nav,
+.app-shell[data-app-background] .bottom-nav {
+  overflow: visible !important;
+}
+
+.app-shell .bottom-nav,
+.app-shell[data-app-background] .bottom-nav,
+.app-shell[data-theme="dark"] .bottom-nav {
+  border: 0 !important;
+  border-color: transparent !important;
+  background: linear-gradient(180deg, rgba(18, 43, 59, 0) 0%, rgba(18, 43, 59, 0.5) 22%, rgba(10, 27, 39, 0.86) 100%) !important;
+  background-image: linear-gradient(180deg, rgba(18, 43, 59, 0) 0%, rgba(18, 43, 59, 0.5) 22%, rgba(10, 27, 39, 0.86) 100%) !important;
+  box-shadow: 0 -8px 22px rgba(0, 0, 0, 0.12) !important;
+}
+
 .home-hero,
 .page-header,
 .reader-topbar,
@@ -179,10 +234,16 @@
   margin-top: 5px;
   padding: 0 14px;
   border-radius: 999px;
-  background: #fffdf8;
-  color: #29251f;
+  background: linear-gradient(135deg, #ff9d00 0%, #ff6a00 52%, #e84a00 100%);
+  color: #ffffff;
   font-size: 12px;
   font-weight: 800;
+}
+
+.home-hero-image-copy button:hover,
+.home-hero-image-copy button:focus-visible {
+  background: linear-gradient(135deg, #ffb52e 0%, #ff7a1a 52%, #f05217 100%);
+  box-shadow: 0 8px 18px rgba(255, 106, 0, 0.3);
 }
 
 .home-hero-image-copy button svg {
@@ -449,7 +510,7 @@
 .bottom-nav button {
   display: grid;
   place-items: center;
-  gap: 3px;
+  gap: 0;
   min-height: 34px;
   padding: 2px 0 1px;
   border-radius: 17px;
@@ -511,4 +572,24 @@
 
 .app-shell[data-active-screen="kids-bible"][data-kids-reader="true"] .bottom-nav {
   display: none !important;
+}
+
+/* Fade the navigation into the screen instead of starting with a hard edge. */
+.app-shell .bottom-nav {
+  overflow: visible !important;
+  border: 0 !important;
+  border-top: 0 !important;
+  background: linear-gradient(180deg, rgba(18, 43, 59, 0) 0%, rgba(18, 43, 59, 0.5) 24%, rgba(10, 27, 39, 0.9) 100%) !important;
+  box-shadow: none !important;
+}
+
+.app-shell .bottom-nav::before {
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  left: 0;
+  height: 34px;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 0%, rgba(18, 43, 59, 0.28) 58%, rgba(18, 43, 59, 0.58) 100%);
+  content: "";
 }

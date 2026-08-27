@@ -46,10 +46,10 @@ body:has(.app-shell[data-app-background="black"]) .prayer-intro {
   }
 
   .app-shell[data-app-background="black"] #home .home-hero-image {
-    width: calc(100% + 28px) !important;
+    width: calc(100% + 32px) !important;
     max-width: none !important;
-    margin-right: -14px !important;
-    margin-left: -14px !important;
+    margin-right: -16px !important;
+    margin-left: -16px !important;
   }
 
   .screen img,
@@ -320,10 +320,10 @@ body:has(.app-shell[data-app-background="black"]) .prayer-intro {
   }
 
   .app-shell[data-app-background="black"] #home .home-hero-image {
-    width: calc(100% + 28px) !important;
+    width: calc(100% + 32px) !important;
     max-width: none !important;
-    margin-right: -14px !important;
-    margin-left: -14px !important;
+    margin-right: -16px !important;
+    margin-left: -16px !important;
   }
 
   .app-shell[data-app-background="black"] #home .home-bible-timeline {

@@ -8,6 +8,22 @@ const arrowIcon = (
   </svg>
 );
 
+const debateConversationTtl = 30 * 24 * 60 * 60 * 1000;
+
+function hasRecentDebate() {
+  for (let index = 0; index < localStorage.length; index += 1) {
+    const key = localStorage.key(index);
+    if (!key?.startsWith("brother.debateConversation.")) continue;
+    try {
+      const saved = JSON.parse(localStorage.getItem(key) || "null");
+      if (saved?.messages?.length && Date.now() - Number(saved.updatedAt || 0) <= debateConversationTtl) return true;
+    } catch {
+      // Ignore malformed local conversations.
+    }
+  }
+  return false;
+}
+
 function readInitialStats() {
   return {
     streak: document.querySelector("[data-home-streak]")?.textContent?.trim() || "1 day",
@@ -41,7 +57,7 @@ function LibraryIcon({ name }) {
 export function HomeHero() {
   return (
     <>
-      <img src="assets/home-card-forest.webp" alt="A peaceful natural forest landscape" />
+      <img src="assets/home-hero-community.png" alt="A worship gathering in prayer" />
       <div className="home-hero-image-copy">
         <div className="home-hero-verse">
           <span>Verse of the day</span>
@@ -58,6 +74,7 @@ export function HomeHero() {
 
 export function HomeStats() {
   const [stats, setStats] = useState(readInitialStats);
+  const [hasDebate, setHasDebate] = useState(hasRecentDebate);
 
   useEffect(() => {
     const handleStatsChange = (event) => {
@@ -65,8 +82,22 @@ export function HomeStats() {
       setStats((current) => ({ ...current, ...event.detail }));
     };
     window.addEventListener("home:stats-change", handleStatsChange);
-    return () => window.removeEventListener("home:stats-change", handleStatsChange);
+    const handleDebateChange = () => setHasDebate(hasRecentDebate());
+    document.addEventListener("debate:conversation-change", handleDebateChange);
+    return () => {
+      window.removeEventListener("home:stats-change", handleStatsChange);
+      document.removeEventListener("debate:conversation-change", handleDebateChange);
+    };
   }, []);
+
+  const openDebate = () => {
+    if (!hasRecentDebate()) {
+      window.appNavigate?.("apologetics");
+      return;
+    }
+    window.appNavigate?.("apologetics-debate");
+    document.dispatchEvent(new CustomEvent("debate:open-latest"));
+  };
 
   return (
     <>
@@ -74,10 +105,11 @@ export function HomeStats() {
         <span>Connected streak</span>
         <strong>{stats.streak}</strong>
       </article>
-      <article className="home-stat-card home-stat-card--online">
-        <span>People online</span>
-        <strong>{stats.peopleOnline}</strong>
-      </article>
+      <button className="home-stat-card home-stat-card--continue home-stat-card--debate" type="button" onClick={openDebate}>
+        <span>{hasDebate ? "Continue debate" : "Start a debate"}</span>
+        <strong>Let's Go</strong>
+        {arrowIcon}
+      </button>
       <button className="home-stat-card home-stat-card--continue" type="button" data-nav="bible">
         <span>Continue reading</span>
         <strong>{stats.continueReading}</strong>
