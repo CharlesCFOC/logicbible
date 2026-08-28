@@ -368,6 +368,12 @@ body:has(.app-shell[data-app-background="black"]) .prayer-intro {
   }
 }
 
+/* Final stacking order: the interactive Home timeline stays above the hero. */
+.app-shell #home .home-bible-timeline {
+  z-index: 12 !important;
+  pointer-events: auto;
+}
+
 /* Mobile performance: keep the atmosphere, but avoid animating huge blurred
    layers and a continuously repainted phone background on small devices. */
 @media (max-width: 680px) {

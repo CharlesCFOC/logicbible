@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { getDebateLevelProgress } from "./apologetics-debate.jsx";
 
 const arrowIcon = (
   <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -56,6 +57,7 @@ function LibraryIcon({ name }) {
 
 export function HomeHero() {
   const [coverImage, setCoverImage] = useState(() => window.profileBridge?.getHero?.().coverImage || "assets/cloud-account-zen.png");
+  const [totalXp, setTotalXp] = useState(() => window.aiBridge?.getDebateXp?.() || 0);
 
   useEffect(() => {
     const handleHeroChange = () => {
@@ -66,9 +68,28 @@ export function HomeHero() {
     return () => document.removeEventListener("profile:hero-change", handleHeroChange);
   }, []);
 
+  useEffect(() => {
+    const handleXpChange = () => setTotalXp(window.aiBridge?.getDebateXp?.() || 0);
+    document.addEventListener("debate:xp-change", handleXpChange);
+    return () => document.removeEventListener("debate:xp-change", handleXpChange);
+  }, []);
+
+  const progress = getDebateLevelProgress(totalXp);
+
   return (
     <>
       <img src={coverImage} alt="Selected hero image" />
+      <button className="home-debate-xp-card" type="button" onClick={() => window.appNavigate?.("apologetics")} aria-label={`Open Debat page. Debate XP: ${totalXp}, level ${progress.level}`}>
+        <div className="home-debate-xp-ring" style={{ "--home-xp-progress": `${progress.progress}%` }}>
+          <strong>{totalXp}</strong>
+          <small>XP</small>
+        </div>
+        <div className="home-debate-xp-copy">
+          <span>Debate XP</span>
+          <strong>Level {progress.level}</strong>
+          <small>{progress.requiredXp ? `${progress.currentXp} / ${progress.requiredXp}` : "Maximum level"}</small>
+        </div>
+      </button>
       <div className="home-hero-image-copy">
         <div className="home-hero-verse">
           <span>Verse of the day</span>

@@ -555,6 +555,12 @@
   white-space: nowrap;
 }
 
+/* Keep the interactive Bible timeline above the hero layers. */
+.app-shell #home .home-bible-timeline {
+  z-index: 12 !important;
+  pointer-events: auto;
+}
+
 .app-shell[data-app-background="black"] #home .home-bible-timeline {
   position: absolute;
   z-index: 2;
@@ -653,6 +659,102 @@
 .app-shell[data-app-background="black"] #home .home-hero-image-copy {
   z-index: 6;
   bottom: 50px !important;
+}
+
+.home-debate-xp-card {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 142px;
+  padding: 8px 10px 8px 8px;
+  border: 1px solid rgba(139, 220, 255, 0.42);
+  border-radius: 20px;
+  color: #ffffff;
+  background: rgba(10, 35, 52, 0.58);
+  text-align: left;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(236, 250, 255, 0.16), 0 8px 18px rgba(0, 0, 0, 0.24);
+  -webkit-backdrop-filter: blur(12px) saturate(135%);
+  backdrop-filter: blur(12px) saturate(135%);
+}
+
+.home-debate-xp-card:hover,
+.home-debate-xp-card:focus-visible {
+  border-color: rgba(139, 220, 255, 0.78);
+  background: rgba(20, 65, 88, 0.72);
+  box-shadow: inset 0 1px 0 rgba(236, 250, 255, 0.22), 0 10px 24px rgba(0, 0, 0, 0.3), 0 0 16px rgba(83, 190, 255, 0.2);
+  outline: 0;
+  transform: translateY(-1px);
+}
+
+.home-debate-xp-ring {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  border-radius: 50%;
+  background: conic-gradient(#62f5e0 var(--home-xp-progress), rgba(255, 255, 255, 0.18) 0);
+  box-shadow: 0 0 10px rgba(98, 245, 224, 0.24);
+  position: relative;
+}
+
+.home-debate-xp-ring::after {
+  position: absolute;
+  inset: 4px;
+  border-radius: inherit;
+  background: #153b51;
+  content: "";
+}
+
+.home-debate-xp-ring strong,
+.home-debate-xp-ring small {
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.home-debate-xp-ring strong {
+  margin-top: 3px;
+  font-size: 11px;
+}
+
+.home-debate-xp-ring small {
+  margin-top: -1px;
+  color: rgba(220, 244, 255, 0.72);
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.home-debate-xp-copy {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.home-debate-xp-copy span {
+  color: #a8e5ff;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.home-debate-xp-copy strong {
+  color: #ffffff;
+  font-size: 13px;
+  line-height: 1.1;
+}
+
+.home-debate-xp-copy small {
+  color: rgba(235, 248, 255, 0.72);
+  font-size: 8px;
 }
 
 .app-shell[data-app-background="black"] #home > .home-prayer-card,

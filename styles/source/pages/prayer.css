@@ -374,103 +374,6 @@
   --line: #2d2d2d;
 }
 
-.apologetics-coming-soon-gate {
-  position: absolute;
-  z-index: 8;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  padding: 28px;
-  border-radius: 24px;
-  background: rgba(255, 253, 249, 0.82);
-  backdrop-filter: blur(18px);
-}
-
-.apologetics-coming-soon-gate[hidden] {
-  display: none;
-}
-
-.apologetics-gate-card {
-  width: min(100%, 310px);
-  padding: 28px 22px 24px;
-  border: 1px solid rgba(181, 159, 131, 0.2);
-  border-radius: 28px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 245, 238, 0.96));
-  box-shadow: 0 18px 42px rgba(47, 39, 30, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.96);
-  text-align: center;
-}
-
-.apologetics-gate-icon {
-  display: grid;
-  place-items: center;
-  width: 52px;
-  height: 52px;
-  margin: 0 auto 16px;
-  border-radius: 17px;
-  color: #8a7764;
-  background: #f1ece1;
-}
-
-.apologetics-gate-card h2 {
-  margin: 6px 0 8px;
-  font-size: 28px;
-}
-
-.apologetics-gate-card > p {
-  margin: 0 auto 20px;
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.55;
-}
-
-.apologetics-gate-card form {
-  display: grid;
-  gap: 10px;
-}
-
-.apologetics-gate-card label {
-  display: grid;
-  gap: 6px;
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: 800;
-  text-align: left;
-}
-
-.apologetics-gate-card input {
-  width: 100%;
-  min-height: 46px;
-  padding: 0 14px;
-  border: 1px solid #ded8cf;
-  border-radius: 14px;
-  outline: 0;
-  color: var(--ink);
-  background: #fff;
-  text-align: center;
-  letter-spacing: 0.22em;
-}
-
-.apologetics-gate-card input:focus {
-  border-color: var(--gold);
-  box-shadow: 0 0 0 3px var(--gold-soft);
-}
-
-.apologetics-gate-card form > button {
-  min-height: 46px;
-  border-radius: 14px;
-  color: #fff;
-  background: #8a7764;
-  font-weight: 800;
-}
-
-.apologetics-gate-feedback {
-  min-height: 16px;
-  margin: 0;
-  color: var(--error);
-  font-size: 11px;
-}
-
-
 /* The prayer composer is an open writing space, not a card. */
 body:has(.app-shell[data-app-background="black"]) .prayer-compose {
   padding: 0 !important;
@@ -1122,10 +1025,16 @@ body .app-shell[data-app-background="black"] .prayer-list .prayer-card {
 }
 
 .prayer-list .prayer-card-meta {
+  position: absolute;
+  z-index: 2;
+  top: auto;
+  bottom: 14px;
+  left: 50%;
   display: flex;
-  justify-content: flex-end;
-  margin-top: auto;
-  padding: 7px 14px 13px;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  transform: translateX(-50%);
 }
 
 .prayer-list .prayer-card-actions {

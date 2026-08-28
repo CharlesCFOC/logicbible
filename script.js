@@ -101,16 +101,11 @@ const apologeticsChatThread = document.querySelector("[data-apologetics-chat-thr
 const apologeticsChatForm = document.querySelector("[data-apologetics-chat-form]");
 const apologeticsChatInput = apologeticsChatForm?.querySelector("textarea");
 const apologeticsTopicTabs = document.querySelector("[data-apologetics-topic-tabs]");
-const apologeticsGate = document.querySelector("[data-apologetics-gate]");
-const apologeticsGateForm = document.querySelector("[data-apologetics-gate-form]");
-const apologeticsGateInput = apologeticsGateForm?.querySelector("input");
-const apologeticsGateFeedback = document.querySelector("[data-apologetics-gate-feedback]");
 const aiMemoryKey = "brother.aiMemory";
 const aiConversationsKey = "brother.aiConversations";
 const aiBookmarksKey = "brother.aiBookmarks";
 const apologeticsChatKey = "brother.apologeticsChat";
 const apologeticsProgressKey = "brother.apologeticsProgress";
-const apologeticsGateSessionKey = "brother.apologeticsUnlocked";
 const debateXpKey = "brother.debateXp";
 const pendingSyncKey = "app.pendingSync";
 const aiMemoryTtlMs = 24 * 60 * 60 * 1000;
@@ -1924,7 +1919,9 @@ function applyPreferences() {
   appShell.style.setProperty("--beige", accent.soft);
   appShell.style.setProperty("--accent-contrast", accent.contrast);
   appShell.style.setProperty("--reader-text-size", textSize);
+  appShell.style.setProperty("--chat-text-size", textSize);
   appShell.querySelector(".phone-frame")?.style.setProperty("--reader-text-size", textSize);
+  appShell.querySelector(".phone-frame")?.style.setProperty("--chat-text-size", textSize);
 
   setActivePreference(backgroundOptionButtons, savedPreferences.background, "backgroundOption");
   setActivePreference(textSizeOptionButtons, savedPreferences.textSize, "textSizeOption");
@@ -2869,12 +2866,6 @@ function setScreen(id) {
 
   if (id.startsWith("apologetics") && id !== "apologetics" && id !== "apologetics-debate") {
     renderApologetics();
-    if (sessionStorage.getItem(apologeticsGateSessionKey) !== "true" && apologeticsGate) {
-      apologeticsGate.hidden = false;
-      window.setTimeout(() => apologeticsGateInput?.focus(), 80);
-    }
-  } else if (apologeticsGate) {
-    apologeticsGate.hidden = true;
   }
 
   if (id === "prayer") {

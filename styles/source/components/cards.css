@@ -14,7 +14,6 @@
 .app-shell[data-app-background="black"] .saved-ai-row,
 .app-shell[data-app-background="black"] .ai-history-item,
 .app-shell[data-app-background="black"] .apologetics-challenge-card,
-.app-shell[data-app-background="black"] .apologetics-gate-card,
 .app-shell[data-app-background="black"] .action-grid button,
 .app-shell[data-app-background="black"] .detail-stack article {
   border: 1px solid rgba(170, 215, 238, 0.2) !important;
@@ -41,7 +40,6 @@
 .app-shell[data-app-background="black"] .saved-ai-row,
 .app-shell[data-app-background="black"] .ai-history-item,
 .app-shell[data-app-background="black"] .apologetics-challenge-card,
-.app-shell[data-app-background="black"] .apologetics-gate-card,
 .app-shell[data-app-background="black"] .action-grid button,
 .app-shell[data-app-background="black"] .detail-stack article {
   border: 1px solid rgba(170, 215, 238, 0.2) !important;

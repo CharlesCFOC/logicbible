@@ -10,6 +10,7 @@
   --bottom-nav-height: calc(68px + env(safe-area-inset-bottom));
   --bottom-nav-offset: var(--bottom-nav-height);
   --ai-composer-height: 64px;
+  --chat-text-size: 17px;
   --font-body: "Manrope", -apple-system, BlinkMacSystemFont, "SF Pro Text", Segoe UI, sans-serif;
   --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
   --bg: #fffdf8;

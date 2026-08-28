@@ -56,7 +56,7 @@
 .message {
   max-width: 84%;
   color: var(--ink);
-  font-size: 15px;
+  font-size: var(--chat-text-size, 15px);
   line-height: 1.45;
 }
 
@@ -187,6 +187,7 @@
   min-height: 56px;
   max-height: 192px;
   padding: 12px 14px;
+  font-size: var(--chat-text-size, 15px);
   line-height: 1.45;
   resize: none;
   overflow-y: hidden;

@@ -4,18 +4,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Brother Bible AI</title>
-    <link rel="stylesheet" href="styles.css?v=refactor-24" />
+    <link rel="stylesheet" href="styles.css?v=refactor-34" />
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="bible-data.js" defer></script>
-    <script src="script.js?v=modules-15" defer></script>
+    <script src="script.js?v=modules-16" defer></script>
     <script src="scripts/navigation.js?v=modules-06" defer></script>
     <script src="scripts/prayer.js?v=modules-05" defer></script>
     <script src="scripts/notes.js?v=modules-05" defer></script>
     <script src="scripts/bible.js?v=modules-05" defer></script>
     <script src="scripts/profile.js?v=modules-06" defer></script>
-    <script src="scripts/apologetics.js?v=modules-06" defer></script>
-    <script src="assets/react/navigation.js?v=react-19" defer></script>
+    <script src="assets/react/navigation.js?v=react-21" defer></script>
   </head>
   <body>
     <div class="app-shell" data-theme="light" data-app-background="black">
@@ -371,23 +370,6 @@
               <button type="button" aria-label="Send apologetics message"><i data-lucide="send"></i></button>
             </form>
           </section>
-        </section>
-
-        <section class="apologetics-coming-soon-gate" data-apologetics-gate hidden aria-labelledby="apologetics-gate-title">
-          <div class="apologetics-gate-card">
-            <div class="apologetics-gate-icon" aria-hidden="true"><i data-lucide="shield-lock"></i></div>
-            <span class="eyebrow">Apologetics</span>
-            <h2 id="apologetics-gate-title">Coming soon</h2>
-            <p>This training space is almost ready. Enter the access code to preview it.</p>
-            <form data-apologetics-gate-form>
-              <label>
-                <span>Access code</span>
-                <input type="password" inputmode="numeric" autocomplete="off" maxlength="3" placeholder="•••" aria-label="Apologetics access code" />
-              </label>
-              <button type="submit">Access</button>
-              <p class="apologetics-gate-feedback" data-apologetics-gate-feedback role="status" aria-live="polite"></p>
-            </form>
-          </div>
         </section>
 
         <section id="prayer" class="screen prayer-screen" data-screen data-react-prayer-root>
