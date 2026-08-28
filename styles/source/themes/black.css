@@ -387,11 +387,11 @@ html:has(.app-shell[data-app-background="black"]) {
 .app-shell[data-theme="dark"][data-app-background] .bottom-nav {
   border-color: rgba(139, 220, 255, 0.32) !important;
   border-radius: 0 !important;
-  background: rgba(18, 43, 59, 0.42) !important;
-  background-image: linear-gradient(180deg, rgba(87, 151, 183, 0.18), rgba(8, 22, 31, 0.38)) !important;
+  background: rgba(18, 43, 59, 0.18) !important;
+  background-image: linear-gradient(180deg, rgba(87, 151, 183, 0.08), rgba(8, 22, 31, 0.18)) !important;
   box-shadow: 0 -8px 22px rgba(0, 0, 0, 0.26), inset 0 1px 0 rgba(201, 239, 255, 0.14) !important;
-  -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
-  backdrop-filter: blur(18px) saturate(135%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(125%) !important;
+  backdrop-filter: blur(12px) saturate(125%) !important;
   overflow: hidden;
 }
 
@@ -937,17 +937,18 @@ html:has(.app-shell[data-app-background="black"]) {
 }
 
 .app-shell[data-app-background] .highlight-palette button {
-  border-color: rgba(221, 227, 234, 0.96);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(247, 249, 252, 0.948));
+  border: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .app-shell[data-app-background] .highlight-palette span {
-  border-color: rgba(255, 255, 255, 0.82);
+  border: 0;
 }
 
 .app-shell[data-app-background] .highlight-palette button.is-selected {
-  border-color: rgba(181, 159, 131, 0.42);
-  box-shadow: 0 0 0 3px rgba(181, 159, 131, 0.12);
+  border: 0;
+  box-shadow: none;
 }
 
 .app-shell[data-theme="dark"] .tabs button,
@@ -1100,6 +1101,28 @@ html:has(.app-shell[data-app-background="black"]) {
   animation: none !important;
 }
 
+/* Prayer and Brother AI tabs use the same homepage blue treatment. */
+.app-shell[data-app-background="black"] #prayer .prayer-page-tabs,
+.app-shell[data-app-background="black"] #ai .ai-tabs {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+.app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is-active,
+.app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is-active:hover,
+.app-shell[data-app-background="black"] #ai .ai-tabs button.is-active,
+.app-shell[data-app-background="black"] #ai .ai-tabs button.is-active:hover {
+  border-color: transparent !important;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.28), transparent 32%),
+    linear-gradient(135deg, #22cfa2 0%, #258fd8 48%, #8062f2 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 24px rgba(35, 148, 190, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
+}
+
 /* Homepage blue controls share the Prayer requests card palette. */
 .app-shell[data-app-background="black"] #home .home-stats .home-stat-card,
 .app-shell[data-app-background="black"] #home .home-library-tabs button.is-active,
@@ -1127,4 +1150,78 @@ html:has(.app-shell[data-app-background="black"]) {
 .app-shell[data-app-background="black"] #home .home-library-tabs button.is-active span,
 .app-shell[data-app-background="black"] #home .home-library-tabs button.is-active svg {
   color: #ffffff !important;
+}
+
+/* High-contrast Highlight controls below the color swatches. */
+.app-shell[data-app-background="black"] .bottom-sheet .highlight-folder-select select,
+.app-shell[data-app-background="black"] .bottom-sheet .highlight-folder-form,
+.app-shell[data-app-background="black"] .bottom-sheet [data-remove-highlight] {
+  border-color: rgba(255, 255, 255, 0.28) !important;
+  color: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .highlight-folder-select select {
+  background: transparent !important;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .highlight-folder-select select option {
+  background: #1f252b;
+  color: #ffffff;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .highlight-folder-form {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .highlight-folder-form input {
+  background: transparent !important;
+  color: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .highlight-folder-form input::placeholder {
+  color: rgba(255, 255, 255, 0.68) !important;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .highlight-folder-form button,
+.app-shell[data-app-background="black"] .bottom-sheet [data-remove-highlight] {
+  border: 0 !important;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.28), transparent 32%),
+    linear-gradient(135deg, #22cfa2 0%, #258fd8 48%, #8062f2 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 24px rgba(35, 148, 190, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
+}
+
+.app-shell[data-app-background="black"] .bottom-sheet .highlight-folder-form button:hover,
+.app-shell[data-app-background="black"] .bottom-sheet [data-remove-highlight]:hover {
+  filter: brightness(1.08) saturate(1.08);
+}
+
+/* Remove any remaining stacked border or surface on Prayer and Brother AI tabs. */
+.app-shell[data-app-background="black"] #prayer .prayer-page-tabs,
+.app-shell[data-app-background="black"] #ai .ai-tabs {
+  border: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+.app-shell[data-app-background="black"] #prayer .prayer-page-tabs button:not(.is-active),
+.app-shell[data-app-background="black"] #ai .ai-tabs button:not(.is-active),
+.app-shell[data-app-background="black"] #prayer .prayer-page-tabs button:not(.is-active):hover,
+.app-shell[data-app-background="black"] #ai .ai-tabs button:not(.is-active):hover {
+  border: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+.app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is-active,
+.app-shell[data-app-background="black"] #ai .ai-tabs button.is-active {
+  border: 0 !important;
+  box-shadow: 0 6px 14px rgba(35, 148, 190, 0.24) !important;
 }

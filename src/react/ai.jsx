@@ -6,12 +6,13 @@ const aiIcons = {
   copy: ["M8 8h11v12H8z", "M5 16H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v1"],
   bookmark: ["M6 4.5A2.5 2.5 0 0 1 8.5 2H18v19l-6-3-6 3z"],
   arrow: ["M5 19 19 5", "M9 5h10v10"],
+  ai: ["m12 3-1.3 5.7L5 10l5.7 1.3L12 17l1.3-5.7L19 10l-5.7-1.3z", "m5 17-.6 2.4L2 20l2.4.6L5 23l.6-2.4L8 20l-2.4-.6z", "m19 3-.5 1.5L17 5l1.5.5L19 7l.5-1.5L21 5l-1.5-.5z"],
 };
 
 const aiComposerPrompts = [
-  "Tu as une question ?",
-  "Tu cherches un verset ?",
-  "Tu veux comparer le sens d’un mot ?",
+  "Have a question?",
+  "Looking for a verse?",
+  "Want to compare the meaning of a word?",
 ];
 
 export function AiIcon({ name }) {
@@ -22,11 +23,51 @@ export function AiIcon({ name }) {
   );
 }
 
-export function AiMessage({ message, bridge, formatText, pendingLabel = "Brother AI is thinking..." }) {
+export function AiComposer({ value, onChange, onSubmit, placeholder, ariaLabel, disabled = false, className = "", textareaClassName = "", submitLabel = "Send message" }) {
+  const textareaRef = useRef(null);
+
+  const resize = (textarea) => {
+    textarea.style.height = "auto";
+    const maxHeight = 180;
+    textarea.style.height = `${Math.min(textarea.scrollHeight, maxHeight)}px`;
+    textarea.style.overflowY = textarea.scrollHeight > maxHeight ? "auto" : "hidden";
+  };
+
+  useEffect(() => {
+    if (!textareaRef.current) return;
+    if (!value) {
+      textareaRef.current.style.height = "";
+      textareaRef.current.style.overflowY = "hidden";
+      return;
+    }
+    resize(textareaRef.current);
+  }, [value]);
+
+  return (
+    <form className={`composer reusable-ai-composer${className ? ` ${className}` : ""}`} onSubmit={onSubmit}>
+      <textarea
+        ref={textareaRef}
+        className={textareaClassName}
+        value={value}
+        onChange={(event) => { onChange(event.target.value); resize(event.currentTarget); }}
+        rows="1"
+        placeholder={placeholder}
+        aria-label={ariaLabel}
+        disabled={disabled}
+      />
+      <button type="submit" aria-label={submitLabel} disabled={disabled}>
+        <AiIcon name="send" />
+      </button>
+    </form>
+  );
+}
+
+export function AiMessage({ message, bridge, formatText, pendingLabel = "Brother AI is thinking...", showAvatar = false }) {
   if (message.role === "user") return <article className="message user-message"><p>{message.text}</p></article>;
   const messageId = bridge.messageId(message.text);
   return (
-    <article className="message ai-message" data-ai-message-id={messageId}>
+    <article className={`message ai-message${showAvatar ? " ai-message--with-avatar" : ""}`} data-ai-message-id={messageId}>
+      {showAvatar && <span className="ai-message-avatar" aria-hidden="true"><AiIcon name="ai" /></span>}
       <div className="ai-message-stack">
         <div className={`message-body rich-text${message.pending ? " shining-text" : ""}`} dangerouslySetInnerHTML={{ __html: message.pending ? pendingLabel : (formatText ? formatText(message.text) : bridge.format(message.text)) }} />
         {!message.pending && (
@@ -132,7 +173,7 @@ export function AiPage() {
         <button className={tab === "history" ? "is-active" : ""} type="button" onClick={() => setTab("history")}>History</button>
       </nav>
       <div className="chat-thread" ref={threadRef} hidden={tab === "history"}>
-        {messages.map((message, index) => <AiMessage key={`${message.role}-${index}-${message.text}`} message={message} bridge={bridge} />)}
+        {messages.map((message, index) => <AiMessage key={`${message.role}-${index}-${message.text}`} message={message} bridge={bridge} showAvatar />)}
       </div>
       <section className="ai-history-panel" hidden={tab !== "history"} aria-label="Conversation history">
         {histories.length ? histories.map((conversation) => (
@@ -142,10 +183,7 @@ export function AiPage() {
         )) : <p className="ai-history-empty">No conversations in the last 24 hours.</p>}
         <p className="ai-history-retention">Conversations are saved for 24 hours after your last message.</p>
       </section>
-      <form className="composer" onSubmit={send}>
-        <textarea className={promptFading ? "is-placeholder-fading" : ""} value={prompt} onChange={(event) => setPrompt(event.target.value)} rows="1" placeholder={aiComposerPrompts[promptIndex]} aria-label="Message Brother AI" />
-        <button type="submit" disabled={pending} aria-label="Send message"><AiIcon name="send" /></button>
-      </form>
+      <AiComposer value={prompt} onChange={setPrompt} onSubmit={send} placeholder={aiComposerPrompts[promptIndex]} ariaLabel="Message Brother AI" disabled={pending} textareaClassName={promptFading ? "is-placeholder-fading" : ""} />
     </>
   );
 }

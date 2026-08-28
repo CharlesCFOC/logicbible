@@ -1,61 +1,5 @@
 /* pages/ai.css */
 
-/* Rotating AI prompts should stay secondary to the user's message. */
-.ai-screen .composer textarea::placeholder {
-  font-size: 13px;
-}
-
-/* AI composer: squared input and a clearly visible send control. */
-.app-shell[data-app-background="black"] .ai-screen .composer {
-  gap: 8px !important;
-  padding: 8px 12px !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-.app-shell[data-app-background="black"] .ai-screen .composer textarea {
-  min-height: 58px !important;
-  padding: 12px 14px !important;
-  border: 1px solid rgba(139, 220, 255, 0.58) !important;
-  border-radius: 10px !important;
-  background: transparent !important;
-  color: #f4fbff !important;
-  box-shadow: none !important;
-}
-
-.app-shell[data-app-background="black"] .ai-screen .composer textarea:focus {
-  border: 1px solid #8bdcff !important;
-  box-shadow: none !important;
-}
-
-.app-shell[data-app-background="black"] .ai-screen .composer textarea::placeholder {
-  opacity: 0.82;
-  transition: opacity 260ms ease;
-}
-
-.app-shell[data-app-background="black"] .ai-screen .composer textarea.is-placeholder-fading::placeholder {
-  opacity: 0;
-}
-
-.app-shell[data-app-background="black"] .ai-screen .composer button {
-  flex: 0 0 44px;
-  width: 44px;
-  min-width: 44px !important;
-  min-height: 44px;
-  border: 1px solid #8bdcff !important;
-  border-radius: 12px !important;
-  background: #3c9dcc !important;
-  color: #ffffff !important;
-  box-shadow: 0 4px 12px rgba(60, 157, 204, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
-}
-
-.app-shell[data-app-background="black"] .ai-screen .composer button:hover {
-  background: #4aaedc !important;
-}
-
-
 /* AI dark theme: user bubble, tabs and response actions. */
 .app-shell[data-app-background="black"] .user-message {
   border: 1px solid rgba(139, 220, 255, 0.32) !important;
@@ -310,6 +254,25 @@
   box-shadow: 0 1px 3px rgba(47, 60, 74, 0.08);
 }
 
+/* Keep the Brother AI tabs visible without the surrounding card surface. */
+#ai .ai-tabs {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+#ai .ai-tabs button.is-active,
+#ai .ai-tabs button.is-active:hover {
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.28), transparent 32%),
+    linear-gradient(135deg, #22cfa2 0%, #258fd8 48%, #8062f2 100%);
+  border-color: transparent;
+  color: #ffffff;
+  box-shadow: 0 10px 24px rgba(35, 148, 190, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
 .ai-history-panel {
   grid-row: 3;
   min-height: 0;
@@ -365,6 +328,24 @@
 .ai-history-item:hover {
   border-color: #8ca9ba;
   background: #d8e8f0;
+}
+
+/* Align the AI header and tabs with Prayer on the homepage shell. */
+#ai.ai-screen {
+  row-gap: 16px;
+}
+
+#ai .ai-topbar .icon-button {
+  width: 34px;
+  min-width: 34px;
+  height: 34px;
+  min-height: 34px;
+}
+
+#ai .ai-tabs button {
+  min-height: 40px;
+  border-radius: 11px;
+  font-size: 12px;
 }
 
 .chat-thread[hidden],
@@ -433,6 +414,37 @@
   max-width: 100%;
   padding: 0;
   background: transparent;
+}
+
+#ai .chat-thread .ai-message--with-avatar {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+#ai .chat-thread .ai-message-avatar {
+  display: grid;
+  place-items: center;
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 50%;
+  background: linear-gradient(135deg, #22cfa2 0%, #258fd8 48%, #8062f2 100%);
+  box-shadow: 0 6px 14px rgba(35, 148, 190, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+#ai .chat-thread .ai-message-avatar svg {
+  width: 21px;
+  height: 21px;
+  color: #ffffff;
+  stroke-width: 1.7;
+}
+
+#ai .chat-thread .ai-message--with-avatar .ai-message-stack {
+  flex: 1;
+  min-width: 0;
 }
 
 .ai-message-stack {
@@ -660,4 +672,122 @@
   line-height: 1.45;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 4;
+}
+
+/* Shared expandable AI composer used by Brother AI, Debate Room, and Coach Room. */
+.reusable-ai-composer {
+  gap: 8px;
+  padding: 6px 8px 6px 14px;
+  border: 1px solid transparent !important;
+  border-radius: 30px !important;
+  background: rgba(14, 38, 54, 0.72) !important;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+  isolation: isolate;
+  animation: debateComposerNeonGlow 6s ease-in-out infinite;
+}
+
+.reusable-ai-composer::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--debate-composer-neon-angle), #8bdcff, #6e7bff, #b27dff, #39e5e5, #8bdcff);
+  content: "";
+  pointer-events: none;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: debateComposerNeonSpin 6s linear infinite;
+}
+
+.reusable-ai-composer textarea,
+.reusable-ai-composer button {
+  position: relative;
+  z-index: 1;
+}
+
+.reusable-ai-composer textarea {
+  min-height: 44px !important;
+  max-height: 180px !important;
+  padding: 9px 4px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  outline: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow-y: hidden;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.reusable-ai-composer textarea::placeholder {
+  color: #ffffff !important;
+  opacity: 1;
+}
+
+.reusable-ai-composer textarea:placeholder-shown {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  line-height: 44px;
+}
+
+.reusable-ai-composer button {
+  display: grid;
+  place-items: center;
+  flex: 0 0 42px;
+  width: 42px;
+  min-width: 42px !important;
+  min-height: 42px;
+  border: 0 !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #34d5ed, #2774eb) !important;
+  color: #ffffff !important;
+  font-size: 22px;
+  box-shadow: 0 4px 12px rgba(60, 157, 204, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+.app-shell:not(.is-debate-room):not(.is-coach-room) .reusable-ai-composer {
+  right: 14px;
+  bottom: calc(var(--bottom-nav-offset) + 14px);
+  left: 14px;
+  width: auto;
+}
+
+.app-shell.is-coach-room .reusable-ai-composer {
+  right: 14px;
+  bottom: 14px;
+  left: 14px;
+  width: auto;
+}
+
+/* The AI page has older dark-theme composer rules with higher specificity. */
+.app-shell[data-app-background="black"] .ai-screen .reusable-ai-composer {
+  gap: 8px !important;
+  padding: 6px 8px 6px 14px !important;
+  border: 1px solid transparent !important;
+  border-radius: 30px !important;
+  background: rgba(14, 38, 54, 0.72) !important;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+}
+
+.app-shell[data-app-background="black"] .ai-screen .reusable-ai-composer textarea {
+  min-height: 44px !important;
+  max-height: 180px !important;
+  padding: 9px 4px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.app-shell[data-app-background="black"] .ai-screen .reusable-ai-composer button {
+  flex: 0 0 42px;
+  width: 42px;
+  min-width: 42px !important;
+  min-height: 42px;
+  border: 0 !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #34d5ed, #2774eb) !important;
+  box-shadow: 0 4px 12px rgba(60, 157, 204, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
 }

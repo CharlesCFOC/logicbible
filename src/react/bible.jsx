@@ -258,9 +258,33 @@ function BibleParallelContent({ state, selection, bridge }) {
   );
 }
 
+function BibleChapterNavigation({ state, bridge }) {
+  const bookIndex = state.books.findIndex((book) => book.id === state.bookId);
+  const atBibleBeginning = bookIndex <= 0 && state.chapter <= 1;
+  const atBibleEnd = bookIndex >= state.books.length - 1 && state.chapter >= state.chapterCount;
+
+  const goToChapter = (delta) => {
+    bridge.changeChapter(delta);
+    document.querySelector(".reader-screen")?.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  return (
+    <nav className="bible-chapter-navigation" aria-label="Chapter navigation">
+      <button type="button" onClick={() => goToChapter(-1)} disabled={atBibleBeginning} aria-label="Previous chapter">
+        <span aria-hidden="true">←</span>
+      </button>
+      <button type="button" onClick={() => goToChapter(1)} disabled={atBibleEnd} aria-label="Next chapter">
+        <span aria-hidden="true">→</span>
+      </button>
+    </nav>
+  );
+}
+
 export function BibleChapterContent() {
   const { state, verseState, bridge } = useBibleChapterState();
   if (state.status !== "ready" || !state.verses.length) return <BibleEmptyState state={state} />;
-  if (state.parallelEnabled && state.parallel) return <BibleParallelContent state={state} selection={verseState} bridge={bridge} />;
-  return state.verses.map((verse) => <BibleVerseLine key={verse.key} verse={verse} selection={verseState} bridge={bridge} />);
+  const content = state.parallelEnabled && state.parallel
+    ? <BibleParallelContent state={state} selection={verseState} bridge={bridge} />
+    : state.verses.map((verse) => <BibleVerseLine key={verse.key} verse={verse} selection={verseState} bridge={bridge} />);
+  return <>{content}<BibleChapterNavigation state={state} bridge={bridge} /></>;
 }

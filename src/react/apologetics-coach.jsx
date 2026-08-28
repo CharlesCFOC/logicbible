@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { AiIcon, AiMessage } from "./ai.jsx";
-import { debateThemes, debateDifficulties, debateDifficultyDescriptions, generalQuestion, getDebateLevelProgress } from "./apologetics-debate.jsx";
+import { AiComposer, AiMessage } from "./ai.jsx";
+import { DebateQuestionCarousel, DifficultyGuidance, debateThemes, debateDifficulties, generalQuestion, getDebateLevelProgress } from "./apologetics-debate.jsx";
 
 const coachKey = (theme, question) => `brother.coachConversation.${theme?.id || "general"}.${encodeURIComponent(question || generalQuestion)}`;
 
@@ -38,12 +38,17 @@ function CoachRoom({ theme, question, difficulty, onBack }) {
   const [messages, setMessages] = useState(() => readCoachMessages(theme, question) || initialMessages);
   const [draft, setDraft] = useState("");
   const [pending, setPending] = useState(false);
+  const [roomInfoOpen, setRoomInfoOpen] = useState(false);
   const threadRef = useRef(null);
 
   useEffect(() => {
     const appShell = document.querySelector(".app-shell");
+    appShell?.classList.add("is-debate-room");
     appShell?.classList.add("is-coach-room");
-    return () => appShell?.classList.remove("is-coach-room");
+    return () => {
+      appShell?.classList.remove("is-debate-room");
+      appShell?.classList.remove("is-coach-room");
+    };
   }, []);
 
   useEffect(() => {
@@ -71,19 +76,30 @@ function CoachRoom({ theme, question, difficulty, onBack }) {
   };
 
   return (
-    <div className="apologetics-coach-room">
+    <div className="apologetics-debate-room apologetics-coach-room">
       <header className="apologetics-debate-room-header">
         <button className="apologetics-debate-room-back" type="button" onClick={onBack} aria-label="Back to coach setup">←</button>
         <div><h1>Coach room</h1><p>Practice, improve, and try again.</p></div>
       </header>
-      <div className="apologetics-coach-context"><article><small>THEME</small><strong>{theme?.label}</strong></article><article><small>QUESTION</small><strong>{question || generalQuestion}</strong></article></div>
-      <div className="chat-thread apologetics-coach-thread" ref={threadRef} aria-label="Coach conversation">
-        {messages.map((message, index) => <AiMessage key={`${message.role}-${index}-${message.text}`} message={message} bridge={bridge} pendingLabel="Your coach is thinking..." />)}
+      <div className="apologetics-debate-room-settings">
+        <div className="apologetics-debate-room-info">
+          <button className="apologetics-debate-room-info-toggle" type="button" onMouseDown={(event) => event.preventDefault()} onClick={() => setRoomInfoOpen((current) => !current)} aria-expanded={roomInfoOpen} aria-controls="coach-room-information">
+            <span>Room informations</span>
+            <span className={`apologetics-debate-room-info-arrow${roomInfoOpen ? " is-open" : ""}`} aria-hidden="true">⌄</span>
+          </button>
+          {roomInfoOpen && (
+            <div className="apologetics-debate-room-context" id="coach-room-information">
+              <span>Difficulty: <strong>{difficulty}</strong></span>
+              <span>Theme: <strong>{theme?.label || "General"}</strong></span>
+              <span>Question: <strong>{question || generalQuestion}</strong></span>
+            </div>
+          )}
+        </div>
       </div>
-      <form className="composer apologetics-coach-composer" onSubmit={sendMessage}>
-        <textarea value={draft} onChange={(event) => setDraft(event.target.value)} rows="1" placeholder="Write your answer..." aria-label="Write your answer" disabled={pending} />
-        <button type="submit" aria-label="Send answer" disabled={pending}><AiIcon name="send" /></button>
-      </form>
+      <div className="chat-thread apologetics-debate-chat-thread" ref={threadRef} aria-label="Coach conversation">
+        {messages.map((message, index) => <AiMessage key={`${message.role}-${index}-${message.text}`} message={message} bridge={bridge} pendingLabel="Your coach is thinking..." showAvatar />)}
+      </div>
+      <AiComposer value={draft} onChange={setDraft} onSubmit={sendMessage} placeholder="Write your answer..." ariaLabel="Write your answer" disabled={pending} className="apologetics-debate-composer apologetics-coach-composer" submitLabel="Send answer" />
     </div>
   );
 }
@@ -100,8 +116,8 @@ export function ApologeticsCoachPage() {
   return (
     <div className="apologetics-debate-content apologetics-coach-setup">
       <header className="apologetics-debate-header"><button className="apologetics-debate-back" type="button" onClick={() => window.appNavigate?.("apologetics")} aria-label="Back to Apologetics">←</button><div><h1>Coach room</h1><p>Build your answer one step at a time.</p></div></header>
-      <section className="apologetics-debate-step apologetics-debate-step--theme"><div className="apologetics-debate-step-heading"><span>01</span><div><h2>Choose a debate theme</h2><p>Select the perspective you want to practice.</p></div></div><div className="apologetics-debate-theme-list">{debateThemes.map((item) => <button className={themeId === item.id ? "is-selected" : ""} key={item.id} type="button" onClick={() => { setThemeId(item.id); setQuestion(""); }} aria-pressed={themeId === item.id}>{item.label}</button>)}</div><div className="apologetics-debate-setup-settings"><div><span>Difficulty</span><div className="apologetics-debate-difficulty-list">{debateDifficulties.map((level) => <button className={difficulty === level ? "is-selected" : ""} type="button" key={level} onClick={() => setDifficulty(level)}>{level}</button>)}</div>{difficulty && <p className="apologetics-debate-difficulty-description">{debateDifficultyDescriptions[difficulty]}</p>}</div></div></section>
-      {theme ? <section className="apologetics-debate-step apologetics-debate-step--questions"><div className="apologetics-debate-step-heading"><span>02</span><div><h2>Choose the central question</h2><p>Pick a question to practice with your coach.</p></div></div><div className="apologetics-debate-question-list">{questions.map((item, index) => <button className={question === item ? "is-selected" : ""} key={item} type="button" onClick={() => setQuestion(item)} aria-pressed={question === item}><span>{index === 0 ? "General" : `Question ${index}`}</span><strong>{item}</strong></button>)}</div></section> : <p className="apologetics-debate-empty">Choose a theme to unlock the coaching questions.</p>}
+      <section className="apologetics-debate-step apologetics-debate-step--theme"><div className="apologetics-debate-step-heading"><span>01</span><div><h2>Choose a debate theme</h2><p>Select the perspective you want to practice.</p></div></div><div className="apologetics-debate-theme-list">{debateThemes.map((item) => <button className={themeId === item.id ? "is-selected" : ""} key={item.id} type="button" onClick={() => { setThemeId(themeId === item.id ? "" : item.id); setQuestion(""); }} aria-pressed={themeId === item.id}>{item.label}</button>)}</div><div className="apologetics-debate-setup-settings"><div><span>Difficulty</span><div className="apologetics-debate-difficulty-list">{debateDifficulties.map((level) => <button className={difficulty === level ? "is-selected" : ""} type="button" key={level} onClick={() => setDifficulty(level)}>{level}</button>)}</div><DifficultyGuidance difficulty={difficulty} /></div></div></section>
+      {theme ? <section className="apologetics-debate-step apologetics-debate-step--questions"><div className="apologetics-debate-step-heading"><span>02</span><div><h2>Choose the central question</h2><p>Pick a question to practice with your coach.</p></div></div><DebateQuestionCarousel questions={questions} value={question} onChange={setQuestion} /></section> : <p className="apologetics-debate-empty">Choose a theme to unlock the coaching questions.</p>}
       <button className="apologetics-debate-launch" type="button" disabled={!theme || !question || !difficulty} onClick={() => setRoomOpen(true)}>Start coaching</button>
     </div>
   );

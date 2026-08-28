@@ -96,6 +96,8 @@ button {
   border: 0;
   color: inherit;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
 }
 
 svg {

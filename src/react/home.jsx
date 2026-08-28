@@ -55,9 +55,20 @@ function LibraryIcon({ name }) {
 }
 
 export function HomeHero() {
+  const [coverImage, setCoverImage] = useState(() => window.profileBridge?.getHero?.().coverImage || "assets/cloud-account-zen.png");
+
+  useEffect(() => {
+    const handleHeroChange = () => {
+      const nextCover = window.profileBridge?.getHero?.().coverImage;
+      if (nextCover) setCoverImage(nextCover);
+    };
+    document.addEventListener("profile:hero-change", handleHeroChange);
+    return () => document.removeEventListener("profile:hero-change", handleHeroChange);
+  }, []);
+
   return (
     <>
-      <img src="assets/home-hero-community.png" alt="A worship gathering in prayer" />
+      <img src={coverImage} alt="Selected hero image" />
       <div className="home-hero-image-copy">
         <div className="home-hero-verse">
           <span>Verse of the day</span>

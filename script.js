@@ -79,10 +79,6 @@ const verseAiForm = document.querySelector("[data-verse-ai-form]");
 const verseAiInput = verseAiForm?.querySelector("input");
 const multiSelectMenuToggle = document.querySelector("[data-multi-select-toggle]");
 const noteAddSaveButton = document.querySelector("[data-note-add-save]");
-const aiComposerInput = document.querySelector(".composer textarea");
-const aiForm = document.querySelector("[data-ai-form]");
-const aiThread = document.querySelector("[data-ai-thread]");
-const newAiChatButton = document.querySelector("[data-new-ai-chat]");
 const apologeticsTracks = document.querySelector("[data-apologetics-tracks]");
 const apologeticsFilters = document.querySelector("[data-apologetics-filters]");
 const apologeticsTopicCount = document.querySelector("[data-apologetics-topic-count]");
@@ -119,8 +115,6 @@ const debateXpKey = "brother.debateXp";
 const pendingSyncKey = "app.pendingSync";
 const aiMemoryTtlMs = 24 * 60 * 60 * 1000;
 const maxAiMemoryMessages = 24;
-const aiTabs = [...document.querySelectorAll("[data-ai-tab]")];
-const aiHistoryPanel = document.querySelector("[data-ai-history-panel]");
 let currentAiConversationId = localStorage.getItem("brother.aiConversationId") || `chat-${Date.now()}`;
 
 let supabaseClient = null;
@@ -267,7 +261,6 @@ const profileStyleFeedback = document.querySelector("[data-profile-style-feedbac
 const profileName = document.querySelector("[data-profile-name]");
 const profileStreak = document.querySelector("[data-profile-streak]");
 const profileForm = document.querySelector("[data-profile-form]");
-const profileFormFeedback = document.querySelector("[data-profile-form-feedback]");
 const profileAuthStatus = document.querySelector("[data-profile-auth-status]");
 const profileStorageStatus = document.querySelector("[data-profile-storage-status]");
 const profileAccountId = document.querySelector("[data-profile-account-id]");
@@ -432,7 +425,7 @@ const defaultPreferences = {
 };
 const defaultProfile = {
   displayName: "Charles",
-  coverImage: "assets/profile-hero-v2.png",
+  coverImage: "assets/cloud-account-zen.png",
   email: "",
   country: "",
   dateOfBirth: "",
@@ -443,10 +436,20 @@ const defaultProfile = {
   authStatus: "Local profile",
   storageStatus: "Local only",
 };
+const profileCoverOptions = [
+  { id: "community", label: "Community", src: "assets/home-hero-community.png" },
+  { id: "forest", label: "Forest", src: "assets/home-card-forest.webp" },
+  { id: "prayer", label: "Prayer", src: "assets/home-card-prayer.webp" },
+  { id: "sunlit-path", label: "Sunlit path", src: "assets/prayer-backgrounds/prayer-1.jpg" },
+  { id: "open-sky", label: "Open sky", src: "assets/prayer-backgrounds/prayer-2.jpg" },
+];
 const savedProfile = {
   ...defaultProfile,
   ...readJson("brother.profile", {}),
 };
+if (savedProfile.coverImage === "assets/profile-hero-v2.png") {
+  savedProfile.coverImage = defaultProfile.coverImage;
+}
 const savedPreferences = {
   ...defaultPreferences,
   ...readJson("brother.preferences", {}),
@@ -935,6 +938,19 @@ function removeLocalValue(key) {
   if (supabaseClient && supabaseUser && !isHydratingSupabase) {
     supabaseClient.from("user_app_state").delete().eq("user_id", supabaseUser.id).eq("state_key", key);
   }
+}
+
+function clearLocalAccountData() {
+  Object.keys(localStorage).forEach((key) => {
+    if (key.startsWith("brother.")) {
+      localStorage.removeItem(key);
+    }
+  });
+  Object.keys(sessionStorage).forEach((key) => {
+    if (key.startsWith("brother.")) {
+      sessionStorage.removeItem(key);
+    }
+  });
 }
 
 function parseStoredValue(rawValue) {
@@ -1508,7 +1524,7 @@ async function loadPrayerFromSupabase() {
 
   const { data: requests, error } = await supabaseClient
     .from("prayer_requests")
-    .select("id,author_id,content,prayer_count,status,category,urgent,created_at");
+    .select("id,author_id,title,content,prayer_count,status,category,urgent,created_at");
   if (error) {
     console.warn("Prayer requests could not be loaded:", error.message);
     return;
@@ -1528,6 +1544,7 @@ async function loadPrayerFromSupabase() {
   prayerState.requests = (requests || []).map((request) => ({
     id: request.id,
     ownerId: request.author_id,
+    title: request.title || "Prayer request",
     text: request.content,
     prayerCount: request.prayer_count || 0,
     prayedBy: prayedIds.has(request.id) && supabaseUser ? [supabaseUser.id] : [],
@@ -1539,12 +1556,13 @@ async function loadPrayerFromSupabase() {
   renderPrayerPage();
 }
 
-async function createPrayerRequest(text, category, urgent, backgroundIndex) {
+async function createPrayerRequest(title, text, category, urgent, backgroundIndex) {
   if (!supabaseClient || !supabaseUser) {
     return false;
   }
   const { data, error } = await supabaseClient.from("prayer_requests").insert({
     author_id: supabaseUser.id,
+    title,
     content: text,
     category,
     urgent,
@@ -1616,15 +1634,16 @@ function renderPrayerPage() {
           <article class="prayer-card${expanded ? " is-expanded" : ""}${request.urgent ? " is-urgent" : ""}${isNewlyPrayed ? " is-prayed" : ""}" style="--prayer-card-image: url('assets/prayer-backgrounds/prayer-${prayerBackgroundIndex + 1}.jpg')">
             <button type="button" class="prayer-card-toggle" data-prayer-toggle data-prayer-id="${escapeAttr(request.id)}" aria-expanded="${expanded}">
               <span>
+                <strong class="prayer-card-title">${escapeHtml(request.title || "Prayer request")}</strong>
                 <p>${escapeHtml(expanded ? request.text : getPrayerPreview(request.text))}</p>
               </span>
               <i data-lucide="chevron-down"></i>
             </button>
             <div class="prayer-card-meta">
               <div class="prayer-card-actions">
-                <button type="button" class="prayer-action prayer-action-secondary" data-prayer-action="share" data-prayer-id="${escapeAttr(request.id)}" aria-label="Share prayer request" title="Share"><i data-lucide="share-2"></i></button>
+                <button type="button" class="prayer-action prayer-action-secondary" data-prayer-action="share" data-prayer-id="${escapeAttr(request.id)}" aria-label="Share prayer request" title="Share"><i data-lucide="external-link"></i></button>
                 <button type="button" class="prayer-action${hasPrayed ? " is-prayed" : ""}" data-prayer-action="pray" data-prayer-id="${escapeAttr(request.id)}" aria-label="${hasPrayed ? "Prayer count" : "I prayed"}">
-                  <i data-lucide="${hasPrayed ? "heart" : "hand-heart"}"></i>
+                  <i data-lucide="heart"></i>
                   <span>${request.prayerCount}</span>
                 </button>
               </div>
@@ -1743,41 +1762,7 @@ function clearAiMemory() {
 }
 
 function startNewAiConversation() {
-  currentAiConversationId = `chat-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
-  localStorage.setItem("brother.aiConversationId", currentAiConversationId);
-  clearAiMemory();
-  if (aiThread) {
-    aiThread.innerHTML = `<article class="message ai-message"><div class="ai-message-stack"><div class="message-body rich-text"><p>Ask me about a verse, doctrine, original language, cross references, or biblical context.</p></div></div></article>`;
-  }
-}
-
-function renderAiHistory() {
-  if (!aiHistoryPanel) return;
-  const conversations = readJson(aiConversationsKey, [])
-    .filter((item) => Date.now() - Number(item.updatedAt || item.createdAt || 0) < aiMemoryTtlMs)
-    .sort((a, b) => Number(b.updatedAt) - Number(a.updatedAt));
-  writeJson(aiConversationsKey, conversations);
-  aiHistoryPanel.innerHTML = `${conversations.length ? conversations.map((conversation) => {
-    const firstUser = conversation.messages?.find((message) => message.role === "user");
-    const preview = firstUser?.text || "New conversation";
-    const shortPreview = preview.length > 30 ? `${preview.slice(0, 30).trim()}...` : preview;
-    return `<button type="button" class="ai-history-item" data-ai-history-id="${escapeAttr(conversation.id)}"><span>${escapeHtml(shortPreview)}</span><i data-lucide="square-arrow-out-up-right" aria-hidden="true"></i></button>`;
-  }).join("") : '<p class="ai-history-empty">No conversations in the last 24 hours.</p>'}<p class="ai-history-retention">Conversations are saved for 24 hours after your last message.</p>`;
-  aiHistoryPanel.querySelectorAll("[data-ai-history-id]").forEach((button) => {
-    button.addEventListener("click", () => loadAiConversation(button.dataset.aiHistoryId));
-  });
-  refreshIcons();
-}
-
-function loadAiConversation(id) {
-  const conversation = readJson(aiConversationsKey, []).find((item) => item.id === id);
-  if (!conversation || !aiThread) return;
-  currentAiConversationId = id;
-  localStorage.setItem("brother.aiConversationId", id);
-  writeJson(aiMemoryKey, conversation.messages || []);
-  aiThread.innerHTML = "";
-  (conversation.messages || []).forEach((item) => appendAiMessage(item.role, item.text));
-  setAiTab("chat");
+  window.aiBridge?.newConversation?.();
 }
 
 function savePreferences() {
@@ -2359,7 +2344,7 @@ async function handleApologeticsChatSubmit(event) {
 function launchApologeticsCoach(mode = "coach") {
   const track = getApologeticsTrack();
   const topic = getApologeticsTopic();
-  if (!track || !topic || !aiComposerInput) {
+  if (!track || !topic) {
     return;
   }
 
@@ -2371,9 +2356,7 @@ function launchApologeticsCoach(mode = "coach") {
   };
 
   setScreen("ai");
-  aiComposerInput.value = prompts[mode] || prompts.coach;
-  resizeAiComposerInput();
-  aiComposerInput.focus();
+  document.dispatchEvent(new CustomEvent("ai:prefill", { detail: { prompt: prompts[mode] || prompts.coach } }));
 }
 
 async function copyApologeticsShortAnswer() {
@@ -4562,22 +4545,6 @@ function askAiAboutVerse() {
   setScreen("ai");
   const versePrompt = `Explain ${selectedVerseData.reference} (${selectedVerseData.version}) with biblical context, original language, cross references, and application. Verse: "${selectedVerseData.text}"`;
   document.dispatchEvent(new CustomEvent("ai:prefill", { detail: { prompt: versePrompt } }));
-  if (aiComposerInput) {
-    stopAiComposerPromptRotation();
-    aiComposerInput.value = versePrompt;
-    resizeAiComposerInput();
-    aiComposerInput.focus();
-  }
-}
-
-function setAiTab(tab) {
-  aiTabs.forEach((button) => button.classList.toggle("is-active", button.dataset.aiTab === tab));
-  document.querySelector("#ai")?.classList.toggle("is-history", tab === "history");
-  if (!aiThread || !aiHistoryPanel) return;
-  const isHistory = tab === "history";
-  aiThread.hidden = isHistory;
-  aiHistoryPanel.hidden = !isHistory;
-  if (isHistory) renderAiHistory();
 }
 
 function openVerseAiChat(verseData) {
@@ -4642,136 +4609,8 @@ function handleVerseAiSubmit(event) {
   requestVerseAiResponse(question);
 }
 
-function scrollAiThreadToBottom() {
-  if (aiThread) {
-    aiThread.scrollTop = aiThread.scrollHeight;
-  }
-}
-
-function resizeAiComposerInput() {
-  if (!aiComposerInput) {
-    return;
-  }
-
-  aiComposerInput.style.height = "auto";
-  const nextHeight = Math.min(aiComposerInput.scrollHeight, 168);
-  aiComposerInput.style.height = `${nextHeight}px`;
-  aiComposerInput.style.overflowY = aiComposerInput.scrollHeight > nextHeight ? "auto" : "hidden";
-}
-
-const aiComposerPrompts = [
-  "Tu as une question ?",
-  "Tu cherches un verset ?",
-  "Tu veux comparer le sens d’un mot ?",
-];
-let aiComposerPromptIndex = 0;
-let aiComposerPromptTimer = null;
-let aiComposerPromptFadeTimer = null;
-
-function stopAiComposerPromptRotation() {
-  window.clearInterval(aiComposerPromptTimer);
-  window.clearTimeout(aiComposerPromptFadeTimer);
-  aiComposerPromptTimer = null;
-  aiComposerPromptFadeTimer = null;
-  aiComposerInput?.classList.remove("is-placeholder-fading");
-  if (aiComposerInput) aiComposerInput.placeholder = "";
-}
-
-function startAiComposerPromptRotation() {
-  if (!aiComposerInput || aiComposerInput.value.trim()) return;
-  stopAiComposerPromptRotation();
-  aiComposerInput.placeholder = aiComposerPrompts[aiComposerPromptIndex];
-  aiComposerPromptTimer = window.setInterval(() => {
-    if (aiComposerInput.value.trim()) {
-      stopAiComposerPromptRotation();
-      return;
-    }
-    aiComposerInput.classList.add("is-placeholder-fading");
-    aiComposerPromptFadeTimer = window.setTimeout(() => {
-      aiComposerPromptIndex = (aiComposerPromptIndex + 1) % aiComposerPrompts.length;
-      aiComposerInput.placeholder = aiComposerPrompts[aiComposerPromptIndex];
-      aiComposerInput.classList.remove("is-placeholder-fading");
-    }, 260);
-  }, 2000);
-}
-
-function appendAiMessage(role, text) {
-  if (!aiThread) {
-    return;
-  }
-
-  const article = document.createElement("article");
-  article.className = `message ${role === "user" ? "user-message" : "ai-message"}`;
-  if (role === "user") {
-    article.innerHTML = `<p>${escapeHtml(text)}</p>`;
-  } else {
-    const messageId = getAiMessageId(text);
-    article.dataset.aiMessageId = messageId;
-    article.dataset.aiMessageText = text;
-    article.innerHTML = `
-      <div class="ai-message-stack">
-        <div class="message-body rich-text">${renderRichText(text)}</div>
-        ${renderAiMessageActions(messageId)}
-      </div>
-    `;
-  }
-  aiThread.appendChild(article);
-  refreshIcons();
-  scrollAiThreadToBottom();
-}
-
 function clearThinkingState(element) {
   element?.classList.remove("shining-text");
-}
-
-function restoreAiMemory() {
-  if (!aiThread) {
-    return;
-  }
-
-  getRecentAiMemory().forEach((item) => appendAiMessage(item.role, item.text));
-}
-
-async function requestAiResponse(prompt, history = []) {
-  const pending = aiThread?.querySelector("[data-ai-pending]");
-  try {
-    const response = await fetch("/api/ai/chat", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ prompt, history, mode: "debate" }),
-    });
-    const payload = await response.json();
-    if (!response.ok) {
-      throw new Error(payload.error || "AI request failed.");
-    }
-    if (pending) {
-      const responseText = payload.text || "No response text returned.";
-      const article = pending.closest(".ai-message");
-      clearThinkingState(pending);
-      pending.classList.add("rich-text");
-      pending.innerHTML = renderRichText(responseText);
-      if (article) {
-        const messageId = getAiMessageId(responseText);
-        article.dataset.aiMessageId = messageId;
-        article.dataset.aiMessageText = responseText;
-        const actions = article.querySelector(".ai-message-actions");
-        if (actions) {
-          actions.outerHTML = renderAiMessageActions(messageId);
-        }
-      }
-      pending.removeAttribute("data-ai-pending");
-      rememberAiMessage("user", prompt);
-      rememberAiMessage("assistant", responseText);
-    }
-  } catch (error) {
-    if (pending) {
-      clearThinkingState(pending);
-      pending.textContent = error.message || "AI is not available yet.";
-      pending.removeAttribute("data-ai-pending");
-    }
-  }
-  refreshIcons();
-  scrollAiThreadToBottom();
 }
 
 async function requestVerseAiResponse(question) {
@@ -4818,41 +4657,6 @@ async function requestVerseAiResponse(question) {
   }
   refreshIcons();
   scrollVerseAiThreadToBottom();
-}
-
-function resetAiChat() {
-  if (!aiThread) {
-    return;
-  }
-
-  startNewAiConversation();
-  aiThread.innerHTML = `
-    <article class="message ai-message">
-      <div class="ai-message-stack">
-        <div class="message-body rich-text"><p>Ask me about a verse, doctrine, original language, cross references, or biblical context.</p></div>
-      </div>
-    </article>
-  `;
-  refreshIcons();
-}
-
-function handleAiSubmit(event) {
-  event.preventDefault();
-  const prompt = aiComposerInput?.value.trim();
-  if (!prompt) {
-    return;
-  }
-
-  const history = getRecentAiMemory();
-  aiComposerInput.value = "";
-  startAiComposerPromptRotation();
-  resizeAiComposerInput();
-  appendAiMessage("user", prompt);
-  appendAiMessage("ai", "Brother AI is thinking...");
-  const pending = aiThread.querySelector(".ai-message:last-child .message-body");
-  pending?.setAttribute("data-ai-pending", "");
-  pending?.classList.add("shining-text");
-  requestAiResponse(prompt, history);
 }
 
 async function copyAiMessage(button) {
@@ -5873,36 +5677,11 @@ document.querySelectorAll("[data-close-modal]").forEach((button) => {
   button.addEventListener("click", closeModal);
 });
 
-if (aiForm) {
-  aiForm.addEventListener("submit", handleAiSubmit);
-}
-
-if (aiComposerInput) {
-  resizeAiComposerInput();
-  startAiComposerPromptRotation();
-  aiComposerInput.addEventListener("input", () => {
-    resizeAiComposerInput();
-    if (aiComposerInput.value.trim()) {
-      stopAiComposerPromptRotation();
-    } else {
-      startAiComposerPromptRotation();
-    }
-  });
-}
-
-if (newAiChatButton) {
-  newAiChatButton.addEventListener("click", resetAiChat);
-}
-
-aiTabs.forEach((button) => {
-  button.addEventListener("click", () => setAiTab(button.dataset.aiTab));
-});
-
 if (verseAiForm) {
   verseAiForm.addEventListener("submit", handleVerseAiSubmit);
 }
 
-[aiThread, verseAiThread].forEach((thread) => {
+[verseAiThread].forEach((thread) => {
   thread?.addEventListener("click", (event) => {
     const button = event.target.closest("[data-ai-action]");
     if (!button) {
@@ -6485,7 +6264,9 @@ function getBibleChapterSnapshot() {
     status: bibleChapterError ? "error" : bibleChapterLoading ? "loading" : "ready",
     error: bibleChapterError,
     chapter: readerState.chapter,
+    chapterCount: book.chapters,
     bookName: book.name,
+    books: BOOKS.map((item) => ({ id: item.id, name: item.name, chapters: item.chapters })),
     sourceLabel: `${book.name} ${readerState.chapter} · ${readerState.parallelEnabled ? "Parallel" : `${getVersionLanguageFlag(version)} ${chapter?.versionName || version.name}`}`,
     copyright: chapter?.copyright || "",
     title: chapter?.title || "",
@@ -6591,7 +6372,33 @@ window.bibleReaderBridge = {
     loadChapter();
   },
   setChapter(value) {
-    readerState.chapter = Number(value);
+    const book = getBook(readerState.bookId);
+    readerState.chapter = Math.max(1, Math.min(book.chapters, Number(value) || 1));
+    renderChapterOptions();
+    loadChapter();
+  },
+  changeChapter(delta) {
+    const currentBookIndex = BOOKS.findIndex((book) => book.id === readerState.bookId);
+    if (currentBookIndex < 0) return;
+
+    const direction = Number(delta) < 0 ? -1 : 1;
+    let nextBookIndex = currentBookIndex;
+    let nextChapter = readerState.chapter + direction;
+
+    if (nextChapter < 1) {
+      nextBookIndex -= 1;
+      if (nextBookIndex < 0) return;
+      nextChapter = BOOKS[nextBookIndex].chapters;
+    } else if (nextChapter > BOOKS[currentBookIndex].chapters) {
+      nextBookIndex += 1;
+      if (nextBookIndex >= BOOKS.length) return;
+      nextChapter = 1;
+    }
+
+    readerState.bookId = BOOKS[nextBookIndex].id;
+    readerState.chapter = nextChapter;
+    renderBookOptions();
+    renderChapterOptions();
     loadChapter();
   },
   toggleParallel() {
@@ -6748,7 +6555,13 @@ window.profileBridge = {
     setProfileTab(tab);
   },
   getHero() {
-    return { displayName: savedProfile.displayName || defaultProfile.displayName, streakLabel: savedProfile.streakLabel || defaultProfile.streakLabel, coverImage: savedProfile.coverImage || defaultProfile.coverImage };
+    const coverImage = savedProfile.coverImage || defaultProfile.coverImage;
+    return {
+      displayName: savedProfile.displayName || defaultProfile.displayName,
+      streakLabel: savedProfile.streakLabel || defaultProfile.streakLabel,
+      coverImage,
+      coverOptions: profileCoverOptions,
+    };
   },
   async prepareCover(file) {
     return compressProfileCover(file);
@@ -6798,6 +6611,41 @@ window.profileBridge = {
     }
     const { error } = await supabaseClient.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}${window.location.pathname}` });
     setAuthFeedback(error ? error.message : "Password reset email sent. Check your inbox.", Boolean(error));
+  },
+  async deleteAccount() {
+    if (!supabaseClient || !supabaseUser) {
+      setAuthFeedback("Sign in before deleting your account.", true);
+      return false;
+    }
+
+    const sessionResult = await supabaseClient.auth.getSession();
+    const session = sessionResult.data?.session;
+    if (!session?.access_token) {
+      setAuthFeedback("Your session has expired. Sign in again before deleting your account.", true);
+      return false;
+    }
+
+    try {
+      const response = await fetch("/api/account/delete", {
+        method: "POST",
+        headers: { authorization: `Bearer ${session.access_token}` },
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || !payload.deleted) {
+        throw new Error(payload.error || "The account could not be deleted.");
+      }
+
+      await supabaseClient.auth.signOut().catch(() => {});
+      clearLocalAccountData();
+      supabaseUser = null;
+      setAuthFeedback("Your account and synced data were permanently deleted.");
+      updateAuthUi();
+      window.setTimeout(() => window.location.reload(), 80);
+      return true;
+    } catch (error) {
+      setAuthFeedback(error.message || "The account could not be deleted.", true);
+      return false;
+    }
   },
   async signOut() {
     await supabaseClient?.auth.signOut();
@@ -6900,7 +6748,7 @@ window.prayerBridge = {
   async share(requestId) {
     const request = prayerState.requests.find((item) => item.id === requestId);
     if (!request) return;
-    const shareText = `Prayer request: ${request.text}`;
+    const shareText = `${request.title || "Prayer request"}\n\n${request.text}`;
     try {
       if (navigator.share) await navigator.share({ title: "Prayer request", text: shareText });
       else if (navigator.clipboard) {
@@ -6938,12 +6786,13 @@ window.prayerBridge = {
     setPrayerCategory(category);
     emitPrayerStateChange();
   },
-  async submit(text, category, backgroundIndex) {
+  async submit(title, text, category, backgroundIndex) {
+    const cleanTitle = String(title || "").trim();
     const cleanText = String(text || "").trim();
     const wordCount = countPrayerWords(cleanText);
     const moderationMessage = getPrayerModerationMessage(cleanText);
-    if (!cleanText || wordCount > 300) {
-      setPrayerBridgeFeedback(wordCount > 300 ? "Please keep your request under 300 words." : "Write a prayer request first.");
+    if (!cleanTitle || !cleanText || wordCount > 300) {
+      setPrayerBridgeFeedback(wordCount > 300 ? "Please keep your request under 300 words." : (!cleanTitle ? "Add a title to your prayer request." : "Write a prayer request first."));
       return false;
     }
     if (moderationMessage) {
@@ -6955,12 +6804,13 @@ window.prayerBridge = {
       return false;
     }
     if (supabaseClient && supabaseUser) {
-      const created = await createPrayerRequest(cleanText, category, false, backgroundIndex);
+      const created = await createPrayerRequest(cleanTitle, cleanText, category, false, backgroundIndex);
       if (!created) return false;
     } else {
       prayerState.requests.unshift({
         id: `prayer-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
         ownerId: prayerUserId,
+        title: cleanTitle,
         text: cleanText,
         prayerCount: 0,
         prayedBy: [],
@@ -7096,6 +6946,5 @@ window.aiBridge = {
 initHomeStats();
 initAuthForm();
 initSupabase();
-restoreAiMemory();
 renderApologetics();
 refreshIcons();

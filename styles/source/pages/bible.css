@@ -302,6 +302,37 @@
   backdrop-filter: blur(18px) saturate(125%);
 }
 
+/* Give the selected-verse menu a thin animated neon edge along its top only. */
+.app-shell[data-modal="verse"] .bottom-sheet[data-verse-sheet] {
+  position: relative;
+  isolation: isolate;
+  overflow-x: hidden;
+}
+
+.app-shell[data-modal="verse"] .bottom-sheet[data-verse-sheet] > .modal-handle {
+  display: none;
+}
+
+.app-shell[data-modal="verse"] .bottom-sheet[data-verse-sheet]::before {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #39e5e5 0%, #8bdcff 24%, #6e7bff 52%, #b27dff 76%, #39e5e5 100%);
+  background-size: 220% 100%;
+  box-shadow: 0 0 10px rgba(57, 229, 229, 0.72), 0 0 16px rgba(110, 123, 255, 0.48);
+  content: "";
+  pointer-events: none;
+  animation: verseSheetNeonShift 5s ease-in-out infinite;
+}
+
+@keyframes verseSheetNeonShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
 .app-shell[data-app-background="black"] .bottom-sheet .sheet-title {
   margin-bottom: 10px !important;
 }
@@ -374,7 +405,13 @@
 }
 
 .reader-select-label.compact {
-  flex: 0 0 68px;
+  flex: 0 0 78px;
+  min-width: 78px;
+}
+
+.reader-select-label.compact select {
+  padding-right: 12px;
+  padding-left: 12px;
 }
 
 .reader-select-label select {
@@ -479,6 +516,41 @@
 
 .scripture-page {
   padding-top: 26px;
+}
+
+.bible-chapter-navigation {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 34px 0 12px;
+}
+
+.bible-chapter-navigation button {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 52px;
+  border: 1px solid rgba(139, 220, 255, 0.46);
+  border-radius: 18px;
+  background: linear-gradient(135deg, #22cfa2 0%, #258fd8 48%, #8062f2 100%) !important;
+  color: #ffffff;
+  box-shadow: 0 7px 16px rgba(35, 148, 190, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.26);
+}
+
+.bible-chapter-navigation button:hover:not(:disabled) {
+  filter: brightness(1.08) saturate(1.08);
+}
+
+.bible-chapter-navigation button:disabled {
+  cursor: not-allowed;
+  opacity: 0.34;
+  filter: saturate(0.45);
+}
+
+.bible-chapter-navigation button > span {
+  font-size: 30px;
+  font-weight: 500;
+  line-height: 1;
 }
 
 .reader-screen [data-reader-source] {

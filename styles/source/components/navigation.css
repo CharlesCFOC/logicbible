@@ -45,8 +45,21 @@
 
 .app-shell .bottom-nav button[data-nav="home"].is-active,
 .app-shell[data-app-background] .bottom-nav button[data-nav="home"].is-active {
-  background: linear-gradient(135deg, #5edcff 0%, #4f9dff 52%, #6f7cff 100%) !important;
+  background: linear-gradient(135deg, #22cfa2 0%, #258fd8 34%, #8062f2 68%, #ff56c7 100%) !important;
+  background-size: 260% 260% !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42), 0 5px 18px rgba(83, 157, 255, 0.42) !important;
+  animation: homeActiveColorShift 8s ease-in-out infinite !important;
+}
+
+@keyframes homeActiveColorShift {
+  0%, 100% {
+    background-position: 0% 50%;
+    filter: hue-rotate(0deg) saturate(1.18);
+  }
+  50% {
+    background-position: 100% 50%;
+    filter: hue-rotate(24deg) saturate(1.42);
+  }
 }
 
 .app-shell .bottom-nav button:not([data-nav="home"]).is-active,
@@ -592,4 +605,15 @@
   pointer-events: none;
   background: linear-gradient(180deg, transparent 0%, rgba(18, 43, 59, 0.28) 58%, rgba(18, 43, 59, 0.58) 100%);
   content: "";
+}
+
+/* Final Home state: animated color variations take priority over theme overrides. */
+.app-shell[data-app-background] .bottom-nav button[data-nav="home"].is-active {
+  background-color: #8062f2 !important;
+  background-image: radial-gradient(circle at 16% 16%, rgba(255, 255, 255, 0.34), transparent 30%), linear-gradient(135deg, #22cfa2 0%, #258fd8 32%, #8062f2 66%, #ff56c7 100%) !important;
+  background-size: 260% 260% !important;
+  background-position: 0% 50% !important;
+  filter: saturate(1.32);
+  transition: background-position 700ms ease, filter 700ms ease !important;
+  animation: homeActiveColorShift 8s ease-in-out infinite !important;
 }

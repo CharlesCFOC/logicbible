@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
+import { getSupabaseAdminClient, getSupabaseServerClient } from "./lib/supabase/server.js";
 
 const root = fileURLToPath(new URL(".", import.meta.url));
 const port = Number(process.env.PORT || 4000);
@@ -408,6 +409,57 @@ function handleSupabaseConfig(res) {
   });
 }
 
+async function handleAccountDeletion(req, res) {
+  if (req.method !== "POST") {
+    res.writeHead(405, { allow: "POST" });
+    res.end();
+    return;
+  }
+
+  const authorization = String(req.headers.authorization || "");
+  const accessToken = authorization.startsWith("Bearer ") ? authorization.slice(7).trim() : "";
+  if (!accessToken) {
+    sendJson(res, 401, { error: "A signed-in session is required to delete the account." });
+    return;
+  }
+
+  const supabase = getSupabaseServerClient();
+  const { data: { user }, error: userError } = await supabase.auth.getUser(accessToken);
+  if (userError || !user) {
+    sendJson(res, 401, { error: "Your session has expired. Sign in again before deleting the account." });
+    return;
+  }
+
+  const admin = getSupabaseAdminClient();
+  const userDataTables = [
+    ["prayer_interactions", "user_id"],
+    ["prayer_requests", "author_id"],
+    ["user_app_state", "user_id"],
+    ["ai_conversations", "user_id"],
+    ["user_saved_items", "user_id"],
+    ["user_topic_progress", "user_id"],
+    ["user_preferences", "user_id"],
+    ["profiles", "id"],
+  ];
+  for (const [table, column] of userDataTables) {
+    const { error } = await admin.from(table).delete().eq(column, user.id);
+    if (error) {
+      const cleanupError = new Error(`Could not delete account data from ${table}: ${error.message}`);
+      cleanupError.status = 502;
+      throw cleanupError;
+    }
+  }
+
+  const { error: deletionError } = await admin.auth.admin.deleteUser(user.id);
+  if (deletionError) {
+    const error = new Error(deletionError.message || "The account could not be deleted.");
+    error.status = 502;
+    throw error;
+  }
+
+  sendJson(res, 200, { deleted: true });
+}
+
 async function handleChapter(req, res) {
   const url = new URL(req.url, `http://${req.headers.host}`);
   const bibleId = url.searchParams.get("bibleId");
@@ -506,6 +558,11 @@ async function requestHandler(req, res) {
   try {
     if (req.url.startsWith("/api/supabase/config")) {
       handleSupabaseConfig(res);
+      return;
+    }
+
+    if (req.url.startsWith("/api/account/delete")) {
+      await handleAccountDeletion(req, res);
       return;
     }
 

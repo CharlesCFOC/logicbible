@@ -85,9 +85,6 @@ function initProfile() {
     savedProfile.dateOfBirth = dateOfBirth;
     saveProfile();
     applyProfile();
-    if (profileFormFeedback) {
-      profileFormFeedback.textContent = "Information saved locally. It will be ready to sync once Supabase auth is connected.";
-    }
   });
 }
 

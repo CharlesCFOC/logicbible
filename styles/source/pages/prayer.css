@@ -58,11 +58,11 @@
   min-width: 28px;
   min-height: 28px;
   padding: 0;
-  border: 1px solid rgba(111, 125, 106, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.72);
   border-radius: 50%;
-  background: transparent;
-  color: var(--muted);
-  box-shadow: none;
+  background: #ffffff;
+  color: #258fd8;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 .prayer-card .prayer-action:hover {
@@ -72,10 +72,10 @@
 .prayer-card .prayer-action.is-prayed {
   min-width: 48px;
   padding: 0 9px;
-  border-color: rgba(255, 112, 123, 0.28);
-  background: rgba(255, 112, 123, 0.1);
-  color: #ff6874;
-  box-shadow: none;
+  border-color: rgba(139, 220, 255, 0.68);
+  background: linear-gradient(135deg, #22cfa2 0%, #258fd8 48%, #8062f2 100%);
+  color: #ffffff;
+  box-shadow: 0 5px 14px rgba(83, 157, 255, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.32);
 }
 
 .prayer-card .prayer-action.is-prayed svg {
@@ -481,6 +481,81 @@ body:has(.app-shell[data-app-background="black"]) .prayer-compose {
   backdrop-filter: none !important;
 }
 
+.prayer-request-title-field {
+  margin-bottom: 10px;
+}
+
+.prayer-request-title-field input {
+  display: block;
+  width: 100%;
+  min-height: 54px;
+  padding: 0 16px;
+  border: 1px solid rgba(139, 220, 255, 0.42);
+  border-radius: 20px;
+  outline: 0;
+  color: #f4fbff;
+  background: rgba(42, 76, 94, 0.72);
+  box-shadow: inset 0 1px 0 rgba(220, 248, 255, 0.08), 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.prayer-request-title-field input::placeholder {
+  color: rgba(218, 239, 248, 0.72);
+}
+
+.prayer-request-title-field input:focus {
+  border-color: #8bdcff;
+  box-shadow: 0 0 0 3px rgba(139, 220, 255, 0.16), inset 0 1px 0 rgba(220, 248, 255, 0.1);
+}
+
+body .app-shell[data-app-background="black"] .prayer-request-title-field input {
+  border-color: rgba(139, 220, 255, 0.48) !important;
+  color: #f4fbff !important;
+  background: rgba(42, 76, 94, 0.72) !important;
+}
+
+@property --prayer-neon-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* Neon writing field for prayer requests. */
+.prayer-request-textarea {
+  position: relative;
+  min-width: 0;
+  padding: 2px;
+  border-radius: 22px;
+  background: conic-gradient(
+    from var(--prayer-neon-angle),
+    #00f5ff 0deg,
+    #1688ff 75deg,
+    #8c4dff 150deg,
+    #ff3cf2 225deg,
+    #00f5ff 300deg,
+    #00f5ff 360deg
+  );
+  animation: prayerNeonRotate 6s linear infinite;
+}
+
+.prayer-request-textarea:focus-within {
+  box-shadow: none;
+}
+
+.prayer-request-textarea textarea,
+body:has(.app-shell[data-app-background="black"]) .prayer-request-textarea textarea {
+  display: block;
+  width: 100%;
+  border: 0 !important;
+  border-radius: 20px !important;
+  box-shadow: none !important;
+}
+
+@keyframes prayerNeonRotate {
+  to {
+    --prayer-neon-angle: 360deg;
+  }
+}
+
 /* A softer blue writing surface for prayer requests. */
 body:has(.app-shell[data-app-background="black"]) .prayer-compose textarea {
   background: linear-gradient(145deg, rgba(42, 76, 94, 0.96), rgba(24, 48, 62, 0.98)) !important;
@@ -582,8 +657,10 @@ body:has(.app-shell[data-app-background="black"]) .prayer-compose textarea:focus
 }
 
 .prayer-card .prayer-action-secondary {
-  background: rgba(17, 39, 53, 0.5);
-  color: rgba(232, 247, 255, 0.82);
+  border-color: rgba(255, 255, 255, 0.72) !important;
+  background: #ffffff !important;
+  color: #258fd8 !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
 }
 
 .prayer-card .prayer-action {
@@ -968,6 +1045,343 @@ body .app-shell[data-app-background="black"] .prayer-list .prayer-card {
   max-width: 100% !important;
 }
 
+/* Prayer board mosaic: compact previews open into a full detail dialog. */
+.prayer-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  align-items: stretch;
+}
+
+.prayer-list .prayer-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 174px;
+  cursor: pointer;
+  transition: transform 180ms ease, filter 180ms ease;
+}
+
+.prayer-list .prayer-card:hover,
+.prayer-list .prayer-card:focus-within {
+  filter: brightness(1.08) saturate(1.05);
+  transform: translateY(-2px);
+}
+
+.prayer-list .prayer-card--1 {
+  min-height: 210px;
+}
+
+.prayer-list .prayer-card--2 {
+  grid-column: 1 / -1;
+  min-height: 148px;
+}
+
+.prayer-list .prayer-card--3 {
+  min-height: 192px;
+}
+
+.prayer-list .prayer-card-toggle {
+  display: flex;
+  flex: 1;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 0;
+  gap: 10px;
+  padding: 17px 16px 8px;
+  background: transparent;
+  text-align: left;
+}
+
+.prayer-list .prayer-card-toggle span {
+  min-width: 0;
+}
+
+.prayer-list .prayer-card-title {
+  display: block;
+  margin-bottom: 6px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.prayer-list .prayer-card-preview {
+  color: rgba(241, 250, 255, 0.84) !important;
+  font-size: 11px;
+}
+
+.prayer-list .prayer-card-toggle p {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 0;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+}
+
+.prayer-list .prayer-card-meta {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: auto;
+  padding: 7px 14px 13px;
+}
+
+.prayer-list .prayer-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.prayer-detail-modal {
+  position: absolute;
+  z-index: 1000;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(3, 12, 20, 0.7);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.prayer-detail-dialog {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 380px);
+  max-height: min(720px, calc(100dvh - 36px));
+  overflow: hidden;
+  border: 0;
+  border-radius: 28px;
+  color: #f5fbff;
+  background: rgba(15, 43, 59, 0.94);
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.48);
+  animation: prayerPopupNeonGlow 5s ease-in-out infinite;
+}
+
+@property --prayer-popup-neon-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.prayer-detail-dialog::before {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--prayer-popup-neon-angle),
+    #62f5e0,
+    #56a8ff,
+    #9b6cff,
+    #ea6cff,
+    #62f5e0
+  );
+  content: "";
+  pointer-events: none;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: prayerPopupNeonSpin 5s linear infinite;
+}
+
+.prayer-detail-dialog > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes prayerPopupNeonSpin {
+  to {
+    --prayer-popup-neon-angle: 360deg;
+  }
+}
+
+@keyframes prayerPopupNeonGlow {
+  0%,
+  100% {
+    box-shadow: 0 20px 55px rgba(0, 0, 0, 0.48), 0 0 12px rgba(98, 245, 224, 0.45), 0 0 28px rgba(86, 168, 255, 0.2);
+  }
+  50% {
+    box-shadow: 0 20px 55px rgba(0, 0, 0, 0.48), 0 0 14px rgba(155, 108, 255, 0.58), 0 0 32px rgba(234, 108, 255, 0.24);
+  }
+}
+
+.prayer-detail-image {
+  flex: 0 0 120px;
+  background-position: center;
+  background-size: cover;
+  filter: saturate(1.05) brightness(0.82);
+}
+
+.prayer-detail-content {
+  min-height: 0;
+  padding: 18px 18px 16px;
+  overflow-y: auto;
+}
+
+.prayer-detail-header,
+.prayer-detail-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.prayer-detail-header {
+  color: #9edcff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.prayer-detail-close {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  min-height: 32px;
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(139, 220, 255, 0.14);
+  font-size: 24px;
+  line-height: 1;
+}
+
+.prayer-detail-dialog h2 {
+  margin: 15px 0 10px;
+  color: #fff;
+  font-size: 23px;
+}
+
+.prayer-detail-text {
+  margin: 0;
+  color: rgba(245, 251, 255, 0.94);
+  font-size: 15px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.prayer-detail-footer {
+  margin-top: 20px;
+  color: rgba(215, 239, 250, 0.72);
+  font-size: 11px;
+}
+
+.prayer-detail-footer .prayer-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.prayer-detail-footer .prayer-action {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  min-width: 46px;
+  min-height: 46px;
+  padding: 0;
+  border: 1px solid rgba(139, 220, 255, 0.42);
+  border-radius: 50%;
+  color: #ffffff;
+  background: rgba(76, 153, 194, 0.28);
+  box-shadow: inset 0 1px 0 rgba(236, 250, 255, 0.18), 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+.prayer-detail-footer .prayer-action:hover {
+  background: rgba(94, 220, 255, 0.42);
+}
+
+.prayer-detail-footer .prayer-action-secondary {
+  border-color: rgba(255, 255, 255, 0.78);
+  background: #ffffff;
+  color: #258fd8;
+}
+
+.prayer-detail-footer .prayer-action-secondary:hover {
+  background: #eaf8ff;
+  color: #1d75b7;
+}
+
+.prayer-detail-footer .prayer-action.is-prayed {
+  border-color: rgba(139, 220, 255, 0.68);
+  color: #ffffff;
+  background: linear-gradient(135deg, #22cfa2 0%, #258fd8 48%, #8062f2 100%);
+  box-shadow: 0 5px 16px rgba(83, 157, 255, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.34);
+}
+
+.prayer-detail-footer .prayer-action.is-prayed {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  min-width: 132px;
+  gap: 8px;
+  padding: 0 14px;
+  border-radius: 999px;
+}
+
+.prayer-detail-footer .prayer-action.is-prayed:hover {
+  background: linear-gradient(135deg, #39ddae 0%, #3da4e9 48%, #9278ff 100%);
+}
+
+.prayer-detail-footer .prayer-action svg {
+  width: 19px;
+  height: 19px;
+}
+
+.prayer-detail-footer .prayer-action-label {
+  position: static;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.prayer-detail-footer .prayer-action-count,
+.prayer-detail-footer .prayer-action > small {
+  position: static;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal;
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.35);
+}
+
+@media (max-width: 370px) {
+  .prayer-list {
+    gap: 9px;
+  }
+
+  .prayer-list .prayer-card {
+    min-height: 160px;
+  }
+
+  .prayer-list .prayer-card--1 {
+    min-height: 188px;
+  }
+}
+
+@media (min-width: 681px) {
+  /* Keep the same two-column rhythm on the phone preview and desktop. */
+  .prayer-list .prayer-card--2 {
+    grid-column: 1 / -1;
+  }
+}
+
 /* Consolidated shared rules */
 
 .app-shell[data-app-background="black"] .home-stat-card strong,
@@ -1008,4 +1422,33 @@ body .app-shell[data-app-background="black"] .prayer-list .prayer-card {
 
 .prayer-page-tabs button.is-active {
   animation: tabIn 180ms ease;
+}
+
+/* Keep the Prayer tabs visible without the surrounding card surface. */
+#prayer .prayer-page-tabs {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+#prayer .prayer-page-tabs button.is-active,
+#prayer .prayer-page-tabs button.is-active:hover {
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.28), transparent 32%),
+    linear-gradient(135deg, #22cfa2 0%, #258fd8 48%, #8062f2 100%);
+  border-color: transparent;
+  color: #ffffff;
+  box-shadow: 0 10px 24px rgba(35, 148, 190, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+/* Prayer room request category: use the same blue active treatment as Home. */
+#prayer .prayer-compose-options .prayer-category-picker button.is-active,
+#prayer .prayer-compose-options .prayer-category-picker button.is-active:hover,
+#prayer .prayer-compose-options .prayer-category-picker button.is-active:focus-visible {
+  background: linear-gradient(135deg, #43b8ec 0%, #6579f4 100%) !important;
+  border-color: rgba(139, 220, 255, 0.82) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(60, 157, 204, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
 }

@@ -1,6 +1,7 @@
 create table if not exists public.prayer_requests (
   id uuid primary key default gen_random_uuid(),
   author_id uuid not null references public.profiles(id) on delete cascade,
+  title text not null default 'Prayer request' check (char_length(title) between 1 and 120),
   content text not null check (char_length(content) between 1 and 2200),
   prayer_count integer not null default 0 check (prayer_count >= 0),
   status text not null default 'active' check (status in ('active', 'archived', 'answered')),

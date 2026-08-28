@@ -4,18 +4,18 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Brother Bible AI</title>
-    <link rel="stylesheet" href="styles.css?v=refactor-06" />
+    <link rel="stylesheet" href="styles.css?v=refactor-24" />
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="bible-data.js" defer></script>
-    <script src="script.js?v=modules-08" defer></script>
+    <script src="script.js?v=modules-15" defer></script>
     <script src="scripts/navigation.js?v=modules-06" defer></script>
     <script src="scripts/prayer.js?v=modules-05" defer></script>
     <script src="scripts/notes.js?v=modules-05" defer></script>
     <script src="scripts/bible.js?v=modules-05" defer></script>
     <script src="scripts/profile.js?v=modules-06" defer></script>
     <script src="scripts/apologetics.js?v=modules-06" defer></script>
-    <script src="assets/react/navigation.js?v=react-08" defer></script>
+    <script src="assets/react/navigation.js?v=react-19" defer></script>
   </head>
   <body>
     <div class="app-shell" data-theme="light" data-app-background="black">
@@ -50,7 +50,7 @@
           </header>
 
           <article class="home-hero-image" data-react-home-hero-root>
-            <img src="assets/home-hero-community.png" alt="A worship gathering in prayer" />
+            <img src="assets/cloud-account-zen.png" alt="Selected hero image" />
             <div class="home-hero-image-copy">
               <div class="home-hero-verse">
                 <span>Verse of the day</span>
@@ -282,36 +282,7 @@
 
         </section>
 
-        <section id="ai" class="screen ai-screen" data-screen data-react-ai-root>
-          <header class="ai-topbar">
-            <div>
-              <strong>Brother AI</strong>
-            </div>
-            <button class="icon-button" data-new-ai-chat aria-label="New chat">
-              <i data-lucide="square-pen"></i>
-            </button>
-          </header>
-
-          <nav class="ai-tabs" aria-label="AI sections">
-            <button class="is-active" type="button" data-ai-tab="chat">Chat</button>
-            <button type="button" data-ai-tab="history">History</button>
-          </nav>
-
-          <div class="chat-thread" data-ai-thread>
-            <article class="message ai-message">
-              <div class="ai-message-stack">
-                <div class="message-body rich-text"><p>Ask me about a verse, doctrine, original language, cross references, or biblical context.</p></div>
-              </div>
-            </article>
-          </div>
-
-          <section class="ai-history-panel" data-ai-history-panel hidden aria-label="Conversation history"></section>
-
-          <form class="composer" data-ai-form>
-            <textarea rows="1" placeholder="" aria-label="Message Brother AI"></textarea>
-            <button aria-label="Send message"><i data-lucide="send"></i></button>
-          </form>
-        </section>
+        <section id="ai" class="screen ai-screen" data-screen data-react-ai-root></section>
 
         <section id="apologetics" class="screen apologetics-screen" data-screen>
           <header class="apologetics-page-header">
@@ -422,7 +393,7 @@
         <section id="prayer" class="screen prayer-screen" data-screen data-react-prayer-root>
           <header class="prayer-header">
             <div>
-              <h1>Prayer community</h1>
+              <h1>Prayer room</h1>
             </div>
           </header>
           <div class="prayer-page-tabs" role="tablist" aria-label="Prayer sections">
@@ -437,7 +408,9 @@
             </article>
 
             <form class="prayer-compose" data-prayer-form>
-              <textarea id="prayer-request" name="request" rows="5" maxlength="2200" placeholder="What would you like us to pray for?" required></textarea>
+              <div class="prayer-request-textarea">
+                <textarea id="prayer-request" name="request" rows="5" maxlength="2200" placeholder="What would you like us to pray for?" required></textarea>
+              </div>
               <div class="prayer-compose-options">
                 <select class="sr-only" data-prayer-category aria-label="Prayer request category">
                   <option value="general">General</option>
@@ -516,7 +489,7 @@
 
         <section id="profile" class="screen profile-screen" data-screen>
           <article class="profile-hero" data-react-profile-hero-root>
-            <img src="assets/profile-hero-v2.png" alt="Profile background" data-profile-cover loading="lazy" decoding="async" />
+            <img src="assets/cloud-account-zen.png" alt="Profile background" data-profile-cover loading="lazy" decoding="async" />
             <button class="profile-style-button" type="button" data-profile-style-toggle aria-expanded="false">
               <i data-lucide="pencil"></i><span>Edit style</span>
             </button>
@@ -601,7 +574,6 @@
 
                 <div class="profile-info-actions">
                   <button type="submit" class="profile-save-button">Save information</button>
-                  <p data-profile-form-feedback>These details stay on this device until Supabase auth is connected.</p>
                 </div>
               </form>
             </div>
@@ -610,20 +582,6 @@
           <section class="preference-section" data-profile-section="preferences" data-react-profile-preferences-root aria-labelledby="appearance-title">
             <div class="preference-heading">
               <h2 id="appearance-title">Preferences</h2>
-              <span>Contrast</span>
-            </div>
-
-            <div class="preference-card">
-              <div class="preference-copy">
-                <i data-lucide="image"></i>
-                <div>
-                  <strong>Background</strong>
-                  <p>Use the clean white reading mode.</p>
-                </div>
-              </div>
-              <div class="segmented-control" data-background-options>
-                <button data-background-option="paper">Light</button>
-              </div>
             </div>
 
             <div class="preference-card">

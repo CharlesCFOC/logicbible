@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const profileTabs = [
   ["preferences", "Preference", ["M4 5h16", "M7 5v8", "M17 5v14", "M4 13h16", "M4 21h16"]],
@@ -106,6 +106,8 @@ function PreferenceIcon({ name }) {
 export function ProfilePreferences() {
   const bridge = window.profileBridge;
   const [state, setState] = useState(() => bridge.getPreferences());
+  const [hero, setHero] = useState(() => bridge.getHero());
+  const coverCarouselRef = useRef(null);
 
   useEffect(() => {
     const handleChange = () => setState(bridge.getPreferences());
@@ -113,19 +115,39 @@ export function ProfilePreferences() {
     return () => document.removeEventListener("profile:preferences-change", handleChange);
   }, [bridge]);
 
+  useEffect(() => {
+    const handleChange = () => setHero(bridge.getHero());
+    document.addEventListener("profile:hero-change", handleChange);
+    return () => document.removeEventListener("profile:hero-change", handleChange);
+  }, [bridge]);
+
+  const scrollCoverCarousel = (direction) => {
+    coverCarouselRef.current?.scrollBy({ left: direction * (coverCarouselRef.current.clientWidth * 0.82), behavior: "smooth" });
+  };
+
   return (
     <>
       <div className="preference-heading">
         <h2 id="appearance-title">Preferences</h2>
-        <span>Contrast</span>
       </div>
       <div className="preference-card">
-        <div className="preference-copy"><PreferenceIcon name="image" /><div><strong>Background</strong><p>Use the clean white reading mode.</p></div></div>
-        <div className="segmented-control">
-          <button className={state.background === "paper" ? "is-active" : ""} type="button" onClick={() => bridge.setPreference("background", "paper")}>Light</button>
+        <div className="preference-cover-picker">
+          <div className="preference-copy"><PreferenceIcon name="image" /><div><strong>Hero image</strong><p>Choose the image shown at the top of your profile.</p></div></div>
+          <div className="profile-cover-carousel" role="region" aria-label="Hero image carousel">
+            <button className="profile-cover-arrow" type="button" onClick={() => scrollCoverCarousel(-1)} aria-label="Previous hero images">‹</button>
+            <div className="profile-cover-viewport" ref={coverCarouselRef}>
+              <div className="profile-cover-grid" aria-label="Hero image choices">
+                {(hero.coverOptions || []).map((option) => (
+                  <button className={hero.coverImage === option.src ? "is-active" : ""} type="button" key={option.id} onClick={() => bridge.saveCover(option.src)} aria-label={`Use ${option.label} hero image`} aria-pressed={hero.coverImage === option.src}>
+                    <img src={option.src} alt="" loading="lazy" decoding="async" />
+                    <span>{option.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+            <button className="profile-cover-arrow" type="button" onClick={() => scrollCoverCarousel(1)} aria-label="Next hero images">›</button>
+          </div>
         </div>
-      </div>
-      <div className="preference-card">
         <div className="preference-copy"><PreferenceIcon name="type" /><div><strong>Text size</strong><p>Adjust the Scripture reading size.</p></div></div>
         <div className="segmented-control" data-text-size-options>
           {[["xs", "A−", "Extra small text"], ["small", "A", "Small text"], ["medium", "A", "Medium text"], ["large", "A", "Large text"], ["xl", "A+", "Extra large text"]].map(([id, label, ariaLabel]) => (
@@ -141,7 +163,6 @@ export function ProfilePreferences() {
 export function ProfileInformation() {
   const bridge = window.profileBridge;
   const [state, setState] = useState(() => bridge.getInfo());
-  const [feedback, setFeedback] = useState("These details stay on this device until Supabase auth is connected.");
 
   useEffect(() => {
     const handleChange = () => setState(bridge.getInfo());
@@ -153,18 +174,17 @@ export function ProfileInformation() {
   const save = (event) => {
     event.preventDefault();
     bridge.saveInfo(state);
-    setFeedback("Information saved locally. It will be ready to sync once Supabase auth is connected.");
   };
 
   return (
     <>
-      <div className="preference-heading"><h2 id="profile-info-title">Informations</h2><span>Identity</span></div>
+      <div className="preference-heading"><h2 id="profile-info-title">Informations</h2></div>
       <div className="profile-info-card">
         <form className="profile-info-form" onSubmit={save}>
           <label className="profile-field"><span>Name</span><input type="text" value={state.displayName} onChange={(event) => update("displayName", event.target.value)} maxLength="40" placeholder="Your name" /></label>
           <label className="profile-field"><span>Country</span><input type="text" value={state.country} onChange={(event) => update("country", event.target.value)} maxLength="60" placeholder="Canada" /></label>
           <label className="profile-field"><span>Date de naissance</span><input type="date" value={state.dateOfBirth} onChange={(event) => update("dateOfBirth", event.target.value)} /></label>
-          <div className="profile-info-actions"><button type="submit" className="profile-save-button">Save information</button><p>{feedback}</p></div>
+          <div className="profile-info-actions"><button type="submit" className="profile-save-button">Save information</button></div>
         </form>
       </div>
     </>
@@ -179,6 +199,9 @@ export function ProfileCloudAccount() {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
 
   useEffect(() => {
     const handleChange = () => setAuth(bridge.getAuth());
@@ -191,11 +214,42 @@ export function ProfileCloudAccount() {
     await bridge.submitAuth(mode, email.trim(), password, passwordConfirm);
   };
 
+  const deleteAccount = async () => {
+    setDeleting(true);
+    setDeleteError("");
+    const deleted = await bridge.deleteAccount();
+    if (!deleted) {
+      setDeleteError(bridge.getAuth().feedback);
+      setDeleting(false);
+      return;
+    }
+    setDeleteOpen(false);
+  };
+
   if (auth.connected) {
     return (
       <>
         <div className="preference-heading"><h2 id="profile-auth-title">Cloud account</h2><span>Connected</span></div>
-        <div className="profile-auth-form"><div className="auth-connected-email"><span>Connected with</span><strong>{auth.email}</strong></div><div className="profile-auth-actions"><button type="button" onClick={bridge.signOut}>Sign out</button></div><p data-state="success">{auth.feedback}</p></div>
+        <div className="profile-auth-form">
+          <div className="auth-connected-email"><span>Connected with</span><strong>{auth.email}</strong></div>
+          <div className="profile-auth-actions"><button type="button" onClick={bridge.signOut}>Sign out</button></div>
+          <div className="profile-delete-account">
+            <div>
+              <strong>Delete account</strong>
+              <p>This permanently removes your account, synced data, and shared content.</p>
+            </div>
+            <button type="button" className="profile-delete-trigger" onClick={() => { setDeleteError(""); setDeleteOpen(true); }} aria-haspopup="dialog">Delete account</button>
+          </div>
+          {deleteError && <p className="profile-delete-error" role="alert">{deleteError}</p>}
+          {deleteOpen && <div className="profile-delete-dialog" role="alertdialog" aria-modal="false" aria-labelledby="profile-delete-title" aria-describedby="profile-delete-description">
+            <h3 id="profile-delete-title">Delete your account?</h3>
+            <p id="profile-delete-description">Your profile, preferences, prayer requests, saved items, and conversations will be permanently deleted. This cannot be undone.</p>
+            <div className="profile-delete-dialog-actions">
+              <button type="button" onClick={() => setDeleteOpen(false)} disabled={deleting}>Cancel</button>
+              <button type="button" className="profile-delete-confirm" onClick={deleteAccount} disabled={deleting}>{deleting ? "Deleting…" : "Delete permanently"}</button>
+            </div>
+          </div>}
+        </div>
       </>
     );
   }

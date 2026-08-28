@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { AiIcon, AiMessage } from "./ai.jsx";
+import { AiComposer, AiIcon, AiMessage } from "./ai.jsx";
 
 export const debateThemes = [
   {
@@ -113,12 +113,135 @@ export function getDebateLevelProgress(totalXp) {
   };
 }
 export const debateDifficulties = ["Beginner", "Intermediate", "Advanced", "Hostile"];
+export const opponentPersonalities = [
+  { id: "serious", label: "Serious", description: "Calm, precise, and rigorous.", opening: "I'll take the opposing side. Make your best case, and I'll examine it carefully.", instruction: "Be formal, measured, and rigorous. Use precise language, focus on the strongest version of each objection, and never use jokes or personal remarks." },
+  { id: "playful", label: "Playful", description: "Light, witty, and energetic.", opening: "All right, let's make this interesting. I'll take the other side and test your case with a little wit along the way.", instruction: "Be energetic and conversational. Add an occasional gentle joke, witty analogy, or playful aside, but keep the argument sharp and never let humor replace reasoning." },
+  { id: "teasing", label: "Teasing", description: "Provocative, sharp, but respectful.", opening: "Go on, make your best case. I'll be watching closely for the gap you hope I won't notice.", instruction: "Use pointed challenges, rhetorical questions, and light teasing to expose weak reasoning. Make the difference obvious, but never insult, belittle, or attack the user personally." },
+  { id: "open-minded", label: "Open-minded", description: "Curious and willing to acknowledge good points.", opening: "I'll take the opposing side, but I'm genuinely open to being persuaded. Make your best case.", instruction: "Ask sincere, exploratory questions. Explicitly acknowledge strong points before challenging them, concede when the user's reasoning is persuasive, and avoid arguing just to win." },
+  { id: "skeptical", label: "Skeptical", description: "Doubtful and demanding about evidence.", opening: "I'll take the opposing side. Start with your strongest evidence—confidence alone won't convince me.", instruction: "Be doubtful and evidence-focused. Repeatedly ask what supports a claim, separate facts from assumptions, and challenge certainty without becoming dismissive or hostile." },
+  { id: "stubborn", label: "Stubborn", description: "Firmly committed and difficult to persuade.", opening: "I'll take the opposing side. You may have to work hard to move me from my position.", instruction: "Defend your position firmly and be slow to concede. Return to your core objection when it is not answered, but stay logically consistent, honest, and respectful rather than unreasonable." },
+];
 export const debateDifficultyDescriptions = {
-  Beginner: "Simple objections and clear questions to help you learn the basics.",
-  Intermediate: "Balanced counter-arguments that test your reasoning and biblical support.",
-  Advanced: "Stronger objections, subtle assumptions, and challenging follow-up questions.",
-  Hostile: "A highly persuasive opponent who may use flawed or misleading arguments to test your discernment.",
+  Beginner: {
+    behavior: "AI uses clear, simple objections and gives you room to build one focused point.",
+    expectations: "Give a direct answer, one basic reason or biblical support, and clear wording. Expert-level detail is not required.",
+  },
+  Intermediate: {
+    behavior: "AI uses balanced counter-arguments and tests the assumptions in your answer.",
+    expectations: "Build a structured answer with relevant biblical or historical support and respond directly to the objection.",
+  },
+  Advanced: {
+    behavior: "AI raises stronger objections, hidden assumptions, and challenging follow-up questions.",
+    expectations: "Use nuance, carefully supported claims, awareness of context, and anticipate the next challenge.",
+  },
+  Hostile: {
+    behavior: "AI applies pressure with persuasive, loaded, or misleading objections to test your discernment.",
+    expectations: "Stay calm, detect weak framing, correct overstatements, defend your position, and remain respectful.",
+  },
 };
+
+export function DifficultyGuidance({ difficulty }) {
+  const guidance = debateDifficultyDescriptions[difficulty];
+  if (!guidance) return null;
+  return (
+    <div className="apologetics-difficulty-guidance">
+      <article className="apologetics-difficulty-guidance-card">
+        <strong>AI behavior</strong>
+        <p>{guidance.behavior}</p>
+      </article>
+      <article className="apologetics-difficulty-guidance-card">
+        <strong>What we expect from you</strong>
+        <p>{guidance.expectations}</p>
+      </article>
+    </div>
+  );
+}
+
+export const debateScoringRubrics = {
+  Beginner: "Logic: make one clear point without a major contradiction. Evidence: give one relevant biblical idea or honest reason without inventing support. Clarity: make the answer understandable and organized. Response: address the main objection directly. Reward a sound, simple answer; do not require expert nuance, several sources, or advanced terminology.",
+  Intermediate: "Logic: build a coherent argument and identify important assumptions. Evidence: use relevant biblical or historical support accurately. Clarity: explain the point precisely and in a clear structure. Response: answer the counter-argument and move the discussion forward.",
+  Advanced: "Logic: develop a nuanced argument that handles implications and competing objections. Evidence: distinguish strong evidence from weak evidence, use context, and qualify uncertainty. Clarity: stay precise while explaining complexity. Response: anticipate likely follow-up objections and defend the central claim.",
+  Hostile: "Logic: stay consistent while resisting traps, loaded questions, and misleading framing. Evidence: correct overstatements and unsupported claims without overclaiming yourself. Clarity: remain concise, calm, and understandable under pressure. Response: answer the strongest point directly, preserve the user's position, and respond respectfully.",
+};
+
+const debateXpRewardThresholds = {
+  Beginner: [82, 68, 52, 36],
+  Intermediate: [90, 75, 55, 40],
+  Advanced: [92, 80, 62, 48],
+  Hostile: [94, 84, 68, 52],
+};
+
+export function getDebateXpReward(difficulty, averageCriteria) {
+  const [excellent, strong, solid, developing] = debateXpRewardThresholds[difficulty] || debateXpRewardThresholds.Intermediate;
+  if (averageCriteria >= excellent) return 20;
+  if (averageCriteria >= strong) return 15;
+  if (averageCriteria >= solid) return 10;
+  if (averageCriteria >= developing) return 5;
+  return 0;
+}
+
+const questionsPerPage = 5;
+
+export function DebateQuestionCarousel({ questions, value, onChange }) {
+  const [page, setPage] = useState(0);
+  const touchStartX = useRef(null);
+  const pageCount = Math.max(1, Math.ceil(questions.length / questionsPerPage));
+
+  useEffect(() => {
+    const selectedIndex = questions.indexOf(value);
+    if (selectedIndex >= 0) {
+      setPage(Math.floor(selectedIndex / questionsPerPage));
+    } else {
+      setPage((current) => Math.min(current, pageCount - 1));
+    }
+  }, [questions, value, pageCount]);
+
+  const movePage = (nextPage) => setPage(Math.max(0, Math.min(pageCount - 1, nextPage)));
+  const handleTouchStart = (event) => { touchStartX.current = event.touches[0]?.clientX ?? null; };
+  const handleTouchEnd = (event) => {
+    if (touchStartX.current === null) return;
+    const distance = event.changedTouches[0]?.clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(distance) < 40) return;
+    movePage(page + (distance < 0 ? 1 : -1));
+  };
+
+  return (
+    <div className="apologetics-debate-question-carousel">
+      <div className="apologetics-debate-question-pages" aria-label="Question blocks">
+        {Array.from({ length: pageCount }, (_, index) => (
+          <button
+            className={page === index ? "is-active" : ""}
+            key={index}
+            type="button"
+            aria-label={`Question block ${index + 1} of ${pageCount}`}
+            aria-current={page === index ? "page" : undefined}
+            onClick={() => movePage(index)}
+          >
+            <span aria-hidden="true" />
+          </button>
+        ))}
+      </div>
+      <div className="apologetics-debate-question-viewport" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+        <div className="apologetics-debate-question-track" style={{ transform: `translate3d(-${page * 100}%, 0, 0)` }}>
+          {Array.from({ length: pageCount }, (_, pageIndex) => (
+            <div className="apologetics-debate-question-list" key={pageIndex} aria-label={`Question block ${pageIndex + 1}`}>
+              {questions.slice(pageIndex * questionsPerPage, (pageIndex + 1) * questionsPerPage).map((item, index) => {
+                const questionIndex = pageIndex * questionsPerPage + index;
+                return (
+                  <button className={value === item ? "is-selected" : ""} key={item} type="button" onClick={() => onChange(item)} aria-pressed={value === item}>
+                    <span>{questionIndex === 0 ? "General" : `Question ${questionIndex}`}</span>
+                    <strong>{item}</strong>
+                  </button>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function getDebateConversationKey(theme, question) {
   return `brother.debateConversation.${theme?.id || "general"}.${encodeURIComponent(question || generalQuestion)}`;
@@ -137,6 +260,18 @@ function readDebateConversation(theme, question) {
   }
 }
 
+const debateOpeningChallenge = "I’ll take the opposing side. Make your best case, and I’ll challenge it fairly.";
+
+function normalizeDebateOpening(messages, question) {
+  if (!messages?.length) return messages;
+  const openingQuestion = question || generalQuestion;
+  const first = messages[0];
+  const second = messages[1];
+  if (first?.role !== "assistant" || second?.role !== "assistant") return messages;
+  if (first.text !== openingQuestion || second.text !== debateOpeningChallenge) return messages;
+  return [{ ...first, text: `${first.text}\n\n${second.text}` }, ...messages.slice(2)];
+}
+
 function readDebateProgress(theme, question) {
   try {
     const stored = JSON.parse(localStorage.getItem(getDebateConversationKey(theme, question)) || "null");
@@ -146,9 +281,9 @@ function readDebateProgress(theme, question) {
   }
 }
 
-function saveDebateConversation(theme, question, messages, difficulty = "Intermediate", factCheck = false, confidence = 50, journal = []) {
+function saveDebateConversation(theme, question, messages, difficulty = "Intermediate", factCheck = false, confidence = 50, journal = [], opponentPersonality = "serious") {
   const cleanMessages = messages.filter((message) => !message.pending && message.text);
-  localStorage.setItem(getDebateConversationKey(theme, question), JSON.stringify({ themeId: theme?.id, question, difficulty, factCheck, confidence, journal: journal.slice(-20), updatedAt: Date.now(), messages: cleanMessages }));
+  localStorage.setItem(getDebateConversationKey(theme, question), JSON.stringify({ themeId: theme?.id, question, difficulty, opponentPersonality, factCheck, confidence, journal: journal.slice(-20), updatedAt: Date.now(), messages: cleanMessages }));
   document.dispatchEvent(new CustomEvent("debate:conversation-change"));
 }
 
@@ -173,13 +308,13 @@ function getLatestDebateConversation() {
   return latest;
 }
 
-function DebateRoomView({ theme, question, difficulty, factCheck, savedMessages, onBack }) {
+function DebateRoomView({ theme, question, difficulty, opponentPersonality = "serious", factCheck, savedMessages, onBack }) {
   const bridge = window.aiBridge;
+  const selectedPersonality = opponentPersonalities.find((item) => item.id === opponentPersonality) || opponentPersonalities[0];
   const initialMessages = [
-    { role: "assistant", text: question || generalQuestion },
-    { role: "assistant", text: "I’ll take the opposing side. Make your best case, and I’ll challenge it fairly." },
+    { role: "assistant", text: `${question || generalQuestion}\n\n${selectedPersonality.opening}` },
   ];
-  const [messages, setMessages] = useState(() => savedMessages?.length ? savedMessages : readDebateConversation(theme, question) || initialMessages);
+  const [messages, setMessages] = useState(() => normalizeDebateOpening(savedMessages?.length ? savedMessages : readDebateConversation(theme, question), question) || initialMessages);
   const [draft, setDraft] = useState("");
   const [pending, setPending] = useState(false);
   const [verseSupportOpen, setVerseSupportOpen] = useState(false);
@@ -192,6 +327,7 @@ function DebateRoomView({ theme, question, difficulty, factCheck, savedMessages,
   const [betterAnswerLoading, setBetterAnswerLoading] = useState(false);
   const [betterAnswerText, setBetterAnswerText] = useState("");
   const [roomFactCheck, setRoomFactCheck] = useState(factCheck);
+  const [roomInfoOpen, setRoomInfoOpen] = useState(false);
   const savedProgress = readDebateProgress(theme, question);
   const [confidence, setConfidence] = useState(savedProgress.confidence);
   const [confidenceJournal, setConfidenceJournal] = useState(savedProgress.journal);
@@ -207,11 +343,11 @@ function DebateRoomView({ theme, question, difficulty, factCheck, savedMessages,
 
   useEffect(() => {
     if (threadRef.current) threadRef.current.scrollTop = threadRef.current.scrollHeight;
-    saveDebateConversation(theme, question, messages, difficulty, roomFactCheck, confidence, confidenceJournal);
+    saveDebateConversation(theme, question, messages, difficulty, roomFactCheck, confidence, confidenceJournal, opponentPersonality);
   }, [messages, roomFactCheck, confidence, confidenceJournal]);
 
   useEffect(() => {
-    const persistBeforeLeaving = () => saveDebateConversation(theme, question, messages, difficulty, roomFactCheck, confidence, confidenceJournal);
+    const persistBeforeLeaving = () => saveDebateConversation(theme, question, messages, difficulty, roomFactCheck, confidence, confidenceJournal, opponentPersonality);
     window.addEventListener("pagehide", persistBeforeLeaving);
     return () => {
       persistBeforeLeaving();
@@ -296,11 +432,12 @@ function DebateRoomView({ theme, question, difficulty, factCheck, savedMessages,
     setPending(true);
     try {
       const factCheckInstruction = roomFactCheck ? "Wrap any claim you believe is false, invented, or needs verification in [[FACT]] and [[/FACT]] markers so the app can highlight it." : "Do not use fact-check markers.";
-      const context = `Stay in character as the user's respectful but serious opposing debater, never as a coach or tutor. Debate theme: ${theme?.label || "General"}. Central question: ${question || generalQuestion}. Difficulty: ${difficulty}. ${difficulty === "Hostile" ? "You may use plausible but intentionally flawed objections, but never fabricate a Bible quotation." : "Keep objections accurate and fair."} Begin by disagreeing with the latest argument or acknowledging one specific point before challenging it. Give a direct counter-argument, expose assumptions and unanswered questions, then end with one question the user must defend. Do not give improvement advice or a replacement answer. Never invent evidence or Bible quotations. Stay charitable and intellectually honest. ${factCheckInstruction}`;
+      const context = `Stay in character as the user's opposing debater, never as a coach or tutor. Make the selected personality obvious in every response and do not fall back to a generic assistant tone. Debate theme: ${theme?.label || "General"}. Central question: ${question || generalQuestion}. Difficulty: ${difficulty}. Opponent personality: ${selectedPersonality.label}. Personality direction: ${selectedPersonality.instruction} ${difficulty === "Hostile" ? "You may use plausible but intentionally flawed objections, but never fabricate a Bible quotation." : "Keep objections accurate and fair."} Begin by disagreeing with the latest argument or acknowledging one specific point before challenging it. Give a direct counter-argument, expose assumptions and unanswered questions, then end with one question the user must defend. Do not give improvement advice or a replacement answer. Never invent evidence or Bible quotations. Stay charitable and intellectually honest. ${factCheckInstruction}`;
       const responseText = await bridge.sendDebate(`${context}\n\nUser response: ${text}`, history);
       setMessages((current) => [...current.slice(0, -1), { role: "assistant", text: responseText }]);
       try {
-        const evaluation = await bridge.evaluateDebate(`Evaluate this user's latest debate response for a Christian apologetics practice session. Current confidence score: ${confidence}%. User response: ${text}. Return JSON only with this shape: {"change": number from -8 to 8, "reason": "one short explanation", "criteria": {"logic": 0-100, "evidence": 0-100, "clarity": 0-100, "response": 0-100}}. Judge the quality of reasoning, not whether the position agrees with you.`);
+        const scoringRubric = debateScoringRubrics[difficulty] || debateScoringRubrics.Intermediate;
+        const evaluation = await bridge.evaluateDebate(`Evaluate this user's latest debate response for a Christian apologetics practice session. Difficulty: ${difficulty}. Current confidence score: ${confidence}%. User response: ${text}. Use this level-specific rubric and do not judge a Beginner by Advanced standards: ${scoringRubric} Return JSON only with this shape: {"change": number from -8 to 8, "reason": "one short explanation", "criteria": {"logic": 0-100, "evidence": 0-100, "clarity": 0-100, "response": 0-100}}. Judge the quality of reasoning, not whether the position agrees with you.`);
         const parsed = JSON.parse(evaluation.match(/\{[\s\S]*\}/)?.[0] || "{}");
         const change = Math.max(-8, Math.min(8, Number(parsed.change) || 0));
         const nextScore = Math.max(0, Math.min(100, confidence + change));
@@ -308,7 +445,7 @@ function DebateRoomView({ theme, question, difficulty, factCheck, savedMessages,
         setConfidenceJournal((current) => [...current, { score: nextScore, change, reason: parsed.reason || "Your response was evaluated by the debate coach." }]);
         const criteriaValues = Object.values(parsed.criteria || {}).map(Number).filter((value) => Number.isFinite(value));
         const averageCriteria = criteriaValues.length ? criteriaValues.reduce((sum, value) => sum + value, 0) / criteriaValues.length : 0;
-        const xpReward = averageCriteria >= 90 ? 20 : averageCriteria >= 75 ? 15 : averageCriteria >= 55 ? 10 : averageCriteria >= 40 ? 5 : 0;
+        const xpReward = getDebateXpReward(difficulty, averageCriteria);
         if (xpReward && bridge.addDebateXp) setTotalXp(bridge.addDebateXp(xpReward));
       } catch {
         // The debate continues even if the optional score evaluation is unavailable.
@@ -322,6 +459,15 @@ function DebateRoomView({ theme, question, difficulty, factCheck, savedMessages,
 
   const levelProgress = getDebateLevelProgress(totalXp);
 
+  const leaveRoom = () => {
+    saveDebateConversation(theme, question, messages, difficulty, roomFactCheck, confidence, confidenceJournal, opponentPersonality);
+    onBack();
+  };
+
+  const toggleRoomInfo = () => {
+    setRoomInfoOpen((current) => !current);
+  };
+
   const sendMessage = async (event) => {
     event.preventDefault();
     const text = draft.trim();
@@ -333,7 +479,7 @@ function DebateRoomView({ theme, question, difficulty, factCheck, savedMessages,
   const verseBlocks = verseSupportText.split(/(?=\b\d+\.\s)/).map((block) => block.trim()).filter(Boolean);
   const hintBlocks = hintsText.split(/(?=\b\d+\.\s)/).map((block) => block.trim()).filter(Boolean);
   const formatDebateText = (text) => {
-    const spacedText = String(text || "").replace(/\r\n/g, "\n").split(/\n+/).join("\n\n");
+    const spacedText = String(text || "").replace(/\r\n/g, "\n");
     const html = bridge.format(spacedText);
     return roomFactCheck
       ? html.replace(/\[\[FACT\]\]([\s\S]*?)\[\[\/FACT\]\]/g, '<mark class="debate-fact-check">$1</mark>')
@@ -344,17 +490,26 @@ function DebateRoomView({ theme, question, difficulty, factCheck, savedMessages,
     <>
     <div className="apologetics-debate-room">
       <header className="apologetics-debate-room-header">
-        <button className="apologetics-debate-room-back" type="button" onClick={onBack} aria-label="Back to debate setup">←</button>
+        <button className="apologetics-debate-room-back" type="button" onClick={leaveRoom} aria-label="Back to debate setup">←</button>
         <div>
           <h1>Debat room</h1>
         </div>
       </header>
 
       <div className="apologetics-debate-room-settings">
-        <div className="apologetics-debate-room-context">
-          <span>Difficulty: <strong>{difficulty}</strong></span>
-          <span>Theme: <strong>{theme?.label || "General"}</strong></span>
-          <span>Question: <strong>{question || generalQuestion}</strong></span>
+        <div className="apologetics-debate-room-info">
+          <button className="apologetics-debate-room-info-toggle" type="button" onMouseDown={(event) => event.preventDefault()} onClick={toggleRoomInfo} aria-expanded={roomInfoOpen} aria-controls="debate-room-information">
+            <span>Room informations</span>
+            <span className={`apologetics-debate-room-info-arrow${roomInfoOpen ? " is-open" : ""}`} aria-hidden="true">⌄</span>
+          </button>
+          {roomInfoOpen && (
+            <div className="apologetics-debate-room-context" id="debate-room-information">
+              <span>Difficulty: <strong>{difficulty}</strong></span>
+              <span>Personality: <strong>{selectedPersonality.label}</strong></span>
+              <span>Theme: <strong>{theme?.label || "General"}</strong></span>
+              <span>Question: <strong>{question || generalQuestion}</strong></span>
+            </div>
+          )}
         </div>
       </div>
 
@@ -383,16 +538,13 @@ function DebateRoomView({ theme, question, difficulty, factCheck, savedMessages,
       </div>
 
       <div className="chat-thread apologetics-debate-chat-thread" ref={threadRef} aria-label="Debate conversation">
-        {messages.map((message, index) => <AiMessage key={`${message.role}-${index}-${message.text}`} message={message} bridge={bridge} formatText={formatDebateText} pendingLabel="Your debat partner is thinking..." />)}
+        {messages.map((message, index) => <AiMessage key={`${message.role}-${index}-${message.text}`} message={message} bridge={bridge} formatText={formatDebateText} pendingLabel="Your debat partner is thinking..." showAvatar />)}
       </div>
 
     </div>
     {createPortal(
       <>
-        <form className="composer apologetics-debate-composer" onSubmit={sendMessage}>
-          <textarea value={draft} onChange={(event) => setDraft(event.target.value)} rows="1" placeholder="Type your response..." aria-label="Type your response" disabled={pending} />
-          <button type="submit" aria-label="Send response" disabled={pending}><AiIcon name="send" /></button>
-        </form>
+        <AiComposer value={draft} onChange={setDraft} onSubmit={sendMessage} placeholder="Type your response..." ariaLabel="Type your response" disabled={pending} className="apologetics-debate-composer" submitLabel="Send response" />
         {verseSupportOpen && (
           <div className="apologetics-debate-verse-overlay" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setVerseSupportOpen(false); }}>
             <section className="apologetics-debate-verse-modal" role="dialog" aria-modal="true" aria-labelledby="verse-support-title">
@@ -462,6 +614,7 @@ export function ApologeticsDebatePage() {
   const [themeId, setThemeId] = useState("");
   const [question, setQuestion] = useState("");
   const [difficulty, setDifficulty] = useState("");
+  const [opponentPersonality, setOpponentPersonality] = useState("serious");
   const [factCheck, setFactCheck] = useState(false);
   const [isRoomOpen, setIsRoomOpen] = useState(false);
   const [savedDebate, setSavedDebate] = useState(() => getLatestDebateConversation());
@@ -477,6 +630,7 @@ export function ApologeticsDebatePage() {
       setThemeId(savedTheme.id);
       setQuestion(latest.question || generalQuestion);
       setDifficulty(latest.difficulty || "Intermediate");
+      setOpponentPersonality(latest.opponentPersonality || "serious");
       setFactCheck(Boolean(latest.factCheck));
       setResumeDebate(latest);
       setIsRoomOpen(true);
@@ -489,7 +643,7 @@ export function ApologeticsDebatePage() {
   const questions = theme ? [generalQuestion, ...theme.questions] : [];
 
   if (isRoomOpen) {
-    return <DebateRoomView theme={theme} question={question} difficulty={difficulty} factCheck={factCheck} savedMessages={resumeDebate?.messages} onBack={() => { setSavedDebate(getLatestDebateConversation()); setResumeDebate(null); setIsRoomOpen(false); }} />;
+    return <DebateRoomView theme={theme} question={question} difficulty={difficulty} opponentPersonality={opponentPersonality} factCheck={factCheck} savedMessages={resumeDebate?.messages} onBack={() => { setSavedDebate(getLatestDebateConversation()); setResumeDebate(null); setIsRoomOpen(false); }} />;
   }
 
   return (
@@ -511,14 +665,29 @@ export function ApologeticsDebatePage() {
         </div>
         <div className="apologetics-debate-theme-list">
           {debateThemes.map((item) => (
-            <button className={themeId === item.id ? "is-selected" : ""} key={item.id} type="button" onClick={() => { setThemeId(item.id); setQuestion(""); }} aria-pressed={themeId === item.id}>
+            <button className={themeId === item.id ? "is-selected" : ""} key={item.id} type="button" onClick={() => { setThemeId(themeId === item.id ? "" : item.id); setQuestion(""); }} aria-pressed={themeId === item.id}>
               {item.label}
             </button>
           ))}
         </div>
         <div className="apologetics-debate-setup-settings">
-          <div><span>Difficulty</span><div className="apologetics-debate-difficulty-list">{debateDifficulties.map((level) => <button className={difficulty === level ? "is-selected" : ""} type="button" key={level} onClick={() => setDifficulty(level)}>{level}</button>)}</div>{difficulty && <p className="apologetics-debate-difficulty-description">{debateDifficultyDescriptions[difficulty]}</p>}</div>
+          <div><span>Difficulty</span><div className="apologetics-debate-difficulty-list">{debateDifficulties.map((level) => <button className={difficulty === level ? "is-selected" : ""} type="button" key={level} onClick={() => setDifficulty(level)}>{level}</button>)}</div><DifficultyGuidance difficulty={difficulty} /></div>
         </div>
+
+        <section className="apologetics-debate-setup-settings apologetics-debate-personality-settings" aria-labelledby="opponent-personality-title">
+          <div>
+            <span id="opponent-personality-title">Opponent personality</span>
+            <p className="apologetics-debate-personality-intro">Choose the tone and attitude of your opponent.</p>
+            <div className="apologetics-debate-personality-list">
+              {opponentPersonalities.map((personality) => (
+                <button className={opponentPersonality === personality.id ? "is-selected" : ""} type="button" key={personality.id} onClick={() => setOpponentPersonality(personality.id)} aria-pressed={opponentPersonality === personality.id}>
+                  {personality.label}
+                </button>
+              ))}
+            </div>
+            <p className="apologetics-debate-personality-description">{opponentPersonalities.find((item) => item.id === opponentPersonality)?.description}</p>
+          </div>
+        </section>
       </section>
 
       {theme ? (
@@ -530,36 +699,32 @@ export function ApologeticsDebatePage() {
               <p>General is always available, or pick a focused question for {theme.label}.</p>
             </div>
           </div>
-          <div className="apologetics-debate-question-list">
-            {questions.map((item, index) => (
-              <button className={question === item ? "is-selected" : ""} key={item} type="button" onClick={() => setQuestion(item)} aria-pressed={question === item}>
-                <span>{index === 0 ? "General" : `Question ${index}`}</span>
-                <strong>{item}</strong>
-              </button>
-            ))}
-          </div>
+          <DebateQuestionCarousel questions={questions} value={question} onChange={setQuestion} />
         </section>
       ) : (
         <p className="apologetics-debate-empty">Choose a theme to unlock the debate questions.</p>
       )}
 
-      <button className="apologetics-debate-launch" type="button" disabled={!theme || !question || !difficulty} onClick={() => { setResumeDebate(null); setIsRoomOpen(true); }}>
-        Lancer le debat
-      </button>
-      {savedDebate && (
-        <button className="apologetics-debate-continue" type="button" onClick={() => {
-          const savedTheme = debateThemes.find((item) => item.id === savedDebate.themeId);
-          if (!savedTheme) return;
-          setThemeId(savedTheme.id);
-          setQuestion(savedDebate.question || generalQuestion);
-          setDifficulty(savedDebate.difficulty || "Intermediate");
-          setFactCheck(Boolean(savedDebate.factCheck));
-          setResumeDebate(savedDebate);
-          setIsRoomOpen(true);
-        }}>
-          Continuer mon debat
+      <div className={`apologetics-debate-actions${savedDebate ? " has-continue" : ""}`}>
+        <button className="apologetics-debate-launch" type="button" disabled={!theme || !question || !difficulty} onClick={() => { setResumeDebate(null); setIsRoomOpen(true); }}>
+          Lancer le debat
         </button>
-      )}
+        {savedDebate && (
+          <button className="apologetics-debate-continue" type="button" onClick={() => {
+            const savedTheme = debateThemes.find((item) => item.id === savedDebate.themeId);
+            if (!savedTheme) return;
+            setThemeId(savedTheme.id);
+            setQuestion(savedDebate.question || generalQuestion);
+            setDifficulty(savedDebate.difficulty || "Intermediate");
+            setOpponentPersonality(savedDebate.opponentPersonality || "serious");
+            setFactCheck(Boolean(savedDebate.factCheck));
+            setResumeDebate(savedDebate);
+            setIsRoomOpen(true);
+          }}>
+            Continuer mon debat
+          </button>
+        )}
+      </div>
     </div>
   );
 }

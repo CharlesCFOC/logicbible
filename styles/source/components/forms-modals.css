@@ -1157,31 +1157,28 @@
   width: 54px;
   min-height: 54px;
   padding: 0;
-  border: 1px solid rgba(221, 227, 234, 0.01);
+  border: 0;
   border-radius: 50%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.999), rgba(249, 251, 253, 0.99));
+  background: transparent;
+  box-shadow: none;
   scroll-snap-align: start;
 }
 
 .highlight-palette button.is-selected {
-  border-color: var(--cool);
-  box-shadow: 0 0 0 3px rgba(181, 159, 131, 0.14);
+  border: 0;
+  box-shadow: none;
 }
 
 .highlight-palette span {
   width: 38px;
   height: 38px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 0;
   border-radius: 50%;
   background: var(--swatch);
 }
 
 .highlight-palette button.is-selected::after {
-  position: absolute;
-  inset: 19px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.86);
-  content: "";
+  display: none;
 }
 
 .highlight-folder-tools {
@@ -1215,7 +1212,7 @@
 
 .highlight-folder-form {
   display: grid;
-  grid-template-columns: 1fr 42px;
+  grid-template-columns: 42px 1fr;
   gap: 8px;
   padding: 6px;
   border: 1px solid rgba(221, 227, 234, 0.01);
@@ -1227,6 +1224,7 @@
 }
 
 .highlight-folder-form input {
+  grid-column: 2;
   min-width: 0;
   border: 0;
   outline: 0;
@@ -1236,6 +1234,8 @@
 }
 
 .highlight-folder-form button {
+  grid-column: 1;
+  grid-row: 1;
   display: grid;
   place-items: center;
   width: 42px;
