@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 const profileTabs = [
   ["preferences", "Preference", ["M4 5h16", "M7 5v8", "M17 5v14", "M4 13h16", "M4 21h16"]],
@@ -209,6 +210,15 @@ export function ProfileCloudAccount() {
     return () => document.removeEventListener("profile:auth-change", handleChange);
   }, [bridge]);
 
+  useEffect(() => {
+    if (!deleteOpen) return undefined;
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape" && !deleting) setDeleteOpen(false);
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [deleteOpen, deleting]);
+
   const submit = async (event) => {
     event.preventDefault();
     await bridge.submitAuth(mode, email.trim(), password, passwordConfirm);
@@ -232,24 +242,27 @@ export function ProfileCloudAccount() {
         <div className="preference-heading"><h2 id="profile-auth-title">Cloud account</h2><span>Connected</span></div>
         <div className="profile-auth-form">
           <div className="auth-connected-email"><span>Connected with</span><strong>{auth.email}</strong></div>
-          <div className="profile-auth-actions"><button type="button" onClick={bridge.signOut}>Sign out</button></div>
-          <div className="profile-delete-account">
-            <div>
-              <strong>Delete account</strong>
-              <p>This permanently removes your account, synced data, and shared content.</p>
-            </div>
-            <button type="button" className="profile-delete-trigger" onClick={() => { setDeleteError(""); setDeleteOpen(true); }} aria-haspopup="dialog">Delete account</button>
+          <div className="profile-auth-actions">
+            <button type="button" data-auth-action="sign-out" onClick={bridge.signOut}>Sign out</button>
+            <button type="button" className="profile-delete-trigger" onClick={() => { setDeleteError(""); setDeleteOpen(true); }} aria-haspopup="dialog" aria-expanded={deleteOpen}>Delete my account</button>
           </div>
-          {deleteError && <p className="profile-delete-error" role="alert">{deleteError}</p>}
-          {deleteOpen && <div className="profile-delete-dialog" role="alertdialog" aria-modal="false" aria-labelledby="profile-delete-title" aria-describedby="profile-delete-description">
-            <h3 id="profile-delete-title">Delete your account?</h3>
-            <p id="profile-delete-description">Your profile, preferences, prayer requests, saved items, and conversations will be permanently deleted. This cannot be undone.</p>
-            <div className="profile-delete-dialog-actions">
-              <button type="button" onClick={() => setDeleteOpen(false)} disabled={deleting}>Cancel</button>
-              <button type="button" className="profile-delete-confirm" onClick={deleteAccount} disabled={deleting}>{deleting ? "Deleting…" : "Delete permanently"}</button>
-            </div>
-          </div>}
         </div>
+        {deleteOpen && createPortal(
+          <div className="profile-delete-dialog-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget && !deleting) setDeleteOpen(false); }}>
+            <section className="profile-delete-dialog" role="alertdialog" aria-modal="true" aria-labelledby="profile-delete-title" aria-describedby="profile-delete-description">
+              <div className="profile-delete-dialog-icon" aria-hidden="true">!</div>
+              <span className="profile-delete-dialog-eyebrow">ACCOUNT SECURITY</span>
+              <h3 id="profile-delete-title">Delete your account?</h3>
+              <p id="profile-delete-description">Your profile, preferences, prayer requests, saved items, and conversations will be permanently deleted. This cannot be undone.</p>
+              {deleteError && <p className="profile-delete-error" role="alert">{deleteError}</p>}
+              <div className="profile-delete-dialog-actions">
+                <button type="button" onClick={() => setDeleteOpen(false)} disabled={deleting}>Cancel</button>
+                <button type="button" className="profile-delete-confirm" onClick={deleteAccount} disabled={deleting}>{deleting ? "Deleting…" : "Delete permanently"}</button>
+              </div>
+            </section>
+          </div>,
+          document.querySelector(".phone-frame") || document.body,
+        )}
       </>
     );
   }

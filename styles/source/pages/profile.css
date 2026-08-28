@@ -630,7 +630,6 @@
 }
 
 .profile-auth-actions button[data-auth-action="sign-out"] {
-  grid-column: 1 / -1;
   background: #f5f1eb;
 }
 
@@ -644,33 +643,9 @@
   color: var(--error);
 }
 
-.profile-delete-account {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 6px;
-  padding: 12px;
-  border: 1px solid rgba(205, 78, 78, 0.28);
-  border-radius: 16px;
-  background: rgba(205, 78, 78, 0.06);
-}
-
-.profile-delete-account strong {
-  color: var(--ink);
-  font-size: 12px;
-}
-
-.profile-delete-account p {
-  margin: 3px 0 0;
-  color: var(--muted) !important;
-  font-size: 10px !important;
-  line-height: 1.4;
-}
-
 .profile-delete-trigger,
 .profile-delete-confirm {
-  min-height: 36px;
+  min-height: 40px;
   padding: 0 12px;
   border-radius: 11px;
   color: #fff;
@@ -685,25 +660,62 @@
   background: #cf4654;
 }
 
+.profile-delete-dialog-backdrop {
+  position: absolute;
+  z-index: 100;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(4, 13, 21, 0.72);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
+  backdrop-filter: blur(12px) saturate(120%);
+}
+
 .profile-delete-dialog {
   display: grid;
   gap: 8px;
-  padding: 14px;
-  border: 1px solid rgba(205, 78, 78, 0.42);
-  border-radius: 16px;
-  background: rgba(205, 78, 78, 0.1);
+  width: min(100%, 320px);
+  padding: 22px 18px 18px;
+  border: 1px solid rgba(255, 126, 139, 0.58);
+  border-radius: 26px;
+  background: linear-gradient(155deg, rgba(28, 46, 60, 0.98), rgba(8, 20, 29, 0.99));
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.42), 0 0 26px rgba(255, 91, 119, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  text-align: center;
+}
+
+.profile-delete-dialog-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  margin: 0 auto 2px;
+  border: 1px solid rgba(255, 174, 184, 0.62);
+  border-radius: 50%;
+  color: #fff;
+  background: linear-gradient(145deg, #e9576d, #a92d47);
+  font-size: 22px;
+  font-weight: 850;
+  box-shadow: 0 8px 18px rgba(220, 59, 89, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.profile-delete-dialog-eyebrow {
+  color: #ffadb8;
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: 0.14em;
 }
 
 .profile-delete-dialog h3 {
-  margin: 0;
-  color: var(--ink);
-  font-size: 14px;
+  margin: 2px 0 0;
+  color: #fff;
+  font-size: 19px;
 }
 
 .profile-delete-dialog p {
-  margin: 0;
-  color: var(--muted) !important;
-  font-size: 11px !important;
+  margin: 0 0 8px;
+  color: #d7e2e8;
+  font-size: 11px;
   line-height: 1.5;
 }
 
@@ -716,10 +728,16 @@
 .profile-delete-dialog-actions button {
   min-height: 38px;
   border-radius: 11px;
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--ink);
+  border: 1px solid rgba(170, 215, 238, 0.34);
+  background: rgba(54, 82, 103, 0.72);
+  color: #fff;
   font-size: 10px;
   font-weight: 800;
+}
+
+.profile-delete-dialog-actions .profile-delete-confirm {
+  border-color: rgba(255, 174, 184, 0.64);
+  background: linear-gradient(135deg, #e9576d, #b42f4b);
 }
 
 .profile-delete-dialog-actions button:disabled {
@@ -1088,24 +1106,12 @@
   box-shadow: none !important;
 }
 
-.app-shell[data-app-background="black"] #profile .profile-delete-account {
-  border-color: rgba(255, 126, 139, 0.42);
-  background: rgba(122, 32, 48, 0.22);
-}
-
-.app-shell[data-app-background="black"] #profile .profile-delete-account strong,
 .app-shell[data-app-background="black"] #profile .profile-delete-dialog h3 {
   color: #ffffff;
 }
 
-.app-shell[data-app-background="black"] #profile .profile-delete-account p,
 .app-shell[data-app-background="black"] #profile .profile-delete-dialog p {
   color: #d7e2e8 !important;
-}
-
-.app-shell[data-app-background="black"] #profile .profile-delete-dialog {
-  border-color: rgba(255, 126, 139, 0.56);
-  background: rgba(122, 32, 48, 0.3);
 }
 
 .app-shell[data-app-background="black"] #profile .profile-delete-dialog-actions button:first-child {
@@ -1119,17 +1125,6 @@
   border-radius: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
-}
-
-@media (width <= 360px) {
-  #profile .profile-delete-account {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  #profile .profile-delete-trigger {
-    width: 100%;
-  }
 }
 
 /* Profile Preferences hero image picker. */
