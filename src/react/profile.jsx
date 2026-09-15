@@ -60,7 +60,11 @@ export function ProfileHero() {
       setDraft(next.coverImage);
     };
     document.addEventListener("profile:hero-change", handleChange);
-    return () => document.removeEventListener("profile:hero-change", handleChange);
+    document.addEventListener("profile:auth-change", handleChange);
+    return () => {
+      document.removeEventListener("profile:hero-change", handleChange);
+      document.removeEventListener("profile:auth-change", handleChange);
+    };
   }, [bridge]);
 
   const chooseCover = async (event) => {

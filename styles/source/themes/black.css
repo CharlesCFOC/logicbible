@@ -575,9 +575,9 @@ html:has(.app-shell[data-app-background="black"]) {
 }
 
 .app-shell[data-app-background="black"] #profile .profile-auth-actions button[data-auth-action="sign-up"] {
-  background: linear-gradient(135deg, #fff7e9 0%, #f2dfc8 100%) !important;
-  color: #1c2631 !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78), 0 7px 16px rgba(0, 0, 0, 0.18) !important;
+  background: linear-gradient(135deg, #22cfa2 0%, #258fd8 48%, #8062f2 100%) !important;
+  color: #ffffff !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42), 0 7px 16px rgba(35, 148, 190, 0.28) !important;
 }
 
 .app-shell[data-app-background="black"] #profile .profile-auth-actions button[data-auth-action="sign-in"]:hover,

@@ -274,12 +274,8 @@ const passwordToggleButtons = [...document.querySelectorAll("[data-password-togg
 const authConnectedEmail = document.querySelector("[data-auth-connected-email]");
 const authConnectedEmailValue = document.querySelector("[data-auth-connected-email-value]");
 const homeStreak = document.querySelector("[data-home-streak]");
-const peopleOnline = document.querySelector("[data-people-online]");
 const homeContinueReading = document.querySelector("[data-home-continue-reading]");
 const homePrayerCount = document.querySelector("[data-home-prayer-count]");
-let peopleOnlineValue = Number(peopleOnline?.textContent) || 128;
-let peopleOnlineInterval = null;
-let peopleOnlineAnimationFrame = null;
 let homeStatsEmitTimer = null;
 const prayerForm = document.querySelector("[data-prayer-form]");
 const prayerRequestPanel = document.querySelector("[data-prayer-request-panel]");
@@ -419,15 +415,15 @@ const defaultPreferences = {
   accent: "taupe",
 };
 const defaultProfile = {
-  displayName: "Charles",
+  displayName: "",
   coverImage: "assets/cloud-account-zen.png",
   email: "",
   country: "",
   dateOfBirth: "",
-  avatarInitials: "CB",
-  bio: "Focused on Scripture, apologetics, and daily spiritual growth.",
-  streakLabel: "18 days in Scripture",
-  accountId: "local-charles",
+  avatarInitials: "",
+  bio: "",
+  streakLabel: "",
+  accountId: "",
   authStatus: "Local profile",
   storageStatus: "Local only",
 };
@@ -442,6 +438,13 @@ const savedProfile = {
   ...defaultProfile,
   ...readJson("brother.profile", {}),
 };
+if (savedProfile.displayName === "Charles" && savedProfile.accountId === "local-charles") {
+  savedProfile.displayName = "";
+  savedProfile.avatarInitials = "";
+  savedProfile.streakLabel = "";
+  savedProfile.accountId = "";
+  writeJson("brother.profile", savedProfile);
+}
 if (savedProfile.coverImage === "assets/profile-hero-v2.png") {
   savedProfile.coverImage = defaultProfile.coverImage;
 }
@@ -1118,7 +1121,7 @@ async function hydrateSupabaseState() {
       writeLocalWithoutSync("brother.profile", {
         ...localProfile,
         email: profile.email || supabaseUser.email || "",
-        displayName: profile.display_name || localProfile.displayName || "Charles",
+        displayName: profile.display_name || localProfile.displayName || supabaseUser.user_metadata?.display_name || "",
         country: profile.country || localProfile.country || "",
         dateOfBirth: localProfile.dateOfBirth || "",
         avatarInitials: localProfile.avatarInitials || getProfileInitials(profile.display_name),
@@ -1316,27 +1319,6 @@ function getTodayKey() {
   }).format(new Date());
 }
 
-function animatePeopleOnline(nextValue) {
-  if (!peopleOnline) return;
-  const startValue = peopleOnlineValue;
-  const startedAt = performance.now();
-  const duration = 1700;
-
-  window.cancelAnimationFrame(peopleOnlineAnimationFrame);
-  const step = (now) => {
-    const progress = Math.min(1, (now - startedAt) / duration);
-    const eased = 1 - ((1 - progress) ** 3);
-    peopleOnline.textContent = String(Math.round(startValue + ((nextValue - startValue) * eased)));
-    emitHomeStatsChange();
-    if (progress < 1) {
-      peopleOnlineAnimationFrame = window.requestAnimationFrame(step);
-    } else {
-      peopleOnlineValue = nextValue;
-    }
-  };
-  peopleOnlineAnimationFrame = window.requestAnimationFrame(step);
-}
-
 function emitHomeStatsChange() {
   if (homeStatsEmitTimer) return;
   homeStatsEmitTimer = window.setTimeout(() => {
@@ -1344,36 +1326,11 @@ function emitHomeStatsChange() {
     window.dispatchEvent(new CustomEvent("home:stats-change", {
       detail: {
         streak: homeStreak?.textContent?.trim() || "1 day",
-        peopleOnline: peopleOnline?.textContent?.trim() || String(peopleOnlineValue),
         continueReading: homeContinueReading?.textContent?.trim() || "John 15",
         prayerCount: homePrayerCount?.textContent?.trim() || "0",
       },
     }));
   }, 80);
-}
-
-function updatePeopleOnline() {
-  if (!peopleOnline) return;
-  const hour = new Date().getHours();
-  const targetByHour = hour < 7
-    ? 135
-    : hour < 11
-      ? 210
-      : hour < 17
-        ? 310
-        : hour < 20
-          ? 430
-          : hour < 22
-            ? 525
-            : 600;
-  const step = Math.floor(Math.random() * 3) + 3;
-  let direction = Math.random() > 0.5 ? 1 : -1;
-
-  if (peopleOnlineValue < targetByHour - 8) direction = 1;
-  if (peopleOnlineValue > targetByHour + 8) direction = -1;
-
-  const nextValue = Math.max(100, Math.min(640, peopleOnlineValue + (step * direction)));
-  animatePeopleOnline(nextValue);
 }
 
 function initHomeStats() {
@@ -1399,13 +1356,7 @@ function initHomeStats() {
     homeStreak.textContent = `${activity.streak} ${activity.streak === 1 ? "day" : "days"}`;
   }
 
-  if (peopleOnline) {
-    peopleOnlineValue = Number(peopleOnline.textContent) || peopleOnlineValue;
-    peopleOnline.textContent = String(peopleOnlineValue);
-    if (!peopleOnlineInterval) {
-      peopleOnlineInterval = window.setInterval(updatePeopleOnline, 2000);
-    }
-  }
+  applyProfile();
   updateHomeContinueReading();
   updateHomePrayerCount();
   emitHomeStatsChange();
@@ -1820,7 +1771,7 @@ async function syncProfileRecord() {
   const { error } = await supabaseClient.from("profiles").upsert({
     id: supabaseUser.id,
     email: supabaseUser.email || savedProfile.email || null,
-    display_name: savedProfile.displayName,
+    display_name: getEffectiveProfileName(),
     country: savedProfile.country || null,
     age: savedProfile.age ? Number(savedProfile.age) : null,
     bio: savedProfile.bio,
@@ -1842,9 +1793,26 @@ async function syncPreferencesRecord() {
   if (error) setAuthFeedback(`Preferences sync failed: ${error.message}`, true);
 }
 
+function getEffectiveProfileName() {
+  const savedName = String(savedProfile.displayName || "").trim();
+  if (savedName) return savedName;
+  const authName = String(supabaseUser?.user_metadata?.display_name || "").trim();
+  if (authName) return authName;
+  const emailName = String(supabaseUser?.email || savedProfile.email || "")
+    .split("@")[0]
+    .replace(/[._-]+/g, " ")
+    .trim();
+  return emailName || "Your profile";
+}
+
+function getProfileStreakLabel() {
+  const streak = Math.max(0, Number(readJson("brother.homeActivity", {}).streak || 0));
+  return `${streak} ${streak === 1 ? "day" : "days"} in Scripture`;
+}
+
 function applyProfile() {
-  const displayName = String(savedProfile.displayName || defaultProfile.displayName).trim() || defaultProfile.displayName;
-  const streakLabel = String(savedProfile.streakLabel || defaultProfile.streakLabel).trim() || defaultProfile.streakLabel;
+  const displayName = getEffectiveProfileName();
+  const streakLabel = getProfileStreakLabel();
   const authStatus = String(savedProfile.authStatus || defaultProfile.authStatus).trim() || defaultProfile.authStatus;
   const storageStatus = String(savedProfile.storageStatus || defaultProfile.storageStatus).trim() || defaultProfile.storageStatus;
   const accountId = String(savedProfile.accountId || defaultProfile.accountId).trim() || defaultProfile.accountId;
@@ -6548,8 +6516,8 @@ window.profileBridge = {
   getHero() {
     const coverImage = savedProfile.coverImage || defaultProfile.coverImage;
     return {
-      displayName: savedProfile.displayName || defaultProfile.displayName,
-      streakLabel: savedProfile.streakLabel || defaultProfile.streakLabel,
+      displayName: getEffectiveProfileName(),
+      streakLabel: getProfileStreakLabel(),
       coverImage,
       coverOptions: profileCoverOptions,
     };

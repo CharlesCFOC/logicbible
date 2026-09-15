@@ -460,10 +460,6 @@
   font-size: 18px !important;
 }
 
-.app-shell[data-app-background="black"] #home .home-stat-card--online {
-  background: rgba(79, 112, 119, 0.25) !important;
-}
-
 .app-shell[data-app-background="black"] #home .home-stat-card--continue {
   background: rgba(77, 98, 126, 0.28) !important;
 }
@@ -1210,17 +1206,7 @@
   box-shadow: 0 4px 14px rgba(71, 78, 86, 0.07);
 }
 
-.home-stat-card--online {
-  background:
-    radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.66), transparent 48%),
-    linear-gradient(135deg, #e0ebe6 0%, #f4f8f6 100%);
-}
-
 .home-stat-card::before {
-  display: none;
-}
-
-.home-stat-card--online::before {
   display: none;
 }
 

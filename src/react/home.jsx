@@ -28,9 +28,20 @@ function hasRecentDebate() {
 function readInitialStats() {
   return {
     streak: document.querySelector("[data-home-streak]")?.textContent?.trim() || "1 day",
-    peopleOnline: document.querySelector("[data-people-online]")?.textContent?.trim() || "128",
     continueReading: document.querySelector("[data-home-continue-reading]")?.textContent?.trim() || "John 15",
     prayerCount: document.querySelector("[data-home-prayer-count]")?.textContent?.trim() || "0",
+  };
+}
+
+function readHomeVerse() {
+  const snapshot = window.bibleReaderBridge?.getChapterSnapshot?.();
+  const verse = snapshot?.verses?.[0];
+  if (!verse?.text) {
+    return { text: "Open the Bible to begin reading.", reference: "Your next verse" };
+  }
+  return {
+    text: `“${verse.text}”`,
+    reference: `${snapshot.bookName} ${snapshot.chapter}:${verse.number}`,
   };
 }
 
@@ -58,6 +69,7 @@ function LibraryIcon({ name }) {
 export function HomeHero() {
   const [coverImage, setCoverImage] = useState(() => window.profileBridge?.getHero?.().coverImage || "assets/cloud-account-zen.png");
   const [totalXp, setTotalXp] = useState(() => window.aiBridge?.getDebateXp?.() || 0);
+  const [verse, setVerse] = useState(readHomeVerse);
 
   useEffect(() => {
     const handleHeroChange = () => {
@@ -72,6 +84,17 @@ export function HomeHero() {
     const handleXpChange = () => setTotalXp(window.aiBridge?.getDebateXp?.() || 0);
     document.addEventListener("debate:xp-change", handleXpChange);
     return () => document.removeEventListener("debate:xp-change", handleXpChange);
+  }, []);
+
+  useEffect(() => {
+    const handleBibleChange = () => setVerse(readHomeVerse());
+    document.addEventListener("bible:reader-change", handleBibleChange);
+    document.addEventListener("bible:chapter-change", handleBibleChange);
+    handleBibleChange();
+    return () => {
+      document.removeEventListener("bible:reader-change", handleBibleChange);
+      document.removeEventListener("bible:chapter-change", handleBibleChange);
+    };
   }, []);
 
   const progress = getDebateLevelProgress(totalXp);
@@ -93,8 +116,8 @@ export function HomeHero() {
       <div className="home-hero-image-copy">
         <div className="home-hero-verse">
           <span>Verse of the day</span>
-          <strong>“The Lord is my shepherd; I shall not want.”</strong>
-          <small>Psalm 23:1</small>
+          <strong>{verse.text}</strong>
+          <small>{verse.reference}</small>
         </div>
         <button type="button" data-nav="bible">
           Start reading {arrowIcon}
