@@ -666,6 +666,12 @@
   background: var(--highlight-color, var(--beige));
 }
 
+/* Keep the chosen highlight visible while the verse action menu is open. */
+.scripture-line.is-selected.is-highlighted,
+.parallel-scripture-line.is-selected.is-highlighted {
+  background: var(--highlight-color, var(--beige));
+}
+
 .parallel-scripture-line.is-bookmarked::after {
   position: absolute;
   top: 10px;
