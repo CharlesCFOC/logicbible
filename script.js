@@ -3873,7 +3873,7 @@ function showHighlightPicker(selectedFolderId = null) {
           <button aria-label="Create highlight folder"><i data-lucide="plus"></i></button>
         </form>
       </div>
-      <button class="secondary-button${currentHighlight ? " is-highlight-active" : ""}" data-remove-highlight>Remove Highlight</button>
+      <button class="secondary-button${currentHighlight ? " is-highlight-active" : ""}" data-remove-highlight${currentHighlight ? "" : " disabled"}>Remove Highlight</button>
     </div>
   `;
 
@@ -3954,6 +3954,9 @@ function updateSelectedHighlightFolder(folderId, options = {}) {
 }
 
 function removeHighlight() {
+  if (!selectedVerseData || !savedState.highlights[selectedVerseData.highlightKey]) {
+    return;
+  }
   const lines = document.querySelectorAll(`[data-highlight-key="${CSS.escape(selectedVerseData.highlightKey)}"]`);
   delete savedState.highlights[selectedVerseData.highlightKey];
   lines.forEach((line) => {
