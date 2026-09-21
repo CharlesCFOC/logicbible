@@ -683,6 +683,23 @@
   height: 0;
 }
 
+/* Keep the neon edge pinned while the verse menu content scrolls underneath. */
+.app-shell[data-modal="verse"] .bottom-sheet[data-verse-sheet] {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.app-shell[data-modal="verse"] .bottom-sheet[data-verse-sheet]::before {
+  position: sticky;
+  top: 0;
+  right: auto;
+  left: auto;
+  display: block;
+  width: calc(100% + 24px);
+  margin: -8px -12px 6px;
+  height: 2px;
+}
+
 .parallel-scripture-line.is-bookmarked::after {
   position: absolute;
   top: 10px;
