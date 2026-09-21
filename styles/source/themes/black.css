@@ -1309,6 +1309,37 @@ html:has(.app-shell[data-app-background="black"]) {
   box-shadow: none !important;
 }
 
+/* AI History is a compact text list, not a large card. */
+.app-shell[data-app-background="black"] #ai .ai-history-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 100%;
+}
+
+.app-shell[data-app-background="black"] #ai .ai-history-item,
+.app-shell[data-app-background="black"] #ai .ai-history-item:hover,
+.app-shell[data-app-background="black"] #ai .ai-history-item:focus-visible {
+  min-height: 0;
+  margin: 0;
+  padding: 8px 4px;
+  border: 0 !important;
+  border-radius: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #ffffff !important;
+  transform: none;
+}
+
+.app-shell[data-app-background="black"] #ai .ai-history-item span {
+  font-size: 14px;
+}
+
+.app-shell[data-app-background="black"] #ai .ai-history-retention {
+  margin-top: auto;
+  padding-top: 16px;
+}
+
 /* AI History: replace the generic dark card with the blue glass treatment. */
 .app-shell[data-app-background="black"] #ai .ai-history-item {
   border: 1px solid rgba(139, 220, 255, 0.42) !important;
