@@ -1493,3 +1493,10 @@ body .app-shell[data-app-background="black"] .prayer-list .prayer-card {
     width: 100%;
   }
 }
+
+/* Keep the Prayer request fields fully transparent over the page background. */
+body .app-shell[data-app-background="black"] #prayer .prayer-request-title-field input,
+body .app-shell[data-app-background="black"] #prayer .prayer-compose textarea {
+  background: transparent !important;
+  background-image: none !important;
+}
