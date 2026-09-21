@@ -1200,7 +1200,11 @@
   left: 0;
   height: 82px;
   pointer-events: none;
-  background: linear-gradient(180deg, rgba(15, 54, 76, 0), rgba(15, 54, 76, 0.96) 72%);
+  background: transparent;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 48%);
+  mask-image: linear-gradient(180deg, transparent, #000 48%);
   content: "";
 }
 
