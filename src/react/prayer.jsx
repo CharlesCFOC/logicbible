@@ -109,6 +109,93 @@ function PrayerRequestForm({ state, bridge }) {
   );
 }
 
+const onlinePrayerMeetings = [
+  {
+    id: "morning",
+    title: "Morning prayer",
+    torontoStart: [5, 0],
+    torontoEnd: [7, 0],
+    url: "https://us06web.zoom.us/j/81740698791?pwd=I9YOloR8BybnNTf4khVQApuY2obgyl.1",
+  },
+  {
+    id: "evening",
+    title: "Evening prayer",
+    torontoStart: [22, 0],
+    torontoEnd: [23, 0],
+    url: "https://us06web.zoom.us/j/81132108320?pwd=4JZzUaXk21paxbFa0D53AmIc9magq7.1",
+  },
+];
+
+const torontoTimeZone = "America/Toronto";
+
+function getTorontoDateParts() {
+  return Object.fromEntries(new Intl.DateTimeFormat("en-CA", {
+    timeZone: torontoTimeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date()).filter(({ type }) => type !== "literal").map(({ type, value }) => [type, value]));
+}
+
+function getTorontoOffsetMinutes(date) {
+  const offset = new Intl.DateTimeFormat("en-US", {
+    timeZone: torontoTimeZone,
+    timeZoneName: "shortOffset",
+  }).formatToParts(date).find(({ type }) => type === "timeZoneName")?.value || "GMT-5";
+  const match = offset.match(/GMT([+-])(\d{1,2})(?::(\d{2}))?/);
+  if (!match) return -300;
+  const minutes = Number(match[2]) * 60 + Number(match[3] || 0);
+  return match[1] === "+" ? minutes : -minutes;
+}
+
+function getLocalMeetingTime([hour, minute]) {
+  const { year, month, day } = getTorontoDateParts();
+  const torontoWallTime = Date.UTC(Number(year), Number(month) - 1, Number(day), hour, minute);
+  const firstGuess = new Date(torontoWallTime);
+  const utcTime = torontoWallTime - getTorontoOffsetMinutes(firstGuess) * 60 * 1000;
+  return new Intl.DateTimeFormat(undefined, {
+    hour: "numeric",
+    minute: "2-digit",
+    timeZoneName: "short",
+  }).format(new Date(utcTime));
+}
+
+function OnlinePrayerPanel() {
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(new Date()), 60 * 1000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const localTimeZone = new Intl.DateTimeFormat(undefined, { timeZoneName: "long" })
+    .formatToParts(now)
+    .find(({ type }) => type === "timeZoneName")?.value;
+
+  return (
+    <section className="online-prayer-panel" aria-labelledby="online-prayer-title">
+      <div className="online-prayer-intro">
+        <span className="eyebrow">Join us online</span>
+        <h2 id="online-prayer-title">Online prayer</h2>
+        <p>Daily prayer meetings shown in your local time. The schedule is based on Toronto time.</p>
+        <small>{localTimeZone ? `Your time zone: ${localTimeZone}` : "Your local time zone"}</small>
+      </div>
+      <div className="online-prayer-list">
+        {onlinePrayerMeetings.map((meeting) => (
+          <article className="online-prayer-card" key={meeting.id}>
+            <div>
+              <span className="online-prayer-card-label">Every day</span>
+              <h3>{meeting.title}</h3>
+              <p>{getLocalMeetingTime(meeting.torontoStart)} – {getLocalMeetingTime(meeting.torontoEnd)}</p>
+              <small>Toronto: {meeting.torontoStart[0] === 5 ? "5:00–7:00 AM" : "10:00–11:00 PM"}</small>
+            </div>
+            <a className="online-prayer-join" href={meeting.url} target="_blank" rel="noreferrer">Open Zoom</a>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function PrayerCard({ request, bridge, index }) {
   const [isOpen, setIsOpen] = useState(false);
   const image = `assets/prayer-backgrounds/prayer-${request.backgroundIndex + 1}.jpg`;
@@ -192,7 +279,9 @@ export function PrayerPage() {
       <div className="prayer-page-tabs" role="tablist" aria-label="Prayer sections">
         <button className={state.pageTab === "board" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("board")}>Prayer</button>
         <button className={state.pageTab === "request" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("request")}>Prayer request</button>
+        <button className={state.pageTab === "online" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("online")}>Online prayer</button>
       </div>
+      {state.pageTab === "online" && <OnlinePrayerPanel />}
       {state.pageTab === "request" && <PrayerRequestForm state={state} bridge={bridge} />}
       {(state.pageTab === "board" || state.myWallExpanded) && (
         <section className="prayer-board-section">
