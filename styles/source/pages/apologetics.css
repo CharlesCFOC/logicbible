@@ -1180,6 +1180,67 @@
   color: #ffffff !important;
 }
 
+/* Show a short question preview, then let the user expand the remaining choices. */
+.apologetics-debate-question-viewport {
+  position: relative;
+}
+
+.apologetics-debate-question-viewport:not(.is-expanded) .apologetics-debate-question-list {
+  max-height: 252px;
+  overflow: hidden;
+}
+
+.apologetics-debate-question-viewport:not(.is-expanded)::after {
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 82px;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(15, 54, 76, 0), rgba(15, 54, 76, 0.96) 72%);
+  content: "";
+}
+
+.apologetics-debate-question-expand {
+  position: absolute;
+  z-index: 2;
+  right: 50%;
+  bottom: 10px;
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  gap: 5px;
+  padding: 0 12px;
+  border: 1px solid rgba(139, 220, 255, 0.78);
+  border-radius: 999px;
+  background: linear-gradient(135deg, #2ed4e9, #3269f4);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 850;
+  transform: translateX(50%);
+}
+
+.apologetics-debate-question-expand b {
+  font-size: 17px;
+  line-height: 1;
+}
+
+.apologetics-debate-question-collapse {
+  display: block;
+  min-height: 32px;
+  margin: 8px auto 0;
+  padding: 0 11px;
+  background: transparent;
+  color: #a8e5ff;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.apologetics-debate-question-awaiting {
+  min-height: 16px;
+}
+
 .apologetics-hero-image img {
   position: absolute;
   inset: 0;

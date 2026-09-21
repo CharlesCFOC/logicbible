@@ -180,65 +180,31 @@ export function getDebateXpReward(difficulty, averageCriteria) {
   return 0;
 }
 
-const questionsPerPage = 5;
+const collapsedQuestionCount = 3;
 
 export function DebateQuestionCarousel({ questions, value, onChange }) {
-  const [page, setPage] = useState(0);
-  const touchStartX = useRef(null);
-  const pageCount = Math.max(1, Math.ceil(questions.length / questionsPerPage));
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
-    const selectedIndex = questions.indexOf(value);
-    if (selectedIndex >= 0) {
-      setPage(Math.floor(selectedIndex / questionsPerPage));
-    } else {
-      setPage((current) => Math.min(current, pageCount - 1));
-    }
-  }, [questions, value, pageCount]);
+    setExpanded(false);
+  }, [questions]);
 
-  const movePage = (nextPage) => setPage(Math.max(0, Math.min(pageCount - 1, nextPage)));
-  const handleTouchStart = (event) => { touchStartX.current = event.touches[0]?.clientX ?? null; };
-  const handleTouchEnd = (event) => {
-    if (touchStartX.current === null) return;
-    const distance = event.changedTouches[0]?.clientX - touchStartX.current;
-    touchStartX.current = null;
-    if (Math.abs(distance) < 40) return;
-    movePage(page + (distance < 0 ? 1 : -1));
-  };
+  const hasMoreQuestions = questions.length > collapsedQuestionCount;
 
   return (
     <div className="apologetics-debate-question-carousel">
-      <div className="apologetics-debate-question-pages" aria-label="Question blocks">
-        {Array.from({ length: pageCount }, (_, index) => (
-          <button
-            className={page === index ? "is-active" : ""}
-            key={index}
-            type="button"
-            aria-label={`Question block ${index + 1} of ${pageCount}`}
-            aria-current={page === index ? "page" : undefined}
-            onClick={() => movePage(index)}
-          >
-            <span aria-hidden="true" />
-          </button>
-        ))}
-      </div>
-      <div className="apologetics-debate-question-viewport" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-        <div className="apologetics-debate-question-track" style={{ transform: `translate3d(-${page * 100}%, 0, 0)` }}>
-          {Array.from({ length: pageCount }, (_, pageIndex) => (
-            <div className="apologetics-debate-question-list" key={pageIndex} aria-label={`Question block ${pageIndex + 1}`}>
-              {questions.slice(pageIndex * questionsPerPage, (pageIndex + 1) * questionsPerPage).map((item, index) => {
-                const questionIndex = pageIndex * questionsPerPage + index;
-                return (
-                  <button className={value === item ? "is-selected" : ""} key={item} type="button" onClick={() => onChange(value === item ? "" : item)} aria-pressed={value === item}>
-                    <span>{questionIndex === 0 ? "General" : `Question ${questionIndex}`}</span>
-                    <strong>{item}</strong>
-                  </button>
-                );
-              })}
-            </div>
+      <div className={`apologetics-debate-question-viewport${expanded ? " is-expanded" : ""}`}>
+        <div className="apologetics-debate-question-list" aria-label="Questions">
+          {questions.map((item, index) => (
+            <button className={value === item ? "is-selected" : ""} key={item} type="button" onClick={() => onChange(value === item ? "" : item)} aria-pressed={value === item}>
+              <span>{index === 0 ? "General" : `Question ${index}`}</span>
+              <strong>{item}</strong>
+            </button>
           ))}
         </div>
+        {!expanded && hasMoreQuestions && <button className="apologetics-debate-question-expand" type="button" onClick={() => setExpanded(true)} aria-label={`Show ${questions.length - collapsedQuestionCount} more questions`}><b>+</b><span>More questions</span></button>}
       </div>
+      {expanded && hasMoreQuestions && <button className="apologetics-debate-question-collapse" type="button" onClick={() => setExpanded(false)}>Show less</button>}
     </div>
   );
 }
@@ -680,18 +646,22 @@ export function ApologeticsDebatePage() {
             </button>
           ))}
         </div>
-        {theme ? (
-          <div className="apologetics-debate-question-step" aria-labelledby="debate-question-title">
-            <h3 id="debate-question-title">Choose the question</h3>
-            <p>General is always available, or pick a focused question for {theme.label}.</p>
-            <DebateQuestionCarousel questions={questions} value={question} onChange={setQuestion} />
+      </section>
+
+      <section className="apologetics-debate-step apologetics-debate-setup-settings apologetics-debate-question-settings" aria-labelledby="debate-question-title">
+        <div className="apologetics-debate-setup-heading">
+          <span>2</span>
+          <div>
+            <h2 id="debate-question-title">Choose the question</h2>
+            <p>{theme ? `Pick the question you want to explore for ${theme.label}.` : ""}</p>
           </div>
-        ) : null}
+        </div>
+        {theme ? <DebateQuestionCarousel questions={questions} value={question} onChange={setQuestion} /> : <div className="apologetics-debate-question-awaiting" aria-hidden="true" />}
       </section>
 
       <section className="apologetics-debate-step apologetics-debate-setup-settings" aria-labelledby="debate-difficulty-title">
         <div className="apologetics-debate-setup-heading">
-          <span>2</span>
+          <span>3</span>
           <div>
             <h2 id="debate-difficulty-title">Choose the difficulty</h2>
             <p>Set how challenging you want the conversation to be.</p>
@@ -703,7 +673,7 @@ export function ApologeticsDebatePage() {
 
       <section className="apologetics-debate-step apologetics-debate-setup-settings apologetics-debate-personality-settings" aria-labelledby="opponent-personality-title">
         <div className="apologetics-debate-setup-heading">
-          <span>3</span>
+          <span>4</span>
           <div>
             <h2 id="opponent-personality-title">Choose the personality</h2>
             <p>Choose the tone and attitude of your opponent.</p>
