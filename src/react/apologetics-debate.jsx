@@ -615,6 +615,7 @@ export function ApologeticsDebatePage() {
   const [question, setQuestion] = useState("");
   const [difficulty, setDifficulty] = useState("");
   const [opponentPersonality, setOpponentPersonality] = useState("serious");
+  const [personalityTouched, setPersonalityTouched] = useState(false);
   const [factCheck, setFactCheck] = useState(false);
   const [isRoomOpen, setIsRoomOpen] = useState(false);
   const [savedDebate, setSavedDebate] = useState(() => getLatestDebateConversation());
@@ -631,6 +632,7 @@ export function ApologeticsDebatePage() {
       setQuestion(latest.question || generalQuestion);
       setDifficulty(latest.difficulty || "Intermediate");
       setOpponentPersonality(latest.opponentPersonality || "serious");
+      setPersonalityTouched(true);
       setFactCheck(Boolean(latest.factCheck));
       setResumeDebate(latest);
       setIsRoomOpen(true);
@@ -656,11 +658,11 @@ export function ApologeticsDebatePage() {
       </header>
 
       <nav className="apologetics-debate-setup-progress" aria-label="Debate setup progress">
-        <span className={theme && question ? "is-complete" : "is-current"}><b>1</b><small>Beliefs</small></span>
+        <span className={theme && question ? "is-complete" : ""}><b>1</b><small>Beliefs</small></span>
         <i aria-hidden="true"></i>
         <span className={difficulty ? "is-complete" : ""}><b>2</b><small>Difficulty</small></span>
         <i aria-hidden="true"></i>
-        <span className={opponentPersonality ? "is-complete" : ""}><b>3</b><small>Personality</small></span>
+        <span className={personalityTouched ? "is-complete" : ""}><b>3</b><small>Personality</small></span>
       </nav>
 
       <section className="apologetics-debate-step apologetics-debate-step--theme" aria-labelledby="debate-theme-title">
@@ -709,7 +711,7 @@ export function ApologeticsDebatePage() {
         </div>
         <div className="apologetics-debate-personality-list">
           {opponentPersonalities.map((personality) => (
-            <button className={opponentPersonality === personality.id ? "is-selected" : ""} type="button" key={personality.id} onClick={() => setOpponentPersonality(personality.id)} aria-pressed={opponentPersonality === personality.id}>
+            <button className={opponentPersonality === personality.id ? "is-selected" : ""} type="button" key={personality.id} onClick={() => { setOpponentPersonality(personality.id); setPersonalityTouched(true); }} aria-pressed={opponentPersonality === personality.id}>
               {personality.label}
             </button>
           ))}
@@ -729,6 +731,7 @@ export function ApologeticsDebatePage() {
             setQuestion(savedDebate.question || generalQuestion);
             setDifficulty(savedDebate.difficulty || "Intermediate");
             setOpponentPersonality(savedDebate.opponentPersonality || "serious");
+            setPersonalityTouched(true);
             setFactCheck(Boolean(savedDebate.factCheck));
             setResumeDebate(savedDebate);
             setIsRoomOpen(true);

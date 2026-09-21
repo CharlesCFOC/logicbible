@@ -635,7 +635,7 @@
   place-items: center;
   border: 1px solid rgba(139, 220, 255, 0.36);
   border-radius: 50%;
-  background: rgba(32, 74, 100, 0.46);
+  background: transparent;
   color: #dff7ff;
   font-size: 12px;
 }
@@ -652,7 +652,6 @@
   background: rgba(139, 220, 255, 0.3);
 }
 
-.apologetics-debate-setup-progress > .is-current b,
 .apologetics-debate-setup-progress > .is-complete b {
   border-color: rgba(163, 255, 208, 0.9);
   background: linear-gradient(135deg, #72ffb1, #00bd70);
@@ -660,7 +659,6 @@
   box-shadow: 0 0 16px rgba(47, 255, 154, 0.24);
 }
 
-.apologetics-debate-setup-progress > .is-current,
 .apologetics-debate-setup-progress > .is-complete {
   color: #ffffff;
 }
