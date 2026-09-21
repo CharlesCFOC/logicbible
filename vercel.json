@@ -4,5 +4,14 @@
     "api/[...path].mjs": {
       "includeFiles": "{data/**,lib/**}"
     }
+  },
+  "routes": [
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/[...path].mjs"
+    }
   }
 }
