@@ -700,6 +700,34 @@
   height: 2px;
 }
 
+/* Final layout: the neon edge stays on the sheet border while details scroll. */
+.app-shell[data-modal="verse"] .bottom-sheet[data-verse-sheet] {
+  overflow: hidden;
+}
+
+.app-shell[data-modal="verse"] .bottom-sheet[data-verse-sheet]::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  display: block;
+  width: auto;
+  margin: 0;
+}
+
+.app-shell[data-modal="verse"] .bottom-sheet[data-verse-sheet] .verse-detail-panel {
+  max-height: calc(min(52vh, 430px) - 150px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+.app-shell[data-modal="verse"] .bottom-sheet[data-verse-sheet] .verse-detail-panel::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
 .parallel-scripture-line.is-bookmarked::after {
   position: absolute;
   top: 10px;
