@@ -1802,7 +1802,7 @@ function getEffectiveProfileName() {
     .split("@")[0]
     .replace(/[._-]+/g, " ")
     .trim();
-  return emailName || "Your profile";
+  return emailName || "It's time to login";
 }
 
 function getProfileStreakLabel() {
