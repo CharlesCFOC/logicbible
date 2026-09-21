@@ -1391,6 +1391,31 @@ html:has(.app-shell[data-app-background="black"]) {
   box-shadow: 0 8px 18px rgba(117, 10, 35, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
 }
 
+/* Bible search: make the magnifier a clear, high-contrast primary control. */
+.app-shell[data-app-background="black"] .reader-screen .reader-topbar > .bible-glass-search {
+  border-color: rgba(174, 235, 255, 0.9) !important;
+  background:
+    radial-gradient(circle at 28% 20%, rgba(255, 255, 255, 0.28), transparent 34%),
+    linear-gradient(135deg, rgba(43, 175, 224, 0.86), rgba(49, 94, 211, 0.9)) !important;
+  color: #ffffff !important;
+  box-shadow: 0 7px 18px rgba(11, 73, 125, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.42) !important;
+}
+
+.app-shell[data-app-background="black"] .reader-screen .reader-topbar > .bible-glass-search svg {
+  width: 23px;
+  height: 23px;
+  color: #ffffff !important;
+  filter: drop-shadow(0 1px 2px rgba(4, 30, 54, 0.42));
+}
+
+.app-shell[data-app-background="black"] .reader-screen .reader-topbar > .bible-glass-search:hover,
+.app-shell[data-app-background="black"] .reader-screen .reader-topbar > .bible-glass-search:focus-visible {
+  border-color: #ffffff !important;
+  background: linear-gradient(135deg, #3edcf0, #396cf4) !important;
+  box-shadow: 0 9px 21px rgba(25, 105, 204, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.54) !important;
+  transform: translateY(-1px);
+}
+
 /* A verse without a highlight must show Remove Highlight as disabled. */
 .app-shell[data-app-background="black"] .bottom-sheet [data-remove-highlight]:disabled,
 .app-shell[data-app-background="black"] .bottom-sheet [data-remove-highlight]:disabled:hover,
