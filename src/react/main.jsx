@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { HomeHero, HomeLibraryPanel, HomeLibraryTabs, HomePrayerCard, HomeStats } from "./home.jsx";
 import { ProfileCloudAccount, ProfileHero, ProfileInformation, ProfilePreferences, ProfileTabs } from "./profile.jsx";
-import { BibleChapterContent, BibleParallelControls, BibleReaderControls, BibleSelectedVerse, BibleSheetFeedback, BibleVerseActions } from "./bible.jsx";
+import { BibleChapterContent, BibleParallelControls, BibleReaderControls, BibleSelectedVerse, BibleVerseActions } from "./bible.jsx";
 import { NoteEditorContent, NoteEditorHeader, NoteEditorVerseChips, NoteToolbar } from "./notes.jsx";
 import { PrayerPage } from "./prayer.jsx";
 import { AiPage } from "./ai.jsx";
@@ -146,11 +146,6 @@ if (bibleChapterNode && window.bibleReaderBridge) {
 const selectedVerseNode = document.querySelector("[data-react-selected-verse-root]");
 if (selectedVerseNode && window.bibleReaderBridge) {
   createRoot(selectedVerseNode).render(<BibleSelectedVerse />);
-}
-
-const sheetFeedbackNode = document.querySelector("[data-react-sheet-feedback-root]");
-if (sheetFeedbackNode && window.bibleReaderBridge) {
-  createRoot(sheetFeedbackNode).render(<BibleSheetFeedback />);
 }
 
 const verseActionsNode = document.querySelector("[data-react-verse-actions-root]");

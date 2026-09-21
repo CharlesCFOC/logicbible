@@ -832,6 +832,12 @@
   background: var(--cool-soft);
 }
 
+/* Keep the selected verse's actual highlight visible while its action sheet is open. */
+.app-shell[data-modal="verse"] .scripture-line.is-selected.is-highlighted,
+.app-shell[data-modal="verse"] .parallel-scripture-line.is-selected.is-highlighted {
+  background: var(--highlight-color, var(--beige)) !important;
+}
+
 .scripture-line.is-bookmarked::after {
   position: absolute;
   top: 10px;
