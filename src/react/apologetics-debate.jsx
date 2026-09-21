@@ -229,7 +229,7 @@ export function DebateQuestionCarousel({ questions, value, onChange }) {
               {questions.slice(pageIndex * questionsPerPage, (pageIndex + 1) * questionsPerPage).map((item, index) => {
                 const questionIndex = pageIndex * questionsPerPage + index;
                 return (
-                  <button className={value === item ? "is-selected" : ""} key={item} type="button" onClick={() => onChange(item)} aria-pressed={value === item}>
+                  <button className={value === item ? "is-selected" : ""} key={item} type="button" onClick={() => onChange(value === item ? "" : item)} aria-pressed={value === item}>
                     <span>{questionIndex === 0 ? "General" : `Question ${questionIndex}`}</span>
                     <strong>{item}</strong>
                   </button>
@@ -614,8 +614,7 @@ export function ApologeticsDebatePage() {
   const [themeId, setThemeId] = useState("");
   const [question, setQuestion] = useState("");
   const [difficulty, setDifficulty] = useState("");
-  const [opponentPersonality, setOpponentPersonality] = useState("serious");
-  const [personalityTouched, setPersonalityTouched] = useState(false);
+  const [opponentPersonality, setOpponentPersonality] = useState("");
   const [factCheck, setFactCheck] = useState(false);
   const [isRoomOpen, setIsRoomOpen] = useState(false);
   const [savedDebate, setSavedDebate] = useState(() => getLatestDebateConversation());
@@ -632,7 +631,6 @@ export function ApologeticsDebatePage() {
       setQuestion(latest.question || generalQuestion);
       setDifficulty(latest.difficulty || "Intermediate");
       setOpponentPersonality(latest.opponentPersonality || "serious");
-      setPersonalityTouched(true);
       setFactCheck(Boolean(latest.factCheck));
       setResumeDebate(latest);
       setIsRoomOpen(true);
@@ -662,7 +660,7 @@ export function ApologeticsDebatePage() {
         <i aria-hidden="true"></i>
         <span className={difficulty ? "is-complete" : ""}><b>2</b><small>Difficulty</small></span>
         <i aria-hidden="true"></i>
-        <span className={personalityTouched ? "is-complete" : ""}><b>3</b><small>Personality</small></span>
+        <span className={opponentPersonality ? "is-complete" : ""}><b>3</b><small>Personality</small></span>
       </nav>
 
       <section className="apologetics-debate-step apologetics-debate-step--theme" aria-labelledby="debate-theme-title">
@@ -697,7 +695,7 @@ export function ApologeticsDebatePage() {
             <p>Set how challenging you want the conversation to be.</p>
           </div>
         </div>
-        <div className="apologetics-debate-difficulty-list">{debateDifficulties.map((level) => <button className={difficulty === level ? "is-selected" : ""} type="button" key={level} onClick={() => setDifficulty(level)}>{level}</button>)}</div>
+        <div className="apologetics-debate-difficulty-list">{debateDifficulties.map((level) => <button className={difficulty === level ? "is-selected" : ""} type="button" key={level} onClick={() => setDifficulty((current) => current === level ? "" : level)}>{level}</button>)}</div>
         <DifficultyGuidance difficulty={difficulty} />
       </section>
 
@@ -711,7 +709,7 @@ export function ApologeticsDebatePage() {
         </div>
         <div className="apologetics-debate-personality-list">
           {opponentPersonalities.map((personality) => (
-            <button className={opponentPersonality === personality.id ? "is-selected" : ""} type="button" key={personality.id} onClick={() => { setOpponentPersonality(personality.id); setPersonalityTouched(true); }} aria-pressed={opponentPersonality === personality.id}>
+            <button className={opponentPersonality === personality.id ? "is-selected" : ""} type="button" key={personality.id} onClick={() => setOpponentPersonality((current) => current === personality.id ? "" : personality.id)} aria-pressed={opponentPersonality === personality.id}>
               {personality.label}
             </button>
           ))}
@@ -720,7 +718,7 @@ export function ApologeticsDebatePage() {
       </section>
 
       <div className={`apologetics-debate-actions${savedDebate ? " has-continue" : ""}`}>
-        <button className="apologetics-debate-launch" type="button" disabled={!theme || !question || !difficulty} onClick={() => { setResumeDebate(null); setIsRoomOpen(true); }}>
+        <button className="apologetics-debate-launch" type="button" disabled={!theme || !question || !difficulty || !opponentPersonality} onClick={() => { setResumeDebate(null); setIsRoomOpen(true); }}>
           Lancer le debat
         </button>
         {savedDebate && (
@@ -731,7 +729,6 @@ export function ApologeticsDebatePage() {
             setQuestion(savedDebate.question || generalQuestion);
             setDifficulty(savedDebate.difficulty || "Intermediate");
             setOpponentPersonality(savedDebate.opponentPersonality || "serious");
-            setPersonalityTouched(true);
             setFactCheck(Boolean(savedDebate.factCheck));
             setResumeDebate(savedDebate);
             setIsRoomOpen(true);
