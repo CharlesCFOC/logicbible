@@ -684,7 +684,7 @@ export function ApologeticsDebatePage() {
             <p>General is always available, or pick a focused question for {theme.label}.</p>
             <DebateQuestionCarousel questions={questions} value={question} onChange={setQuestion} />
           </div>
-        ) : <p className="apologetics-debate-empty">Choose a belief to unlock the questions.</p>}
+        ) : null}
       </section>
 
       <section className="apologetics-debate-step apologetics-debate-setup-settings" aria-labelledby="debate-difficulty-title">
