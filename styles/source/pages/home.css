@@ -1203,7 +1203,7 @@
     radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.72), transparent 48%),
     linear-gradient(135deg, #e9e3db 0%, #f7f5f1 100%);
   color: var(--ink);
-  box-shadow: 0 4px 14px rgba(71, 78, 86, 0.07);
+  box-shadow: 0 12px 22px rgba(31, 47, 66, 0.2), 0 3px 7px rgba(31, 47, 66, 0.12);
 }
 
 .home-stat-card::before {
