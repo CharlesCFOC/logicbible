@@ -197,10 +197,10 @@
   animation: anthraciteAtmosphere 24s ease-in-out infinite alternate;
 }
 
-.app-shell[data-modal="original-language"] .bottom-sheet.is-original-language > .modal-handle,
-.app-shell[data-modal="original-language"] .bottom-sheet.is-original-language > .sheet-title,
-.app-shell[data-modal="original-language"] .bottom-sheet.is-original-language > .action-grid,
-.app-shell[data-modal="original-language"] .bottom-sheet.is-original-language > .sheet-feedback {
+.app-shell[data-modal="original-language"] .bottom-sheet.is-original-language .modal-handle,
+.app-shell[data-modal="original-language"] .bottom-sheet.is-original-language .sheet-title,
+.app-shell[data-modal="original-language"] .bottom-sheet.is-original-language .action-grid,
+.app-shell[data-modal="original-language"] .bottom-sheet.is-original-language .sheet-feedback {
   display: none;
 }
 
@@ -703,6 +703,8 @@
 /* Final layout: the neon edge stays on the sheet border while details scroll. */
 .app-shell[data-modal="verse"] .bottom-sheet[data-verse-sheet] {
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .app-shell[data-modal="verse"] .bottom-sheet[data-verse-sheet]::before {
@@ -726,6 +728,28 @@
   display: none;
   width: 0;
   height: 0;
+}
+
+/* Scroll the sheet contents as one surface while the neon border stays fixed. */
+.app-shell[data-modal="verse"] .bottom-sheet[data-verse-sheet] .verse-sheet-scroll {
+  height: auto;
+  max-height: 100%;
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+.app-shell[data-modal="verse"] .bottom-sheet[data-verse-sheet] .verse-sheet-scroll::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.app-shell[data-modal="verse"] .bottom-sheet[data-verse-sheet] .verse-detail-panel {
+  max-height: none;
+  overflow: visible;
 }
 
 .parallel-scripture-line.is-bookmarked::after {
