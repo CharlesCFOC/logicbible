@@ -222,7 +222,7 @@ export function DebateQuestionCarousel({ questions, value, onChange }) {
               {questions.slice(pageIndex * questionsPerPage, (pageIndex + 1) * questionsPerPage).map((item, index) => {
                 const questionIndex = pageIndex * questionsPerPage + index;
                 return <button className={value === item ? "is-selected" : ""} key={item} type="button" onClick={() => onChange(value === item ? "" : item)} aria-pressed={value === item}>
-                  <span>{questionIndex === 0 ? "General" : `Question ${questionIndex}`}</span>
+                  <span>{`Question ${questionIndex + 1}`}</span>
                   <strong>{item}</strong>
                 </button>;
               })}
@@ -631,7 +631,7 @@ export function ApologeticsDebatePage() {
   }, []);
 
   const goBack = () => window.appNavigate?.("apologetics");
-  const questions = theme ? [generalQuestion, ...theme.questions] : [];
+  const questions = theme ? theme.questions : [];
 
   if (isRoomOpen) {
     return <DebateRoomView theme={theme} question={question} difficulty={difficulty} opponentPersonality={opponentPersonality} factCheck={factCheck} savedMessages={resumeDebate?.messages} onBack={() => { setSavedDebate(getLatestDebateConversation()); setResumeDebate(null); setIsRoomOpen(false); }} />;
