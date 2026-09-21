@@ -128,13 +128,13 @@ const onlinePrayerMeetings = [
 
 const torontoTimeZone = "America/Toronto";
 
-function getTorontoDateParts() {
+function getTorontoDateParts(date = new Date()) {
   return Object.fromEntries(new Intl.DateTimeFormat("en-CA", {
     timeZone: torontoTimeZone,
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
-  }).formatToParts(new Date()).filter(({ type }) => type !== "literal").map(({ type, value }) => [type, value]));
+  }).formatToParts(date).filter(({ type }) => type !== "literal").map(({ type, value }) => [type, value]));
 }
 
 function getTorontoOffsetMinutes(date) {
@@ -160,18 +160,54 @@ function getLocalMeetingTime([hour, minute]) {
   }).format(new Date(utcTime));
 }
 
+function getTorontoMeetingTimestamp(year, month, day, hour, minute) {
+  const wallTime = Date.UTC(year, month - 1, day, hour, minute);
+  let timestamp = wallTime - getTorontoOffsetMinutes(new Date(wallTime)) * 60 * 1000;
+  timestamp = wallTime - getTorontoOffsetMinutes(new Date(timestamp)) * 60 * 1000;
+  return timestamp;
+}
+
+function getNextPrayerMeeting(now) {
+  const { year, month, day } = getTorontoDateParts(now);
+  const candidates = [];
+  for (let offset = 0; offset <= 2; offset += 1) {
+    onlinePrayerMeetings.forEach((meeting) => {
+      candidates.push({
+        meeting,
+        startsAt: getTorontoMeetingTimestamp(Number(year), Number(month), Number(day) + offset, ...meeting.torontoStart),
+      });
+    });
+  }
+  return candidates.filter((candidate) => candidate.startsAt > now.getTime()).sort((a, b) => a.startsAt - b.startsAt)[0];
+}
+
+function formatCountdown(milliseconds) {
+  const totalSeconds = Math.max(0, Math.ceil(milliseconds / 1000));
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return [hours, minutes, seconds].map((value) => String(value).padStart(2, "0")).join(":");
+}
+
 function OnlinePrayerPanel() {
-  const [, setNow] = useState(() => new Date());
+  const [now, setNow] = useState(() => new Date());
   useEffect(() => {
-    const timer = window.setInterval(() => setNow(new Date()), 60 * 1000);
+    const timer = window.setInterval(() => setNow(new Date()), 1000);
     return () => window.clearInterval(timer);
   }, []);
+
+  const nextPrayer = getNextPrayerMeeting(now);
 
   return (
     <section className="online-prayer-panel" aria-labelledby="online-prayer-title">
       <div className="online-prayer-intro">
         <h2 id="online-prayer-title">Join us online</h2>
       </div>
+      {nextPrayer && <div className="online-prayer-countdown" role="status" aria-live="polite">
+        <span>Next prayer time in:</span>
+        <strong>{formatCountdown(nextPrayer.startsAt - now.getTime())}</strong>
+        <small>{nextPrayer.meeting.title}</small>
+      </div>}
       <div className="online-prayer-list">
         {onlinePrayerMeetings.map((meeting) => (
             <article className="online-prayer-card" key={meeting.id}>
