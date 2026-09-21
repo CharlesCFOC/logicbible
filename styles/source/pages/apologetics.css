@@ -731,7 +731,7 @@
 }
 
 .apologetics-debate-theme-list button {
-  flex: 0 0 min(62%, 190px);
+  flex: 0 0 min(48%, 150px);
   min-height: 42px;
   padding: 0 11px;
   font-size: 12px;
