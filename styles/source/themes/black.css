@@ -1302,6 +1302,13 @@ html:has(.app-shell[data-app-background="black"]) {
   box-shadow: 0 6px 14px rgba(35, 148, 190, 0.24) !important;
 }
 
+/* The History shortcut stays flat without a glow behind it. */
+.app-shell[data-app-background="black"] #ai .ai-tabs button:last-child,
+.app-shell[data-app-background="black"] #ai .ai-tabs button:last-child:hover,
+.app-shell[data-app-background="black"] #ai .ai-tabs button:last-child.is-active {
+  box-shadow: none !important;
+}
+
 /* AI History: replace the generic dark card with the blue glass treatment. */
 .app-shell[data-app-background="black"] #ai .ai-history-item {
   border: 1px solid rgba(139, 220, 255, 0.42) !important;
