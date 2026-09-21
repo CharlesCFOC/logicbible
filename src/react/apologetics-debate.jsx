@@ -655,12 +655,20 @@ export function ApologeticsDebatePage() {
         </div>
       </header>
 
+      <nav className="apologetics-debate-setup-progress" aria-label="Debate setup progress">
+        <span className={theme && question ? "is-complete" : "is-current"}><b>1</b><small>Beliefs</small></span>
+        <i aria-hidden="true"></i>
+        <span className={difficulty ? "is-complete" : ""}><b>2</b><small>Difficulty</small></span>
+        <i aria-hidden="true"></i>
+        <span className={opponentPersonality ? "is-complete" : ""}><b>3</b><small>Personality</small></span>
+      </nav>
+
       <section className="apologetics-debate-step apologetics-debate-step--theme" aria-labelledby="debate-theme-title">
         <div className="apologetics-debate-step-heading">
-          <span>01</span>
+          <span>1</span>
           <div>
-            <h2 id="debate-theme-title">Choose a debate theme</h2>
-            <p>Select the perspective you want to explore.</p>
+            <h2 id="debate-theme-title">Choose your beliefs</h2>
+            <p>Choose the belief or perspective you want to defend.</p>
           </div>
         </div>
         <div className="apologetics-debate-theme-list">
@@ -670,40 +678,44 @@ export function ApologeticsDebatePage() {
             </button>
           ))}
         </div>
-        <div className="apologetics-debate-setup-settings">
-          <div><span>Difficulty</span><div className="apologetics-debate-difficulty-list">{debateDifficulties.map((level) => <button className={difficulty === level ? "is-selected" : ""} type="button" key={level} onClick={() => setDifficulty(level)}>{level}</button>)}</div><DifficultyGuidance difficulty={difficulty} /></div>
-        </div>
-
-        <section className="apologetics-debate-setup-settings apologetics-debate-personality-settings" aria-labelledby="opponent-personality-title">
-          <div>
-            <span id="opponent-personality-title">Opponent personality</span>
-            <p className="apologetics-debate-personality-intro">Choose the tone and attitude of your opponent.</p>
-            <div className="apologetics-debate-personality-list">
-              {opponentPersonalities.map((personality) => (
-                <button className={opponentPersonality === personality.id ? "is-selected" : ""} type="button" key={personality.id} onClick={() => setOpponentPersonality(personality.id)} aria-pressed={opponentPersonality === personality.id}>
-                  {personality.label}
-                </button>
-              ))}
-            </div>
-            <p className="apologetics-debate-personality-description">{opponentPersonalities.find((item) => item.id === opponentPersonality)?.description}</p>
+        {theme ? (
+          <div className="apologetics-debate-question-step" aria-labelledby="debate-question-title">
+            <h3 id="debate-question-title">Choose the question</h3>
+            <p>General is always available, or pick a focused question for {theme.label}.</p>
+            <DebateQuestionCarousel questions={questions} value={question} onChange={setQuestion} />
           </div>
-        </section>
+        ) : <p className="apologetics-debate-empty">Choose a belief to unlock the questions.</p>}
       </section>
 
-      {theme ? (
-        <section className="apologetics-debate-step apologetics-debate-step--questions" aria-labelledby="debate-question-title">
-          <div className="apologetics-debate-step-heading">
-            <span>02</span>
-            <div>
-              <h2 id="debate-question-title">Choose the central question</h2>
-              <p>General is always available, or pick a focused question for {theme.label}.</p>
-            </div>
+      <section className="apologetics-debate-step apologetics-debate-setup-settings" aria-labelledby="debate-difficulty-title">
+        <div className="apologetics-debate-setup-heading">
+          <span>2</span>
+          <div>
+            <h2 id="debate-difficulty-title">Choose the difficulty</h2>
+            <p>Set how challenging you want the conversation to be.</p>
           </div>
-          <DebateQuestionCarousel questions={questions} value={question} onChange={setQuestion} />
-        </section>
-      ) : (
-        <p className="apologetics-debate-empty">Choose a theme to unlock the debate questions.</p>
-      )}
+        </div>
+        <div className="apologetics-debate-difficulty-list">{debateDifficulties.map((level) => <button className={difficulty === level ? "is-selected" : ""} type="button" key={level} onClick={() => setDifficulty(level)}>{level}</button>)}</div>
+        <DifficultyGuidance difficulty={difficulty} />
+      </section>
+
+      <section className="apologetics-debate-step apologetics-debate-setup-settings apologetics-debate-personality-settings" aria-labelledby="opponent-personality-title">
+        <div className="apologetics-debate-setup-heading">
+          <span>3</span>
+          <div>
+            <h2 id="opponent-personality-title">Choose the personality</h2>
+            <p>Choose the tone and attitude of your opponent.</p>
+          </div>
+        </div>
+        <div className="apologetics-debate-personality-list">
+          {opponentPersonalities.map((personality) => (
+            <button className={opponentPersonality === personality.id ? "is-selected" : ""} type="button" key={personality.id} onClick={() => setOpponentPersonality(personality.id)} aria-pressed={opponentPersonality === personality.id}>
+              {personality.label}
+            </button>
+          ))}
+        </div>
+        <p className="apologetics-debate-personality-description">{opponentPersonalities.find((item) => item.id === opponentPersonality)?.description}</p>
+      </section>
 
       <div className={`apologetics-debate-actions${savedDebate ? " has-continue" : ""}`}>
         <button className="apologetics-debate-launch" type="button" disabled={!theme || !question || !difficulty} onClick={() => { setResumeDebate(null); setIsRoomOpen(true); }}>
