@@ -1500,3 +1500,39 @@ body .app-shell[data-app-background="black"] #prayer .prayer-compose textarea {
   background: transparent !important;
   background-image: none !important;
 }
+
+/* Neon belongs to the border only; the writing area must stay transparent. */
+#prayer .prayer-request-textarea {
+  background: transparent !important;
+}
+
+#prayer .prayer-request-textarea::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--prayer-neon-angle),
+    #00f5ff 0deg,
+    #1688ff 75deg,
+    #8c4dff 150deg,
+    #ff3cf2 225deg,
+    #00f5ff 300deg,
+    #00f5ff 360deg
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: prayerNeonRotate 6s linear infinite;
+}
+
+#prayer .prayer-request-textarea textarea {
+  position: relative;
+  z-index: 1;
+  background: transparent !important;
+  background-image: none !important;
+}
