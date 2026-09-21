@@ -2691,6 +2691,12 @@
   line-height: 1;
 }
 
+.apologetics-debate-tools button > span svg {
+  display: block;
+  width: 22px;
+  height: 22px;
+}
+
 .apologetics-debate-context-card strong {
   min-width: 0;
   font-size: 13px;
