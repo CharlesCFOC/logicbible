@@ -2599,14 +2599,32 @@
 .apologetics-debate-room-back {
   display: grid;
   place-items: center;
-  width: 38px;
-  min-height: 38px;
-  border: 1px solid rgba(139, 220, 255, 0.25);
+  width: 42px;
+  min-height: 42px;
+  padding: 0;
+  border: 1px solid rgba(139, 220, 255, 0.48);
   border-radius: 50%;
-  background: rgba(35, 83, 112, 0.6);
+  background: rgba(35, 83, 112, 0.46);
   color: #ffffff;
-  font-size: 28px;
-  line-height: 1;
+  box-shadow: inset 0 1px 0 rgba(220, 246, 255, 0.22), 0 6px 16px rgba(2, 24, 39, 0.22);
+  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.apologetics-debate-room-back svg {
+  width: 22px;
+  height: 22px;
+}
+
+.apologetics-debate-room-back:hover,
+.apologetics-debate-room-back:focus-visible {
+  border-color: #8bdcff;
+  background: rgba(56, 129, 169, 0.68);
+  box-shadow: inset 0 1px 0 rgba(220, 246, 255, 0.34), 0 8px 18px rgba(15, 115, 170, 0.26);
+  transform: translateX(-2px);
+}
+
+.apologetics-debate-room-back:active {
+  transform: translateX(-1px) scale(0.94);
 }
 
 .apologetics-debate-room-header h1 {

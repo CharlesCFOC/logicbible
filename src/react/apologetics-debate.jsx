@@ -481,7 +481,9 @@ function DebateRoomView({ theme, question, difficulty, opponentPersonality = "se
     <>
     <div className="apologetics-debate-room">
       <header className="apologetics-debate-room-header">
-        <button className="apologetics-debate-room-back" type="button" onClick={leaveRoom} aria-label="Back to debate setup">←</button>
+        <button className="apologetics-debate-room-back" type="button" onClick={leaveRoom} aria-label="Back to debate setup">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
+        </button>
         <div>
           <h1>Debat room</h1>
         </div>
