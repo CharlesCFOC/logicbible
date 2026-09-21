@@ -1,14 +1,8 @@
 {
   "buildCommand": "npm run build",
   "functions": {
-    "server.mjs": {
-      "includeFiles": "{assets/**,lib/**,index.html,styles.css,script.js,bible-data.js}"
+    "api/[...path].mjs": {
+      "includeFiles": "{data/**,lib/**}"
     }
-  },
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/server.mjs"
-    }
-  ]
+  }
 }
