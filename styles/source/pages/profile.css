@@ -629,6 +629,20 @@
   color: #fffdf8;
 }
 
+/* Keep the secondary auth action readable on the dark cloud-account panel. */
+#profile .profile-auth-actions button[data-auth-action="sign-up"] {
+  background: #173c52 !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(139, 220, 255, 0.72) !important;
+  box-shadow: 0 6px 14px rgba(4, 18, 28, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+}
+
+#profile .profile-auth-actions button[data-auth-action="sign-up"]:hover,
+#profile .profile-auth-actions button[data-auth-action="sign-up"]:focus-visible {
+  background: #215c78 !important;
+  color: #ffffff !important;
+}
+
 .profile-auth-actions button[data-auth-action="sign-out"] {
   background: #f5f1eb;
 }

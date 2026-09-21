@@ -58,25 +58,25 @@ export function BibleReaderControls() {
 
   return (
     <>
-      <label className="reader-select-label" aria-label="Bible version">
-        <select value={state.versionId} onChange={(event) => bridge.setVersion(event.target.value)}>
+      <label className="reader-select-label bible-glass-select" aria-label="Bible version">
+        <select className="bible-glass-select-input" value={state.versionId} onChange={(event) => bridge.setVersion(event.target.value)}>
           {state.versionOptions.map((option) => option.separator
             ? <option key="separator" disabled value="">────────────</option>
             : <option key={option.id} value={option.id}>{option.label}</option>)}
         </select>
       </label>
-      <label className="reader-select-label" aria-label="Book">
-        <select value={state.bookId} onChange={(event) => bridge.setBook(event.target.value)}>
+      <label className="reader-select-label bible-glass-select" aria-label="Book">
+        <select className="bible-glass-select-input" value={state.bookId} onChange={(event) => bridge.setBook(event.target.value)}>
           {state.books.map((book) => <option key={book.id} value={book.id}>{book.name}</option>)}
         </select>
       </label>
-      <label className="reader-select-label compact" aria-label="Chapter">
-        <select value={String(state.chapter)} onChange={(event) => bridge.setChapter(Number(event.target.value))}>
+      <label className="reader-select-label compact bible-glass-select" aria-label="Chapter">
+        <select className="bible-glass-select-input" value={String(state.chapter)} onChange={(event) => bridge.setChapter(Number(event.target.value))}>
           {state.chapters.map((chapter) => <option key={chapter} value={chapter}>{chapter}</option>)}
         </select>
       </label>
-      <button className="icon-button" type="button" data-open-search aria-label="Search Scripture">
-        {searchIcon}
+      <button className="icon-button bible-glass-control bible-glass-search" type="button" data-open-search aria-label="Search Scripture">
+        <span className="bible-glass-control-content">{searchIcon}</span>
       </button>
     </>
   );
@@ -87,13 +87,11 @@ export function BibleParallelControls() {
 
   return (
     <>
-      <button className={`parallel-toggle${state.parallelEnabled ? " is-active" : ""}`} type="button" onClick={bridge.toggleParallel}>
-        {columnsIcon}
-        <span>Parallèle</span>
+      <button className={`parallel-toggle bible-glass-control bible-glass-parallel${state.parallelEnabled ? " is-active" : ""}`} type="button" onClick={bridge.toggleParallel}>
+        <span className="bible-glass-control-content">{columnsIcon}<span>Parallèle</span></span>
       </button>
-      <button className={`parallel-toggle reader-target-toggle${state.showHighlightsOnly ? " is-active" : ""}`} type="button" onClick={bridge.toggleTarget}>
-        {targetIcon}
-        <span>Cible</span>
+      <button className={`parallel-toggle reader-target-toggle bible-glass-control bible-glass-target${state.showHighlightsOnly ? " is-active" : ""}`} type="button" onClick={bridge.toggleTarget}>
+        <span className="bible-glass-control-content">{targetIcon}<span>Cible</span></span>
       </button>
       <div className="parallel-selects" hidden={!state.parallelEnabled}>
         <label aria-label="Compare with Bible version">

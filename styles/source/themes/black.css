@@ -81,13 +81,24 @@ html:has(.app-shell[data-app-background="black"]) {
 }
 
 .app-shell[data-app-background="black"] .reader-screen .reader-select-label select {
-  border-color: rgba(170, 215, 238, 0.42) !important;
-  background: rgba(54, 82, 103, 0.85) !important;
+  border-color: rgba(170, 215, 238, 0.34) !important;
+  background: rgba(54, 82, 103, 0.24) !important;
   background-image: none !important;
-  -webkit-backdrop-filter: blur(36px) saturate(135%) !important;
-  backdrop-filter: blur(36px) saturate(135%) !important;
-  box-shadow: inset 0 1px 0 rgba(220, 242, 255, 0.14) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(135%) !important;
+  backdrop-filter: blur(28px) saturate(135%) !important;
+  box-shadow: inset 0 1px 0 rgba(220, 242, 255, 0.14), 0 3px 10px rgba(0, 0, 0, 0.12) !important;
   color: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] .reader-screen .reader-topbar > .icon-button {
+  border: 1px solid rgba(170, 215, 238, 0.34) !important;
+  border-radius: 999px !important;
+  background: rgba(54, 82, 103, 0.24) !important;
+  background-image: none !important;
+  -webkit-backdrop-filter: blur(28px) saturate(135%) !important;
+  backdrop-filter: blur(28px) saturate(135%) !important;
+  color: #ffffff !important;
+  box-shadow: inset 0 1px 0 rgba(220, 242, 255, 0.14), 0 3px 10px rgba(0, 0, 0, 0.12) !important;
 }
 
 .app-shell[data-app-background="black"] .prayer-toolbar,
@@ -104,24 +115,24 @@ html:has(.app-shell[data-app-background="black"]) {
 
 .app-shell[data-app-background="black"] .reader-screen .parallel-toggle,
 .app-shell[data-app-background="black"] .reader-screen .parallel-toggle:hover {
-  border-color: rgba(139, 220, 255, 0.32) !important;
-  background: rgba(18, 43, 59, 0.85) !important;
+  border-color: rgba(170, 215, 238, 0.34) !important;
+  background: rgba(54, 82, 103, 0.24) !important;
   background-image: none !important;
-  -webkit-backdrop-filter: blur(36px) saturate(135%) !important;
-  backdrop-filter: blur(36px) saturate(135%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(135%) !important;
+  backdrop-filter: blur(28px) saturate(135%) !important;
   color: #ffffff !important;
-  box-shadow: inset 0 1px 0 rgba(201, 239, 255, 0.14) !important;
+  box-shadow: inset 0 1px 0 rgba(220, 242, 255, 0.14), 0 3px 10px rgba(0, 0, 0, 0.12) !important;
 }
 
 .app-shell[data-app-background="black"] .reader-screen .parallel-toggle.is-active,
 .app-shell[data-app-background="black"] .reader-screen .parallel-toggle.is-active:hover {
-  border-color: rgba(139, 220, 255, 0.72) !important;
-  background: rgba(76, 153, 194, 0.85) !important;
+  border-color: rgba(170, 215, 238, 0.58) !important;
+  background: rgba(76, 153, 194, 0.28) !important;
   background-image: none !important;
-  -webkit-backdrop-filter: blur(36px) saturate(135%) !important;
-  backdrop-filter: blur(36px) saturate(135%) !important;
-  color: #9edcff !important;
-  box-shadow: inset 0 1px 0 rgba(236, 250, 255, 0.24) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(135%) !important;
+  backdrop-filter: blur(28px) saturate(135%) !important;
+  color: #ffffff !important;
+  box-shadow: inset 0 1px 0 rgba(236, 250, 255, 0.24), 0 3px 10px rgba(0, 0, 0, 0.12) !important;
 }
 
 .app-shell[data-app-background="black"] .apologetics-challenge-button,
@@ -575,9 +586,74 @@ html:has(.app-shell[data-app-background="black"]) {
 }
 
 .app-shell[data-app-background="black"] #profile .profile-auth-actions button[data-auth-action="sign-up"] {
-  background: linear-gradient(135deg, #22cfa2 0%, #258fd8 48%, #8062f2 100%) !important;
+  background: #173c52 !important;
   color: #ffffff !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42), 0 7px 16px rgba(35, 148, 190, 0.28) !important;
+  border: 1px solid rgba(139, 220, 255, 0.72) !important;
+  box-shadow: 0 7px 16px rgba(4, 18, 28, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+}
+
+/* The React cloud form uses .is-secondary for Create account. */
+.app-shell[data-app-background="black"] #profile .profile-auth-actions button.is-secondary {
+  background: #173c52 !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(139, 220, 255, 0.72) !important;
+  box-shadow: 0 7px 16px rgba(4, 18, 28, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-auth-actions button.is-secondary:hover,
+.app-shell[data-app-background="black"] #profile .profile-auth-actions button.is-secondary:focus-visible {
+  background: #215c78 !important;
+  color: #ffffff !important;
+}
+
+/* Do not isolate these surfaces: they must sample the scrolling verses. */
+.app-shell[data-app-background="black"] .reader-screen .bible-glass-select,
+.app-shell[data-app-background="black"] .reader-screen .bible-glass-control {
+  position: relative;
+  isolation: auto;
+  overflow: hidden;
+  border-radius: 999px;
+  border: 1px solid rgba(170, 215, 238, 0.34) !important;
+  background: rgba(54, 82, 103, 0.28) !important;
+  background-image: none !important;
+  -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
+  backdrop-filter: blur(18px) saturate(135%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(220, 242, 255, 0.14),
+    0 3px 10px rgba(0, 0, 0, 0.12) !important;
+}
+
+.app-shell[data-app-background="black"] .reader-screen .bible-glass-select select.bible-glass-select-input {
+  position: relative;
+  z-index: 1;
+  border: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  color: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] .reader-screen .bible-glass-control-content {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] .reader-screen .reader-topbar > .bible-glass-search {
+  -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
+  backdrop-filter: blur(18px) saturate(135%) !important;
+}
+
+.app-shell[data-app-background="black"] .reader-screen .bible-glass-control.is-active {
+  border-color: rgba(170, 215, 238, 0.58) !important;
+  background: rgba(76, 153, 194, 0.28) !important;
+  background-image: none !important;
 }
 
 .app-shell[data-app-background="black"] #profile .profile-auth-actions button[data-auth-action="sign-in"]:hover,

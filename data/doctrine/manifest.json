@@ -1,0 +1,354 @@
+{
+  "books": [
+    {
+      "book": "Growing Up, Spiritually",
+      "slug": "hagin_growing_up_spiritually",
+      "chapters": [
+        {
+          "number": 1,
+          "title": "1 LOCATING YOURSELF",
+          "file": "chapter_01.txt"
+        },
+        {
+          "number": 2,
+          "title": "2 BABYHOOD",
+          "file": "chapter_02.txt"
+        },
+        {
+          "number": 3,
+          "title": "3 CHILDHOOD",
+          "file": "chapter_03.txt"
+        },
+        {
+          "number": 4,
+          "title": "4 MANHOOD",
+          "file": "chapter_04.txt"
+        },
+        {
+          "number": 5,
+          "title": "5 WALKING WITH YOUR FATHER",
+          "file": "chapter_05.txt"
+        },
+        {
+          "number": 6,
+          "title": "6 WALKING IN LOVE",
+          "file": "chapter_06.txt"
+        },
+        {
+          "number": 7,
+          "title": "7 RECEIVING THE KNOWLEDGE",
+          "file": "chapter_07.txt"
+        },
+        {
+          "number": 8,
+          "title": "8 WHAT MANNER OF MAN ARE YOU?",
+          "file": "chapter_08.txt"
+        },
+        {
+          "number": 9,
+          "title": "9 THE NATURAL MAN",
+          "file": "chapter_09.txt"
+        },
+        {
+          "number": 10,
+          "title": "10 THE CARNAL MAN",
+          "file": "chapter_10.txt"
+        },
+        {
+          "number": 11,
+          "title": "11 THE SPIRITUAL MAN",
+          "file": "chapter_11.txt"
+        },
+        {
+          "number": 12,
+          "title": "12 THE RIGHT DIET",
+          "file": "chapter_12.txt"
+        },
+        {
+          "number": 13,
+          "title": "13 A WORD OF ENCOURAGEMENT",
+          "file": "chapter_13.txt"
+        }
+      ]
+    },
+    {
+      "book": "Plans, Purposes and Pursuits",
+      "slug": "hagin_plans_purposes_pursuits",
+      "chapters": [
+        {
+          "number": 1,
+          "title": "1 Visitation",
+          "file": "chapter_01.txt"
+        },
+        {
+          "number": 2,
+          "title": "2 Plans, Purposes, Pursuits",
+          "file": "chapter_02.txt"
+        },
+        {
+          "number": 3,
+          "title": "3 Except the Lord Build the House",
+          "file": "chapter_03.txt"
+        },
+        {
+          "number": 4,
+          "title": "4 What's Your Purpose?",
+          "file": "chapter_04.txt"
+        },
+        {
+          "number": 5,
+          "title": "5 Walking in the Light",
+          "file": "chapter_05.txt"
+        },
+        {
+          "number": 6,
+          "title": "6 A Change in the Order of Worship",
+          "file": "chapter_06.txt"
+        },
+        {
+          "number": 7,
+          "title": "7 Dancing in the Flesh or in the",
+          "file": "chapter_07.txt"
+        },
+        {
+          "number": 12,
+          "title": "The full import and blessing of God cannot",
+          "file": "chapter_12.txt"
+        },
+        {
+          "number": 8,
+          "title": "8 Reverence: Key to God's Presence",
+          "file": "chapter_08.txt"
+        },
+        {
+          "number": 9,
+          "title": "9 Be Being Filled—Speaking",
+          "file": "chapter_09.txt"
+        },
+        {
+          "number": 10,
+          "title": "10 Demonstration of the Spirit",
+          "file": "chapter_10.txt"
+        },
+        {
+          "number": 11,
+          "title": "11 True New Testament Worship",
+          "file": "chapter_11.txt"
+        }
+      ]
+    },
+    {
+      "book": "Changed into His Likeness",
+      "slug": "watchman_nee_changed_into_his_likeness",
+      "chapters": [
+        {
+          "number": 1,
+          "title": "THREE SIGNIFICANT MEN",
+          "file": "chapter_01.txt"
+        },
+        {
+          "number": 2,
+          "title": "THE STARTING-POINT OF RECOVERY",
+          "file": "chapter_02.txt"
+        },
+        {
+          "number": 3,
+          "title": "CALL AND RESPONSE",
+          "file": "chapter_03.txt"
+        },
+        {
+          "number": 4,
+          "title": "THE COMMITTED LIFE",
+          "file": "chapter_04.txt"
+        },
+        {
+          "number": 5,
+          "title": "THE MAN IN THE LAND",
+          "file": "chapter_05.txt"
+        },
+        {
+          "number": 6,
+          "title": "THE HEIR AND THE PROOF OF TIME",
+          "file": "chapter_06.txt"
+        },
+        {
+          "number": 7,
+          "title": "THE COVENANT OF GRACE",
+          "file": "chapter_07.txt"
+        },
+        {
+          "number": 8,
+          "title": "THE GIFTS, OR THE GIVER?",
+          "file": "chapter_08.txt"
+        },
+        {
+          "number": 9,
+          "title": "THE WEALTH OF THE CHILD OF GOD",
+          "file": "chapter_09.txt"
+        },
+        {
+          "number": 10,
+          "title": "THE STATUS OF AN HEIR",
+          "file": "chapter_10.txt"
+        },
+        {
+          "number": 11,
+          "title": "THE NEW LIFE INDWELLING",
+          "file": "chapter_11.txt"
+        },
+        {
+          "number": 12,
+          "title": "PRECIOUS STONES",
+          "file": "chapter_12.txt"
+        },
+        {
+          "number": 13,
+          "title": "HIS OWN MEDICINE",
+          "file": "chapter_13.txt"
+        },
+        {
+          "number": 14,
+          "title": "THE DIVINE WOUNDING",
+          "file": "chapter_14.txt"
+        },
+        {
+          "number": 15,
+          "title": "THE FACE OF GOD",
+          "file": "chapter_15.txt"
+        },
+        {
+          "number": 16,
+          "title": "THE PEACEABLE FRUIT",
+          "file": "chapter_16.txt"
+        },
+        {
+          "number": 49,
+          "title": "this personal vindictiveness has gone, and it is the sin which concerns him. `O",
+          "file": "chapter_49.txt"
+        }
+      ]
+    },
+    {
+      "book": "The Passion for Souls",
+      "slug": "oswald_smith_the_passion_for_souls",
+      "chapters": [
+        {
+          "number": 1,
+          "title": "SATAN'S DEFEAT",
+          "file": "chapter_01.txt"
+        },
+        {
+          "number": 2,
+          "title": "THE \"HIGH RIGGER\"",
+          "file": "chapter_02.txt"
+        },
+        {
+          "number": 4,
+          "title": "\"WHY",
+          "file": "chapter_04.txt"
+        },
+        {
+          "number": 5,
+          "title": "WILL CHRIST RETURN TO BARTE BEFORE THE WORLD HAS BEEN",
+          "file": "chapter_05.txt"
+        },
+        {
+          "number": 6,
+          "title": "DARE WE IGNORE THE CHALLENGE OF THE UNFINISHED",
+          "file": "chapter_06.txt"
+        },
+        {
+          "number": 7,
+          "title": "• WHY HAS THE CHURCH FAILED IO EVANGELIZE",
+          "file": "chapter_07.txt"
+        },
+        {
+          "number": 8,
+          "title": "WHY SHOULD WE GIVE TO FOREIGN MISSIONARY WORK?",
+          "file": "chapter_08.txt"
+        },
+        {
+          "number": 9,
+          "title": "THE NEED OF THE HOUR",
+          "file": "chapter_09.txt"
+        },
+        {
+          "number": 10,
+          "title": "EVANGELISM! GOD'S ANSWER TO THIS GROANING WORLD",
+          "file": "chapter_10.txt"
+        },
+        {
+          "number": 11,
+          "title": "GOD MANIFESTS HIS POWER IN REVIVATS",
+          "file": "chapter_11.txt"
+        },
+        {
+          "number": 12,
+          "title": "‘THE ABIDING RESULTS OF EVANGELISM AND REVIVAL",
+          "file": "chapter_12.txt"
+        },
+        {
+          "number": 13,
+          "title": "HOW CAN WE HAVE REVIVAL TODAY",
+          "file": "chapter_13.txt"
+        }
+      ]
+    },
+    {
+      "book": "The Pursuit of God",
+      "slug": "tozer_the_pursuit_of_god",
+      "chapters": [
+        {
+          "number": 1,
+          "title": "Following Hard after God",
+          "file": "chapter_01.txt"
+        },
+        {
+          "number": 2,
+          "title": "The Blessedness of Possessing Nothing",
+          "file": "chapter_02.txt"
+        },
+        {
+          "number": 3,
+          "title": "Removing the Veil",
+          "file": "chapter_03.txt"
+        },
+        {
+          "number": 4,
+          "title": "4",
+          "file": "chapter_04.txt"
+        },
+        {
+          "number": 5,
+          "title": "The Universal Presence",
+          "file": "chapter_05.txt"
+        },
+        {
+          "number": 6,
+          "title": "The Speaking Voice",
+          "file": "chapter_06.txt"
+        },
+        {
+          "number": 7,
+          "title": "The Gaze of the Soul",
+          "file": "chapter_07.txt"
+        },
+        {
+          "number": 8,
+          "title": "8",
+          "file": "chapter_08.txt"
+        },
+        {
+          "number": 9,
+          "title": "9",
+          "file": "chapter_09.txt"
+        },
+        {
+          "number": 10,
+          "title": "10",
+          "file": "chapter_10.txt"
+        }
+      ]
+    }
+  ]
+}

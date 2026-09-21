@@ -97,3 +97,7 @@ npm run import:step -- --source=/path/to/STEPBible-Data
 ```
 
 The browser calls `/api/original-language?bookId=GAL&chapter=6&verse=6` when the verse action sheet opens `Greek` or `Hebrew`.
+
+## Christian reference library
+
+The five supplied Christian books are stored in [`data/doctrine`](data/doctrine), with `manifest.json` indexing their chapters. The general Brother AI chat performs a lightweight local relevance search over the 64 chapters and sends only the best matching excerpts to OpenAI as optional reference context. The books are not injected into unrelated answers and are treated as source material, not as system instructions.

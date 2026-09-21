@@ -1,0 +1,66 @@
+{
+  "book": "Plans, Purposes and Pursuits",
+  "slug": "hagin_plans_purposes_pursuits",
+  "chapters": [
+    {
+      "number": 1,
+      "title": "1 Visitation",
+      "file": "chapter_01.txt"
+    },
+    {
+      "number": 2,
+      "title": "2 Plans, Purposes, Pursuits",
+      "file": "chapter_02.txt"
+    },
+    {
+      "number": 3,
+      "title": "3 Except the Lord Build the House",
+      "file": "chapter_03.txt"
+    },
+    {
+      "number": 4,
+      "title": "4 What's Your Purpose?",
+      "file": "chapter_04.txt"
+    },
+    {
+      "number": 5,
+      "title": "5 Walking in the Light",
+      "file": "chapter_05.txt"
+    },
+    {
+      "number": 6,
+      "title": "6 A Change in the Order of Worship",
+      "file": "chapter_06.txt"
+    },
+    {
+      "number": 7,
+      "title": "7 Dancing in the Flesh or in the",
+      "file": "chapter_07.txt"
+    },
+    {
+      "number": 12,
+      "title": "The full import and blessing of God cannot",
+      "file": "chapter_12.txt"
+    },
+    {
+      "number": 8,
+      "title": "8 Reverence: Key to God's Presence",
+      "file": "chapter_08.txt"
+    },
+    {
+      "number": 9,
+      "title": "9 Be Being Filled—Speaking",
+      "file": "chapter_09.txt"
+    },
+    {
+      "number": 10,
+      "title": "10 Demonstration of the Spirit",
+      "file": "chapter_10.txt"
+    },
+    {
+      "number": 11,
+      "title": "11 True New Testament Worship",
+      "file": "chapter_11.txt"
+    }
+  ]
+}

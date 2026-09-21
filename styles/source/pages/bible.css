@@ -372,6 +372,11 @@
   background: #fcfdff;
 }
 
+/* Keep the reader in the same backdrop as its sticky glass controls. */
+.reader-screen.is-active {
+  will-change: auto;
+}
+
 .reader-topbar {
   position: sticky;
   z-index: 4;
@@ -380,7 +385,7 @@
   padding: 18px 20px 4px;
   background: linear-gradient(180deg, rgba(252, 253, 255, 0.97), rgba(250, 251, 253, 0.88));
   backdrop-filter: blur(12px);
-  gap: 8px;
+  gap: 6px;
 }
 
 .reader-select-label {
@@ -444,9 +449,9 @@
   z-index: 5;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  margin: 2px 0 8px;
-  padding: 6px 0;
+  gap: 6px;
+  margin: -2px 0 4px;
+  padding: 2px 0 4px;
   border-radius: 14px;
   background: transparent;
   -webkit-backdrop-filter: none;

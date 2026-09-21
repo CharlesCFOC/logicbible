@@ -1,0 +1,66 @@
+{
+  "book": "The Passion for Souls",
+  "slug": "oswald_smith_the_passion_for_souls",
+  "chapters": [
+    {
+      "number": 1,
+      "title": "SATAN'S DEFEAT",
+      "file": "chapter_01.txt"
+    },
+    {
+      "number": 2,
+      "title": "THE \"HIGH RIGGER\"",
+      "file": "chapter_02.txt"
+    },
+    {
+      "number": 4,
+      "title": "\"WHY",
+      "file": "chapter_04.txt"
+    },
+    {
+      "number": 5,
+      "title": "WILL CHRIST RETURN TO BARTE BEFORE THE WORLD HAS BEEN",
+      "file": "chapter_05.txt"
+    },
+    {
+      "number": 6,
+      "title": "DARE WE IGNORE THE CHALLENGE OF THE UNFINISHED",
+      "file": "chapter_06.txt"
+    },
+    {
+      "number": 7,
+      "title": "• WHY HAS THE CHURCH FAILED IO EVANGELIZE",
+      "file": "chapter_07.txt"
+    },
+    {
+      "number": 8,
+      "title": "WHY SHOULD WE GIVE TO FOREIGN MISSIONARY WORK?",
+      "file": "chapter_08.txt"
+    },
+    {
+      "number": 9,
+      "title": "THE NEED OF THE HOUR",
+      "file": "chapter_09.txt"
+    },
+    {
+      "number": 10,
+      "title": "EVANGELISM! GOD'S ANSWER TO THIS GROANING WORLD",
+      "file": "chapter_10.txt"
+    },
+    {
+      "number": 11,
+      "title": "GOD MANIFESTS HIS POWER IN REVIVATS",
+      "file": "chapter_11.txt"
+    },
+    {
+      "number": 12,
+      "title": "‘THE ABIDING RESULTS OF EVANGELISM AND REVIVAL",
+      "file": "chapter_12.txt"
+    },
+    {
+      "number": 13,
+      "title": "HOW CAN WE HAVE REVIVAL TODAY",
+      "file": "chapter_13.txt"
+    }
+  ]
+}
