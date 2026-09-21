@@ -29,6 +29,10 @@
       "use": "@vercel/static"
     },
     {
+      "src": "assets/react/navigation.js",
+      "use": "@vercel/static"
+    },
+    {
       "src": "scripts/**",
       "use": "@vercel/static"
     }
