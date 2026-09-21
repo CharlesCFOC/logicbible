@@ -438,11 +438,9 @@ const savedProfile = {
   ...defaultProfile,
   ...readJson("brother.profile", {}),
 };
-if (savedProfile.displayName === "Charles" && savedProfile.accountId === "local-charles") {
-  savedProfile.displayName = "";
+if (String(savedProfile.displayName || "").trim().toLowerCase() === "charles") {
+  savedProfile.displayName = "It's time to login";
   savedProfile.avatarInitials = "";
-  savedProfile.streakLabel = "";
-  savedProfile.accountId = "";
   writeJson("brother.profile", savedProfile);
 }
 if (savedProfile.coverImage === "assets/profile-hero-v2.png") {
@@ -1795,6 +1793,7 @@ async function syncPreferencesRecord() {
 
 function getEffectiveProfileName() {
   const savedName = String(savedProfile.displayName || "").trim();
+  if (savedName.toLowerCase() === "charles") return "It's time to login";
   if (savedName) return savedName;
   const authName = String(supabaseUser?.user_metadata?.display_name || "").trim();
   if (authName) return authName;
