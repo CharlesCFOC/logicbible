@@ -20,8 +20,8 @@
   opacity: 0.38 !important;
 }
 
-.app-shell[data-app-background="black"] .reader-screen.is-verse-focused .scripture-line.is-selected,
-.app-shell[data-app-background="black"] .reader-screen.is-verse-focused .parallel-scripture-line.is-selected {
+.app-shell[data-app-background="black"] .reader-screen.is-verse-focused .scripture-line.is-selected:not(.is-highlighted),
+.app-shell[data-app-background="black"] .reader-screen.is-verse-focused .parallel-scripture-line.is-selected:not(.is-highlighted) {
   filter: none !important;
   opacity: 1 !important;
   background: transparent !important;
