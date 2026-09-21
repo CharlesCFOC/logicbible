@@ -1301,3 +1301,26 @@ html:has(.app-shell[data-app-background="black"]) {
   border: 0 !important;
   box-shadow: 0 6px 14px rgba(35, 148, 190, 0.24) !important;
 }
+
+/* AI History: replace the generic dark card with the blue glass treatment. */
+.app-shell[data-app-background="black"] #ai .ai-history-item {
+  border: 1px solid rgba(139, 220, 255, 0.42) !important;
+  background:
+    radial-gradient(circle at 12% 12%, rgba(255, 255, 255, 0.16), transparent 34%),
+    linear-gradient(135deg, rgba(46, 126, 166, 0.84), rgba(46, 73, 126, 0.92)) !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 22px rgba(3, 18, 38, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+}
+
+.app-shell[data-app-background="black"] #ai .ai-history-item svg {
+  color: #bdeeff !important;
+}
+
+.app-shell[data-app-background="black"] #ai .ai-history-item:hover,
+.app-shell[data-app-background="black"] #ai .ai-history-item:focus-visible {
+  border-color: rgba(174, 235, 255, 0.78) !important;
+  background:
+    radial-gradient(circle at 12% 12%, rgba(255, 255, 255, 0.22), transparent 34%),
+    linear-gradient(135deg, rgba(57, 153, 198, 0.92), rgba(67, 84, 153, 0.96)) !important;
+  transform: translateY(-1px);
+}
