@@ -180,31 +180,56 @@ export function getDebateXpReward(difficulty, averageCriteria) {
   return 0;
 }
 
-const collapsedQuestionCount = 3;
+const questionsPerPage = 5;
 
 export function DebateQuestionCarousel({ questions, value, onChange }) {
-  const [expanded, setExpanded] = useState(false);
+  const [page, setPage] = useState(0);
+  const touchStartX = useRef(null);
+  const pageCount = Math.max(1, Math.ceil(questions.length / questionsPerPage));
 
   useEffect(() => {
-    setExpanded(false);
-  }, [questions]);
+    const selectedIndex = questions.indexOf(value);
+    if (selectedIndex >= 0) {
+      setPage(Math.floor(selectedIndex / questionsPerPage));
+    } else {
+      setPage((current) => Math.min(current, pageCount - 1));
+    }
+  }, [questions, value, pageCount]);
 
-  const hasMoreQuestions = questions.length > collapsedQuestionCount;
+  const movePage = (nextPage) => setPage(Math.max(0, Math.min(pageCount - 1, nextPage)));
+  const handleTouchStart = (event) => { touchStartX.current = event.touches[0]?.clientX ?? null; };
+  const handleTouchEnd = (event) => {
+    if (touchStartX.current === null) return;
+    const distance = event.changedTouches[0]?.clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(distance) < 40) return;
+    movePage(page + (distance < 0 ? 1 : -1));
+  };
 
   return (
     <div className="apologetics-debate-question-carousel">
-      <div className={`apologetics-debate-question-viewport${expanded ? " is-expanded" : ""}`}>
-        <div className="apologetics-debate-question-list" aria-label="Questions">
-          {questions.map((item, index) => (
-            <button className={value === item ? "is-selected" : ""} key={item} type="button" onClick={() => onChange(value === item ? "" : item)} aria-pressed={value === item}>
-              <span>{index === 0 ? "General" : `Question ${index}`}</span>
-              <strong>{item}</strong>
-            </button>
+      <div className="apologetics-debate-question-pages" aria-label="Question pages">
+        {Array.from({ length: pageCount }, (_, index) => (
+          <button className={page === index ? "is-active" : ""} key={index} type="button" aria-label={`Question page ${index + 1} of ${pageCount}`} aria-current={page === index ? "page" : undefined} onClick={() => movePage(index)}>
+            <span aria-hidden="true" />
+          </button>
+        ))}
+      </div>
+      <div className="apologetics-debate-question-viewport" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+        <div className="apologetics-debate-question-track" style={{ transform: `translate3d(-${page * 100}%, 0, 0)` }}>
+          {Array.from({ length: pageCount }, (_, pageIndex) => (
+            <div className="apologetics-debate-question-list" key={pageIndex} aria-label={`Question page ${pageIndex + 1}`}>
+              {questions.slice(pageIndex * questionsPerPage, (pageIndex + 1) * questionsPerPage).map((item, index) => {
+                const questionIndex = pageIndex * questionsPerPage + index;
+                return <button className={value === item ? "is-selected" : ""} key={item} type="button" onClick={() => onChange(value === item ? "" : item)} aria-pressed={value === item}>
+                  <span>{questionIndex === 0 ? "General" : `Question ${questionIndex}`}</span>
+                  <strong>{item}</strong>
+                </button>;
+              })}
+            </div>
           ))}
         </div>
-        {!expanded && hasMoreQuestions && <button className="apologetics-debate-question-expand" type="button" onClick={() => setExpanded(true)} aria-label={`Show ${questions.length - collapsedQuestionCount} more questions`}>+</button>}
       </div>
-      {expanded && hasMoreQuestions && <button className="apologetics-debate-question-collapse" type="button" onClick={() => setExpanded(false)}>Show less</button>}
     </div>
   );
 }
