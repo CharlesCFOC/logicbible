@@ -1362,3 +1362,13 @@ html:has(.app-shell[data-app-background="black"]) {
     linear-gradient(135deg, rgba(57, 153, 198, 0.92), rgba(67, 84, 153, 0.96)) !important;
   transform: translateY(-1px);
 }
+
+/* Final override: keep history as a text row while preserving the arrow. */
+.app-shell[data-app-background="black"] #ai .ai-history-item,
+.app-shell[data-app-background="black"] #ai .ai-history-item:hover,
+.app-shell[data-app-background="black"] #ai .ai-history-item:focus-visible {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
