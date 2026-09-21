@@ -161,29 +161,21 @@ function getLocalMeetingTime([hour, minute]) {
 }
 
 function OnlinePrayerPanel() {
-  const [now, setNow] = useState(() => new Date());
+  const [, setNow] = useState(() => new Date());
   useEffect(() => {
     const timer = window.setInterval(() => setNow(new Date()), 60 * 1000);
     return () => window.clearInterval(timer);
   }, []);
 
-  const localTimeZone = new Intl.DateTimeFormat(undefined, { timeZoneName: "long" })
-    .formatToParts(now)
-    .find(({ type }) => type === "timeZoneName")?.value;
-
   return (
     <section className="online-prayer-panel" aria-labelledby="online-prayer-title">
       <div className="online-prayer-intro">
-        <span className="eyebrow">Join us online</span>
         <h2 id="online-prayer-title">Online prayer</h2>
-        <p>Daily prayer meetings shown in your local time. The schedule is based on Toronto time.</p>
-        <small>{localTimeZone ? `Your time zone: ${localTimeZone}` : "Your local time zone"}</small>
       </div>
       <div className="online-prayer-list">
         {onlinePrayerMeetings.map((meeting) => (
           <article className="online-prayer-card" key={meeting.id}>
             <div>
-              <span className="online-prayer-card-label">Every day</span>
               <h3>{meeting.title}</h3>
               <p>{getLocalMeetingTime(meeting.torontoStart)} – {getLocalMeetingTime(meeting.torontoEnd)}</p>
               <small>Toronto: {meeting.torontoStart[0] === 5 ? "5:00–7:00 AM" : "10:00–11:00 PM"}</small>
