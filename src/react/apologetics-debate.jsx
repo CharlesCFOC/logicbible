@@ -202,7 +202,7 @@ export function DebateQuestionCarousel({ questions, value, onChange }) {
             </button>
           ))}
         </div>
-        {!expanded && hasMoreQuestions && <button className="apologetics-debate-question-expand" type="button" onClick={() => setExpanded(true)} aria-label={`Show ${questions.length - collapsedQuestionCount} more questions`}><b>+</b><span>More questions</span></button>}
+        {!expanded && hasMoreQuestions && <button className="apologetics-debate-question-expand" type="button" onClick={() => setExpanded(true)} aria-label={`Show ${questions.length - collapsedQuestionCount} more questions`}>+</button>}
       </div>
       {expanded && hasMoreQuestions && <button className="apologetics-debate-question-collapse" type="button" onClick={() => setExpanded(false)}>Show less</button>}
     </div>

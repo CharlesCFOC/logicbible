@@ -1183,6 +1183,8 @@
 /* Show a short question preview, then let the user expand the remaining choices. */
 .apologetics-debate-question-viewport {
   position: relative;
+  border: 0;
+  border-radius: 0;
 }
 
 .apologetics-debate-question-viewport:not(.is-expanded) .apologetics-debate-question-list {
@@ -1207,23 +1209,16 @@
   z-index: 2;
   right: 50%;
   bottom: 10px;
-  display: inline-flex;
-  min-height: 34px;
-  align-items: center;
-  gap: 5px;
-  padding: 0 12px;
-  border: 1px solid rgba(139, 220, 255, 0.78);
-  border-radius: 999px;
-  background: linear-gradient(135deg, #2ed4e9, #3269f4);
-  color: #ffffff;
-  font-size: 10px;
-  font-weight: 850;
-  transform: translateX(50%);
-}
-
-.apologetics-debate-question-expand b {
-  font-size: 17px;
+  width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #a8e5ff;
+  font-size: 38px;
+  font-weight: 400;
   line-height: 1;
+  transform: translateX(50%);
 }
 
 .apologetics-debate-question-collapse {
