@@ -748,14 +748,14 @@
 
 .apologetics-debate-theme-list button.is-selected,
 .apologetics-debate-question-list button.is-selected {
-  border-color: rgba(163, 255, 208, 0.86);
-  background: linear-gradient(135deg, #72ffb1 0%, #00bd70 100%);
-  box-shadow: 0 0 22px rgba(47, 255, 154, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.36);
+  border-color: rgba(139, 220, 255, 0.88);
+  background: linear-gradient(135deg, #2ed4e9, #3269f4);
+  box-shadow: 0 5px 14px rgba(50, 105, 244, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.28);
 }
 
 .apologetics-debate-theme-list button.is-selected {
   border: 0;
-  background: linear-gradient(135deg, #72ffb1 0%, #00bd70 100%);
+  background: linear-gradient(135deg, #2ed4e9, #3269f4);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.36);
 }
 
@@ -817,9 +817,9 @@
 }
 
 .apologetics-debate-difficulty-list button.is-selected {
-  border-color: rgba(163, 255, 208, 0.8);
-  background: linear-gradient(135deg, #72ffb1 0%, #00bd70 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.36);
+  border-color: rgba(139, 220, 255, 0.88);
+  background: linear-gradient(135deg, #2ed4e9, #3269f4);
+  box-shadow: 0 5px 14px rgba(50, 105, 244, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.28);
   transform: translateY(-2px);
 }
 
