@@ -3024,6 +3024,11 @@
   margin: 0;
 }
 
+.apologetics-debate-chat-thread .ai-message .message-body {
+  font-size: 14px;
+  line-height: 1.55;
+}
+
 .apologetics-debate-chat-thread .ai-message .message-body p + p {
   margin-top: 16px;
 }
