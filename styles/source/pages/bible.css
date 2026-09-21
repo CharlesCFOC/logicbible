@@ -672,6 +672,17 @@
   background: var(--highlight-color, var(--beige));
 }
 
+/* Keep the verse action menu scrollable without showing a scrollbar. */
+.app-shell[data-modal="verse"] .bottom-sheet[data-verse-sheet] {
+  scrollbar-width: none;
+}
+
+.app-shell[data-modal="verse"] .bottom-sheet[data-verse-sheet]::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
 .parallel-scripture-line.is-bookmarked::after {
   position: absolute;
   top: 10px;
