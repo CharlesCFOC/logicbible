@@ -523,7 +523,7 @@ function DebateRoomView({ theme, question, difficulty, opponentPersonality = "se
 
       <div className="apologetics-debate-carousel" aria-label="Debate context and tools">
         <div className="apologetics-debate-tools" aria-label="Debate tools">
-          <button type="button" onClick={openHints}><span>♧</span><strong>Hints</strong><b>›</b></button>
+          <button type="button" onClick={openHints}><span><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M18 11V6a2 2 0 0 0-4 0v5" /><path d="M14 10V4a2 2 0 0 0-4 0v6" /><path d="M10 10V5a2 2 0 0 0-4 0v7" /><path d="M6 12V8a2 2 0 0 0-4 0v8c0 3.3 2.7 6 6 6h4a6 6 0 0 0 6-6v-5Z" /></svg></span><strong>Hints</strong><b>›</b></button>
           <button type="button" onClick={openVerseSupport}><span><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 3H20v18H6.5A2.5 2.5 0 0 0 4 23.5v-18A2.5 2.5 0 0 1 6.5 3Z" /><path d="M8 7h8M8 11h6" /></svg></span><strong>Verse support</strong><b>›</b></button>
           <button type="button" onClick={openBetterAnswer}><span>☆</span><strong>Better answer</strong><b>›</b></button>
           <button className={roomFactCheck ? "is-on" : ""} type="button" onClick={() => setRoomFactCheck((current) => !current)} aria-pressed={roomFactCheck}><span>✓</span><strong>Fact-check</strong><b>{roomFactCheck ? "On" : "Off"}</b></button>
