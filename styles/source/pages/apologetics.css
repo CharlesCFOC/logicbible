@@ -1119,8 +1119,8 @@
 
 .apologetics-debate-question-pages button.is-active span {
   width: 18px;
-  background: #72ffb1;
-  box-shadow: 0 0 10px rgba(114, 255, 177, 0.58);
+  background: #2ed4e9;
+  box-shadow: 0 0 10px rgba(46, 212, 233, 0.58);
 }
 
 .apologetics-debate-question-viewport {
@@ -1174,8 +1174,8 @@
 .apologetics-debate-question-list button.is-selected {
   border: 0;
   border-radius: 16px;
-  background: linear-gradient(135deg, #72ffb1 0%, #00bd70 100%);
-  box-shadow: 0 0 22px rgba(47, 255, 154, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.36);
+  background: linear-gradient(135deg, #2ed4e9, #3269f4);
+  box-shadow: 0 5px 14px rgba(50, 105, 244, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.28);
 }
 
 .apologetics-debate-question-list button.is-selected > span,
