@@ -1374,3 +1374,19 @@ html:has(.app-shell[data-app-background="black"]) {
   box-shadow: none !important;
   transform: none !important;
 }
+
+/* Profile danger action: high-contrast red against the blue theme. */
+.app-shell[data-app-background="black"] #profile .profile-delete-trigger {
+  border: 1px solid rgba(255, 214, 220, 0.92) !important;
+  background: linear-gradient(135deg, #ff4d68 0%, #d52449 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 14px rgba(117, 10, 35, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-delete-trigger:hover,
+.app-shell[data-app-background="black"] #profile .profile-delete-trigger:focus-visible {
+  border-color: #ffffff !important;
+  background: linear-gradient(135deg, #ff637a 0%, #e22d54 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 8px 18px rgba(117, 10, 35, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+}
