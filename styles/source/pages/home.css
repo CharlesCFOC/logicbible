@@ -2377,3 +2377,8 @@ body:has(.app-shell[data-app-background="black"]) > .app-shell {
   width: 14px;
   height: 14px;
 }
+
+/* The Bible timeline was removed from the Home screen. */
+.app-shell #home .home-bible-timeline {
+  display: none !important;
+}

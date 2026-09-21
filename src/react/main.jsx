@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { HomeBibleTimeline, HomeHero, HomeLibraryPanel, HomeLibraryTabs, HomePrayerCard, HomeStats } from "./home.jsx";
+import { HomeHero, HomeLibraryPanel, HomeLibraryTabs, HomePrayerCard, HomeStats } from "./home.jsx";
 import { ProfileCloudAccount, ProfileHero, ProfileInformation, ProfilePreferences, ProfileTabs } from "./profile.jsx";
 import { BibleChapterContent, BibleParallelControls, BibleReaderControls, BibleSelectedVerse, BibleSheetFeedback, BibleVerseActions } from "./bible.jsx";
 import { NoteEditorContent, NoteEditorHeader, NoteEditorVerseChips, NoteToolbar } from "./notes.jsx";
@@ -89,11 +89,6 @@ if (homeStatsNode) {
 const homePrayerNode = document.querySelector("[data-react-home-prayer-root]");
 if (homePrayerNode) {
   createRoot(homePrayerNode).render(<HomePrayerCard />);
-}
-
-const homeTimelineNode = document.querySelector("[data-react-home-timeline-root]");
-if (homeTimelineNode && window.homeTimelineBridge) {
-  createRoot(homeTimelineNode).render(<HomeBibleTimeline />);
 }
 
 const homeLibraryTabsNode = document.querySelector("[data-react-home-library-tabs-root]");

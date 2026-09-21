@@ -174,32 +174,6 @@ export function HomeStats() {
   );
 }
 
-function readTimelineItems() {
-  return [...document.querySelectorAll("[data-home-era-book]")].map((button) => ({
-    id: button.dataset.homeEraBook,
-    label: button.querySelector("span")?.textContent?.trim() || "",
-    details: (button.querySelector("strong")?.textContent || "")
-      .split("·")
-      .map((item) => item.trim())
-      .filter(Boolean),
-    title: button.title || "",
-  }));
-}
-
-export function HomeBibleTimeline() {
-  const items = readTimelineItems();
-  return (
-    <div className="home-bible-timeline-track">
-      {items.map((item) => (
-        <button key={item.id} type="button" title={item.title} onClick={() => window.homeTimelineBridge?.open(item.id)}>
-          <span>{item.label}</span>
-          <strong>{item.details.map((detail) => <span className="timeline-detail-item" key={detail}>{detail}</span>)}</strong>
-        </button>
-      ))}
-    </div>
-  );
-}
-
 export function HomePrayerCard() {
   const [prayerCount, setPrayerCount] = useState(() => readInitialStats().prayerCount);
 

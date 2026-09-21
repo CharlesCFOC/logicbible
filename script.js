@@ -5754,20 +5754,6 @@ document.addEventListener("home:library-tab-change", (event) => {
   }
 });
 
-window.homeTimelineBridge = {
-  open(bookId) {
-    if (!BOOKS.some((book) => book.id === bookId)) return;
-    readerState.bookId = bookId;
-    readerState.chapter = 1;
-    setLocalValue("brother.book", bookId);
-    setLocalValue("brother.chapter", "1");
-    renderBookOptions();
-    renderChapterOptions();
-    setScreen("bible");
-    loadChapter();
-  },
-};
-
 window.homeLibraryBridge = {
   selectTab(tab) {
     if (!["highlights", "bookmarks", "notes"].includes(tab)) return;
