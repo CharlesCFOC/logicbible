@@ -656,11 +656,13 @@ export function ApologeticsDebatePage() {
       </header>
 
       <nav className="apologetics-debate-setup-progress" aria-label="Debate setup progress">
-        <span className={theme && question ? "is-complete" : ""}><b>1</b><small>Beliefs</small></span>
+        <span className={theme ? "is-complete" : ""}><b>1</b><small>Beliefs</small></span>
         <i aria-hidden="true"></i>
-        <span className={difficulty ? "is-complete" : ""}><b>2</b><small>Difficulty</small></span>
+        <span className={question ? "is-complete" : ""}><b>2</b><small>Questions</small></span>
         <i aria-hidden="true"></i>
-        <span className={opponentPersonality ? "is-complete" : ""}><b>3</b><small>Personality</small></span>
+        <span className={difficulty ? "is-complete" : ""}><b>3</b><small>Difficulty</small></span>
+        <i aria-hidden="true"></i>
+        <span className={opponentPersonality ? "is-complete" : ""}><b>4</b><small>Personality</small></span>
       </nav>
 
       <section className="apologetics-debate-step apologetics-debate-step--theme" aria-labelledby="debate-theme-title">
