@@ -524,8 +524,9 @@
 }
 
 .bible-chapter-navigation {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 12px;
   margin: 34px 0 12px;
 }
@@ -533,8 +534,9 @@
 .bible-chapter-navigation button {
   display: grid;
   place-items: center;
-  width: 100%;
-  min-height: 52px;
+  width: 44px;
+  min-height: 44px;
+  flex: 0 0 44px;
   border: 1px solid rgba(139, 220, 255, 0.46);
   border-radius: 18px;
   background: linear-gradient(135deg, #22cfa2 0%, #258fd8 48%, #8062f2 100%) !important;
@@ -552,10 +554,9 @@
   filter: saturate(0.45);
 }
 
-.bible-chapter-navigation button > span {
-  font-size: 30px;
-  font-weight: 500;
-  line-height: 1;
+.bible-chapter-navigation button svg {
+  width: 20px;
+  height: 20px;
 }
 
 .reader-screen [data-reader-source] {
