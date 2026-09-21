@@ -170,7 +170,7 @@ function OnlinePrayerPanel() {
   return (
     <section className="online-prayer-panel" aria-labelledby="online-prayer-title">
       <div className="online-prayer-intro">
-        <h2 id="online-prayer-title">Online prayer</h2>
+        <h2 id="online-prayer-title">Join us online</h2>
       </div>
       <div className="online-prayer-list">
         {onlinePrayerMeetings.map((meeting) => (
