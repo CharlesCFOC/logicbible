@@ -1438,8 +1438,7 @@ body .app-shell[data-app-background="black"] .prayer-list .prayer-card {
   font-weight: 800;
 }
 
-.online-prayer-card p span,
-.online-prayer-card small span {
+.online-prayer-card p span {
   display: block;
   margin-bottom: 2px;
   font-size: 9px;
@@ -1456,8 +1455,10 @@ body .app-shell[data-app-background="black"] .prayer-list .prayer-card {
 }
 
 .online-prayer-card .online-prayer-local-time {
-  font-size: 11px;
-  font-weight: 600;
+  margin-top: 3px;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 800;
 }
 
 .online-prayer-join {

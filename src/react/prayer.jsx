@@ -160,14 +160,6 @@ function getLocalMeetingTime([hour, minute]) {
   }).format(new Date(utcTime));
 }
 
-function formatTorontoMeetingTime([hour, minute]) {
-  return new Intl.DateTimeFormat("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-    timeZone: "UTC",
-  }).format(new Date(Date.UTC(2020, 0, 1, hour, minute)));
-}
-
 function OnlinePrayerPanel() {
   const [, setNow] = useState(() => new Date());
   useEffect(() => {
@@ -185,8 +177,7 @@ function OnlinePrayerPanel() {
             <article className="online-prayer-card" key={meeting.id}>
               <div>
                 <h3>{meeting.title}</h3>
-                <p className="online-prayer-toronto-time"><span>Toronto time</span>{formatTorontoMeetingTime(meeting.torontoStart)} – {formatTorontoMeetingTime(meeting.torontoEnd)}</p>
-                <small className="online-prayer-local-time"><span>Your location time</span>{getLocalMeetingTime(meeting.torontoStart)} – {getLocalMeetingTime(meeting.torontoEnd)}</small>
+                <p className="online-prayer-local-time"><span>Your location time</span>{getLocalMeetingTime(meeting.torontoStart)} – {getLocalMeetingTime(meeting.torontoEnd)}</p>
               </div>
             <a className="online-prayer-join" href={meeting.url} target="_blank" rel="noreferrer">Open Zoom</a>
           </article>
