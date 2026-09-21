@@ -1,17 +1,45 @@
 {
   "buildCommand": "npm run build",
-  "functions": {
-    "api/[...path].mjs": {
-      "includeFiles": "{data/**,lib/**}"
-    }
-  },
-  "routes": [
+  "builds": [
     {
-      "handle": "filesystem"
+      "src": "api/[...path].mjs",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": ["data/**", "lib/**"]
+      }
     },
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "styles.css",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "script.js",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "bible-data.js",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "assets/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "scripts/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
     {
       "src": "/api/(.*)",
       "dest": "/api/[...path].mjs"
+    },
+    {
+      "handle": "filesystem"
     }
-  }
+  ]
 }
