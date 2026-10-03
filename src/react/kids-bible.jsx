@@ -42,6 +42,7 @@ function KidsBibleLibrary({ snapshot, onOpen }) {
 
 function KidsBibleReader({ snapshot, onBack, onPage, onChangePage }) {
   const swipeStart = useRef(null);
+  const suppressClick = useRef(false);
   const book = snapshot.currentBook;
 
   const handleTouchStart = (event) => {
@@ -56,7 +57,20 @@ function KidsBibleReader({ snapshot, onBack, onPage, onChangePage }) {
     const deltaY = (touch?.clientY || 0) - swipeStart.current.y;
     swipeStart.current = null;
     if (Math.abs(deltaX) < 45 || Math.abs(deltaX) < Math.abs(deltaY)) return;
+    suppressClick.current = true;
+    window.setTimeout(() => { suppressClick.current = false; }, 350);
     onChangePage(deltaX < 0 ? 1 : -1);
+  };
+
+  const handleImageClick = (event) => {
+    if (suppressClick.current) return;
+    const bounds = event.currentTarget.getBoundingClientRect();
+    onChangePage(event.clientX < bounds.left + bounds.width / 2 ? -1 : 1);
+  };
+
+  const handleImageKeyDown = (event) => {
+    if (event.key === "ArrowLeft") onChangePage(-1);
+    if (event.key === "ArrowRight") onChangePage(1);
   };
 
   return (
@@ -78,12 +92,18 @@ function KidsBibleReader({ snapshot, onBack, onPage, onChangePage }) {
         </div>
       </header>
       <div className="kids-reader-progress" aria-hidden="true"><span style={{ width: `${snapshot.progress}%` }} /></div>
-      <div className="kids-reader-image-wrap" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+      <div
+        className="kids-reader-image-wrap"
+        role="button"
+        tabIndex={0}
+        aria-label="Cliquez à gauche pour revenir ou à droite pour avancer"
+        onClick={handleImageClick}
+        onKeyDown={handleImageKeyDown}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         <img src={snapshot.imageSrc} alt={`${book.title} illustrated page ${snapshot.page}`} loading="lazy" decoding="async" />
       </div>
-      <button className="kids-reader-first-page" type="button" onClick={() => onPage(1)} aria-label="Go to first page"><KidsBibleIcon name="home" /></button>
-      <button className="kids-reader-arrow is-previous" type="button" onClick={() => onChangePage(-1)} aria-label="Previous page"><KidsBibleIcon name="chevronLeft" /></button>
-      <button className="kids-reader-arrow is-next" type="button" onClick={() => onChangePage(1)} aria-label="Next page"><KidsBibleIcon name="chevronRight" /></button>
     </section>
   );
 }
@@ -110,7 +130,9 @@ export function KidsBiblePage() {
           <h1>Kids Bible</h1>
         </div>
       </header>
-      {snapshot.reader ? <KidsBibleReader snapshot={snapshot} onBack={closeReader} onPage={setPage} onChangePage={changePage} /> : <KidsBibleLibrary snapshot={snapshot} onOpen={openBook} />}
+      {snapshot.reader ? <>
+        <KidsBibleReader snapshot={snapshot} onBack={closeReader} onPage={setPage} onChangePage={changePage} />
+      </> : <KidsBibleLibrary snapshot={snapshot} onOpen={openBook} />}
     </>
   );
 }

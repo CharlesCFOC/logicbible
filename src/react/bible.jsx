@@ -141,7 +141,7 @@ export function BibleVerseActions() {
   ];
 
   return actions.map(([id, label, baseClass]) => (
-    <button className={`${baseClass}${state.active[id] ? " is-active" : ""}`} key={id} type="button" data-verse-action={id} onClick={() => bridge.runAction(id)}>
+    <button className={`${baseClass}${state.active[id] ? " is-active" : ""}`} key={id} type="button" data-verse-action={id} disabled={id === "original-language"} aria-label={id === "original-language" ? "Greek indisponible" : undefined} onClick={() => bridge.runAction(id)}>
       <VerseActionIcon name={id} />
       <span>{label}</span>
     </button>

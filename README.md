@@ -47,7 +47,7 @@ SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 Recommended order:
 
 1. Create a Supabase project.
-2. Run the SQL files in order: [supabase/001_init.sql](supabase/001_init.sql), [supabase/002_prayers.sql](supabase/002_prayers.sql), [supabase/003_user_sync.sql](supabase/003_user_sync.sql), [supabase/004_profile_details.sql](supabase/004_profile_details.sql), [supabase/005_prayer_metadata.sql](supabase/005_prayer_metadata.sql), then [supabase/006_private_prayer_board.sql](supabase/006_private_prayer_board.sql).
+2. Run the SQL files in numerical order, from [supabase/001_init.sql](supabase/001_init.sql) through [supabase/009_family_safety_and_prayer_moderation.sql](supabase/009_family_safety_and_prayer_moderation.sql).
 3. Fill `.env.local`.
 4. Restart `npm run dev`.
 
@@ -61,6 +61,20 @@ Files added for the backend foundation:
 - [supabase/004_profile_details.sql](supabase/004_profile_details.sql)
 - [supabase/005_prayer_metadata.sql](supabase/005_prayer_metadata.sql)
 - [supabase/006_private_prayer_board.sql](supabase/006_private_prayer_board.sql)
+- [supabase/007_prayer_request_titles.sql](supabase/007_prayer_request_titles.sql)
+- [supabase/008_prayer_toggle.sql](supabase/008_prayer_toggle.sql)
+- [supabase/009_family_safety_and_prayer_moderation.sql](supabase/009_family_safety_and_prayer_moderation.sql)
+
+## Prayer Community moderation
+
+Prayer requests are visible immediately. Users can report a request, and a moderator can review the report or hide the request from the Admin review page. After migration 009, add a trusted moderator in the Supabase SQL editor (replace the value with their Auth user UUID):
+
+```sql
+insert into public.app_moderators (user_id)
+values ('YOUR_AUTH_USER_UUID');
+```
+
+The moderator will see the review queue in Prayer room after signing in. Users can report a post or hide another author; reports are visible only to moderators.
 
 Data model included in the initial schema:
 

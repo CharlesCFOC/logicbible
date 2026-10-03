@@ -47,6 +47,16 @@
   box-shadow: none !important;
 }
 
+/* Reversible homepage-only background treatment. */
+.app-shell[data-app-background="black"] #home {
+  background:
+    radial-gradient(ellipse 64% 42% at 8% 22%, rgba(76, 151, 199, 0.24), transparent 72%),
+    radial-gradient(ellipse 54% 42% at 94% 68%, rgba(69, 104, 177, 0.18), transparent 72%),
+    radial-gradient(ellipse 38% 30% at 78% 14%, rgba(181, 83, 127, 0.08), transparent 70%),
+    linear-gradient(145deg, #202229 0%, #16191f 48%, #0e1117 100%) !important;
+  background-attachment: local;
+}
+
 .app-shell[data-app-background="black"] .home-library-panel .saved-notes-search input::placeholder,
 .app-shell[data-app-background="black"] .home-library-panel .saved-folder-form input::placeholder {
   color: rgba(255, 255, 255, 0.68) !important;
@@ -366,10 +376,53 @@
 }
 
 .app-shell[data-app-background="black"] #home .home-stats .home-stat-card {
-  border: 0 !important;
-  background: linear-gradient(135deg, #239ed8 0%, #3567e8 52%, #5154c8 100%) !important;
+  position: relative;
+  min-height: 64px;
+  border: 1px solid rgba(174, 235, 255, 0.36) !important;
+  border-radius: 18px !important;
+  background: linear-gradient(145deg, rgba(46, 113, 145, 0.64), rgba(20, 42, 67, 0.58)) !important;
   color: #ffffff !important;
-  box-shadow: 14px 14px 28px rgba(0, 0, 0, 0.46) !important;
+  box-shadow: inset 0 1px 0 rgba(232, 250, 255, 0.22), 0 10px 22px rgba(0, 0, 0, 0.28) !important;
+  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.app-shell[data-app-background="black"] #home .home-stats .home-stat-card::before {
+  position: absolute;
+  top: 0;
+  right: 16px;
+  left: 16px;
+  display: block;
+  height: 2px;
+  border-radius: 999px;
+  background: #61e6ff;
+  content: "";
+  box-shadow: 0 0 9px currentColor;
+}
+
+.app-shell[data-app-background="black"] #home .home-stats .home-stat-card:nth-child(2) {
+  border-color: rgba(130, 245, 213, 0.4) !important;
+  background: linear-gradient(145deg, rgba(37, 126, 127, 0.64), rgba(17, 58, 68, 0.58)) !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-stats .home-stat-card:nth-child(2)::before {
+  background: #69f0c2;
+}
+
+.app-shell[data-app-background="black"] #home .home-stats .home-stat-card:nth-child(3) {
+  border-color: rgba(196, 164, 255, 0.42) !important;
+  background: linear-gradient(145deg, rgba(85, 83, 157, 0.66), rgba(38, 39, 86, 0.6)) !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-stats .home-stat-card:nth-child(3)::before {
+  background: #c39aff;
+}
+
+.app-shell[data-app-background="black"] #home .home-stats .home-stat-card:is(button):hover,
+.app-shell[data-app-background="black"] #home .home-stats .home-stat-card:is(button):focus-visible {
+  border-color: rgba(224, 250, 255, 0.78) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 12px 24px rgba(0, 0, 0, 0.34), 0 0 16px rgba(97, 230, 255, 0.18) !important;
+  outline: 0;
+  transform: translateY(-2px);
 }
 
 .app-shell[data-app-background="black"] #home .home-stats .home-stat-card span,
@@ -398,8 +451,13 @@
 }
 
 .app-shell[data-app-background="black"] #home > .home-hero {
+  position: absolute;
+  z-index: 6;
+  top: 16px;
+  left: 16px;
+  width: 52px;
   min-height: 0 !important;
-  height: 0 !important;
+  height: 52px !important;
   padding: 0 !important;
   margin: 0 !important;
 }
@@ -412,13 +470,13 @@
 
 .app-shell[data-app-background="black"] .home-hero-image img {
   transform: scale(1.02);
-  filter: blur(2px) saturate(0.88) brightness(0.9) contrast(0.94);
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 48%, rgba(0, 0, 0, 0.76) 64%, rgba(0, 0, 0, 0.26) 82%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 0%, #000 48%, rgba(0, 0, 0, 0.76) 64%, rgba(0, 0, 0, 0.26) 82%, transparent 100%);
+  filter: saturate(0.96) brightness(1.1) contrast(0.98);
+  -webkit-mask-image: none;
+  mask-image: none;
 }
 
 .app-shell[data-app-background="black"] .home-hero-image::after {
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0.1) 46%, rgba(0, 0, 0, 0.72) 78%, #000000 100%);
+  background: rgba(0, 0, 0, 0.22);
 }
 
 
@@ -431,24 +489,24 @@
   position: absolute;
   z-index: 5;
   top: 18px;
-  right: auto;
-  left: 22px;
-  grid-template-columns: 1fr;
-  gap: 6px;
-  width: 145px;
+  right: 16px;
+  left: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  width: auto;
   margin: 0 !important;
 }
 
 .app-shell[data-app-background="black"] #home .home-stat-card {
-  min-height: 56px;
-  padding: 10px 11px !important;
-  border: 1px solid rgba(190, 227, 246, 0.3) !important;
+  min-height: 72px;
+  padding: 11px 12px !important;
+  border: 1px solid rgba(190, 227, 246, 0.42) !important;
   border-radius: 16px !important;
-  background: rgba(54, 82, 103, 0.28) !important;
+  background: linear-gradient(135deg, rgba(125, 191, 221, 0.24), rgba(28, 63, 84, 0.2)) !important;
   color: #ffffff !important;
-  box-shadow: inset 0 1px 0 rgba(220, 242, 255, 0.16), 0 8px 18px rgba(0, 0, 0, 0.18) !important;
-  -webkit-backdrop-filter: blur(16px) saturate(125%);
-  backdrop-filter: blur(16px) saturate(125%);
+  box-shadow: inset 0 1px 0 rgba(220, 242, 255, 0.3), 0 10px 22px rgba(0, 0, 0, 0.22) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  backdrop-filter: blur(22px) saturate(150%);
 }
 
 .app-shell[data-app-background="black"] #home .home-stat-card span,
@@ -457,11 +515,34 @@
 }
 
 .app-shell[data-app-background="black"] #home .home-stat-card strong {
-  font-size: 18px !important;
+  font-size: 19px !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-stat-card span {
+  font-size: 10px !important;
+  line-height: 1.1;
+}
+
+.app-shell[data-app-background="black"] #home .home-stat-card svg {
+  width: 15px;
+  height: 15px;
 }
 
 .app-shell[data-app-background="black"] #home .home-stat-card--continue {
-  background: rgba(77, 98, 126, 0.28) !important;
+  background: linear-gradient(135deg, rgba(137, 192, 229, 0.24), rgba(43, 74, 111, 0.18)) !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-hero-verse strong {
+  color: #ffffff !important;
+  text-shadow: none !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-hero-verse small {
+  color: #ffffff !important;
+}
+
+.app-shell[data-app-background="black"] #home .home-hero-verse strong {
+  font-size: 17px !important;
 }
 
 
@@ -655,102 +736,6 @@
 .app-shell[data-app-background="black"] #home .home-hero-image-copy {
   z-index: 6;
   bottom: 50px !important;
-}
-
-.home-debate-xp-card {
-  position: absolute;
-  top: 18px;
-  right: 18px;
-  z-index: 8;
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  min-width: 142px;
-  padding: 8px 10px 8px 8px;
-  border: 1px solid rgba(139, 220, 255, 0.42);
-  border-radius: 20px;
-  color: #ffffff;
-  background: rgba(10, 35, 52, 0.58);
-  text-align: left;
-  cursor: pointer;
-  box-shadow: inset 0 1px 0 rgba(236, 250, 255, 0.16), 0 8px 18px rgba(0, 0, 0, 0.24);
-  -webkit-backdrop-filter: blur(12px) saturate(135%);
-  backdrop-filter: blur(12px) saturate(135%);
-}
-
-.home-debate-xp-card:hover,
-.home-debate-xp-card:focus-visible {
-  border-color: rgba(139, 220, 255, 0.78);
-  background: rgba(20, 65, 88, 0.72);
-  box-shadow: inset 0 1px 0 rgba(236, 250, 255, 0.22), 0 10px 24px rgba(0, 0, 0, 0.3), 0 0 16px rgba(83, 190, 255, 0.2);
-  outline: 0;
-  transform: translateY(-1px);
-}
-
-.home-debate-xp-ring {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  flex: 0 0 44px;
-  border-radius: 50%;
-  background: conic-gradient(#62f5e0 var(--home-xp-progress), rgba(255, 255, 255, 0.18) 0);
-  box-shadow: 0 0 10px rgba(98, 245, 224, 0.24);
-  position: relative;
-}
-
-.home-debate-xp-ring::after {
-  position: absolute;
-  inset: 4px;
-  border-radius: inherit;
-  background: #153b51;
-  content: "";
-}
-
-.home-debate-xp-ring strong,
-.home-debate-xp-ring small {
-  position: relative;
-  z-index: 1;
-  color: #ffffff;
-  line-height: 1;
-}
-
-.home-debate-xp-ring strong {
-  margin-top: 3px;
-  font-size: 11px;
-}
-
-.home-debate-xp-ring small {
-  margin-top: -1px;
-  color: rgba(220, 244, 255, 0.72);
-  font-size: 7px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-}
-
-.home-debate-xp-copy {
-  display: grid;
-  min-width: 0;
-  gap: 2px;
-}
-
-.home-debate-xp-copy span {
-  color: #a8e5ff;
-  font-size: 8px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.home-debate-xp-copy strong {
-  color: #ffffff;
-  font-size: 13px;
-  line-height: 1.1;
-}
-
-.home-debate-xp-copy small {
-  color: rgba(235, 248, 255, 0.72);
-  font-size: 8px;
 }
 
 .app-shell[data-app-background="black"] #home > .home-prayer-card,
@@ -1069,21 +1054,13 @@
 
 /* Continue the hero fade on the homepage background, behind the sections below. */
 .app-shell[data-app-background="black"] #home::before {
-  position: absolute;
-  z-index: 0;
-  top: clamp(480px, 70vh, 620px);
-  right: 0;
-  bottom: auto;
-  left: 0;
-  height: 240px;
-  background: linear-gradient(180deg, #000000 0%, rgba(0, 0, 0, 0.82) 18%, rgba(0, 0, 0, 0.34) 52%, transparent 100%);
-  content: "";
+  display: none;
   pointer-events: none;
 }
 
 @media (max-width: 760px) {
   .app-shell[data-app-background="black"] #home::before {
-    top: 620px;
+    display: none;
   }
 }
 
@@ -1197,13 +1174,13 @@
   gap: 5px;
   min-height: 104px;
   padding: 14px 12px 14px 16px;
-  border: 0;
+  border: 1px solid rgba(255, 255, 255, 0.42);
   border-radius: 18px;
-  background:
-    radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.72), transparent 48%),
-    linear-gradient(135deg, #e9e3db 0%, #f7f5f1 100%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.56), rgba(255, 255, 255, 0.2));
   color: var(--ink);
-  box-shadow: 0 12px 22px rgba(31, 47, 66, 0.2), 0 3px 7px rgba(31, 47, 66, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.62), 0 12px 22px rgba(31, 47, 66, 0.2), 0 3px 7px rgba(31, 47, 66, 0.12);
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+  backdrop-filter: blur(18px) saturate(135%);
 }
 
 .home-stat-card::before {
@@ -1215,9 +1192,7 @@
 }
 
 .home-stat-card--continue {
-  background:
-    radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.7), transparent 48%),
-    linear-gradient(135deg, #e2e9ee 0%, #f4f7f8 100%);
+  background: linear-gradient(135deg, rgba(232, 245, 252, 0.52), rgba(255, 255, 255, 0.18));
 }
 
 .home-stat-card span,

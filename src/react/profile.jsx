@@ -94,7 +94,7 @@ export function ProfileHero() {
         <div className="profile-style-actions"><button type="button" className="profile-style-reset" onClick={() => { setDraft(bridge.getHero().coverImage); setFeedback("Default cover restored. Save to apply it."); }}>Reset</button><button type="submit" className="profile-style-save">Save style</button></div>
         <p className="profile-style-feedback" role="status" aria-live="polite">{feedback}</p>
       </form>}
-      <div className="profile-hero-overlay"><div><p className="eyebrow">Profile</p><h1 data-profile-name>{state.displayName}</h1><p data-profile-streak>{state.streakLabel}</p></div></div>
+      <div className="profile-hero-overlay"><div><p className="eyebrow">Profile</p><h1 data-profile-name>{state.displayName}</h1></div></div>
     </>
   );
 }
@@ -192,6 +192,10 @@ export function ProfileInformation() {
           <div className="profile-info-actions"><button type="submit" className="profile-save-button">Save information</button></div>
         </form>
       </div>
+      <section className="profile-admin-entry" aria-labelledby="moderation-admin-title">
+        <div><span>Moderation</span><strong id="moderation-admin-title">Admin review</strong><p>Review reports and remove inappropriate requests.</p></div>
+        <button type="button" onClick={() => window.moderationBridge?.open?.()}>Open</button>
+      </section>
     </>
   );
 }

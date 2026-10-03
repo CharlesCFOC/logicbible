@@ -392,3 +392,178 @@ body:has(.app-shell[data-app-background="black"]) .prayer-intro {
     opacity: 0.3;
   }
 }
+
+/* Brother AI tabs: mirror the animated horizontal color sweep used by Home. */
+#ai .ai-tabs button.is-active,
+#ai .ai-tabs button.is-active:hover,
+body .app-shell[data-app-background="black"] #ai .ai-tabs button.is-active,
+body .app-shell[data-app-background="black"] #ai .ai-tabs button.is-active:hover {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 0 !important;
+  color: #ffffff !important;
+  background: linear-gradient(110deg, #4fc3ff 0%, #8bdcff 24%, #ff9d00 50%, #ffb6dc 76%, #4fc3ff 100%) !important;
+  background-size: 280% 100% !important;
+  background-position: 0% 50% !important;
+  box-shadow: none !important;
+  animation: homeHeroTitleGradient 7s ease-in-out infinite !important;
+}
+
+#ai .ai-tabs button.is-active::before,
+body .app-shell[data-app-background="black"] #ai .ai-tabs button.is-active::before {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 280%;
+  border-radius: inherit;
+  background: linear-gradient(110deg, #4fc3ff 0%, #8bdcff 24%, #ff9d00 50%, #ffb6dc 76%, #4fc3ff 100%);
+  background-size: 100% 100%;
+  content: "";
+  pointer-events: none;
+  transform: translateX(0);
+  animation: homeNavColorSweep 4.6s ease-in-out infinite;
+}
+
+#ai .ai-tabs button.is-active > span,
+body .app-shell[data-app-background="black"] #ai .ai-tabs button.is-active > span {
+  position: relative;
+  z-index: 1;
+}
+
+/* Prayer tabs use the same Home-inspired animated fill as Brother AI. */
+#prayer .prayer-page-tabs button.is-active,
+#prayer .prayer-page-tabs button.is-active:hover,
+#prayer .prayer-page-tabs button.is-active:focus-visible,
+body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is-active,
+body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is-active:hover,
+body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is-active:focus-visible {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 0 !important;
+  color: #ffffff !important;
+  background: linear-gradient(110deg, #4fc3ff 0%, #8bdcff 24%, #ff9d00 50%, #ffb6dc 76%, #4fc3ff 100%) !important;
+  background-size: 280% 100% !important;
+  background-position: 0% 50% !important;
+  box-shadow: none !important;
+  animation: homeHeroTitleGradient 7s ease-in-out infinite !important;
+}
+
+#prayer .prayer-page-tabs button.is-active::before,
+body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is-active::before {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 280%;
+  border-radius: inherit;
+  background: linear-gradient(110deg, #4fc3ff 0%, #8bdcff 24%, #ff9d00 50%, #ffb6dc 76%, #4fc3ff 100%);
+  background-size: 100% 100%;
+  content: "";
+  pointer-events: none;
+  transform: translateX(0);
+  animation: homeNavColorSweep 4.6s ease-in-out infinite;
+}
+
+#prayer .prayer-page-tabs button.is-active > span,
+body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is-active > span {
+  position: relative;
+  z-index: 1;
+}
+
+/* Improve contrast for Profile text-entry fields on the dark blue surface. */
+.app-shell[data-app-background] #profile .profile-field input,
+.app-shell[data-app-background] #profile .profile-field textarea,
+.app-shell[data-app-background] #profile .profile-auth-form input {
+  border: 1px solid rgba(139, 220, 255, 0.68) !important;
+  background: rgba(8, 24, 40, 0.88) !important;
+  color: #ffffff !important;
+  caret-color: #ffffff;
+}
+
+.app-shell[data-app-background] #profile .profile-field input::placeholder,
+.app-shell[data-app-background] #profile .profile-field textarea::placeholder,
+.app-shell[data-app-background] #profile .profile-auth-form input::placeholder {
+  color: rgba(224, 242, 255, 0.82) !important;
+}
+
+.app-shell[data-app-background] #profile .profile-field input:focus,
+.app-shell[data-app-background] #profile .profile-field textarea:focus,
+.app-shell[data-app-background] #profile .profile-auth-form input:focus {
+  border-color: #8bdcff !important;
+  outline: 2px solid rgba(255, 182, 220, 0.62) !important;
+  outline-offset: 2px;
+  box-shadow: none !important;
+}
+
+/* Profile tabs use the same active treatment as Prayer and Brother AI. */
+#profile .profile-tabs button.is-active,
+#profile .profile-tabs button.is-active:hover,
+#profile .profile-tabs button.is-active:focus-visible,
+body .app-shell[data-app-background="black"] #profile .profile-tabs button.is-active,
+body .app-shell[data-app-background="black"] #profile .profile-tabs button.is-active:hover,
+body .app-shell[data-app-background="black"] #profile .profile-tabs button.is-active:focus-visible {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 0 !important;
+  color: #ffffff !important;
+  background: linear-gradient(110deg, #4fc3ff 0%, #8bdcff 24%, #ff9d00 50%, #ffb6dc 76%, #4fc3ff 100%) !important;
+  background-size: 280% 100% !important;
+  background-position: 0% 50% !important;
+  box-shadow: none !important;
+  animation: homeHeroTitleGradient 7s ease-in-out infinite !important;
+}
+
+#profile .profile-tabs button.is-active::before,
+body .app-shell[data-app-background="black"] #profile .profile-tabs button.is-active::before {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 280%;
+  border-radius: inherit;
+  background: linear-gradient(110deg, #4fc3ff 0%, #8bdcff 24%, #ff9d00 50%, #ffb6dc 76%, #4fc3ff 100%);
+  background-size: 100% 100%;
+  content: "";
+  pointer-events: none;
+  transform: translateX(0);
+  animation: homeNavColorSweep 4.6s ease-in-out infinite;
+}
+
+#profile .profile-tabs button.is-active > svg,
+#profile .profile-tabs button.is-active > span,
+body .app-shell[data-app-background="black"] #profile .profile-tabs button.is-active > svg,
+body .app-shell[data-app-background="black"] #profile .profile-tabs button.is-active > span {
+  position: relative;
+  z-index: 1;
+  color: #ffffff !important;
+}
+
+/* Add the shared cyan, blue, orange and pink palette to Profile's neon borders. */
+#profile .profile-cover-grid button.is-active::before {
+  background: conic-gradient(from var(--profile-cover-neon-angle), #4fc3ff, #8bdcff, #ff9d00, #ffb6dc, #4fc3ff) !important;
+}
+
+.app-shell[data-app-background] #profile .profile-hero-overlay::before {
+  background: conic-gradient(from var(--profile-card-neon-angle), #4fc3ff, #8bdcff, #ff9d00, #ffb6dc, #4fc3ff) !important;
+}
+
+/* Match Brother AI tab corners to the Prayer tab shape. */
+#ai .ai-tabs button,
+body .app-shell[data-app-background="black"] #ai .ai-tabs button {
+  min-height: 40px !important;
+  padding: 6px 4px !important;
+  border-radius: 999px !important;
+}
+
+/* Keep Prayer's page title aligned with the shared 28px page-title scale. */
+#prayer .prayer-header h1 {
+  font-size: 28px !important;
+  line-height: 1.1 !important;
+}

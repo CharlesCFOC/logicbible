@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { getDebateLevelProgress } from "./apologetics-debate.jsx";
 
 const arrowIcon = (
   <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -8,22 +7,6 @@ const arrowIcon = (
     <path d="M9 5h10v10" />
   </svg>
 );
-
-const debateConversationTtl = 30 * 24 * 60 * 60 * 1000;
-
-function hasRecentDebate() {
-  for (let index = 0; index < localStorage.length; index += 1) {
-    const key = localStorage.key(index);
-    if (!key?.startsWith("brother.debateConversation.")) continue;
-    try {
-      const saved = JSON.parse(localStorage.getItem(key) || "null");
-      if (saved?.messages?.length && Date.now() - Number(saved.updatedAt || 0) <= debateConversationTtl) return true;
-    } catch {
-      // Ignore malformed local conversations.
-    }
-  }
-  return false;
-}
 
 function readInitialStats() {
   return {
@@ -67,8 +50,7 @@ function LibraryIcon({ name }) {
 }
 
 export function HomeHero() {
-  const [coverImage, setCoverImage] = useState(() => window.profileBridge?.getHero?.().coverImage || "assets/cloud-account-zen.png");
-  const [totalXp, setTotalXp] = useState(() => window.aiBridge?.getDebateXp?.() || 0);
+  const [coverImage, setCoverImage] = useState(() => window.profileBridge?.getHero?.().coverImage || "assets/home-hero-mountain-sunrise.webp");
   const [verse, setVerse] = useState(readHomeVerse);
 
   useEffect(() => {
@@ -78,12 +60,6 @@ export function HomeHero() {
     };
     document.addEventListener("profile:hero-change", handleHeroChange);
     return () => document.removeEventListener("profile:hero-change", handleHeroChange);
-  }, []);
-
-  useEffect(() => {
-    const handleXpChange = () => setTotalXp(window.aiBridge?.getDebateXp?.() || 0);
-    document.addEventListener("debate:xp-change", handleXpChange);
-    return () => document.removeEventListener("debate:xp-change", handleXpChange);
   }, []);
 
   useEffect(() => {
@@ -97,79 +73,23 @@ export function HomeHero() {
     };
   }, []);
 
-  const progress = getDebateLevelProgress(totalXp);
-
   return (
     <>
       <img src={coverImage} alt="Selected hero image" />
-      <button className="home-debate-xp-card" type="button" onClick={() => window.appNavigate?.("apologetics")} aria-label={`Open Debat page. Debate XP: ${totalXp}, level ${progress.level}`}>
-        <div className="home-debate-xp-ring" style={{ "--home-xp-progress": `${progress.progress}%` }}>
-          <strong>{totalXp}</strong>
-          <small>XP</small>
-        </div>
-        <div className="home-debate-xp-copy">
-          <span>Debate XP</span>
-          <strong>Level {progress.level}</strong>
-          <small>{progress.requiredXp ? `${progress.currentXp} / ${progress.requiredXp}` : "Maximum level"}</small>
-        </div>
-      </button>
+      <h1 className="home-hero-app-title">Thought Bible</h1>
       <div className="home-hero-image-copy">
         <div className="home-hero-verse">
-          <span>Verse of the day</span>
+          <div className="home-hero-verse-heading">
+            <span>Verse of the day</span>
+            <span aria-hidden="true">-</span>
+            <small>{verse.reference}</small>
+          </div>
           <strong>{verse.text}</strong>
-          <small>{verse.reference}</small>
         </div>
         <button type="button" data-nav="bible">
           Start reading {arrowIcon}
         </button>
       </div>
-    </>
-  );
-}
-
-export function HomeStats() {
-  const [stats, setStats] = useState(readInitialStats);
-  const [hasDebate, setHasDebate] = useState(hasRecentDebate);
-
-  useEffect(() => {
-    const handleStatsChange = (event) => {
-      if (!event.detail) return;
-      setStats((current) => ({ ...current, ...event.detail }));
-    };
-    window.addEventListener("home:stats-change", handleStatsChange);
-    const handleDebateChange = () => setHasDebate(hasRecentDebate());
-    document.addEventListener("debate:conversation-change", handleDebateChange);
-    return () => {
-      window.removeEventListener("home:stats-change", handleStatsChange);
-      document.removeEventListener("debate:conversation-change", handleDebateChange);
-    };
-  }, []);
-
-  const openDebate = () => {
-    if (!hasRecentDebate()) {
-      window.appNavigate?.("apologetics");
-      return;
-    }
-    window.appNavigate?.("apologetics-debate");
-    document.dispatchEvent(new CustomEvent("debate:open-latest"));
-  };
-
-  return (
-    <>
-      <article className="home-stat-card">
-        <span>Connected streak</span>
-        <strong>{stats.streak}</strong>
-      </article>
-      <button className="home-stat-card home-stat-card--continue home-stat-card--debate" type="button" onClick={openDebate}>
-        <span>{hasDebate ? "Continue debate" : "Start a debate"}</span>
-        <strong>Let's Go</strong>
-        {arrowIcon}
-      </button>
-      <button className="home-stat-card home-stat-card--continue" type="button" data-nav="bible">
-        <span>Continue reading</span>
-        <strong>{stats.continueReading}</strong>
-        {arrowIcon}
-      </button>
     </>
   );
 }
@@ -190,7 +110,7 @@ export function HomePrayerCard() {
     <>
       <span className="home-prayer-card-icon">{handHeartIcon}</span>
       <span>
-        <small>Prayer requests</small>
+        <small>Pray for someone</small>
         <strong><span>{prayerCount}</span> people are waiting for prayer</strong>
       </span>
       {arrowIcon}

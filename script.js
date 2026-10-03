@@ -1,5 +1,12 @@
 const screens = [...document.querySelectorAll("[data-screen]")];
 const navButtons = [...document.querySelectorAll("[data-nav]")];
+const activeScreenStorageKey = "thought-bible.active-screen";
+const homeMenuToggle = document.querySelector("[data-home-menu-toggle]");
+const homeMenuLayer = document.querySelector("[data-home-menu-layer]");
+const homeMenuDrawer = document.querySelector("[data-home-menu-drawer]");
+const homeMenuCloseButtons = [...document.querySelectorAll("[data-home-menu-close]")];
+const homeMenuNavigationButtons = [...document.querySelectorAll("[data-home-menu-drawer] [data-nav]")];
+let homeMenuLastFocusedElement = null;
 const kidsBibleLibrary = document.querySelector("[data-kids-library]");
 const kidsBibleReader = document.querySelector("[data-kids-reader]");
 const kidsBiblePageImage = document.querySelector("[data-kids-page-image]");
@@ -13,7 +20,7 @@ const kidsBibleBooks = {
     title: "Matthew",
     totalPages: 37,
     imageDir: "assets/kids-bible/matthew",
-    getFileName: (number) => `${number}_Matthew_Comic_Page_Modern_English.jpg`,
+    getFileName: (number) => `${number}_Matthew_Comic_Page_Modern_English.webp`,
   },
   mark: {
     title: "Mark",
@@ -301,9 +308,11 @@ const prayerUserId = localStorage.getItem("brother.prayerUserId") || (() => {
 })();
 const storedPrayerRequests = readJson("brother.prayerRequests", []);
 const cleanedPrayerRequests = Array.isArray(storedPrayerRequests)
-  ? storedPrayerRequests.filter((request) => !request.demo)
+  ? storedPrayerRequests
+    .filter((request) => !request.demo)
+    .map((request) => request.status === "pending" ? { ...request, status: "active" } : request)
   : [];
-if (cleanedPrayerRequests.length !== (Array.isArray(storedPrayerRequests) ? storedPrayerRequests.length : 0)) {
+if (JSON.stringify(cleanedPrayerRequests) !== JSON.stringify(Array.isArray(storedPrayerRequests) ? storedPrayerRequests : [])) {
   writeJson("brother.prayerRequests", cleanedPrayerRequests);
 }
 const prayerState = {
@@ -316,6 +325,10 @@ const prayerState = {
 };
 let prayerBridgeFeedback = "";
 let prayerBridgeSent = false;
+let prayerModerator = false;
+const moderationReportsKey = "brother.moderationReports";
+let moderationReports = readJson(moderationReportsKey, []);
+let moderationAdminUnlocked = false;
 
 const PRAYER_BACKGROUND_COUNT = 6;
 const prayerBackgroundAssignments = readJson("brother.prayerBackgrounds", {});
@@ -416,7 +429,7 @@ const defaultPreferences = {
 };
 const defaultProfile = {
   displayName: "",
-  coverImage: "assets/cloud-account-zen.png",
+  coverImage: "assets/home-hero-mountain-sunrise.webp",
   email: "",
   country: "",
   dateOfBirth: "",
@@ -428,22 +441,36 @@ const defaultProfile = {
   storageStatus: "Local only",
 };
 const profileCoverOptions = [
-  { id: "community", label: "Community", src: "assets/home-hero-community.png" },
+  { id: "mountain-sunrise", label: "Mountain sunrise", src: "assets/home-hero-mountain-sunrise.webp" },
+  { id: "community", label: "Community", src: "assets/home-hero-community.webp" },
   { id: "forest", label: "Forest", src: "assets/home-card-forest.webp" },
   { id: "prayer", label: "Prayer", src: "assets/home-card-prayer.webp" },
-  { id: "sunlit-path", label: "Sunlit path", src: "assets/prayer-backgrounds/prayer-1.jpg" },
-  { id: "open-sky", label: "Open sky", src: "assets/prayer-backgrounds/prayer-2.jpg" },
+  { id: "sunlit-path", label: "Sunlit path", src: "assets/prayer-backgrounds/prayer-1.webp" },
+  { id: "open-sky", label: "Open sky", src: "assets/prayer-backgrounds/prayer-2.webp" },
+  { id: "mountain-sunrise-trail", label: "Mountain sunrise", src: "assets/profile-hero/mountain-sunrise-trail.webp" },
+  { id: "moonlit-lake", label: "Moonlit lake", src: "assets/profile-hero/moonlit-lake.webp" },
+  { id: "forest-sunrise-trail", label: "Forest trail", src: "assets/profile-hero/forest-sunrise-trail.webp" },
+  { id: "coastal-sunset", label: "Coastal sunset", src: "assets/profile-hero/coastal-sunset.webp" },
+  { id: "desert-oasis", label: "Desert oasis", src: "assets/profile-hero/desert-oasis.webp" },
+  { id: "wildflower-valley", label: "Wildflower valley", src: "assets/profile-hero/wildflower-valley.webp" },
+  { id: "northern-lights", label: "Northern lights", src: "assets/profile-hero/northern-lights.webp" },
+  { id: "snowy-mountains", label: "Snowy mountains", src: "assets/profile-hero/snowy-mountains.webp" },
+  { id: "canyon-river", label: "Canyon river", src: "assets/profile-hero/canyon-river.webp" },
+  { id: "ocean-cliffs", label: "Ocean cliffs", src: "assets/profile-hero/ocean-cliffs.webp" },
 ];
 const savedProfile = {
   ...defaultProfile,
   ...readJson("brother.profile", {}),
 };
-if (String(savedProfile.displayName || "").trim().toLowerCase() === "charles") {
-  savedProfile.displayName = "It's time to login";
-  savedProfile.avatarInitials = "";
+if (/\.(?:png|jpe?g)$/i.test(savedProfile.coverImage)) {
+  savedProfile.coverImage = savedProfile.coverImage.replace(/\.(?:png|jpe?g)$/i, ".webp");
   writeJson("brother.profile", savedProfile);
 }
-if (savedProfile.coverImage === "assets/profile-hero-v2.png") {
+if (savedProfile.coverImage === "assets/cloud-account-zen.webp") {
+  savedProfile.coverImage = defaultProfile.coverImage;
+  writeJson("brother.profile", savedProfile);
+}
+if (savedProfile.coverImage === "assets/profile-hero-v2.webp") {
   savedProfile.coverImage = defaultProfile.coverImage;
 }
 const savedPreferences = {
@@ -936,6 +963,13 @@ function removeLocalValue(key) {
   }
 }
 
+function containsPersonalContactInfo(value) {
+  const text = String(value || "");
+  const email = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
+  const phone = /(?:\+?\d[\d().\-\s]{6,}\d)/;
+  return email.test(text) || phone.test(text);
+}
+
 function clearLocalAccountData() {
   Object.keys(localStorage).forEach((key) => {
     if (key.startsWith("brother.")) {
@@ -1386,7 +1420,9 @@ function getPrayerModerationMessage(text) {
 }
 
 function getPrayerStatus(request) {
-  return request.status === "answered" ? "answered" : "active";
+  return ["pending", "active", "archived", "answered", "rejected"].includes(request.status)
+    ? request.status
+    : "active";
 }
 
 function getPrayerPreview(text, wordLimit = 6) {
@@ -1461,10 +1497,19 @@ async function loadPrayerFromSupabase() {
   }
 
   if (!supabaseUser) {
+    prayerModerator = false;
     prayerState.requests = [];
     renderPrayerPage();
     return;
   }
+
+  const { data: moderatorRow } = await supabaseClient
+    .from("app_moderators")
+    .select("user_id")
+    .eq("user_id", supabaseUser.id)
+    .maybeSingle()
+    .catch(() => ({ data: null }));
+  prayerModerator = Boolean(moderatorRow);
 
   const { data: requests, error } = await supabaseClient
     .from("prayer_requests")
@@ -1493,7 +1538,7 @@ async function loadPrayerFromSupabase() {
     prayerCount: request.prayer_count || 0,
     prayedBy: prayedIds.has(request.id) && supabaseUser ? [supabaseUser.id] : [],
     createdAt: request.created_at,
-    status: request.status || "active",
+    status: request.status === "pending" ? "active" : (request.status || "active"),
     category: request.category || "general",
     urgent: Boolean(request.urgent),
   }));
@@ -1510,6 +1555,8 @@ async function createPrayerRequest(title, text, category, urgent, backgroundInde
     content: text,
     category,
     urgent,
+    status: "active",
+    terms_accepted_at: new Date().toISOString(),
   }).select("id").single();
   if (error) {
     prayerFeedback.textContent = error.message;
@@ -1575,7 +1622,7 @@ function renderPrayerPage() {
         const expanded = Boolean(request.expanded);
         const prayerBackgroundIndex = getPrayerBackgroundIndex(request);
         return `
-          <article class="prayer-card${expanded ? " is-expanded" : ""}${request.urgent ? " is-urgent" : ""}${isNewlyPrayed ? " is-prayed" : ""}" style="--prayer-card-image: url('assets/prayer-backgrounds/prayer-${prayerBackgroundIndex + 1}.jpg')">
+          <article class="prayer-card${expanded ? " is-expanded" : ""}${request.urgent ? " is-urgent" : ""}${isNewlyPrayed ? " is-prayed" : ""}" style="--prayer-card-image: url('assets/prayer-backgrounds/prayer-${prayerBackgroundIndex + 1}.webp')">
             <button type="button" class="prayer-card-toggle" data-prayer-toggle data-prayer-id="${escapeAttr(request.id)}" aria-expanded="${expanded}">
               <span>
                 <strong class="prayer-card-title">${escapeHtml(request.title || "Prayer request")}</strong>
@@ -1585,7 +1632,6 @@ function renderPrayerPage() {
             </button>
             <div class="prayer-card-meta">
               <div class="prayer-card-actions">
-                <button type="button" class="prayer-action prayer-action-secondary" data-prayer-action="share" data-prayer-id="${escapeAttr(request.id)}" aria-label="Share prayer request" title="Share"><i data-lucide="external-link"></i></button>
                 <button type="button" class="prayer-action${hasPrayed ? " is-prayed" : ""}" data-prayer-action="pray" data-prayer-id="${escapeAttr(request.id)}" aria-label="${hasPrayed ? "Prayer count" : "I prayed"}">
                   <i data-lucide="heart"></i>
                   <span>${request.prayerCount}</span>
@@ -1733,7 +1779,7 @@ function getProfileInitials(name) {
 
 function saveProfile() {
   writeJson("brother.profile", savedProfile);
-  syncProfileRecord();
+  return syncProfileRecord();
 }
 
 function setProfileStyleFeedback(message, isError = false) {
@@ -1765,18 +1811,22 @@ function compressProfileCover(file) {
 }
 
 async function syncProfileRecord() {
-  if (!supabaseClient || !supabaseUser) return;
+  if (!supabaseClient || !supabaseUser) return false;
   const { error } = await supabaseClient.from("profiles").upsert({
     id: supabaseUser.id,
     email: supabaseUser.email || savedProfile.email || null,
-    display_name: getEffectiveProfileName(),
+    display_name: String(savedProfile.displayName || "").trim() || null,
     country: savedProfile.country || null,
     age: savedProfile.age ? Number(savedProfile.age) : null,
     bio: savedProfile.bio,
     streak: Number(readJson("brother.homeActivity", {}).streak || 0),
     updated_at: new Date().toISOString(),
   });
-  if (error) setAuthFeedback(`Profile sync failed: ${error.message}`, true);
+  if (error) {
+    setAuthFeedback(`Profile sync failed: ${error.message}`, true);
+    return false;
+  }
+  return true;
 }
 
 async function syncPreferencesRecord() {
@@ -1793,7 +1843,6 @@ async function syncPreferencesRecord() {
 
 function getEffectiveProfileName() {
   const savedName = String(savedProfile.displayName || "").trim();
-  if (savedName.toLowerCase() === "charles") return "It's time to login";
   if (savedName) return savedName;
   const authName = String(supabaseUser?.user_metadata?.display_name || "").trim();
   if (authName) return authName;
@@ -2216,6 +2265,9 @@ async function requestApologeticsModeResponse(mode, requestId) {
   const topic = getApologeticsTopic();
   const conversation = getApologeticsConversation();
   const history = (conversation[mode] || []).filter((item) => !item.pending).slice(-18);
+  if (history.some((item) => containsPersonalContactInfo(item.text))) {
+    throw new Error("For your safety, do not include an email address or phone number in AI messages.");
+  }
   const response = await fetch("/api/ai/apologetics", {
     method: "POST",
     headers: { "content-type": "application/json" },
@@ -2231,6 +2283,7 @@ async function requestApologeticsModeResponse(mode, requestId) {
       pitfalls: topic?.pitfalls || [],
       history,
       message: history.filter((item) => item.role === "user").slice(-1)[0]?.text || "",
+      audience: "teen",
     }),
   });
   const payload = await response.json();
@@ -2808,10 +2861,11 @@ function emitKidsBibleChange() {
 renderKidsBibleLibraryProgress();
 
 function setScreen(id) {
+  if (!screens.some((screen) => screen.id === id)) return;
   if (noteEditorPanel?.classList.contains("is-visible")) {
     closeModal();
   }
-  const activeNavId = id.startsWith("apologetics") ? "apologetics" : id;
+  const activeNavId = id === "admin" ? "profile" : (id.startsWith("apologetics") ? "apologetics" : id);
   if (id !== "bible" && multiSelectMode) {
     exitMultiSelectMode();
   }
@@ -2819,6 +2873,11 @@ function setScreen(id) {
     delete appShell.dataset.kidsReader;
   }
   appShell.dataset.activeScreen = id;
+  try {
+    window.sessionStorage.setItem(activeScreenStorageKey, id);
+  } catch {
+    // Navigation still works when browser storage is unavailable.
+  }
   bottomNav?.classList.remove("is-scroll-hidden");
   screens.forEach((screen) => {
     screen.classList.toggle("is-active", screen.id === id);
@@ -2844,6 +2903,57 @@ function setScreen(id) {
     detail: { id, activeNavId },
   }));
 }
+
+function openHomeMenu() {
+  if (!homeMenuLayer || !homeMenuDrawer) return;
+  homeMenuLastFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  homeMenuLayer.removeAttribute("inert");
+  homeMenuLayer.setAttribute("aria-hidden", "false");
+  homeMenuLayer.classList.add("is-open");
+  homeMenuToggle?.setAttribute("aria-expanded", "true");
+  navigator.vibrate?.(8);
+  window.setTimeout(() => (homeMenuDrawer.querySelector("[data-home-menu-close]") || homeMenuDrawer).focus(), 20);
+}
+
+function closeHomeMenu({ restoreFocus = true } = {}) {
+  if (!homeMenuLayer?.classList.contains("is-open")) return;
+  homeMenuLayer.classList.remove("is-open");
+  homeMenuLayer.setAttribute("aria-hidden", "true");
+  homeMenuLayer.setAttribute("inert", "");
+  homeMenuToggle?.setAttribute("aria-expanded", "false");
+  if (restoreFocus && homeMenuLastFocusedElement?.isConnected) {
+    homeMenuLastFocusedElement.focus();
+  }
+}
+
+function keepHomeMenuFocus(event) {
+  if (event.key !== "Tab" || !homeMenuLayer?.classList.contains("is-open") || !homeMenuDrawer) return;
+  const focusable = [...homeMenuDrawer.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])')]
+    .filter((element) => !element.hasAttribute("hidden"));
+  if (!focusable.length) return;
+  const first = focusable[0];
+  const last = focusable.at(-1);
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+}
+
+homeMenuToggle?.addEventListener("click", openHomeMenu);
+homeMenuCloseButtons.forEach((button) => button.addEventListener("click", () => closeHomeMenu()));
+homeMenuNavigationButtons.forEach((button) => button.addEventListener("click", () => closeHomeMenu({ restoreFocus: false })));
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && homeMenuLayer?.classList.contains("is-open")) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    closeHomeMenu();
+    return;
+  }
+  keepHomeMenuFocus(event);
+});
 
 let lastReaderScrollTop = 0;
 let readerScrollFrame = 0;
@@ -4577,6 +4687,9 @@ function clearThinkingState(element) {
 async function requestVerseAiResponse(question) {
   const pending = verseAiThread?.querySelector("[data-verse-ai-pending]");
   try {
+    if (containsPersonalContactInfo(question)) {
+      throw new Error("For your safety, do not include an email address or phone number in AI messages.");
+    }
     const response = await fetch("/api/ai/verse", {
       method: "POST",
       headers: { "content-type": "application/json" },
@@ -4585,6 +4698,7 @@ async function requestVerseAiResponse(question) {
         reference: verseAiContextData.reference,
         version: verseAiContextData.version,
         text: verseAiContextData.text,
+        audience: "teen",
       }),
     });
     const payload = await response.json();
@@ -5598,23 +5712,12 @@ document.querySelectorAll("[data-kids-book]").forEach((button) => {
 });
 
 document.querySelector("[data-kids-reader-back]")?.addEventListener("click", closeKidsBibleReader);
-document.querySelector("[data-kids-first-page]")?.addEventListener("click", () => {
-  kidsBibleState.page = 1;
-  renderKidsBiblePage();
-});
 if (kidsBiblePageSelect) {
   kidsBiblePageSelect.addEventListener("change", () => {
     kidsBibleState.page = Number(kidsBiblePageSelect.value);
     renderKidsBiblePage();
   });
 }
-document.querySelector("[data-kids-previous]")?.addEventListener("click", () => {
-  changeKidsBiblePage(-1);
-});
-document.querySelector("[data-kids-next]")?.addEventListener("click", () => {
-  changeKidsBiblePage(1);
-});
-
 let kidsSwipeStartX = 0;
 let kidsSwipeStartY = 0;
 kidsBibleImageWrap?.addEventListener("touchstart", (event) => {
@@ -6175,8 +6278,14 @@ modalLayer.addEventListener("click", (event) => {
 });
 
 window.addEventListener("load", refreshIcons);
-appShell.dataset.activeScreen = document.querySelector(".screen.is-active")?.id || "home";
 window.appNavigate = setScreen;
+let restoredScreenId = "";
+try {
+  restoredScreenId = window.sessionStorage.getItem(activeScreenStorageKey) || "";
+} catch {
+  restoredScreenId = "";
+}
+setScreen(screens.some((screen) => screen.id === restoredScreenId) ? restoredScreenId : (document.querySelector(".screen.is-active")?.id || "home"));
 function getBibleVerseSnapshot(verse, chapter = currentChapterData, version = getVersion(readerState.versionId)) {
   const book = getBook(readerState.bookId);
   const number = Number(verse.number || 0);
@@ -6606,11 +6715,11 @@ window.profileBridge = {
       dateOfBirth: savedProfile.dateOfBirth || "",
     };
   },
-  saveInfo(info) {
+  async saveInfo(info) {
     savedProfile.displayName = String(info.displayName || "").trim() || defaultProfile.displayName;
     savedProfile.country = String(info.country || "").trim();
     savedProfile.dateOfBirth = String(info.dateOfBirth || "").trim();
-    saveProfile();
+    await saveProfile();
     applyProfile();
     document.dispatchEvent(new CustomEvent("profile:info-change"));
     document.dispatchEvent(new CustomEvent("profile:hero-change"));
@@ -6634,33 +6743,185 @@ window.profileBridge = {
     document.dispatchEvent(new CustomEvent("profile:preferences-change"));
   },
 };
+async function reportPrayerRequest(requestId, reason, details = "") {
+  const report = {
+    id: `report-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+    requestId,
+    reason,
+    details: String(details || "").trim().slice(0, 500),
+    status: "open",
+    createdAt: new Date().toISOString(),
+    remote: false,
+  };
+  moderationReports = [report, ...moderationReports].slice(0, 300);
+  localStorage.setItem(moderationReportsKey, JSON.stringify(moderationReports));
+  document.dispatchEvent(new CustomEvent("moderation:change"));
+
+  if (!supabaseClient || !supabaseUser) return report;
+  const { data, error } = await supabaseClient.from("prayer_reports").insert({
+    request_id: requestId,
+    reporter_id: supabaseUser.id,
+    reason,
+    details: report.details,
+  }).select("id, status, created_at").single();
+  if (error) {
+    console.warn("Prayer report could not be synced:", error.message);
+    return report;
+  }
+  report.id = data.id;
+  report.status = data.status || "open";
+  report.createdAt = data.created_at || report.createdAt;
+  report.remote = true;
+  localStorage.setItem(moderationReportsKey, JSON.stringify(moderationReports));
+  document.dispatchEvent(new CustomEvent("moderation:change"));
+  return report;
+}
+
+async function loadModerationReports() {
+  if (!supabaseClient || !supabaseUser || !prayerModerator) {
+    document.dispatchEvent(new CustomEvent("moderation:change"));
+    return;
+  }
+  const { data, error } = await supabaseClient
+    .from("prayer_reports")
+    .select("id,request_id,reason,details,status,created_at,prayer_requests(title,content,status)")
+    .order("created_at", { ascending: false })
+    .limit(300);
+  if (error) {
+    console.warn("Prayer reports could not be loaded:", error.message);
+    return;
+  }
+  moderationReports = (data || []).map((report) => ({
+    id: report.id,
+    requestId: report.request_id,
+    reason: report.reason,
+    details: report.details || "",
+    status: report.status || "open",
+    createdAt: report.created_at,
+    remote: true,
+    requestTitle: report.prayer_requests?.title || "Prayer request",
+    requestText: report.prayer_requests?.content || "",
+    requestStatus: report.prayer_requests?.status || "active",
+  }));
+  localStorage.setItem(moderationReportsKey, JSON.stringify(moderationReports));
+  document.dispatchEvent(new CustomEvent("moderation:change"));
+}
+
+async function resolveModerationReport(reportId, action) {
+  const report = moderationReports.find((item) => item.id === reportId);
+  if (!report) throw new Error("This report no longer exists.");
+  const request = prayerState.requests.find((item) => item.id === report.requestId);
+
+  if (action === "hide" && request) {
+    if (supabaseClient && supabaseUser && prayerModerator) {
+      await moderatePrayerRequest(request.id, "archived");
+    } else {
+      request.status = "archived";
+      savePrayerRequests();
+    }
+  }
+
+  report.status = action === "hide" ? "resolved" : "reviewed";
+  if (report.remote && supabaseClient && supabaseUser && prayerModerator) {
+    const { error } = await supabaseClient.from("prayer_reports").update({ status: report.status }).eq("id", report.id);
+    if (error) throw new Error(error.message || "This report could not be updated.");
+  }
+  localStorage.setItem(moderationReportsKey, JSON.stringify(moderationReports));
+  renderPrayerPage();
+  document.dispatchEvent(new CustomEvent("moderation:change"));
+}
+
+window.moderationBridge = {
+  getSnapshot() {
+    return {
+      unlocked: moderationAdminUnlocked,
+      reports: moderationReports.map((report) => {
+        const request = prayerState.requests.find((item) => item.id === report.requestId);
+        return {
+          ...report,
+          requestTitle: request?.title || report.requestTitle || "Prayer request",
+          requestText: request?.text || report.requestText || "This request is no longer available.",
+          requestStatus: request?.status || report.requestStatus || "unknown",
+        };
+      }),
+    };
+  },
+  unlock(code) {
+    moderationAdminUnlocked = String(code || "") === "158";
+    if (moderationAdminUnlocked) sessionStorage.setItem("brother.moderationAdminUnlocked", "true");
+    return moderationAdminUnlocked;
+  },
+  lock() {
+    moderationAdminUnlocked = false;
+    sessionStorage.removeItem("brother.moderationAdminUnlocked");
+    document.dispatchEvent(new CustomEvent("moderation:change"));
+  },
+  async refresh() {
+    await loadModerationReports();
+  },
+  async resolve(reportId, action) {
+    await resolveModerationReport(reportId, action);
+  },
+  open() {
+    setScreen("admin");
+  },
+};
+
+async function blockPrayerAuthor(authorId) {
+  if (!supabaseClient || !supabaseUser) {
+    throw new Error("Sign in to block a user.");
+  }
+  if (!authorId || authorId === supabaseUser.id) return;
+  const { error } = await supabaseClient.from("blocked_users").upsert({
+    blocker_id: supabaseUser.id,
+    blocked_user_id: authorId,
+  }, { onConflict: "blocker_id,blocked_user_id" });
+  if (error) throw new Error(error.message || "This user could not be blocked.");
+  await loadPrayerFromSupabase();
+}
+
+async function moderatePrayerRequest(requestId, nextStatus) {
+  if (!supabaseClient || !supabaseUser) throw new Error("Sign in before moderating requests.");
+  const { error } = await supabaseClient.rpc("moderate_prayer_request", {
+    request_uuid: requestId,
+    next_status: nextStatus,
+  });
+  if (error) throw new Error(error.message || "This request could not be reviewed.");
+  await loadPrayerFromSupabase();
+}
+
 window.prayerBridge = {
   getSnapshot() {
     const currentPrayerUserId = supabaseUser?.id || prayerUserId;
-    const requests = prayerState.requests
+    const sortPrayerRequests = (requests) => requests.sort((a, b) => {
+      if (prayerState.sort === "recent") return String(b.createdAt).localeCompare(String(a.createdAt));
+      const difference = prayerState.sort === "least" ? a.prayerCount - b.prayerCount : b.prayerCount - a.prayerCount;
+      return difference || String(b.createdAt).localeCompare(String(a.createdAt));
+    });
+    const formatPrayerRequests = (requests) => requests.map((request) => ({
+      ...request,
+      preview: getPrayerPreview(request.text),
+      hasPrayed: request.prayedBy?.includes(currentPrayerUserId),
+      isNewlyPrayed: request.prayedBy?.includes(currentPrayerUserId) && request.prayerCount === 1,
+      backgroundIndex: getPrayerBackgroundIndex(request),
+    }));
+    const eligibleRequests = prayerState.requests
       .filter((request) => {
         if (prayerState.pageTab === "request") {
           const isOwnRequest = supabaseClient ? request.ownerId === supabaseUser?.id : true;
           if (!isOwnRequest) return false;
         }
-        if (prayerState.pageTab === "board") {
-          return prayerState.filter === "all" || (request.category || "general") === prayerState.filter;
-        }
+        if (prayerState.pageTab === "board" && getPrayerStatus(request) !== "active") return false;
         return true;
-      })
-      .sort((a, b) => {
-        if (prayerState.sort === "recent") return String(b.createdAt).localeCompare(String(a.createdAt));
-        const difference = prayerState.sort === "least" ? a.prayerCount - b.prayerCount : b.prayerCount - a.prayerCount;
-        return difference || String(b.createdAt).localeCompare(String(a.createdAt));
-      })
-      .map((request) => ({
-        ...request,
-        preview: getPrayerPreview(request.text),
-        hasPrayed: request.prayedBy?.includes(currentPrayerUserId),
-        isNewlyPrayed: request.prayedBy?.includes(currentPrayerUserId) && request.prayerCount === 1,
-        backgroundIndex: getPrayerBackgroundIndex(request),
-      }));
+      });
+    const requests = formatPrayerRequests(sortPrayerRequests(
+      prayerState.pageTab === "board"
+        ? eligibleRequests.filter((request) => prayerState.filter === "all" || (request.category || "general") === prayerState.filter)
+        : eligibleRequests.slice(),
+    ));
+    const spotlightRequests = formatPrayerRequests(sortPrayerRequests(eligibleRequests.slice()));
     return {
+      currentUserId: currentPrayerUserId,
       pageTab: prayerState.pageTab,
       filter: prayerState.filter,
       sort: prayerState.sort,
@@ -6669,7 +6930,10 @@ window.prayerBridge = {
       backgroundIndex: selectedPrayerBackgroundIndex,
       feedback: prayerBridgeFeedback || prayerFeedback?.textContent || "",
       sent: prayerBridgeSent,
+      isModerator: prayerModerator,
+      moderationQueue: prayerModerator ? formatPrayerRequests(prayerState.requests.filter((request) => getPrayerStatus(request) === "pending")) : [],
       requests,
+      spotlightRequests,
     };
   },
   setPageTab(tab) {
@@ -6714,7 +6978,7 @@ window.prayerBridge = {
       return;
     }
     if (supabaseClient && supabaseUser) {
-      const { error } = await supabaseClient.rpc("pray_for_request", { request_uuid: request.id });
+      const { error } = await supabaseClient.rpc(request.prayedBy?.includes(supabaseUser.id) ? "unpray_for_request" : "pray_for_request", { request_uuid: request.id });
       if (error) {
         setPrayerBridgeFeedback(error.message);
         return;
@@ -6723,9 +6987,14 @@ window.prayerBridge = {
       return;
     }
     request.prayedBy ||= [];
-    if (request.prayedBy.includes(prayerUserId)) return;
-    request.prayedBy.push(prayerUserId);
-    request.prayerCount += 1;
+    const prayerIndex = request.prayedBy.indexOf(prayerUserId);
+    if (prayerIndex >= 0) {
+      request.prayedBy.splice(prayerIndex, 1);
+      request.prayerCount = Math.max(0, request.prayerCount - 1);
+    } else {
+      request.prayedBy.push(prayerUserId);
+      request.prayerCount += 1;
+    }
     savePrayerRequests();
     renderPrayerPage();
   },
@@ -6733,7 +7002,7 @@ window.prayerBridge = {
     setPrayerCategory(category);
     emitPrayerStateChange();
   },
-  async submit(title, text, category, backgroundIndex) {
+  async submit(title, text, category, backgroundIndex, acceptedTerms = false) {
     const cleanTitle = String(title || "").trim();
     const cleanText = String(text || "").trim();
     const wordCount = countPrayerWords(cleanText);
@@ -6744,6 +7013,14 @@ window.prayerBridge = {
     }
     if (moderationMessage) {
       setPrayerBridgeFeedback(moderationMessage);
+      return false;
+    }
+    if (containsPersonalContactInfo(`${cleanTitle}\n${cleanText}`)) {
+      setPrayerBridgeFeedback("For everyone’s safety, remove email addresses and phone numbers before posting.");
+      return false;
+    }
+    if (!acceptedTerms) {
+      setPrayerBridgeFeedback("Accept the community rules before sending a request.");
       return false;
     }
     if (supabaseClient && !supabaseUser) {
@@ -6774,7 +7051,7 @@ window.prayerBridge = {
     prayerState.pageTab = "request";
     prayerState.myWallExpanded = true;
     prayerState.filter = "all";
-    prayerBridgeFeedback = "Your request was shared anonymously.";
+    prayerBridgeFeedback = "Your prayer request has been shared with the community.";
     prayerBridgeSent = true;
     window.setTimeout(() => {
       prayerBridgeSent = false;
@@ -6782,6 +7059,21 @@ window.prayerBridge = {
     }, 1800);
     renderPrayerPage();
     return true;
+  },
+  async report(requestId, reason, details) {
+    const report = await reportPrayerRequest(requestId, reason, details);
+    setPrayerBridgeFeedback(report.remote ? "Thank you. Your report was sent to the moderation team." : "Thank you. Your report is saved for review on this device.");
+    emitPrayerStateChange();
+  },
+  async block(authorId) {
+    await blockPrayerAuthor(authorId);
+    setPrayerBridgeFeedback("This user’s prayer requests are now hidden on this device.");
+    emitPrayerStateChange();
+  },
+  async moderate(requestId, nextStatus) {
+    await moderatePrayerRequest(requestId, nextStatus);
+    setPrayerBridgeFeedback(nextStatus === "active" ? "Prayer request approved." : "Prayer request removed from the public wall.");
+    emitPrayerStateChange();
   },
 };
 window.aiBridge = {
@@ -6808,10 +7100,13 @@ window.aiBridge = {
     return Boolean(savedState.aiBookmarks[getAiMessageId(text)]);
   },
   async send(prompt, history = []) {
+    if (containsPersonalContactInfo(prompt)) {
+      throw new Error("For your safety, do not send an email address or phone number to Brother AI.");
+    }
     const response = await fetch("/api/ai/chat", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ prompt, history }),
+      body: JSON.stringify({ prompt, history, audience: "teen" }),
     });
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.error || "AI request failed.");
@@ -6822,30 +7117,39 @@ window.aiBridge = {
     return responseText;
   },
   async sendDebate(prompt, history = []) {
+    if (containsPersonalContactInfo(prompt)) {
+      throw new Error("For your safety, do not send an email address or phone number to Brother AI.");
+    }
     const response = await fetch("/api/ai/chat", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ prompt, history, mode: "debate" }),
+      body: JSON.stringify({ prompt, history, mode: "debate", audience: "teen" }),
     });
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.error || "AI request failed.");
     return payload.text || "No response text returned.";
   },
   async sendCoach(prompt, history = []) {
+    if (containsPersonalContactInfo(prompt)) {
+      throw new Error("For your safety, do not send an email address or phone number to Brother AI.");
+    }
     const response = await fetch("/api/ai/chat", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ prompt, history, mode: "coach" }),
+      body: JSON.stringify({ prompt, history, mode: "coach", audience: "teen" }),
     });
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.error || "AI request failed.");
     return payload.text || "No response text returned.";
   },
   async evaluateDebate(prompt) {
+    if (containsPersonalContactInfo(prompt)) {
+      throw new Error("For your safety, do not send an email address or phone number to Brother AI.");
+    }
     const response = await fetch("/api/ai/chat", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ prompt, history: [], mode: "evaluation" }),
+      body: JSON.stringify({ prompt, history: [], mode: "evaluation", audience: "teen" }),
     });
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.error || "AI evaluation failed.");

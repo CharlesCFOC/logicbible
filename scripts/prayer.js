@@ -158,7 +158,8 @@ function initPrayerPage() {
       return;
     }
     if (supabaseClient && supabaseUser) {
-      const { error } = await supabaseClient.rpc("pray_for_request", { request_uuid: request.id });
+      const currentPrayerUserId = supabaseUser.id;
+      const { error } = await supabaseClient.rpc(request.prayedBy?.includes(currentPrayerUserId) ? "unpray_for_request" : "pray_for_request", { request_uuid: request.id });
       if (error) {
         prayerFeedback.textContent = error.message;
         return;
@@ -167,9 +168,14 @@ function initPrayerPage() {
       return;
     }
     request.prayedBy ||= [];
-    if (request.prayedBy.includes(prayerUserId)) return;
-    request.prayedBy.push(prayerUserId);
-    request.prayerCount += 1;
+    const prayerIndex = request.prayedBy.indexOf(prayerUserId);
+    if (prayerIndex >= 0) {
+      request.prayedBy.splice(prayerIndex, 1);
+      request.prayerCount = Math.max(0, request.prayerCount - 1);
+    } else {
+      request.prayedBy.push(prayerUserId);
+      request.prayerCount += 1;
+    }
     savePrayerRequests();
     renderPrayerPage();
   });

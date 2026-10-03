@@ -485,7 +485,9 @@ function DebateRoomView({ theme, question, difficulty, opponentPersonality = "se
           <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
         </button>
         <div>
-          <h1>Debat room</h1>
+          <nav className="thoughts-room-breadcrumb" aria-label="Current path">
+            <span>Thought room</span><i aria-hidden="true">/</i><strong>Debate room</strong>
+          </nav>
         </div>
       </header>
 
@@ -644,7 +646,9 @@ export function ApologeticsDebatePage() {
       <header className="apologetics-debate-header">
         <button className="apologetics-debate-back" type="button" onClick={goBack} aria-label="Back to Apologetics">←</button>
         <div>
-          <h1>Debat room</h1>
+          <nav className="thoughts-room-breadcrumb" aria-label="Current path">
+            <span>Thought room</span><i aria-hidden="true">/</i><strong>Debate room</strong>
+          </nav>
         </div>
       </header>
 
@@ -662,13 +666,28 @@ export function ApologeticsDebatePage() {
         <div className="apologetics-debate-step-heading">
           <span>1</span>
           <div>
-            <h2 id="debate-theme-title">Choose your beliefs</h2>
+            <h2 id="debate-theme-title">Choose your topic</h2>
             <p>Choose the belief or perspective you want to defend.</p>
           </div>
         </div>
         <div className="apologetics-debate-theme-list">
           {debateThemes.map((item) => (
-            <button className={themeId === item.id ? "is-selected" : ""} key={item.id} type="button" onClick={() => { setThemeId(themeId === item.id ? "" : item.id); setQuestion(""); }} aria-pressed={themeId === item.id}>
+            <button className={themeId === item.id ? "is-selected" : ""} key={item.id} type="button" onClick={(event) => {
+              const nextThemeId = themeId === item.id ? "" : item.id;
+              setThemeId(nextThemeId);
+              setQuestion("");
+              if (nextThemeId) {
+                const card = event.currentTarget;
+                window.requestAnimationFrame(() => {
+                  const carousel = card.parentElement;
+                  if (!carousel) return;
+                  carousel.scrollTo({
+                    left: Math.max(0, card.offsetLeft - (carousel.clientWidth - card.offsetWidth) / 2),
+                    behavior: "smooth",
+                  });
+                });
+              }
+            }} aria-pressed={themeId === item.id}>
               {item.label}
             </button>
           ))}
@@ -708,7 +727,21 @@ export function ApologeticsDebatePage() {
         </div>
         <div className="apologetics-debate-personality-list">
           {opponentPersonalities.map((personality) => (
-            <button className={opponentPersonality === personality.id ? "is-selected" : ""} type="button" key={personality.id} onClick={() => setOpponentPersonality((current) => current === personality.id ? "" : personality.id)} aria-pressed={opponentPersonality === personality.id}>
+            <button className={opponentPersonality === personality.id ? "is-selected" : ""} type="button" key={personality.id} onClick={(event) => {
+              const nextPersonality = opponentPersonality === personality.id ? "" : personality.id;
+              setOpponentPersonality(nextPersonality);
+              if (nextPersonality) {
+                const card = event.currentTarget;
+                window.requestAnimationFrame(() => {
+                  const carousel = card.parentElement;
+                  if (!carousel) return;
+                  carousel.scrollTo({
+                    left: Math.max(0, card.offsetLeft - (carousel.clientWidth - card.offsetWidth) / 2),
+                    behavior: "smooth",
+                  });
+                });
+              }
+            }} aria-pressed={opponentPersonality === personality.id}>
               {personality.label}
             </button>
           ))}

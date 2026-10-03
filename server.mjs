@@ -43,6 +43,7 @@ const mimeTypes = {
   ".css": "text/css; charset=utf-8",
   ".js": "application/javascript; charset=utf-8",
   ".json": "application/json; charset=utf-8",
+  ".webp": "image/webp",
   ".svg": "image/svg+xml",
 };
 
@@ -82,6 +83,37 @@ function getOpenAiKey() {
 
 function getOpenAiModel() {
   return process.env.OPENAI_MODEL || "gpt-5.6-sol";
+}
+
+function containsPersonalContactInfo(value) {
+  const text = String(value || "");
+  const email = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
+  const phone = /(?:\+?\d[\d().\-\s]{6,}\d)/;
+  return email.test(text) || phone.test(text);
+}
+
+function assertNoPersonalContactInfo(...values) {
+  if (values.some((value) => containsPersonalContactInfo(value))) {
+    const error = new Error("For privacy, do not include an email address or phone number in AI messages.");
+    error.status = 400;
+    throw error;
+  }
+}
+
+function getAiSafetyInstructions(audience = "adult") {
+  const shared = [
+    "Never ask for or encourage users to share contact details, an address, a school, or other identifying information.",
+    "If a user includes an email address or phone number, ask them to remove it before continuing.",
+    "Do not provide sexual content, graphic violence, self-harm instructions, illegal guidance, or advice that bypasses parental or professional support.",
+    "When a user may be in immediate danger, encourage them to contact a trusted adult or local emergency services.",
+  ];
+  if (audience === "teen") {
+    shared.push(
+      "This conversation may be read by a minor. Keep every response age-appropriate, calm, and supportive.",
+      "Do not encourage secrecy from parents, guardians, teachers, or trusted adults.",
+    );
+  }
+  return shared.join(" ");
 }
 
 async function readJsonBody(req) {
@@ -275,6 +307,7 @@ async function handleAiChat(req, res) {
   const body = await readJsonBody(req);
   const prompt = String(body.prompt || "").trim();
   const mode = String(body.mode || "general");
+  const audience = body.audience === "teen" ? "teen" : "adult";
   const history = Array.isArray(body.history)
     ? body.history
       .filter((item) => item && ["user", "assistant"].includes(item.role) && item.text)
@@ -289,6 +322,7 @@ async function handleAiChat(req, res) {
     sendJson(res, 400, { error: "prompt is required." });
     return;
   }
+  assertNoPersonalContactInfo(prompt, ...history.map((item) => item.text));
 
   const conversationContext = history.length
     ? [
@@ -338,6 +372,7 @@ async function handleAiChat(req, res) {
         "Give biblically grounded, clear, helpful answers. When interpretation is uncertain, say so plainly.",
         referenceGuidance,
       ];
+  instructions.push(getAiSafetyInstructions(audience));
   const result = await openAiResponse({
     instructions: instructions.join(" "),
     input: context,
@@ -356,6 +391,7 @@ async function handleVerseAiChat(req, res) {
     sendJson(res, 400, { error: "question, reference, and text are required." });
     return;
   }
+  assertNoPersonalContactInfo(question);
 
   const result = await openAiResponse({
     instructions: [
@@ -363,6 +399,7 @@ async function handleVerseAiChat(req, res) {
       "Every answer must stay directly connected to the provided Bible verse.",
       "If the user asks something unrelated, briefly connect it back to the verse instead of drifting.",
       "Be concise, pastoral, and clear. Mention interpretive uncertainty when needed.",
+      getAiSafetyInstructions(body.audience === "teen" ? "teen" : "adult"),
     ].join(" "),
     input: [
       `Reference: ${reference}`,
@@ -395,6 +432,7 @@ async function handleApologeticsAiChat(req, res) {
     sendJson(res, 400, { error: "mode, message, trackTitle, and topicTitle are required." });
     return;
   }
+  assertNoPersonalContactInfo(message, ...history.map((item) => item.text));
 
   const opponentCase = Array.isArray(body.opponentCase) ? body.opponentCase.slice(0, 8) : [];
   const keyResponse = Array.isArray(body.keyResponse) ? body.keyResponse.slice(0, 8) : [];
@@ -444,7 +482,7 @@ async function handleApologeticsAiChat(req, res) {
     ].join(" ");
 
   const result = await openAiResponse({
-    instructions,
+    instructions: `${instructions} ${getAiSafetyInstructions(body.audience === "teen" ? "teen" : "adult")}`,
     input: [
       "Apologetics topic dossier:",
       dossier,

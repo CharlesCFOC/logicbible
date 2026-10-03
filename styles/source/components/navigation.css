@@ -32,11 +32,21 @@
   box-shadow: inset 0 1px 0 rgba(236, 250, 255, 0.24), 0 3px 10px rgba(0, 0, 0, 0.2) !important;
 }
 
+/* Non-Home active items should not turn the page label into a filled block. */
+.app-shell .bottom-nav button:not([data-nav="home"]).is-active,
+.app-shell[data-app-background] .bottom-nav button:not([data-nav="home"]).is-active,
+.app-shell[data-theme="dark"] .bottom-nav button:not([data-nav="home"]).is-active,
+.app-shell[data-theme="dark"][data-app-background] .bottom-nav button:not([data-nav="home"]).is-active {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
 /* Keep Home centered and visually prominent in the seven-item navigation. */
 .app-shell .bottom-nav button[data-nav="home"],
 .app-shell[data-app-background] .bottom-nav button[data-nav="home"] {
   z-index: 1;
-  transform: translateY(-3px) scale(1.06) !important;
+  transform: scale(1.06) !important;
   border-radius: 20px;
   background: rgba(76, 153, 194, 0.3) !important;
   background-image: linear-gradient(180deg, rgba(125, 210, 247, 0.2), rgba(33, 87, 116, 0.34)) !important;
@@ -45,10 +55,39 @@
 
 .app-shell .bottom-nav button[data-nav="home"].is-active,
 .app-shell[data-app-background] .bottom-nav button[data-nav="home"].is-active {
-  background: linear-gradient(135deg, #22cfa2 0%, #258fd8 34%, #8062f2 68%, #ff56c7 100%) !important;
-  background-size: 260% 260% !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42), 0 5px 18px rgba(83, 157, 255, 0.42) !important;
-  animation: homeActiveColorShift 8s ease-in-out infinite !important;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: linear-gradient(110deg, #4fc3ff 0%, #8bdcff 24%, #ff9d00 50%, #ffb6dc 76%, #4fc3ff 100%) !important;
+  background-size: 280% 100% !important;
+  background-position: 0% 50%;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42), 0 5px 18px rgba(255, 156, 114, 0.34) !important;
+  animation: homeHeroTitleGradient 7s ease-in-out infinite !important;
+}
+
+.app-shell .bottom-nav button[data-nav="home"].is-active::before,
+.app-shell[data-app-background] .bottom-nav button[data-nav="home"].is-active::before {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 280%;
+  border-radius: inherit;
+  background: linear-gradient(110deg, #4fc3ff 0%, #8bdcff 24%, #ff9d00 50%, #ffb6dc 76%, #4fc3ff 100%);
+  background-size: 100% 100%;
+  content: "";
+  pointer-events: none;
+  transform: translateX(0);
+  animation: homeNavColorSweep 4.6s ease-in-out infinite;
+}
+
+.app-shell .bottom-nav button[data-nav="home"].is-active > svg,
+.app-shell .bottom-nav button[data-nav="home"].is-active > span,
+.app-shell[data-app-background] .bottom-nav button[data-nav="home"].is-active > svg,
+.app-shell[data-app-background] .bottom-nav button[data-nav="home"].is-active > span {
+  position: relative;
+  z-index: 1;
 }
 
 @keyframes homeActiveColorShift {
@@ -169,10 +208,71 @@
 .home-hero-image::after {
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(180deg, rgba(17, 18, 18, 0.04) 0%, rgba(17, 18, 18, 0.03) 42%, rgba(17, 18, 18, 0.62) 100%),
-    linear-gradient(90deg, rgba(17, 18, 18, 0.18), transparent 62%);
+  background: rgba(0, 0, 0, 0.22);
   content: "";
+}
+
+.home-hero-image::before {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(110deg, #4fc3ff 0%, #8bdcff 24%, #ff9d00 50%, #ffb6dc 76%, #4fc3ff 100%);
+  background-size: 280% 100%;
+  content: "";
+  pointer-events: none;
+  box-shadow: 0 0 8px rgba(139, 220, 255, 0.72), 0 0 18px rgba(255, 157, 0, 0.3), 0 0 22px rgba(255, 182, 220, 0.28);
+  animation: homeHeroNeonShift 6s ease-in-out infinite;
+}
+
+@keyframes homeHeroNeonShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.home-hero-app-title {
+  position: absolute;
+  top: 46%;
+  right: 18px;
+  z-index: 5;
+  width: min(78%, 310px);
+  margin: 0;
+  color: transparent;
+  font-family: var(--font-body);
+  font-size: clamp(42px, 11vw, 70px);
+  font-weight: 800;
+  line-height: 0.86;
+  letter-spacing: -0.075em;
+  text-align: right;
+  text-wrap: balance;
+  background: linear-gradient(110deg, #4fc3ff 0%, #8bdcff 24%, #ff9d00 50%, #ffb6dc 76%, #4fc3ff 100%);
+  background-size: 280% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 12px 10px rgba(0, 0, 0, 0.48)) drop-shadow(0 0 8px rgba(139, 220, 255, 0.34)) drop-shadow(0 0 18px rgba(255, 182, 220, 0.3));
+  transform: translateY(-50%);
+  animation: homeHeroTitleGradient 7s ease-in-out infinite;
+}
+
+@keyframes homeHeroTitleGradient {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .home-hero-image-copy {
@@ -218,22 +318,33 @@
   gap: 3px;
   max-width: 31ch;
   margin-top: 3px;
-  padding-left: 10px;
-  border-left: 2px solid rgba(255, 253, 248, 0.7);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
 }
 
-.home-hero-verse span,
-.home-hero-verse small {
-  color: rgba(255, 253, 248, 0.72);
+.home-hero-verse-heading {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.home-hero-verse-heading span,
+.home-hero-verse-heading small {
+  color: rgba(49, 24, 8, 0.72);
   font-size: 10px;
   letter-spacing: 0.04em;
   text-transform: none;
 }
 
 .home-hero-verse strong {
-  color: #fffdf8;
-  font-family: var(--font-display);
+  color: #000000;
+  font-family: var(--font-body);
   font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
   line-height: 1.12;
 }
 
@@ -583,10 +694,6 @@
   z-index: 20;
 }
 
-.app-shell[data-active-screen="kids-bible"][data-kids-reader="true"] .bottom-nav {
-  display: none !important;
-}
-
 /* Fade the navigation into the screen instead of starting with a hard edge. */
 .app-shell .bottom-nav {
   overflow: visible !important;
@@ -607,13 +714,281 @@
   content: "";
 }
 
-/* Final Home state: animated color variations take priority over theme overrides. */
+/* Final Home state: preserve its animated color treatment. */
 .app-shell[data-app-background] .bottom-nav button[data-nav="home"].is-active {
-  background-color: #8062f2 !important;
-  background-image: radial-gradient(circle at 16% 16%, rgba(255, 255, 255, 0.34), transparent 30%), linear-gradient(135deg, #22cfa2 0%, #258fd8 32%, #8062f2 66%, #ff56c7 100%) !important;
-  background-size: 260% 260% !important;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: #ff9d00 !important;
+  background-image: linear-gradient(110deg, #4fc3ff 0%, #8bdcff 24%, #ff9d00 50%, #ffb6dc 76%, #4fc3ff 100%) !important;
+  background-size: 280% 100% !important;
   background-position: 0% 50% !important;
-  filter: saturate(1.32);
+  filter: none;
   transition: background-position 700ms ease, filter 700ms ease !important;
-  animation: homeActiveColorShift 8s ease-in-out infinite !important;
+  animation: homeHeroTitleGradient 7s ease-in-out infinite !important;
+}
+
+.app-shell[data-app-background] .bottom-nav button[data-nav="home"].is-active::before {
+  display: block;
+}
+
+.app-shell[data-app-background] .bottom-nav button[data-nav="home"].is-active > svg,
+.app-shell[data-app-background] .bottom-nav button[data-nav="home"].is-active > span {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes homeNavColorSweep {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(-64.2857%);
+  }
+}
+
+/* Active destinations use the same blue-to-orange accent, except Home which keeps its animated fill. */
+.app-shell[data-app-background] .bottom-nav button:not([data-nav="home"]).is-active > span {
+  background: none !important;
+  -webkit-text-fill-color: currentColor;
+  color: #5edcff !important;
+}
+
+/* Home menu: a full destination drawer that keeps the primary tab bar compact. */
+.home-hero {
+  position: relative;
+  z-index: 3;
+}
+
+.home-menu-toggle {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  min-height: 52px;
+  padding: 0;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  color: #f5fbff;
+  box-shadow: none;
+  filter: drop-shadow(0 1px 2px rgba(1, 12, 27, 0.62));
+}
+
+.home-menu-toggle svg {
+  width: 28px;
+  height: 28px;
+  stroke-width: 2.1;
+}
+
+.home-menu-toggle:hover,
+.home-menu-toggle:focus-visible {
+  background: transparent;
+  color: #fff;
+}
+
+.home-menu-toggle:focus-visible {
+  outline: 2px solid rgba(168, 235, 255, 0.92);
+  outline-offset: 2px;
+}
+
+.app-menu-close {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  color: #f5fbff;
+  box-shadow: none;
+  filter: drop-shadow(0 1px 2px rgba(1, 12, 27, 0.62));
+}
+
+.app-menu-close:hover,
+.app-menu-close:focus-visible {
+  background: transparent;
+  color: #fff;
+}
+
+.app-menu-close:focus-visible {
+  outline: 2px solid rgba(168, 235, 255, 0.92);
+  outline-offset: 2px;
+}
+
+.app-menu-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1200;
+  overflow: hidden;
+  pointer-events: none;
+  visibility: hidden;
+  transition: visibility 0s linear 260ms;
+}
+
+.app-menu-layer.is-open {
+  pointer-events: auto;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.app-menu-scrim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  min-height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: rgba(1, 10, 22, 0.18);
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+
+.app-menu-layer.is-open .app-menu-scrim {
+  opacity: 1;
+}
+
+.app-menu-drawer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  height: 100%;
+  overflow-y: auto;
+  padding: max(18px, env(safe-area-inset-top)) 18px calc(24px + env(safe-area-inset-bottom));
+  border-right: 1px solid rgba(159, 225, 255, 0.5);
+  background:
+    radial-gradient(ellipse 72% 32% at 20% 0%, rgba(110, 208, 255, 0.24), transparent 74%),
+    radial-gradient(ellipse 70% 42% at 92% 80%, rgba(116, 99, 255, 0.22), transparent 76%),
+    linear-gradient(155deg, rgba(13, 56, 90, 0.5) 0%, rgba(8, 40, 69, 0.44) 52%, rgba(4, 26, 49, 0.52) 100%);
+  box-shadow: 18px 0 36px rgba(0, 8, 22, 0.44);
+  -webkit-backdrop-filter: blur(28px) saturate(150%);
+  backdrop-filter: blur(28px) saturate(150%);
+  color: #f6fbff;
+  transform: translateX(-102%);
+  transition: transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  scrollbar-width: none;
+}
+
+.app-menu-drawer::-webkit-scrollbar {
+  display: none;
+}
+
+.app-menu-layer.is-open .app-menu-drawer {
+  transform: translateX(0);
+}
+
+.app-menu-drawer-header,
+.app-menu-brand,
+.app-menu-section button,
+.app-menu-section a {
+  display: flex;
+  align-items: center;
+}
+
+.app-menu-drawer-header {
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 26px;
+}
+
+.app-menu-brand {
+  gap: 9px;
+  min-width: 0;
+  color: #fff;
+  font-size: 18px;
+  letter-spacing: -0.03em;
+}
+
+.app-menu-close {
+  flex: 0 0 44px;
+}
+
+.app-menu-section {
+  display: grid;
+  gap: 4px;
+}
+
+.app-menu-section + .app-menu-section {
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(190, 229, 255, 0.22);
+}
+
+.app-menu-section > p {
+  margin: 0 0 5px 8px;
+  color: rgba(204, 235, 255, 0.72);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.app-menu-section button,
+.app-menu-section a {
+  width: 100%;
+  min-height: 48px;
+  gap: 12px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  background: transparent;
+  color: rgba(246, 251, 255, 0.9);
+  font-size: 14px;
+  font-weight: 700;
+  text-align: left;
+  text-decoration: none;
+}
+
+.app-menu-section button > svg:first-child,
+.app-menu-section a > svg:first-child {
+  flex: 0 0 20px;
+  color: #93e2ff;
+}
+
+.app-menu-section button > span,
+.app-menu-section a > span {
+  flex: 1;
+}
+
+.app-menu-section button > svg:last-child,
+.app-menu-section a > svg:last-child {
+  width: 17px;
+  height: 17px;
+  color: rgba(220, 241, 255, 0.58);
+}
+
+.app-menu-section button:hover,
+.app-menu-section button:focus-visible,
+.app-menu-section a:hover,
+.app-menu-section a:focus-visible,
+.app-menu-section button.is-active {
+  border-color: rgba(151, 225, 255, 0.38);
+  background: linear-gradient(90deg, rgba(103, 206, 255, 0.22), rgba(105, 119, 235, 0.13));
+  color: #fff;
+}
+
+.app-menu-section button:focus-visible,
+.app-menu-section a:focus-visible {
+  outline: 2px solid #a8ebff;
+  outline-offset: 2px;
+}
+
+.app-menu-section--secondary button,
+.app-menu-section--secondary a {
+  min-height: 44px;
+  color: rgba(224, 241, 255, 0.82);
+  font-size: 13px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-menu-layer,
+  .app-menu-scrim,
+  .app-menu-drawer {
+    transition: none;
+  }
 }

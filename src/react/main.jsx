@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { HomeHero, HomeLibraryPanel, HomeLibraryTabs, HomePrayerCard, HomeStats } from "./home.jsx";
+import { HomeHero, HomeLibraryPanel, HomeLibraryTabs, HomePrayerCard } from "./home.jsx";
 import { ProfileCloudAccount, ProfileHero, ProfileInformation, ProfilePreferences, ProfileTabs } from "./profile.jsx";
 import { BibleChapterContent, BibleParallelControls, BibleReaderControls, BibleSelectedVerse, BibleVerseActions } from "./bible.jsx";
 import { NoteEditorContent, NoteEditorHeader, NoteEditorVerseChips, NoteToolbar } from "./notes.jsx";
@@ -9,6 +9,7 @@ import { AiPage } from "./ai.jsx";
 import { KidsBiblePage } from "./kids-bible.jsx";
 import { ApologeticsDebatePage } from "./apologetics-debate.jsx";
 import { ApologeticsCoachPage, ApologeticsXpCard } from "./apologetics-coach.jsx";
+import { AdminPage } from "./admin.jsx";
 
 const navigationItems = [
   ["prayer", "Prayer", "heart"],
@@ -30,11 +31,60 @@ const iconPaths = {
   user: ["M20 21a8 8 0 0 0-16 0", "M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8"],
 };
 
-function NavigationIcon({ name }) {
+function NavigationIcon({ name, hasActiveGradient = false }) {
+  const gradientId = `active-nav-gradient-${name}`;
+
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      {iconPaths[name].map((path) => <path key={path} d={path} />)}
+      {hasActiveGradient && (
+        <defs>
+          <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#5edcff" />
+            <stop offset="100%" stopColor="#ff9d00" />
+          </linearGradient>
+        </defs>
+      )}
+      {iconPaths[name].map((path) => <path key={path} d={path} stroke={hasActiveGradient ? `url(#${gradientId})` : undefined} />)}
     </svg>
+  );
+}
+
+function BibleReadingProgress() {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const reader = document.querySelector("#bible");
+    if (!reader) return undefined;
+
+    let frame = 0;
+    const updateProgress = () => {
+      frame = 0;
+      const scrollableDistance = reader.scrollHeight - reader.clientHeight;
+      setProgress(scrollableDistance > 0
+        ? Math.min(100, Math.max(0, (reader.scrollTop / scrollableDistance) * 100))
+        : 0);
+    };
+    const requestUpdate = () => {
+      if (!frame) frame = window.requestAnimationFrame(updateProgress);
+    };
+
+    reader.addEventListener("scroll", requestUpdate, { passive: true });
+    document.addEventListener("bible:chapter-change", requestUpdate);
+    window.addEventListener("resize", requestUpdate);
+    requestUpdate();
+
+    return () => {
+      reader.removeEventListener("scroll", requestUpdate);
+      document.removeEventListener("bible:chapter-change", requestUpdate);
+      window.removeEventListener("resize", requestUpdate);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  return (
+    <div className="reader-reading-progress" aria-label={`Reading progress: ${Math.round(progress)}%`} role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow={Math.round(progress)}>
+      <span style={{ width: `${progress}%` }} />
+    </div>
   );
 }
 
@@ -63,12 +113,17 @@ function BottomNavigation() {
     }
   };
 
-  return navigationItems.map(([id, label, icon]) => (
-    <button key={id} className={activeScreen === id ? "is-active" : ""} data-nav={id} type="button" onPointerDown={triggerNavigationHaptic} onClick={() => navigate(id)}>
-      <NavigationIcon name={icon} />
-      <span>{label}</span>
-    </button>
-  ));
+  return (
+    <>
+      {navigationItems.map(([id, label, icon]) => (
+        <button key={id} className={activeScreen === id ? "is-active" : ""} data-nav={id} type="button" onPointerDown={triggerNavigationHaptic} onClick={() => navigate(id)}>
+          <NavigationIcon name={icon} hasActiveGradient={activeScreen === id && id !== "home"} />
+          <span>{label}</span>
+        </button>
+      ))}
+      {activeScreen === "bible" && <BibleReadingProgress />}
+    </>
+  );
 }
 
 const mountNode = document.querySelector("[data-react-navigation-root]");
@@ -79,11 +134,6 @@ if (mountNode) {
 const homeHeroNode = document.querySelector("[data-react-home-hero-root]");
 if (homeHeroNode) {
   createRoot(homeHeroNode).render(<HomeHero />);
-}
-
-const homeStatsNode = document.querySelector("[data-react-home-stats-root]");
-if (homeStatsNode) {
-  createRoot(homeStatsNode).render(<HomeStats />);
 }
 
 const homePrayerNode = document.querySelector("[data-react-home-prayer-root]");
@@ -201,4 +251,9 @@ if (apologeticsCoachNode) {
 const apologeticsXpNode = document.querySelector("[data-react-apologetics-xp-root]");
 if (apologeticsXpNode && window.aiBridge) {
   createRoot(apologeticsXpNode).render(<ApologeticsXpCard />);
+}
+
+const adminNode = document.querySelector("[data-react-admin-root]");
+if (adminNode && window.moderationBridge) {
+  createRoot(adminNode).render(<AdminPage />);
 }

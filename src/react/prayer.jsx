@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 const categories = [
@@ -12,6 +12,29 @@ const categories = [
 const filterCategories = [["all", "All"], ...categories];
 
 const backgrounds = [1, 2, 3, 4, 5, 6];
+
+function getHourBucket(timestamp = Date.now()) {
+  return Math.floor(timestamp / (60 * 60 * 1000));
+}
+
+function getHourlyPrayerIndices(count, hourBucket, size = 3) {
+  if (!count) return [];
+  const indices = Array.from({ length: count }, (_, index) => index);
+  let seed = hourBucket * 12.9898 + 78.233;
+  for (let index = indices.length - 1; index > 0; index -= 1) {
+    seed = Math.sin(seed) * 43758.5453;
+    const random = seed - Math.floor(seed);
+    const swapIndex = Math.floor(random * (index + 1));
+    [indices[index], indices[swapIndex]] = [indices[swapIndex], indices[index]];
+  }
+  return indices.slice(0, Math.min(size, count));
+}
+
+function formatSpotlightCountdown(timestamp = Date.now()) {
+  const seconds = Math.ceil(((60 * 60 * 1000) - (timestamp % (60 * 60 * 1000))) / 1000);
+  const minutes = Math.floor(seconds / 60);
+  return `${String(minutes).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
+}
 
 const icons = {
   send: ["m22 2-7 20-4-9-9-4Z", "M22 2 11 13"],
@@ -35,7 +58,9 @@ function usePrayerState() {
   useEffect(() => {
     const handleChange = () => setState(bridge.getSnapshot());
     document.addEventListener("prayer:state-change", handleChange);
-    return () => document.removeEventListener("prayer:state-change", handleChange);
+    return () => {
+      document.removeEventListener("prayer:state-change", handleChange);
+    };
   }, [bridge]);
   return [state, bridge];
 }
@@ -58,18 +83,20 @@ function PrayerRequestForm({ state, bridge }) {
   const [category, setCategory] = useState(state.requestCategory || "general");
   const [background, setBackground] = useState(state.backgroundIndex || 0);
   const [sending, setSending] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const words = text.trim() ? text.trim().split(/\s+/).length : 0;
 
   const submit = async (event) => {
     event.preventDefault();
     setSending(true);
-    const success = await bridge.submit(title, text, category, background);
+    const success = await bridge.submit(title, text, category, background, acceptedTerms);
     setSending(false);
     if (success) {
       setTitle("");
       setText("");
       setCategory("general");
       setBackground(0);
+      setAcceptedTerms(false);
     }
   };
 
@@ -80,6 +107,7 @@ function PrayerRequestForm({ state, bridge }) {
         <p>Share your request anonymously and let the community pray with you.</p>
       </article>
       <form className="prayer-compose" onSubmit={submit}>
+        <p className="prayer-safety-reminder">Keep personal details private. Reported content can be reviewed and removed by an administrator.</p>
         <div className="prayer-request-title-field">
           <input value={title} onChange={(event) => setTitle(event.target.value)} type="text" maxLength="120" placeholder="Prayer title" aria-label="Prayer title" required />
         </div>
@@ -94,11 +122,15 @@ function PrayerRequestForm({ state, bridge }) {
           <div className="prayer-background-options">
             {backgrounds.map((number, index) => (
               <button className={background === index ? "is-active" : ""} type="button" key={number} onClick={() => setBackground(index)} aria-label={`Choose prayer background ${number}`} aria-pressed={background === index}>
-                <img src={`assets/prayer-backgrounds/prayer-${number}.jpg`} alt="" loading="lazy" decoding="async" />
+                <img src={`assets/prayer-backgrounds/prayer-${number}.webp`} alt="" loading="lazy" decoding="async" />
               </button>
             ))}
           </div>
         </div>
+        <label className="prayer-community-terms">
+          <input type="checkbox" checked={acceptedTerms} onChange={(event) => setAcceptedTerms(event.target.checked)} required />
+          <span>I agree to the <a href="community-guidelines.html" target="_blank" rel="noreferrer">community rules</a>: no private contact details, bullying, sexual content, threats, or spam.</span>
+        </label>
         <div className="prayer-compose-footer">
           <small className={words > 300 ? "is-over-limit" : ""}>{words} / 300 words</small>
           <button type="submit" disabled={sending}><PrayerIcon name="send" /><span>{sending ? "Sending..." : state.sent ? "Sent" : "Send prayer request"}</span></button>
@@ -223,9 +255,22 @@ function OnlinePrayerPanel() {
   );
 }
 
-function PrayerCard({ request, bridge, index }) {
+const prayerStatusLabels = {
+  pending: "Pending review",
+  rejected: "Not approved",
+  archived: "Archived",
+  answered: "Answered",
+};
+
+function PrayerCard({ request, bridge, index, currentUserId }) {
   const [isOpen, setIsOpen] = useState(false);
-  const image = `assets/prayer-backgrounds/prayer-${request.backgroundIndex + 1}.jpg`;
+  const [reportOpen, setReportOpen] = useState(false);
+  const [reportReason, setReportReason] = useState("personal-information");
+  const [reportDetails, setReportDetails] = useState("");
+  const [reportFeedback, setReportFeedback] = useState("");
+  const [reporting, setReporting] = useState(false);
+  const pressTimer = useRef(null);
+  const image = `assets/prayer-backgrounds/prayer-${request.backgroundIndex + 1}.webp`;
   const title = request.title?.trim() || "Prayer request";
 
   useEffect(() => {
@@ -237,6 +282,23 @@ function PrayerCard({ request, bridge, index }) {
     return () => document.removeEventListener("keydown", closeOnEscape);
   }, [isOpen]);
 
+  useEffect(() => () => window.clearTimeout(pressTimer.current), []);
+
+  const openModeration = () => {
+    window.clearTimeout(pressTimer.current);
+    setIsOpen(true);
+    setReportOpen(true);
+    navigator.vibrate?.(12);
+  };
+
+  const startLongPress = (event) => {
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+    window.clearTimeout(pressTimer.current);
+    pressTimer.current = window.setTimeout(openModeration, 550);
+  };
+
+  const cancelLongPress = () => window.clearTimeout(pressTimer.current);
+
   const share = (event) => {
     event.stopPropagation();
     bridge.share(request.id);
@@ -244,6 +306,28 @@ function PrayerCard({ request, bridge, index }) {
   const pray = (event) => {
     event.stopPropagation();
     bridge.pray(request.id);
+  };
+  const submitReport = async (event) => {
+    event.preventDefault();
+    setReporting(true);
+    setReportFeedback("");
+    try {
+      await bridge.report(request.id, reportReason, reportDetails);
+      setReportFeedback("Report sent. Thank you for helping keep this space safe.");
+      setReportOpen(false);
+    } catch (error) {
+      setReportFeedback(error.message || "This report could not be sent.");
+    } finally {
+      setReporting(false);
+    }
+  };
+  const block = async () => {
+    try {
+      await bridge.block(request.ownerId);
+      setIsOpen(false);
+    } catch (error) {
+      setReportFeedback(error.message || "This user could not be blocked.");
+    }
   };
 
   const modal = isOpen ? createPortal(
@@ -260,12 +344,22 @@ function PrayerCard({ request, bridge, index }) {
           <div className="prayer-detail-footer">
             <div className="prayer-card-actions">
               <button type="button" className="prayer-action prayer-action-secondary" onClick={share} aria-label="Share prayer request" title="Share"><PrayerIcon name="share" /></button>
-              <button type="button" className={`prayer-action${request.hasPrayed ? " is-prayed" : ""}`} onClick={pray} aria-label={request.hasPrayed ? "Prayer count" : "I prayed"}>
+              <button type="button" className={`prayer-action${request.hasPrayed ? " is-prayed" : ""}`} onClick={pray} aria-label={request.hasPrayed ? "You prayed for this request" : "Pray for this request"} aria-pressed={request.hasPrayed}>
                 <PrayerIcon name="heart" />
-                <span className="prayer-action-label">I prayed</span>
+                <span className="prayer-action-label">{request.hasPrayed ? "✓ You prayed" : "I prayed"}</span>
                 <small className="prayer-action-count">{request.prayerCount}</small>
               </button>
             </div>
+            <div className="prayer-safety-actions">
+              <button type="button" onClick={() => setReportOpen((current) => !current)}>Report</button>
+              {request.ownerId && request.ownerId !== currentUserId && <button type="button" onClick={block}>Hide this user</button>}
+            </div>
+            {reportOpen && <form className="prayer-report-form" onSubmit={submitReport}>
+              <label><span>Reason</span><select value={reportReason} onChange={(event) => setReportReason(event.target.value)}><option value="personal-information">Private information</option><option value="bullying">Bullying or harassment</option><option value="sexual-content">Sexual content</option><option value="violence">Violence or threats</option><option value="spam">Spam</option><option value="other">Other</option></select></label>
+              <label><span>Optional details</span><textarea value={reportDetails} onChange={(event) => setReportDetails(event.target.value)} maxLength="500" rows="2" /></label>
+              <button type="submit" disabled={reporting}>{reporting ? "Sending…" : "Send report"}</button>
+            </form>}
+            {reportFeedback && <p className="prayer-report-feedback" role="status">{reportFeedback}</p>}
           </div>
         </div>
       </section>
@@ -275,18 +369,18 @@ function PrayerCard({ request, bridge, index }) {
 
   return (
     <>
-      <article className={`prayer-card prayer-card--${index % 4}${request.expanded ? " is-expanded" : ""}${request.urgent ? " is-urgent" : ""}${request.isNewlyPrayed ? " is-prayed" : ""}`} style={{ "--prayer-card-image": `url('${image}')` }} onClick={() => setIsOpen(true)}>
+      <article className={`prayer-card prayer-card--${index % 4}${request.expanded ? " is-expanded" : ""}${request.urgent ? " is-urgent" : ""}${request.isNewlyPrayed ? " is-prayed" : ""}${isOpen ? " is-open" : ""}`} style={{ "--prayer-card-image": `url('${image}')` }} onClick={() => setIsOpen(true)} onPointerDown={startLongPress} onPointerUp={cancelLongPress} onPointerCancel={cancelLongPress} onPointerLeave={cancelLongPress} onContextMenu={(event) => { event.preventDefault(); openModeration(); }}>
       <button type="button" className="prayer-card-toggle" onClick={() => setIsOpen(true)} aria-label="Open prayer request">
         <span>
+          <small className="prayer-card-category">{request.category || "General"}</small>
           <strong className="prayer-card-title">{title}</strong>
+          {request.status !== "active" && <small className="prayer-card-status">{prayerStatusLabels[request.status] || request.status}</small>}
           <p className="prayer-card-preview">{request.expanded ? request.text : request.preview}</p>
         </span>
-        <PrayerIcon name="chevron" />
       </button>
       <div className="prayer-card-meta">
         <div className="prayer-card-actions">
-          <button type="button" className="prayer-action prayer-action-secondary" onClick={share} aria-label="Share prayer request" title="Share"><PrayerIcon name="share" /></button>
-          <button type="button" className={`prayer-action${request.hasPrayed ? " is-prayed" : ""}`} onClick={pray} aria-label={request.hasPrayed ? "Prayer count" : "I prayed"}>
+          <button type="button" className={`prayer-action${request.hasPrayed ? " is-prayed" : ""}`} onClick={pray} aria-label={request.hasPrayed ? "Cancel prayer" : "Pray for this request"} aria-pressed={request.hasPrayed}>
             <PrayerIcon name="heart" />
             <span>{request.prayerCount}</span>
           </button>
@@ -298,37 +392,156 @@ function PrayerCard({ request, bridge, index }) {
   );
 }
 
+function PrayerModerationQueue({ requests, bridge }) {
+  const [feedback, setFeedback] = useState("");
+  const [workingId, setWorkingId] = useState("");
+  if (!requests.length) return null;
+  const review = async (requestId, nextStatus) => {
+    setWorkingId(requestId);
+    setFeedback("");
+    try {
+      await bridge.moderate(requestId, nextStatus);
+      setFeedback(nextStatus === "active" ? "Request approved." : "Request rejected.");
+    } catch (error) {
+      setFeedback(error.message || "This request could not be reviewed.");
+    } finally {
+      setWorkingId("");
+    }
+  };
+  return <section className="prayer-moderation-queue" aria-label="Prayer moderation queue">
+    <header><span>Moderation</span><strong>{requests.length} pending</strong></header>
+    {requests.map((request) => <article key={request.id}><div><strong>{request.title || "Prayer request"}</strong><p>{request.preview || request.text}</p></div><div><button type="button" onClick={() => review(request.id, "active")} disabled={workingId === request.id}>Approve</button><button type="button" onClick={() => review(request.id, "rejected")} disabled={workingId === request.id}>Reject</button></div></article>)}
+    {feedback && <p role="status">{feedback}</p>}
+  </section>;
+}
+
+function PrayerSpotlight({ requests, bridge, hourBucket }) {
+  const [now, setNow] = useState(() => Date.now());
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [dragX, setDragX] = useState(0);
+  const dragStartX = useRef(null);
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(Date.now()), 1000);
+    return () => window.clearInterval(timer);
+  }, []);
+  useEffect(() => {
+    setActiveIndex(0);
+    setDragX(0);
+  }, [hourBucket, requests.length]);
+  if (!requests.length) return null;
+
+  const move = (direction) => {
+    setActiveIndex((current) => (current + direction + requests.length) % requests.length);
+    setDragX(0);
+  };
+
+  const handlePointerDown = (event) => {
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+    dragStartX.current = event.clientX;
+    event.currentTarget.setPointerCapture?.(event.pointerId);
+  };
+
+  const handlePointerMove = (event) => {
+    if (dragStartX.current === null) return;
+    setDragX(Math.max(-120, Math.min(120, event.clientX - dragStartX.current)));
+  };
+
+  const handlePointerEnd = () => {
+    if (dragStartX.current === null) return;
+    const distance = dragX;
+    dragStartX.current = null;
+    if (Math.abs(distance) > 42 && requests.length > 1) {
+      move(distance < 0 ? 1 : -1);
+    } else {
+      setDragX(0);
+    }
+  };
+
+  return (
+    <section className="prayer-spotlight-carousel" aria-label="Hourly prayer spotlight">
+      <div
+        className="prayer-spotlight-stack"
+        aria-live="polite"
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerEnd}
+        onPointerCancel={handlePointerEnd}
+        style={{ "--prayer-spotlight-drag-x": `${dragX}px` }}
+      >
+        {[requests[activeIndex]].map((request) => {
+          const title = request.title?.trim() || "Prayer request";
+          return (
+            <article
+              className="prayer-spotlight prayer-spotlight-position-0 is-active"
+              key={request.id}
+              style={{ "--prayer-spotlight-image": "url('assets/prayer-spotlight-background.webp')" }}
+            >
+              <span className="prayer-spotlight-label">Next spotlight in <strong>{formatSpotlightCountdown(now)}</strong></span>
+              <h2>{title}</h2>
+              <p>{request.preview || request.text}</p>
+              <footer>
+                <span>{request.category || "General"}</span>
+                <span>♥ {request.prayerCount} praying</span>
+                <button className={request.hasPrayed ? "is-prayed" : ""} type="button" onClick={() => bridge.pray(request.id)} aria-pressed={request.hasPrayed}>
+                  {request.hasPrayed ? "✓ You prayed" : "Pray now"}
+                </button>
+              </footer>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 export function PrayerPage() {
   const [state, bridge] = usePrayerState();
+  const [query, setQuery] = useState("");
+  const [spotlightHour, setSpotlightHour] = useState(() => getHourBucket());
+  useEffect(() => {
+    const delay = ((60 * 60 * 1000) - (Date.now() % (60 * 60 * 1000))) + 150;
+    const timer = window.setTimeout(() => setSpotlightHour(getHourBucket()), delay);
+    return () => window.clearTimeout(timer);
+  }, [spotlightHour]);
+  const visibleRequests = state.requests.filter((request) => `${request.title || ""} ${request.text || ""} ${request.category || ""}`.toLowerCase().includes(query.trim().toLowerCase()));
+  const searchableSpotlightRequests = (state.spotlightRequests || state.requests).filter((request) => `${request.title || ""} ${request.text || ""} ${request.category || ""}`.toLowerCase().includes(query.trim().toLowerCase()));
+  const spotlightIndices = getHourlyPrayerIndices(searchableSpotlightRequests.length, spotlightHour);
+  const spotlightRequests = spotlightIndices.map((index) => searchableSpotlightRequests[index]);
+  // The spotlight highlights one request; it must not remove it from the
+  // "Recent prayers" wall. Otherwise a community with only one request shows
+  // a count but an empty recent list.
+  const recentRequests = visibleRequests;
   return (
     <>
-      <header className="prayer-header"><div><h1>Prayer room</h1></div></header>
+      <header className="prayer-header"><div><h1>Prayer room</h1><p>A place to pray together.</p></div></header>
       <div className="prayer-page-tabs" role="tablist" aria-label="Prayer sections">
-        <button className={state.pageTab === "board" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("board")}>Prayer</button>
-        <button className={state.pageTab === "request" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("request")}>Prayer request</button>
-        <button className={state.pageTab === "online" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("online")}>Online prayer</button>
+        <button className={state.pageTab === "board" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("board")}><span>Prayer</span></button>
+        <button className={state.pageTab === "request" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("request")}><span>Prayer request</span></button>
+        <button className={state.pageTab === "online" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("online")}><span>Online prayer</span></button>
       </div>
       {state.pageTab === "online" && <OnlinePrayerPanel />}
       {state.pageTab === "request" && <PrayerRequestForm state={state} bridge={bridge} />}
       {(state.pageTab === "board" || state.myWallExpanded) && (
-        <section className="prayer-board-section">
-          <div className="prayer-board-content">
+        <>
+          <PrayerSpotlight requests={spotlightRequests} bridge={bridge} hourBucket={spotlightHour} />
+          <section className="prayer-board-section">
+            <div className="prayer-board-content">
             <div className="prayer-board-controls">
-              <label className="prayer-sort">
-                <span className="sr-only">Sort prayers</span>
-                <select value={state.sort} onChange={(event) => bridge.setSort(event.target.value)}>
-                  <option value="most">Most prayed</option>
-                  <option value="least">Least prayed</option>
-                  <option value="recent">Most recent</option>
-                </select>
+              <label className="prayer-wall-search">
+                <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+                <span className="sr-only">Search prayers</span>
+                <input value={query} onChange={(event) => setQuery(event.target.value)} type="search" placeholder="Search prayers" />
               </label>
               <PrayerCategories active={state.filter} onChange={bridge.setFilter} filter />
             </div>
+            <div className="prayer-recent-heading"><h2>Recent prayers</h2><span>{visibleRequests.length} requests</span></div>
+            <p className="prayer-report-tip">Press and hold a prayer card to report content.</p>
             <section className="prayer-list" aria-live="polite">
-              {state.requests.length ? state.requests.map((request, index) => <PrayerCard key={request.id} request={request} bridge={bridge} index={index} />) : <p className="prayer-empty">{state.pageTab === "request" ? "You have not posted any prayer requests yet." : "No prayer requests have been posted yet."}</p>}
+              {recentRequests.length ? recentRequests.map((request, index) => <PrayerCard key={request.id} request={request} bridge={bridge} index={index} currentUserId={state.currentUserId} />) : !spotlightRequests.length && <p className="prayer-empty">{state.pageTab === "request" ? "You have not posted any prayer requests yet." : "No prayer requests match your search."}</p>}
             </section>
-          </div>
-        </section>
+            </div>
+          </section>
+        </>
       )}
     </>
   );

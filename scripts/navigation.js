@@ -14,6 +14,11 @@ function navigateFromFallback(id) {
   document.querySelectorAll("[data-nav]").forEach((navButton) => {
     navButton.classList.toggle("is-active", navButton.dataset.nav === id);
   });
+  try {
+    window.sessionStorage.setItem("thought-bible.active-screen", id);
+  } catch {
+    // Ignore unavailable browser storage in the fallback path.
+  }
 }
 
 document.addEventListener("click", (event) => {

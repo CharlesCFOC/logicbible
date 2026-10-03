@@ -169,8 +169,8 @@ export function AiPage() {
         <button className="icon-button" type="button" onClick={newChat} aria-label="New chat"><AiIcon name="edit" /></button>
       </header>
       <nav className="ai-tabs" aria-label="AI sections">
-        <button className={tab === "chat" ? "is-active" : ""} type="button" onClick={() => setTab("chat")}>Chat</button>
-        <button className={tab === "history" ? "is-active" : ""} type="button" onClick={() => setTab("history")}>History</button>
+        <button className={tab === "chat" ? "is-active" : ""} type="button" onClick={() => setTab("chat")}><span>Chat</span></button>
+        <button className={tab === "history" ? "is-active" : ""} type="button" onClick={() => setTab("history")}><span>History</span></button>
       </nav>
       <div className="chat-thread" ref={threadRef} hidden={tab === "history"}>
         {messages.map((message, index) => <AiMessage key={`${message.role}-${index}-${message.text}`} message={message} bridge={bridge} showAvatar />)}

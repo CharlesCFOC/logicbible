@@ -733,6 +733,29 @@
   line-height: 44px;
 }
 
+.ai-safety-notice {
+  margin: 14px;
+  padding: 14px;
+  border: 1px solid rgba(137, 224, 255, .55);
+  border-radius: 18px;
+  color: #eaf7ff;
+  background: rgba(26, 87, 127, .42);
+  box-shadow: 0 0 16px rgba(83, 193, 255, .16);
+}
+
+.ai-safety-notice strong {
+  display: block;
+  color: #fff;
+  font-size: 14px;
+}
+
+.ai-safety-notice p {
+  margin: 6px 0 0;
+  color: #d2e9ff;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
 .reusable-ai-composer button {
   display: grid;
   place-items: center;

@@ -208,6 +208,20 @@
   margin: 0;
 }
 
+/* Original Greek is unavailable for now: keep the action visible but fully blurred and inert. */
+.bottom-sheet [data-verse-action="original-language"]:disabled,
+.bottom-sheet [data-verse-action="original-language"]:disabled:hover,
+.bottom-sheet [data-verse-action="original-language"]:disabled:active,
+.bottom-sheet [data-verse-action="original-language"]:disabled:focus-visible {
+  filter: blur(8px) !important;
+  opacity: 0.7;
+  pointer-events: none;
+  cursor: default;
+  transform: none !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
 .app-shell[data-modal="original-language"] .interlinear-verse-card,
 .app-shell[data-modal="original-language"] .interlinear-row {
   border-color: rgba(170, 215, 238, 0.3) !important;
@@ -309,7 +323,7 @@
   overflow-x: hidden;
 }
 
-.app-shell[data-modal="verse"] .bottom-sheet[data-verse-sheet] > .modal-handle {
+.app-shell[data-modal="verse"] .bottom-sheet[data-verse-sheet] .modal-handle {
   display: none;
 }
 
@@ -320,9 +334,9 @@
   right: 0;
   left: 0;
   height: 2px;
-  background: linear-gradient(90deg, #39e5e5 0%, #8bdcff 24%, #6e7bff 52%, #b27dff 76%, #39e5e5 100%);
+  background: linear-gradient(90deg, #4fc3ff 0%, #8bdcff 24%, #ff9d00 50%, #ffb6dc 76%, #4fc3ff 100%);
   background-size: 220% 100%;
-  box-shadow: 0 0 10px rgba(57, 229, 229, 0.72), 0 0 16px rgba(110, 123, 255, 0.48);
+  box-shadow: 0 0 10px rgba(79, 195, 255, 0.72), 0 0 15px rgba(255, 157, 0, 0.58), 0 0 18px rgba(255, 182, 220, 0.38);
   content: "";
   pointer-events: none;
   animation: verseSheetNeonShift 5s ease-in-out infinite;
@@ -386,6 +400,39 @@
   background: linear-gradient(180deg, rgba(252, 253, 255, 0.97), rgba(250, 251, 253, 0.88));
   backdrop-filter: blur(12px);
   gap: 6px;
+}
+
+.bottom-nav .reader-reading-progress {
+  position: absolute;
+  right: 0;
+  top: 0;
+  left: 0;
+  height: 3px;
+  overflow: hidden;
+  pointer-events: none;
+  background: rgba(8, 24, 38, 0.35);
+}
+
+.bottom-nav .reader-reading-progress span {
+  display: block;
+  height: 100%;
+  min-width: 0;
+  background: linear-gradient(90deg, #39e5e5 0%, #4f9dff 36%, #ff9d00 68%, #ff6a00 100%);
+  background-size: 180% 100%;
+  box-shadow: 0 0 7px rgba(79, 157, 255, 0.8), 0 0 13px rgba(255, 106, 0, 0.58);
+  transition: width 180ms ease-out;
+  animation: readerProgressNeonShift 4s ease-in-out infinite;
+}
+
+@keyframes readerProgressNeonShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .reader-select-label {
@@ -537,11 +584,11 @@
   width: 44px;
   min-height: 44px;
   flex: 0 0 44px;
-  border: 1px solid rgba(139, 220, 255, 0.46);
+  border: 1px solid rgba(255, 178, 125, 0.7);
   border-radius: 18px;
-  background: linear-gradient(135deg, #22cfa2 0%, #258fd8 48%, #8062f2 100%) !important;
+  background: linear-gradient(135deg, #ff9d00 0%, #ff6a00 52%, #e84a00 100%) !important;
   color: #ffffff;
-  box-shadow: 0 7px 16px rgba(35, 148, 190, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.26);
+  box-shadow: 0 7px 16px rgba(255, 106, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.26);
 }
 
 .bible-chapter-navigation button:hover:not(:disabled) {
@@ -557,6 +604,41 @@
 .bible-chapter-navigation button svg {
   width: 20px;
   height: 20px;
+}
+
+/* Match the active Home button's animated neon sweep on chapter navigation. */
+.bible-chapter-navigation button:not(:disabled) {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-color: rgba(184, 230, 255, 0.6);
+  background-image: linear-gradient(110deg, #4fc3ff 0%, #8bdcff 24%, #ff9d00 50%, #ffb6dc 76%, #4fc3ff 100%) !important;
+  background-size: 280% 100% !important;
+  background-position: 0% 50%;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.36), 0 0 10px rgba(139, 220, 255, 0.3), 0 0 20px rgba(255, 182, 220, 0.22);
+  animation: none;
+}
+
+.bible-chapter-navigation button:disabled { animation: none; }
+
+.bible-chapter-navigation button:not(:disabled)::before {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 280%;
+  border-radius: inherit;
+  background: linear-gradient(110deg, #4fc3ff 0%, #8bdcff 24%, #ff9d00 50%, #ffb6dc 76%, #4fc3ff 100%);
+  content: "";
+  pointer-events: none;
+  transform: translateX(0);
+  animation: homeNavColorSweep 4.6s ease-in-out infinite;
+}
+
+.bible-chapter-navigation button:not(:disabled) svg {
+  position: relative;
+  z-index: 1;
 }
 
 .reader-screen [data-reader-source] {

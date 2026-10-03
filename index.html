@@ -4,17 +4,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Brother Bible AI</title>
-    <link rel="stylesheet" href="styles.css?v=refactor-37" />
+    <link rel="stylesheet" href="styles.css?v=refactor-105" />
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="bible-data.js" defer></script>
-    <script src="script.js?v=modules-18" defer></script>
-    <script src="scripts/navigation.js?v=modules-06" defer></script>
-    <script src="scripts/prayer.js?v=modules-05" defer></script>
+    <script src="script.js?v=modules-24" defer></script>
+    <script src="scripts/navigation.js?v=modules-07" defer></script>
+    <script src="scripts/prayer.js?v=modules-06" defer></script>
     <script src="scripts/notes.js?v=modules-05" defer></script>
     <script src="scripts/bible.js?v=modules-05" defer></script>
     <script src="scripts/profile.js?v=modules-06" defer></script>
-    <script src="assets/react/navigation.js?v=react-24" defer></script>
+    <script src="assets/react/navigation.js?v=react-39" defer></script>
   </head>
   <body>
     <div class="app-shell" data-theme="light" data-app-background="black">
@@ -46,10 +46,14 @@
       <main class="phone-frame" aria-live="polite">
         <section id="home" class="screen is-active" data-screen>
           <header class="home-hero">
+            <button class="home-menu-toggle" type="button" data-home-menu-toggle aria-label="Open menu" aria-controls="app-menu-drawer" aria-expanded="false">
+              <i data-lucide="menu" aria-hidden="true"></i>
+              <span class="sr-only">Open menu</span>
+            </button>
           </header>
 
           <article class="home-hero-image" data-react-home-hero-root>
-            <img src="assets/cloud-account-zen.png" alt="Selected hero image" />
+            <img src="assets/home-hero-mountain-sunrise.webp" alt="Selected hero image" />
             <div class="home-hero-image-copy">
               <div class="home-hero-verse">
                 <span>Verse of the day</span>
@@ -59,18 +63,6 @@
               <button type="button" data-nav="bible">Start reading <i data-lucide="arrow-up-right"></i></button>
             </div>
           </article>
-
-          <section class="home-stats" aria-label="Daily activity" data-react-home-stats-root>
-            <article class="home-stat-card">
-              <span>Connected streak</span>
-              <strong data-home-streak>1 day</strong>
-            </article>
-            <button class="home-stat-card home-stat-card--continue" type="button" data-nav="bible">
-              <span>Continue reading</span>
-              <strong data-home-continue-reading>John 15</strong>
-              <i data-lucide="arrow-up-right"></i>
-            </button>
-          </section>
 
           <section class="home-bible-timeline" aria-label="Bible timeline" data-react-home-timeline-root>
             <div class="home-bible-timeline-track">
@@ -145,7 +137,7 @@
 
           <button class="home-prayer-card" type="button" data-nav="prayer" data-react-home-prayer-root>
             <span class="home-prayer-card-icon"><i data-lucide="hand-heart"></i></span>
-            <span><small>Prayer requests</small><strong><span data-home-prayer-count>0</span> people are waiting for prayer</strong></span>
+            <span><small>Pray for someone</small><strong><span data-home-prayer-count>0</span> people are waiting for prayer</strong></span>
             <i data-lucide="arrow-up-right"></i>
           </button>
 
@@ -178,7 +170,7 @@
               <span>3 stories</span>
             </div>
             <button class="kids-book-card" type="button" data-kids-book="matthew">
-              <img src="assets/kids-bible/matthew/01_Matthew_Comic_Page_Modern_English.jpg" alt="Matthew comic preview" loading="lazy" decoding="async" />
+              <img src="assets/kids-bible/matthew/01_Matthew_Comic_Page_Modern_English.webp" alt="Matthew comic preview" loading="lazy" decoding="async" />
               <div class="kids-book-card-copy">
                 <strong>Matthew</strong>
                 <small data-kids-book-progress-label>Page 1 of 37 · 3%</small>
@@ -230,9 +222,6 @@
             <div class="kids-reader-image-wrap">
               <img data-kids-page-image alt="Kids Bible illustrated page" loading="lazy" decoding="async" />
             </div>
-            <button class="kids-reader-first-page" type="button" data-kids-first-page aria-label="Go to first page"><i data-lucide="house"></i></button>
-            <button class="kids-reader-arrow is-previous" type="button" data-kids-previous aria-label="Previous page"><i data-lucide="chevron-left"></i></button>
-            <button class="kids-reader-arrow is-next" type="button" data-kids-next aria-label="Next page"><i data-lucide="chevron-right"></i></button>
           </section>
         </section>
 
@@ -281,23 +270,29 @@
 
         <section id="apologetics" class="screen apologetics-screen" data-screen>
           <header class="apologetics-page-header">
-            <h1>Apologetics</h1>
+            <h1>Thought room</h1>
             <p>Choose how you want to grow.</p>
           </header>
           <div data-react-apologetics-xp-root></div>
 
           <div class="apologetics-room-list" aria-label="Apologetics rooms">
             <button class="apologetics-room-button apologetics-room-button--debate" type="button" data-apologetics-room="debate">
-              <i data-lucide="message-circle" aria-hidden="true"></i>
-              <span class="apologetics-room-copy"><strong>Debat room</strong><small>Practice real conversations</small></span>
+              <span class="apologetics-room-number" aria-hidden="true">01</span>
+              <span class="apologetics-room-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h7A2.5 2.5 0 0 1 16 5.5v5a2.5 2.5 0 0 1-2.5 2.5H8l-4 3v-3.5z"/><path d="M8 8h4M8 10.5h5"/><path d="M10 15.5A2.5 2.5 0 0 1 12.5 13h5a2.5 2.5 0 0 1 2.5 2.5v3a2.5 2.5 0 0 1-2.5 2.5H15l-3 2v-2"/></svg></span>
+              <span class="apologetics-room-copy"><strong>Debate<br />room</strong><small>Challenge ideas and build stronger arguments.</small></span>
+              <span class="apologetics-room-arrow" aria-hidden="true">→</span>
             </button>
             <button class="apologetics-room-button apologetics-room-button--coach" type="button" data-apologetics-room="coach">
-              <i data-lucide="sparkles" aria-hidden="true"></i>
-              <span class="apologetics-room-copy"><strong>Coach room</strong><small>Improve your answers</small></span>
+              <span class="apologetics-room-number" aria-hidden="true">02</span>
+              <span class="apologetics-room-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>
+              <span class="apologetics-room-copy"><strong>Coach<br />room</strong><small>Get guidance and unlock your potential.</small></span>
+              <span class="apologetics-room-arrow" aria-hidden="true">→</span>
             </button>
-            <button class="apologetics-room-button apologetics-room-button--theory" type="button">
-              <i data-lucide="book-open" aria-hidden="true"></i>
-              <span class="apologetics-room-copy"><strong>Theorique room</strong><small>Learn the essentials</small></span>
+            <button class="apologetics-room-button apologetics-room-button--theory" type="button" disabled aria-label="Theorique room indisponible">
+              <span class="apologetics-room-number" aria-hidden="true">03</span>
+              <span class="apologetics-room-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.5A2.5 2.5 0 0 1 5.5 3H11v16H5.5A2.5 2.5 0 0 0 3 21.5z"/><path d="M21 5.5A2.5 2.5 0 0 0 18.5 3H13v16h5.5a2.5 2.5 0 0 1 2.5 2.5z"/></svg></span>
+              <span class="apologetics-room-copy"><strong>Theorique<br />room</strong><small>Explore concepts and deepen your understanding.</small></span>
+              <span class="apologetics-room-arrow" aria-hidden="true">→</span>
             </button>
           </div>
         </section>
@@ -412,22 +407,22 @@
                 <span class="prayer-background-picker-label">Choose a background</span>
                 <div class="prayer-background-options">
                   <button class="is-active" type="button" data-prayer-background-option="0" aria-label="Choose prayer background 1" aria-pressed="true">
-                    <img src="assets/prayer-backgrounds/prayer-1.jpg" alt="" loading="lazy" decoding="async" />
+                    <img src="assets/prayer-backgrounds/prayer-1.webp" alt="" loading="lazy" decoding="async" />
                   </button>
                   <button type="button" data-prayer-background-option="1" aria-label="Choose prayer background 2" aria-pressed="false">
-                    <img src="assets/prayer-backgrounds/prayer-2.jpg" alt="" loading="lazy" decoding="async" />
+                    <img src="assets/prayer-backgrounds/prayer-2.webp" alt="" loading="lazy" decoding="async" />
                   </button>
                   <button type="button" data-prayer-background-option="2" aria-label="Choose prayer background 3" aria-pressed="false">
-                    <img src="assets/prayer-backgrounds/prayer-3.jpg" alt="" loading="lazy" decoding="async" />
+                    <img src="assets/prayer-backgrounds/prayer-3.webp" alt="" loading="lazy" decoding="async" />
                   </button>
                   <button type="button" data-prayer-background-option="3" aria-label="Choose prayer background 4" aria-pressed="false">
-                    <img src="assets/prayer-backgrounds/prayer-4.jpg" alt="" loading="lazy" decoding="async" />
+                    <img src="assets/prayer-backgrounds/prayer-4.webp" alt="" loading="lazy" decoding="async" />
                   </button>
                   <button type="button" data-prayer-background-option="4" aria-label="Choose prayer background 5" aria-pressed="false">
-                    <img src="assets/prayer-backgrounds/prayer-5.jpg" alt="" loading="lazy" decoding="async" />
+                    <img src="assets/prayer-backgrounds/prayer-5.webp" alt="" loading="lazy" decoding="async" />
                   </button>
                   <button type="button" data-prayer-background-option="5" aria-label="Choose prayer background 6" aria-pressed="false">
-                    <img src="assets/prayer-backgrounds/prayer-6.jpg" alt="" loading="lazy" decoding="async" />
+                    <img src="assets/prayer-backgrounds/prayer-6.webp" alt="" loading="lazy" decoding="async" />
                   </button>
                 </div>
               </div>
@@ -467,7 +462,7 @@
 
         <section id="profile" class="screen profile-screen" data-screen>
           <article class="profile-hero" data-react-profile-hero-root>
-            <img src="assets/cloud-account-zen.png" alt="Profile background" data-profile-cover loading="lazy" decoding="async" />
+            <img src="assets/cloud-account-zen.webp" alt="Profile background" data-profile-cover loading="lazy" decoding="async" />
             <button class="profile-style-button" type="button" data-profile-style-toggle aria-expanded="false">
               <i data-lucide="pencil"></i><span>Edit style</span>
             </button>
@@ -486,7 +481,6 @@
               <div>
                 <p class="eyebrow">Profile</p>
                 <h1 data-profile-name>Your profile</h1>
-                <p data-profile-streak>0 days in Scripture</p>
               </div>
             </div>
           </article>
@@ -588,6 +582,8 @@
           <section class="profile-saved-panel" data-profile-panel="saved" data-profile-saved-panel hidden></section>
         </section>
 
+        <section id="admin" class="screen admin-screen" data-screen data-react-admin-root></section>
+
         <button class="apologetics-begin-button is-disabled" type="button" data-apologetics-begin aria-disabled="true" hidden>Continue Learning</button>
 
         <button class="multi-select-menu-toggle" data-multi-select-toggle type="button" aria-label="Open selected verse actions" hidden>
@@ -606,6 +602,35 @@
             <button data-nav="profile" type="button"><i data-lucide="user-round"></i><span>Profile</span></button>
           </div>
         </nav>
+
+        <div class="app-menu-layer" data-home-menu-layer aria-hidden="true" inert>
+          <button class="app-menu-scrim" type="button" data-home-menu-close aria-label="Close menu"></button>
+          <aside id="app-menu-drawer" class="app-menu-drawer" data-home-menu-drawer aria-label="App menu" tabindex="-1">
+            <header class="app-menu-drawer-header">
+              <div class="app-menu-brand"><strong>Thought Bible</strong></div>
+              <button class="app-menu-close" type="button" data-home-menu-close aria-label="Close menu"><i data-lucide="x" aria-hidden="true"></i></button>
+            </header>
+
+            <nav class="app-menu-section" aria-label="All pages">
+              <p>Explore</p>
+              <button type="button" data-nav="home"><i data-lucide="house" aria-hidden="true"></i><span>Home</span><i data-lucide="chevron-right" aria-hidden="true"></i></button>
+              <button type="button" data-nav="bible"><i data-lucide="book-open" aria-hidden="true"></i><span>Bible</span><i data-lucide="chevron-right" aria-hidden="true"></i></button>
+              <button type="button" data-nav="kids-bible"><i data-lucide="book-image" aria-hidden="true"></i><span>Kids Bible</span><i data-lucide="chevron-right" aria-hidden="true"></i></button>
+              <button type="button" data-nav="prayer"><i data-lucide="hand-heart" aria-hidden="true"></i><span>Prayer room</span><i data-lucide="chevron-right" aria-hidden="true"></i></button>
+              <button type="button" data-nav="apologetics"><i data-lucide="shield" aria-hidden="true"></i><span>Thought room</span><i data-lucide="chevron-right" aria-hidden="true"></i></button>
+              <button type="button" data-nav="ai"><i data-lucide="sparkles" aria-hidden="true"></i><span>Brother AI</span><i data-lucide="chevron-right" aria-hidden="true"></i></button>
+              <button type="button" data-nav="profile"><i data-lucide="user-round" aria-hidden="true"></i><span>Profile</span><i data-lucide="chevron-right" aria-hidden="true"></i></button>
+            </nav>
+
+            <nav class="app-menu-section app-menu-section--secondary" aria-label="Settings and information">
+              <p>Information</p>
+              <button type="button" data-nav="admin"><i data-lucide="shield-check" aria-hidden="true"></i><span>Admin review</span><i data-lucide="chevron-right" aria-hidden="true"></i></button>
+              <a href="community-guidelines.html"><i data-lucide="heart-handshake" aria-hidden="true"></i><span>Community rules</span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+              <a href="terms.html"><i data-lucide="scroll-text" aria-hidden="true"></i><span>Terms of use</span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+              <a href="privacy.html"><i data-lucide="lock-keyhole" aria-hidden="true"></i><span>Privacy</span><i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+            </nav>
+          </aside>
+        </div>
 
       <div class="modal-layer" data-modal-layer hidden>
         <section class="search-panel" data-search-panel role="dialog" aria-modal="true" aria-label="Universal Search">
@@ -650,7 +675,7 @@
               <button class="action-secondary" data-verse-action="copy"><i data-lucide="copy"></i><span>Copy</span></button>
               <button class="action-secondary" data-verse-action="share"><i data-lucide="share"></i><span>Share</span></button>
               <button class="action-secondary" data-verse-action="bookmark"><i data-lucide="bookmark"></i><span>Bookmark</span></button>
-              <button class="action-secondary" data-verse-action="original-language"><i data-lucide="languages"></i><span>Greek</span></button>
+              <button class="action-secondary" data-verse-action="original-language" type="button" disabled aria-label="Greek indisponible"><i data-lucide="languages"></i><span>Greek</span></button>
             </div>
             <p class="sheet-feedback" data-sheet-feedback aria-live="polite"></p>
             <div class="verse-detail-panel" data-verse-detail hidden></div>
