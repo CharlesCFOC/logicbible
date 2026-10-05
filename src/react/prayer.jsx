@@ -58,6 +58,10 @@ function usePrayerState() {
   useEffect(() => {
     const handleChange = () => setState(bridge.getSnapshot());
     document.addEventListener("prayer:state-change", handleChange);
+    // Supabase may finish loading before React attaches this listener. Read
+    // the latest snapshot after subscribing so the prayer wall cannot stay
+    // stuck on its initial empty state.
+    handleChange();
     return () => {
       document.removeEventListener("prayer:state-change", handleChange);
     };

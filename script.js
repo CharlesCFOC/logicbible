@@ -1500,13 +1500,12 @@ async function loadPrayerFromSupabase() {
   // sign in; authentication is only required for posting, praying, reporting,
   // and moderation actions.
   if (supabaseUser) {
-    const { data: moderatorRow } = await supabaseClient
+    const { data: moderatorRow, error: moderatorError } = await supabaseClient
       .from("app_moderators")
       .select("user_id")
       .eq("user_id", supabaseUser.id)
-      .maybeSingle()
-      .catch(() => ({ data: null }));
-    prayerModerator = Boolean(moderatorRow);
+      .maybeSingle();
+    prayerModerator = !moderatorError && Boolean(moderatorRow);
   } else {
     prayerModerator = false;
   }

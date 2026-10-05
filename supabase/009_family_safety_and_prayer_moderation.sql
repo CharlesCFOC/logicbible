@@ -44,6 +44,10 @@ alter table public.prayer_reports enable row level security;
 
 grant select on public.app_moderators to authenticated;
 grant select, insert, update, delete on public.blocked_users to authenticated;
+-- The public-wall policy checks whether an author was blocked. Let anonymous
+-- requests evaluate that policy; RLS still restricts this table to the
+-- caller's own block list, which is empty for anonymous users.
+grant select on public.blocked_users to anon;
 grant select, insert, update on public.prayer_reports to authenticated;
 
 create or replace function public.is_app_moderator()
