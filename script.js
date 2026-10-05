@@ -1496,20 +1496,20 @@ async function loadPrayerFromSupabase() {
     return;
   }
 
-  if (!supabaseUser) {
+  // The prayer wall is public. Visitors can read active requests before they
+  // sign in; authentication is only required for posting, praying, reporting,
+  // and moderation actions.
+  if (supabaseUser) {
+    const { data: moderatorRow } = await supabaseClient
+      .from("app_moderators")
+      .select("user_id")
+      .eq("user_id", supabaseUser.id)
+      .maybeSingle()
+      .catch(() => ({ data: null }));
+    prayerModerator = Boolean(moderatorRow);
+  } else {
     prayerModerator = false;
-    prayerState.requests = [];
-    renderPrayerPage();
-    return;
   }
-
-  const { data: moderatorRow } = await supabaseClient
-    .from("app_moderators")
-    .select("user_id")
-    .eq("user_id", supabaseUser.id)
-    .maybeSingle()
-    .catch(() => ({ data: null }));
-  prayerModerator = Boolean(moderatorRow);
 
   const { data: requests, error } = await supabaseClient
     .from("prayer_requests")
@@ -1521,14 +1521,17 @@ async function loadPrayerFromSupabase() {
   updateHomePrayerCount();
 
   if (!requests?.length) {
+    prayerState.requests = [];
     renderPrayerPage();
     return;
   }
 
-  const { data: ownInteractions = [] } = await supabaseClient
-    .from("prayer_interactions")
-    .select("request_id")
-    .eq("user_id", supabaseUser.id);
+  const { data: ownInteractions = [] } = supabaseUser
+    ? await supabaseClient
+      .from("prayer_interactions")
+      .select("request_id")
+      .eq("user_id", supabaseUser.id)
+    : { data: [] };
   const prayedIds = new Set(ownInteractions.map((item) => item.request_id));
   prayerState.requests = (requests || []).map((request) => ({
     id: request.id,

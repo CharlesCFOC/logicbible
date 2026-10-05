@@ -511,6 +511,13 @@ export function PrayerPage() {
   // "Recent prayers" wall. Otherwise a community with only one request shows
   // a count but an empty recent list.
   const recentRequests = visibleRequests;
+  const emptyPrayerMessage = state.pageTab === "request"
+    ? "You have not posted any prayer requests yet."
+    : query.trim()
+      ? "No prayer requests match your search."
+      : state.filter !== "all"
+        ? "No prayer requests match this category yet."
+        : "No prayer requests have been posted yet.";
   return (
     <>
       <header className="prayer-header"><div><h1>Prayer room</h1><p>A place to pray together.</p></div></header>
@@ -537,7 +544,7 @@ export function PrayerPage() {
             <div className="prayer-recent-heading"><h2>Recent prayers</h2><span>{visibleRequests.length} requests</span></div>
             <p className="prayer-report-tip">Press and hold a prayer card to report content.</p>
             <section className="prayer-list" aria-live="polite">
-              {recentRequests.length ? recentRequests.map((request, index) => <PrayerCard key={request.id} request={request} bridge={bridge} index={index} currentUserId={state.currentUserId} />) : !spotlightRequests.length && <p className="prayer-empty">{state.pageTab === "request" ? "You have not posted any prayer requests yet." : "No prayer requests match your search."}</p>}
+              {recentRequests.length ? recentRequests.map((request, index) => <PrayerCard key={request.id} request={request} bridge={bridge} index={index} currentUserId={state.currentUserId} />) : <p className="prayer-empty">{emptyPrayerMessage}</p>}
             </section>
             </div>
           </section>
