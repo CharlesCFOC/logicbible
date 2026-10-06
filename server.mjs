@@ -10,6 +10,7 @@ const port = Number(process.env.PORT || 4000);
 const apiBase = "https://rest.api.bible/v1";
 const originalLanguagePath = join(root, "data", "original-language.json");
 const doctrineManifestPath = join(root, "data", "doctrine", "manifest.json");
+const nativeAppOrigins = new Set(["https://localhost"]);
 const hiddenBibleAbbreviations = new Set([
   "ASV",
   "ASVBT",
@@ -692,6 +693,28 @@ async function serveStatic(req, res) {
 }
 
 async function requestHandler(req, res) {
+  if (req.url?.startsWith("/api/")) {
+    const origin = String(req.headers.origin || "");
+    if (nativeAppOrigins.has(origin)) {
+      res.setHeader("Access-Control-Allow-Origin", origin);
+      res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+      res.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
+      res.setHeader("Access-Control-Max-Age", "86400");
+      res.setHeader("Vary", "Origin");
+    }
+
+    if (req.method === "OPTIONS") {
+      if (!nativeAppOrigins.has(origin)) {
+        res.writeHead(403);
+        res.end();
+        return;
+      }
+      res.writeHead(204);
+      res.end();
+      return;
+    }
+  }
+
   try {
     if (req.url.startsWith("/api/supabase/config")) {
       handleSupabaseConfig(res);
