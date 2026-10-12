@@ -6322,6 +6322,10 @@ function getBibleChapterSnapshot() {
     status: bibleChapterError ? "error" : bibleChapterLoading ? "loading" : "ready",
     error: bibleChapterError,
     chapter: readerState.chapter,
+    bookId: readerState.bookId,
+    versionId: readerState.versionId,
+    versionName: chapter?.versionName || version.name,
+    versionLanguage: version.language,
     chapterCount: book.chapters,
     bookName: book.name,
     books: BOOKS.map((item) => ({ id: item.id, name: item.name, chapters: item.chapters })),
@@ -6331,6 +6335,10 @@ function getBibleChapterSnapshot() {
     parallelEnabled: readerState.parallelEnabled,
     showHighlightsOnly: readerState.showHighlightsOnly,
     verses: primaryVerses,
+    quizVerses: (chapter?.verses || []).map((verse) => ({
+      number: Number(verse.number || 0),
+      text: String(verse.text || ""),
+    })),
     parallel: readerState.parallelEnabled
       ? {
         primary: { label: chapter?.version || version.abbreviation, name: chapter?.versionName || version.name },

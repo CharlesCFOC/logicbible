@@ -641,6 +641,332 @@
   z-index: 1;
 }
 
+.bible-chapter-quiz {
+  display: grid;
+  gap: 22px;
+  margin: 48px 0 30px;
+  padding: clamp(22px, 4vw, 34px);
+  border: 0;
+  border-radius: 26px;
+  color: #252a31;
+  background: linear-gradient(135deg, rgba(239, 247, 250, 0.94), rgba(248, 245, 241, 0.9));
+}
+
+.bible-chapter-quiz-heading {
+  display: grid;
+  gap: 7px;
+}
+
+.bible-chapter-quiz-eyebrow {
+  color: #718392;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.bible-chapter-quiz-heading h2 {
+  margin: 0;
+  color: inherit;
+  font-family: var(--font-display, Georgia, serif);
+  font-size: clamp(27px, 4vw, 35px);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+}
+
+.bible-chapter-quiz-heading p,
+.bible-chapter-quiz-result p {
+  margin: 0;
+  color: #66717b;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.bible-chapter-quiz-start-button,
+.bible-chapter-quiz-next {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  min-height: 46px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  background: #293d4d;
+  font-size: 13px;
+  font-weight: 750;
+  transition: transform 160ms ease, background 160ms ease;
+}
+
+.bible-chapter-quiz-start-button:hover,
+.bible-chapter-quiz-next:hover {
+  transform: translateY(-1px);
+  background: #1e303d;
+}
+
+.bible-chapter-quiz-start-button svg,
+.bible-chapter-quiz-next svg {
+  width: 17px;
+  height: 17px;
+}
+
+.bible-chapter-quiz-loading {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  color: #536675;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.bible-chapter-quiz-spinner {
+  width: 17px;
+  height: 17px;
+  border: 2px solid rgba(41, 61, 77, 0.16);
+  border-top-color: #293d4d;
+  border-radius: 50%;
+  animation: bibleQuizSpin 700ms linear infinite;
+}
+
+@keyframes bibleQuizSpin {
+  to { transform: rotate(360deg); }
+}
+
+.bible-chapter-quiz-game {
+  display: grid;
+  gap: 16px;
+}
+
+.bible-chapter-quiz-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #293d4d;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.bible-chapter-quiz-meta span span {
+  color: #79858e;
+  font-weight: 550;
+}
+
+.bible-chapter-quiz-progress {
+  overflow: hidden;
+  height: 4px;
+  border-radius: 99px;
+  background: rgba(41, 61, 77, 0.1);
+}
+
+.bible-chapter-quiz-progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #6b91a2, #314f62);
+  transition: width 220ms ease;
+}
+
+.bible-chapter-quiz-question {
+  margin: 5px 0 1px;
+  color: #252a31;
+  font-family: var(--font-display, Georgia, serif);
+  font-size: clamp(21px, 3.5vw, 27px);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.bible-chapter-quiz-answers {
+  display: grid;
+  gap: 8px;
+}
+
+.bible-chapter-quiz-answer {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  min-height: 52px;
+  padding: 9px 13px;
+  border: 0;
+  border-radius: 15px;
+  color: #3e4b55;
+  background: rgba(255, 255, 255, 0.72);
+  font-size: 13px;
+  line-height: 1.45;
+  text-align: left;
+  transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.bible-chapter-quiz-answer:hover:not(:disabled) {
+  transform: translateX(2px);
+  color: #233744;
+  background: #fff;
+}
+
+.bible-chapter-quiz-answer:disabled {
+  cursor: default;
+}
+
+.bible-chapter-quiz-letter {
+  display: grid;
+  place-items: center;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  color: #617887;
+  background: rgba(41, 61, 77, 0.08);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.bible-chapter-quiz-answer.is-correct {
+  color: #245640;
+  background: rgba(218, 239, 225, 0.9);
+}
+
+.bible-chapter-quiz-answer.is-correct .bible-chapter-quiz-letter {
+  color: #fff;
+  background: #4b8764;
+}
+
+.bible-chapter-quiz-answer.is-incorrect {
+  color: #7a4841;
+  background: rgba(247, 228, 223, 0.92);
+}
+
+.bible-chapter-quiz-answer.is-incorrect .bible-chapter-quiz-letter {
+  color: #fff;
+  background: #b46c61;
+}
+
+.bible-chapter-quiz-feedback {
+  display: grid;
+  gap: 7px;
+  padding-top: 2px;
+  color: #59666e;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.bible-chapter-quiz-feedback p {
+  margin: 0;
+  color: #314f62;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.bible-chapter-quiz-feedback.is-incorrect p {
+  color: #9b5d53;
+}
+
+.bible-chapter-quiz-feedback small {
+  color: #718392;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.bible-chapter-quiz-next {
+  justify-self: start;
+  margin-top: 8px;
+}
+
+.bible-chapter-quiz-result {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+}
+
+.bible-chapter-quiz-result-score {
+  color: #293d4d;
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 45px;
+  font-weight: 650;
+  line-height: 1;
+}
+
+.bible-chapter-quiz-result-score span {
+  color: #84919a;
+  font-family: var(--font-body, sans-serif);
+  font-size: 16px;
+  font-weight: 650;
+}
+
+.bible-chapter-quiz-text-button {
+  padding: 4px 0;
+  border: 0;
+  color: #385c70;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.bible-chapter-quiz-error {
+  margin: 0 0 10px;
+  color: #9b5d53;
+  font-size: 12px;
+}
+
+.app-shell[data-theme="dark"] .reader-screen .bible-chapter-quiz,
+.app-shell[data-app-background="black"] .reader-screen .bible-chapter-quiz {
+  color: #f2eee6;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.035));
+}
+
+.app-shell[data-theme="dark"] .reader-screen .bible-chapter-quiz-heading p,
+.app-shell[data-app-background="black"] .reader-screen .bible-chapter-quiz-heading p,
+.app-shell[data-theme="dark"] .reader-screen .bible-chapter-quiz-result p,
+.app-shell[data-app-background="black"] .reader-screen .bible-chapter-quiz-result p {
+  color: #b7bec3;
+}
+
+.app-shell[data-theme="dark"] .reader-screen .bible-chapter-quiz-question,
+.app-shell[data-app-background="black"] .reader-screen .bible-chapter-quiz-question,
+.app-shell[data-theme="dark"] .reader-screen .bible-chapter-quiz-meta,
+.app-shell[data-app-background="black"] .reader-screen .bible-chapter-quiz-meta,
+.app-shell[data-theme="dark"] .reader-screen .bible-chapter-quiz-result-score,
+.app-shell[data-app-background="black"] .reader-screen .bible-chapter-quiz-result-score {
+  color: #f2eee6;
+}
+
+.app-shell[data-theme="dark"] .reader-screen .bible-chapter-quiz-answer,
+.app-shell[data-app-background="black"] .reader-screen .bible-chapter-quiz-answer {
+  color: #e3e0da;
+  background: rgba(255, 255, 255, 0.075);
+}
+
+.app-shell[data-theme="dark"] .reader-screen .bible-chapter-quiz-answer.is-correct,
+.app-shell[data-app-background="black"] .reader-screen .bible-chapter-quiz-answer.is-correct {
+  color: #d5f0dd;
+  background: rgba(65, 125, 86, 0.36);
+}
+
+.app-shell[data-theme="dark"] .reader-screen .bible-chapter-quiz-answer.is-incorrect,
+.app-shell[data-app-background="black"] .reader-screen .bible-chapter-quiz-answer.is-incorrect {
+  color: #f3d5cf;
+  background: rgba(153, 78, 67, 0.34);
+}
+
+@media (max-width: 560px) {
+  .bible-chapter-quiz {
+    gap: 18px;
+    margin: 34px -2px 24px;
+    padding: 22px 17px;
+    border-radius: 21px;
+  }
+
+  .bible-chapter-quiz-start-button,
+  .bible-chapter-quiz-next {
+    min-height: 44px;
+    font-size: 12px;
+  }
+}
+
 .reader-screen [data-reader-source] {
   display: none !important;
 }
