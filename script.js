@@ -6947,7 +6947,7 @@ window.prayerBridge = {
     };
   },
   setPageTab(tab) {
-    prayerState.pageTab = ["board", "request", "online"].includes(tab) ? tab : "board";
+    prayerState.pageTab = ["board", "request", "online", "intercession"].includes(tab) ? tab : "board";
     if (prayerState.pageTab === "request") startPrayerPromptRotation();
     else stopPrayerPromptRotation();
     renderPrayerPage();
