@@ -431,7 +431,7 @@ async function handleVerseAiChat(req, res) {
   sendJson(res, 200, result);
 }
 
-async function handleChapterQuiz(req, res) {
+async function handleLegacyBibleQuiz(req, res) {
   const body = await readJsonBody(req);
   const book = String(body.book || "").trim().slice(0, 80);
   const chapter = Number(body.chapter);
@@ -987,6 +987,13 @@ async function requestHandler(req, res) {
       return;
     }
 
+    if (req.url.split("?")[0] === "/api/prayer/intercession-location") {
+      const countryCode = String(req.headers["x-vercel-ip-country"] || req.headers["cf-ipcountry"] || "").toUpperCase();
+      res.setHeader("Cache-Control", "no-store");
+      sendJson(res, 200, { countryCode: /^[A-Z]{2}$/.test(countryCode) ? countryCode : null });
+      return;
+    }
+
     if (req.url.startsWith("/api/account/delete")) {
       await handleAccountDeletion(req, res);
       return;
@@ -1028,7 +1035,7 @@ async function requestHandler(req, res) {
     }
 
     if (req.url.startsWith("/api/bible/quiz")) {
-      await handleChapterQuiz(req, res);
+      await handleLegacyBibleQuiz(req, res);
       return;
     }
 

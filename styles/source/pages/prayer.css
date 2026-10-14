@@ -2442,8 +2442,14 @@ body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is
 #prayer .intercession-panel { display: grid; gap: 16px; padding: 6px 0 24px; color: #edf6ff; }
 #prayer .intercession-kicker { color: #a7cbd5; font-size: 9px; font-weight: 800; letter-spacing: .1em; }
 #prayer .intercession-focus-card { position: relative; display: grid; gap: 10px; padding: 15px; border: 1px solid rgba(161, 201, 223, .2); border-radius: 18px; background: rgba(11, 31, 55, .42); box-shadow: 0 8px 24px rgba(3, 14, 28, .18); }
+#prayer .intercession-top-actions { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 42px; padding: 0 2px; }
+#prayer .intercession-session-elapsed { display: grid; gap: 2px; min-width: 0; }
+#prayer .intercession-session-elapsed span { color: #a9d7ee; font-size: 9px; font-weight: 700; }
+#prayer .intercession-session-elapsed strong { color: #edf6ff; font-size: 15px; font-variant-numeric: tabular-nums; line-height: 1; }
 #prayer .intercession-session-actions { display: grid; gap: 5px; }
-#prayer .intercession-session-finish { justify-self: start; min-height: 36px; padding: 0 2px; border: 0; color: #a9d7ee; background: transparent; font-size: 10px; font-weight: 800; cursor: pointer; }
+#prayer .intercession-session-finish { min-height: 40px; padding: 0 14px; border: 0; border-radius: 999px; color: #17344c; background: #a8dcc8; box-shadow: 0 5px 14px rgba(3, 14, 28, .18); font-size: 10px; font-weight: 800; cursor: pointer; transition: background 160ms ease, transform 160ms ease; }
+#prayer .intercession-session-finish:hover { background: #b9e8d6; }
+#prayer .intercession-session-finish:active { transform: scale(.97); }
 .phone-frame .intercession-session-modal { position: absolute; z-index: 1000; inset: 0; display: grid; align-items: center; padding: 18px; background: transparent; -webkit-backdrop-filter: blur(12px) saturate(115%); backdrop-filter: blur(12px) saturate(115%); }
 .phone-frame .intercession-session-dialog { position: relative; width: min(100%, 380px); margin: 0 auto; padding: 21px 18px 18px; border: 1px solid rgba(196, 232, 249, .32); border-radius: 24px; color: #f5fbff; background: transparent; -webkit-backdrop-filter: blur(22px) saturate(125%); backdrop-filter: blur(22px) saturate(125%); box-shadow: 0 18px 45px rgba(0, 0, 0, .35), inset 0 1px rgba(255, 255, 255, .18); animation: intercession-session-sheet-in 220ms ease-out both; }
 .phone-frame .intercession-session-close { position: absolute; top: 8px; right: 8px; display: grid; place-items: center; width: 38px; min-height: 38px; padding: 0; border: 0; border-radius: 50%; color: #dceef7; background: transparent; font-size: 24px; line-height: 1; cursor: pointer; }
@@ -2517,13 +2523,14 @@ body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is
 @keyframes intercession-focus-reveal { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes intercession-session-sheet-in { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) { #prayer .intercession-current-focus { animation: none; } .phone-frame .intercession-session-dialog { animation: none; } }
-#prayer .intercession-world { position: relative; display: block; height: 190px; margin: -2px -20px 0; overflow: hidden; background: transparent; }
-#prayer .intercession-globe-shell { position: absolute; top: 50%; left: -50px; width: 236px; height: 236px; transform: translateY(-50%); }
-#prayer .intercession-globe-canvas { display: block; width: 236px; height: 236px; cursor: grab; touch-action: none; outline: 0; }
+#prayer .intercession-world-section { min-width: 0; }
+#prayer .intercession-world-section > h3 { margin: 0 0 18px; color: #edf6ff; font-size: 20px; font-weight: 800; line-height: 1.25; text-align: left; }
+#prayer .intercession-world { position: relative; display: block; height: 320px; margin: 0 -20px; overflow: visible; background: transparent; }
+#prayer .intercession-globe-shell { position: absolute; top: 50%; left: 0; width: 310px; height: 310px; transform: translateY(-50%); }
+#prayer .intercession-globe-canvas { display: block; width: 310px; height: 310px; cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; outline: 0; }
 #prayer .intercession-globe-canvas:active { cursor: grabbing; }
 #prayer .intercession-globe-canvas:focus-visible { outline: 2px solid #a9d7ee; outline-offset: 4px; border-radius: 50%; }
-#prayer .intercession-globe-hint { position: absolute; left: 105px; bottom: 5px; padding: 3px 6px; border-radius: 99px; color: #a7c3cb; background: rgba(6, 22, 33, .74); font-size: 8px; pointer-events: none; white-space: nowrap; }
-#prayer .intercession-world-copy { position: absolute; z-index: 1; right: 19px; bottom: 30px; display: grid; gap: 4px; max-width: 45%; }
+#prayer .intercession-world-copy { position: absolute; z-index: 1; right: 12px; bottom: 25px; display: grid; gap: 4px; max-width: 32%; }
 #prayer .intercession-world-copy strong { color: #edf6ff; font-size: 38px; font-variant-numeric: tabular-nums; letter-spacing: -.05em; line-height: .95; }
 #prayer .intercession-world-copy > span:last-of-type, #prayer .intercession-world-copy small { color: #9bb7c0; font-size: 10px; line-height: 1.4; }
 #prayer .intercession-live-dot { width: 7px; height: 7px; margin-bottom: 3px; border-radius: 50%; background: #abd8c2; box-shadow: 0 0 0 0 rgba(171, 216, 194, .55); animation: intercession-live-pulse 1.8s ease-out infinite; }
@@ -2555,10 +2562,10 @@ body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is
 #prayer .intercession-panel :is(button, summary):focus-visible { outline: 2px solid #a9d7ee; outline-offset: 3px; }
 @keyframes intercession-live-pulse { 70% { box-shadow: 0 0 0 7px rgba(171, 216, 194, 0); } 100% { box-shadow: 0 0 0 0 rgba(171, 216, 194, 0); } }
 @media (max-width: 360px) {
-  #prayer .intercession-world { height: 180px; margin-inline: -16px; }
-  #prayer .intercession-globe-shell, #prayer .intercession-globe-canvas { width: 224px; height: 224px; }
-  #prayer .intercession-globe-shell { left: -50px; }
-  #prayer .intercession-world-copy { right: 14px; bottom: 25px; }
+  #prayer .intercession-world { height: 290px; margin-inline: -16px; }
+  #prayer .intercession-globe-shell, #prayer .intercession-globe-canvas { width: 280px; height: 280px; }
+  #prayer .intercession-globe-shell { left: 0; }
+  #prayer .intercession-world-copy { right: 10px; bottom: 20px; max-width: 33%; }
   #prayer .intercession-world-copy strong { font-size: 32px; }
   #prayer .prayer-page-tabs button { font-size: 9px; }
 }

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { decodeCountryBorders, globePoint, projectGlobePoint, rotateGlobePoint } from '../lib/prayer/interactive-globe.js';
+import { decodeCoastline, decodeCountryBorders, globePoint, projectGlobePoint, rotateGlobePoint } from '../lib/prayer/interactive-globe.js';
 
 test('geographic points are normalized before rotation', () => {
   for (const [latitude, longitude] of [[0, 0], [45, -73], [-30, 151], [90, 0]]) {
@@ -30,4 +30,16 @@ test('country topology becomes geographic rings that can be projected on the glo
   assert.equal(borders.length, 1);
   assert.equal(borders[0].rings[0].length, 5);
   assert.ok(borders[0].rings[0].every(point => Math.abs(Math.hypot(point.x, point.y, point.z) - 1) < .000001));
+});
+
+test('land topology becomes coastline rings without country border metadata', () => {
+  const topology = {
+    transform: { scale: [1, 1], translate: [0, 0] },
+    arcs: [[[0, 0], [10, 0], [0, 10], [-10, 0], [0, -10]]],
+    objects: { land: { geometries: [{ type: 'Polygon', arcs: [[0]] }] } },
+  };
+  const coastline = decodeCoastline(topology);
+  assert.equal(coastline.length, 1);
+  assert.equal(coastline[0].length, 5);
+  assert.ok(coastline[0].every(point => Math.abs(Math.hypot(point.x, point.y, point.z) - 1) < .000001));
 });
