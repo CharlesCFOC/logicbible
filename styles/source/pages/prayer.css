@@ -2221,3 +2221,31 @@ body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is
 @media (prefers-reduced-motion: reduce) {
   #prayer .prayer-spotlight-stack .prayer-spotlight { transition: none; }
 }
+
+
+/* Global intercession experience */
+#prayer .intercession-panel{display:grid;gap:16px;padding:2px 0 28px;color:#f7fbff}
+#prayer .intercession-hero{padding:12px 5px 0;text-align:center}
+#prayer .intercession-kicker,#prayer .intercession-session-label,#prayer .intercession-section-heading span{color:#ffad59;font-size:10px;font-weight:900;letter-spacing:.16em}
+#prayer .intercession-hero h2{margin:7px auto 5px;max-width:330px;font-size:28px;line-height:1.02;letter-spacing:-.055em}
+#prayer .intercession-hero p{margin:0 auto;max-width:340px;color:#b8cfdd;font-size:12px;line-height:1.5}
+#prayer .intercession-globe-wrap{position:relative;display:grid;place-items:center;min-height:310px;overflow:hidden;border-radius:28px;background:radial-gradient(circle at 50% 45%,rgba(29,126,180,.22),transparent 43%),linear-gradient(180deg,rgba(4,20,35,.35),rgba(5,18,32,.76))}
+#prayer .intercession-globe{position:relative;width:250px;height:250px;overflow:hidden;border:1px solid rgba(119,207,255,.4);border-radius:50%;background:radial-gradient(circle at 35% 28%,rgba(89,184,227,.3),rgba(13,63,94,.72) 42%,#061b2d 73%);box-shadow:inset -28px -18px 50px rgba(0,0,0,.48),0 0 55px rgba(44,159,224,.22)}
+#prayer .intercession-globe-grid{position:absolute;inset:0;border-radius:50%;background:repeating-linear-gradient(0deg,transparent 0 28px,rgba(131,215,255,.09) 29px 30px),repeating-linear-gradient(90deg,transparent 0 34px,rgba(131,215,255,.08) 35px 36px);mask-image:radial-gradient(circle,#000 66%,transparent 72%)}
+#prayer .intercession-continent{position:absolute;background:rgba(79,169,155,.4);filter:drop-shadow(0 0 6px rgba(80,203,175,.18))}
+#prayer .intercession-continent-a{left:15%;top:20%;width:34%;height:43%;border-radius:60% 30% 48% 34%;transform:rotate(-18deg)}
+#prayer .intercession-continent-b{left:48%;top:24%;width:25%;height:48%;border-radius:36% 58% 48% 65%;transform:rotate(9deg)}
+#prayer .intercession-continent-c{right:9%;bottom:16%;width:24%;height:21%;border-radius:50% 45% 60% 42%;transform:rotate(-12deg)}
+#prayer .intercession-country-pulse{position:absolute;z-index:3;border-radius:50%;background:#ff493d;box-shadow:0 0 5px #ff4a3d,0 0 15px #ff392e,0 0 28px rgba(255,51,42,.78);transform:translate(-50%,-50%);animation:intercessionPulse 2.4s ease-in-out infinite}
+@keyframes intercessionPulse{50%{transform:translate(-50%,-50%) scale(1.35);filter:brightness(1.35)}}
+#prayer .intercession-live-count{position:absolute;bottom:17px;display:flex;align-items:center;gap:6px;padding:8px 12px;border:1px solid rgba(180,226,249,.19);border-radius:999px;background:rgba(6,25,41,.8);backdrop-filter:blur(12px);font-size:11px}
+#prayer .intercession-live-count strong{font-size:15px}.intercession-live-dot{width:7px;height:7px;border-radius:50%;background:#56e49d;box-shadow:0 0 9px #56e49d}
+#prayer .intercession-session-card{display:grid;gap:8px;padding:20px;border:1px solid rgba(141,211,245,.2);border-radius:24px;background:linear-gradient(145deg,rgba(21,63,91,.7),rgba(14,34,57,.82));box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+#prayer .intercession-session-card h3{margin:0;font-size:22px;letter-spacing:-.035em}#prayer .intercession-session-card p{margin:0;color:#c6dce8;font-size:13px;line-height:1.48}#prayer .intercession-session-card small{color:#86d9ff;font-weight:800}
+#prayer .intercession-timer{font-size:52px;font-variant-numeric:tabular-nums;letter-spacing:-.055em}
+#prayer .intercession-primary{min-height:48px;margin-top:5px;border:0;border-radius:16px;color:#fff;background:linear-gradient(135deg,#ffb04e,#ef7528 62%,#dd5731);box-shadow:0 10px 20px rgba(218,92,27,.25);font-weight:900}
+#prayer .intercession-vote-section{display:grid;gap:10px}.intercession-section-heading{display:flex;align-items:end;justify-content:space-between;padding:0 3px}.intercession-section-heading h3{margin:4px 0 0;font-size:18px}.intercession-section-heading>small{color:#91aebe;font-size:10px}
+#prayer .intercession-topic-list{display:grid;gap:7px}.intercession-topic-list button{display:flex;align-items:center;justify-content:space-between;min-height:60px;padding:10px 13px;border:1px solid rgba(137,202,234,.16);border-radius:17px;color:#f4fbff;background:rgba(21,52,75,.56);text-align:left}.intercession-topic-list button.is-selected{border-color:rgba(255,171,87,.55);background:linear-gradient(110deg,rgba(229,113,36,.24),rgba(24,61,87,.68))}.intercession-topic-list button span{display:grid;gap:3px}.intercession-topic-list button strong{font-size:13px}.intercession-topic-list button small{color:#9fc2d5;font-size:10px}.intercession-topic-list button em{display:grid;place-items:center;min-width:34px;height:34px;border-radius:50%;color:#ffd2a1;background:rgba(240,125,48,.16);font-size:11px;font-style:normal;font-weight:900}
+#prayer .intercession-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.intercession-stats div{display:grid;gap:2px;padding:13px 7px;border-radius:16px;background:rgba(18,48,69,.58);text-align:center}.intercession-stats strong{font-size:19px}.intercession-stats span{color:#9db9c9;font-size:9px}
+#prayer .intercession-privacy{margin:0;padding:0 14px;color:#7596a9;font-size:9px;line-height:1.45;text-align:center}
+@media(prefers-reduced-motion:reduce){#prayer .intercession-country-pulse{animation:none}}
