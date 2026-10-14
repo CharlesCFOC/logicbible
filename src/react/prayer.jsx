@@ -259,6 +259,57 @@ function OnlinePrayerPanel() {
   );
 }
 
+
+const intercessionTopics = [
+  { id: "families", title: "Families & relationships", detail: "Pray for peace, reconciliation, wisdom, and strong homes.", verse: "Joshua 24:15" },
+  { id: "healing", title: "Healing & strength", detail: "Pray for those facing sickness, grief, exhaustion, and recovery.", verse: "James 5:16" },
+  { id: "nations", title: "Nations & peace", detail: "Pray for leaders, justice, peace, and people affected by conflict.", verse: "1 Timothy 2:1–2" },
+  { id: "salvation", title: "Salvation & faith", detail: "Pray for people to encounter Christ and grow in faith.", verse: "1 Timothy 2:4" },
+  { id: "church", title: "The Church", detail: "Pray for unity, courage, wisdom, and faithful witness.", verse: "Ephesians 4:3" },
+];
+const demoPrayerCountries = [
+  { code: "CA", name: "Canada", x: 28, y: 32, count: 30 }, { code: "US", name: "United States", x: 24, y: 43, count: 18 },
+  { code: "GB", name: "United Kingdom", x: 48, y: 31, count: 9 }, { code: "FR", name: "France", x: 50, y: 38, count: 7 },
+  { code: "KE", name: "Kenya", x: 59, y: 60, count: 5 }, { code: "ZA", name: "South Africa", x: 56, y: 78, count: 4 },
+  { code: "AU", name: "Australia", x: 84, y: 73, count: 3 },
+];
+function formatIntercessionTime(seconds) {
+  const safe = Math.max(0, Math.floor(seconds));
+  return String(Math.floor(safe / 60)).padStart(2, "0") + ":" + String(safe % 60).padStart(2, "0");
+}
+function PrayerGlobe({ countries, total }) {
+  const max = Math.max(1, ...countries.map((country) => Number(country.count || 0)));
+  return <div className="intercession-globe-wrap" aria-label={total + " people praying around the world"}>
+    <div className="intercession-globe" aria-hidden="true"><div className="intercession-globe-grid" /><div className="intercession-continent intercession-continent-a" /><div className="intercession-continent intercession-continent-b" /><div className="intercession-continent intercession-continent-c" />
+      {countries.map((country) => { const intensity=.35+(Number(country.count||0)/max)*.65; const size=7+Math.min(18,Math.sqrt(Number(country.count||0))*2.2); return <span key={country.code} className="intercession-country-pulse" style={{left:country.x+"%",top:country.y+"%",width:size,height:size,opacity:intensity}} />; })}
+    </div>
+    <div className="intercession-live-count"><span className="intercession-live-dot" /><strong>{total}</strong><span>praying now</span></div>
+  </div>;
+}
+function IntercessionPanel() {
+  const [phase,setPhase]=useState("ready"); const [secondsLeft,setSecondsLeft]=useState(60); const [selectedTopic,setSelectedTopic]=useState("families");
+  const [votes,setVotes]=useState(()=>Object.fromEntries(intercessionTopics.map((topic,index)=>[topic.id,[18,12,9,15,7][index]])));
+  const [sessionCount,setSessionCount]=useState(()=>Number(localStorage.getItem("brother.intercessionSessions")||0));
+  const countries=demoPrayerCountries; const total=countries.reduce((sum,country)=>sum+country.count,0); const activeTopic=intercessionTopics.find((topic)=>topic.id===selectedTopic)||intercessionTopics[0];
+  useEffect(()=>{ if(phase==="ready"||phase==="complete") return undefined; const timer=window.setInterval(()=>setSecondsLeft((current)=>{ if(current>1)return current-1; if(phase==="commit"){setPhase("praying");return 600;} setPhase("complete");setSessionCount((count)=>{const next=count+1;localStorage.setItem("brother.intercessionSessions",String(next));return next;});return 0;}),1000); return()=>window.clearInterval(timer);},[phase]);
+  const vote=(topicId)=>{setSelectedTopic(topicId);setVotes((current)=>({...current,[topicId]:Number(current[topicId]||0)+1}));};
+  const topTopic=[...intercessionTopics].sort((a,b)=>Number(votes[b.id]||0)-Number(votes[a.id]||0))[0];
+  return <section className="intercession-panel" aria-labelledby="intercession-title">
+    <header className="intercession-hero"><span className="intercession-kicker">GLOBAL INTERCESSION</span><h2 id="intercession-title">Pray together. Wherever you are.</h2><p>No camera. No microphone. No public identity. Join believers around the world in focused prayer.</p></header>
+    <PrayerGlobe countries={countries} total={total} />
+    <div className="intercession-session-card">
+      {phase==="ready"&&<><span className="intercession-session-label">Next guided prayer</span><h3>{topTopic.title}</h3><p>The community is choosing the next focus. When you join, take 60 seconds to become still before the 10-minute prayer begins.</p><button className="intercession-primary" type="button" onClick={()=>{setPhase("commit");setSecondsLeft(60);}}>Join prayer</button></>}
+      {phase==="commit"&&<><span className="intercession-session-label">Prepare your heart</span><strong className="intercession-timer">{formatIntercessionTime(secondsLeft)}</strong><p>Put distractions aside. When the timer reaches zero, the guided prayer begins automatically.</p></>}
+      {phase==="praying"&&<><span className="intercession-session-label">Praying together now</span><strong className="intercession-timer">{formatIntercessionTime(secondsLeft)}</strong><h3>{activeTopic.title}</h3><p>{activeTopic.detail}</p><small>{activeTopic.verse}</small></>}
+      {phase==="complete"&&<><span className="intercession-session-label">Prayer completed</span><h3>Thank you for standing in prayer.</h3><p>Your completed session has been counted. You have completed {sessionCount} intercession {sessionCount===1?"session":"sessions"} on this device.</p><button className="intercession-primary" type="button" onClick={()=>{setPhase("ready");setSecondsLeft(60);}}>Pray again</button></>}
+    </div>
+    <section className="intercession-vote-section"><div className="intercession-section-heading"><div><span>CHOOSE THE NEXT FOCUS</span><h3>What should we pray for next?</h3></div><small>Anonymous voting</small></div><div className="intercession-topic-list">
+      {intercessionTopics.map((topic)=><button key={topic.id} className={selectedTopic===topic.id?"is-selected":""} type="button" onClick={()=>vote(topic.id)}><span><strong>{topic.title}</strong><small>{topic.verse}</small></span><em>{votes[topic.id]||0}</em></button>)}
+    </div></section>
+    <div className="intercession-stats"><div><strong>{total}</strong><span>praying now</span></div><div><strong>{countries.length}</strong><span>countries</span></div><div><strong>{sessionCount}</strong><span>your sessions</span></div></div>
+    <p className="intercession-privacy">Location is designed to be displayed only at country level. No precise location is shown on the prayer map.</p>
+  </section>;
+}
 const prayerStatusLabels = {
   pending: "Pending review",
   rejected: "Not approved",
@@ -528,9 +579,9 @@ export function PrayerPage() {
       <div className="prayer-page-tabs" role="tablist" aria-label="Prayer sections">
         <button className={state.pageTab === "board" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("board")}><span>Prayer</span></button>
         <button className={state.pageTab === "request" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("request")}><span>Prayer request</span></button>
-        <button className={state.pageTab === "online" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("online")}><span>Online prayer</span></button>
+        <button className={state.pageTab === "online" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("online")}><span>Online prayer</span></button>\n        <button className={state.pageTab === "intercession" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("intercession")}><span>Intercession</span></button>
       </div>
-      {state.pageTab === "online" && <OnlinePrayerPanel />}
+      {state.pageTab === "online" && <OnlinePrayerPanel />}\n      {state.pageTab === "intercession" && <IntercessionPanel />}
       {state.pageTab === "request" && <PrayerRequestForm state={state} bridge={bridge} />}
       {(state.pageTab === "board" || state.myWallExpanded) && (
         <>
