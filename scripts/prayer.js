@@ -153,6 +153,10 @@ function initPrayerPage() {
       return;
     }
     if (button.dataset.prayerAction !== "pray") return;
+    if (window.prayerBridge) {
+      await window.prayerBridge.pray(request.id);
+      return;
+    }
     if (supabaseClient && !supabaseUser) {
       prayerFeedback.textContent = "Sign in to record your prayer.";
       return;

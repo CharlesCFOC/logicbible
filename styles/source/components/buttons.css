@@ -37,7 +37,7 @@
 }
 
 .app-shell .bottom-sheet .action-grid button.action-secondary {
-  grid-column: span 3;
+  grid-column: span 4;
 }
 
 .app-shell .bottom-sheet .action-grid button svg {

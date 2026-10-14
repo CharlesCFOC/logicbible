@@ -639,20 +639,32 @@ body .app-shell .prayer-card::before {
 }
 
 .prayer-background-options {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 7px;
+  display: flex;
+  gap: 8px;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 2px 2px 7px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+}
+
+.prayer-background-options::-webkit-scrollbar {
+  display: none;
 }
 
 .prayer-background-options button {
   position: relative;
   overflow: hidden;
+  flex: 0 0 76px;
   height: 42px;
   padding: 0;
   border: 1px solid rgba(139, 220, 255, 0.28);
   border-radius: 10px;
   background: rgba(14, 32, 44, 0.7);
   opacity: 0.7;
+  scroll-snap-align: center;
   transition: opacity 160ms ease, transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
 }
 
@@ -1609,17 +1621,6 @@ body .app-shell[data-app-background="black"] #prayer .prayer-compose textarea {
   line-height: 1.45;
 }
 
-.prayer-safety-reminder {
-  margin: 0;
-  padding: 10px 12px;
-  border-radius: 14px;
-  color: #d8efff;
-  background: rgba(95, 201, 255, .12);
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 1.4;
-}
-
 .prayer-community-terms {
   display: flex;
   align-items: flex-start;
@@ -1630,12 +1631,80 @@ body .app-shell[data-app-background="black"] #prayer .prayer-compose textarea {
   line-height: 1.4;
 }
 
+.prayer-community-terms span {
+  font-size: 11px;
+}
+
+.prayer-word-count {
+  display: block;
+  margin: -10px 8px 0;
+  color: var(--muted);
+  font-size: 11px;
+  text-align: right;
+}
+
+.prayer-word-count.is-over-limit {
+  color: var(--error);
+}
+
 .prayer-community-terms input {
   width: 18px;
   height: 18px;
   flex: 0 0 auto;
   margin: 0;
   accent-color: #71e2ff;
+}
+
+.app-shell #prayer .prayer-community-terms {
+  position: relative;
+  align-items: center;
+  min-height: 44px;
+  gap: 12px;
+  background: transparent !important;
+  cursor: pointer;
+}
+
+.app-shell #prayer .prayer-community-terms input[type="checkbox"] {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.app-shell #prayer .prayer-checkbox-mark {
+  display: grid;
+  place-items: center;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  border: 1px solid #8bdcff;
+  border-radius: 7px;
+  background: transparent !important;
+  transition: border-color 160ms ease;
+}
+
+.app-shell #prayer .prayer-checkbox-mark svg {
+  width: 19px;
+  height: 19px;
+  stroke: #ffb066;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  visibility: hidden;
+}
+
+.app-shell #prayer .prayer-community-terms input:checked + .prayer-checkbox-mark {
+  border-color: #ffb066;
+}
+
+.app-shell #prayer .prayer-community-terms input:checked + .prayer-checkbox-mark svg {
+  visibility: visible;
+}
+
+.app-shell #prayer .prayer-community-terms input:focus-visible + .prayer-checkbox-mark {
+  outline: 2px solid #8bdcff;
+  outline-offset: 4px;
 }
 
 .prayer-community-terms a {
@@ -1871,8 +1940,8 @@ body .app-shell[data-app-background="black"] #prayer .prayer-compose textarea {
 #prayer .prayer-wall-search input::placeholder { color: #b3c9da; opacity: 1; }
 
 #prayer .prayer-board-controls .prayer-filter-row.prayer-category-picker { gap: 9px; padding: 0 0 2px !important; }
-#prayer .prayer-board-controls .prayer-filter-row.prayer-category-picker button { min-height: 48px; padding: 0 20px; border: 1px solid rgba(148, 205, 238, .36) !important; border-radius: 999px; color: #d2e1ec !important; background: rgba(29, 59, 82, .38) !important; font-size: 14px; font-weight: 800; }
-#prayer .prayer-board-controls .prayer-filter-row.prayer-category-picker button.is-active { border-color: rgba(152, 233, 255, .66) !important; color: #fff !important; background: linear-gradient(135deg, #53c7e4, #4b90e5) !important; box-shadow: 0 7px 15px rgba(40, 146, 221, .26) !important; }
+:is(#prayer .prayer-board-controls .prayer-filter-row.prayer-category-picker, #home .home-library-tabs) button { min-height: 48px; padding: 0 20px; border: 1px solid rgba(148, 205, 238, .36) !important; border-radius: 999px; color: #d2e1ec !important; background: rgba(29, 59, 82, .38) !important; font-size: 14px; font-weight: 800; }
+:is(#prayer .prayer-board-controls .prayer-filter-row.prayer-category-picker, #home .home-library-tabs) button.is-active { border-color: rgba(152, 233, 255, .66) !important; color: #fff !important; background: linear-gradient(135deg, #53c7e4, #4b90e5) !important; box-shadow: 0 7px 15px rgba(40, 146, 221, .26) !important; }
 
 #prayer .prayer-spotlight {
   position: relative;
@@ -1904,20 +1973,20 @@ body .app-shell[data-app-background="black"] #prayer .prayer-compose textarea {
 #prayer .prayer-recent-heading span { color: #b7d7e8 !important; font-size: 13px; font-weight: 700; }
 
 #prayer .prayer-list { display: grid; grid-template-columns: 1fr; gap: 8px; padding: 8px 0; border-radius: 22px; background: rgba(9, 29, 47, .4); }
-#prayer .prayer-list .prayer-card,
-#prayer .prayer-list .prayer-card--1,
-#prayer .prayer-list .prayer-card--2,
-#prayer .prayer-list .prayer-card--3 { display: grid; grid-template-columns: 1fr auto; min-height: 82px; border: 0 !important; border-radius: 0; background: transparent !important; box-shadow: none !important; transform: none !important; }
-#prayer .prayer-list .prayer-card:not(:last-child) { border-bottom: 1px solid rgba(149, 205, 235, .18) !important; }
-#prayer .prayer-list .prayer-card::before { display: none; }
-#prayer .prayer-list .prayer-card-toggle { min-height: 0; padding: 12px 14px; }
-#prayer .prayer-list .prayer-card-category { display: block; margin-bottom: 3px; color: #78d6ff !important; font-size: 10px; font-weight: 800; text-transform: capitalize; }
-#prayer .prayer-list .prayer-card-title { margin-bottom: 3px; font-size: 14px; }
-#prayer .prayer-list .prayer-card-preview { -webkit-line-clamp: 1; font-size: 12px; color: #cedfeb !important; }
-#prayer .prayer-list .prayer-card-meta { position: static; align-self: center; margin: 0; padding: 0 13px 0 0; transform: none; }
-#prayer .prayer-list .prayer-card-actions { gap: 4px; }
-#prayer .prayer-list .prayer-action-secondary { display: none; }
-#prayer .prayer-list .prayer-action { min-width: 43px; padding: 0 7px; border-color: rgba(151, 221, 248, .34); background: rgba(99, 155, 198, .22); box-shadow: none; font-size: 11px; }
+:is(#prayer, #profile) .prayer-list .prayer-card,
+:is(#prayer, #profile) .prayer-list .prayer-card--1,
+:is(#prayer, #profile) .prayer-list .prayer-card--2,
+:is(#prayer, #profile) .prayer-list .prayer-card--3 { display: grid; grid-template-columns: 1fr auto; min-height: 82px; border: 0 !important; border-radius: 0; background: transparent !important; box-shadow: none !important; transform: none !important; }
+:is(#prayer, #profile) .prayer-list .prayer-card:not(:last-child) { border-bottom: 1px solid rgba(149, 205, 235, .18) !important; }
+:is(#prayer, #profile) .prayer-list .prayer-card::before { display: none; }
+:is(#prayer, #profile) .prayer-list .prayer-card-toggle { min-height: 0; padding: 12px 14px; }
+:is(#prayer, #profile) .prayer-list .prayer-card-category { display: block; margin-bottom: 3px; color: #78d6ff !important; font-size: 10px; font-weight: 800; text-transform: capitalize; }
+:is(#prayer, #profile) .prayer-list .prayer-card-title { margin-bottom: 3px; font-size: 14px; }
+:is(#prayer, #profile) .prayer-list .prayer-card-preview { -webkit-line-clamp: 1; font-size: 12px; color: #cedfeb !important; }
+:is(#prayer, #profile) .prayer-list .prayer-card-meta { position: static; align-self: center; margin: 0; padding: 0 13px 0 0; transform: none; }
+:is(#prayer, #profile) .prayer-list .prayer-card-actions { gap: 4px; }
+:is(#prayer, #profile) .prayer-list .prayer-action-secondary { display: none; }
+:is(#prayer, #profile) .prayer-list .prayer-action { min-width: 43px; padding: 0 7px; border-color: rgba(151, 221, 248, .34); background: rgba(99, 155, 198, .22); box-shadow: none; font-size: 11px; }
 
 /* Compact Prayer wall: denser reading without sacrificing tap targets. */
 #prayer.prayer-screen { padding-top: 18px; }
@@ -1939,7 +2008,7 @@ body .app-shell[data-app-background="black"] #prayer .prayer-compose textarea {
 #prayer .prayer-wall-search svg { width: 20px; height: 20px; }
 #prayer .prayer-wall-search input { font-size: 14px; }
 #prayer .prayer-board-controls .prayer-filter-row.prayer-category-picker { gap: 7px; }
-#prayer .prayer-board-controls .prayer-filter-row.prayer-category-picker button { min-height: 40px; padding: 0 15px; font-size: 12px; }
+:is(#prayer .prayer-board-controls .prayer-filter-row.prayer-category-picker, #home .home-library-tabs) button { min-height: 40px; padding: 0 15px; font-size: 12px; }
 
 #prayer .prayer-spotlight { min-height: 204px; gap: 7px; padding: 17px 16px 13px; border-radius: 21px; }
 #prayer .prayer-spotlight-label { font-size: 12px; }
@@ -1954,16 +2023,16 @@ body .app-shell[data-app-background="black"] #prayer .prayer-compose textarea {
 #prayer .prayer-recent-heading h2 { font-size: 22px; }
 #prayer .prayer-recent-heading span { font-size: 11px; }
 #prayer .prayer-list { gap: 5px; padding: 5px 0; border-radius: 17px; }
-#prayer .prayer-list .prayer-card,
-#prayer .prayer-list .prayer-card--1,
-#prayer .prayer-list .prayer-card--2,
-#prayer .prayer-list .prayer-card--3 { min-height: 68px; }
-#prayer .prayer-list .prayer-card-toggle { padding: 9px 12px; }
-#prayer .prayer-list .prayer-card-category { margin-bottom: 2px; font-size: 8px; }
-#prayer .prayer-list .prayer-card-title { margin-bottom: 2px; font-size: 12px; }
-#prayer .prayer-list .prayer-card-preview { font-size: 10px; }
-#prayer .prayer-list .prayer-card-meta { padding-right: 10px; }
-#prayer .prayer-list .prayer-action { min-height: 30px; min-width: 38px; font-size: 10px; }
+:is(#prayer, #profile) .prayer-list .prayer-card,
+:is(#prayer, #profile) .prayer-list .prayer-card--1,
+:is(#prayer, #profile) .prayer-list .prayer-card--2,
+:is(#prayer, #profile) .prayer-list .prayer-card--3 { min-height: 68px; }
+:is(#prayer, #profile) .prayer-list .prayer-card-toggle { padding: 9px 12px; }
+:is(#prayer, #profile) .prayer-list .prayer-card-category { margin-bottom: 2px; font-size: 8px; }
+:is(#prayer, #profile) .prayer-list .prayer-card-title { margin-bottom: 2px; font-size: 12px; }
+:is(#prayer, #profile) .prayer-list .prayer-card-preview { font-size: 10px; }
+:is(#prayer, #profile) .prayer-list .prayer-card-meta { padding-right: 10px; }
+:is(#prayer, #profile) .prayer-list .prayer-action { min-height: 30px; min-width: 38px; font-size: 10px; }
 
 /* Keep the selected Prayer section unmistakably orange. */
 body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is-active,
@@ -1983,10 +2052,10 @@ body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is
   background: transparent;
 }
 
-#prayer .prayer-list .prayer-card,
-#prayer .prayer-list .prayer-card--1,
-#prayer .prayer-list .prayer-card--2,
-#prayer .prayer-list .prayer-card--3 {
+:is(#prayer, #profile) .prayer-list .prayer-card,
+:is(#prayer, #profile) .prayer-list .prayer-card--1,
+:is(#prayer, #profile) .prayer-list .prayer-card--2,
+:is(#prayer, #profile) .prayer-list .prayer-card--3 {
   position: relative;
   min-height: 72px;
   overflow: hidden;
@@ -1996,21 +2065,21 @@ body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is
   box-shadow: inset 0 1px 0 rgba(238, 253, 255, .08), 0 7px 15px rgba(3, 17, 31, .16) !important;
 }
 
-#prayer .prayer-list .prayer-card:not(:last-child) { border-bottom: 1px solid rgba(151, 210, 239, .19) !important; }
-#prayer .prayer-list .prayer-card::after { position: absolute; top: 12px; bottom: 12px; left: 0; width: 3px; border-radius: 0 4px 4px 0; background: linear-gradient(#a2f2ff, #3caaf0); box-shadow: 0 0 9px rgba(86, 207, 255, .72); content: ""; }
-#prayer .prayer-list .prayer-card:nth-child(2n)::after { background: linear-gradient(#bfffdc, #3ac996); box-shadow: 0 0 9px rgba(82, 232, 172, .66); }
-#prayer .prayer-list .prayer-card:nth-child(3n)::after { background: linear-gradient(#ffd0b0, #f28747); box-shadow: 0 0 9px rgba(255, 151, 82, .62); }
-#prayer .prayer-list .prayer-card:nth-child(4n)::after { background: linear-gradient(#ddd0ff, #9a78f3); box-shadow: 0 0 9px rgba(178, 141, 255, .65); }
+:is(#prayer, #profile) .prayer-list .prayer-card:not(:last-child) { border-bottom: 1px solid rgba(151, 210, 239, .19) !important; }
+:is(#prayer, #profile) .prayer-list .prayer-card::after { position: absolute; top: 12px; bottom: 12px; left: 0; width: 3px; border-radius: 0 4px 4px 0; background: linear-gradient(#a2f2ff, #3caaf0); box-shadow: 0 0 9px rgba(86, 207, 255, .72); content: ""; }
+:is(#prayer, #profile) .prayer-list .prayer-card:nth-child(2n)::after { background: linear-gradient(#bfffdc, #3ac996); box-shadow: 0 0 9px rgba(82, 232, 172, .66); }
+:is(#prayer, #profile) .prayer-list .prayer-card:nth-child(3n)::after { background: linear-gradient(#ffd0b0, #f28747); box-shadow: 0 0 9px rgba(255, 151, 82, .62); }
+:is(#prayer, #profile) .prayer-list .prayer-card:nth-child(4n)::after { background: linear-gradient(#ddd0ff, #9a78f3); box-shadow: 0 0 9px rgba(178, 141, 255, .65); }
 
-#prayer .prayer-list .prayer-card-toggle { align-items: center; gap: 7px; padding: 10px 10px 10px 15px; }
-#prayer .prayer-list .prayer-card-category { width: max-content; margin-bottom: 4px; padding: 3px 7px; border: 1px solid rgba(135, 219, 255, .24); border-radius: 999px; color: #9ae1ff !important; background: rgba(73, 162, 205, .13); font-size: 8px; letter-spacing: .02em; }
-#prayer .prayer-list .prayer-card-title { color: #f9fcff; font-size: 12px; letter-spacing: -.02em; }
-#prayer .prayer-list .prayer-card-preview { color: rgba(218, 236, 247, .8) !important; font-size: 10px; }
-#prayer .prayer-list .prayer-card-toggle > svg { flex: 0 0 auto; width: 17px; height: 17px; padding: 3px; border: 1px solid rgba(152, 216, 245, .32); border-radius: 50%; color: #b9e9ff; transform: rotate(-90deg); }
-#prayer .prayer-list .prayer-card-meta { padding-right: 11px; }
-#prayer .prayer-list .prayer-action { min-width: 42px; border-color: rgba(173, 228, 250, .27); color: #daf5ff; background: rgba(93, 170, 210, .17); }
-#prayer .prayer-list .prayer-card:hover,
-#prayer .prayer-list .prayer-card:focus-within { filter: brightness(1.12); transform: translateY(-1px) !important; }
+:is(#prayer, #profile) .prayer-list .prayer-card-toggle { align-items: center; gap: 7px; padding: 10px 10px 10px 15px; }
+:is(#prayer, #profile) .prayer-list .prayer-card-category { width: max-content; margin-bottom: 4px; padding: 3px 7px; border: 1px solid rgba(135, 219, 255, .24); border-radius: 999px; color: #9ae1ff !important; background: rgba(73, 162, 205, .13); font-size: 8px; letter-spacing: .02em; }
+:is(#prayer, #profile) .prayer-list .prayer-card-title { color: #f9fcff; font-size: 12px; letter-spacing: -.02em; }
+:is(#prayer, #profile) .prayer-list .prayer-card-preview { color: rgba(218, 236, 247, .8) !important; font-size: 10px; }
+:is(#prayer, #profile) .prayer-list .prayer-card-toggle > svg { flex: 0 0 auto; width: 17px; height: 17px; padding: 3px; border: 1px solid rgba(152, 216, 245, .32); border-radius: 50%; color: #b9e9ff; transform: rotate(-90deg); }
+:is(#prayer, #profile) .prayer-list .prayer-card-meta { padding-right: 11px; }
+:is(#prayer, #profile) .prayer-list .prayer-action { min-width: 42px; border-color: rgba(173, 228, 250, .27); color: #daf5ff; background: rgba(93, 170, 210, .17); }
+:is(#prayer, #profile) .prayer-list .prayer-card:hover,
+:is(#prayer, #profile) .prayer-list .prayer-card:focus-within { filter: brightness(1.12); transform: translateY(-1px) !important; }
 
 #prayer .prayer-spotlight footer button.is-prayed {
   color: #fff8ed;
@@ -2027,37 +2096,37 @@ body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is
 }
 
 /* Each category tag echoes its card's neon rail. */
-#prayer .prayer-list .prayer-card .prayer-card-category {
+:is(#prayer, #profile) .prayer-list .prayer-card .prayer-card-category {
   border-color: rgba(111, 221, 255, .55);
   color: #c7f5ff !important;
   background: rgba(55, 170, 221, .24);
   box-shadow: 0 0 8px rgba(74, 198, 246, .18);
 }
 
-#prayer .prayer-list .prayer-card:nth-child(2n) .prayer-card-category {
+:is(#prayer, #profile) .prayer-list .prayer-card:nth-child(2n) .prayer-card-category {
   border-color: rgba(111, 238, 181, .56);
   color: #d3ffe9 !important;
   background: rgba(46, 179, 130, .24);
   box-shadow: 0 0 8px rgba(78, 225, 165, .18);
 }
 
-#prayer .prayer-list .prayer-card:nth-child(3n) .prayer-card-category {
+:is(#prayer, #profile) .prayer-list .prayer-card:nth-child(3n) .prayer-card-category {
   border-color: rgba(255, 169, 106, .58);
   color: #fff0dc !important;
   background: rgba(224, 111, 49, .25);
   box-shadow: 0 0 8px rgba(246, 139, 69, .18);
 }
 
-#prayer .prayer-list .prayer-card:nth-child(4n) .prayer-card-category {
+:is(#prayer, #profile) .prayer-list .prayer-card:nth-child(4n) .prayer-card-category {
   border-color: rgba(202, 170, 255, .58);
   color: #f0e7ff !important;
   background: rgba(135, 96, 218, .25);
   box-shadow: 0 0 8px rgba(169, 127, 250, .18);
 }
 
-#prayer .prayer-list .prayer-action,
-#prayer .prayer-list .prayer-action:hover,
-#prayer .prayer-list .prayer-action.is-prayed {
+:is(#prayer, #profile) .prayer-list .prayer-action,
+:is(#prayer, #profile) .prayer-list .prayer-action:hover,
+:is(#prayer, #profile) .prayer-list .prayer-action.is-prayed {
   min-width: 0;
   padding: 0;
   border: 0;
@@ -2067,9 +2136,9 @@ body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is
   box-shadow: none !important;
 }
 
-#prayer .prayer-list .prayer-action svg,
-#prayer .prayer-list .prayer-action span,
-#prayer .prayer-list .prayer-action small {
+:is(#prayer, #profile) .prayer-list .prayer-action svg,
+:is(#prayer, #profile) .prayer-list .prayer-action span,
+:is(#prayer, #profile) .prayer-list .prayer-action small {
   border: 0 !important;
   border-radius: 0 !important;
   background: transparent !important;
@@ -2077,19 +2146,19 @@ body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is
   box-shadow: none !important;
 }
 
-#prayer .prayer-list .prayer-action.is-prayed,
-#prayer .prayer-list .prayer-action.is-prayed:hover {
+:is(#prayer, #profile) .prayer-list .prayer-action.is-prayed,
+:is(#prayer, #profile) .prayer-list .prayer-action.is-prayed:hover {
   color: #ff9b42 !important;
 }
 
-#prayer .prayer-list .prayer-action.is-prayed svg {
+:is(#prayer, #profile) .prayer-list .prayer-action.is-prayed svg {
   fill: currentColor;
   stroke: currentColor;
   filter: drop-shadow(0 0 5px rgba(255, 145, 55, .55));
   animation: prayerHeartColorFlow 4.6s ease-in-out infinite;
 }
 
-#prayer .prayer-list .prayer-action.is-prayed span {
+:is(#prayer, #profile) .prayer-list .prayer-action.is-prayed span {
   color: #ff9b42 !important;
   animation: prayerHeartColorFlow 4.6s ease-in-out infinite;
 }
@@ -2206,15 +2275,15 @@ body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is
   box-shadow: inset 0 1px 0 rgba(230, 251, 255, .2), 0 20px 34px rgba(2, 12, 28, .48), 0 0 28px rgba(70, 173, 255, .16);
 }
 
-#prayer .prayer-list .prayer-card {
+:is(#prayer, #profile) .prayer-list .prayer-card {
   border: 0 !important;
   outline: 0;
 }
 
-#prayer .prayer-board-controls .prayer-filter-row.prayer-category-picker button,
-#prayer .prayer-board-controls .prayer-filter-row.prayer-category-picker button:hover,
-#prayer .prayer-board-controls .prayer-filter-row.prayer-category-picker button.is-active,
-#prayer .prayer-board-controls .prayer-filter-row.prayer-category-picker button.is-active:hover {
+:is(#prayer .prayer-board-controls .prayer-filter-row.prayer-category-picker, #home .home-library-tabs) button,
+:is(#prayer .prayer-board-controls .prayer-filter-row.prayer-category-picker, #home .home-library-tabs) button:hover,
+:is(#prayer .prayer-board-controls .prayer-filter-row.prayer-category-picker, #home .home-library-tabs) button.is-active,
+:is(#prayer .prayer-board-controls .prayer-filter-row.prayer-category-picker, #home .home-library-tabs) button.is-active:hover {
   border: 0 !important;
 }
 
@@ -2222,30 +2291,328 @@ body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is
   #prayer .prayer-spotlight-stack .prayer-spotlight { transition: none; }
 }
 
+/* Keep moderation controls below the prayer action, with the report form
+   expanding as a full-width disclosure instead of squeezing beside it. */
+.prayer-detail-footer {
+  display: grid;
+  justify-content: stretch;
+  gap: 14px;
+}
 
-/* Global intercession experience */
-#prayer .intercession-panel{display:grid;gap:16px;padding:2px 0 28px;color:#f7fbff}
-#prayer .intercession-hero{padding:12px 5px 0;text-align:center}
-#prayer .intercession-kicker,#prayer .intercession-session-label,#prayer .intercession-section-heading span{color:#ffad59;font-size:10px;font-weight:900;letter-spacing:.16em}
-#prayer .intercession-hero h2{margin:7px auto 5px;max-width:330px;font-size:28px;line-height:1.02;letter-spacing:-.055em}
-#prayer .intercession-hero p{margin:0 auto;max-width:340px;color:#b8cfdd;font-size:12px;line-height:1.5}
-#prayer .intercession-globe-wrap{position:relative;display:grid;place-items:center;min-height:310px;overflow:hidden;border-radius:28px;background:radial-gradient(circle at 50% 45%,rgba(29,126,180,.22),transparent 43%),linear-gradient(180deg,rgba(4,20,35,.35),rgba(5,18,32,.76))}
-#prayer .intercession-globe{position:relative;width:250px;height:250px;overflow:hidden;border:1px solid rgba(119,207,255,.4);border-radius:50%;background:radial-gradient(circle at 35% 28%,rgba(89,184,227,.3),rgba(13,63,94,.72) 42%,#061b2d 73%);box-shadow:inset -28px -18px 50px rgba(0,0,0,.48),0 0 55px rgba(44,159,224,.22)}
-#prayer .intercession-globe-grid{position:absolute;inset:0;border-radius:50%;background:repeating-linear-gradient(0deg,transparent 0 28px,rgba(131,215,255,.09) 29px 30px),repeating-linear-gradient(90deg,transparent 0 34px,rgba(131,215,255,.08) 35px 36px);mask-image:radial-gradient(circle,#000 66%,transparent 72%)}
-#prayer .intercession-continent{position:absolute;background:rgba(79,169,155,.4);filter:drop-shadow(0 0 6px rgba(80,203,175,.18))}
-#prayer .intercession-continent-a{left:15%;top:20%;width:34%;height:43%;border-radius:60% 30% 48% 34%;transform:rotate(-18deg)}
-#prayer .intercession-continent-b{left:48%;top:24%;width:25%;height:48%;border-radius:36% 58% 48% 65%;transform:rotate(9deg)}
-#prayer .intercession-continent-c{right:9%;bottom:16%;width:24%;height:21%;border-radius:50% 45% 60% 42%;transform:rotate(-12deg)}
-#prayer .intercession-country-pulse{position:absolute;z-index:3;border-radius:50%;background:#ff493d;box-shadow:0 0 5px #ff4a3d,0 0 15px #ff392e,0 0 28px rgba(255,51,42,.78);transform:translate(-50%,-50%);animation:intercessionPulse 2.4s ease-in-out infinite}
-@keyframes intercessionPulse{50%{transform:translate(-50%,-50%) scale(1.35);filter:brightness(1.35)}}
-#prayer .intercession-live-count{position:absolute;bottom:17px;display:flex;align-items:center;gap:6px;padding:8px 12px;border:1px solid rgba(180,226,249,.19);border-radius:999px;background:rgba(6,25,41,.8);backdrop-filter:blur(12px);font-size:11px}
-#prayer .intercession-live-count strong{font-size:15px}.intercession-live-dot{width:7px;height:7px;border-radius:50%;background:#56e49d;box-shadow:0 0 9px #56e49d}
-#prayer .intercession-session-card{display:grid;gap:8px;padding:20px;border:1px solid rgba(141,211,245,.2);border-radius:24px;background:linear-gradient(145deg,rgba(21,63,91,.7),rgba(14,34,57,.82));box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
-#prayer .intercession-session-card h3{margin:0;font-size:22px;letter-spacing:-.035em}#prayer .intercession-session-card p{margin:0;color:#c6dce8;font-size:13px;line-height:1.48}#prayer .intercession-session-card small{color:#86d9ff;font-weight:800}
-#prayer .intercession-timer{font-size:52px;font-variant-numeric:tabular-nums;letter-spacing:-.055em}
-#prayer .intercession-primary{min-height:48px;margin-top:5px;border:0;border-radius:16px;color:#fff;background:linear-gradient(135deg,#ffb04e,#ef7528 62%,#dd5731);box-shadow:0 10px 20px rgba(218,92,27,.25);font-weight:900}
-#prayer .intercession-vote-section{display:grid;gap:10px}.intercession-section-heading{display:flex;align-items:end;justify-content:space-between;padding:0 3px}.intercession-section-heading h3{margin:4px 0 0;font-size:18px}.intercession-section-heading>small{color:#91aebe;font-size:10px}
-#prayer .intercession-topic-list{display:grid;gap:7px}.intercession-topic-list button{display:flex;align-items:center;justify-content:space-between;min-height:60px;padding:10px 13px;border:1px solid rgba(137,202,234,.16);border-radius:17px;color:#f4fbff;background:rgba(21,52,75,.56);text-align:left}.intercession-topic-list button.is-selected{border-color:rgba(255,171,87,.55);background:linear-gradient(110deg,rgba(229,113,36,.24),rgba(24,61,87,.68))}.intercession-topic-list button span{display:grid;gap:3px}.intercession-topic-list button strong{font-size:13px}.intercession-topic-list button small{color:#9fc2d5;font-size:10px}.intercession-topic-list button em{display:grid;place-items:center;min-width:34px;height:34px;border-radius:50%;color:#ffd2a1;background:rgba(240,125,48,.16);font-size:11px;font-style:normal;font-weight:900}
-#prayer .intercession-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.intercession-stats div{display:grid;gap:2px;padding:13px 7px;border-radius:16px;background:rgba(18,48,69,.58);text-align:center}.intercession-stats strong{font-size:19px}.intercession-stats span{color:#9db9c9;font-size:9px}
-#prayer .intercession-privacy{margin:0;padding:0 14px;color:#7596a9;font-size:9px;line-height:1.45;text-align:center}
-@media(prefers-reduced-motion:reduce){#prayer .intercession-country-pulse{animation:none}}
+.prayer-detail-footer .prayer-detail-pray-actions {
+  width: 100%;
+}
+
+.prayer-safety-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 9px;
+  margin-top: 0;
+}
+
+.prayer-safety-actions .prayer-report-toggle {
+  display: flex;
+  align-items: center;
+  justify-self: end;
+  width: max-content;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 4px;
+  border: 0;
+  border-radius: 0;
+  color: rgba(225, 242, 252, .82);
+  background: transparent;
+  box-shadow: none;
+  text-align: right;
+  font-size: 12px;
+}
+
+.prayer-safety-actions .prayer-hide-user {
+  justify-self: start;
+  min-height: 34px;
+  padding: 0 4px;
+  border: 0;
+  color: rgba(207, 232, 246, .76);
+  background: transparent;
+  font-size: 11px;
+}
+
+.prayer-report-form {
+  width: 100%;
+  gap: 12px;
+  margin-top: 0;
+  padding: 14px;
+  border: 1px solid rgba(111, 214, 255, .38);
+  border-radius: 17px;
+  background: linear-gradient(145deg, rgba(32, 83, 117, .58), rgba(5, 29, 55, .62));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07), 0 8px 24px rgba(0, 0, 0, .12);
+  animation: prayerReportReveal 180ms ease-out both;
+}
+
+.prayer-report-form label {
+  gap: 7px;
+  font-size: 12px;
+}
+
+.prayer-report-form select,
+.prayer-report-form textarea {
+  box-sizing: border-box;
+  min-width: 0;
+  border-color: rgba(141, 215, 248, .34);
+  border-radius: 12px;
+  background: rgba(5, 28, 49, .62);
+  outline-color: #76dfff;
+}
+
+.prayer-report-form select { min-height: 44px; padding: 0 12px; }
+.prayer-report-form textarea { min-height: 88px; padding: 11px 12px; line-height: 1.45; }
+
+.prayer-report-form > button {
+  min-height: 44px;
+  border: 1px solid rgba(142, 241, 226, .35);
+  border-radius: 13px;
+  box-shadow: 0 6px 18px rgba(69, 201, 221, .14);
+  font-size: 13px;
+}
+
+.prayer-detail-footer .prayer-detail-pray-actions {
+  justify-content: flex-end;
+}
+
+.prayer-detail-footer .prayer-action,
+.prayer-detail-footer .prayer-action.is-prayed {
+  display: grid;
+  place-items: center;
+  flex: 0 0 48px;
+  width: 48px;
+  min-width: 48px;
+  height: 48px;
+  min-height: 48px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.prayer-detail-footer .prayer-action svg {
+  width: 21px;
+  height: 21px;
+}
+
+.prayer-detail-dialog > .prayer-detail-close {
+  position: absolute;
+  z-index: 2;
+  top: 12px;
+  left: 12px;
+  width: 40px;
+  height: 40px;
+  min-height: 40px;
+  border: 1px solid rgba(221, 244, 255, .28);
+  color: #fff;
+  background: rgba(7, 31, 48, .62);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, .18);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+/* Match the prayer popup surface to the same blue-violet atmosphere as the page. */
+.app-shell[data-app-background="black"] .prayer-detail-dialog {
+  background:
+    radial-gradient(ellipse 85% 34% at 4% 8%, rgba(111, 177, 255, .34), transparent 74%),
+    radial-gradient(ellipse 72% 42% at 100% 40%, rgba(119, 108, 255, .32), transparent 72%),
+    radial-gradient(ellipse 82% 35% at 12% 100%, rgba(111, 137, 255, .3), transparent 72%),
+    linear-gradient(145deg, #122b56 0%, #0a1d40 48%, #101c4b 100%);
+}
+
+@keyframes prayerReportReveal {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prayer-report-form { animation: none; }
+}
+
+#prayer .prayer-page-tabs {
+  position: sticky;
+  top: calc(env(safe-area-inset-top, 0px) + 8px);
+  z-index: 12;
+}
+
+/* Intercession shares Prayer's tabs and keeps the content light. */
+#prayer .prayer-page-tabs { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+#prayer .intercession-panel { display: grid; gap: 16px; padding: 6px 0 24px; color: #edf6ff; }
+#prayer .intercession-kicker { color: #a7cbd5; font-size: 9px; font-weight: 800; letter-spacing: .1em; }
+#prayer .intercession-focus-card { position: relative; display: grid; gap: 10px; padding: 15px; border: 1px solid rgba(161, 201, 223, .2); border-radius: 18px; background: rgba(11, 31, 55, .42); box-shadow: 0 8px 24px rgba(3, 14, 28, .18); }
+#prayer .intercession-session-actions { display: grid; gap: 5px; }
+#prayer .intercession-session-finish { justify-self: start; min-height: 36px; padding: 0 2px; border: 0; color: #a9d7ee; background: transparent; font-size: 10px; font-weight: 800; cursor: pointer; }
+.phone-frame .intercession-session-modal { position: absolute; z-index: 1000; inset: 0; display: grid; align-items: center; padding: 18px; background: transparent; -webkit-backdrop-filter: blur(12px) saturate(115%); backdrop-filter: blur(12px) saturate(115%); }
+.phone-frame .intercession-session-dialog { position: relative; width: min(100%, 380px); margin: 0 auto; padding: 21px 18px 18px; border: 1px solid rgba(196, 232, 249, .32); border-radius: 24px; color: #f5fbff; background: transparent; -webkit-backdrop-filter: blur(22px) saturate(125%); backdrop-filter: blur(22px) saturate(125%); box-shadow: 0 18px 45px rgba(0, 0, 0, .35), inset 0 1px rgba(255, 255, 255, .18); animation: intercession-session-sheet-in 220ms ease-out both; }
+.phone-frame .intercession-session-close { position: absolute; top: 8px; right: 8px; display: grid; place-items: center; width: 38px; min-height: 38px; padding: 0; border: 0; border-radius: 50%; color: #dceef7; background: transparent; font-size: 24px; line-height: 1; cursor: pointer; }
+.phone-frame .intercession-session-dialog h2 { max-width: 280px; margin: 7px 36px 8px 0; color: #fff; font-size: 24px; line-height: 1.08; letter-spacing: -.03em; }
+.phone-frame .intercession-session-dialog > p { margin: 0; color: #d3e6f0; font-size: 12px; line-height: 1.5; }
+.phone-frame .intercession-session-dialog-details { display: grid; gap: 5px; margin: 17px 0; padding: 11px 12px; border-left: 2px solid #a8dcc8; color: #e7f4fb; font-size: 11px; line-height: 1.35; }
+.phone-frame .intercession-session-dialog-details span:last-child { color: #a9d7ee; font-size: 10px; }
+.phone-frame .intercession-session-dialog-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.phone-frame .intercession-session-dialog-actions button { min-height: 44px; border-radius: 13px; font-size: 11px; font-weight: 800; cursor: pointer; }
+.phone-frame .intercession-session-dialog-secondary { border: 1px solid rgba(196, 232, 249, .28); color: #d3e6f0; background: transparent; }
+.phone-frame .intercession-session-dialog-primary { border: 0; color: #17344c; background: #a8dcc8; }
+.phone-frame .intercession-session-dialog-primary:disabled { opacity: .45; cursor: not-allowed; }
+.phone-frame .intercession-session-reminder-link { display: block; margin: -4px 0 15px; padding: 0; border: 0; color: #a8dcc8; background: transparent; font-size: 11px; font-weight: 800; text-align: left; cursor: pointer; }
+.phone-frame .intercession-reminder-dialog { width: min(100%, 420px); }
+.phone-frame .intercession-reminder-calendar { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; margin: 18px 0 14px; }
+.phone-frame .intercession-reminder-calendar button { display: grid; gap: 2px; min-height: 48px; padding: 6px 2px; border: 1px solid rgba(196, 232, 249, .2); border-radius: 12px; color: #b8d4e0; background: rgba(255, 255, 255, .035); cursor: pointer; }
+.phone-frame .intercession-reminder-calendar button[aria-pressed='true'] { border-color: rgba(168, 220, 200, .72); color: #17344c; background: #a8dcc8; }
+.phone-frame .intercession-reminder-calendar button.has-slots { border-color: rgba(126, 205, 238, .78); color: #17344c; background: #79c9ea; }
+.phone-frame .intercession-reminder-calendar span { font-size: 13px; font-weight: 900; }
+.phone-frame .intercession-reminder-calendar small { color: #fff; font-size: 8px; font-weight: 800; }
+.phone-frame .intercession-reminder-calendar button[aria-pressed='true'] small { color: #fff; }
+.phone-frame .intercession-reminder-day-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 8px; color: #f5fbff; font-size: 12px; }
+.phone-frame .intercession-reminder-day-heading span { color: #a9d7ee; font-size: 10px; }
+.phone-frame .intercession-reminder-slots { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; max-height: 154px; overflow-y: auto; padding: 1px; scrollbar-width: none; }
+.phone-frame .intercession-reminder-slots::-webkit-scrollbar { display: none; }
+.phone-frame .intercession-reminder-slots button { min-height: 34px; border: 1px solid rgba(196, 232, 249, .2); border-radius: 9px; color: #cfe5ef; background: rgba(255, 255, 255, .035); font-size: 10px; font-weight: 800; cursor: pointer; }
+.phone-frame .intercession-reminder-slots button.is-selected { border-color: transparent; color: #17344c; background: #a8dcc8; }
+.phone-frame .intercession-reminder-timezone { margin: 10px 0 4px !important; color: #a9d7ee !important; font-size: 10px !important; }
+.phone-frame .intercession-reminder-message { margin: 5px 0 11px !important; color: #a8dcc8 !important; font-size: 10px !important; }
+.phone-frame .intercession-session-stat { display: grid; gap: 1px; }
+.phone-frame .intercession-session-stat strong { color: #fff; font-size: 20px; font-variant-numeric: tabular-nums; }
+.phone-frame .intercession-session-stat small { color: #a9d7ee; font-size: 10px; }
+#prayer .intercession-prayer-carousel { display: grid; gap: 8px; min-width: 0; }
+#prayer .intercession-prayer-indicators { display: flex; justify-content: center; gap: 6px; padding: 0 2px; }
+#prayer .intercession-prayer-indicators button { display: inline-flex; align-items: center; gap: 6px; min-height: 34px; padding: 0 10px; border: 1px solid transparent; border-radius: 999px; color: #9dbbc9; background: transparent; font-size: 10px; font-weight: 800; cursor: pointer; transition: color 160ms ease, background 160ms ease, border-color 160ms ease, transform 160ms ease; }
+#prayer .intercession-prayer-indicators button > span { width: 6px; height: 6px; border-radius: 50%; background: rgba(167, 203, 213, .5); }
+#prayer .intercession-prayer-indicators button.is-active { border-color: transparent; color: #edf6ff; background: rgba(68, 126, 147, .55); }
+#prayer .intercession-prayer-indicators button.is-active > span { background: #a8dcc8; box-shadow: 0 0 0 3px rgba(168, 220, 200, .13); }
+#prayer .intercession-prayer-indicators button:active { transform: scale(.97); }
+#prayer .intercession-prayer-viewport { position: relative; z-index: 0; isolation: isolate; contain: paint; min-width: 0; overflow-x: auto; overflow-y: hidden; border-radius: 18px; clip-path: inset(0 round 18px); scrollbar-width: none; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; }
+#prayer .intercession-prayer-viewport::-webkit-scrollbar { display: none; }
+#prayer .intercession-prayer-track { display: flex; width: 100%; }
+#prayer .intercession-prayer-slide { flex: 0 0 100%; min-width: 0; min-height: 300px; scroll-snap-align: start; scroll-snap-stop: always; }
+#prayer .intercession-prayer-slide > .intercession-focus-card { min-height: 300px; }
+#prayer .intercession-prayer-slide > .intercession-journal { min-height: 300px; }
+#prayer .intercession-prayer-slide > .intercession-journal .intercession-journal-log { height: 252px; }
+#prayer .intercession-prayer-slide [aria-hidden='true'] { pointer-events: none; }
+#prayer .intercession-theme-row, #prayer .intercession-subject-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+#prayer .intercession-theme-row { padding-bottom: 11px; border-bottom: 1px solid rgba(143, 191, 200, .2); }
+#prayer .intercession-theme-row h2 { margin: 3px 0 0; font-size: 20px; line-height: 1.15; color: #edf6ff; }
+#prayer .intercession-clock { display: grid; gap: 2px; text-align: right; flex-shrink: 0; }
+#prayer .intercession-clock > span { color: #abc8d6; font-size: 10px; }
+#prayer .intercession-clock strong { color: #edf6ff; font-size: 20px; line-height: 1.15; font-variant-numeric: tabular-nums; }
+#prayer .intercession-subject-row .intercession-clock { display: flex; align-items: baseline; gap: 6px; }
+#prayer .intercession-subject-row .intercession-clock strong { font-size: 16px; }
+#prayer .intercession-current-focus { animation: intercession-focus-reveal 240ms ease-out; }
+#prayer .intercession-current-focus h3 { margin: 0 0 5px; font-size: 21px; line-height: 1.2; letter-spacing: -.025em; color: #fff; }
+#prayer .intercession-current-focus p { margin: 0; color: #cfdfeb; font-size: 12px; line-height: 1.45; }
+#prayer .intercession-progress { display: flex; gap: 5px; }
+#prayer .intercession-progress > span { flex: 1; height: 4px; overflow: hidden; border-radius: 8px; background: rgba(181, 215, 228, .2); }
+#prayer .intercession-progress > span > span { display: block; height: 100%; border-radius: inherit; background: #a3d3c0; }
+#prayer .intercession-progress .is-current { background: rgba(181, 215, 228, .4); }
+#prayer .intercession-next { margin: 0; color: #9dbbc9; font-size: 10px; line-height: 1.35; }
+#prayer .intercession-next span { color: #cfdfeb; }
+#prayer .intercession-guidance { padding: 0 2px; }
+#prayer .intercession-guidance summary { display: flex; justify-content: space-between; align-items: center; min-height: 44px; color: #cfdfeb; font-size: 12px; font-weight: 700; cursor: pointer; list-style: none; }
+#prayer .intercession-guidance summary::-webkit-details-marker { display: none; }
+#prayer .intercession-guidance[open] summary span { transform: rotate(45deg); }
+#prayer .intercession-guidance ul { margin: 3px 0 10px; padding-left: 19px; color: #cfdfeb; font-size: 12px; line-height: 1.6; }
+#prayer .intercession-guidance small { color: #a7cbd5; font-size: 11px; }
+@keyframes intercession-focus-reveal { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes intercession-session-sheet-in { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { #prayer .intercession-current-focus { animation: none; } .phone-frame .intercession-session-dialog { animation: none; } }
+#prayer .intercession-world { position: relative; display: block; height: 190px; margin: -2px -20px 0; overflow: hidden; background: transparent; }
+#prayer .intercession-globe-shell { position: absolute; top: 50%; left: -50px; width: 236px; height: 236px; transform: translateY(-50%); }
+#prayer .intercession-globe-canvas { display: block; width: 236px; height: 236px; cursor: grab; touch-action: none; outline: 0; }
+#prayer .intercession-globe-canvas:active { cursor: grabbing; }
+#prayer .intercession-globe-canvas:focus-visible { outline: 2px solid #a9d7ee; outline-offset: 4px; border-radius: 50%; }
+#prayer .intercession-globe-hint { position: absolute; left: 105px; bottom: 5px; padding: 3px 6px; border-radius: 99px; color: #a7c3cb; background: rgba(6, 22, 33, .74); font-size: 8px; pointer-events: none; white-space: nowrap; }
+#prayer .intercession-world-copy { position: absolute; z-index: 1; right: 19px; bottom: 30px; display: grid; gap: 4px; max-width: 45%; }
+#prayer .intercession-world-copy strong { color: #edf6ff; font-size: 38px; font-variant-numeric: tabular-nums; letter-spacing: -.05em; line-height: .95; }
+#prayer .intercession-world-copy > span:last-of-type, #prayer .intercession-world-copy small { color: #9bb7c0; font-size: 10px; line-height: 1.4; }
+#prayer .intercession-live-dot { width: 7px; height: 7px; margin-bottom: 3px; border-radius: 50%; background: #abd8c2; box-shadow: 0 0 0 0 rgba(171, 216, 194, .55); animation: intercession-live-pulse 1.8s ease-out infinite; }
+#prayer .intercession-ai-focus { display: grid; gap: 5px; padding: 0 2px; }
+#prayer .intercession-ai-focus > span { color: #8db8c4; font-size: 10px; font-weight: 700; }
+#prayer .intercession-ai-focus strong { color: #edf6ff; font-size: 20px; line-height: 1.2; }
+#prayer .intercession-ai-focus p { margin: 0; color: #bdd1e1; font-size: 12px; line-height: 1.45; }
+#prayer .intercession-ai-focus small { color: #8db8c4; font-size: 10px; }
+#prayer .intercession-session { display: grid; gap: 9px; padding: 18px; border-radius: 20px; background: linear-gradient(135deg, #22557a, #153552); }
+#prayer .intercession-session-label { color: #a9d7ee; font-size: 11px; font-weight: 700; }
+#prayer .intercession-session h3 { margin: 0; color: #edf6ff; font-size: 19px; line-height: 1.25; }
+#prayer .intercession-session p { margin: 0; color: #d1e1ec; font-size: 12px; line-height: 1.5; }
+#prayer .intercession-session small { color: #a9d7ee; font-size: 11px; }
+#prayer .intercession-timer { color: #edf6ff; font-size: 40px; font-variant-numeric: tabular-nums; line-height: 1.15; }
+#prayer .intercession-primary { min-height: 44px; margin-top: 5px; padding: 10px 16px; border: 0; border-radius: 14px; background: linear-gradient(135deg, #4ba5cc, #377dc1); color: #fff; font-size: 13px; font-weight: 800; }
+#prayer .intercession-topics { padding: 0 2px; }
+#prayer .intercession-topics summary { display: flex; align-items: center; justify-content: space-between; min-height: 44px; color: #edf6ff; font-size: 13px; font-weight: 700; cursor: pointer; list-style: none; }
+#prayer .intercession-topics summary::-webkit-details-marker { display: none; }
+#prayer .intercession-topics summary span { transition: transform 150ms ease; }
+#prayer .intercession-topics[open] summary span { transform: rotate(45deg); }
+#prayer .intercession-topics > p { margin: 0 0 10px; color: #bdd1e1; font-size: 11px; }
+#prayer .intercession-topic-list { display: grid; gap: 4px; }
+#prayer .intercession-topic-list button { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 52px; padding: 10px; border: 0; border-radius: 12px; color: #e1eef7; background: transparent; text-align: left; }
+#prayer .intercession-topic-list button.is-selected { background: #285978; color: #fff; }
+#prayer .intercession-topic-list button > span:first-child { display: grid; gap: 4px; }
+#prayer .intercession-topic-list strong { font-size: 12px; }
+#prayer .intercession-topic-list small { color: #bdd1e1; font-size: 10px; }
+#prayer .intercession-personal { margin: 0; color: #bdd1e1; font-size: 11px; text-align: center; }
+#prayer .intercession-panel :is(button, summary):focus-visible { outline: 2px solid #a9d7ee; outline-offset: 3px; }
+@keyframes intercession-live-pulse { 70% { box-shadow: 0 0 0 7px rgba(171, 216, 194, 0); } 100% { box-shadow: 0 0 0 0 rgba(171, 216, 194, 0); } }
+@media (max-width: 360px) {
+  #prayer .intercession-world { height: 180px; margin-inline: -16px; }
+  #prayer .intercession-globe-shell, #prayer .intercession-globe-canvas { width: 224px; height: 224px; }
+  #prayer .intercession-globe-shell { left: -50px; }
+  #prayer .intercession-world-copy { right: 14px; bottom: 25px; }
+  #prayer .intercession-world-copy strong { font-size: 32px; }
+  #prayer .prayer-page-tabs button { font-size: 9px; }
+}
+@media (prefers-reduced-motion: reduce) { #prayer .intercession-topics summary span { transition: none; } #prayer .intercession-live-dot { animation: none; } }
+
+/* Next-session voting stays in a single horizontal row under the prayer card. */
+#prayer .intercession-voting { min-width: 0; }
+#prayer .intercession-vote-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+#prayer .intercession-vote-heading h3 { margin: 0; color: #edf6ff; font-size: 14px; line-height: 1.3; }
+#prayer .intercession-theme-carousel { display: flex; gap: 8px; padding: 3px 3px 7px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: 3px; scrollbar-width: none; }
+#prayer .intercession-theme-carousel::-webkit-scrollbar { display: none; }
+#prayer .intercession-vote-card { position: relative; isolation: isolate; flex: 0 0 150px; aspect-ratio: 3 / 2; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-content: end; align-items: center; justify-items: start; gap: 6px 4px; min-height: 100px; padding: 12px; overflow: hidden; border: 1px solid rgba(255, 255, 255, .3); border-radius: 20px; background-color: #1d3655; background-image: var(--vote-image); background-size: cover; background-position: center; background-repeat: no-repeat; box-shadow: 0 4px 12px rgba(5, 17, 37, .2); color: #fff; text-align: left; scroll-snap-align: start; cursor: pointer; transition: transform 160ms ease, box-shadow 160ms ease; }
+#prayer .intercession-vote-card.is-selected { border-color: #a8dcc8; box-shadow: inset 0 0 0 2px #a8dcc8, 0 4px 12px rgba(5, 17, 37, .18); }
+#prayer .intercession-vote-card:disabled { cursor: default; }
+#prayer .intercession-vote-card:active:not(:disabled) { transform: scale(.97); }
+#prayer .intercession-vote-card:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+#prayer .intercession-vote-card strong { grid-column: 1 / -1; color: #fff; text-shadow: 0 1px 3px rgba(0, 0, 0, .5); font-size: 14px; font-weight: 800; letter-spacing: -.02em; }
+#prayer .intercession-vote-count { min-width: 0; color: #edf6ff; font-size: 10px; font-variant-numeric: tabular-nums; }
+#prayer .intercession-vote-action { display: inline-flex; align-items: center; min-height: 22px; margin-top: 0; padding: 3px 8px; border-radius: 99px; color: #203855; background: rgba(255, 255, 255, .9); font-size: 10px; font-weight: 800; }
+#prayer .intercession-vote-card.is-selected .intercession-vote-action { color: #102b44; background: #a8dcc8; }
+@media (hover: hover) { #prayer .intercession-vote-card:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(5, 17, 37, .2); } }
+@media (prefers-reduced-motion: reduce) { #prayer .intercession-vote-card { transition: none; } #prayer .intercession-prayer-indicators button { transition: none; } #prayer .intercession-prayer-viewport { scroll-behavior: auto; } }
+#prayer .intercession-vote-feedback { display: flex; justify-content: space-between; align-items: center; gap: 8px; min-height: 25px; margin-top: 3px; color: #a8c3d3; font-size: 10px; line-height: 1.4; }
+#prayer .intercession-vote-feedback button { flex-shrink: 0; min-height: 44px; padding: 0 8px; border: 0; color: #edf6ff; background: transparent; font-size: 11px; font-weight: 800; cursor: pointer; }
+/* Keep focus/scroll navigation inside the carousel, including hidden app screens. */
+.phone-frame:has(#prayer.is-active .intercession-panel) { overflow: clip; }
+#prayer .intercession-world { margin-inline: 0; }
+
+#prayer .intercession-vote-feedback:empty { display: none; }
+
+
+/* Brother AI's synchronized prayer stays inside a compact chat journal. */
+#prayer .intercession-journal { min-width: 0; padding: 10px; border: 1px solid rgba(161, 201, 223, .2); border-radius: 17px; background: rgba(11, 31, 55, .42); }
+#prayer .intercession-journal-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 28px; margin-bottom: 7px; }
+#prayer .intercession-journal-heading > div { display: flex; align-items: center; gap: 7px; min-width: 0; }
+#prayer .intercession-journal-heading h3 { margin: 0; color: #edf6ff; font-size: 13px; font-weight: 800; }
+#prayer .intercession-journal-heading > div > span:last-child { color: #a8c3d3; font-size: 10px; }
+#prayer .intercession-journal-tools { display: flex; align-items: center; justify-content: flex-end; gap: 6px; }
+#prayer .intercession-journal-topic-timer { color: #a8c3d3; font-size: 9px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+#prayer .intercession-journal-dot { width: 6px; height: 6px; flex-shrink: 0; border-radius: 50%; background: #a8dcc8; }
+#prayer .intercession-journal-log { height: 144px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; border-radius: 10px; padding: 2px; }
+#prayer .intercession-journal-log::-webkit-scrollbar { display: none; }
+#prayer .intercession-journal-log:focus-visible { outline: 2px solid #a9d7ee; outline-offset: 3px; }
+#prayer .intercession-journal-log ol { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+#prayer .intercession-journal-focus { display: block; margin: 4px 1px 6px; color: #a8c3d3; font-size: 10px; font-weight: 700; }
+#prayer .intercession-journal-message { display: flex; align-items: flex-end; gap: 8px; padding: 9px 10px; border-left: 2px solid var(--prayer-line-color, #a8dcc8); border-radius: 0; background: transparent; }
+#prayer .intercession-journal-message p { flex: 1; margin: 0; color: #e3eef7; font-size: 12px; line-height: 1.45; overflow-wrap: anywhere; }
+#prayer .intercession-journal-message p.is-typing::after { content: ''; display: inline-block; width: 1px; height: 1em; margin-left: 3px; vertical-align: -.15em; background: var(--prayer-line-color, #a8dcc8); animation: intercession-typing-caret 700ms steps(1, end) infinite; }
+#prayer .intercession-journal-message time { flex-shrink: 0; color: #a8c3d3; font-size: 9px; font-variant-numeric: tabular-nums; }
+#prayer .intercession-journal-empty { margin: 0; padding: 15px 8px; color: #a8c3d3; font-size: 12px; line-height: 1.5; }
+#prayer .intercession-journal-empty p { margin: 0; }
+#prayer .intercession-journal :is(header, .intercession-journal-empty) button { min-height: 44px; padding: 0 8px; border: 0; border-radius: 10px; background: rgba(168, 207, 230, .1); color: #e3eef7; font-size: 10px; font-weight: 700; cursor: pointer; }
+
+#prayer .intercession-journal-message.is-new { animation: intercession-message-appear 350ms ease-out both; }
+@keyframes intercession-message-appear { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes intercession-typing-caret { 0%, 45% { opacity: 1; } 46%, 100% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { #prayer .intercession-journal-message.is-new { animation: none; } #prayer .intercession-journal-message p.is-typing::after { animation: none; } }

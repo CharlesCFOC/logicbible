@@ -1,6 +1,12 @@
 .env.local
 node_modules/
 assets/react/
+dist/
 .cache/
 .DS_Store
 test-results/
+.vercel
+.env*
+*.apk
+supabase/.temp/
+android/.idea/

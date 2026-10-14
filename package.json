@@ -4,18 +4,31 @@
     "build:css": "node scripts/build-styles.mjs",
     "build:react": "vite build --config vite.bridge.config.js",
     "build": "npm run build:css && npm run build:react",
+    "build:mobile": "npm run build && node scripts/build-mobile.mjs",
+    "android:add": "npm run build:mobile && cap add android",
+    "android:sync": "npm run build:mobile && cap sync android",
     "dev": "npm run build && node server.mjs",
-    "start": "node server.mjs"
+    "start": "node server.mjs",
+    "build:updates": "npm run build:mobile && node scripts/build-mobile-updates.mjs",
+    "vercel-build": "npm run build:updates",
+    "build:intercession-journal": "node scripts/build-intercession-journal.mjs",
+    "seed:intercession-journal": "node --env-file=.env.local scripts/seed-intercession-journal.mjs"
   },
   "private": true,
   "type": "module",
   "dependencies": {
+    "@capacitor/android": "^8.5.2",
+    "@capacitor/core": "^8.5.2",
+    "@capacitor/haptics": "^8.0.2",
+    "@capawesome/capacitor-live-update": "8.7.0",
     "@supabase/supabase-js": "^2.110.9",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.5.2",
     "@vitejs/plugin-react": "^6.1.0",
+    "fflate": "0.8.3",
     "lightningcss": "^1.33.0",
     "vite": "^8.2.2"
   }

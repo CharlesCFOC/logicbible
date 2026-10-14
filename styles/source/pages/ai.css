@@ -419,8 +419,9 @@
 
 #ai .chat-thread .ai-message--with-avatar {
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
-  gap: 10px;
+  gap: 8px;
 }
 
 #ai .chat-thread .ai-message-avatar {
@@ -432,7 +433,10 @@
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: 50%;
-  background: linear-gradient(135deg, #22cfa2 0%, #258fd8 48%, #8062f2 100%);
+  background: linear-gradient(110deg, #4fc3ff 0%, #8bdcff 24%, #ff9d00 50%, #ffb6dc 76%, #4fc3ff 100%);
+  background-size: 280% 100%;
+  background-position: 0% 50%;
+  animation: homeHeroTitleGradient 7s ease-in-out infinite;
   box-shadow: 0 6px 14px rgba(35, 148, 190, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.28);
 }
 
@@ -444,7 +448,8 @@
 }
 
 #ai .chat-thread .ai-message--with-avatar .ai-message-stack {
-  flex: 1;
+  flex: none;
+  width: 100%;
   min-width: 0;
 }
 
@@ -624,6 +629,22 @@
   text-justify: inter-word;
 }
 
+/* Brother AI user bubbles and latest discussion share the same blue treatment. */
+.app-shell #ai .chat-thread .user-message,
+.app-shell .phone-frame #ai .ai-history-panel > .ai-history-item:first-child {
+  border: 0 !important;
+  background:
+    radial-gradient(ellipse at top left, rgba(139, 220, 255, 0.24), transparent 70%),
+    linear-gradient(135deg, #285d88 0%, #234b79 48%, #19345c 100%) !important;
+  color: #f4fbff !important;
+  box-shadow: 0 5px 14px rgba(5, 23, 48, 0.16) !important;
+}
+
+.app-shell .phone-frame #ai .ai-history-panel > .ai-history-item:first-child {
+  padding: 14px 16px;
+  border-radius: 24px;
+}
+
 .composer textarea::placeholder,
 .verse-ai-composer input::placeholder {
   color: var(--muted);
@@ -693,7 +714,7 @@
   inset: 0;
   padding: 1.5px;
   border-radius: inherit;
-  background: conic-gradient(from var(--debate-composer-neon-angle), #8bdcff, #6e7bff, #b27dff, #39e5e5, #8bdcff);
+  background: conic-gradient(from var(--debate-composer-neon-angle), #4fc3ff, #8bdcff, #ff9d00, #ffb6dc, #4fc3ff);
   content: "";
   pointer-events: none;
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -814,4 +835,104 @@
   border-radius: 50% !important;
   background: linear-gradient(135deg, #34d5ed, #2774eb) !important;
   box-shadow: 0 4px 12px rgba(60, 157, 204, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #ai .chat-thread .ai-message-avatar,
+  .apologetics-debate-chat-thread .ai-message-avatar {
+    animation: none;
+  }
+}
+
+/* Both composers share the same frame, dimensions, and surface treatment. */
+.app-shell .phone-frame .reusable-ai-composer.brother-ai-composer,
+.app-shell .phone-frame .reusable-ai-composer.apologetics-debate-composer {
+  position: absolute !important;
+  left: 14px !important;
+  right: 14px !important;
+  bottom: calc(var(--bottom-nav-offset) + 14px) !important;
+  width: auto !important;
+  box-sizing: border-box;
+  transform: none !important;
+  gap: 8px !important;
+  padding: 6px 8px 6px 14px !important;
+  background: rgba(14, 38, 54, 0.72) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(125%);
+  backdrop-filter: blur(16px) saturate(125%);
+}
+
+.app-shell .phone-frame .brother-ai-composer textarea {
+  color: #f4fbff !important;
+}
+
+/* Prevent the global input theme from painting a rectangle inside the composer. */
+.app-shell[data-app-background] .phone-frame .reusable-ai-composer textarea,
+.app-shell[data-app-background] .phone-frame .reusable-ai-composer textarea:focus {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  color: #f4fbff !important;
+}
+
+/* The composer surface reveals the page background; only its neon edge remains. */
+.app-shell[data-app-background] .phone-frame .reusable-ai-composer.brother-ai-composer,
+.app-shell[data-app-background] .phone-frame .reusable-ai-composer.apologetics-debate-composer {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  animation: none !important;
+}
+
+/* Brother AI response headings use a static soft green color. */
+.app-shell #ai .ai-message .rich-text :is(h2, h3, h4) {
+  width: fit-content;
+  max-width: 100%;
+  color: #8fdbad !important;
+  background: none;
+  -webkit-text-fill-color: #8fdbad;
+  filter: none;
+  animation: none;
+}
+
+.app-shell #ai .ai-message .rich-text li,
+.app-shell #ai .ai-message .rich-text li :is(strong, em, span, p) {
+  color: #8bdcff !important;
+}
+
+.app-shell #ai .ai-message .rich-text li::marker {
+  color: #8bdcff;
+}
+
+/* Add two lines only between top-level numbered points. */
+.app-shell #ai .ai-message .rich-text > ol > li + li {
+  margin-top: calc(6px + 3.3em);
+  margin-top: calc(6px + 2lh);
+}
+
+/* Numbered sections can also be rendered as headings, with paragraphs and bullets. */
+.app-shell #ai .ai-message .rich-text > :is(h2, h3, h4):not(:first-child) {
+  margin-top: calc(10px + 3.3em);
+  margin-top: calc(10px + 2lh);
+}
+
+.app-shell #ai .ai-message .rich-text .debate-bible-citation,
+.app-shell #ai .ai-message .rich-text li .debate-bible-citation {
+  color: #ffb066 !important;
+  -webkit-text-fill-color: #ffb066;
+}
+
+.app-shell #ai .ai-message .rich-text a.debate-bible-citation {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.app-shell #ai .ai-message .rich-text a.debate-bible-citation:is(:hover, :focus-visible) {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }

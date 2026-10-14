@@ -1,4 +1,4 @@
-# Brother Bible AI
+# Think Bible
 
 Local prototype with a real Bible reader data layer.
 
@@ -15,6 +15,26 @@ Open:
 ```txt
 http://localhost:4000/
 ```
+
+## Android automatic web updates
+
+Install the APK with native version `1.1` once to enable automatic web updates.
+It checks `https://logicbible.vercel.app/mobile-updates/latest.json` on startup
+and when returning to the foreground (at most once every ten minutes).
+Updates download in the background and apply on the next cold start; the app
+keeps its local bundle when offline. A SHA-256 checksum verifies each download.
+A bundle that fails to confirm startup within 15 seconds rolls back and is blocked.
+
+`npm run build:updates` generates the website, an update ZIP, and its manifest in
+`dist/`. Vercel runs this through `vercel-build`. Publish the code to the production
+site to make an update available; saving a local file alone does not publish it.
+The existing APKs without the updater cannot receive these updates.
+
+HTML, CSS, JavaScript, and assets can update this way. Native/plugin changes require
+a new APK: increase Android `versionCode` and `versionName`, and change
+`mobile-update.config.json` `nativeVersion` to match. Existing APKs reject bundles
+for a different native version. `npm run android:sync` prepares bundled assets
+without including the update ZIP in the APK.
 
 ## Bible API key
 
@@ -83,6 +103,20 @@ Data model included in the initial schema:
 - `user_topic_progress`
 - `user_saved_items`
 - `ai_conversations`
+
+## Intercession prayer journal
+
+Brother AI uses prewritten prayers from `public.intercession_prayer_lines`: 12 messages per focus, published every 10 seconds against the shared 10-minute session clock. The journal shows earlier messages when someone joins late and preserves their scroll position while they read the history.
+
+For a new Supabase project, run [the journal migration](supabase/migrations/20261014185525_intercession_prayer_journal.sql), then seed the catalogue using the server credentials in `.env.local`:
+
+```bash
+npm run seed:intercession-journal
+```
+
+The seed command fills missing messages and preserves existing database edits. Edit `body` in the Supabase table to adjust an individual prayer; `sequence` runs from 0 to 11 within each `focus_id`. Updated content is loaded when the journal opens or the next session begins.
+
+The initial catalogue comes from [intercession-petitions.json](data/prayer/intercession-petitions.json). To rebuild it, run `npm run build:intercession-journal`. Use `npm run seed:intercession-journal -- --replace` only when intentionally replacing the stored prayers with that rebuilt catalogue.
 
 ## How Bible versions work
 

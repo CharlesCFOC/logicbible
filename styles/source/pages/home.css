@@ -169,7 +169,7 @@
 
 .saved-folder-create-actions {
   display: grid;
-  grid-template-columns: 1fr 1.3fr;
+  grid-template-columns: 1fr;
   gap: 8px;
 }
 
@@ -2270,6 +2270,53 @@ body:has(.app-shell[data-app-background="black"]) > .app-shell {
 
 .home-library-panel {
   min-height: 92px;
+}
+
+.home-library-cards {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+.home-library-expand {
+  position: relative;
+  justify-self: center;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  min-height: 48px;
+  margin-top: 2px;
+  padding: 0;
+  border: 1px solid rgba(207, 244, 255, 0.72);
+  border-radius: 50%;
+  background: linear-gradient(135deg, #68dcf4, #6179ef);
+  color: #fff;
+  box-shadow: 0 5px 18px rgba(33, 117, 190, 0.34), 0 0 18px rgba(102, 211, 255, 0.24);
+  cursor: pointer;
+  transition: transform 180ms ease, filter 180ms ease, box-shadow 180ms ease;
+}
+
+.home-library-expand:hover,
+.home-library-expand:focus-visible {
+  transform: scale(1.06);
+  filter: brightness(1.08);
+  box-shadow: 0 7px 22px rgba(33, 117, 190, 0.42), 0 0 22px rgba(102, 211, 255, 0.32);
+}
+
+.home-library-expand:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.home-library-expand svg {
+  width: 21px;
+  height: 21px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-library-expand {
+    transition: none;
+  }
 }
 
 .home-library-placeholder {

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { IntercessionPanel } from "./intercession.jsx";
 
 const categories = [
   ["general", "General"],
@@ -11,16 +12,16 @@ const categories = [
 ];
 const filterCategories = [["all", "All"], ...categories];
 
-const backgrounds = [1, 2, 3, 4, 5, 6];
+const SPOTLIGHT_INTERVAL_MS = 15 * 60 * 1000;
 
-function getHourBucket(timestamp = Date.now()) {
-  return Math.floor(timestamp / (60 * 60 * 1000));
+function getSpotlightBucket(timestamp = Date.now()) {
+  return Math.floor(timestamp / SPOTLIGHT_INTERVAL_MS);
 }
 
-function getHourlyPrayerIndices(count, hourBucket, size = 3) {
+function getSpotlightPrayerIndices(count, spotlightBucket, size = 3) {
   if (!count) return [];
   const indices = Array.from({ length: count }, (_, index) => index);
-  let seed = hourBucket * 12.9898 + 78.233;
+  let seed = spotlightBucket * 12.9898 + 78.233;
   for (let index = indices.length - 1; index > 0; index -= 1) {
     seed = Math.sin(seed) * 43758.5453;
     const random = seed - Math.floor(seed);
@@ -31,7 +32,7 @@ function getHourlyPrayerIndices(count, hourBucket, size = 3) {
 }
 
 function formatSpotlightCountdown(timestamp = Date.now()) {
-  const seconds = Math.ceil(((60 * 60 * 1000) - (timestamp % (60 * 60 * 1000))) / 1000);
+  const seconds = Math.ceil((SPOTLIGHT_INTERVAL_MS - (timestamp % SPOTLIGHT_INTERVAL_MS)) / 1000);
   const minutes = Math.floor(seconds / 60);
   return `${String(minutes).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
 }
@@ -82,10 +83,11 @@ function PrayerCategories({ active, onChange, filter = false }) {
 }
 
 function PrayerRequestForm({ state, bridge }) {
+  const backgrounds = bridge.getSelectableBackgroundOptions();
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [category, setCategory] = useState(state.requestCategory || "general");
-  const [background, setBackground] = useState(state.backgroundIndex || 0);
+  const [background, setBackground] = useState(() => backgrounds.some((option) => option.index === state.backgroundIndex) ? state.backgroundIndex : backgrounds[0].index);
   const [sending, setSending] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const words = text.trim() ? text.trim().split(/\s+/).length : 0;
@@ -99,7 +101,7 @@ function PrayerRequestForm({ state, bridge }) {
       setTitle("");
       setText("");
       setCategory("general");
-      setBackground(0);
+      setBackground(backgrounds[0].index);
       setAcceptedTerms(false);
     }
   };
@@ -111,32 +113,32 @@ function PrayerRequestForm({ state, bridge }) {
         <p>Share your request anonymously and let the community pray with you.</p>
       </article>
       <form className="prayer-compose" onSubmit={submit}>
-        <p className="prayer-safety-reminder">Keep personal details private. Reported content can be reviewed and removed by an administrator.</p>
         <div className="prayer-request-title-field">
           <input value={title} onChange={(event) => setTitle(event.target.value)} type="text" maxLength="120" placeholder="Prayer title" aria-label="Prayer title" required />
         </div>
         <div className="prayer-request-textarea">
           <textarea value={text} onChange={(event) => setText(event.target.value)} rows="5" maxLength="2200" placeholder="What would you like us to pray for?" required />
         </div>
+        <small className={`prayer-word-count${words > 300 ? " is-over-limit" : ""}`}>{words} / 300 words</small>
         <div className="prayer-compose-options">
           <PrayerCategories active={category} onChange={setCategory} />
         </div>
         <div className="prayer-background-picker" role="group" aria-label="Choose prayer card background">
           <span className="prayer-background-picker-label">Choose a background</span>
           <div className="prayer-background-options">
-            {backgrounds.map((number, index) => (
-              <button className={background === index ? "is-active" : ""} type="button" key={number} onClick={() => setBackground(index)} aria-label={`Choose prayer background ${number}`} aria-pressed={background === index}>
-                <img src={`assets/prayer-backgrounds/prayer-${number}.webp`} alt="" loading="lazy" decoding="async" />
+            {backgrounds.map((option) => (
+              <button className={background === option.index ? "is-active" : ""} type="button" key={option.id} onClick={() => setBackground(option.index)} aria-label={`Choose ${option.label} prayer background`} aria-pressed={background === option.index}>
+                <img src={option.src} alt="" loading="lazy" decoding="async" />
               </button>
             ))}
           </div>
         </div>
         <label className="prayer-community-terms">
           <input type="checkbox" checked={acceptedTerms} onChange={(event) => setAcceptedTerms(event.target.checked)} required />
-          <span>I agree to the <a href="community-guidelines.html" target="_blank" rel="noreferrer">community rules</a>: no private contact details, bullying, sexual content, threats, or spam.</span>
+          <span className="prayer-checkbox-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4 10-10" /></svg></span>
+          <span>I agree to the community rules</span>
         </label>
         <div className="prayer-compose-footer">
-          <small className={words > 300 ? "is-over-limit" : ""}>{words} / 300 words</small>
           <button type="submit" disabled={sending}><PrayerIcon name="send" /><span>{sending ? "Sending..." : state.sent ? "Sent" : "Send prayer request"}</span></button>
         </div>
         <p className="prayer-form-feedback" aria-live="polite">{state.feedback}</p>
@@ -189,7 +191,7 @@ function getLocalMeetingTime([hour, minute]) {
   const torontoWallTime = Date.UTC(Number(year), Number(month) - 1, Number(day), hour, minute);
   const firstGuess = new Date(torontoWallTime);
   const utcTime = torontoWallTime - getTorontoOffsetMinutes(firstGuess) * 60 * 1000;
-  return new Intl.DateTimeFormat(undefined, {
+  return new Intl.DateTimeFormat("en-CA", {
     hour: "numeric",
     minute: "2-digit",
     timeZoneName: "short",
@@ -249,7 +251,7 @@ function OnlinePrayerPanel() {
             <article className="online-prayer-card" key={meeting.id}>
               <div>
                 <h3>{meeting.title}</h3>
-                <p className="online-prayer-local-time"><span>Your location time</span>{getLocalMeetingTime(meeting.torontoStart)} – {getLocalMeetingTime(meeting.torontoEnd)}</p>
+                <p className="online-prayer-local-time"><span>Your local time</span>{getLocalMeetingTime(meeting.torontoStart)} – {getLocalMeetingTime(meeting.torontoEnd)}</p>
               </div>
             <a className="online-prayer-join" href={meeting.url} target="_blank" rel="noreferrer">Open Zoom</a>
           </article>
@@ -259,63 +261,26 @@ function OnlinePrayerPanel() {
   );
 }
 
-
-const intercessionTopics = [
-  { id: "families", title: "Families & relationships", detail: "Pray for peace, reconciliation, wisdom, and strong homes.", verse: "Joshua 24:15" },
-  { id: "healing", title: "Healing & strength", detail: "Pray for those facing sickness, grief, exhaustion, and recovery.", verse: "James 5:16" },
-  { id: "nations", title: "Nations & peace", detail: "Pray for leaders, justice, peace, and people affected by conflict.", verse: "1 Timothy 2:1–2" },
-  { id: "salvation", title: "Salvation & faith", detail: "Pray for people to encounter Christ and grow in faith.", verse: "1 Timothy 2:4" },
-  { id: "church", title: "The Church", detail: "Pray for unity, courage, wisdom, and faithful witness.", verse: "Ephesians 4:3" },
-];
-const demoPrayerCountries = [
-  { code: "CA", name: "Canada", x: 28, y: 32, count: 30 }, { code: "US", name: "United States", x: 24, y: 43, count: 18 },
-  { code: "GB", name: "United Kingdom", x: 48, y: 31, count: 9 }, { code: "FR", name: "France", x: 50, y: 38, count: 7 },
-  { code: "KE", name: "Kenya", x: 59, y: 60, count: 5 }, { code: "ZA", name: "South Africa", x: 56, y: 78, count: 4 },
-  { code: "AU", name: "Australia", x: 84, y: 73, count: 3 },
-];
-function formatIntercessionTime(seconds) {
-  const safe = Math.max(0, Math.floor(seconds));
-  return String(Math.floor(safe / 60)).padStart(2, "0") + ":" + String(safe % 60).padStart(2, "0");
-}
-function PrayerGlobe({ countries, total }) {
-  const max = Math.max(1, ...countries.map((country) => Number(country.count || 0)));
-  return <div className="intercession-globe-wrap" aria-label={total + " people praying around the world"}>
-    <div className="intercession-globe" aria-hidden="true"><div className="intercession-globe-grid" /><div className="intercession-continent intercession-continent-a" /><div className="intercession-continent intercession-continent-b" /><div className="intercession-continent intercession-continent-c" />
-      {countries.map((country) => { const intensity=.35+(Number(country.count||0)/max)*.65; const size=7+Math.min(18,Math.sqrt(Number(country.count||0))*2.2); return <span key={country.code} className="intercession-country-pulse" style={{left:country.x+"%",top:country.y+"%",width:size,height:size,opacity:intensity}} />; })}
-    </div>
-    <div className="intercession-live-count"><span className="intercession-live-dot" /><strong>{total}</strong><span>praying now</span></div>
-  </div>;
-}
-function IntercessionPanel() {
-  const [phase,setPhase]=useState("ready"); const [secondsLeft,setSecondsLeft]=useState(60); const [selectedTopic,setSelectedTopic]=useState("families");
-  const [votes,setVotes]=useState(()=>Object.fromEntries(intercessionTopics.map((topic,index)=>[topic.id,[18,12,9,15,7][index]])));
-  const [sessionCount,setSessionCount]=useState(()=>Number(localStorage.getItem("brother.intercessionSessions")||0));
-  const countries=demoPrayerCountries; const total=countries.reduce((sum,country)=>sum+country.count,0); const activeTopic=intercessionTopics.find((topic)=>topic.id===selectedTopic)||intercessionTopics[0];
-  useEffect(()=>{ if(phase==="ready"||phase==="complete") return undefined; const timer=window.setInterval(()=>setSecondsLeft((current)=>{ if(current>1)return current-1; if(phase==="commit"){setPhase("praying");return 600;} setPhase("complete");setSessionCount((count)=>{const next=count+1;localStorage.setItem("brother.intercessionSessions",String(next));return next;});return 0;}),1000); return()=>window.clearInterval(timer);},[phase]);
-  const vote=(topicId)=>{setSelectedTopic(topicId);setVotes((current)=>({...current,[topicId]:Number(current[topicId]||0)+1}));};
-  const topTopic=[...intercessionTopics].sort((a,b)=>Number(votes[b.id]||0)-Number(votes[a.id]||0))[0];
-  return <section className="intercession-panel" aria-labelledby="intercession-title">
-    <header className="intercession-hero"><span className="intercession-kicker">GLOBAL INTERCESSION</span><h2 id="intercession-title">Pray together. Wherever you are.</h2><p>No camera. No microphone. No public identity. Join believers around the world in focused prayer.</p></header>
-    <PrayerGlobe countries={countries} total={total} />
-    <div className="intercession-session-card">
-      {phase==="ready"&&<><span className="intercession-session-label">Next guided prayer</span><h3>{topTopic.title}</h3><p>The community is choosing the next focus. When you join, take 60 seconds to become still before the 10-minute prayer begins.</p><button className="intercession-primary" type="button" onClick={()=>{setPhase("commit");setSecondsLeft(60);}}>Join prayer</button></>}
-      {phase==="commit"&&<><span className="intercession-session-label">Prepare your heart</span><strong className="intercession-timer">{formatIntercessionTime(secondsLeft)}</strong><p>Put distractions aside. When the timer reaches zero, the guided prayer begins automatically.</p></>}
-      {phase==="praying"&&<><span className="intercession-session-label">Praying together now</span><strong className="intercession-timer">{formatIntercessionTime(secondsLeft)}</strong><h3>{activeTopic.title}</h3><p>{activeTopic.detail}</p><small>{activeTopic.verse}</small></>}
-      {phase==="complete"&&<><span className="intercession-session-label">Prayer completed</span><h3>Thank you for standing in prayer.</h3><p>Your completed session has been counted. You have completed {sessionCount} intercession {sessionCount===1?"session":"sessions"} on this device.</p><button className="intercession-primary" type="button" onClick={()=>{setPhase("ready");setSecondsLeft(60);}}>Pray again</button></>}
-    </div>
-    <section className="intercession-vote-section"><div className="intercession-section-heading"><div><span>CHOOSE THE NEXT FOCUS</span><h3>What should we pray for next?</h3></div><small>Anonymous voting</small></div><div className="intercession-topic-list">
-      {intercessionTopics.map((topic)=><button key={topic.id} className={selectedTopic===topic.id?"is-selected":""} type="button" onClick={()=>vote(topic.id)}><span><strong>{topic.title}</strong><small>{topic.verse}</small></span><em>{votes[topic.id]||0}</em></button>)}
-    </div></section>
-    <div className="intercession-stats"><div><strong>{total}</strong><span>praying now</span></div><div><strong>{countries.length}</strong><span>countries</span></div><div><strong>{sessionCount}</strong><span>your sessions</span></div></div>
-    <p className="intercession-privacy">Location is designed to be displayed only at country level. No precise location is shown on the prayer map.</p>
-  </section>;
-}
 const prayerStatusLabels = {
   pending: "Pending review",
   rejected: "Not approved",
   archived: "Archived",
   answered: "Answered",
 };
+
+export function PrayerReadOnlyCard({ request, bridge, index }) {
+  const image = bridge.getBackgroundOptions()[request.backgroundIndex]?.src || "assets/prayer-backgrounds/prayer-1.webp";
+  return <article className={`prayer-card prayer-card--${index % 4} prayer-card--readonly`} style={{ "--prayer-card-image": `url('${image}')` }}>
+    <div className="prayer-card-toggle"><span>
+      <small className="prayer-card-category">{request.category || "General"}</small>
+      <strong className="prayer-card-title">{request.title?.trim() || "Prayer request"}</strong>
+      <p className="prayer-card-preview">{request.preview || request.text}</p>
+    </span></div>
+    <div className="prayer-card-meta"><span className={`prayer-action profile-prayer-count${request.hasPrayed ? " is-prayed" : ""}`} aria-label={`${request.prayerCount || 0} prayers`}>
+      <span>{request.prayerCount || 0}</span><PrayerIcon name="heart" />
+    </span></div>
+  </article>;
+}
 
 function PrayerCard({ request, bridge, index, currentUserId }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -325,7 +290,7 @@ function PrayerCard({ request, bridge, index, currentUserId }) {
   const [reportFeedback, setReportFeedback] = useState("");
   const [reporting, setReporting] = useState(false);
   const pressTimer = useRef(null);
-  const image = `assets/prayer-backgrounds/prayer-${request.backgroundIndex + 1}.webp`;
+  const image = bridge.getBackgroundOptions()[request.backgroundIndex]?.src || "assets/prayer-backgrounds/prayer-1.webp";
   const title = request.title?.trim() || "Prayer request";
 
   useEffect(() => {
@@ -343,7 +308,7 @@ function PrayerCard({ request, bridge, index, currentUserId }) {
     window.clearTimeout(pressTimer.current);
     setIsOpen(true);
     setReportOpen(true);
-    navigator.vibrate?.(12);
+    if (!window.appButtonHaptic) navigator.vibrate?.(12);
   };
 
   const startLongPress = (event) => {
@@ -388,32 +353,38 @@ function PrayerCard({ request, bridge, index, currentUserId }) {
   const modal = isOpen ? createPortal(
     <div className="prayer-detail-modal" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && setIsOpen(false)}>
       <section className="prayer-detail-dialog" role="dialog" aria-modal="true" aria-labelledby={`prayer-detail-title-${request.id}`}>
+        <button type="button" className="prayer-detail-close" onClick={() => setIsOpen(false)} aria-label="Close prayer request">×</button>
         <div className="prayer-detail-image" style={{ backgroundImage: `url('${image}')` }} aria-hidden="true" />
         <div className="prayer-detail-content">
           <div className="prayer-detail-header">
             <span>Prayer request</span>
-            <button type="button" className="prayer-detail-close" onClick={() => setIsOpen(false)} aria-label="Close prayer request">×</button>
           </div>
           <h2 id={`prayer-detail-title-${request.id}`}>{title}</h2>
           <p className="prayer-detail-text">{request.text}</p>
           <div className="prayer-detail-footer">
-            <div className="prayer-card-actions">
+            <div className="prayer-card-actions prayer-detail-pray-actions">
               <button type="button" className="prayer-action prayer-action-secondary" onClick={share} aria-label="Share prayer request" title="Share"><PrayerIcon name="share" /></button>
-              <button type="button" className={`prayer-action${request.hasPrayed ? " is-prayed" : ""}`} onClick={pray} aria-label={request.hasPrayed ? "You prayed for this request" : "Pray for this request"} aria-pressed={request.hasPrayed}>
+              <button type="button" className={`prayer-action${request.hasPrayed ? " is-prayed" : ""}`} onClick={pray} aria-label={request.hasPrayed ? "Cancel prayer" : "Pray for this request"} aria-pressed={request.hasPrayed}>
                 <PrayerIcon name="heart" />
-                <span className="prayer-action-label">{request.hasPrayed ? "✓ You prayed" : "I prayed"}</span>
-                <small className="prayer-action-count">{request.prayerCount}</small>
               </button>
             </div>
             <div className="prayer-safety-actions">
-              <button type="button" onClick={() => setReportOpen((current) => !current)}>Report</button>
-              {request.ownerId && request.ownerId !== currentUserId && <button type="button" onClick={block}>Hide this user</button>}
+              <button
+                type="button"
+                className="prayer-report-toggle"
+                onClick={() => setReportOpen((current) => !current)}
+                aria-expanded={reportOpen}
+                aria-controls={`prayer-report-form-${request.id}`}
+              >
+                <span>Report</span>
+              </button>
+              {reportOpen && <form id={`prayer-report-form-${request.id}`} className="prayer-report-form" onSubmit={submitReport}>
+                <label><span>Reason</span><select value={reportReason} onChange={(event) => setReportReason(event.target.value)}><option value="personal-information">Private information</option><option value="bullying">Bullying or harassment</option><option value="sexual-content">Sexual content</option><option value="violence">Violence or threats</option><option value="spam">Spam</option><option value="other">Other</option></select></label>
+                <label><span>Optional details</span><textarea value={reportDetails} onChange={(event) => setReportDetails(event.target.value)} maxLength="500" rows="3" /></label>
+                <button type="submit" disabled={reporting}>{reporting ? "Sending…" : "Send report"}</button>
+              </form>}
+              {request.ownerId && request.ownerId !== currentUserId && <button type="button" className="prayer-hide-user" onClick={block}>Hide this user</button>}
             </div>
-            {reportOpen && <form className="prayer-report-form" onSubmit={submitReport}>
-              <label><span>Reason</span><select value={reportReason} onChange={(event) => setReportReason(event.target.value)}><option value="personal-information">Private information</option><option value="bullying">Bullying or harassment</option><option value="sexual-content">Sexual content</option><option value="violence">Violence or threats</option><option value="spam">Spam</option><option value="other">Other</option></select></label>
-              <label><span>Optional details</span><textarea value={reportDetails} onChange={(event) => setReportDetails(event.target.value)} maxLength="500" rows="2" /></label>
-              <button type="submit" disabled={reporting}>{reporting ? "Sending…" : "Send report"}</button>
-            </form>}
             {reportFeedback && <p className="prayer-report-feedback" role="status">{reportFeedback}</p>}
           </div>
         </div>
@@ -470,7 +441,7 @@ function PrayerModerationQueue({ requests, bridge }) {
   </section>;
 }
 
-function PrayerSpotlight({ requests, bridge, hourBucket }) {
+function PrayerSpotlight({ requests, bridge, spotlightBucket }) {
   const [now, setNow] = useState(() => Date.now());
   const [activeIndex, setActiveIndex] = useState(0);
   const [dragX, setDragX] = useState(0);
@@ -482,7 +453,7 @@ function PrayerSpotlight({ requests, bridge, hourBucket }) {
   useEffect(() => {
     setActiveIndex(0);
     setDragX(0);
-  }, [hourBucket, requests.length]);
+  }, [spotlightBucket, requests.length]);
   if (!requests.length) return null;
 
   const move = (direction) => {
@@ -492,6 +463,10 @@ function PrayerSpotlight({ requests, bridge, hourBucket }) {
 
   const handlePointerDown = (event) => {
     if (event.pointerType === "mouse" && event.button !== 0) return;
+    if (event.target.closest("button, a, input, textarea, select")) {
+      dragStartX.current = null;
+      return;
+    }
     dragStartX.current = event.clientX;
     event.currentTarget.setPointerCapture?.(event.pointerId);
   };
@@ -513,7 +488,7 @@ function PrayerSpotlight({ requests, bridge, hourBucket }) {
   };
 
   return (
-    <section className="prayer-spotlight-carousel" aria-label="Hourly prayer spotlight">
+    <section className="prayer-spotlight-carousel" aria-label="Prayer spotlight">
       <div
         className="prayer-spotlight-stack"
         aria-live="polite"
@@ -552,15 +527,15 @@ function PrayerSpotlight({ requests, bridge, hourBucket }) {
 export function PrayerPage() {
   const [state, bridge] = usePrayerState();
   const [query, setQuery] = useState("");
-  const [spotlightHour, setSpotlightHour] = useState(() => getHourBucket());
+  const [spotlightBucket, setSpotlightBucket] = useState(() => getSpotlightBucket());
   useEffect(() => {
-    const delay = ((60 * 60 * 1000) - (Date.now() % (60 * 60 * 1000))) + 150;
-    const timer = window.setTimeout(() => setSpotlightHour(getHourBucket()), delay);
+    const delay = (SPOTLIGHT_INTERVAL_MS - (Date.now() % SPOTLIGHT_INTERVAL_MS)) + 150;
+    const timer = window.setTimeout(() => setSpotlightBucket(getSpotlightBucket()), delay);
     return () => window.clearTimeout(timer);
-  }, [spotlightHour]);
+  }, [spotlightBucket]);
   const visibleRequests = state.requests.filter((request) => `${request.title || ""} ${request.text || ""} ${request.category || ""}`.toLowerCase().includes(query.trim().toLowerCase()));
   const searchableSpotlightRequests = (state.spotlightRequests || state.requests).filter((request) => `${request.title || ""} ${request.text || ""} ${request.category || ""}`.toLowerCase().includes(query.trim().toLowerCase()));
-  const spotlightIndices = getHourlyPrayerIndices(searchableSpotlightRequests.length, spotlightHour);
+  const spotlightIndices = getSpotlightPrayerIndices(searchableSpotlightRequests.length, spotlightBucket);
   const spotlightRequests = spotlightIndices.map((index) => searchableSpotlightRequests[index]);
   // The spotlight highlights one request; it must not remove it from the
   // "Recent prayers" wall. Otherwise a community with only one request shows
@@ -575,17 +550,21 @@ export function PrayerPage() {
         : "No prayer requests have been posted yet.";
   return (
     <>
+      <div className="prayer-header-band">
       <header className="prayer-header"><div><h1>Prayer room</h1><p>A place to pray together.</p></div></header>
       <div className="prayer-page-tabs" role="tablist" aria-label="Prayer sections">
         <button className={state.pageTab === "board" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("board")}><span>Prayer</span></button>
         <button className={state.pageTab === "request" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("request")}><span>Prayer request</span></button>
-        <button className={state.pageTab === "online" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("online")}><span>Online prayer</span></button>\n        <button className={state.pageTab === "intercession" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("intercession")}><span>Intercession</span></button>
+        <button className={state.pageTab === "online" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("online")}><span>Online prayer</span></button>
+        <button className={state.pageTab === "intercession" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("intercession")}><span>Intercession</span></button>
       </div>
-      {state.pageTab === "online" && <OnlinePrayerPanel />}\n      {state.pageTab === "intercession" && <IntercessionPanel />}
+      </div>
+      {state.pageTab === "online" && <OnlinePrayerPanel />}
+      {state.pageTab === "intercession" && <IntercessionPanel />}
       {state.pageTab === "request" && <PrayerRequestForm state={state} bridge={bridge} />}
-      {(state.pageTab === "board" || state.myWallExpanded) && (
+      {(state.pageTab === "board" || (state.pageTab === "request" && state.myWallExpanded)) && (
         <>
-          <PrayerSpotlight requests={spotlightRequests} bridge={bridge} hourBucket={spotlightHour} />
+          <PrayerSpotlight requests={spotlightRequests} bridge={bridge} spotlightBucket={spotlightBucket} />
           <section className="prayer-board-section">
             <div className="prayer-board-content">
             <div className="prayer-board-controls">
@@ -597,7 +576,6 @@ export function PrayerPage() {
               <PrayerCategories active={state.filter} onChange={bridge.setFilter} filter />
             </div>
             <div className="prayer-recent-heading"><h2>Recent prayers</h2><span>{visibleRequests.length} requests</span></div>
-            <p className="prayer-report-tip">Press and hold a prayer card to report content.</p>
             <section className="prayer-list" aria-live="polite">
               {recentRequests.length ? recentRequests.map((request, index) => <PrayerCard key={request.id} request={request} bridge={bridge} index={index} currentUserId={state.currentUserId} />) : <p className="prayer-empty">{emptyPrayerMessage}</p>}
             </section>

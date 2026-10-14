@@ -3,18 +3,18 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Brother Bible AI</title>
-    <link rel="stylesheet" href="styles.css?v=refactor-105" />
+    <title>Think Bible</title>
+    <link rel="stylesheet" href="styles.css?v=refactor-122" />
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="bible-data.js" defer></script>
-    <script src="script.js?v=modules-25" defer></script>
+    <script src="script.js?v=modules-29" defer></script>
     <script src="scripts/navigation.js?v=modules-07" defer></script>
     <script src="scripts/prayer.js?v=modules-06" defer></script>
     <script src="scripts/notes.js?v=modules-05" defer></script>
     <script src="scripts/bible.js?v=modules-05" defer></script>
     <script src="scripts/profile.js?v=modules-06" defer></script>
-    <script src="assets/react/navigation.js?v=react-40" defer></script>
+    <script src="assets/react/navigation.js?v=react-48" defer></script>
   </head>
   <body>
     <div class="app-shell" data-theme="light" data-app-background="black">
@@ -44,6 +44,7 @@
       </aside>
 
       <main class="phone-frame" aria-live="polite">
+        <div data-react-page-top-spacer-root></div>
         <section id="home" class="screen is-active" data-screen>
           <header class="home-hero">
             <button class="home-menu-toggle" type="button" data-home-menu-toggle aria-label="Open menu" aria-controls="app-menu-drawer" aria-expanded="false">
@@ -66,72 +67,72 @@
 
           <section class="home-bible-timeline" aria-label="Bible timeline" data-react-home-timeline-root>
             <div class="home-bible-timeline-track">
-              <button type="button" data-home-era-book="GEN" title="Création · chute · patriarches"><span>01 · Genèse</span><strong>Création · chute · patriarches</strong></button>
-              <button type="button" data-home-era-book="JOB" title="Épreuve de Job · souffrance · restauration"><span>02 · Job</span><strong>Épreuve · souffrance · restauration</strong></button>
-              <button type="button" data-home-era-book="EXO" title="Buisson ardent · dix plaies · alliance"><span>03 · Exode</span><strong>Moïse · sortie d’Égypte · Loi</strong></button>
-              <button type="button" data-home-era-book="LEV" title="Sacrifices · prêtres · sainteté"><span>04 · Lévitique</span><strong>Sacrifices · prêtres · sainteté</strong></button>
-              <button type="button" data-home-era-book="NUM" title="Désert · révolte · serpent de bronze"><span>05 · Nombres</span><strong>Désert · révolte · promesse</strong></button>
-              <button type="button" data-home-era-book="DEU" title="Alliance · bénédictions · mort de Moïse"><span>06 · Deutéronome</span><strong>Alliance · Loi · Terre promise</strong></button>
-              <button type="button" data-home-era-book="JOS" title="Jourdain · Jéricho · Canaan"><span>07 · Josué</span><strong>Jourdain · Jéricho · conquête</strong></button>
-              <button type="button" data-home-era-book="JDG" title="Déborah · Gédéon · Samson"><span>08 · Juges</span><strong>Déborah · Gédéon · Samson</strong></button>
-              <button type="button" data-home-era-book="RUT" title="Fidélité de Ruth · Boaz · ancêtre de David"><span>09 · Ruth</span><strong>Fidélité · Boaz · lignée de David</strong></button>
-              <button type="button" data-home-era-book="1SA" title="Samuel · Saül · David et Goliath"><span>10 · 1 Samuel</span><strong>Samuel · Saül · David</strong></button>
-              <button type="button" data-home-era-book="2SA" title="Règne de David · Jérusalem · Bath-Shéba"><span>11 · 2 Samuel</span><strong>David · Jérusalem · royaume</strong></button>
-              <button type="button" data-home-era-book="1CH" title="Généalogies · David · préparation du Temple"><span>12 · 1 Chroniques</span><strong>Généalogies · David · Temple</strong></button>
-              <button type="button" data-home-era-book="PSA" title="Louange · souffrance · espérance messianique"><span>13 · Psaumes</span><strong>Louange · prière · espérance</strong></button>
-              <button type="button" data-home-era-book="1KI" title="Sagesse de Salomon · Temple · Élie au Carmel"><span>14 · 1 Rois</span><strong>Salomon · Temple · Élie</strong></button>
-              <button type="button" data-home-era-book="2CH" title="Salomon · Temple · rois de Juda"><span>15 · 2 Chroniques</span><strong>Salomon · Temple · Juda</strong></button>
-              <button type="button" data-home-era-book="PRO" title="Crainte de Dieu · sagesse · vie quotidienne"><span>16 · Proverbes</span><strong>Sagesse · parole · travail</strong></button>
-              <button type="button" data-home-era-book="ECC" title="Vanité · recherche du bonheur · crainte de Dieu"><span>17 · Ecclésiaste</span><strong>Vanité · bonheur · sagesse</strong></button>
-              <button type="button" data-home-era-book="SNG" title="Rencontre · recherche · amour fidèle"><span>18 · Cantique</span><strong>Désir · recherche · amour</strong></button>
-              <button type="button" data-home-era-book="2KI" title="Élie · miracles d’Élisée · exil"><span>19 · 2 Rois</span><strong>Élie · Élisée · exil</strong></button>
-              <button type="button" data-home-era-book="AMO" title="Justice sociale · jugement · restauration"><span>20 · Amos</span><strong>Justice · jugement · restauration</strong></button>
-              <button type="button" data-home-era-book="HOS" title="Mariage d’Osée · infidélité · restauration"><span>21 · Osée</span><strong>Alliance · infidélité · amour</strong></button>
-              <button type="button" data-home-era-book="JOL" title="Sauterelles · repentance · Esprit"><span>22 · Joël</span><strong>Repentance · Esprit · espérance</strong></button>
-              <button type="button" data-home-era-book="JON" title="Fuite · grand poisson · repentance de Ninive"><span>23 · Jonas</span><strong>Fuite · Ninive · miséricorde</strong></button>
-              <button type="button" data-home-era-book="MIC" title="Injustice · Bethléem · restauration"><span>24 · Michée</span><strong>Justice · Messie · pardon</strong></button>
-              <button type="button" data-home-era-book="ISA" title="Vision du Temple · Emmanuel · Serviteur souffrant"><span>25 · Ésaïe</span><strong>Emmanuel · salut · Serviteur</strong></button>
-              <button type="button" data-home-era-book="NAM" title="Chute de Ninive · jugement · paix"><span>26 · Nahum</span><strong>Ninive · jugement · paix</strong></button>
-              <button type="button" data-home-era-book="ZEP" title="Jour du Seigneur · jugement · peuple restauré"><span>27 · Sophonie</span><strong>Jugement · humilité · restauration</strong></button>
-              <button type="button" data-home-era-book="HAB" title="Question du mal · Babylone · vivre par la foi"><span>28 · Habacuc</span><strong>Mal · foi · confiance</strong></button>
-              <button type="button" data-home-era-book="JER" title="Appel · chute de Jérusalem · nouvelle alliance"><span>29 · Jérémie</span><strong>Jérusalem · jugement · alliance</strong></button>
-              <button type="button" data-home-era-book="LAM" title="Destruction · confession · compassion"><span>30 · Lamentations</span><strong>Ruines · repentance · espérance</strong></button>
-              <button type="button" data-home-era-book="EZK" title="Gloire de Dieu · ossements · cœur nouveau"><span>31 · Ézéchiel</span><strong>Gloire · renouveau · Esprit</strong></button>
-              <button type="button" data-home-era-book="DAN" title="Fidélité · fournaise · fosse aux lions"><span>32 · Daniel</span><strong>Fidélité · royaumes · délivrance</strong></button>
-              <button type="button" data-home-era-book="OBA" title="Jugement d’Édom · violence · rétablissement"><span>33 · Abdias</span><strong>Édom · jugement · restauration</strong></button>
-              <button type="button" data-home-era-book="EZR" title="Retour · reconstruction · enseignement de la Loi"><span>34 · Esdras</span><strong>Retour · Temple · Loi</strong></button>
-              <button type="button" data-home-era-book="HAG" title="Reconstruction · gloire future · Zorobabel"><span>35 · Aggée</span><strong>Temple · gloire · promesse</strong></button>
-              <button type="button" data-home-era-book="ZEC" title="Visions · Josué purifié · roi humble"><span>36 · Zacharie</span><strong>Visions · Messie · restauration</strong></button>
-              <button type="button" data-home-era-book="EST" title="Reine Esther · Haman · délivrance"><span>37 · Esther</span><strong>Reine · courage · délivrance</strong></button>
-              <button type="button" data-home-era-book="NEH" title="Retour · murailles · renouvellement de l’alliance"><span>38 · Néhémie</span><strong>Murailles · Loi · alliance</strong></button>
-              <button type="button" data-home-era-book="MAL" title="Indifférence · sacrifices · messager"><span>39 · Malachie</span><strong>Fidélité · messager · attente</strong></button>
-              <button type="button" data-home-era-book="MAT" title="Naissance · Sermon sur la montagne · résurrection"><span>40 · Matthieu</span><strong>Roi · enseignement · mission</strong></button>
-              <button type="button" data-home-era-book="MRK" title="Baptême · miracles · tombeau vide"><span>41 · Marc</span><strong>Serviteur · miracles · victoire</strong></button>
-              <button type="button" data-home-era-book="LUK" title="Naissance · paraboles · Emmaüs"><span>42 · Luc</span><strong>Compassion · paraboles · résurrection</strong></button>
-              <button type="button" data-home-era-book="JHN" title="Cana · Lazare · Thomas"><span>43 · Jean</span><strong>Signes · vie · résurrection</strong></button>
-              <button type="button" data-home-era-book="ACT" title="Pentecôte · conversion de Saul · expansion de l’Église"><span>44 · Actes</span><strong>Esprit · Paul · mission</strong></button>
-              <button type="button" data-home-era-book="ROM" title="Péché · justification par la foi · vie nouvelle"><span>45 · Romains</span><strong>Grâce · foi · vie nouvelle</strong></button>
-              <button type="button" data-home-era-book="1CO" title="Divisions · dons spirituels · résurrection"><span>46 · 1 Corinthiens</span><strong>Église · amour · résurrection</strong></button>
-              <button type="button" data-home-era-book="2CO" title="Ministère · souffrance · générosité"><span>47 · 2 Corinthiens</span><strong>Service · consolation · générosité</strong></button>
-              <button type="button" data-home-era-book="GAL" title="Grâce · liberté · fruit de l’Esprit"><span>48 · Galates</span><strong>Grâce · liberté · Esprit</strong></button>
-              <button type="button" data-home-era-book="EPH" title="Grâce · unité · armure de Dieu"><span>49 · Éphésiens</span><strong>Grâce · unité · armure</strong></button>
-              <button type="button" data-home-era-book="PHP" title="Prison · humilité de Jésus · joie"><span>50 · Philippiens</span><strong>Humilité · joie · contentement</strong></button>
-              <button type="button" data-home-era-book="COL" title="Suprématie de Christ · fausses doctrines · vie nouvelle"><span>51 · Colossiens</span><strong>Christ · vérité · vie nouvelle</strong></button>
-              <button type="button" data-home-era-book="1TH" title="Persévérance · retour de Jésus · résurrection"><span>52 · 1 Thessaloniciens</span><strong>Foi · retour · espérance</strong></button>
-              <button type="button" data-home-era-book="2TH" title="Persécution · jour du Seigneur · discipline"><span>53 · 2 Thessaloniciens</span><strong>Persévérance · vigilance · travail</strong></button>
-              <button type="button" data-home-era-book="1TI" title="Église · responsables · fidélité"><span>54 · 1 Timothée</span><strong>Église · service · fidélité</strong></button>
-              <button type="button" data-home-era-book="2TI" title="Persévérance · Écritures · dernier ministère"><span>55 · 2 Timothée</span><strong>Persévérer · Écritures · héritage</strong></button>
-              <button type="button" data-home-era-book="TIT" title="Responsables · saine doctrine · bonnes œuvres"><span>56 · Tite</span><strong>Doctrine · ordre · bonnes œuvres</strong></button>
-              <button type="button" data-home-era-book="PHM" title="Onésime · conversion · accueil comme frère"><span>57 · Philémon</span><strong>Pardon · fraternité · réconciliation</strong></button>
-              <button type="button" data-home-era-book="HEB" title="Christ supérieur · grand prêtre · héros de la foi"><span>58 · Hébreux</span><strong>Christ · prêtre · foi</strong></button>
-              <button type="button" data-home-era-book="JAS" title="Foi et œuvres · maîtrise de la langue · prière"><span>59 · Jacques</span><strong>Foi · sagesse · pratique</strong></button>
-              <button type="button" data-home-era-book="1PE" title="Souffrance · nation sainte · modèle de Jésus"><span>60 · 1 Pierre</span><strong>Espérance · sainteté · souffrance</strong></button>
-              <button type="button" data-home-era-book="2PE" title="Croissance · faux enseignants · retour du Seigneur"><span>61 · 2 Pierre</span><strong>Croissance · vigilance · retour</strong></button>
-              <button type="button" data-home-era-book="1JN" title="Lumière · amour · assurance du salut"><span>62 · 1 Jean</span><strong>Lumière · amour · assurance</strong></button>
-              <button type="button" data-home-era-book="2JN" title="Vérité · amour · faux docteurs"><span>63 · 2 Jean</span><strong>Vérité · amour · discernement</strong></button>
-              <button type="button" data-home-era-book="3JN" title="Hospitalité de Gaïus · orgueil de Diotrèphe · fidélité"><span>64 · 3 Jean</span><strong>Accueil · fidélité · exemple</strong></button>
-              <button type="button" data-home-era-book="JUD" title="Défendre la foi · faux enseignants · jugement"><span>65 · Jude</span><strong>Foi · vigilance · jugement</strong></button>
-              <button type="button" data-home-era-book="REV" title="Sept Églises · jugement · nouvelle Jérusalem"><span>66 · Apocalypse</span><strong>Victoire · retour · nouvelle création</strong></button>
+              <button type="button" data-home-era-book="GEN" title="Creation · Fall · Patriarchs"><span>01 · Genesis</span><strong>Creation · Fall · Patriarchs</strong></button>
+              <button type="button" data-home-era-book="JOB" title="Job’s trials · Suffering · Restoration"><span>02 · Job</span><strong>Trials · Suffering · Restoration</strong></button>
+              <button type="button" data-home-era-book="EXO" title="Burning bush · Ten plagues · Covenant"><span>03 · Exodus</span><strong>Moses · Deliverance from Egypt · Law</strong></button>
+              <button type="button" data-home-era-book="LEV" title="Sacrifices · Priests · Holiness"><span>04 · Leviticus</span><strong>Sacrifices · Priests · Holiness</strong></button>
+              <button type="button" data-home-era-book="NUM" title="Wilderness · Rebellion · Bronze serpent"><span>05 · Numbers</span><strong>Wilderness · Rebellion · Promise</strong></button>
+              <button type="button" data-home-era-book="DEU" title="Covenant · Blessings · Death of Moses"><span>06 · Deuteronomy</span><strong>Covenant · Law · Promised Land</strong></button>
+              <button type="button" data-home-era-book="JOS" title="Jordan · Jericho · Canaan"><span>07 · Joshua</span><strong>Jordan · Jericho · Conquest</strong></button>
+              <button type="button" data-home-era-book="JDG" title="Deborah · Gideon · Samson"><span>08 · Judges</span><strong>Deborah · Gideon · Samson</strong></button>
+              <button type="button" data-home-era-book="RUT" title="Ruth’s faithfulness · Boaz · Ancestor of David"><span>09 · Ruth</span><strong>Faithfulness · Boaz · David’s lineage</strong></button>
+              <button type="button" data-home-era-book="1SA" title="Samuel · Saul · David and Goliath"><span>10 · 1 Samuel</span><strong>Samuel · Saul · David</strong></button>
+              <button type="button" data-home-era-book="2SA" title="David’s reign · Jerusalem · Bathsheba"><span>11 · 2 Samuel</span><strong>David · Jerusalem · Kingdom</strong></button>
+              <button type="button" data-home-era-book="1CH" title="Genealogies · David · Preparation for the Temple"><span>12 · 1 Chronicles</span><strong>Genealogies · David · Temple</strong></button>
+              <button type="button" data-home-era-book="PSA" title="Praise · Suffering · Messianic hope"><span>13 · Psalms</span><strong>Praise · Prayer · Hope</strong></button>
+              <button type="button" data-home-era-book="1KI" title="Solomon’s wisdom · Temple · Elijah at Carmel"><span>14 · 1 Kings</span><strong>Solomon · Temple · Elijah</strong></button>
+              <button type="button" data-home-era-book="2CH" title="Solomon · Temple · Kings of Judah"><span>15 · 2 Chronicles</span><strong>Solomon · Temple · Judah</strong></button>
+              <button type="button" data-home-era-book="PRO" title="Fear of God · Wisdom · Daily life"><span>16 · Proverbs</span><strong>Wisdom · Speech · Work</strong></button>
+              <button type="button" data-home-era-book="ECC" title="Vanity · Search for happiness · Fear of God"><span>17 · Ecclesiastes</span><strong>Vanity · Happiness · Wisdom</strong></button>
+              <button type="button" data-home-era-book="SNG" title="Meeting · Searching · Faithful love"><span>18 · Song of Solomon</span><strong>Desire · Searching · Love</strong></button>
+              <button type="button" data-home-era-book="2KI" title="Elijah · Elisha’s miracles · Exile"><span>19 · 2 Kings</span><strong>Elijah · Elisha · Exile</strong></button>
+              <button type="button" data-home-era-book="AMO" title="Social justice · Judgment · Restoration"><span>20 · Amos</span><strong>Justice · Judgment · Restoration</strong></button>
+              <button type="button" data-home-era-book="HOS" title="Hosea’s marriage · Unfaithfulness · Restoration"><span>21 · Hosea</span><strong>Covenant · Unfaithfulness · Love</strong></button>
+              <button type="button" data-home-era-book="JOL" title="Locusts · Repentance · Spirit"><span>22 · Joel</span><strong>Repentance · Spirit · Hope</strong></button>
+              <button type="button" data-home-era-book="JON" title="Flight · Great fish · Repentance of Nineveh"><span>23 · Jonah</span><strong>Flight · Nineveh · Mercy</strong></button>
+              <button type="button" data-home-era-book="MIC" title="Injustice · Bethlehem · Restoration"><span>24 · Micah</span><strong>Justice · Messiah · Forgiveness</strong></button>
+              <button type="button" data-home-era-book="ISA" title="Temple vision · Immanuel · Suffering servant"><span>25 · Isaiah</span><strong>Immanuel · Salvation · Servant</strong></button>
+              <button type="button" data-home-era-book="NAM" title="Fall of Nineveh · Judgment · Peace"><span>26 · Nahum</span><strong>Nineveh · Judgment · Peace</strong></button>
+              <button type="button" data-home-era-book="ZEP" title="Day of the Lord · Judgment · Restored people"><span>27 · Zephaniah</span><strong>Judgment · Humility · Restoration</strong></button>
+              <button type="button" data-home-era-book="HAB" title="Problem of evil · Babylon · Living by faith"><span>28 · Habakkuk</span><strong>Evil · Faith · Trust</strong></button>
+              <button type="button" data-home-era-book="JER" title="Calling · Fall of Jerusalem · New covenant"><span>29 · Jeremiah</span><strong>Jerusalem · Judgment · Covenant</strong></button>
+              <button type="button" data-home-era-book="LAM" title="Destruction · Confession · Compassion"><span>30 · Lamentations</span><strong>Ruins · Repentance · Hope</strong></button>
+              <button type="button" data-home-era-book="EZK" title="Glory of God · Dry bones · New heart"><span>31 · Ezekiel</span><strong>Glory · Renewal · Spirit</strong></button>
+              <button type="button" data-home-era-book="DAN" title="Faithfulness · Furnace · Lions’ den"><span>32 · Daniel</span><strong>Faithfulness · Kingdoms · Deliverance</strong></button>
+              <button type="button" data-home-era-book="OBA" title="Judgment of Edom · Violence · Restoration"><span>33 · Obadiah</span><strong>Edom · Judgment · Restoration</strong></button>
+              <button type="button" data-home-era-book="EZR" title="Return · Rebuilding · Teaching the Law"><span>34 · Ezra</span><strong>Return · Temple · Law</strong></button>
+              <button type="button" data-home-era-book="HAG" title="Rebuilding · Future glory · Zerubbabel"><span>35 · Haggai</span><strong>Temple · Glory · Promise</strong></button>
+              <button type="button" data-home-era-book="ZEC" title="Visions · Joshua cleansed · Humble king"><span>36 · Zechariah</span><strong>Visions · Messiah · Restoration</strong></button>
+              <button type="button" data-home-era-book="EST" title="Queen Esther · Haman · Deliverance"><span>37 · Esther</span><strong>Queen · Courage · Deliverance</strong></button>
+              <button type="button" data-home-era-book="NEH" title="Return · Walls · Renewal of the covenant"><span>38 · Nehemiah</span><strong>Walls · Law · Covenant</strong></button>
+              <button type="button" data-home-era-book="MAL" title="Indifference · Sacrifices · Messenger"><span>39 · Malachi</span><strong>Faithfulness · Messenger · Expectation</strong></button>
+              <button type="button" data-home-era-book="MAT" title="Birth · Sermon on the Mount · Resurrection"><span>40 · Matthew</span><strong>King · Teaching · Mission</strong></button>
+              <button type="button" data-home-era-book="MRK" title="Baptism · Miracles · Empty tomb"><span>41 · Mark</span><strong>Servant · Miracles · Victory</strong></button>
+              <button type="button" data-home-era-book="LUK" title="Birth · Parables · Emmaus"><span>42 · Luke</span><strong>Compassion · Parables · Resurrection</strong></button>
+              <button type="button" data-home-era-book="JHN" title="Cana · Lazarus · Thomas"><span>43 · John</span><strong>Signs · Life · Resurrection</strong></button>
+              <button type="button" data-home-era-book="ACT" title="Pentecost · Saul’s conversion · Expansion of the Church"><span>44 · Acts</span><strong>Spirit · Paul · Mission</strong></button>
+              <button type="button" data-home-era-book="ROM" title="Sin · Justification by faith · New life"><span>45 · Romans</span><strong>Grace · Faith · New Life</strong></button>
+              <button type="button" data-home-era-book="1CO" title="Divisions · Spiritual gifts · Resurrection"><span>46 · 1 Corinthians</span><strong>Church · Love · Resurrection</strong></button>
+              <button type="button" data-home-era-book="2CO" title="Ministry · Suffering · Generosity"><span>47 · 2 Corinthians</span><strong>Service · Comfort · Generosity</strong></button>
+              <button type="button" data-home-era-book="GAL" title="Grace · Freedom · Fruit of the Spirit"><span>48 · Galatians</span><strong>Grace · Freedom · Spirit</strong></button>
+              <button type="button" data-home-era-book="EPH" title="Grace · Unity · Armor of God"><span>49 · Ephesians</span><strong>Grace · Unity · Armor</strong></button>
+              <button type="button" data-home-era-book="PHP" title="Prison · Humility of Jesus · Joy"><span>50 · Philippians</span><strong>Humility · Joy · Contentment</strong></button>
+              <button type="button" data-home-era-book="COL" title="Supremacy of Christ · False teachings · New life"><span>51 · Colossians</span><strong>Christ · Truth · New Life</strong></button>
+              <button type="button" data-home-era-book="1TH" title="Perseverance · Return of Jesus · Resurrection"><span>52 · 1 Thessalonians</span><strong>Faith · Return · Hope</strong></button>
+              <button type="button" data-home-era-book="2TH" title="Persecution · Day of the Lord · Discipline"><span>53 · 2 Thessalonians</span><strong>Perseverance · Watchfulness · Work</strong></button>
+              <button type="button" data-home-era-book="1TI" title="Church · Leaders · Faithfulness"><span>54 · 1 Timothy</span><strong>Church · Service · Faithfulness</strong></button>
+              <button type="button" data-home-era-book="2TI" title="Perseverance · Scripture · Final ministry"><span>55 · 2 Timothy</span><strong>Perseverance · Scripture · Legacy</strong></button>
+              <button type="button" data-home-era-book="TIT" title="Leaders · Sound doctrine · Good works"><span>56 · Titus</span><strong>Doctrine · Order · Good Works</strong></button>
+              <button type="button" data-home-era-book="PHM" title="Onesimus · Conversion · Welcome as a brother"><span>57 · Philemon</span><strong>Forgiveness · Brotherhood · Reconciliation</strong></button>
+              <button type="button" data-home-era-book="HEB" title="Supremacy of Christ · High priest · Heroes of faith"><span>58 · Hebrews</span><strong>Christ · Priest · Faith</strong></button>
+              <button type="button" data-home-era-book="JAS" title="Faith and works · Control of the tongue · Prayer"><span>59 · James</span><strong>Faith · Wisdom · Practice</strong></button>
+              <button type="button" data-home-era-book="1PE" title="Suffering · Holy nation · Example of Jesus"><span>60 · 1 Peter</span><strong>Hope · Holiness · Suffering</strong></button>
+              <button type="button" data-home-era-book="2PE" title="Growth · False teachers · Return of the Lord"><span>61 · 2 Peter</span><strong>Growth · Watchfulness · Return</strong></button>
+              <button type="button" data-home-era-book="1JN" title="Light · Love · Assurance of salvation"><span>62 · 1 John</span><strong>Light · Love · Assurance</strong></button>
+              <button type="button" data-home-era-book="2JN" title="Truth · Love · False teachers"><span>63 · 2 John</span><strong>Truth · Love · Discernment</strong></button>
+              <button type="button" data-home-era-book="3JN" title="Gaius’s hospitality · Diotrephes’s pride · Faithfulness"><span>64 · 3 John</span><strong>Hospitality · Faithfulness · Example</strong></button>
+              <button type="button" data-home-era-book="JUD" title="Defending the faith · False teachers · Judgment"><span>65 · Jude</span><strong>Faith · Watchfulness · Judgment</strong></button>
+              <button type="button" data-home-era-book="REV" title="Seven churches · Judgment · New Jerusalem"><span>66 · Revelation</span><strong>Victory · Return · New Creation</strong></button>
             </div>
           </section>
 
@@ -143,9 +144,9 @@
 
           <section class="home-library-section" aria-label="Your library">
             <nav class="profile-tabs home-library-tabs" aria-label="Home library sections" data-react-home-library-tabs-root>
-              <button type="button" data-home-library-tab="highlights"><i data-lucide="highlighter"></i><span>Highlight</span></button>
-              <button type="button" data-home-library-tab="bookmarks"><i data-lucide="bookmark"></i><span>Bookmark</span></button>
-              <button class="is-active" type="button" data-home-library-tab="notes"><i data-lucide="notebook-pen"></i><span>Notes</span></button>
+              <button class="is-active" type="button" data-home-library-tab="highlights"><i data-lucide="highlighter"></i><span>Highlights</span></button>
+              <button type="button" data-home-library-tab="bookmarks"><i data-lucide="bookmark"></i><span>Bookmarks</span></button>
+              <button type="button" data-home-library-tab="notes"><i data-lucide="notebook-pen"></i><span>Notes</span></button>
             </nav>
             <section class="home-library-panel" data-home-library-panel data-react-home-library-panel-root>
               <div class="home-library-placeholder">
@@ -164,65 +165,7 @@
               <h1>Kids Bible</h1>
             </div>
           </header>
-          <div class="kids-bible-library" data-kids-library>
-            <div class="kids-bible-section-heading">
-              <h2>Choose a book</h2>
-              <span>3 stories</span>
-            </div>
-            <button class="kids-book-card" type="button" data-kids-book="matthew">
-              <img src="assets/kids-bible/matthew/01_Matthew_Comic_Page_Modern_English.webp" alt="Matthew comic preview" loading="lazy" decoding="async" />
-              <div class="kids-book-card-copy">
-                <strong>Matthew</strong>
-                <small data-kids-book-progress-label>Page 1 of 37 · 3%</small>
-                <div class="kids-book-progress" role="progressbar" aria-label="Matthew reading progress" aria-valuemin="1" aria-valuemax="37" aria-valuenow="1">
-                  <span data-kids-book-progress-fill></span>
-                </div>
-              </div>
-              <i data-lucide="arrow-up-right" aria-hidden="true"></i>
-            </button>
-            <button class="kids-book-card" type="button" data-kids-book="mark">
-              <img src="assets/kids-bible/mark/01.webp" alt="Mark comic preview" loading="lazy" decoding="async" />
-              <div class="kids-book-card-copy">
-                <strong>Mark</strong>
-                <small data-kids-book-progress-label>Page 1 of 16 · 6%</small>
-                <div class="kids-book-progress" role="progressbar" aria-label="Mark reading progress" aria-valuemin="1" aria-valuemax="16" aria-valuenow="1">
-                  <span data-kids-book-progress-fill></span>
-                </div>
-              </div>
-              <i data-lucide="arrow-up-right" aria-hidden="true"></i>
-            </button>
-            <button class="kids-book-card" type="button" data-kids-book="luke">
-              <img src="assets/kids-bible/luke/01.webp" alt="Luke comic preview" loading="lazy" decoding="async" />
-              <div class="kids-book-card-copy">
-                <strong>Luke</strong>
-                <small data-kids-book-progress-label>Page 1 of 21 · 5%</small>
-                <div class="kids-book-progress" role="progressbar" aria-label="Luke reading progress" aria-valuemin="1" aria-valuemax="21" aria-valuenow="1">
-                  <span data-kids-book-progress-fill></span>
-                </div>
-              </div>
-              <i data-lucide="arrow-up-right" aria-hidden="true"></i>
-            </button>
-          </div>
-          <section class="kids-bible-reader" data-kids-reader hidden aria-label="Kids Bible reader">
-            <header class="kids-reader-topbar">
-              <button type="button" data-kids-reader-back aria-label="Back to Kids Bible books"><i data-lucide="arrow-left"></i></button>
-              <div>
-                <span>Kids Bible</span>
-                <strong data-kids-reader-title>Matthew</strong>
-              </div>
-              <div class="kids-reader-page-tools">
-                <label>
-                  <span class="sr-only">Page</span>
-                  <select data-kids-page-select aria-label="Choose page"></select>
-                </label>
-                <span data-kids-page-label>1 / 37</span>
-              </div>
-            </header>
-            <div class="kids-reader-progress" aria-hidden="true"><span data-kids-progress></span></div>
-            <div class="kids-reader-image-wrap">
-              <img data-kids-page-image alt="Kids Bible illustrated page" loading="lazy" decoding="async" />
-            </div>
-          </section>
+
         </section>
 
         <section id="bible" class="screen reader-screen" data-screen>
@@ -236,19 +179,17 @@
             <label class="reader-select-label compact" aria-label="Chapter">
               <select data-chapter-select></select>
             </label>
-            <button class="icon-button" data-open-search aria-label="Search Scripture">
-              <i data-lucide="search"></i>
-            </button>
+            <button class="icon-button bible-glass-control" type="button" data-bible-menu-toggle aria-label="Open Bible menu" aria-controls="bible-menu-drawer" aria-expanded="false"><i data-lucide="search"></i></button>
           </header>
 
           <section class="parallel-controls" data-parallel-controls data-react-bible-parallel-root>
             <button class="parallel-toggle" data-parallel-toggle>
               <i data-lucide="columns-3"></i>
-              <span>Parallèle</span>
+              <span>Parallel</span>
             </button>
             <button class="parallel-toggle reader-target-toggle" data-reader-target type="button">
               <i data-lucide="crosshair"></i>
-              <span>Cible</span>
+              <span>Highlights</span>
             </button>
             <div class="parallel-selects" data-parallel-selects hidden>
               <label aria-label="Compare with Bible version">
@@ -270,7 +211,7 @@
 
         <section id="apologetics" class="screen apologetics-screen" data-screen>
           <header class="apologetics-page-header">
-            <h1>Thought room</h1>
+            <h1>Think room</h1>
             <p>Choose how you want to grow.</p>
           </header>
           <div data-react-apologetics-xp-root></div>
@@ -285,16 +226,11 @@
             <button class="apologetics-room-button apologetics-room-button--coach" type="button" data-apologetics-room="coach">
               <span class="apologetics-room-number" aria-hidden="true">02</span>
               <span class="apologetics-room-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>
-              <span class="apologetics-room-copy"><strong>Coach<br />room</strong><small>Get guidance and unlock your potential.</small></span>
-              <span class="apologetics-room-arrow" aria-hidden="true">→</span>
-            </button>
-            <button class="apologetics-room-button apologetics-room-button--theory" type="button" disabled aria-label="Theorique room indisponible">
-              <span class="apologetics-room-number" aria-hidden="true">03</span>
-              <span class="apologetics-room-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.5A2.5 2.5 0 0 1 5.5 3H11v16H5.5A2.5 2.5 0 0 0 3 21.5z"/><path d="M21 5.5A2.5 2.5 0 0 0 18.5 3H13v16h5.5a2.5 2.5 0 0 1 2.5 2.5z"/></svg></span>
-              <span class="apologetics-room-copy"><strong>Theorique<br />room</strong><small>Explore concepts and deepen your understanding.</small></span>
+              <span class="apologetics-room-copy"><strong>Coach<br />room</strong><small>Practice your answers and get focused feedback.</small></span>
               <span class="apologetics-room-arrow" aria-hidden="true">→</span>
             </button>
           </div>
+          <div data-react-think-room-resume-root></div>
         </section>
 
         <section id="apologetics-debate" class="screen apologetics-screen apologetics-debate-screen" data-screen data-react-apologetics-debate-root></section>
@@ -463,32 +399,18 @@
         <section id="profile" class="screen profile-screen" data-screen>
           <article class="profile-hero" data-react-profile-hero-root>
             <img src="assets/cloud-account-zen.webp" alt="Profile background" data-profile-cover loading="lazy" decoding="async" />
-            <button class="profile-style-button" type="button" data-profile-style-toggle aria-expanded="false">
-              <i data-lucide="pencil"></i><span>Edit style</span>
-            </button>
-            <form class="profile-style-editor" data-profile-style-editor hidden>
-              <label>
-                <span>Cover image</span>
-                <input type="file" accept="image/*" data-profile-cover-input />
-              </label>
-              <div class="profile-style-actions">
-                <button type="button" class="profile-style-reset" data-profile-cover-reset>Reset</button>
-                <button type="submit" class="profile-style-save" data-profile-style-save>Save style</button>
-              </div>
-              <p class="profile-style-feedback" data-profile-style-feedback role="status" aria-live="polite"></p>
-            </form>
             <div class="profile-hero-overlay">
               <div>
-                <p class="eyebrow">Profile</p>
-                <h1 data-profile-name>Your profile</h1>
+                <h1 data-profile-name>Welcome</h1>
               </div>
             </div>
           </article>
 
           <nav class="profile-tabs" data-profile-tabs data-react-profile-tabs-root aria-label="Profile sections">
-            <button class="is-active" type="button" data-profile-tab="preferences"><i data-lucide="sliders-horizontal"></i><span>Preference</span></button>
+            <button class="is-active" type="button" data-profile-tab="preferences"><i data-lucide="sliders-horizontal"></i><span>Preferences</span></button>
             <button type="button" data-profile-tab="information"><i data-lucide="id-card"></i><span>Information</span></button>
             <button type="button" data-profile-tab="cloud"><i data-lucide="cloud"></i><span>Cloud account</span></button>
+            <button type="button" data-profile-tab="prayers"><i data-lucide="heart"></i><span>My prayers</span></button>
           </nav>
 
           <div class="profile-settings-panel" data-profile-panel="settings">
@@ -523,7 +445,7 @@
 
           <section class="profile-info-section" data-profile-section="information" data-react-profile-information-root aria-labelledby="profile-info-title" hidden>
             <div class="preference-heading">
-              <h2 id="profile-info-title">Informations</h2>
+              <h2 id="profile-info-title">Information</h2>
               <span>Identity</span>
             </div>
 
@@ -540,7 +462,7 @@
                 </label>
 
                 <label class="profile-field">
-                  <span>Date de naissance</span>
+                  <span>Date of birth</span>
                   <input type="date" name="dateOfBirth" autocomplete="bday" />
                 </label>
 
@@ -579,6 +501,7 @@
           </section>
           </div>
 
+          <section data-profile-section="prayers" data-react-profile-prayers-root hidden></section>
           <section class="profile-saved-panel" data-profile-panel="saved" data-profile-saved-panel hidden></section>
         </section>
 
@@ -593,13 +516,13 @@
 
         <nav class="bottom-nav" aria-label="Primary navigation">
           <div data-react-navigation-root>
+            <button data-nav="profile" type="button"><i data-lucide="user-round"></i><span>Profile</span></button>
+            <button data-nav="ai" type="button"><i data-lucide="sparkles"></i><span>AI</span></button>
+            <button data-nav="apologetics" type="button"><i data-lucide="shield"></i><span>Apologetics</span></button>
             <button class="is-active" data-nav="home" type="button"><i data-lucide="home"></i><span>Home</span></button>
             <button data-nav="bible" type="button"><i data-lucide="book-open"></i><span>Bible</span></button>
             <button data-nav="kids-bible" type="button"><i data-lucide="book-image"></i><span>Kids Bible</span></button>
             <button data-nav="prayer" type="button"><i data-lucide="hand-heart"></i><span>Prayer</span></button>
-            <button data-nav="ai" type="button"><i data-lucide="sparkles"></i><span>AI</span></button>
-            <button data-nav="apologetics" type="button"><i data-lucide="shield"></i><span>Apologetics</span></button>
-            <button data-nav="profile" type="button"><i data-lucide="user-round"></i><span>Profile</span></button>
           </div>
         </nav>
 
@@ -607,7 +530,7 @@
           <button class="app-menu-scrim" type="button" data-home-menu-close aria-label="Close menu"></button>
           <aside id="app-menu-drawer" class="app-menu-drawer" data-home-menu-drawer aria-label="App menu" tabindex="-1">
             <header class="app-menu-drawer-header">
-              <div class="app-menu-brand"><strong>Thought Bible</strong></div>
+              <div class="app-menu-brand"><strong>Think Bible</strong></div>
               <button class="app-menu-close" type="button" data-home-menu-close aria-label="Close menu"><i data-lucide="x" aria-hidden="true"></i></button>
             </header>
 
@@ -617,7 +540,7 @@
               <button type="button" data-nav="bible"><i data-lucide="book-open" aria-hidden="true"></i><span>Bible</span><i data-lucide="chevron-right" aria-hidden="true"></i></button>
               <button type="button" data-nav="kids-bible"><i data-lucide="book-image" aria-hidden="true"></i><span>Kids Bible</span><i data-lucide="chevron-right" aria-hidden="true"></i></button>
               <button type="button" data-nav="prayer"><i data-lucide="hand-heart" aria-hidden="true"></i><span>Prayer room</span><i data-lucide="chevron-right" aria-hidden="true"></i></button>
-              <button type="button" data-nav="apologetics"><i data-lucide="shield" aria-hidden="true"></i><span>Thought room</span><i data-lucide="chevron-right" aria-hidden="true"></i></button>
+              <button type="button" data-nav="apologetics"><i data-lucide="shield" aria-hidden="true"></i><span>Think room</span><i data-lucide="chevron-right" aria-hidden="true"></i></button>
               <button type="button" data-nav="ai"><i data-lucide="sparkles" aria-hidden="true"></i><span>Brother AI</span><i data-lucide="chevron-right" aria-hidden="true"></i></button>
               <button type="button" data-nav="profile"><i data-lucide="user-round" aria-hidden="true"></i><span>Profile</span><i data-lucide="chevron-right" aria-hidden="true"></i></button>
             </nav>
@@ -632,34 +555,30 @@
           </aside>
         </div>
 
+        <div class="app-menu-layer" data-bible-menu-layer aria-hidden="true" inert>
+          <button class="app-menu-scrim" type="button" data-bible-menu-close aria-label="Close menu"></button>
+          <aside id="bible-menu-drawer" class="app-menu-drawer" data-bible-menu-drawer role="dialog" aria-modal="true" aria-label="Search Scripture" tabindex="-1">
+            <header class="app-menu-drawer-header">
+              <div class="app-menu-brand"><strong>Search Scripture</strong></div>
+              <button class="app-menu-close" type="button" data-bible-menu-close aria-label="Close search"><i data-lucide="x" aria-hidden="true"></i></button>
+            </header>
+            <form class="bible-menu-search" data-bible-search-form>
+              <label class="bible-menu-search-field"><i data-lucide="search" aria-hidden="true"></i><input type="search" aria-label="Search Scripture" placeholder="Try anxiety or forgiveness…" maxlength="120" required /></label>
+              <div class="app-menu-section bible-menu-search-filters" role="group" aria-label="Search filter">
+                <button type="button" class="is-active" data-bible-search-mode="topic" aria-pressed="true">Topic</button>
+                <button type="button" data-bible-search-mode="word" aria-pressed="false">Word</button>
+                <button type="button" data-bible-search-mode="expression" aria-pressed="false">Expression</button>
+              </div>
+              <div class="app-menu-section"><button type="submit" class="is-active bible-menu-search-submit">Search</button></div>
+            </form>
+            <p class="bible-menu-search-status" data-bible-search-status role="status">Choose a filter and enter your search.</p>
+            <div class="app-menu-section bible-menu-search-results" data-bible-search-results></div>
+            <div class="app-menu-section"><button type="button" data-bible-search-more hidden>Load more</button></div>
+          </aside>
+        </div>
+
       <div class="modal-layer" data-modal-layer hidden>
-        <section class="search-panel" data-search-panel role="dialog" aria-modal="true" aria-label="Universal Search">
-          <div class="modal-handle" aria-hidden="true"></div>
-          <div class="search-field">
-            <i data-lucide="search"></i>
-            <input type="search" placeholder="Verse, topic, word, person, place..." />
-            <button data-close-modal aria-label="Close"><i data-lucide="x"></i></button>
-          </div>
-          <div class="search-suggestions">
-            <p class="label">Recent</p>
-            <button>Romans 8</button>
-            <button>Anxiety</button>
-            <button>David</button>
-            <button>Greek agape</button>
-          </div>
-          <div class="result-list">
-            <article>
-              <span>Verse</span>
-              <strong>Philippians 4:6</strong>
-              <p>Be careful for nothing; but in every thing by prayer...</p>
-            </article>
-            <article>
-              <span>Topic</span>
-              <strong>Peace</strong>
-              <p>86 verses, 12 plans, 4 apologetics notes</p>
-            </article>
-          </div>
-        </section>
+
 
         <section class="bottom-sheet" data-verse-sheet role="dialog" aria-modal="true" aria-label="Verse Actions">
           <div class="verse-sheet-scroll">
@@ -675,7 +594,6 @@
               <button class="action-secondary" data-verse-action="copy"><i data-lucide="copy"></i><span>Copy</span></button>
               <button class="action-secondary" data-verse-action="share"><i data-lucide="share"></i><span>Share</span></button>
               <button class="action-secondary" data-verse-action="bookmark"><i data-lucide="bookmark"></i><span>Bookmark</span></button>
-              <button class="action-secondary" data-verse-action="original-language" type="button" disabled aria-label="Greek indisponible"><i data-lucide="languages"></i><span>Greek</span></button>
             </div>
             <p class="sheet-feedback" data-sheet-feedback aria-live="polite"></p>
             <div class="verse-detail-panel" data-verse-detail hidden></div>

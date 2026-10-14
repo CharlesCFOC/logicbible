@@ -269,6 +269,18 @@ svg {
     0 0 0 1px rgba(255, 255, 255, 0.42);
 }
 
+[data-react-page-top-spacer-root] {
+  display: contents;
+}
+
+.page-top-spacer {
+  flex: 0 0 var(--page-top-space, 32px);
+  width: 100%;
+  height: var(--page-top-space, 32px);
+  background: transparent;
+  pointer-events: none;
+}
+
 .screen {
   display: none;
   flex: 1 1 auto;

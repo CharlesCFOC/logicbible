@@ -417,15 +417,18 @@
   color: var(--cool);
 }
 
-.preference-copy strong,
+.preference-copy h3,
 .preference-copy p {
   display: block;
   margin: 0;
 }
 
-.preference-copy strong {
+.preference-copy h3 {
+  margin: 0;
   color: var(--ink);
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.25;
 }
 
 .preference-copy p {

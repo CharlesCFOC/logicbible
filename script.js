@@ -1,65 +1,34 @@
+function apiUrl(path) {
+  // Resolve on every call: Capacitor's bridge may initialize after this script.
+  const native = window.Capacitor?.isNativePlatform?.()
+    || ["android", "ios"].includes(window.Capacitor?.getPlatform?.())
+    || (window.location.hostname === "localhost" && !window.location.port);
+  return `${native ? "https://logicbible.vercel.app" : ""}${path}`;
+}
+
+document.addEventListener("pointerdown", (event) => {
+  if (!(event.target instanceof Element)) return;
+  const button = event.target.closest("button, [role='button'], [role='tab']");
+  if (!button || button.matches(":disabled") || button.getAttribute("aria-disabled") === "true") return;
+  if (button.closest(".haptics-strength-control")) return;
+  // Cards can use button semantics for accessibility without being haptic controls.
+  const isCard = [...button.classList].some((name) => /(?:^|-)(?:card|tile)(?:-|$)/.test(name));
+  if (isCard || button.matches(".saved-note-open, .saved-verse-open, .apologetics-room-button, .apologetics-debate-progress-main")) return;
+  if (!button.matches("button, [role='tab']")) return;
+  window.appButtonHaptic?.();
+}, true);
+
 const screens = [...document.querySelectorAll("[data-screen]")];
 const navButtons = [...document.querySelectorAll("[data-nav]")];
-const activeScreenStorageKey = "thought-bible.active-screen";
+const activeScreenStorageKey = "think-bible.active-screen";
 const homeMenuToggle = document.querySelector("[data-home-menu-toggle]");
 const homeMenuLayer = document.querySelector("[data-home-menu-layer]");
 const homeMenuDrawer = document.querySelector("[data-home-menu-drawer]");
 const homeMenuCloseButtons = [...document.querySelectorAll("[data-home-menu-close]")];
 const homeMenuNavigationButtons = [...document.querySelectorAll("[data-home-menu-drawer] [data-nav]")];
 let homeMenuLastFocusedElement = null;
-const kidsBibleLibrary = document.querySelector("[data-kids-library]");
-const kidsBibleReader = document.querySelector("[data-kids-reader]");
-const kidsBiblePageImage = document.querySelector("[data-kids-page-image]");
-const kidsBibleImageWrap = document.querySelector(".kids-reader-image-wrap");
-const kidsBiblePageLabel = document.querySelector("[data-kids-page-label]");
-const kidsBiblePageSelect = document.querySelector("[data-kids-page-select]");
-const kidsBibleProgress = document.querySelector("[data-kids-progress]");
-const kidsBibleReaderTitle = document.querySelector("[data-kids-reader-title]");
-const kidsBibleBooks = {
-  matthew: {
-    title: "Matthew",
-    totalPages: 37,
-    imageDir: "assets/kids-bible/matthew",
-    getFileName: (number) => `${number}_Matthew_Comic_Page_Modern_English.webp`,
-  },
-  mark: {
-    title: "Mark",
-    totalPages: 16,
-    imageDir: "assets/kids-bible/mark",
-    getFileName: (number) => `${number}.webp`,
-  },
-  luke: {
-    title: "Luke",
-    totalPages: 21,
-    imageDir: "assets/kids-bible/luke",
-    getFileName: (number) => `${number}.webp`,
-  },
-};
-const initialKidsBibleBookId = kidsBibleBooks[localStorage.getItem("brother.kidsBibleBook")] ? localStorage.getItem("brother.kidsBibleBook") : "matthew";
-
-function getKidsBibleBook(bookId = initialKidsBibleBookId) {
-  return kidsBibleBooks[bookId] || kidsBibleBooks.matthew;
-}
-
-function getKidsBiblePageStorageKey(bookId) {
-  return `brother.kidsBiblePage.${bookId}`;
-}
-
-function readKidsBiblePage(bookId) {
-  const book = getKidsBibleBook(bookId);
-  const storedPage = localStorage.getItem(getKidsBiblePageStorageKey(bookId))
-    || (bookId === "matthew" ? localStorage.getItem("brother.kidsBiblePage") : null)
-    || "1";
-  return Math.max(1, Math.min(book.totalPages, Number(storedPage) || 1));
-}
-
-const kidsBibleState = {
-  bookId: initialKidsBibleBookId,
-  page: readKidsBiblePage(initialKidsBibleBookId),
-};
 const appShell = document.querySelector(".app-shell");
 const modalLayer = document.querySelector("[data-modal-layer]");
-const searchPanel = document.querySelector("[data-search-panel]");
 const verseSheet = document.querySelector("[data-verse-sheet]");
 const verseAiPanel = document.querySelector("[data-verse-ai-panel]");
 const noteEditorPanel = document.querySelector("[data-note-editor-panel]");
@@ -244,7 +213,6 @@ const versesList = document.querySelector("[data-verses-list]");
 const readerSource = document.querySelector("[data-reader-source]");
 const readerChapter = document.querySelector("[data-reader-chapter]");
 const copyrightNote = document.querySelector("[data-copyright-note]");
-const originalLanguageLabel = document.querySelector('[data-verse-action="original-language"] span');
 const parallelToggle = document.querySelector("[data-parallel-toggle]");
 const readerTargetToggle = document.querySelector("[data-reader-target]");
 const parallelSelects = document.querySelector("[data-parallel-selects]");
@@ -255,11 +223,6 @@ const textSizeOptionButtons = [...document.querySelectorAll("[data-text-size-opt
 const accentOptionButtons = [...document.querySelectorAll("[data-accent-option]")];
 const profileAvatar = document.querySelector("[data-profile-avatar]");
 const profileCover = document.querySelector("[data-profile-cover]");
-const profileStyleToggle = document.querySelector("[data-profile-style-toggle]");
-const profileStyleEditor = document.querySelector("[data-profile-style-editor]");
-const profileCoverInput = document.querySelector("[data-profile-cover-input]");
-const profileCoverReset = document.querySelector("[data-profile-cover-reset]");
-const profileStyleFeedback = document.querySelector("[data-profile-style-feedback]");
 const profileName = document.querySelector("[data-profile-name]");
 const profileStreak = document.querySelector("[data-profile-streak]");
 const profileForm = document.querySelector("[data-profile-form]");
@@ -330,7 +293,6 @@ const moderationReportsKey = "brother.moderationReports";
 let moderationReports = readJson(moderationReportsKey, []);
 let moderationAdminUnlocked = false;
 
-const PRAYER_BACKGROUND_COUNT = 6;
 const prayerBackgroundAssignments = readJson("brother.prayerBackgrounds", {});
 
 function getPrayerBackgroundIndex(request) {
@@ -365,6 +327,7 @@ const readerState = {
   parallelVersionIds: readJson("brother.parallelVersions", ["local-kjv"]),
 };
 let chapterRequestId = 0;
+let remoteBibleVersions = [];
 const bibleChapterCache = new Map();
 let selectedVerseData = null;
 let multiSelectMode = false;
@@ -440,7 +403,7 @@ const defaultProfile = {
   authStatus: "Local profile",
   storageStatus: "Local only",
 };
-const profileCoverOptions = [
+const profileCoverCatalog = [
   { id: "mountain-sunrise", label: "Mountain sunrise", src: "assets/home-hero-mountain-sunrise.webp" },
   { id: "community", label: "Community", src: "assets/home-hero-community.webp" },
   { id: "forest", label: "Forest", src: "assets/home-card-forest.webp" },
@@ -458,6 +421,19 @@ const profileCoverOptions = [
   { id: "canyon-river", label: "Canyon river", src: "assets/profile-hero/canyon-river.webp" },
   { id: "ocean-cliffs", label: "Ocean cliffs", src: "assets/profile-hero/ocean-cliffs.webp" },
 ];
+const removedProfileCoverLabels = new Set(["Mountain sunrise", "Community", "Forest", "Prayer", "Sunlit path", "Open sky"]);
+const profileCoverOptions = profileCoverCatalog.filter((option) => !removedProfileCoverLabels.has(option.label));
+const prayerCardBackgrounds = [
+  ...Array.from({ length: 6 }, (_, index) => ({
+    id: `prayer-${index + 1}`,
+    label: `Prayer background ${index + 1}`,
+    src: `assets/prayer-backgrounds/prayer-${index + 1}.webp`,
+  })),
+  ...profileCoverCatalog
+    .filter((option) => !["assets/prayer-backgrounds/prayer-1.webp", "assets/prayer-backgrounds/prayer-2.webp"].includes(option.src))
+    .map(({ id, label, src }) => ({ id: `profile-${id}`, label, src })),
+];
+const PRAYER_BACKGROUND_COUNT = prayerCardBackgrounds.length;
 const savedProfile = {
   ...defaultProfile,
   ...readJson("brother.profile", {}),
@@ -560,121 +536,121 @@ const apologeticsTracksData = [
     id: "islam",
     title: "Islam",
     icon: "shield",
-    description: "Objections musulmanes fréquentes sur Jésus, la Bible et la crucifixion.",
+    description: "Common Muslim objections about Jesus, the Bible, and the crucifixion.",
     level: "Beginner",
     topics: [
       {
         id: "bible-corrupted",
-        title: "La Bible a-t-elle été corrompue ?",
+        title: "Has the Bible been corrupted?",
         category: "Bible",
         difficulty: "Essential",
-        summary: "Répondre à l’idée que le texte biblique aurait été modifié au point d’être inutilisable.",
+        summary: "Respond to the claim that the biblical text has been changed beyond use.",
         opponentCase: [
-          "Les Évangiles ont été changés au fil du temps.",
-          "Le texte original de Jésus a disparu.",
-          "Les manuscrits se contredisent trop pour être fiables.",
+          "The Gospels have been changed over time.",
+          "The original message of Jesus has been lost.",
+          "The manuscripts disagree too much to be reliable.",
         ],
-        shortAnswer: "Il n’existe pas de preuve historique d’une corruption totale de la Bible. Les manuscrits permettent au contraire de contrôler la transmission du texte de manière sérieuse.",
+        shortAnswer: "There is no historical evidence of a complete corruption of the Bible. The manuscripts allow us to examine the transmission of the text carefully.",
         keyResponse: [
-          "Demande quand, où et par qui la corruption totale aurait eu lieu.",
-          "Explique que la multitude de manuscrits rend une falsification universelle très difficile.",
-          "Rappelle qu’une variation manuscrite ne signifie pas une doctrine perdue.",
+          "Ask when, where, and by whom the alleged complete corruption took place.",
+          "Explain that the large number of manuscripts makes a universal forgery very difficult.",
+          "Remember that a manuscript variation does not mean a doctrine has been lost.",
         ],
-        longAnswer: "La meilleure réponse n’est pas de nier les variantes manuscrites, mais de montrer qu’elles sont justement connues parce que les manuscrits ont été conservés. Une corruption totale demanderait un remplacement mondial coordonné sans trace historique crédible.",
+        longAnswer: "The best response is to acknowledge manuscript variants and explain that we know about them because manuscripts have been preserved. Complete corruption would require a coordinated worldwide replacement without credible historical evidence.",
         keyVerses: ["PSA.119.160", "MAT.5.18", "JHN.17.17"],
         questionsToAsk: [
-          "Quel texte original aurait été remplacé exactement ?",
-          "Qui a réussi à modifier tous les manuscrits dispersés dans plusieurs régions ?",
-          "Pourquoi l’histoire ne garde-t-elle aucune trace claire d’une telle opération ?",
+          "Which original text was supposedly replaced?",
+          "Who managed to change all the manuscripts spread across different regions?",
+          "Why is there no clear historical record of such an operation?",
         ],
         pitfalls: [
-          "Ne pas présenter l’argument comme s’il n’existait aucune variante mineure.",
-          "Ne pas répondre avec mépris.",
-          "Éviter de parler trop vite sans cadre historique.",
+          "Do not suggest that minor manuscript variants do not exist.",
+          "Do not respond with contempt.",
+          "Avoid rushing through the answer without historical context.",
         ],
       },
       {
         id: "jesus-god",
-        title: "Jésus est-il vraiment Dieu ?",
+        title: "Is Jesus really God?",
         category: "Jesus",
         difficulty: "Essential",
-        summary: "Montrer que la divinité du Christ ne repose pas sur un seul verset isolé.",
+        summary: "Show that the divinity of Christ does not rest on a single isolated verse.",
         opponentCase: [
-          "Jésus n’a jamais dit textuellement : Je suis Dieu, adorez-moi.",
-          "Il priait Dieu, donc il ne peut pas être Dieu.",
-          "Les chrétiens ont exagéré son statut plus tard.",
+          "Jesus never explicitly said: I am God, worship me.",
+          "He prayed to God, so he cannot be God.",
+          "Christians exaggerated his status later.",
         ],
-        shortAnswer: "Le Nouveau Testament présente Jésus avec les titres, les œuvres, l’autorité et l’honneur qui appartiennent à Dieu seul.",
+        shortAnswer: "The New Testament presents Jesus with the titles, works, authority, and honor that belong to God alone.",
         keyResponse: [
-          "Montre le cumul des preuves plutôt qu’un slogan unique.",
-          "Distingue la divinité du Fils et son incarnation réelle.",
-          "Rappelle que Jésus reçoit l’adoration et pardonne les péchés.",
+          "Present the cumulative evidence rather than a single slogan.",
+          "Distinguish the divinity of the Son from his real incarnation.",
+          "Remember that Jesus receives worship and forgives sins.",
         ],
-        longAnswer: "La question n’est pas seulement ce que Jésus a formulé avec nos catégories modernes, mais comment les auteurs bibliques l’identifient. Ils lui attribuent des fonctions et un honneur réservés à Dieu.",
+        longAnswer: "The question concerns both how Jesus expressed himself and how the biblical authors identify him. They attribute to him roles and honor reserved for God.",
         keyVerses: ["JHN.1.1", "JHN.8.58", "COL.2.9"],
         questionsToAsk: [
-          "Qui peut pardonner les péchés en propre ?",
-          "Pourquoi les Juifs ont-ils compris certaines paroles de Jésus comme un blasphème ?",
-          "Pourquoi Thomas appelle-t-il Jésus mon Seigneur et mon Dieu ?",
+          "Who can forgive sins on their own authority?",
+          "Why did the Jewish listeners understand some of the words of Jesus as blasphemy?",
+          "Why does Thomas call Jesus my Lord and my God?",
         ],
         pitfalls: [
-          "Ne pas nier la vraie humanité de Jésus.",
-          "Éviter d’attaquer seulement avec Jean 1:1 sans expliquer le contexte.",
+          "Do not deny the true humanity of Jesus.",
+          "Avoid relying only on John 1:1 without explaining its context.",
         ],
       },
       {
         id: "trinity-biblical",
-        title: "La Trinité est-elle biblique ?",
+        title: "Is the Trinity biblical?",
         category: "Doctrine",
         difficulty: "Intermediate",
-        summary: "Expliquer la Trinité sans tomber dans des analogies confuses.",
+        summary: "Explain the Trinity without relying on confusing analogies.",
         opponentCase: [
-          "Le mot Trinité n’est pas dans la Bible.",
-          "Trois personnes = trois dieux.",
-          "Cette doctrine serait une invention tardive.",
+          "The word Trinity is not in the Bible.",
+          "Three persons means three gods.",
+          "This doctrine was invented later.",
         ],
-        shortAnswer: "Le mot n’est pas biblique, mais la doctrine résume fidèlement ce que l’Écriture affirme: un seul Dieu, et pourtant le Père, le Fils et l’Esprit sont distingués et pleinement divins.",
+        shortAnswer: "The word does not appear in the Bible, but the doctrine faithfully summarizes what Scripture affirms: one God, with the Father, Son, and Spirit distinct and fully divine.",
         keyResponse: [
-          "Séparer clairement essence divine et distinction personnelle.",
-          "Montrer que l’alternative n’est pas seulement entre Trinité et monothéisme pur abstrait.",
-          "Utiliser plusieurs textes au lieu d’un seul.",
+          "Clearly distinguish divine essence from personal distinction.",
+          "Explain why the discussion involves more than a choice between the Trinity and abstract monotheism.",
+          "Use several passages rather than just one.",
         ],
-        longAnswer: "La Trinité n’est pas un ajout extérieur, mais une formulation théologique pour tenir ensemble toutes les données bibliques sans en supprimer une partie.",
+        longAnswer: "The Trinity is a theological formulation that brings together all the biblical evidence without discarding any part of it.",
         keyVerses: ["MAT.28.19", "2CO.13.14", "JHN.14.16-17"],
         questionsToAsk: [
-          "Le Père est-il Dieu ? Le Fils est-il Dieu ? L’Esprit est-il Dieu ?",
-          "Comment gardes-tu toutes ces affirmations ensemble sans en annuler une ?",
+          "Is the Father God? Is the Son God? Is the Spirit God?",
+          "How do you hold all these affirmations together without dismissing one?",
         ],
         pitfalls: [
-          "Éviter les analogies eau/glace/vapeur.",
-          "Ne pas expliquer la Trinité comme trois parties de Dieu.",
+          "Avoid water, ice, and steam analogies.",
+          "Do not explain the Trinity as three parts of God.",
         ],
       },
       {
         id: "crucifixion-denied",
-        title: "Jésus a-t-il été crucifié ?",
+        title: "Was Jesus crucified?",
         category: "History",
         difficulty: "Essential",
-        summary: "Répondre au refus de la crucifixion en s’appuyant sur l’histoire et le Nouveau Testament.",
+        summary: "Respond to the denial of the crucifixion using history and the New Testament.",
         opponentCase: [
-          "Dieu n’aurait jamais laissé son prophète mourir ainsi.",
-          "Quelqu’un d’autre a été crucifié à sa place.",
-          "Le récit chrétien est théologiquement construit.",
+          "God would never have allowed his prophet to die that way.",
+          "Someone else was crucified in his place.",
+          "The Christian account was constructed for theological reasons.",
         ],
-        shortAnswer: "La crucifixion de Jésus fait partie des faits les plus solidement établis de l’histoire ancienne chrétienne.",
+        shortAnswer: "The crucifixion of Jesus is among the most firmly established facts of early Christian history.",
         keyResponse: [
-          "S’appuyer sur l’histoire avant d’entrer dans la théologie du salut.",
-          "Montrer que même des sources non chrétiennes reconnaissent la crucifixion.",
-          "Expliquer que la honte de la croix renforce l’authenticité du récit.",
+          "Start with history before discussing the theology of salvation.",
+          "Show that even non-Christian sources acknowledge the crucifixion.",
+          "Explain why the shame of the cross strengthens the authenticity of the account.",
         ],
-        longAnswer: "Le problème n’est pas l’absence de sources, mais l’acceptation de ce qu’elles affirment. La croix est attestée très tôt, au cœur même de la proclamation chrétienne primitive.",
+        longAnswer: "The challenge concerns the acceptance of what the sources say. The cross is attested very early, at the heart of the earliest Christian proclamation.",
         keyVerses: ["1CO.15.3-4", "MAR.15.24", "ISA.53.5"],
         questionsToAsk: [
-          "Pourquoi les premiers chrétiens auraient-ils inventé un Messie humilié par la croix ?",
-          "Quelle source historique ancienne défend sérieusement la substitution d’une autre personne ?",
+          "Why would the first Christians have invented a Messiah humiliated on a cross?",
+          "Which ancient historical source seriously supports the substitution of another person?",
         ],
         pitfalls: [
-          "Ne pas passer directement à l’expiation avant d’établir le fait historique.",
+          "Establish the historical event before moving to atonement.",
         ],
       },
     ],
@@ -683,109 +659,109 @@ const apologeticsTracksData = [
     id: "jehovahs-witnesses",
     title: "Jehovah’s Witnesses",
     icon: "landmark",
-    description: "Répondre aux textes souvent utilisés contre la divinité de Christ et la doctrine chrétienne.",
+    description: "Respond to passages often used against the divinity of Christ and Christian doctrine.",
     level: "Beginner",
     topics: [
       {
         id: "john-1-1",
-        title: "Jean 1:1 dit-il “un dieu” ?",
+        title: "Does John 1:1 say “a god”?",
         category: "Bible",
         difficulty: "Essential",
-        summary: "Répondre à la traduction qui minimise la divinité du Verbe.",
+        summary: "Respond to the translation that minimizes the divinity of the Word.",
         opponentCase: [
-          "Le grec permet de traduire theos par un dieu.",
-          "Jésus est divin au sens secondaire, pas pleinement Dieu.",
+          "The Greek allows theos to be translated as a god.",
+          "Jesus is divine in a secondary sense, rather than fully God.",
         ],
-        shortAnswer: "Jean 1:1 présente le Verbe comme distinct du Père, mais pleinement participant à l’identité divine, pas comme un petit dieu parmi d’autres.",
+        shortAnswer: "John 1:1 presents the Word as distinct from the Father while fully sharing in the divine identity, rather than as a lesser god among others.",
         keyResponse: [
-          "Expliquer le rôle du contexte immédiat de Jean 1.",
-          "Montrer que Jean parle de création universelle par le Verbe.",
-          "Insister sur la cohérence du prologue entier.",
+          "Explain the immediate context of John 1.",
+          "Show that John describes all creation as coming through the Word.",
+          "Emphasize the consistency of the entire prologue.",
         ],
-        longAnswer: "La traduction isolée d’un mot ne suffit pas. Le prologue attribue au Verbe des fonctions et une éternité incompatibles avec l’idée d’une simple créature divine inférieure.",
+        longAnswer: "Translating a single word in isolation is insufficient. The prologue attributes to the Word roles and an eternal existence incompatible with the idea of a lesser created divine being.",
         keyVerses: ["JHN.1.1", "JHN.1.3", "JHN.1.18"],
         questionsToAsk: [
-          "Si tout a été fait par le Verbe, dans quelle catégorie mettez-vous le Verbe lui-même ?",
-          "Pourquoi Jean commence-t-il comme Genèse 1 s’il veut seulement parler d’une créature élevée ?",
+          "If everything was made through the Word, where would you place the Word himself?",
+          "Why does John begin like Genesis 1 if he only means to describe an exalted creature?",
         ],
         pitfalls: [
-          "Ne pas réduire la discussion à une seule règle grammaticale compliquée.",
+          "Do not reduce the discussion to one complicated grammatical rule.",
         ],
       },
       {
         id: "jesus-created",
-        title: "Jésus est-il la première créature ?",
+        title: "Was Jesus the first created being?",
         category: "Jesus",
         difficulty: "Essential",
-        summary: "Répondre à l’idée que le Fils serait la première œuvre de Dieu.",
+        summary: "Respond to the idea that the Son was the first work of God.",
         opponentCase: [
-          "Colossiens parle du premier-né de toute création.",
-          "Proverbes 8 serait Jésus créé avant le monde.",
+          "Colossians calls him the firstborn of all creation.",
+          "Proverbs 8 describes Jesus as created before the world.",
         ],
-        shortAnswer: "Premier-né ne signifie pas forcément premier créé; le terme peut exprimer rang, héritage et suprématie.",
+        shortAnswer: "Firstborn does not necessarily mean first created; the term can express rank, inheritance, and supremacy.",
         keyResponse: [
-          "Lire Colossiens 1 jusqu’au bout, pas seulement l’expression isolée.",
-          "Montrer que Christ est au-dessus de toute création.",
-          "Refuser l’équation automatique premier-né = première créature.",
+          "Read the whole passage in Colossians 1, rather than an isolated expression.",
+          "Show that Christ is above all creation.",
+          "Challenge the assumption that firstborn means first created being.",
         ],
-        longAnswer: "Dans Colossiens, Paul ne présente pas le Christ comme appartenant au monde créé, mais comme celui par qui et pour qui tout existe.",
+        longAnswer: "In Colossians, Paul presents Christ as the one through whom and for whom everything exists, rather than as part of the created world.",
         keyVerses: ["COL.1.15-17", "HEB.1.2-3", "MIC.5.2"],
         questionsToAsk: [
-          "Pourquoi Paul dit-il que tout subsiste en lui ?",
-          "Si Christ fait partie des choses créées, comment peut-il être l’agent de toute création sans exception ?",
+          "Why does Paul say that all things hold together in him?",
+          "If Christ is among created things, how can he be the agent of all creation without exception?",
         ],
         pitfalls: [
-          "Éviter de répondre uniquement par slogans anti-sectes.",
+          "Avoid responding only with slogans against religious groups.",
         ],
       },
       {
         id: "cross-or-stake",
-        title: "Croix ou poteau ?",
+        title: "Cross or stake?",
         category: "History",
         difficulty: "Beginner",
-        summary: "Répondre sans faire de la forme exacte de l’instrument le centre du débat.",
+        summary: "Respond without making the exact shape of the instrument the center of the debate.",
         opponentCase: [
-          "Le mot grec veut juste dire poteau.",
-          "Le symbole de la croix serait païen.",
+          "The Greek word simply means stake.",
+          "The symbol of the cross is pagan.",
         ],
-        shortAnswer: "Le point central n’est pas la vénération d’un symbole, mais le fait historique de la mort rédemptrice du Christ.",
+        shortAnswer: "The central issue is the historical reality of the redemptive death of Christ.",
         keyResponse: [
-          "Ne pas se laisser détourner du sujet principal.",
-          "Montrer que l’histoire romaine connaissait diverses formes de crucifixion.",
-          "Recentrer sur l’œuvre de Christ.",
+          "Keep the discussion focused on the main issue.",
+          "Show that Roman history included various forms of crucifixion.",
+          "Return to the work of Christ.",
         ],
-        longAnswer: "Même si le débat lexical existe, le Nouveau Testament insiste surtout sur la signification salvifique de la crucifixion.",
+        longAnswer: "Although the lexical debate exists, the New Testament emphasizes the saving significance of the crucifixion.",
         keyVerses: ["GAL.6.14", "1CO.1.18", "PHI.2.8"],
         questionsToAsk: [
-          "Pourquoi cette question de forme devient-elle plus importante que l’identité de Christ ?",
+          "Why does the shape of the instrument become more important than the identity of Christ?",
         ],
         pitfalls: [
-          "Ne pas donner l’impression que les chrétiens adorent la croix matérielle.",
+          "Do not give the impression that Christians worship the physical cross.",
         ],
       },
       {
         id: "michael-archangel",
-        title: "Jésus est-il Michel l’archange ?",
+        title: "Is Jesus Michael the archangel?",
         category: "Jesus",
         difficulty: "Intermediate",
-        summary: "Montrer que le Fils est présenté comme supérieur aux anges, non comme l’un d’eux.",
+        summary: "Show that the Son is presented as superior to the angels.",
         opponentCase: [
-          "Michel commande les anges, comme Jésus.",
-          "1 Thessaloniciens 4 mentionne une voix d’archange.",
+          "Michael commands angels, just as Jesus does.",
+          "1 Thessalonians 4 mentions the voice of an archangel.",
         ],
-        shortAnswer: "Le Nouveau Testament place le Fils au-dessus du monde angélique et lui attribue un statut que les anges ne reçoivent jamais.",
+        shortAnswer: "The New Testament places the Son above the angelic world and attributes to him a status angels never receive.",
         keyResponse: [
-          "Utiliser Hébreux 1 comme texte majeur.",
-          "Montrer la différence entre venir avec une voix d’archange et être un archange.",
+          "Use Hebrews 1 as a central passage.",
+          "Explain the difference between coming with the voice of an archangel and being an archangel.",
         ],
-        longAnswer: "Le cœur de la réponse est la supériorité du Fils dans Hébreux: adoré par les anges, créateur, roi éternel.",
+        longAnswer: "The core of the answer is the superiority of the Son in Hebrews: worshiped by angels, creator, and eternal king.",
         keyVerses: ["HEB.1.4-8", "HEB.1.13", "1TH.4.16"],
         questionsToAsk: [
-          "Quel ange reçoit l’adoration des anges ?",
-          "Pourquoi Hébreux prend-il tant de soin à distinguer le Fils des anges ?",
+          "Which angel receives the worship of angels?",
+          "Why does Hebrews take such care to distinguish the Son from the angels?",
         ],
         pitfalls: [
-          "Ne pas négliger le contexte complet de Hébreux 1.",
+          "Do not overlook the full context of Hebrews 1.",
         ],
       },
     ],
@@ -794,113 +770,113 @@ const apologeticsTracksData = [
     id: "atheism",
     title: "Atheism",
     icon: "atom",
-    description: "Objections sur le mal, la science, la résurrection et la fiabilité de la foi chrétienne.",
+    description: "Objections about evil, science, the resurrection, and the reliability of Christian faith.",
     level: "Beginner",
     topics: [
       {
         id: "problem-of-evil",
-        title: "Pourquoi Dieu permet-il le mal ?",
+        title: "Why does God allow evil?",
         category: "Suffering",
         difficulty: "Essential",
-        summary: "Répondre à l’objection émotionnelle et philosophique sans froideur.",
+        summary: "Address the emotional and philosophical objection with compassion.",
         opponentCase: [
-          "Un Dieu bon et tout-puissant éliminerait le mal.",
-          "La souffrance innocente contredit l’existence de Dieu.",
+          "A good and almighty God would eliminate evil.",
+          "Innocent suffering contradicts the existence of God.",
         ],
-        shortAnswer: "Le christianisme ne banalise pas le mal; il affirme que Dieu le juge réellement, qu’il est entré lui-même dans la souffrance, et qu’il promet sa défaite finale.",
+        shortAnswer: "Christianity takes evil seriously: it affirms that God judges it, has entered into suffering himself, and promises its final defeat.",
         keyResponse: [
-          "Distinguer problème logique et problème existentiel.",
-          "Montrer que l’Évangile donne une réponse incarnée, pas abstraite.",
-          "Insister sur la croix et l’espérance finale.",
+          "Distinguish the logical problem from the existential problem.",
+          "Show how the Gospel offers a response embodied in Christ.",
+          "Emphasize the cross and the final hope.",
         ],
-        longAnswer: "Le christianisme ne prétend pas que tout soit facile à expliquer maintenant, mais il offre une vision où le mal n’est ni nié, ni absolu, ni victorieux.",
+        longAnswer: "Christianity does not claim that everything is easy to explain now, but offers a vision in which evil is neither denied, absolute, nor victorious.",
         keyVerses: ["ROM.8.18", "REV.21.4", "HEB.4.15"],
         questionsToAsk: [
-          "Sur quelle base objective appelez-vous une chose réellement mauvaise ?",
-          "Pourquoi l’indignation morale humaine compte-t-elle autant si l’univers est moralement neutre ?",
+          "On what objective basis do you call something truly evil?",
+          "Why does human moral outrage matter so much if the universe is morally neutral?",
         ],
         pitfalls: [
-          "Ne pas répondre de manière froide à une souffrance personnelle.",
-          "Éviter les clichés simplistes.",
+          "Do not respond coldly to personal suffering.",
+          "Avoid simplistic clichés.",
         ],
       },
       {
         id: "science-vs-god",
-        title: "La science a-t-elle rendu Dieu inutile ?",
+        title: "Has science made God unnecessary?",
         category: "Science",
         difficulty: "Beginner",
-        summary: "Montrer que science et existence de Dieu n’opèrent pas sur le même niveau d’explication.",
+        summary: "Show that science and the existence of God concern different levels of explanation.",
         opponentCase: [
-          "La science explique de plus en plus l’univers.",
-          "Dieu n’est qu’un bouche-trou pour ce qu’on ignore encore.",
+          "Science explains more and more of the universe.",
+          "God is only a placeholder for what we do not yet understand.",
         ],
-        shortAnswer: "La science explique beaucoup de mécanismes, mais elle ne remplace pas les questions de fond sur l’origine, l’ordre, l’intelligibilité et la raison même de l’existence.",
+        shortAnswer: "Science explains many mechanisms, but it does not replace fundamental questions about origins, order, intelligibility, and why anything exists.",
         keyResponse: [
-          "Refuser le faux dilemme science ou Dieu.",
-          "Distinguer causes physiques et fondement ultime.",
-          "Montrer que l’intelligibilité du monde est elle-même remarquable.",
+          "Reject the false choice between science and God.",
+          "Distinguish physical causes from the ultimate foundation.",
+          "Show that the intelligibility of the world is itself remarkable.",
         ],
-        longAnswer: "Le chrétien n’invoque pas Dieu pour combler chaque ignorance ponctuelle; il affirme que le monde entier dépend ultimement de Dieu, y compris ses lois régulières.",
+        longAnswer: "The Christian claim is that the entire world ultimately depends on God, including its regular laws, rather than that God fills each temporary gap in knowledge.",
         keyVerses: ["COL.1.16-17", "PSA.19.1", "ROM.1.20"],
         questionsToAsk: [
-          "Pourquoi y a-t-il quelque chose plutôt que rien ?",
-          "Pourquoi l’univers est-il intelligible et mathématiquement ordonné ?",
+          "Why is there something rather than nothing?",
+          "Why is the universe intelligible and mathematically ordered?",
         ],
         pitfalls: [
-          "Éviter les pseudo-arguments scientifiques mal maîtrisés.",
+          "Avoid poorly understood pseudoscientific arguments.",
         ],
       },
       {
         id: "resurrection-credible",
-        title: "La résurrection de Jésus est-elle crédible ?",
+        title: "Is the resurrection of Jesus credible?",
         category: "History",
         difficulty: "Essential",
-        summary: "Ancrer la foi chrétienne dans un événement historique revendiqué publiquement.",
+        summary: "Ground Christian faith in a publicly proclaimed historical event.",
         opponentCase: [
-          "Les miracles sont impossibles.",
-          "Les disciples ont inventé l’histoire.",
-          "Les témoins ont eu des hallucinations.",
+          "Miracles are impossible.",
+          "The disciples invented the story.",
+          "The witnesses had hallucinations.",
         ],
-        shortAnswer: "La résurrection n’est pas un mythe isolé hors du temps; elle est annoncée très tôt, au centre de la foi apostolique, avec des témoins identifiables.",
+        shortAnswer: "The resurrection was proclaimed very early, at the center of apostolic faith, with identifiable witnesses.",
         keyResponse: [
-          "Établir d’abord les faits minimaux reconnus.",
-          "Montrer la transformation des disciples.",
-          "Comparer les hypothèses concurrentes.",
+          "Begin with the commonly recognized basic facts.",
+          "Show the transformation of the disciples.",
+          "Compare competing explanations.",
         ],
-        longAnswer: "Le christianisme repose sur une proclamation publique d’un tombeau vide, d’apparitions et d’une conviction apostolique précoce. La question honnête est: quelle hypothèse explique le mieux l’ensemble ?",
+        longAnswer: "Christianity rests on a public proclamation of an empty tomb, appearances, and an early apostolic conviction. The honest question is: which explanation best accounts for all the evidence?",
         keyVerses: ["1CO.15.3-8", "LUK.24.36-43", "ACT.2.32"],
         questionsToAsk: [
-          "Quelle hypothèse naturelle explique le mieux tous les éléments ensemble ?",
-          "Pourquoi la résurrection est-elle proclamée si tôt à Jérusalem même ?",
+          "Which natural explanation best accounts for all the evidence together?",
+          "Why was the resurrection proclaimed so early in Jerusalem itself?",
         ],
         pitfalls: [
-          "Ne pas parler de la résurrection seulement comme d’une expérience intérieure.",
+          "Do not describe the resurrection only as an inward experience.",
         ],
       },
       {
         id: "bible-contradictions",
-        title: "La Bible est-elle pleine de contradictions ?",
+        title: "Is the Bible full of contradictions?",
         category: "Bible",
         difficulty: "Essential",
-        summary: "Répondre sans nier les difficultés réelles du texte biblique.",
+        summary: "Respond without denying real difficulties in the biblical text.",
         opponentCase: [
-          "Les récits ne disent pas exactement la même chose.",
-          "Des détails historiques paraissent divergents.",
+          "The accounts do not say exactly the same thing.",
+          "Some historical details appear to differ.",
         ],
-        shortAnswer: "Il existe des passages difficiles, mais la présence de variations ou d’angles différents ne prouve pas automatiquement une contradiction destructrice.",
+        shortAnswer: "Difficult passages exist, but variations or different perspectives do not automatically establish a contradiction.",
         keyResponse: [
-          "Reconnaître honnêtement les textes difficiles.",
-          "Distinguer contradiction réelle et différence de perspective.",
-          "Rappeler la cohérence globale du message biblique.",
+          "Acknowledge difficult passages honestly.",
+          "Distinguish a genuine contradiction from a difference in perspective.",
+          "Remember the overall consistency of the biblical message.",
         ],
-        longAnswer: "Une contradiction exige que deux affirmations incompatibles portent sur le même point dans le même sens. Beaucoup d’objections confondent sélection narrative, compression, ou focalisation différente avec contradiction.",
+        longAnswer: "A contradiction requires two incompatible statements about the same point in the same sense. Many objections confuse narrative selection, compression, or different emphases with contradiction.",
         keyVerses: ["LUK.1.1-4", "2TI.3.16", "PSA.12.6"],
         questionsToAsk: [
-          "En quoi les deux textes sont-ils logiquement impossibles à harmoniser ?",
-          "Est-ce une contradiction ou simplement un angle narratif distinct ?",
+          "In what way are the two passages logically impossible to reconcile?",
+          "Is this a contradiction or simply a different narrative perspective?",
         ],
         pitfalls: [
-          "Éviter les harmonisations artificielles trop rapides.",
+          "Avoid rushing into artificial harmonizations.",
         ],
       },
     ],
@@ -1032,10 +1008,12 @@ async function syncStateKey(key, value) {
     return;
   }
 
+  const userId = supabaseUser.id;
+  const rawValue = typeof value === "string" ? value : JSON.stringify(value);
   const { error } = await supabaseClient.from("user_app_state").upsert({
-    user_id: supabaseUser.id,
+    user_id: userId,
     state_key: key,
-    payload: encodeLocalPayload(typeof value === "string" ? value : JSON.stringify(value)),
+    payload: encodeLocalPayload(rawValue),
     updated_at: new Date().toISOString(),
   }, { onConflict: "user_id,state_key" });
 
@@ -1043,7 +1021,10 @@ async function syncStateKey(key, value) {
     console.warn("Supabase state sync failed:", error.message);
     return false;
   }
-  clearPendingSync(key);
+  // A newer vibration choice must remain queued while an older write finishes.
+  if (key !== "brother.hapticsStrength" || (supabaseUser?.id === userId && localStorage.getItem(key) === rawValue)) {
+    clearPendingSync(key);
+  }
   return true;
 }
 
@@ -1057,12 +1038,18 @@ async function syncPendingState() {
     return pendingSyncPromise;
   }
 
+  const userId = supabaseUser.id;
   pendingSyncPromise = (async () => {
     const pendingKeys = [...getPendingSyncKeys()];
     for (const key of pendingKeys) {
       if (key === "brother.notes") {
         await syncStateKey(key, readJson(key, {}));
       }
+    }
+    // Serialize vibration writes so rapid taps cannot save an older level last.
+    while (supabaseUser?.id === userId && !isHydratingSupabase && getPendingSyncKeys().has("brother.hapticsStrength")) {
+      const value = localStorage.getItem("brother.hapticsStrength");
+      if (!value || !(await syncStateKey("brother.hapticsStrength", value))) break;
     }
   })().finally(() => {
     pendingSyncPromise = null;
@@ -1107,6 +1094,9 @@ async function hydrateSupabaseState() {
     return false;
   }
 
+  // Keep the last text size chosen on this device when older cloud records load.
+  const localPreferences = readJson("brother.preferences", {});
+  const hasLocalTextSize = Object.hasOwn(textSizeOptions, localPreferences.textSize);
   isHydratingSupabase = true;
   try {
     const { data: rows, error } = await supabaseClient
@@ -1125,6 +1115,15 @@ async function hydrateSupabaseState() {
 
     const pendingKeys = getPendingSyncKeys();
     remoteRows.forEach((payload, key) => {
+      if (key === "brother.hapticsStrength") {
+        const localStrength = localStorage.getItem(key);
+        // Preserve levels already chosen on this device before cloud sync existed.
+        if (["off", "1", "2", "3", "4", "5", "light", "medium", "strong"].includes(localStrength)
+          && localStrength !== decodeRemotePayload(payload)) {
+          markPendingSync(key);
+          pendingKeys.add(key);
+        }
+      }
       if (!pendingKeys.has(key)) {
         localStorage.setItem(key, decodeRemotePayload(payload));
       }
@@ -1171,15 +1170,23 @@ async function hydrateSupabaseState() {
       .maybeSingle();
     if (preferences) {
       writeLocalWithoutSync("brother.preferences", {
+        ...readJson("brother.preferences", {}),
         background: preferences.app_background || "paper",
-        textSize: preferences.text_size || "medium",
+        textSize: hasLocalTextSize ? savedPreferences.textSize : preferences.text_size || "medium",
         accent: preferences.accent || "taupe",
       });
     }
 
+    const hydratedPreferences = readJson("brother.preferences", {});
+    if (hasLocalTextSize) hydratedPreferences.textSize = savedPreferences.textSize;
+    writeLocalWithoutSync("brother.preferences", hydratedPreferences);
+    Object.assign(savedPreferences, hydratedPreferences);
+    applyPreferences();
+    document.dispatchEvent(new CustomEvent("profile:preferences-change"));
     return true;
   } finally {
     isHydratingSupabase = false;
+    await syncPendingState();
   }
 }
 
@@ -1218,7 +1225,7 @@ async function initSupabase() {
   }
 
   try {
-    const response = await fetch("/api/supabase/config");
+    const response = await fetch(apiUrl("/api/supabase/config"));
     const config = await response.json();
     if (!config.configured) {
       updateAuthUi();
@@ -1624,7 +1631,7 @@ function renderPrayerPage() {
         const expanded = Boolean(request.expanded);
         const prayerBackgroundIndex = getPrayerBackgroundIndex(request);
         return `
-          <article class="prayer-card${expanded ? " is-expanded" : ""}${request.urgent ? " is-urgent" : ""}${isNewlyPrayed ? " is-prayed" : ""}" style="--prayer-card-image: url('assets/prayer-backgrounds/prayer-${prayerBackgroundIndex + 1}.webp')">
+          <article class="prayer-card${expanded ? " is-expanded" : ""}${request.urgent ? " is-urgent" : ""}${isNewlyPrayed ? " is-prayed" : ""}" style="--prayer-card-image: url('${prayerCardBackgrounds[prayerBackgroundIndex]?.src || prayerCardBackgrounds[0].src}')">
             <button type="button" class="prayer-card-toggle" data-prayer-toggle data-prayer-id="${escapeAttr(request.id)}" aria-expanded="${expanded}">
               <span>
                 <strong class="prayer-card-title">${escapeHtml(request.title || "Prayer request")}</strong>
@@ -1784,34 +1791,6 @@ function saveProfile() {
   return syncProfileRecord();
 }
 
-function setProfileStyleFeedback(message, isError = false) {
-  if (!profileStyleFeedback) return;
-  profileStyleFeedback.textContent = message;
-  profileStyleFeedback.dataset.state = isError ? "error" : "success";
-}
-
-function compressProfileCover(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const image = new Image();
-      image.onload = () => {
-        const maxWidth = 1200;
-        const scale = Math.min(1, maxWidth / image.width);
-        const canvas = document.createElement("canvas");
-        canvas.width = Math.max(1, Math.round(image.width * scale));
-        canvas.height = Math.max(1, Math.round(image.height * scale));
-        canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
-        resolve(canvas.toDataURL("image/jpeg", 0.82));
-      };
-      image.onerror = () => reject(new Error("Unable to read this image."));
-      image.src = reader.result;
-    };
-    reader.onerror = () => reject(new Error("Unable to read this image."));
-    reader.readAsDataURL(file);
-  });
-}
-
 async function syncProfileRecord() {
   if (!supabaseClient || !supabaseUser) return false;
   const { error } = await supabaseClient.from("profiles").upsert({
@@ -1852,12 +1831,18 @@ function getEffectiveProfileName() {
     .split("@")[0]
     .replace(/[._-]+/g, " ")
     .trim();
-  return emailName || "It's time to login";
+  return emailName || "It's time to sign in";
 }
 
 function getProfileStreakLabel() {
   const streak = Math.max(0, Number(readJson("brother.homeActivity", {}).streak || 0));
   return `${streak} ${streak === 1 ? "day" : "days"} in Scripture`;
+}
+
+function getProfileWelcome() {
+  if (!supabaseUser) return "Please sign in.";
+  const name = getEffectiveProfileName();
+  return name === "It's time to sign in" ? "Welcome" : `Welcome ${name.split(/\s+/)[0]}`;
 }
 
 function applyProfile() {
@@ -1888,7 +1873,7 @@ function applyProfile() {
     }
   }
   if (profileName) {
-    profileName.textContent = displayName;
+    profileName.textContent = getProfileWelcome();
   }
   if (profileStreak) {
     profileStreak.textContent = streakLabel;
@@ -2270,7 +2255,7 @@ async function requestApologeticsModeResponse(mode, requestId) {
   if (history.some((item) => containsPersonalContactInfo(item.text))) {
     throw new Error("For your safety, do not include an email address or phone number in AI messages.");
   }
-  const response = await fetch("/api/ai/apologetics", {
+  const response = await fetch(apiUrl("/api/ai/apologetics"), {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({
@@ -2780,88 +2765,6 @@ function refreshIcons() {
   }
 }
 
-function getKidsBiblePagePath(page, bookId = kidsBibleState.bookId) {
-  const book = getKidsBibleBook(bookId);
-  const number = String(page).padStart(2, "0");
-  return `${book.imageDir}/${book.getFileName(number)}`;
-}
-
-function renderKidsBiblePage() {
-  if (!kidsBiblePageImage) return;
-  const book = getKidsBibleBook(kidsBibleState.bookId);
-  kidsBiblePageImage.src = getKidsBiblePagePath(kidsBibleState.page);
-  kidsBiblePageImage.alt = `${book.title} illustrated page ${kidsBibleState.page}`;
-  if (kidsBiblePageLabel) kidsBiblePageLabel.textContent = `${kidsBibleState.page} / ${book.totalPages}`;
-  if (kidsBiblePageSelect) {
-    if (kidsBiblePageSelect.dataset.bookId !== kidsBibleState.bookId) {
-      kidsBiblePageSelect.innerHTML = Array.from({ length: book.totalPages }, (_, index) => `<option value="${index + 1}">Page ${index + 1}</option>`).join("");
-      kidsBiblePageSelect.dataset.bookId = kidsBibleState.bookId;
-    }
-    kidsBiblePageSelect.value = String(kidsBibleState.page);
-  }
-  if (kidsBibleProgress) kidsBibleProgress.style.width = `${(kidsBibleState.page / book.totalPages) * 100}%`;
-  if (kidsBibleReaderTitle) kidsBibleReaderTitle.textContent = book.title;
-  renderKidsBibleLibraryProgress();
-  setLocalValue("brother.kidsBibleBook", kidsBibleState.bookId);
-  setLocalValue(getKidsBiblePageStorageKey(kidsBibleState.bookId), String(kidsBibleState.page));
-  setLocalValue("brother.kidsBiblePage", String(kidsBibleState.page));
-}
-
-function renderKidsBibleLibraryProgress() {
-  document.querySelectorAll("[data-kids-book]").forEach((card) => {
-    const bookId = card.dataset.kidsBook;
-    const book = getKidsBibleBook(bookId);
-    const currentPage = bookId === kidsBibleState.bookId ? kidsBibleState.page : readKidsBiblePage(bookId);
-    const percentage = Math.round((currentPage / book.totalPages) * 100);
-    const progressFill = card.querySelector("[data-kids-book-progress-fill]");
-    const progressLabel = card.querySelector("[data-kids-book-progress-label]");
-    const progressBar = progressFill?.parentElement;
-    if (progressFill) progressFill.style.width = `${percentage}%`;
-    if (progressLabel) progressLabel.textContent = `Page ${currentPage} of ${book.totalPages} · ${percentage}%`;
-    if (progressBar) {
-      progressBar.setAttribute("aria-valuemax", String(book.totalPages));
-      progressBar.setAttribute("aria-valuenow", String(currentPage));
-    }
-  });
-}
-
-function changeKidsBiblePage(delta) {
-  const book = getKidsBibleBook(kidsBibleState.bookId);
-  const nextPage = kidsBibleState.page + delta;
-  if (nextPage < 1 || nextPage > book.totalPages) return;
-  kidsBibleState.page = nextPage;
-  renderKidsBiblePage();
-  if (kidsBibleImageWrap) {
-    const animationClass = delta > 0 ? "is-slide-next" : "is-slide-previous";
-    kidsBibleImageWrap.classList.remove("is-slide-next", "is-slide-previous");
-    window.requestAnimationFrame(() => {
-      kidsBibleImageWrap.classList.add(animationClass);
-      window.setTimeout(() => kidsBibleImageWrap.classList.remove(animationClass), 280);
-    });
-  }
-}
-
-function openKidsBibleBook(bookId) {
-  kidsBibleState.bookId = kidsBibleBooks[bookId] ? bookId : "matthew";
-  kidsBibleState.page = readKidsBiblePage(kidsBibleState.bookId);
-  if (kidsBibleLibrary) kidsBibleLibrary.hidden = true;
-  if (kidsBibleReader) kidsBibleReader.hidden = false;
-  appShell.dataset.kidsReader = "true";
-  renderKidsBiblePage();
-}
-
-function closeKidsBibleReader() {
-  if (kidsBibleReader) kidsBibleReader.hidden = true;
-  if (kidsBibleLibrary) kidsBibleLibrary.hidden = false;
-  delete appShell.dataset.kidsReader;
-}
-
-function emitKidsBibleChange() {
-  window.dispatchEvent(new CustomEvent("kids-bible:state-change"));
-}
-
-renderKidsBibleLibraryProgress();
-
 function setScreen(id) {
   if (!screens.some((screen) => screen.id === id)) return;
   if (noteEditorPanel?.classList.contains("is-visible")) {
@@ -2870,9 +2773,6 @@ function setScreen(id) {
   const activeNavId = id === "admin" ? "profile" : (id.startsWith("apologetics") ? "apologetics" : id);
   if (id !== "bible" && multiSelectMode) {
     exitMultiSelectMode();
-  }
-  if (id !== "kids-bible") {
-    delete appShell.dataset.kidsReader;
   }
   appShell.dataset.activeScreen = id;
   try {
@@ -2913,7 +2813,7 @@ function openHomeMenu() {
   homeMenuLayer.setAttribute("aria-hidden", "false");
   homeMenuLayer.classList.add("is-open");
   homeMenuToggle?.setAttribute("aria-expanded", "true");
-  navigator.vibrate?.(8);
+  if (!window.appButtonHaptic) navigator.vibrate?.(8);
   window.setTimeout(() => (homeMenuDrawer.querySelector("[data-home-menu-close]") || homeMenuDrawer).focus(), 20);
 }
 
@@ -2984,9 +2884,8 @@ readerScreen?.addEventListener("scroll", () => {
 function showModal(panel) {
   const isNotePanel = panel === noteEditorPanel;
   if (!isNotePanel) {
-    [searchPanel, verseSheet, verseAiPanel, noteEditorPanel].forEach((item) => item?.classList.remove("is-visible"));
+    [verseSheet, verseAiPanel, noteEditorPanel].forEach((item) => item?.classList.remove("is-visible"));
   } else {
-    searchPanel?.classList.remove("is-visible");
     verseSheet?.classList.remove("is-visible");
     verseAiPanel?.classList.remove("is-visible");
   }
@@ -3011,7 +2910,7 @@ function closeModal(options = {}) {
   if (noteEditorPanel?.classList.contains("is-visible") && !options.preserveNoteAddMode) {
     noteEditorAddingVerses = false;
   }
-  [searchPanel, verseSheet, verseAiPanel, noteEditorPanel].forEach((item) => item?.classList.remove("is-visible"));
+  [verseSheet, verseAiPanel, noteEditorPanel].forEach((item) => item?.classList.remove("is-visible"));
   verseSheet?.classList.remove("is-original-language");
   modalLayer.hidden = true;
   delete appShell.dataset.modal;
@@ -3153,7 +3052,6 @@ function updateFocusedVerseFromScroll() {
   selectedVerseData = getVerseDataFromElement(nextVerse);
   if (selectedVerse) selectedVerse.textContent = selectedVerseData.reference;
   syncVerseActionStates();
-  navigator.vibrate?.(8);
 }
 
 let verseSheetTouchStartY = 0;
@@ -3230,7 +3128,12 @@ function getVersionDedupeKey(version) {
 
 function dedupeVersions(versions) {
   const seen = new Set();
+  const excludedVersions = new Set(["t4t", "bsb", "englishkjv", "engkjv", "jnd", "lsv"]);
   return versions.filter((version) => {
+    const normalize = (value) => String(value || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+    if ([version.abbreviation, version.name, version.id].some((value) => excludedVersions.has(normalize(value)))) {
+      return false;
+    }
     const key = getVersionDedupeKey(version);
     if (seen.has(key)) {
       return false;
@@ -3274,7 +3177,7 @@ function getOriginalLanguage(bookId = readerState.bookId) {
 }
 
 function getRemoteFallbackVersion(localVersionId) {
-  const remoteVersions = readerState.versions.filter((version) => version.source === "api-bible");
+  const remoteVersions = remoteBibleVersions;
 
   if (localVersionId === "local-kjv") {
     return (
@@ -3412,7 +3315,7 @@ async function fetchRemoteChapter(version, options = {}) {
     bookId: readerState.bookId,
     chapter: String(readerState.chapter),
   });
-  const response = await fetch(`/api/bible/chapter?${params.toString()}`);
+  const response = await fetch(apiUrl(`/api/bible/chapter?${params.toString()}`));
   const payload = await response.json();
 
   if (!response.ok) {
@@ -3450,7 +3353,6 @@ function renderChapter(chapter, parallelChapters = []) {
 
   readerSource.textContent = `${book.name} ${readerState.chapter} · ${readerState.parallelEnabled ? "Parallel" : `${getVersionLanguageFlag(version)} ${versionName}`}`;
   readerChapter.textContent = readerState.chapter;
-  originalLanguageLabel.textContent = getOriginalLanguage(book.id).label;
   copyrightNote.textContent = chapter.copyright || "";
 
   if (window.reactBibleChapterMounted) {
@@ -3478,10 +3380,7 @@ function renderChapter(chapter, parallelChapters = []) {
   if (!visibleVerses.length) {
     versesList.innerHTML = `
       ${filterNotice}
-      <div class="reader-empty">
-        <strong>Aucun verset highlighté dans ce chapitre.</strong>
-        <span>Highlight un verset, puis utilise Cible pour l'isoler ici.</span>
-      </div>
+      <p class="reader-empty reader-empty-highlight">No highlighted verses.</p>
     `;
     bindReaderFilterActions();
     return;
@@ -3775,7 +3674,7 @@ function renderParallelOptions() {
   ];
 
   const options = [
-    '<option value="">Comparer avec</option>',
+    '<option value="">Compare with</option>',
     ...readerState.versions
       .filter((version) => version.id !== readerState.versionId)
       .map((version) => `<option value="${escapeAttr(version.id)}">${escapeHtml(getVersionMenuLabel(version))}</option>`),
@@ -3818,7 +3717,7 @@ function emitBibleChapterChange() {
 
 async function loadRemoteVersions() {
   try {
-    const response = await fetch("/api/bible/versions");
+    const response = await fetch(apiUrl("/api/bible/versions"));
     if (!response.ok) {
       return;
     }
@@ -3828,6 +3727,8 @@ async function loadRemoteVersions() {
     if (!remoteVersions.length) {
       return;
     }
+
+    remoteBibleVersions = remoteVersions;
 
     readerState.versions = dedupeVersions([
       ...LOCAL_VERSIONS,
@@ -4374,7 +4275,7 @@ function renderNoteEditorVerseChips() {
   noteEditorVerseChips.innerHTML = `
     <button type="button" class="note-editor-verse-summary" data-note-verses-toggle aria-expanded="false">
       <span class="note-editor-verse-summary-copy">
-        <strong>Voir les versets</strong>
+        <strong>View verses</strong>
       </span>
       <i data-lucide="chevron-down" aria-hidden="true"></i>
     </button>
@@ -4666,10 +4567,10 @@ function handleVerseAiSubmit(event) {
       <div class="ai-message-stack">
         <div class="message-body shining-text" data-verse-ai-pending>Brother AI is thinking with ${escapeHtml(verseAiContextData.reference)}...</div>
         <div class="ai-message-actions">
-          <button type="button" class="ai-action-button" data-ai-action="copy" aria-label="Copier la réponse" title="Copier">
+          <button type="button" class="ai-action-button" data-ai-action="copy" aria-label="Copy response" title="Copy">
             <i data-lucide="copy"></i>
           </button>
-          <button type="button" class="ai-action-button" data-ai-action="bookmark" aria-label="Bookmark la réponse" title="Bookmark">
+          <button type="button" class="ai-action-button" data-ai-action="bookmark" aria-label="Bookmark response" title="Bookmark">
             <i data-lucide="bookmark"></i>
           </button>
         </div>
@@ -4692,7 +4593,7 @@ async function requestVerseAiResponse(question) {
     if (containsPersonalContactInfo(question)) {
       throw new Error("For your safety, do not include an email address or phone number in AI messages.");
     }
-    const response = await fetch("/api/ai/verse", {
+    const response = await fetch(apiUrl("/api/ai/verse"), {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -4851,10 +4752,10 @@ function renderAiMessageActions(messageId) {
   const bookmarked = Boolean(savedState.aiBookmarks[messageId]);
   return `
     <div class="ai-message-actions">
-      <button type="button" class="ai-action-button" data-ai-action="copy" aria-label="Copier la réponse" title="Copier">
+      <button type="button" class="ai-action-button" data-ai-action="copy" aria-label="Copy response" title="Copy">
         <i data-lucide="copy"></i>
       </button>
-      <button type="button" class="ai-action-button${bookmarked ? " is-active" : ""}" data-ai-action="bookmark" aria-label="Bookmark la réponse" title="Bookmark">
+      <button type="button" class="ai-action-button${bookmarked ? " is-active" : ""}" data-ai-action="bookmark" aria-label="Bookmark response" title="Bookmark">
         <i data-lucide="bookmark"></i>
       </button>
     </div>
@@ -4891,7 +4792,7 @@ async function showOriginalLanguagePanel() {
       chapter: String(selectedVerseData.chapter),
       verse: String(selectedVerseData.number),
     });
-    const response = await fetch(`/api/original-language?${params.toString()}`);
+    const response = await fetch(apiUrl(`/api/original-language?${params.toString()}`));
     const payload = await response.json();
 
     if (!response.ok) {
@@ -5323,6 +5224,7 @@ function closeProfileSavedPanel() {
   profileViewButtons.forEach((button) => button.classList.remove("is-active"));
   if (profileSavedPanel) {
     profileSavedPanel.hidden = true;
+    window.unmountProfileSavedNoteCards?.(profileSavedPanel.querySelector("[data-profile-saved-notes-root]"));
     profileSavedPanel.innerHTML = "";
   }
 }
@@ -5348,6 +5250,8 @@ function renderProfileSavedPanel(type) {
     return;
   }
 
+  window.unmountProfileSavedNoteCards?.(profileSavedPanel.querySelector("[data-profile-saved-notes-root]"));
+
   activeProfileView = type;
   profileViewButtons.forEach((button) => {
     button.classList.toggle("is-active", button.dataset.profileView === type);
@@ -5365,28 +5269,15 @@ function renderProfileSavedPanel(type) {
         <i data-lucide="search"></i>
         <input type="search" data-notes-search placeholder="Search notes..." aria-label="Search notes" />
       </label>
-      ${rows.length ? rows.map((row, index) => `
-        <article class="saved-note-card" data-note-searchable="${escapeAttr(`${row.title || "Untitled note"} ${row.items.map((item) => item.reference || "").join(" ")} ${row.note || ""}`.toLowerCase())}">
-          <button class="saved-note-open" data-saved-note="${index}">
-            <strong class="saved-note-card-title">${escapeHtml(row.title || "Untitled note")}</strong>
-            <span class="saved-note-card-heading">
-              <i data-lucide="notebook-pen"></i>
-              <strong>${row.items.length} verse${row.items.length === 1 ? "" : "s"}</strong>
-            </span>
-            <span class="saved-note-references">${row.items.map((item) => escapeHtml(item.reference || "")).join(" · ")}</span>
-            <p>${escapeHtml(row.note || "No preview available")}</p>
-          </button>
-        </article>
-      `).join("") : '<p class="saved-empty">No notes yet. Create a note from the Bible tab and it will appear here.</p>'}
+      ${rows.length ? '<div class="profile-saved-note-list" data-profile-saved-notes-root></div>' : '<p class="saved-empty">No notes yet. Create a note from the Bible tab and it will appear here.</p>'}
     `;
+    const noteRoot = profileSavedPanel.querySelector("[data-profile-saved-notes-root]");
+    window.renderProfileSavedNoteCards?.(noteRoot, rows, openSavedNote);
     profileSavedPanel.querySelector("[data-notes-search]")?.addEventListener("input", (event) => {
       const query = event.target.value.trim().toLowerCase();
       profileSavedPanel.querySelectorAll("[data-note-searchable]").forEach((card) => {
         card.hidden = Boolean(query) && !card.dataset.noteSearchable.includes(query);
       });
-    });
-    profileSavedPanel.querySelectorAll("[data-saved-note]").forEach((button) => {
-      button.addEventListener("click", () => openSavedNote(rows[Number(button.dataset.savedNote)]));
     });
     refreshIcons();
     return;
@@ -5709,36 +5600,6 @@ async function handleVerseAction(action) {
   }
 }
 
-document.querySelectorAll("[data-kids-book]").forEach((button) => {
-  button.addEventListener("click", () => openKidsBibleBook(button.dataset.kidsBook));
-});
-
-document.querySelector("[data-kids-reader-back]")?.addEventListener("click", closeKidsBibleReader);
-if (kidsBiblePageSelect) {
-  kidsBiblePageSelect.addEventListener("change", () => {
-    kidsBibleState.page = Number(kidsBiblePageSelect.value);
-    renderKidsBiblePage();
-  });
-}
-let kidsSwipeStartX = 0;
-let kidsSwipeStartY = 0;
-kidsBibleImageWrap?.addEventListener("touchstart", (event) => {
-  const touch = event.touches[0];
-  kidsSwipeStartX = touch?.clientX || 0;
-  kidsSwipeStartY = touch?.clientY || 0;
-}, { passive: true });
-kidsBibleImageWrap?.addEventListener("touchend", (event) => {
-  const touch = event.changedTouches[0];
-  const deltaX = (touch?.clientX || 0) - kidsSwipeStartX;
-  const deltaY = (touch?.clientY || 0) - kidsSwipeStartY;
-  if (Math.abs(deltaX) < 45 || Math.abs(deltaX) < Math.abs(deltaY)) return;
-  changeKidsBiblePage(deltaX < 0 ? 1 : -1);
-}, { passive: true });
-
-document.querySelectorAll("[data-open-search]").forEach((button) => {
-  button.addEventListener("click", () => showModal(searchPanel));
-});
-
 document.querySelectorAll("[data-close-modal]").forEach((button) => {
   button.addEventListener("click", closeModal);
 });
@@ -5778,7 +5639,7 @@ profileViewButtons.forEach((button) => {
 
 document.addEventListener("profile:tab-change", (event) => {
   const tab = event.detail?.tab;
-  if (["preferences", "information", "cloud"].includes(tab)) {
+  if (["preferences", "information", "cloud", "prayers"].includes(tab)) {
     setProfileTab(tab);
   }
 });
@@ -5823,9 +5684,19 @@ function renderHomeLibraryTab(tab) {
   }
 
   renderProfileSavedPanel(tab);
+  const fallbackNoteRows = tab === "notes" ? getSavedNoteRows() : [];
+  window.unmountProfileSavedNoteCards?.(profileSavedPanel.querySelector("[data-profile-saved-notes-root]"));
   homeLibraryPanel.innerHTML = profileSavedPanel.innerHTML;
   profileSavedPanel.innerHTML = "";
   profileSavedPanel.hidden = true;
+  const homeNoteRoot = homeLibraryPanel.querySelector("[data-profile-saved-notes-root]");
+  window.renderProfileSavedNoteCards?.(homeNoteRoot, fallbackNoteRows, openSavedNote);
+  homeLibraryPanel.querySelector("[data-notes-search]")?.addEventListener("input", (event) => {
+    const query = event.target.value.trim().toLowerCase();
+    homeLibraryPanel.querySelectorAll("[data-note-searchable]").forEach((card) => {
+      card.hidden = Boolean(query) && !card.dataset.noteSearchable.includes(query);
+    });
+  });
   homeLibraryPanel.querySelectorAll("[data-saved-row]").forEach((button) => {
     button.addEventListener("click", () => openSavedVerse(getSavedRows(tab)[Number(button.dataset.savedRow)]));
   });
@@ -5932,7 +5803,7 @@ window.homeLibraryBridge = {
   },
 };
 
-renderHomeLibraryTab("notes");
+renderHomeLibraryTab("highlights");
 
 function updateNoteColorSwatch(input, selector) {
   input?.closest("label")?.querySelector(selector)?.style.setProperty("background", input.value);
@@ -6243,10 +6114,6 @@ document.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && !modalLayer.hidden) {
     closeModal();
   }
-  if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
-    event.preventDefault();
-    showModal(searchPanel);
-  }
 });
 
 function persistNotesBeforeBackground() {
@@ -6264,14 +6131,11 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
-document.addEventListener("click", (event) => {
-  const searchButton = event.target.closest("[data-open-search]");
-  if (searchButton) {
-    showModal(searchPanel);
-  }
-});
 
 window.addEventListener("pagehide", persistNotesBeforeBackground);
+window.addEventListener("online", () => {
+  syncPendingState().catch(error => console.warn("Preference retry failed:", error.message));
+});
 
 modalLayer.addEventListener("click", (event) => {
   if (event.target === modalLayer) {
@@ -6327,7 +6191,15 @@ function getBibleChapterSnapshot() {
     versionName: chapter?.versionName || version.name,
     versionLanguage: version.language,
     chapterCount: book.chapters,
+    bookId: book.id,
+    versionId: version.id,
     bookName: book.name,
+    quizSource: {
+      reference: `${book.name} ${readerState.chapter}`,
+      version: chapter?.versionName || version.name,
+      verses: (chapter?.verses || []).filter(verse => Number(verse.number) > 0 && verse.text)
+        .map(verse => ({ number: Number(verse.number), text: verse.text })),
+    },
     books: BOOKS.map((item) => ({ id: item.id, name: item.name, chapters: item.chapters })),
     sourceLabel: `${book.name} ${readerState.chapter} · ${readerState.parallelEnabled ? "Parallel" : `${getVersionLanguageFlag(version)} ${chapter?.versionName || version.name}`}`,
     copyright: chapter?.copyright || "",
@@ -6352,54 +6224,44 @@ function getBibleChapterSnapshot() {
   };
 }
 
-window.kidsBibleBridge = {
-  getSnapshot() {
-    const books = Object.entries(kidsBibleBooks).map(([id, book]) => {
-      const page = id === kidsBibleState.bookId ? kidsBibleState.page : readKidsBiblePage(id);
-      return {
-        id,
-        title: book.title,
-        totalPages: book.totalPages,
-        page,
-        progress: Math.round((page / book.totalPages) * 100),
-        previewSrc: getKidsBiblePagePath(1, id),
-      };
-    });
-    const currentBook = books.find((book) => book.id === kidsBibleState.bookId) || books[0];
-    return {
-      reader: appShell.dataset.kidsReader === "true",
-      bookId: currentBook.id,
-      page: kidsBibleState.page,
-      progress: Math.round((kidsBibleState.page / currentBook.totalPages) * 100),
-      imageSrc: getKidsBiblePagePath(kidsBibleState.page, currentBook.id),
-      currentBook,
-      books,
-    };
+// Private badge records use the existing per-user state table and its RLS policies.
+window.kidsBadgesBridge = {
+  getUserId: () => supabaseUser?.id || null,
+  async load() {
+    const userId = supabaseUser?.id;
+    if (!supabaseClient || !userId) return [];
+    const { data, error } = await supabaseClient.from("user_app_state")
+      .select("state_key,payload").eq("user_id", userId).like("state_key", "kids.badge.v1.%");
+    if (error) throw error;
+    return (data || []).filter(row => row.state_key === `kids.badge.v1.${row.payload?.adventureId}`).map(row => row.payload);
   },
-  open(bookId) {
-    openKidsBibleBook(bookId);
-    emitKidsBibleChange();
-  },
-  close() {
-    closeKidsBibleReader();
-    emitKidsBibleChange();
-  },
-  setPage(page) {
-    const book = getKidsBibleBook(kidsBibleState.bookId);
-    kidsBibleState.page = Math.max(1, Math.min(book.totalPages, Number(page) || 1));
-    renderKidsBiblePage();
-    emitKidsBibleChange();
-  },
-  changePage(delta) {
-    const book = getKidsBibleBook(kidsBibleState.bookId);
-    const nextPage = kidsBibleState.page + Number(delta || 0);
-    if (nextPage < 1 || nextPage > book.totalPages) return;
-    kidsBibleState.page = nextPage;
-    renderKidsBiblePage();
-    emitKidsBibleChange();
+  async save(adventureId, earnedAt) {
+    const userId = supabaseUser?.id;
+    if (!supabaseClient || !userId) throw new Error("Sign in to save badges.");
+    const { error } = await supabaseClient.from("user_app_state").upsert({
+      user_id: userId, state_key: `kids.badge.v1.${adventureId}`,
+      payload: { adventureId, earnedAt }, updated_at: new Date().toISOString(),
+    }, { onConflict: "user_id,state_key", ignoreDuplicates: true });
+    if (error) throw error;
   },
 };
+
+async function readQuizResponse(response) {
+  const result = await response.json().catch(() => null);
+  if (!response.ok || !result) {
+    throw new Error(result?.error || "The quiz service could not be reached. Please try again shortly.");
+  }
+  return result;
+}
+
 window.bibleReaderBridge = {
+  async createChapterQuiz(source, signal) {
+    const response = await fetch(apiUrl("/api/bible/quiz"), {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(source), signal,
+    });
+    return readQuizResponse(response);
+  },
   getChapterSnapshot() {
     return getBibleChapterSnapshot();
   },
@@ -6617,20 +6479,18 @@ window.noteEditorBridge = {
 };
 window.profileBridge = {
   selectTab(tab) {
-    if (!["preferences", "information", "cloud"].includes(tab)) return;
+    if (!["preferences", "information", "cloud", "prayers"].includes(tab)) return;
     setProfileTab(tab);
   },
   getHero() {
     const coverImage = savedProfile.coverImage || defaultProfile.coverImage;
     return {
       displayName: getEffectiveProfileName(),
+      welcome: getProfileWelcome(),
       streakLabel: getProfileStreakLabel(),
       coverImage,
       coverOptions: profileCoverOptions,
     };
-  },
-  async prepareCover(file) {
-    return compressProfileCover(file);
   },
   saveCover(coverImage) {
     savedProfile.coverImage = coverImage || defaultProfile.coverImage;
@@ -6666,6 +6526,17 @@ window.profileBridge = {
     const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
     setAuthFeedback(error ? error.message : "Signed in. Syncing your data...", Boolean(error));
   },
+  async changePassword(password, confirmation) {
+    if (!supabaseClient || !supabaseUser) return { error: "Sign in before changing your password." };
+    if (password.length < 6) return { error: "Use at least 6 characters." };
+    if (password !== confirmation) return { error: "The passwords do not match." };
+    try {
+      const { error } = await supabaseClient.auth.updateUser({ password });
+      return { error: error?.message || "" };
+    } catch {
+      return { error: "Could not change your password. Please try again." };
+    }
+  },
   async forgotPassword(email) {
     if (!supabaseClient) {
       setAuthFeedback("Supabase is not configured yet.", true);
@@ -6692,7 +6563,7 @@ window.profileBridge = {
     }
 
     try {
-      const response = await fetch("/api/account/delete", {
+      const response = await fetch(apiUrl("/api/account/delete"), {
         method: "POST",
         headers: { authorization: `Bearer ${session.access_token}` },
       });
@@ -6735,15 +6606,27 @@ window.profileBridge = {
     document.dispatchEvent(new CustomEvent("profile:hero-change"));
   },
   getPreferences() {
+    const savedHapticsStrength = localStorage.getItem("brother.hapticsStrength") || "1";
     return {
       background: savedPreferences.background,
       textSize: savedPreferences.textSize,
       accent: savedPreferences.accent,
+      hapticsStrength: ({ light: "1", medium: "3", strong: "5" })[savedHapticsStrength] || savedHapticsStrength,
       textSizes: Object.keys(textSizeOptions),
       accents: Object.keys(accentOptions),
     };
   },
   setPreference(type, value) {
+    if (type === "hapticsStrength") {
+      if (["off", "1", "2", "3", "4", "5"].includes(value)) {
+        localStorage.setItem("brother.hapticsStrength", value);
+        markPendingSync("brother.hapticsStrength");
+        syncPendingState().catch(error => console.warn("Vibration preference sync failed:", error.message));
+        window.appButtonHaptic?.();
+        document.dispatchEvent(new CustomEvent("profile:preferences-change"));
+      }
+      return;
+    }
     if (type === "background") savedPreferences.background = value;
     if (type === "textSize" && textSizeOptions[value]) savedPreferences.textSize = value;
     if (type === "accent" && accentOptions[value]) savedPreferences.accent = value;
@@ -6900,7 +6783,54 @@ async function moderatePrayerRequest(requestId, nextStatus) {
   await loadPrayerFromSupabase();
 }
 
+const pendingPrayerToggles = new Map();
+
 window.prayerBridge = {
+  async intercessionVotes(payload) {
+    const session = supabaseClient ? await supabaseClient.auth.getSession() : null;
+    const token = session?.data?.session?.access_token;
+    const response = await fetch(apiUrl("/api/prayer/intercession-votes"), {
+      method: payload ? "POST" : "GET",
+      headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(payload ? { "Content-Type": "application/json" } : {}) },
+      ...(payload ? { body: JSON.stringify(payload) } : {}),
+    });
+    const data = await response.json();
+    if (!response.ok) throw Object.assign(new Error(data.error || "Voting is unavailable. Please try again."), { status: response.status });
+    return data;
+  },
+  async intercessionSessions(payload) {
+    const session = supabaseClient ? await supabaseClient.auth.getSession() : null;
+    const token = session?.data?.session?.access_token;
+    const response = await fetch(apiUrl("/api/prayer/intercession-sessions"), {
+      method: payload ? "POST" : "GET",
+      headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(payload ? { "Content-Type": "application/json" } : {}) },
+      ...(payload ? { body: JSON.stringify(payload) } : {}),
+    });
+    const data = await response.json();
+    if (!response.ok) throw Object.assign(new Error(data.error || "Prayer stats are unavailable. Please try again."), { status: response.status });
+    return data;
+  },
+  async intercessionReminders(payload) {
+    const session = supabaseClient ? await supabaseClient.auth.getSession() : null;
+    const token = session?.data?.session?.access_token;
+    const response = await fetch(apiUrl("/api/prayer/intercession-reminders"), {
+      method: payload ? "PUT" : "GET",
+      headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(payload ? { "Content-Type": "application/json" } : {}) },
+      ...(payload ? { body: JSON.stringify(payload) } : {}),
+    });
+    const data = await response.json();
+    if (!response.ok) throw Object.assign(new Error(data.error || "Session reminders are unavailable. Please try again."), { status: response.status });
+    return data;
+  },
+  getSelectableBackgroundOptions() {
+    return profileCoverOptions.map((option) => ({
+      ...option,
+      index: prayerCardBackgrounds.findIndex((background) => background.src === option.src),
+    }));
+  },
+  getBackgroundOptions() {
+    return prayerCardBackgrounds.map((option) => ({ ...option }));
+  },
   getSnapshot() {
     const currentPrayerUserId = supabaseUser?.id || prayerUserId;
     const sortPrayerRequests = (requests) => requests.sort((a, b) => {
@@ -6944,6 +6874,9 @@ window.prayerBridge = {
       moderationQueue: prayerModerator ? formatPrayerRequests(prayerState.requests.filter((request) => getPrayerStatus(request) === "pending")) : [],
       requests,
       spotlightRequests,
+      ownRequests: formatPrayerRequests(prayerState.requests
+        .filter((request) => supabaseClient ? Boolean(supabaseUser) && request.ownerId === supabaseUser.id : !request.ownerId || request.ownerId === prayerUserId)
+        .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)))),
     };
   },
   setPageTab(tab) {
@@ -6987,26 +6920,56 @@ window.prayerBridge = {
       setPrayerBridgeFeedback("Sign in to record your prayer.");
       return;
     }
-    if (supabaseClient && supabaseUser) {
-      const { error } = await supabaseClient.rpc(request.prayedBy?.includes(supabaseUser.id) ? "unpray_for_request" : "pray_for_request", { request_uuid: request.id });
-      if (error) {
-        setPrayerBridgeFeedback(error.message);
-        return;
+    const userId = supabaseUser?.id || prayerUserId;
+    const wasPrayed = (request.prayedBy || []).includes(userId);
+    let pending = pendingPrayerToggles.get(requestId);
+    const alreadySyncing = Boolean(pending);
+    if (!pending) {
+      pending = { confirmed: wasPrayed, desired: wasPrayed, count: request.prayerCount || 0 };
+      pendingPrayerToggles.set(requestId, pending);
+    }
+    pending.desired = !pending.desired;
+    const applyState = () => {
+      const current = prayerState.requests.find((item) => item.id === requestId);
+      if (!current) return;
+      const others = (current.prayedBy || []).filter((id) => id !== userId);
+      current.prayedBy = pending.desired ? [...others, userId] : others;
+      current.prayerCount = Math.max(0, pending.count + Number(pending.desired) - Number(pending.confirmed));
+      renderPrayerPage();
+    };
+    applyState();
+    if (alreadySyncing) return;
+    try {
+      if (supabaseClient && supabaseUser) {
+        // A second click updates the desired state while the first RPC finishes.
+        while (pending.desired !== pending.confirmed) {
+          const target = pending.desired;
+          let { data, error } = await supabaseClient.rpc(target ? "pray_for_request" : "unpray_for_request", { request_uuid: requestId });
+          if (!target && error?.code === "PGRST202") {
+            const { data: sessionData } = await supabaseClient.auth.getSession();
+            const response = await fetch(apiUrl("/api/prayer/cancel"), {
+              method: "POST",
+              headers: { "content-type": "application/json", authorization: `Bearer ${sessionData?.session?.access_token || ""}` },
+              body: JSON.stringify({ requestId }),
+            });
+            const payload = await response.json();
+            error = response.ok ? null : new Error(payload.error || "Your prayer could not be cancelled.");
+            data = payload.count;
+          }
+          if (error) throw error;
+          pending.count = typeof data === "number" ? data : Math.max(0, pending.count + (target ? 1 : -1));
+          pending.confirmed = target;
+          applyState();
+        }
       }
-      await loadPrayerFromSupabase();
-      return;
+      savePrayerRequests();
+    } catch (error) {
+      pending.desired = pending.confirmed;
+      applyState();
+      setPrayerBridgeFeedback(error.message || "Your prayer could not be updated.");
+    } finally {
+      pendingPrayerToggles.delete(requestId);
     }
-    request.prayedBy ||= [];
-    const prayerIndex = request.prayedBy.indexOf(prayerUserId);
-    if (prayerIndex >= 0) {
-      request.prayedBy.splice(prayerIndex, 1);
-      request.prayerCount = Math.max(0, request.prayerCount - 1);
-    } else {
-      request.prayedBy.push(prayerUserId);
-      request.prayerCount += 1;
-    }
-    savePrayerRequests();
-    renderPrayerPage();
   },
   setCategory(category) {
     setPrayerCategory(category);
@@ -7087,6 +7050,21 @@ window.prayerBridge = {
   },
 };
 window.aiBridge = {
+  async openBibleReference(reference) {
+    const match = String(reference).match(/^(.+?)\.?\s+(\d{1,3}):(\d{1,3})/);
+    if (!match) return;
+    const normalize = (value) => value.toLowerCase().replace(/[^a-z0-9]/g, "");
+    const aliases = { ex: "Exodus", kgs: "Kings", chr: "Chronicles", ps: "Psalms", song: "Song of Solomon", songofsongs: "Song of Solomon", mk: "Mark", lk: "Luke", jn: "John", jas: "James" };
+    const entered = normalize(match[1]);
+    const prefix = entered.match(/^[123]/)?.[0] || "";
+    const shortName = entered.slice(prefix.length);
+    const name = prefix + normalize(aliases[shortName] || shortName);
+    const book = BOOKS.find((item) => normalize(item.name) === name)
+      || BOOKS.find((item) => normalize(item.name).startsWith(name));
+    const chapter = Number(match[2]);
+    if (!book || chapter < 1 || chapter > book.chapters) return;
+    await openSavedVerse({ bookId: book.id, chapter, number: Number(match[3]) });
+  },
   getSnapshot() {
     const memory = getRecentAiMemory();
     const messages = memory.length ? memory.map((item) => ({ ...item })) : [{ role: "assistant", text: "Ask me about a verse, doctrine, original language, cross references, or biblical context." }];
@@ -7113,7 +7091,7 @@ window.aiBridge = {
     if (containsPersonalContactInfo(prompt)) {
       throw new Error("For your safety, do not send an email address or phone number to Brother AI.");
     }
-    const response = await fetch("/api/ai/chat", {
+    const response = await fetch(apiUrl("/api/ai/chat"), {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ prompt, history, audience: "teen" }),
@@ -7126,14 +7104,14 @@ window.aiBridge = {
     document.dispatchEvent(new CustomEvent("ai:state-change"));
     return responseText;
   },
-  async sendDebate(prompt, history = []) {
+  async sendDebate(prompt, history = [], options = {}) {
     if (containsPersonalContactInfo(prompt)) {
       throw new Error("For your safety, do not send an email address or phone number to Brother AI.");
     }
-    const response = await fetch("/api/ai/chat", {
+    const response = await fetch(apiUrl("/api/ai/chat"), {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ prompt, history, mode: "debate", audience: "teen" }),
+      body: JSON.stringify({ prompt, history, mode: options.mode === "coach" ? "coach" : "debate", difficulty: options.difficulty || "Beginner", personality: options.personality || "serious", audience: "teen" }),
     });
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.error || "AI request failed.");
@@ -7143,7 +7121,7 @@ window.aiBridge = {
     if (containsPersonalContactInfo(prompt)) {
       throw new Error("For your safety, do not send an email address or phone number to Brother AI.");
     }
-    const response = await fetch("/api/ai/chat", {
+    const response = await fetch(apiUrl("/api/ai/chat"), {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ prompt, history, mode: "coach", audience: "teen" }),
@@ -7152,14 +7130,14 @@ window.aiBridge = {
     if (!response.ok) throw new Error(payload.error || "AI request failed.");
     return payload.text || "No response text returned.";
   },
-  async evaluateDebate(prompt) {
+  async evaluateDebate(prompt, options = {}) {
     if (containsPersonalContactInfo(prompt)) {
       throw new Error("For your safety, do not send an email address or phone number to Brother AI.");
     }
-    const response = await fetch("/api/ai/chat", {
+    const response = await fetch(apiUrl("/api/ai/chat"), {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ prompt, history: [], mode: "evaluation", audience: "teen" }),
+      body: JSON.stringify({ prompt, history: [], mode: "evaluation", difficulty: options.difficulty || "Beginner", audience: "teen" }),
     });
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.error || "AI evaluation failed.");
@@ -7209,3 +7187,103 @@ initAuthForm();
 initSupabase();
 renderApologetics();
 refreshIcons();
+
+
+// Bible search uses the Home navigation drawer surface and container.
+(() => {
+  const layer = document.querySelector('[data-bible-menu-layer]');
+  const drawer = document.querySelector('[data-bible-menu-drawer]');
+  if (!layer || !drawer) return;
+  let lastFocus;
+  function close(restoreFocus = true) {
+    if (!layer.classList.contains('is-open')) return;
+    layer.classList.remove('is-open');
+    layer.setAttribute('aria-hidden', 'true');
+    layer.inert = true;
+    document.querySelectorAll('[data-bible-menu-toggle]').forEach(button => button.setAttribute('aria-expanded', 'false'));
+    if (restoreFocus && lastFocus?.isConnected) lastFocus.focus();
+  }
+  document.addEventListener('click', event => {
+    const toggle = event.target.closest('[data-bible-menu-toggle]');
+    if (!toggle) return;
+    closeHomeMenu({ restoreFocus: false });
+    lastFocus = toggle;
+    layer.classList.add('is-open');
+    layer.setAttribute('aria-hidden', 'false');
+    layer.inert = false;
+    toggle.setAttribute('aria-expanded', 'true');
+    drawer.querySelectorAll('[data-nav]').forEach(button => button.classList.toggle('is-active', button.dataset.nav === 'bible'));
+    drawer.querySelector('[data-bible-menu-close]')?.focus();
+  });
+  layer.querySelectorAll('[data-bible-menu-close]').forEach(button => button.addEventListener('click', () => close()));
+  drawer.querySelectorAll('[data-nav]').forEach(button => button.addEventListener('click', () => {
+    close(false);
+    setScreen(button.dataset.nav);
+  }));
+  document.addEventListener('keydown', event => {
+    if (!layer.classList.contains('is-open')) return;
+    if (event.key === 'Escape') { event.preventDefault(); close(); return; }
+    if (event.key !== 'Tab') return;
+    const controls = [...drawer.querySelectorAll('a[href], button:not([disabled]), input:not([disabled])')].filter(element => !element.hidden);
+    const first = controls[0], last = controls.at(-1);
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+  });
+  const form = drawer.querySelector('[data-bible-search-form]');
+  const input = form.querySelector('input');
+  const status = drawer.querySelector('[data-bible-search-status]');
+  const results = drawer.querySelector('[data-bible-search-results]');
+  const more = drawer.querySelector('[data-bible-search-more]');
+  const submit = form.querySelector('[type="submit"]');
+  const placeholders = { topic: 'Try anxiety or forgiveness…', word: 'Try mercy…', expression: 'Try love your enemies…' };
+  let mode = 'topic', offset = 0, shown = 0, controller, searchVersion;
+  function setMode(next) {
+    controller?.abort();
+    mode = next;
+    form.querySelectorAll('[data-bible-search-mode]').forEach(button => {
+      const selected = button.dataset.bibleSearchMode === mode;
+      button.classList.toggle('is-active', selected);
+      button.setAttribute('aria-pressed', String(selected));
+    });
+    input.placeholder = placeholders[mode];
+    results.replaceChildren(); more.hidden = true; submit.disabled = false;
+    status.textContent = 'Choose a filter and enter your search.';
+  }
+  async function search(append = false) {
+    const query = input.value.trim();
+    if (!query) { input.focus(); return; }
+    controller?.abort();
+    const current = new AbortController(); controller = current;
+    if (!append) { searchVersion = getVersion(readerState.versionId); offset = 0; shown = 0; results.replaceChildren(); }
+    const remote = searchVersion.source === 'local' ? getRemoteFallbackVersion(searchVersion.id) : searchVersion;
+    if (!remote) { status.textContent = 'Search needs an online Bible translation. Please wait for translations to load.'; return; }
+    more.hidden = true; submit.disabled = true;
+    status.textContent = `Searching ${searchVersion.abbreviation || searchVersion.name}…`;
+    try {
+      const params = new URLSearchParams({ bibleId: remote.id, query, mode, offset: String(offset) });
+      const response = await fetch(apiUrl(`/api/bible/search?${params}`), { signal: current.signal });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || 'Search could not be completed.');
+      if (controller !== current) return;
+      for (const verse of payload.results || []) {
+        const match = verse.id?.match(/^([A-Z0-9]{3})\.(\d+)\.(\d+)/);
+        if (!match) continue;
+        const button = document.createElement('button'); button.type = 'button'; button.className = 'bible-menu-search-result';
+        const reference = document.createElement('strong'); reference.textContent = verse.reference;
+        const text = document.createElement('span'); text.textContent = new DOMParser().parseFromString(verse.text || '', 'text/html').body.textContent.trim();
+        button.append(reference, text);
+        const versionId = searchVersion.id;
+        button.addEventListener('click', async () => { close(false); readerState.versionId = versionId; await openSavedVerse({ bookId: match[1], chapter: Number(match[2]), number: Number(match[3]) }); });
+        results.append(button); shown++;
+      }
+      offset = payload.nextOffset || 0; more.hidden = !payload.hasMore;
+      status.textContent = payload.message || (shown ? `${payload.topic ? payload.topic + ' · ' : ''}${shown} results · ${searchVersion.abbreviation || searchVersion.name}` : payload.hasMore ? 'Load more to look for additional matches.' : 'No matching verses. Try another search or translation.');
+    } catch (error) { if (error.name !== 'AbortError') status.textContent = error.message || 'Search is unavailable. Please try again.'; }
+    finally { if (controller === current) submit.disabled = false; }
+  }
+  form.addEventListener('submit', event => { event.preventDefault(); search(); });
+  form.querySelectorAll('[data-bible-search-mode]').forEach(button => button.addEventListener('click', () => setMode(button.dataset.bibleSearchMode)));
+  input.addEventListener('input', () => { controller?.abort(); more.hidden = true; submit.disabled = false; });
+  more.addEventListener('click', () => search(true));
+  window.addEventListener('app:screen-change', () => close(false));
+})();

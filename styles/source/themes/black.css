@@ -1615,8 +1615,8 @@ body .app-shell[data-app-background="black"] #prayer .prayer-header h1 { color: 
 body .app-shell[data-app-background="black"] #prayer .prayer-header p { color: #c7d9ff !important; font-size: 16px; }
 body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs { gap: 5px; margin-bottom: 14px; }
 
-body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button:not(.is-active),
-body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button:not(.is-active):hover {
+body .app-shell[data-app-background="black"] :is(#prayer .prayer-page-tabs, #kids-bible .kids-page-tabs) button:not(.is-active),
+body .app-shell[data-app-background="black"] :is(#prayer .prayer-page-tabs, #kids-bible .kids-page-tabs) button:not(.is-active):hover {
   border: 0 !important;
   border-radius: 999px;
   color: #e3ebff !important;
@@ -1712,7 +1712,7 @@ body .app-shell[data-app-background="black"] #prayer .prayer-wall-search {
 body .app-shell[data-app-background="black"] #prayer .prayer-wall-search input,
 body .app-shell[data-app-background="black"] #prayer .prayer-wall-search input::placeholder { color: #e1eaff !important; }
 
-body .app-shell[data-app-background="black"] #prayer .prayer-board-controls .prayer-filter-row.prayer-category-picker button {
+body .app-shell[data-app-background="black"] :is(#prayer .prayer-board-controls .prayer-filter-row.prayer-category-picker, #home .home-library-tabs) button {
   border: 1px solid rgba(192, 214, 255, .2) !important;
   border-radius: 999px;
   color: #f0f4ff !important;
@@ -1720,7 +1720,7 @@ body .app-shell[data-app-background="black"] #prayer .prayer-board-controls .pra
   box-shadow: none !important;
 }
 
-body .app-shell[data-app-background="black"] #prayer .prayer-board-controls .prayer-filter-row.prayer-category-picker button.is-active {
+body .app-shell[data-app-background="black"] :is(#prayer .prayer-board-controls .prayer-filter-row.prayer-category-picker, #home .home-library-tabs) button.is-active {
   border: 1px solid rgba(216, 240, 255, .82) !important;
   color: #fff !important;
   background: linear-gradient(135deg, #6bd6ff, #548cff 64%, #8c7cff) !important;
@@ -1730,10 +1730,10 @@ body .app-shell[data-app-background="black"] #prayer .prayer-board-controls .pra
 body .app-shell[data-app-background="black"] #prayer .prayer-recent-heading h2 { color: #fff !important; text-shadow: 0 3px 16px rgba(122, 162, 255, .24); }
 body .app-shell[data-app-background="black"] #prayer .prayer-recent-heading > span { color: #c8d9ff !important; }
 
-body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-card,
-body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-card--1,
-body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-card--2,
-body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-card--3 {
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list .prayer-card,
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list .prayer-card--1,
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list .prayer-card--2,
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list .prayer-card--3 {
   border: 1px solid rgba(205, 224, 255, .57) !important;
   border-radius: 24px;
   background: radial-gradient(ellipse at 94% 105%, rgba(112, 117, 255, .27), transparent 43%), linear-gradient(115deg, rgba(34, 68, 119, .72), rgba(24, 48, 100, .7)) !important;
@@ -1742,43 +1742,48 @@ body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-card--
   backdrop-filter: blur(18px) saturate(130%);
 }
 
-body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-card,
-body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-card--1,
-body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-card--2,
-body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-card--3,
-body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-card:not(:last-child) {
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list .prayer-card,
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list .prayer-card--1,
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list .prayer-card--2,
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list .prayer-card--3,
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list .prayer-card:not(:last-child) {
   border: 0 !important;
   border-bottom: 0 !important;
   outline: 0 !important;
   box-shadow: none !important;
 }
 
-body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-card::after {
+/* Prayer cards share Home's neon rail palette and pulse. */
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list .prayer-card::after {
+  --saved-rail-start: #bdeeff;
+  --saved-rail-color: #55caff;
+  --saved-rail-end: #318ee8;
+  --saved-rail-glow: rgba(85, 202, 255, .78);
   top: 10px;
   bottom: 10px;
   left: 0;
-  width: 5px;
+  width: 6px;
   border-radius: 0 5px 5px 0;
-  background: linear-gradient(#9af2ff, #5ab5ff 58%, #b4a6ff) !important;
-  box-shadow: 0 0 11px rgba(109, 211, 255, .78) !important;
+  background: linear-gradient(180deg, var(--saved-rail-start), var(--saved-rail-color) 48%, var(--saved-rail-end)) !important;
+  box-shadow: 0 0 7px var(--saved-rail-glow), 0 0 16px var(--saved-rail-glow) !important;
+  animation: savedCardRailPulse 2.8s ease-in-out infinite;
 }
 
-body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-card:nth-child(4n + 2)::after {
-  background: linear-gradient(#aaffd8, #45dda9 58%, #31a9a2) !important;
-  box-shadow: 0 0 11px rgba(75, 235, 177, .76) !important;
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list .prayer-card:nth-of-type(2n)::after {
+  --saved-rail-start: #b8ffe3;
+  --saved-rail-color: #68e4b2;
+  --saved-rail-end: #23b88c;
+  --saved-rail-glow: rgba(104, 228, 178, .76);
 }
 
-body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-card:nth-child(4n + 3)::after {
-  background: linear-gradient(#ffd5a1, #ff9c68 58%, #e86b91) !important;
-  box-shadow: 0 0 11px rgba(255, 153, 113, .76) !important;
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list .prayer-card:nth-of-type(3n)::after {
+  --saved-rail-start: #efc8ff;
+  --saved-rail-color: #c08cff;
+  --saved-rail-end: #8f5ae4;
+  --saved-rail-glow: rgba(192, 140, 255, .78);
 }
 
-body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-card:nth-child(4n)::after {
-  background: linear-gradient(#e6c6ff, #ae83ff 58%, #7775ff) !important;
-  box-shadow: 0 0 11px rgba(177, 132, 255, .78) !important;
-}
-
-body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-card-category {
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list .prayer-card-category {
   border: 1px solid rgba(184, 218, 255, .63) !important;
   border-radius: 999px;
   color: #edf4ff !important;
@@ -1786,7 +1791,7 @@ body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-card-c
   box-shadow: 0 0 9px rgba(135, 181, 255, .22) !important;
 }
 
-body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-action {
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list .prayer-action {
   width: 42px;
   min-height: 42px;
   border-radius: 15px;
@@ -1795,16 +1800,16 @@ body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-action
   box-shadow: none !important;
 }
 
-body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-action.is-prayed,
-body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-action.is-prayed span { color: #ffc06f !important; }
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list .prayer-action.is-prayed,
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list .prayer-action.is-prayed span { color: #ffc06f !important; }
 
-body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-action,
-body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-action:hover,
-body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-action:active,
-body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-action:focus,
-body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-action:focus-visible,
-body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-action.is-prayed,
-body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-action.is-prayed:hover {
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list .prayer-action,
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list .prayer-action:hover,
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list .prayer-action:active,
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list .prayer-action:focus,
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list .prayer-action:focus-visible,
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list .prayer-action.is-prayed,
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list .prayer-action.is-prayed:hover {
   border: 0 !important;
   outline: 0 !important;
   background: transparent !important;
@@ -1812,14 +1817,14 @@ body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-action
   box-shadow: none !important;
 }
 
-body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-card-meta,
-body .app-shell[data-app-background="black"] #prayer .prayer-list .prayer-card-actions,
-body .app-shell[data-app-background="black"] #prayer .prayer-list button.prayer-action,
-body .app-shell[data-app-background="black"] #prayer .prayer-list button.prayer-action:hover,
-body .app-shell[data-app-background="black"] #prayer .prayer-list button.prayer-action:active,
-body .app-shell[data-app-background="black"] #prayer .prayer-list button.prayer-action:focus,
-body .app-shell[data-app-background="black"] #prayer .prayer-list button.prayer-action:focus-visible,
-body .app-shell[data-app-background="black"] #prayer .prayer-list button.prayer-action.is-prayed {
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list .prayer-card-meta,
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list .prayer-card-actions,
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list :is(button.prayer-action, .profile-prayer-count),
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list :is(button.prayer-action, .profile-prayer-count):hover,
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list :is(button.prayer-action, .profile-prayer-count):active,
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list :is(button.prayer-action, .profile-prayer-count):focus,
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list :is(button.prayer-action, .profile-prayer-count):focus-visible,
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list :is(button.prayer-action, .profile-prayer-count).is-prayed {
   border: 0 !important;
   outline: 0 !important;
   background: none !important;
@@ -1830,12 +1835,12 @@ body .app-shell[data-app-background="black"] #prayer .prayer-list button.prayer-
   appearance: none !important;
 }
 
-body .app-shell[data-app-background="black"] #prayer .prayer-list button.prayer-action,
-body .app-shell[data-app-background="black"] #prayer .prayer-list button.prayer-action:hover,
-body .app-shell[data-app-background="black"] #prayer .prayer-list button.prayer-action:active,
-body .app-shell[data-app-background="black"] #prayer .prayer-list button.prayer-action:focus,
-body .app-shell[data-app-background="black"] #prayer .prayer-list button.prayer-action:focus-visible,
-body .app-shell[data-app-background="black"] #prayer .prayer-list button.prayer-action.is-prayed {
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list :is(button.prayer-action, .profile-prayer-count),
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list :is(button.prayer-action, .profile-prayer-count):hover,
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list :is(button.prayer-action, .profile-prayer-count):active,
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list :is(button.prayer-action, .profile-prayer-count):focus,
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list :is(button.prayer-action, .profile-prayer-count):focus-visible,
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list :is(button.prayer-action, .profile-prayer-count).is-prayed {
   all: unset !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -1850,17 +1855,17 @@ body .app-shell[data-app-background="black"] #prayer .prayer-list button.prayer-
   backdrop-filter: none !important;
 }
 
-html body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-list article.prayer-card,
-html body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-list article.prayer-card:hover,
-html body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-list article.prayer-card:focus-within {
+html body .app-shell[data-app-background="black"] .phone-frame :is(#prayer, #profile) .prayer-list article.prayer-card,
+html body .app-shell[data-app-background="black"] .phone-frame :is(#prayer, #profile) .prayer-list article.prayer-card:hover,
+html body .app-shell[data-app-background="black"] .phone-frame :is(#prayer, #profile) .prayer-list article.prayer-card:focus-within {
   box-shadow: none !important;
   filter: none !important;
 }
 
-html body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-list button.prayer-action,
-html body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-list button.prayer-action:hover,
-html body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-list button.prayer-action:active,
-html body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-list button.prayer-action.is-prayed {
+html body .app-shell[data-app-background="black"] .phone-frame :is(#prayer, #profile) .prayer-list :is(button.prayer-action, .profile-prayer-count),
+html body .app-shell[data-app-background="black"] .phone-frame :is(#prayer, #profile) .prayer-list :is(button.prayer-action, .profile-prayer-count):hover,
+html body .app-shell[data-app-background="black"] .phone-frame :is(#prayer, #profile) .prayer-list :is(button.prayer-action, .profile-prayer-count):active,
+html body .app-shell[data-app-background="black"] .phone-frame :is(#prayer, #profile) .prayer-list :is(button.prayer-action, .profile-prayer-count).is-prayed {
   background: transparent !important;
   background-color: transparent !important;
   background-image: none !important;
@@ -1870,8 +1875,8 @@ html body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-l
   backdrop-filter: none !important;
 }
 
-body .app-shell[data-app-background="black"] #prayer .prayer-list button.prayer-action::before,
-body .app-shell[data-app-background="black"] #prayer .prayer-list button.prayer-action::after {
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list :is(button.prayer-action, .profile-prayer-count)::before,
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list :is(button.prayer-action, .profile-prayer-count)::after {
   display: none !important;
   background: none !important;
   box-shadow: none !important;
@@ -1895,12 +1900,12 @@ body .app-shell[data-app-background="black"] #prayer .prayer-board-controls .pra
   margin-top: 8px !important;
 }
 
-body .app-shell[data-app-background="black"] #prayer .prayer-board-controls .prayer-filter-row.prayer-category-picker button,
-body .app-shell[data-app-background="black"] #prayer .prayer-board-controls .prayer-filter-row.prayer-category-picker button.is-active {
+body .app-shell[data-app-background="black"] :is(#prayer .prayer-board-controls .prayer-filter-row.prayer-category-picker, #home .home-library-tabs) button,
+body .app-shell[data-app-background="black"] :is(#prayer .prayer-board-controls .prayer-filter-row.prayer-category-picker, #home .home-library-tabs) button.is-active {
   border: 0 !important;
 }
 
-body .app-shell[data-app-background="black"] #prayer .prayer-board-controls .prayer-filter-row.prayer-category-picker button.is-active {
+body .app-shell[data-app-background="black"] :is(#prayer .prayer-board-controls .prayer-filter-row.prayer-category-picker, #home .home-library-tabs) button.is-active {
   background: linear-gradient(135deg, rgba(48, 122, 164, .72), rgba(49, 68, 130, .78)) !important;
   box-shadow: none !important;
 }
@@ -1908,13 +1913,28 @@ body .app-shell[data-app-background="black"] #prayer .prayer-board-controls .pra
 /* Match category chips in the Prayer request form to the Prayer tab filters. */
 body .app-shell[data-app-background="black"] #prayer .prayer-compose-options .prayer-category-picker {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   gap: 14px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 3px 2px 7px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+}
+
+body .app-shell[data-app-background="black"] #prayer .prayer-compose-options .prayer-category-picker::-webkit-scrollbar {
+  display: none;
 }
 
 body .app-shell[data-app-background="black"] #prayer .prayer-compose-options .prayer-category-picker button,
 body .app-shell[data-app-background="black"] #prayer .prayer-compose-options .prayer-category-picker button:hover,
 body .app-shell[data-app-background="black"] #prayer .prayer-compose-options .prayer-category-picker button:focus-visible {
+  flex: 0 0 auto;
   min-height: 40px;
   padding: 0 15px;
   border: 0 !important;
@@ -1922,6 +1942,8 @@ body .app-shell[data-app-background="black"] #prayer .prayer-compose-options .pr
   color: #f0f4ff !important;
   background: linear-gradient(145deg, rgba(35, 66, 117, .75), rgba(20, 43, 83, .75)) !important;
   box-shadow: none !important;
+  white-space: nowrap;
+  scroll-snap-align: center;
 }
 
 body .app-shell[data-app-background="black"] #prayer .prayer-compose-options .prayer-category-picker button.is-active,
@@ -2020,31 +2042,6 @@ html body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-r
   box-shadow: 0 0 16px rgba(110, 190, 255, .28), 0 10px 19px rgba(0, 8, 32, .3) !important;
 }
 
-/* Brother AI composer: mirror the Prayer request field treatment. */
-html body .app-shell[data-app-background="black"] .phone-frame #ai .reusable-ai-composer {
-  isolation: isolate;
-  border: 0 !important;
-  background: transparent !important;
-  box-shadow: 0 0 13px rgba(110, 160, 255, .24), 0 10px 19px rgba(0, 8, 32, .22) !important;
-  animation: none !important;
-}
-
-html body .app-shell[data-app-background="black"] .phone-frame #ai .reusable-ai-composer::before {
-  display: block !important;
-  z-index: 0;
-  background: conic-gradient(from var(--prayer-neon-angle), #8bdcff, #39e5e5, #7eefc3, #ae84ff, #6e7bff, #8bdcff) !important;
-  animation: prayerNeonRotate 3.5s linear infinite !important;
-}
-
-html body .app-shell[data-app-background="black"] .phone-frame #ai .reusable-ai-composer textarea {
-  background: transparent !important;
-  color: #f4fbff !important;
-}
-
-html body .app-shell[data-app-background="black"] .phone-frame #ai .reusable-ai-composer:focus-within {
-  box-shadow: 0 0 16px rgba(110, 190, 255, .28), 0 10px 19px rgba(0, 8, 32, .3) !important;
-}
-
 /* Prayer request fields use the page's own blue surface, with neon only on the edge. */
 html body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-request-title-field,
 html body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-request-textarea {
@@ -2079,8 +2076,8 @@ html body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-r
   position: relative;
   z-index: 1;
   border: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
+  background: linear-gradient(145deg, #244f78, #153555) !important;
+  box-shadow: inset 0 1px 0 rgba(190, 229, 255, .12) !important;
   color: #f4fbff !important;
 }
 
@@ -2096,4 +2093,308 @@ html body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-r
 html body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-request-title-field:focus-within,
 html body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-request-textarea:focus-within {
   box-shadow: 0 0 17px rgba(110, 190, 255, .42), 0 10px 19px rgba(0, 8, 32, .22) !important;
+}
+
+/* Keep the Prayer Request page open and uncluttered: only the fields get edges. */
+html body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-intro,
+html body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-compose {
+  border: 0 !important;
+  outline: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+html body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-intro {
+  margin: 0 0 18px !important;
+  padding: 0 !important;
+}
+
+html body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-intro h2 {
+  max-width: 19ch;
+  margin: 0 0 8px;
+  color: #f8fbff !important;
+  font-size: clamp(25px, 6vw, 30px);
+  line-height: 1.12;
+  letter-spacing: -.035em;
+}
+
+html body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-intro p {
+  max-width: 36ch;
+  margin: 0;
+  color: rgba(224, 236, 255, .9) !important;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+html body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-compose {
+  display: grid;
+  gap: 16px;
+  margin: 0 0 20px;
+  padding: 0 !important;
+}
+
+/* Report controls stay blue like their panel; don't inherit the global black inputs. */
+html body .app-shell[data-app-background="black"] .phone-frame .prayer-report-form select,
+html body .app-shell[data-app-background="black"] .phone-frame .prayer-report-form textarea {
+  border-color: rgba(151, 210, 255, .4) !important;
+  color: #f4f8ff !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* Shared React note card: identical presentation in Profile and Home. */
+.app-shell[data-app-background="black"] #profile .profile-saved-note-list,
+.app-shell[data-app-background="black"] #home .home-library-panel .profile-saved-note-list {
+  display: grid;
+  gap: 14px;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-saved-note-list .saved-note-card,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 96px;
+  margin: 0;
+  padding: 14px 16px !important;
+  border: 1px solid rgba(139, 220, 255, .72) !important;
+  border-radius: 18px !important;
+  background: linear-gradient(135deg, rgba(43, 157, 206, .98), rgba(61, 67, 137, .98)) !important;
+  box-shadow: inset 0 1px 0 rgba(236, 250, 255, .28), 0 10px 24px rgba(0, 0, 0, .3) !important;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-saved-note-list .saved-note-card:nth-of-type(2n),
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card:nth-of-type(2n) {
+  border-color: rgba(126, 239, 195, .72) !important;
+  background: linear-gradient(135deg, rgba(38, 139, 139, .98), rgba(43, 91, 113, .98)) !important;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-saved-note-list .saved-note-card:nth-of-type(3n),
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card:nth-of-type(3n) {
+  border-color: rgba(207, 173, 255, .78) !important;
+  background: linear-gradient(135deg, rgba(104, 78, 173, .98), rgba(61, 65, 121, .98)) !important;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-saved-note-list .saved-note-card::before,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card::before {
+  --saved-rail-start: #bdeeff;
+  --saved-rail-color: #55caff;
+  --saved-rail-end: #318ee8;
+  --saved-rail-glow: rgba(85, 202, 255, .78);
+  width: 6px !important;
+  background: linear-gradient(180deg, var(--saved-rail-start), var(--saved-rail-color) 48%, var(--saved-rail-end)) !important;
+  box-shadow: 0 0 7px var(--saved-rail-glow), 0 0 16px var(--saved-rail-glow);
+  animation: savedCardRailPulse 2.8s ease-in-out infinite;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-saved-note-list .saved-note-card:nth-of-type(2n)::before,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card:nth-of-type(2n)::before {
+  --saved-rail-start: #b8ffe3;
+  --saved-rail-color: #68e4b2;
+  --saved-rail-end: #23b88c;
+  --saved-rail-glow: rgba(104, 228, 178, .76);
+}
+
+.app-shell[data-app-background="black"] #profile .profile-saved-note-list .saved-note-card:nth-of-type(3n)::before,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card:nth-of-type(3n)::before {
+  --saved-rail-start: #efc8ff;
+  --saved-rail-color: #c08cff;
+  --saved-rail-end: #8f5ae4;
+  --saved-rail-glow: rgba(192, 140, 255, .78);
+}
+
+.app-shell[data-app-background="black"] #profile .profile-saved-note-list .saved-note-open,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-open {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+  padding: 0;
+  color: #fff !important;
+  background: transparent !important;
+  text-align: left;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-saved-note-list .saved-note-card-title,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card-title {
+  color: #fff !important;
+  font-size: 14px !important;
+  line-height: 1.2;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-saved-note-list .saved-note-card-heading,
+.app-shell[data-app-background="black"] #profile .profile-saved-note-list .saved-note-card-heading svg,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card-heading,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card-heading svg {
+  color: #a8e6ff !important;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-saved-note-list .saved-note-card-heading,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card-heading {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-saved-note-list .saved-note-references,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-references {
+  color: #a8e6ff !important;
+  font-size: 10px;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-saved-note-list .saved-note-open p,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-open p {
+  margin: 2px 0 0;
+  color: rgba(255, 255, 255, .86) !important;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-saved-note-list .saved-note-card:nth-of-type(2n) .saved-note-card-heading,
+.app-shell[data-app-background="black"] #profile .profile-saved-note-list .saved-note-card:nth-of-type(2n) .saved-note-card-heading svg,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card:nth-of-type(2n) .saved-note-card-heading,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card:nth-of-type(2n) .saved-note-card-heading svg {
+  color: #7aefc1 !important;
+}
+
+.app-shell[data-app-background="black"] #profile .profile-saved-note-list .saved-note-card:nth-of-type(3n) .saved-note-card-heading,
+.app-shell[data-app-background="black"] #profile .profile-saved-note-list .saved-note-card:nth-of-type(3n) .saved-note-card-heading svg,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card:nth-of-type(3n) .saved-note-card-heading,
+.app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card:nth-of-type(3n) .saved-note-card-heading svg {
+  color: #d0a8ff !important;
+}
+
+/* Inactive Prayer tabs match the category chips. */
+body .app-shell[data-app-background="black"] :is(#prayer .prayer-page-tabs, #kids-bible .kids-page-tabs) button:not(.is-active),
+body .app-shell[data-app-background="black"] :is(#prayer .prayer-page-tabs, #kids-bible .kids-page-tabs) button:not(.is-active):hover {
+  border: 0 !important;
+  border-radius: 999px;
+  color: #f0f4ff !important;
+  background: linear-gradient(145deg, rgba(35, 66, 117, .75), rgba(20, 43, 83, .75)) !important;
+  box-shadow: none !important;
+}
+
+/* Reserve five digits so the heart stays anchored as the count grows. */
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list :is(button.prayer-action, .profile-prayer-count)[aria-pressed] {
+  display: grid !important;
+  grid-template-columns: 24px 5ch !important;
+  justify-content: start !important;
+  align-items: center !important;
+  gap: 7px !important;
+  font-size: 14px !important;
+  font-variant-numeric: tabular-nums !important;
+}
+
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list :is(button.prayer-action, .profile-prayer-count)[aria-pressed] > svg {
+  width: 24px !important;
+  height: 24px !important;
+  justify-self: start;
+}
+
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list :is(button.prayer-action, .profile-prayer-count)[aria-pressed] > span {
+  width: 5ch;
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Right-anchor the heart; the count sits to its left. */
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list :is(button.prayer-action, .profile-prayer-count)[aria-pressed] {
+  grid-template-columns: 5ch 24px !important;
+  justify-content: end !important;
+}
+
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list :is(button.prayer-action, .profile-prayer-count)[aria-pressed] > span {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list :is(button.prayer-action, .profile-prayer-count)[aria-pressed] > svg {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+}
+
+/* Home library tabs follow the Prayer category chip dimensions. */
+html body .app-shell #home .home-library-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  padding: 0;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html body .app-shell #home .home-library-tabs button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 10px;
+  border: 0 !important;
+  border-radius: 999px !important;
+  font-size: 12px;
+  font-weight: 800;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+html body .app-shell #home .home-library-tabs button :is(svg, span) {
+  color: inherit !important;
+}
+
+html body .app-shell #home .home-library-tabs button svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* Selected folders match the selected Home library and Prayer category chips. */
+html body .app-shell #home .home-library-panel .saved-folder-chips button.is-active,
+html body .app-shell #home .home-library-panel .saved-folder-chips button.is-active:hover,
+html body .app-shell #home .home-library-panel .saved-folder-chips button.is-active:focus-visible {
+  border: 0 !important;
+  border-radius: 999px !important;
+  color: #fff !important;
+  background: linear-gradient(135deg, rgba(48, 122, 164, .72), rgba(49, 68, 130, .78)) !important;
+  box-shadow: none !important;
+  filter: none;
+  font-weight: 800;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* Home's three library tabs match the Prayer section tabs. */
+html body .app-shell #home .home-library-tabs {
+  gap: 5px;
+}
+
+html body .app-shell #home .home-library-tabs button {
+  padding: 6px 4px;
+  font-size: 10px;
+}
+
+html body .app-shell #home .home-library-tabs button:not(.is-active),
+html body .app-shell #home .home-library-tabs button:not(.is-active):hover {
+  border: 0 !important;
+  color: #f0f4ff !important;
+  background: linear-gradient(145deg, rgba(35, 66, 117, .75), rgba(20, 43, 83, .75)) !important;
+  box-shadow: none !important;
+}
+
+html body .app-shell #home .home-library-tabs button.is-active,
+html body .app-shell #home .home-library-tabs button.is-active:hover,
+html body .app-shell #home .home-library-tabs button.is-active:focus-visible {
+  border: 1px solid rgba(255, 228, 183, .78) !important;
+  color: #fff !important;
+  background: linear-gradient(135deg, #ffc56c, #ff9c4c 58%, #f47b49) !important;
+  box-shadow: 0 0 22px rgba(255, 168, 91, .54), inset 0 1px 0 rgba(255, 255, 255, .48) !important;
 }

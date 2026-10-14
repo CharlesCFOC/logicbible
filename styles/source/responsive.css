@@ -434,12 +434,12 @@ body .app-shell[data-app-background="black"] #ai .ai-tabs button.is-active > spa
 }
 
 /* Prayer tabs use the same Home-inspired animated fill as Brother AI. */
-#prayer .prayer-page-tabs button.is-active,
-#prayer .prayer-page-tabs button.is-active:hover,
-#prayer .prayer-page-tabs button.is-active:focus-visible,
-body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is-active,
-body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is-active:hover,
-body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is-active:focus-visible {
+html body .app-shell :is(#prayer .prayer-page-tabs, #kids-bible .kids-page-tabs, #home .home-library-tabs, #profile .profile-tabs) button.is-active,
+html body .app-shell :is(#prayer .prayer-page-tabs, #kids-bible .kids-page-tabs, #home .home-library-tabs, #profile .profile-tabs) button.is-active:hover,
+html body .app-shell :is(#prayer .prayer-page-tabs, #kids-bible .kids-page-tabs, #home .home-library-tabs, #profile .profile-tabs) button.is-active:focus-visible,
+body .app-shell[data-app-background="black"] :is(#prayer .prayer-page-tabs, #kids-bible .kids-page-tabs, #home .home-library-tabs, #profile .profile-tabs) button.is-active,
+body .app-shell[data-app-background="black"] :is(#prayer .prayer-page-tabs, #kids-bible .kids-page-tabs, #home .home-library-tabs, #profile .profile-tabs) button.is-active:hover,
+body .app-shell[data-app-background="black"] :is(#prayer .prayer-page-tabs, #kids-bible .kids-page-tabs, #home .home-library-tabs, #profile .profile-tabs) button.is-active:focus-visible {
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -452,8 +452,8 @@ body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is
   animation: homeHeroTitleGradient 7s ease-in-out infinite !important;
 }
 
-#prayer .prayer-page-tabs button.is-active::before,
-body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is-active::before {
+html body .app-shell :is(#prayer .prayer-page-tabs, #kids-bible .kids-page-tabs, #home .home-library-tabs, #profile .profile-tabs) button.is-active::before,
+body .app-shell[data-app-background="black"] :is(#prayer .prayer-page-tabs, #kids-bible .kids-page-tabs, #home .home-library-tabs, #profile .profile-tabs) button.is-active::before {
   position: absolute;
   z-index: 0;
   top: 0;
@@ -469,8 +469,8 @@ body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is
   animation: homeNavColorSweep 4.6s ease-in-out infinite;
 }
 
-#prayer .prayer-page-tabs button.is-active > span,
-body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is-active > span {
+html body .app-shell :is(#prayer .prayer-page-tabs, #kids-bible .kids-page-tabs, #home .home-library-tabs, #profile .profile-tabs) button.is-active > :is(span, svg),
+body .app-shell[data-app-background="black"] :is(#prayer .prayer-page-tabs, #kids-bible .kids-page-tabs, #home .home-library-tabs, #profile .profile-tabs) button.is-active > :is(span, svg) {
   position: relative;
   z-index: 1;
 }
@@ -500,51 +500,6 @@ body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is
   box-shadow: none !important;
 }
 
-/* Profile tabs use the same active treatment as Prayer and Brother AI. */
-#profile .profile-tabs button.is-active,
-#profile .profile-tabs button.is-active:hover,
-#profile .profile-tabs button.is-active:focus-visible,
-body .app-shell[data-app-background="black"] #profile .profile-tabs button.is-active,
-body .app-shell[data-app-background="black"] #profile .profile-tabs button.is-active:hover,
-body .app-shell[data-app-background="black"] #profile .profile-tabs button.is-active:focus-visible {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  border: 0 !important;
-  color: #ffffff !important;
-  background: linear-gradient(110deg, #4fc3ff 0%, #8bdcff 24%, #ff9d00 50%, #ffb6dc 76%, #4fc3ff 100%) !important;
-  background-size: 280% 100% !important;
-  background-position: 0% 50% !important;
-  box-shadow: none !important;
-  animation: homeHeroTitleGradient 7s ease-in-out infinite !important;
-}
-
-#profile .profile-tabs button.is-active::before,
-body .app-shell[data-app-background="black"] #profile .profile-tabs button.is-active::before {
-  position: absolute;
-  z-index: 0;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 280%;
-  border-radius: inherit;
-  background: linear-gradient(110deg, #4fc3ff 0%, #8bdcff 24%, #ff9d00 50%, #ffb6dc 76%, #4fc3ff 100%);
-  background-size: 100% 100%;
-  content: "";
-  pointer-events: none;
-  transform: translateX(0);
-  animation: homeNavColorSweep 4.6s ease-in-out infinite;
-}
-
-#profile .profile-tabs button.is-active > svg,
-#profile .profile-tabs button.is-active > span,
-body .app-shell[data-app-background="black"] #profile .profile-tabs button.is-active > svg,
-body .app-shell[data-app-background="black"] #profile .profile-tabs button.is-active > span {
-  position: relative;
-  z-index: 1;
-  color: #ffffff !important;
-}
-
 /* Add the shared cyan, blue, orange and pink palette to Profile's neon borders. */
 #profile .profile-cover-grid button.is-active::before {
   background: conic-gradient(from var(--profile-cover-neon-angle), #4fc3ff, #8bdcff, #ff9d00, #ffb6dc, #4fc3ff) !important;
@@ -566,4 +521,501 @@ body .app-shell[data-app-background="black"] #ai .ai-tabs button {
 #prayer .prayer-header h1 {
   font-size: 28px !important;
   line-height: 1.1 !important;
+}
+
+/* Information fields and actions sit without borders or inset edges. */
+html body .app-shell .phone-frame #profile .profile-info-card,
+html body .app-shell .phone-frame #profile .profile-info-card .profile-field :is(input, textarea),
+html body .app-shell .phone-frame #profile .profile-info-actions button[type],
+html body .app-shell .phone-frame #profile .profile-info-actions button[type]:is(:hover, :focus-visible, :active) {
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Cloud account actions have no border or inset edge. */
+html body .app-shell #profile .profile-password-section {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 16px;
+}
+
+html body .app-shell #profile .profile-password-trigger {
+  grid-template-columns: 1fr;
+}
+
+html body .app-shell .phone-frame #profile .profile-password-trigger button[type],
+html body .app-shell .phone-frame #profile .profile-password-trigger button[type]:is(:hover, :focus-visible, :active) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: #ffffff !important;
+}
+
+html body .app-shell #profile .profile-password-chevron {
+  flex-shrink: 0;
+  color: inherit;
+}
+
+html body .app-shell #profile .profile-password-trigger button[aria-expanded="true"] .profile-password-chevron {
+  transform: rotate(180deg);
+}
+
+html body .app-shell #profile .profile-password-form label {
+  display: grid;
+  gap: 6px;
+  color: #f0f4ff;
+  font-size: 12px;
+}
+
+html body .app-shell #profile .profile-password-feedback {
+  color: #b5f5c8 !important;
+}
+
+html body .app-shell #profile .profile-password-feedback[data-state="error"] {
+  color: #ffb6cc !important;
+}
+
+html body .app-shell .phone-frame #profile .profile-auth-actions button[type],
+html body .app-shell .phone-frame #profile .profile-auth-actions button[type]:is(:hover, :focus-visible, :active) {
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+html body .app-shell .phone-frame #profile .profile-password-form .profile-auth-actions button[type="button"] {
+  background: #244b70 !important;
+  color: #ffffff !important;
+  font-weight: 800;
+}
+
+html body .app-shell .phone-frame #profile .profile-password-form .profile-auth-actions button[type="button"]:hover {
+  background: #2c5c87 !important;
+}
+
+/* Profile tabs share Prayer's pill shape and inactive blue surface. */
+html body .app-shell #profile .profile-tabs {
+  gap: 5px;
+  padding: 0;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html body .app-shell #profile .profile-tabs button {
+  min-height: 40px;
+  padding: 6px 4px;
+  border-radius: 999px !important;
+  font-size: 10px;
+  font-weight: 800;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+html body .app-shell #profile .profile-tabs button:not(.is-active),
+html body .app-shell #profile .profile-tabs button:not(.is-active):hover {
+  border: 0 !important;
+  color: #f0f4ff !important;
+  background: linear-gradient(145deg, rgba(35, 66, 117, .75), rgba(20, 43, 83, .75)) !important;
+  box-shadow: none !important;
+}
+
+html body .app-shell #profile .profile-tabs button :is(svg, span) {
+  color: inherit !important;
+}
+
+/* Empty Home folders show a plain message on the page background. */
+html body .app-shell .phone-frame #home .saved-empty {
+  border: 0 !important;
+  border-radius: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #f0f4ff !important;
+  padding: 12px 0;
+}
+
+/* Let Home and Profile hero images reach the top behind the shared spacing. */
+html body .app-shell .phone-frame:has(:is(#home, #profile).is-active) .page-top-spacer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: transparent !important;
+}
+
+html body .app-shell .phone-frame #home > .home-hero {
+  top: calc(16px + var(--page-top-space, 32px));
+}
+
+/* Bible selectors match the dark blue inactive category pills in Profile. */
+html body .app-shell .phone-frame #bible .reader-topbar > .reader-select-label.bible-glass-select {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 0 !important;
+  border-radius: 999px;
+  background: linear-gradient(145deg, rgba(35, 66, 117, .75), rgba(20, 43, 83, .75)) !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
+  backdrop-filter: blur(18px) saturate(135%) !important;
+  animation: none !important;
+}
+
+html body .app-shell .phone-frame #bible .reader-topbar > .reader-select-label.bible-glass-select select.bible-glass-select-input {
+  position: relative;
+  z-index: 1;
+  min-height: 40px;
+  border: 0 !important;
+  background: transparent !important;
+  color: #f0f4ff !important;
+  box-shadow: none !important;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+html body .app-shell #bible .reader-topbar > .reader-select-label:focus-within {
+  outline: 2px solid #8bdcff;
+  outline-offset: 2px;
+}
+
+/* Unavailable chapter arrows keep the same blue glass as the top selectors. */
+html body .app-shell .phone-frame #bible .bible-chapter-navigation button:disabled {
+  border: 0;
+  background: linear-gradient(145deg, rgba(35, 66, 117, .75), rgba(20, 43, 83, .75)) !important;
+  color: #f0f4ff;
+  opacity: 1;
+  filter: none;
+  box-shadow: none;
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+  backdrop-filter: blur(18px) saturate(135%);
+}
+
+/* Keep Bible's Parallel and Highlights actions borderless in both states. */
+html body .app-shell .phone-frame #bible .parallel-controls > .parallel-toggle.bible-glass-control {
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+html body .app-shell .phone-frame #bible .parallel-controls > .parallel-toggle.bible-glass-control.is-active {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  color: #ffffff !important;
+  background: linear-gradient(110deg, #4fc3ff 0%, #8bdcff 24%, #ff9d00 50%, #ffb6dc 76%, #4fc3ff 100%) !important;
+  background-size: 280% 100% !important;
+  animation: homeHeroTitleGradient 7s ease-in-out infinite !important;
+}
+
+html body .app-shell .phone-frame #bible .parallel-controls > .parallel-toggle.bible-glass-control.is-active::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0 auto 0 0;
+  width: 280%;
+  border-radius: inherit;
+  background: linear-gradient(110deg, #4fc3ff 0%, #8bdcff 24%, #ff9d00 50%, #ffb6dc 76%, #4fc3ff 100%);
+  content: "";
+  pointer-events: none;
+  animation: homeNavColorSweep 4.6s ease-in-out infinite;
+}
+
+html body .app-shell .phone-frame #bible .parallel-controls > .parallel-toggle.bible-glass-control.is-active > .bible-glass-control-content {
+  position: relative;
+  z-index: 1;
+  color: #ffffff !important;
+}
+
+/* Keep reader loading and error messages readable on the blue page. */
+html body .app-shell .phone-frame #bible .reader-empty {
+  background: rgba(12, 35, 65, .88) !important;
+  color: #f0f4ff !important;
+}
+
+html body .app-shell .phone-frame #bible .reader-empty :is(strong, span) {
+  color: #f0f4ff !important;
+}
+
+html body .app-shell .phone-frame [data-verse-sheet] .sheet-title [data-close-modal],
+html body .app-shell .phone-frame [data-verse-sheet] .sheet-title [data-close-modal] svg {
+  color: #ffffff !important;
+}
+
+/* Featured verse actions use distinct fixed gradients with larger labels. */
+html body .app-shell .phone-frame [data-verse-sheet] .action-grid button.action-featured[data-verse-action="highlight"] {
+  --verse-action-gradient: linear-gradient(110deg, #ffbd58, #f59a43);
+}
+
+html body .app-shell .phone-frame [data-verse-sheet] .action-grid button.action-featured[data-verse-action="ask-ai"] {
+  --verse-action-gradient: linear-gradient(110deg, #58b5ef, #448fe3);
+}
+
+html body .app-shell .phone-frame [data-verse-sheet] .action-grid button.action-featured[data-verse-action="note"] {
+  --verse-action-gradient: linear-gradient(110deg, #f9a1d2, #ee8ac5);
+}
+
+html body .app-shell .phone-frame [data-verse-sheet] .action-grid button.action-featured[data-verse-action] {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 0 !important;
+  color: #ffffff !important;
+  font-size: 14px;
+  font-weight: 800;
+  background: var(--verse-action-gradient) !important;
+  background-size: 100% 100% !important;
+  box-shadow: none !important;
+  filter: none !important;
+  animation: none !important;
+}
+
+html body .app-shell .phone-frame [data-verse-sheet] .action-grid button.action-featured::before {
+  content: none;
+  animation: none;
+}
+
+html body .app-shell .phone-frame [data-verse-sheet] .action-grid button.action-featured > :is(span, svg) {
+  position: relative;
+  z-index: 1;
+  color: #ffffff !important;
+}
+
+/* Spotlight starts blue and keeps its orange confirmation after praying. */
+html body .app-shell .phone-frame #prayer .prayer-spotlight footer button {
+  border: 0 !important;
+}
+
+html body .app-shell .phone-frame #prayer .prayer-spotlight footer button.is-prayed {
+  box-shadow: 0 7px 18px rgba(245, 125, 55, .28) !important;
+}
+
+html body .app-shell .phone-frame #prayer .prayer-spotlight footer button:not(.is-prayed) {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #8bdcff, #4fc3ff 58%, #36a9ed) !important;
+  box-shadow: 0 7px 18px rgba(54, 169, 237, .28) !important;
+}
+
+/* One blue band keeps the Prayer title and tabs readable over the wall. */
+html body .app-shell #prayer {
+  --prayer-page-gutter: 14px;
+  padding-top: 0;
+  padding-inline: var(--prayer-page-gutter);
+}
+
+@media (max-width: 680px) {
+  html body .app-shell #prayer {
+    --prayer-page-gutter: 16px;
+  }
+}
+
+html body .app-shell .phone-frame:has(#prayer.is-active) .page-top-spacer {
+  flex-basis: 0;
+  height: 0;
+}
+
+html body .app-shell #prayer .prayer-header-band {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  max-width: none;
+  margin: 0 calc(0px - var(--prayer-page-gutter)) 20px;
+  padding: calc(env(safe-area-inset-top, 0px) + 22px + var(--page-top-space, 32px)) var(--prayer-page-gutter) 16px;
+  border: 0;
+  box-shadow: 0 8px 20px rgba(0, 8, 22, .22);
+}
+
+html body .app-shell #prayer .prayer-header-band .prayer-header {
+  margin: 0 0 16px;
+}
+
+html body .app-shell #prayer .prayer-header-band .prayer-page-tabs {
+  position: relative;
+  top: auto;
+  margin: 0;
+}
+
+/* Keep page titles on the page background; Prayer retains its glass band. */
+html body .app-shell .phone-frame :is(
+  #kids-bible .kids-bible-header,
+  #bible .reader-topbar,
+  #ai .ai-topbar,
+  #apologetics .apologetics-page-header,
+  #apologetics-track .apologetics-track-header,
+  #apologetics-topic .apologetics-track-header,
+  #apologetics-debate .apologetics-debate-header,
+  #apologetics-coach .apologetics-debate-header
+) {
+  z-index: 20;
+  margin-right: -14px;
+  margin-left: -14px;
+  padding-right: 14px;
+  padding-left: 14px;
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+html body .app-shell .phone-frame :is(
+  #kids-bible .kids-bible-header,
+  #apologetics .apologetics-page-header,
+  #apologetics-track .apologetics-track-header,
+  #apologetics-topic .apologetics-track-header,
+  #apologetics-debate .apologetics-debate-header,
+  #apologetics-coach .apologetics-debate-header
+) {
+  min-height: 112px;
+  margin-top: -24px;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 22px);
+  padding-bottom: 16px;
+}
+
+/* Align Kids Bible's single-line title with the top of the shared headers. */
+html body .app-shell .phone-frame #kids-bible .kids-bible-header {
+  align-items: flex-start;
+}
+
+html body .app-shell #kids-bible .kids-bible-header h1 {
+  line-height: 1.1;
+}
+
+html body .app-shell #kids-bible.screen.is-active,
+html body .app-shell #bible.screen.is-active,
+html body .app-shell #ai.screen.is-active,
+html body .app-shell #apologetics.screen.is-active,
+html body .app-shell #apologetics-track.screen.is-active,
+html body .app-shell #apologetics-topic.screen.is-active,
+html body .app-shell #apologetics-debate.screen.is-active,
+html body .app-shell #apologetics-coach.screen.is-active {
+  will-change: auto;
+}
+
+/* Let the header glass sample the same backdrop as the Home menu. */
+html body .app-shell #prayer.screen.is-active {
+  will-change: auto;
+  animation: none;
+}
+
+/* Mobile page headings share Brother AI's top position inside the viewport. */
+@media (max-width: 680px) {
+  .app-shell {
+    --page-heading-inset: calc(env(safe-area-inset-top, 0px) + 16px);
+    --page-heading-top: calc(var(--page-top-space, 32px) + var(--page-heading-inset));
+  }
+
+  html body .app-shell .phone-frame :is(
+    #ai, #bible, #kids-bible, #apologetics, #apologetics-track,
+    #apologetics-topic, #apologetics-debate, #apologetics-coach, #admin
+  ) {
+    padding-top: var(--page-heading-inset);
+  }
+
+  html body .app-shell .phone-frame :is(
+    #ai .ai-topbar, #bible .reader-topbar, #kids-bible .kids-bible-header,
+    #apologetics .apologetics-page-header, #apologetics-track .apologetics-track-header,
+    #apologetics-topic .apologetics-track-header, #apologetics-debate .apologetics-debate-header,
+    #apologetics-coach .apologetics-debate-header, #admin .admin-page-header
+  ) {
+    top: 0;
+    min-height: 0;
+    margin-top: 0;
+    padding-top: 0;
+    align-items: start;
+  }
+
+  html body .app-shell #prayer .prayer-header-band {
+    padding-top: var(--page-heading-top);
+  }
+
+  html body .app-shell .phone-frame :is(.think-room-breadcrumb, .apologetics-breadcrumbs) {
+    min-height: 0;
+    align-items: flex-start;
+    line-height: 1.1;
+  }
+
+  html body .app-shell .phone-frame :is(#home, #profile) {
+    padding-top: 0;
+  }
+
+  html body .app-shell .phone-frame :is(#home .home-hero-image, #profile .profile-hero) {
+    margin-top: 0 !important;
+    border: 0 !important;
+  }
+
+  html body .app-shell .phone-frame #home .home-hero-app-title {
+    top: var(--page-heading-top);
+    transform: none;
+  }
+
+  html body .app-shell .phone-frame #home > .home-hero {
+    top: var(--page-heading-top);
+  }
+
+  html body .app-shell .phone-frame #profile .profile-hero-caption {
+    top: var(--page-heading-top);
+    bottom: auto;
+  }
+
+  html body .app-shell #ai .ai-topbar .icon-button {
+    margin-top: -2px;
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+    min-height: 44px;
+  }
+
+  html body .app-shell #ai .ai-topbar .icon-button svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* Keep adventure navigation close to Kids Bible's title at every viewport size. */
+html body .app-shell .phone-frame #kids-bible .kids-bible-header {
+  min-height: 0;
+  margin-bottom: 12px;
+  padding-bottom: 0;
+}
+#kids-bible .kids-adventure-top {
+  margin-bottom: 10px;
+}
+
+.mobile-update-notice {
+  position: fixed;
+  z-index: 10000;
+  left: max(12px, env(safe-area-inset-left, 0px));
+  right: max(12px, env(safe-area-inset-right, 0px));
+  bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 480px;
+  margin-inline: auto;
+  padding: 12px 14px;
+  border: 1px solid #699cc4;
+  border-radius: 16px;
+  background: #153552;
+  color: #edf6ff;
+  box-shadow: 0 5px 22px #0005;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.mobile-update-notice span { flex: 1; }
+.mobile-update-notice button {
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 10px;
+  background: #afe7ff;
+  color: #153552;
+  font-weight: 800;
+}
+
+/* Blur the backdrop of the debate input without painting or tinting its surface. */
+html body .app-shell[data-app-background].is-debate-room .phone-frame .reusable-ai-composer.apologetics-debate-composer {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+  backdrop-filter: blur(18px) !important;
 }

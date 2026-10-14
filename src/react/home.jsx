@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { SavedNoteCard } from "./saved-note-card.jsx";
 
 const arrowIcon = (
   <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -76,7 +77,10 @@ export function HomeHero() {
   return (
     <>
       <img src={coverImage} alt="Selected hero image" />
-      <h1 className="home-hero-app-title">Thought Bible</h1>
+      <h1 className="home-hero-app-title" aria-label="Think Bible!">
+        <span className="home-hero-app-title-think">Think</span>
+        <span className="home-hero-app-title-bible">Bible!</span>
+      </h1>
       <div className="home-hero-image-copy">
         <div className="home-hero-verse">
           <div className="home-hero-verse-heading">
@@ -120,7 +124,7 @@ export function HomePrayerCard() {
 
 export function HomeLibraryTabs() {
   const [activeTab, setActiveTab] = useState(() => (
-    document.querySelector("[data-home-library-tab].is-active")?.dataset.homeLibraryTab || "notes"
+    document.querySelector("[data-home-library-tab].is-active")?.dataset.homeLibraryTab || "highlights"
   ));
 
   useEffect(() => {
@@ -142,8 +146,8 @@ export function HomeLibraryTabs() {
   };
 
   return [
-    ["highlights", "Highlight"],
-    ["bookmarks", "Bookmark"],
+    ["highlights", "Highlights"],
+    ["bookmarks", "Bookmarks"],
     ["notes", "Notes"],
   ].map(([id, label]) => (
     <button
@@ -235,10 +239,9 @@ function HomeLibraryFolderTools({ snapshot, tab, onChange }) {
               <div><span>Organize your library</span><h3 id="new-folder-title">{editingFolder ? "Rename folder" : "New folder"}</h3></div>
               <button type="button" className="saved-folder-create-close" onClick={() => setCreateOpen(false)} aria-label="Close">×</button>
             </div>
-            <p>{editingFolder ? "Update the name of this folder." : `Give your ${tab === "highlights" ? "highlights" : "bookmarks"} a place to call home.`}</p>
+            {editingFolder && <p>Update the name of this folder.</p>}
             <input autoFocus value={folderName} onChange={(event) => setFolderName(event.target.value)} type="text" name="folder" placeholder="Folder name" aria-label="Folder name" maxLength="40" />
             <div className="saved-folder-create-actions">
-              <button type="button" onClick={() => { setEditingFolder(null); setFolderName(""); setCreateOpen(false); }}>Cancel</button>
               <button type="submit">{editingFolder ? "Save changes" : "Create folder"}</button>
             </div>
             {!editingFolder && snapshot.folders.length > 0 && (
@@ -290,28 +293,13 @@ function HomeSavedVerseRow({ row, tab, onOpen }) {
   );
 }
 
-function HomeSavedNoteCard({ row, onOpen }) {
-  return (
-    <article className="saved-note-card">
-      <button className="saved-note-open" type="button" onClick={() => onOpen(row)}>
-        <strong className="saved-note-card-title">{row.title || "Untitled note"}</strong>
-        <span className="saved-note-card-heading">
-          <LibraryIcon name="notes" />
-          <strong>{row.items.length} verse{row.items.length === 1 ? "" : "s"}</strong>
-        </span>
-        <span className="saved-note-references">{row.items.map((item) => item.reference || "").join(" · ")}</span>
-        <p>{row.note || "No preview available"}</p>
-      </button>
-    </article>
-  );
-}
-
 export function HomeLibraryPanel() {
   const bridge = window.homeLibraryBridge;
-  const initialTab = document.querySelector("[data-home-library-panel]")?.dataset.homeLibraryView || "notes";
+  const initialTab = document.querySelector("[data-home-library-panel]")?.dataset.homeLibraryView || "highlights";
   const [activeTab, setActiveTab] = useState(initialTab);
   const [snapshot, setSnapshot] = useState(() => bridge.getSnapshot(initialTab));
   const [search, setSearch] = useState("");
+  const [expandedTabs, setExpandedTabs] = useState({});
 
   useEffect(() => {
     const refresh = (event) => {
@@ -335,7 +323,24 @@ export function HomeLibraryPanel() {
   const visibleRows = activeTab === "notes" && search.trim()
     ? snapshot.rows.filter((row) => `${row.title || "Untitled note"} ${row.items.map((item) => item.reference || "").join(" ")} ${row.note || ""}`.toLowerCase().includes(search.trim().toLowerCase()))
     : snapshot.rows;
-  const hasContent = snapshot.rows.length > 0 || snapshot.aiRows.length > 0;
+  const hasContent = snapshot.totalRows > 0 || snapshot.folders.length > 0 || Boolean(snapshot.activeFolder);
+  const libraryCards = [
+    ...(activeTab === "notes"
+      ? visibleRows.map((row) => <SavedNoteCard key={row.id} row={row} onOpen={bridge.openSavedNote} />)
+      : visibleRows.map((row) => <HomeSavedVerseRow key={row.storageKey} row={row} tab={activeTab} onOpen={bridge.openSavedVerse} />)),
+    ...snapshot.aiRows.map((row) => (
+      <article className="saved-ai-row" key={`ai-${row.id}`}>
+        <div className="saved-ai-row-heading">{sparkleIcon}<strong>AI response</strong></div>
+        <p>{row.text || ""}</p>
+        <button className="saved-folder-trigger" type="button" data-saved-folder-trigger data-saved-folder-type="ai-bookmarks" data-saved-folder-key={row.id} data-saved-folder-current={row.folderId || ""} aria-label="Choose folder" title="Choose folder">
+          {folderIcon}
+        </button>
+      </article>
+    )),
+  ];
+  const isExpanded = Boolean(expandedTabs[activeTab]);
+  const canExpand = libraryCards.length > 5;
+  const toggleExpanded = () => setExpandedTabs((current) => ({ ...current, [activeTab]: !current[activeTab] }));
 
   if (!hasContent) {
     const connected = snapshot.isConnected;
@@ -365,20 +370,16 @@ export function HomeLibraryPanel() {
       )}
       <HomeLibraryFolderTools snapshot={snapshot} tab={activeTab} onChange={changeFolder} />
       {visibleRows.length || snapshot.aiRows.length ? (
-        <>
-          {activeTab === "notes"
-            ? visibleRows.map((row) => <HomeSavedNoteCard key={row.id} row={row} onOpen={bridge.openSavedNote} />)
-            : visibleRows.map((row) => <HomeSavedVerseRow key={row.storageKey} row={row} tab={activeTab} onOpen={bridge.openSavedVerse} />)}
-          {snapshot.aiRows.map((row) => (
-            <article className="saved-ai-row" key={row.id}>
-              <div className="saved-ai-row-heading">{sparkleIcon}<strong>AI response</strong></div>
-              <p>{row.text || ""}</p>
-              <button className="saved-folder-trigger" type="button" data-saved-folder-trigger data-saved-folder-type="ai-bookmarks" data-saved-folder-key={row.id} data-saved-folder-current={row.folderId || ""} aria-label="Choose folder" title="Choose folder">
-                {folderIcon}
-              </button>
-            </article>
-          ))}
-        </>
+        <div className={`home-library-cards${isExpanded ? " is-expanded" : ""}`}>
+          {isExpanded ? libraryCards : libraryCards.slice(0, 5)}
+          {canExpand && (
+            <button className="home-library-expand" type="button" onClick={toggleExpanded} aria-label={isExpanded ? `Show fewer ${activeTab}` : `Show all ${activeTab}`} aria-expanded={isExpanded}>
+              <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                {isExpanded ? <path d="M5 12h14" /> : <path d="M12 5v14M5 12h14" />}
+              </svg>
+            </button>
+          )}
+        </div>
       ) : (
         <p className="saved-empty">{snapshot.activeFolder ? `No saved verses in ${snapshot.folders.find((folder) => folder.id === snapshot.activeFolder)?.name || "this folder"} yet.` : activeTab === "notes" ? "No notes match your search." : `No ${activeTab} yet.`}</p>
       )}

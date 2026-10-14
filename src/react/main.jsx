@@ -1,29 +1,71 @@
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
+import { Capacitor, registerPlugin } from "@capacitor/core";
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
 import { HomeHero, HomeLibraryPanel, HomeLibraryTabs, HomePrayerCard } from "./home.jsx";
-import { ProfileCloudAccount, ProfileHero, ProfileInformation, ProfilePreferences, ProfileTabs } from "./profile.jsx";
+import { SavedNoteCard } from "./saved-note-card.jsx";
+import { ProfileCloudAccount, ProfileHero, ProfileInformation, ProfilePreferences, ProfilePrayers, ProfileTabs } from "./profile.jsx";
 import { BibleChapterContent, BibleParallelControls, BibleReaderControls, BibleSelectedVerse, BibleVerseActions } from "./bible.jsx";
 import { NoteEditorContent, NoteEditorHeader, NoteEditorVerseChips, NoteToolbar } from "./notes.jsx";
 import { PrayerPage } from "./prayer.jsx";
 import { AiPage } from "./ai.jsx";
 import { KidsBiblePage } from "./kids-bible.jsx";
-import { ApologeticsDebatePage } from "./apologetics-debate.jsx";
+import { ApologeticsDebatePage, ThinkRoomResume } from "./apologetics-debate.jsx";
 import { ApologeticsCoachPage, ApologeticsXpCard } from "./apologetics-coach.jsx";
 import { AdminPage } from "./admin.jsx";
+import { PageTopSpacer } from "./page-top-spacer.jsx";
+import { startMobileUpdates } from "./mobile-updates.js";
+
+const pageTopSpacerNode = document.querySelector("[data-react-page-top-spacer-root]");
+if (pageTopSpacerNode) {
+  createRoot(pageTopSpacerNode).render(<PageTopSpacer />);
+}
+
+if (Capacitor.isNativePlatform()) {
+  const gentleHaptics = registerPlugin("GentleHaptics");
+  window.appButtonHaptic = () => {
+    const savedStrength = localStorage.getItem("brother.hapticsStrength") || "1";
+    const strength = ({ light: "1", medium: "3", strong: "5" })[savedStrength] || savedStrength;
+    if (strength === "off") return;
+    const level = Math.max(1, Math.min(5, Number(strength) || 1));
+    if (Capacitor.getPlatform() === "android") {
+      gentleHaptics.tap({ level }).catch(() => {});
+    } else {
+      Haptics.impact({ style: ImpactStyle.Light }).catch(() => {});
+    }
+  };
+}
+
+const profileSavedNoteRoots = new WeakMap();
+window.renderProfileSavedNoteCards = (container, rows, onOpen) => {
+  if (!container) return;
+  let root = profileSavedNoteRoots.get(container);
+  if (!root) {
+    root = createRoot(container);
+    profileSavedNoteRoots.set(container, root);
+  }
+  root.render(rows.map((row) => <SavedNoteCard key={row.id} row={row} onOpen={onOpen} />));
+};
+window.unmountProfileSavedNoteCards = (container) => {
+  const root = container && profileSavedNoteRoots.get(container);
+  if (!root) return;
+  root.unmount();
+  profileSavedNoteRoots.delete(container);
+};
 
 const navigationItems = [
-  ["prayer", "Prayer", "heart"],
-  ["kids-bible", "Kids Bible", "image"],
-  ["bible", "Bible", "book"],
-  ["home", "Home", "home"],
-  ["apologetics", "Debat", "shield"],
-  ["ai", "AI", "sparkles"],
   ["profile", "Profile", "user"],
+  ["ai", "Brother AI", "sparkles"],
+  ["apologetics", "Debate", "shield"],
+  ["home", "Home", "home"],
+  ["bible", "Bible", "book"],
+  ["kids-bible", "Kids Bible", "image"],
+  ["prayer", "Prayer", "heart"],
 ];
 
 const iconPaths = {
   home: ["M3 10.5 12 3l9 7.5", "M5 9.5V21h14V9.5", "M9 21v-6h6v6"],
-  book: ["M4 5.5A2.5 2.5 0 0 1 6.5 3H20v17H6.5A2.5 2.5 0 0 0 4 22.5z", "M4 5.5v17", "M8 7h8"],
+  book: ["M12 7v14", "M3 3h4a5 5 0 0 1 5 4 5 5 0 0 1 5-4h4v16h-4a5 5 0 0 0-5 2 5 5 0 0 0-5-2H3z"],
   image: ["M4 4h16v16H4z", "m4 16 4-4 3 3 3-4 6 6", "M9 8.5h.01"],
   heart: ["M20.8 8.8c0 5.4-8.8 10.2-8.8 10.2S3.2 14.2 3.2 8.8A4.7 4.7 0 0 1 12 6.1a4.7 4.7 0 0 1 8.8 2.7Z", "M7 15h4l2-3 2 2h3"],
   sparkles: ["m12 3-1.3 5.7L5 10l5.7 1.3L12 17l1.3-5.7L19 10l-5.7-1.3z", "m5 17-.6 2.4L2 20l2.4.6L5 23l.6-2.4L8 20l-2.4-.6z", "m19 3-.5 1.5L17 5l1.5.5L19 7l.5-1.5L21 5l-1.5-.5z"],
@@ -109,7 +151,7 @@ function BottomNavigation() {
 
   const triggerNavigationHaptic = (event) => {
     if (event.pointerType === "touch") {
-      navigator.vibrate?.(8);
+      if (!window.appButtonHaptic) navigator.vibrate?.(8);
     }
   };
 
@@ -153,6 +195,8 @@ if (homeLibraryPanelNode && window.homeLibraryBridge) {
 }
 
 const profileTabsNode = document.querySelector("[data-react-profile-tabs-root]");
+const profilePrayersNode = document.querySelector("[data-react-profile-prayers-root]");
+if (profilePrayersNode) createRoot(profilePrayersNode).render(<ProfilePrayers />);
 if (profileTabsNode) {
   createRoot(profileTabsNode).render(<ProfileTabs />);
 }
@@ -234,9 +278,12 @@ if (aiNode && window.aiBridge) {
 }
 
 const kidsBibleNode = document.querySelector("[data-react-kids-bible-root]");
-if (kidsBibleNode && window.kidsBibleBridge) {
+if (kidsBibleNode) {
   createRoot(kidsBibleNode).render(<KidsBiblePage />);
 }
+
+const thinkRoomResumeNode = document.querySelector("[data-react-think-room-resume-root]");
+if (thinkRoomResumeNode) createRoot(thinkRoomResumeNode).render(<ThinkRoomResume />);
 
 const apologeticsDebateNode = document.querySelector("[data-react-apologetics-debate-root]");
 if (apologeticsDebateNode) {
@@ -257,3 +304,5 @@ const adminNode = document.querySelector("[data-react-admin-root]");
 if (adminNode && window.moderationBridge) {
   createRoot(adminNode).render(<AdminPage />);
 }
+
+requestAnimationFrame(() => requestAnimationFrame(() => void startMobileUpdates()));

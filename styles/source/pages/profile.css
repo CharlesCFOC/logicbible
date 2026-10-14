@@ -127,7 +127,7 @@
   box-shadow: inset 0 1px 0 rgba(236, 250, 255, 0.12), 0 9px 20px rgba(0, 0, 0, 0.24) !important;
 }
 
-.app-shell[data-app-background="black"] #profile .preference-copy strong,
+.app-shell[data-app-background="black"] #profile .preference-copy h3,
 .app-shell[data-app-background="black"] #profile .preference-copy p,
 .app-shell[data-app-background="black"] #profile .profile-field span,
 .app-shell[data-app-background="black"] #profile .profile-info-actions p,
@@ -201,6 +201,11 @@
   background: rgba(17, 27, 34, 0.72) !important;
 }
 
+.app-shell[data-app-background="black"] #profile .segmented-control,
+.app-shell[data-app-background="black"] #profile .text-size-preview {
+  background: transparent !important;
+}
+
 .app-shell[data-app-background="black"] #profile .segmented-control button {
   color: #c9d5dd !important;
 }
@@ -210,6 +215,17 @@
   background: #3c9dcc !important;
   color: #ffffff !important;
   box-shadow: 0 3px 10px rgba(60, 157, 204, 0.3) !important;
+}
+
+#profile .haptics-strength-control {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  background: transparent !important;
+}
+
+#profile .haptics-strength-control button {
+  min-height: 44px;
+  padding-inline: 2px;
+  font-size: 12px;
 }
 
 .app-shell[data-app-background="black"] #profile .text-size-preview span,
@@ -285,103 +301,6 @@
   filter: saturate(0.7) brightness(1.08) contrast(0.88);
 }
 
-.profile-style-button {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  z-index: 3;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 32px;
-  padding: 0 11px;
-  border: 1px solid rgba(255, 255, 255, 0.34);
-  border-radius: 999px;
-  background: rgba(18, 32, 43, 0.68);
-  color: #e8f6ff;
-  font-size: 11px;
-  font-weight: 760;
-  -webkit-backdrop-filter: blur(12px) saturate(130%);
-  backdrop-filter: blur(12px) saturate(130%);
-}
-
-.profile-style-button svg {
-  width: 14px;
-  height: 14px;
-}
-
-.profile-style-editor {
-  position: absolute;
-  top: 54px;
-  right: 14px;
-  z-index: 4;
-  display: grid;
-  gap: 10px;
-  width: min(240px, calc(100% - 28px));
-  padding: 12px;
-  border: 1px solid rgba(181, 226, 247, 0.36);
-  border-radius: 16px;
-  background: rgba(18, 32, 43, 0.86);
-  color: #e8f6ff;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
-  -webkit-backdrop-filter: blur(16px) saturate(135%);
-  backdrop-filter: blur(16px) saturate(135%);
-}
-
-.profile-style-editor[hidden] {
-  display: none;
-}
-
-.profile-style-editor label {
-  display: grid;
-  gap: 6px;
-  font-size: 11px;
-  font-weight: 760;
-}
-
-.profile-style-editor input[type="file"] {
-  width: 100%;
-  color: #d8edf8;
-  font-size: 10px;
-}
-
-.profile-style-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 7px;
-}
-
-.profile-style-actions button {
-  min-height: 30px;
-  padding: 0 10px;
-  border-radius: 9px;
-  font-size: 11px;
-  font-weight: 760;
-}
-
-.profile-style-reset {
-  border: 1px solid rgba(216, 237, 248, 0.3);
-  background: transparent;
-  color: #d8edf8;
-}
-
-.profile-style-save {
-  border: 1px solid rgba(139, 220, 255, 0.52);
-  background: #3c9dcc;
-  color: #07141c;
-}
-
-.profile-style-feedback {
-  margin: 0;
-  color: #b9d8e8;
-  font-size: 10px;
-  line-height: 1.35;
-}
-
-.profile-style-feedback[data-state="error"] {
-  color: #ffb3b3;
-}
-
 .profile-hero::after {
   position: absolute;
   inset: 0;
@@ -398,6 +317,8 @@
   left: 14px;
   z-index: 1;
   display: flex;
+  justify-content: center;
+  text-align: center;
   align-items: flex-end;
   gap: 10px;
   padding: 12px 12px;
@@ -452,6 +373,28 @@
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.72);
   pointer-events: auto !important;
+}
+
+#profile .profile-tabs {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+#profile .profile-tabs [data-profile-tab="prayers"] {
+  grid-column: 1 / -1;
+}
+
+#profile .profile-prayer-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+#profile .profile-prayer-list .prayer-card--readonly,
+#profile .profile-prayer-list .prayer-card-toggle {
+  cursor: default;
 }
 
 .profile-tabs button {
@@ -1077,9 +1020,7 @@
 
 /* Profile primary and active controls use the same blue gradient as Home. */
 .app-shell[data-app-background="black"] #profile .profile-tabs button.is-active,
-.app-shell[data-app-background="black"] #profile .segmented-control button.is-active,
 .app-shell[data-app-background="black"] #profile .profile-save-button,
-.app-shell[data-app-background="black"] #profile .profile-style-save,
 .app-shell[data-app-background="black"] #profile .profile-auth-actions button.is-primary,
 .app-shell[data-app-background="black"] #profile .profile-auth-actions button:first-child,
 .app-shell[data-app-background="black"] #profile .profile-library button.is-active {
@@ -1089,6 +1030,16 @@
     linear-gradient(135deg, #22cfa2 0%, #258fd8 48%, #8062f2 100%) !important;
   color: #ffffff !important;
   box-shadow: 0 6px 14px rgba(35, 148, 190, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
+}
+
+/* Match selected text-size and vibration controls to Prayer category chips. */
+.app-shell[data-app-background="black"] #profile .segmented-control button.is-active,
+.app-shell[data-app-background="black"] #profile .segmented-control button.is-active:hover,
+.app-shell[data-app-background="black"] #profile .segmented-control button.is-active:focus-visible {
+  border: 0 !important;
+  color: #ffffff !important;
+  background: linear-gradient(135deg, rgba(48, 122, 164, 0.72), rgba(49, 68, 130, 0.78)) !important;
+  box-shadow: none !important;
 }
 
 .app-shell[data-app-background="black"] #profile .profile-library button.is-active svg,
@@ -1126,6 +1077,41 @@
   box-shadow: none !important;
 }
 
+.app-shell #profile .profile-preference-sections {
+  gap: 30px;
+}
+
+.app-shell #profile .profile-preference-section {
+  display: grid;
+  min-width: 0;
+  gap: 16px;
+}
+
+.app-shell #profile .profile-preference-section + .profile-preference-section {
+  padding-top: 28px;
+  border-top: 1px solid rgba(139, 220, 255, 0.25);
+}
+
+.app-shell #profile .profile-preference-section .preference-copy {
+  gap: 12px;
+}
+
+.app-shell #profile .profile-preference-section .preference-copy h3 {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.app-shell #profile .profile-preference-section .preference-copy > svg {
+  width: 28px;
+  height: 28px;
+  margin-top: 3px;
+}
+
+.app-shell #profile .profile-preference-section .preference-copy p {
+  margin-top: 8px;
+}
+
 #profile .profile-info-form {
   grid-template-columns: minmax(0, 1fr);
   justify-items: center;
@@ -1155,9 +1141,9 @@
 
 #profile .profile-info-card .profile-field input,
 #profile .profile-info-card .profile-field textarea {
-  background: rgba(17, 27, 34, 0.36) !important;
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  background: transparent !important;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
 #profile .profile-auth-card {
@@ -1346,6 +1332,11 @@
   filter: saturate(0.92) brightness(0.78) contrast(1.04) !important;
 }
 
+.app-shell #profile .profile-hero > img[data-profile-cover] {
+  object-fit: cover !important;
+  object-position: 50% 25% !important;
+}
+
 @media (width <= 360px) {
   #profile .profile-cover-grid button {
     flex-basis: 126px;
@@ -1435,4 +1426,19 @@
     margin-left: -14px !important;
     border-radius: 0 !important;
   }
+}
+
+/* The hero greeting sits directly on the cover image. */
+.app-shell #profile .profile-hero-caption {
+  position: absolute;
+  right: 14px;
+  bottom: 26px;
+  left: 14px;
+  z-index: 1;
+  text-align: center;
+}
+
+.app-shell #profile .profile-hero-caption h1 {
+  margin: 0;
+  color: #fff !important;
 }

@@ -15,7 +15,7 @@ function navigateFromFallback(id) {
     navButton.classList.toggle("is-active", navButton.dataset.nav === id);
   });
   try {
-    window.sessionStorage.setItem("thought-bible.active-screen", id);
+    window.sessionStorage.setItem("think-bible.active-screen", id);
   } catch {
     // Ignore unavailable browser storage in the fallback path.
   }

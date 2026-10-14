@@ -12,7 +12,7 @@ const reportLabels = {
 function formatDate(value) {
   if (!value) return "Just now";
   const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? "Just now" : new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short" }).format(date);
+  return Number.isNaN(date.getTime()) ? "Just now" : new Intl.DateTimeFormat("en-CA", { dateStyle: "medium", timeStyle: "short" }).format(date);
 }
 
 export function AdminPage() {
@@ -84,7 +84,7 @@ export function AdminPage() {
   </article>;
 
   return <main className="admin-screen-content">
-    <header className="admin-page-header"><button type="button" onClick={() => window.appNavigate?.("profile")}>←</button><div><span>MODERATION</span><h1>Admin review</h1></div><button type="button" className="admin-lock-button" onClick={() => { bridge.lock(); setState(bridge.getSnapshot()); }}>Lock</button></header>
+    <header className="admin-page-header"><button type="button" onClick={() => window.appNavigate?.("profile")}>←</button><div><span>MODERATION</span><h1>Admin review</h1></div></header>
     <section className="admin-summary"><strong>{openReports.length}</strong><span>open report{openReports.length === 1 ? "" : "s"}</span></section>
     {error && <p className="admin-error" role="alert">{error}</p>}
     <section className="admin-report-section" aria-labelledby="admin-open-reports"><h2 id="admin-open-reports">Needs review</h2>{openReports.length ? openReports.map(renderReport) : <p className="admin-empty">No reports waiting for review.</p>}</section>

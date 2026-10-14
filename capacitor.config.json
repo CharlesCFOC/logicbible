@@ -1,0 +1,12 @@
+{
+  "appId": "com.charlescfoc.logicbible",
+  "appName": "Think Bible",
+  "webDir": "dist",
+  "plugins": {
+    "LiveUpdate": {
+      "readyTimeout": 15000,
+      "autoDeleteBundles": true,
+      "autoBlockRolledBackBundles": true
+    }
+  }
+}

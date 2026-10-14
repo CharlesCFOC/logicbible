@@ -1,0 +1,83 @@
+// Short, child-friendly retellings; references lead to the full biblical accounts.
+export const genesisAdventures = [
+  {
+    id: 'genesis-creation', bookId: 'genesis', title: 'A World to Discover', subtitle: 'Light, plants, animals... everything has its place.',
+    theme: 'Wonder & care', icon: '🌍', badge: 'Creation Explorer', reference: 'Genesis 1:1–2:3', minutes: 4,
+    image: 'assets/kids-bible/genesis/creation.svg', color: 'ocean', coverPosition: '50%',
+    intro: 'Look around you: the sky, a tree, a bird... In Genesis, we discover how God creates a world full of life.',
+    scenes: [
+      { title: 'Let There Be Light!', position: '50%', text: 'In the beginning, God creates the heavens and the earth. He brings light and separates it from darkness. He calls the light day and the darkness night.' },
+      { title: 'A World Full of Life', position: '50%', text: 'God makes dry land and plants appear. He places lights in the sky and creates fish, birds, and animals. Then he creates human beings in his image, male and female. He gives them the earth to care for.' },
+      { title: 'A Time to Rest', position: '50%', text: 'God looks at everything he has made: it is very good. On the seventh day, he rests from his work of creation. He blesses this day and makes it special.' },
+    ],
+    questions: [
+      { question: 'What does God call the light?', choices: [['☀️', 'Day'], ['🌙', 'Night'], ['🌧️', 'Rain']], correct: 0, explanation: 'God calls the light day and the darkness night.' },
+      { question: 'What task does God give human beings?', choices: [['🗑️', 'Damage the earth'], ['🌱', 'Care for the earth'], ['🙈', 'Forget about the animals']], correct: 1, explanation: 'God gives people the earth and its living creatures to care for. We can help look after them.' },
+      { question: 'What does God do on the seventh day?', choices: [['🐟', 'He creates fish'], ['🌳', 'He creates plants'], ['💤', 'He rests from his work']], correct: 2, explanation: 'On the seventh day, God rests from his work of creation.' },
+    ],
+    order: [['☀️', 'Light appears'], ['🌿', 'The world fills with life'], ['💤', 'God rests on the seventh day']],
+    takeaway: 'The world is precious. I can enjoy its wonders and care for it.',
+    mission: 'With an adult, observe a plant or an animal. Find a small way to care for nature, such as watering a plant.',
+    prayer: 'God, thank you for this beautiful world. Help me care for it and respect others. Amen.',
+  },
+  {
+    id: 'genesis-noah', bookId: 'genesis', title: 'Noah and the Great Ark', subtitle: 'A big boat, animals, and a rainbow.',
+    theme: 'Trust & promises', icon: '🌈', badge: 'Ark Keeper', reference: 'Genesis 6–9', minutes: 4,
+    image: 'assets/kids-bible/genesis/noah.svg', color: 'ocean', coverPosition: '50%',
+    intro: 'Noah receives an amazing task: build an ark! Discover how his family and the animals make it through the great rain.',
+    scenes: [
+      { title: 'A Task for Noah', position: '50%', text: 'People do many harmful things on the earth. But Noah walks with God. God tells him a flood is coming and asks him to build a large ark to shelter his family and animals. Noah does what God asks.' },
+      { title: 'Safe Inside the Ark', position: '50%', text: 'Noah, his family, and the animals enter the ark. Rain falls for forty days and forty nights. The water rises, but the ark floats. God remembers Noah and sends a wind. The water begins to go down.' },
+      { title: 'A New Beginning', position: '50%', text: 'Noah sends out a dove. One day, it returns with an olive leaf. When the land is dry, God tells Noah to leave the ark. God makes a covenant with living creatures: the rainbow is a reminder of his promise never again to destroy the whole earth with a flood.' },
+    ],
+    questions: [
+      { question: 'What does God ask Noah to build?', choices: [['🏰', 'A castle'], ['🚢', 'An ark'], ['🗼', 'A tower']], correct: 1, explanation: 'Noah builds an ark to shelter his family and animals.' },
+      { question: 'What does the dove bring back?', choices: [['🪨', 'A large stone'], ['🌾', 'A bag of wheat'], ['🕊️', 'An olive leaf']], correct: 2, explanation: 'The dove returns with an olive leaf. Noah understands that the water has gone down.' },
+      { question: 'Which sign reminds us of God’s promise?', choices: [['🌈', 'The rainbow'], ['❄️', 'Snow'], ['🌋', 'A volcano']], correct: 0, explanation: 'The rainbow is the sign of God’s covenant with living creatures.' },
+    ],
+    order: [['🪵', 'Noah builds the ark'], ['🌧️', 'Rain falls and the ark floats'], ['🌈', 'The family leaves and God gives a sign']],
+    takeaway: 'I can trust God and care for the things I am given to look after.',
+    mission: 'Choose a task you can do, such as putting your things away or helping care for a plant. Ask an adult to help you.',
+    prayer: 'God, thank you for your promises. Help me be patient and care for others. Amen.',
+  },
+  {
+    id: 'genesis-abraham', bookId: 'genesis', title: 'Abraham Sets Out', subtitle: 'A brave journey to a new land.',
+    theme: 'Trust & courage', icon: '⛺', badge: 'Trusting Traveler', reference: 'Genesis 12:1–9', minutes: 4,
+    image: 'assets/kids-bible/genesis/abraham.svg', color: 'garden', coverPosition: '50%',
+    intro: 'In this story, Abraham is still called Abram. God invites him to travel to a new land. Ready to follow his journey?',
+    scenes: [
+      { title: 'A Call to Go', position: '50%', text: 'God asks Abram to leave his country and his father’s home and go to a land he will show him. God promises to bless him and make him a great nation. Through him, the families of the earth will receive a blessing.' },
+      { title: 'Traveling Together', position: '50%', text: 'Abram sets out as God has asked. His wife Sarai and his nephew Lot go with him. They take their belongings and travel toward Canaan. Abram is seventy-five years old when he leaves Haran.' },
+      { title: 'A Promise Along the Way', position: '50%', text: 'In Canaan, God appears to Abram and promises this land to his descendants. Abram builds an altar for God. He continues his journey, pitches his tent, and calls on God’s name.' },
+    ],
+    questions: [
+      { question: 'Who invites Abram to set out?', choices: [['👑', 'A king'], ['🧭', 'A merchant'], ['🙏', 'God']], correct: 2, explanation: 'God calls Abram to travel to the land he will show him.' },
+      { question: 'Who travels with Abram?', choices: [['👨‍👩‍👦', 'Sarai and Lot'], ['⛵', 'Noah and his family'], ['🐟', 'Jesus’ disciples']], correct: 0, explanation: 'Sarai, his wife, and Lot, his nephew, travel with Abram.' },
+      { question: 'Which land do they travel toward?', choices: [['🏔️', 'A snowy land'], ['⛺', 'Canaan'], ['🏝️', 'An unknown island']], correct: 1, explanation: 'Abram and his companions travel toward Canaan.' },
+    ],
+    order: [['🙏', 'God calls Abram'], ['🧳', 'Abram leaves with Sarai and Lot'], ['⛺', 'Abram builds an altar in Canaan']],
+    takeaway: 'I can move forward with courage, even when I do not know the whole path yet.',
+    mission: 'With a trusted adult, try something small and new: learn a game, say hello to someone, or visit a new place. Share how you felt.',
+    prayer: 'God, be with me when I try new things. Help me move forward with courage and ask for help. Amen.',
+  },
+  {
+    id: 'genesis-joseph', bookId: 'genesis', title: 'Joseph Shares the Grain', subtitle: 'Hard times, stored grain, and a family reunion.',
+    theme: 'Helping & forgiveness', icon: '🌾', badge: 'Big-Hearted Friend', reference: 'Genesis 37; 39–45', minutes: 5,
+    image: 'assets/kids-bible/genesis/joseph.svg', color: 'garden', coverPosition: '50%',
+    intro: 'Joseph lives far from his family. His story takes him through hard times, but one day he will be able to help many people.',
+    scenes: [
+      { title: 'Far from His Family', position: '50%', text: 'Joseph’s brothers are jealous of him and sell him to merchants. Joseph is taken to Egypt. He faces many difficulties and even ends up in prison. Yet God stays with him. Joseph helps explain dreams.' },
+      { title: 'Storing Grain', position: '50%', text: 'Pharaoh, the king of Egypt, has dreams that Joseph explains with God’s help. Seven years of plenty will be followed by seven years of famine. Joseph advises storing grain during the good years. Pharaoh puts him in charge of this important task.' },
+      { title: 'Food and a Family Reunion', position: '50%', text: 'When the famine arrives, Joseph’s brothers come to Egypt to buy grain. After several meetings, Joseph tells them who he is. He cries with them and offers help. He invites them to bring their father and family to live near him.' },
+    ],
+    questions: [
+      { question: 'Which country is Joseph taken to?', choices: [['⛺', 'Canaan'], ['🏺', 'Egypt'], ['⛰️', 'A snowy land']], correct: 1, explanation: 'Joseph is taken to Egypt, far from his family.' },
+      { question: 'Why does Joseph have grain stored?', choices: [['🌾', 'To feed people during the famine'], ['🏰', 'To decorate a palace'], ['🙈', 'So nobody can find it']], correct: 0, explanation: 'The stored grain feeds people when food becomes scarce.' },
+      { question: 'What does Joseph do at the reunion?', choices: [['🚪', 'He refuses to help'], ['🗑️', 'He throws away the grain'], ['🤝', 'He helps his brothers and welcomes his family']], correct: 2, explanation: 'Joseph helps his brothers and asks them to bring their father and family.' },
+    ],
+    order: [['🏺', 'Joseph is taken to Egypt'], ['🌾', 'Joseph stores grain'], ['🤝', 'Joseph meets his brothers again and helps them']],
+    takeaway: 'I can help others. When someone hurts me, I can talk to a trusted adult.',
+    mission: 'Find a small way to share or help today. If someone makes you sad, tell an adult who cares for you.',
+    prayer: 'God, thank you for staying close to me in hard times. Help me accept help and do good for others. Amen.',
+  },
+];

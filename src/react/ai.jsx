@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { highlightBibleCitations } from "../../lib/ai/bible-citations.js";
 
 const aiIcons = {
-  edit: ["M12 20h9", "M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4z"],
+  plus: ["M12 5v14", "M5 12h14"],
   send: ["m22 2-7 20-4-9-9-4Z", "M22 2 11 13"],
   copy: ["M8 8h11v12H8z", "M5 16H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v1"],
   bookmark: ["M6 4.5A2.5 2.5 0 0 1 8.5 2H18v19l-6-3-6 3z"],
@@ -62,14 +64,24 @@ export function AiComposer({ value, onChange, onSubmit, placeholder, ariaLabel, 
   );
 }
 
-export function AiMessage({ message, bridge, formatText, pendingLabel = "Brother AI is thinking...", showAvatar = false }) {
+export function AiMessage({ message, bridge, formatText, pendingLabel = "Brother AI is thinking...", showAvatar = false, showName = false, name = "BROTHER AI" }) {
   if (message.role === "user") return <article className="message user-message"><p>{message.text}</p></article>;
   const messageId = bridge.messageId(message.text);
   return (
     <article className={`message ai-message${showAvatar ? " ai-message--with-avatar" : ""}`} data-ai-message-id={messageId}>
-      {showAvatar && <span className="ai-message-avatar" aria-hidden="true"><AiIcon name="ai" /></span>}
+      {showAvatar && (showName ? (
+        <div className="ai-message-identity">
+          <span className="ai-message-avatar" aria-hidden="true"><AiIcon name="ai" /></span>
+          <span className="ai-message-name">{name}</span>
+        </div>
+      ) : <span className="ai-message-avatar" aria-hidden="true"><AiIcon name="ai" /></span>)}
       <div className="ai-message-stack">
-        <div className={`message-body rich-text${message.pending ? " shining-text" : ""}`} dangerouslySetInnerHTML={{ __html: message.pending ? pendingLabel : (formatText ? formatText(message.text) : bridge.format(message.text)) }} />
+        <div className={`message-body rich-text${message.pending ? " shining-text" : ""}`} onClick={(event) => {
+          const citation = event.target.closest("[data-bible-reference]");
+          if (!citation) return;
+          event.preventDefault();
+          bridge.openBibleReference?.(citation.dataset.bibleReference);
+        }} dangerouslySetInnerHTML={{ __html: message.pending ? pendingLabel : (formatText ? formatText(message.text) : bridge.format(message.text)) }} />
         {!message.pending && (
           <div className="ai-message-actions">
             <button type="button" className="ai-action-button" onClick={() => bridge.copy(message.text)} aria-label="Copy response" title="Copy"><AiIcon name="copy" /></button>
@@ -88,6 +100,12 @@ export function AiPage() {
   const [messages, setMessages] = useState(initial.messages);
   const [histories, setHistories] = useState(initial.histories);
   const [prompt, setPrompt] = useState("");
+  const [isAiScreenActive, setIsAiScreenActive] = useState(() => document.querySelector("#ai")?.classList.contains("is-active") || false);
+  useEffect(() => {
+    const handleScreenChange = (event) => setIsAiScreenActive(event.detail?.id === "ai");
+    window.addEventListener("app:screen-change", handleScreenChange);
+    return () => window.removeEventListener("app:screen-change", handleScreenChange);
+  }, []);
   const [promptIndex, setPromptIndex] = useState(0);
   const [promptFading, setPromptFading] = useState(false);
   const [pending, setPending] = useState(false);
@@ -166,14 +184,14 @@ export function AiPage() {
     <>
       <header className="ai-topbar">
         <div><strong>Brother AI</strong></div>
-        <button className="icon-button" type="button" onClick={newChat} aria-label="New chat"><AiIcon name="edit" /></button>
+        <button className="icon-button" type="button" onClick={newChat} aria-label="New chat"><AiIcon name="plus" /></button>
       </header>
       <nav className="ai-tabs" aria-label="AI sections">
         <button className={tab === "chat" ? "is-active" : ""} type="button" onClick={() => setTab("chat")}><span>Chat</span></button>
         <button className={tab === "history" ? "is-active" : ""} type="button" onClick={() => setTab("history")}><span>History</span></button>
       </nav>
       <div className="chat-thread" ref={threadRef} hidden={tab === "history"}>
-        {messages.map((message, index) => <AiMessage key={`${message.role}-${index}-${message.text}`} message={message} bridge={bridge} showAvatar />)}
+        {messages.map((message, index) => <AiMessage key={`${message.role}-${index}-${message.text}`} message={message} bridge={bridge} formatText={(text) => highlightBibleCitations(bridge.format(text), { clickable: true })} showAvatar />)}
       </div>
       <section className="ai-history-panel" hidden={tab !== "history"} aria-label="Conversation history">
         {histories.length ? histories.map((conversation) => (
@@ -183,7 +201,10 @@ export function AiPage() {
         )) : <p className="ai-history-empty">No conversations in the last 24 hours.</p>}
         <p className="ai-history-retention">Conversations are saved for 24 hours after your last message.</p>
       </section>
-      <AiComposer value={prompt} onChange={setPrompt} onSubmit={send} placeholder={aiComposerPrompts[promptIndex]} ariaLabel="Message Brother AI" disabled={pending} textareaClassName={promptFading ? "is-placeholder-fading" : ""} />
+      {isAiScreenActive && tab === "chat" && createPortal(
+        <AiComposer value={prompt} onChange={setPrompt} onSubmit={send} placeholder={aiComposerPrompts[promptIndex]} ariaLabel="Message Brother AI" disabled={pending} className="brother-ai-composer" textareaClassName={promptFading ? "is-placeholder-fading" : ""} />,
+        document.querySelector(".phone-frame"),
+      )}
     </>
   );
 }

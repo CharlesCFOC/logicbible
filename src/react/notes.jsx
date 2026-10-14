@@ -109,7 +109,7 @@ export function NoteEditorVerseChips() {
   return (
     <>
       <button type="button" className="note-editor-verse-summary" aria-expanded={expanded} onClick={() => setExpanded((current) => !current)}>
-        <span className="note-editor-verse-summary-copy"><strong>Voir les versets</strong></span>
+        <span className="note-editor-verse-summary-copy"><strong>View verses</strong></span>
         <NoteHeaderIcon name="chevron" />
       </button>
       {expanded && (

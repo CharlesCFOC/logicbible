@@ -1,11 +1,27 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { PrayerReadOnlyCard } from "./prayer.jsx";
 
 const profileTabs = [
-  ["preferences", "Preference", ["M4 5h16", "M7 5v8", "M17 5v14", "M4 13h16", "M4 21h16"]],
+  ["preferences", "Preferences", ["M4 5h16", "M7 5v8", "M17 5v14", "M4 13h16", "M4 21h16"]],
   ["information", "Information", ["M4 5h16v15H4z", "M8 9h8", "M8 13h5", "M8 17h8"]],
   ["cloud", "Cloud account", ["M7 18a5 5 0 1 1 1-9.9A6 6 0 0 1 19 10a4 4 0 0 1 0 8z"]],
+  ["prayers", "My prayers", ["M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"]],
 ];
+
+export function ProfilePrayers() {
+  const bridge = window.prayerBridge;
+  const [requests, setRequests] = useState(() => bridge.getSnapshot().ownRequests);
+  useEffect(() => {
+    const refresh = () => setRequests(bridge.getSnapshot().ownRequests);
+    document.addEventListener("prayer:state-change", refresh);
+    return () => document.removeEventListener("prayer:state-change", refresh);
+  }, [bridge]);
+  return <div className="prayer-list profile-prayer-list">
+    {requests.length ? requests.map((request, index) => <PrayerReadOnlyCard key={request.id} request={request} index={index} bridge={bridge} />)
+      : <p className="saved-empty">No prayers yet.</p>}
+  </div>;
+}
 
 function ProfileIcon({ paths }) {
   return (
@@ -49,15 +65,10 @@ export function ProfileTabs() {
 export function ProfileHero() {
   const bridge = window.profileBridge;
   const [state, setState] = useState(() => bridge.getHero());
-  const [editorOpen, setEditorOpen] = useState(false);
-  const [draft, setDraft] = useState(state.coverImage);
-  const [feedback, setFeedback] = useState("");
 
   useEffect(() => {
     const handleChange = () => {
-      const next = bridge.getHero();
-      setState(next);
-      setDraft(next.coverImage);
+      setState(bridge.getHero());
     };
     document.addEventListener("profile:hero-change", handleChange);
     document.addEventListener("profile:auth-change", handleChange);
@@ -67,34 +78,10 @@ export function ProfileHero() {
     };
   }, [bridge]);
 
-  const chooseCover = async (event) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-    try {
-      setDraft(await bridge.prepareCover(file));
-      setFeedback("Cover preview ready. Save to apply it.");
-    } catch (error) {
-      setFeedback(error.message || "Unable to read this image.");
-    }
-  };
-
-  const save = (event) => {
-    event.preventDefault();
-    bridge.saveCover(draft);
-    setEditorOpen(false);
-    setFeedback("Style saved on this device.");
-  };
-
   return (
     <>
-      <img src={draft} alt="Profile background" data-profile-cover loading="lazy" decoding="async" />
-      <button className="profile-style-button" type="button" onClick={() => setEditorOpen((current) => !current)} aria-expanded={editorOpen}><span>✎</span><span>Edit style</span></button>
-      {editorOpen && <form className="profile-style-editor" onSubmit={save}>
-        <label><span>Cover image</span><input type="file" accept="image/*" onChange={chooseCover} /></label>
-        <div className="profile-style-actions"><button type="button" className="profile-style-reset" onClick={() => { setDraft(bridge.getHero().coverImage); setFeedback("Default cover restored. Save to apply it."); }}>Reset</button><button type="submit" className="profile-style-save">Save style</button></div>
-        <p className="profile-style-feedback" role="status" aria-live="polite">{feedback}</p>
-      </form>}
-      <div className="profile-hero-overlay"><div><p className="eyebrow">Profile</p><h1 data-profile-name>{state.displayName}</h1></div></div>
+      <img src={state.coverImage} alt="Profile background" data-profile-cover loading="lazy" decoding="async" />
+      <div className="profile-hero-caption"><div><h1 data-profile-name>{state.welcome}</h1></div></div>
     </>
   );
 }
@@ -102,6 +89,7 @@ export function ProfileHero() {
 const preferenceIcons = {
   image: ["M4 4h16v16H4z", "m4 16 4-4 3 3 3-4 6 6", "M9 8.5h.01"],
   type: ["M4 5h16", "M12 5v14", "M8 19h8"],
+  vibration: ["M3 8v8", "M7 5v14", "M11 8v8", "M15 5v14", "M19 8v8", "M23 8v8"],
 };
 
 function PreferenceIcon({ name }) {
@@ -132,12 +120,9 @@ export function ProfilePreferences() {
 
   return (
     <>
-      <div className="preference-heading">
-        <h2 id="appearance-title">Preferences</h2>
-      </div>
-      <div className="preference-card">
-        <div className="preference-cover-picker">
-          <div className="preference-copy"><PreferenceIcon name="image" /><div><strong>Hero image</strong><p>Choose the image shown at the top of your profile.</p></div></div>
+      <div className="preference-card profile-preference-sections">
+        <section className="profile-preference-section preference-cover-picker" aria-labelledby="profile-hero-setting-title">
+          <div className="preference-copy"><PreferenceIcon name="image" /><div><h3 id="profile-hero-setting-title">Hero image</h3><p>Choose the image shown at the top of your profile.</p></div></div>
           <div className="profile-cover-carousel" role="region" aria-label="Hero image carousel">
             <button className="profile-cover-arrow" type="button" onClick={() => scrollCoverCarousel(-1)} aria-label="Previous hero images">‹</button>
             <div className="profile-cover-viewport" ref={coverCarouselRef}>
@@ -152,14 +137,24 @@ export function ProfilePreferences() {
             </div>
             <button className="profile-cover-arrow" type="button" onClick={() => scrollCoverCarousel(1)} aria-label="Next hero images">›</button>
           </div>
-        </div>
-        <div className="preference-copy"><PreferenceIcon name="type" /><div><strong>Text size</strong><p>Adjust the Scripture reading size.</p></div></div>
+        </section>
+        <section className="profile-preference-section" aria-labelledby="profile-text-setting-title">
+        <div className="preference-copy"><PreferenceIcon name="type" /><div><h3 id="profile-text-setting-title">Text size</h3><p>Adjust the Scripture reading size.</p></div></div>
         <div className="segmented-control" data-text-size-options>
           {[["xs", "A−", "Extra small text"], ["small", "A", "Small text"], ["medium", "A", "Medium text"], ["large", "A", "Large text"], ["xl", "A+", "Extra large text"]].map(([id, label, ariaLabel]) => (
             <button className={state.textSize === id ? "is-active" : ""} type="button" key={id} onClick={() => bridge.setPreference("textSize", id)} aria-label={ariaLabel}>{label}</button>
           ))}
         </div>
         <div className="text-size-preview"><span>Preview</span><p><sup>1</sup> In the beginning was the Word.</p></div>
+        </section>
+        <section className="profile-preference-section" aria-labelledby="profile-vibration-setting-title">
+        <div className="preference-copy"><PreferenceIcon name="vibration" /><div><h3 id="profile-vibration-setting-title">Button vibration</h3><p>Off, or choose a strength.</p></div></div>
+        <div className="segmented-control haptics-strength-control" role="group" aria-label="Button vibration strength">
+          {[["off", "Off", "Vibration off"], ["1", "1", "Level 1 of 5, very light"], ["2", "2", "Level 2 of 5, light"], ["3", "3", "Level 3 of 5, medium"], ["4", "4", "Level 4 of 5, strong"], ["5", "5", "Level 5 of 5, very strong"]].map(([id, label, ariaLabel]) => (
+            <button className={state.hapticsStrength === id ? "is-active" : ""} type="button" key={id} onClick={() => bridge.setPreference("hapticsStrength", id)} aria-label={ariaLabel} aria-pressed={state.hapticsStrength === id}>{label}</button>
+          ))}
+        </div>
+        </section>
       </div>
     </>
   );
@@ -183,19 +178,14 @@ export function ProfileInformation() {
 
   return (
     <>
-      <div className="preference-heading"><h2 id="profile-info-title">Informations</h2></div>
       <div className="profile-info-card">
         <form className="profile-info-form" onSubmit={save}>
           <label className="profile-field"><span>Name</span><input type="text" value={state.displayName} onChange={(event) => update("displayName", event.target.value)} maxLength="40" placeholder="Your name" /></label>
           <label className="profile-field"><span>Country</span><input type="text" value={state.country} onChange={(event) => update("country", event.target.value)} maxLength="60" placeholder="Canada" /></label>
-          <label className="profile-field"><span>Date de naissance</span><input type="date" value={state.dateOfBirth} onChange={(event) => update("dateOfBirth", event.target.value)} /></label>
+          <label className="profile-field"><span>Date of birth</span><input type="date" value={state.dateOfBirth} onChange={(event) => update("dateOfBirth", event.target.value)} /></label>
           <div className="profile-info-actions"><button type="submit" className="profile-save-button">Save information</button></div>
         </form>
       </div>
-      <section className="profile-admin-entry" aria-labelledby="moderation-admin-title">
-        <div><span>Moderation</span><strong id="moderation-admin-title">Admin review</strong><p>Review reports and remove inappropriate requests.</p></div>
-        <button type="button" onClick={() => window.moderationBridge?.open?.()}>Open</button>
-      </section>
     </>
   );
 }
@@ -211,6 +201,43 @@ export function ProfileCloudAccount() {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState("");
+  const [passwordOpen, setPasswordOpen] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
+  const [passwordSaving, setPasswordSaving] = useState(false);
+  const [passwordFeedback, setPasswordFeedback] = useState("");
+  const [passwordError, setPasswordError] = useState(false);
+
+  useEffect(() => {
+    if (!auth.connected) {
+      setPasswordOpen(false);
+      setNewPassword("");
+      setNewPasswordConfirm("");
+      setPasswordFeedback("");
+    }
+  }, [auth.connected]);
+
+  const changePassword = async (event) => {
+    event.preventDefault();
+    if (passwordSaving) return;
+    setPasswordSaving(true);
+    setPasswordFeedback("");
+    try {
+      const result = await bridge.changePassword(newPassword, newPasswordConfirm);
+      setPasswordError(Boolean(result.error));
+      setPasswordFeedback(result.error || "Your password has been changed.");
+      if (!result.error) {
+        setNewPassword("");
+        setNewPasswordConfirm("");
+        setPasswordOpen(false);
+      }
+    } catch {
+      setPasswordError(true);
+      setPasswordFeedback("Could not change your password. Please try again.");
+    } finally {
+      setPasswordSaving(false);
+    }
+  };
 
   useEffect(() => {
     const handleChange = () => setAuth(bridge.getAuth());
@@ -254,6 +281,17 @@ export function ProfileCloudAccount() {
             <button type="button" data-auth-action="sign-out" onClick={bridge.signOut}>Sign out</button>
             <button type="button" className="profile-delete-trigger" onClick={() => { setDeleteError(""); setDeleteOpen(true); }} aria-haspopup="dialog" aria-expanded={deleteOpen}>Delete my account</button>
           </div>
+          <section className="profile-password-section" aria-label="Password">
+          <div className="profile-auth-actions profile-password-trigger">
+            <button type="button" aria-expanded={passwordOpen} aria-controls="profile-password-form" disabled={passwordSaving} onClick={() => { setPasswordOpen((open) => !open); setPasswordFeedback(""); setNewPassword(""); setNewPasswordConfirm(""); }}><span>Change password</span><svg className="profile-password-chevron" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button>
+          </div>
+          {passwordOpen && <form id="profile-password-form" className="profile-auth-form profile-password-form" onSubmit={changePassword}>
+            <label><span>New password</span><input autoFocus type="password" autoComplete="new-password" aria-label="New password" value={newPassword} onChange={(event) => setNewPassword(event.target.value)} minLength={6} required disabled={passwordSaving} /></label>
+            <label><span>Confirm new password</span><input type="password" autoComplete="new-password" aria-label="Confirm new password" value={newPasswordConfirm} onChange={(event) => setNewPasswordConfirm(event.target.value)} minLength={6} required disabled={passwordSaving} /></label>
+            <div className="profile-auth-actions"><button type="submit" disabled={passwordSaving}>{passwordSaving ? "Saving…" : "Save password"}</button><button type="button" disabled={passwordSaving} onClick={() => { setPasswordOpen(false); setNewPassword(""); setNewPasswordConfirm(""); setPasswordFeedback(""); }}>Cancel</button></div>
+          </form>}
+          {passwordFeedback && <p className="profile-password-feedback" role={passwordError ? "alert" : "status"} data-state={passwordError ? "error" : "success"}>{passwordFeedback}</p>}
+          </section>
         </div>
         {deleteOpen && createPortal(
           <div className="profile-delete-dialog-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget && !deleting) setDeleteOpen(false); }}>

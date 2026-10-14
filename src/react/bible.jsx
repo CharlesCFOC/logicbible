@@ -1,11 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-
-const searchIcon = (
-  <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="10.8" cy="10.8" r="6.8" />
-    <path d="m16 16 5 5" />
-  </svg>
-);
+import { ChapterQuiz } from "./chapter-quiz.jsx";
 
 const columnsIcon = (
   <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -75,8 +69,8 @@ export function BibleReaderControls() {
           {state.chapters.map((chapter) => <option key={chapter} value={chapter}>{chapter}</option>)}
         </select>
       </label>
-      <button className="icon-button bible-glass-control bible-glass-search" type="button" data-open-search aria-label="Search Scripture">
-        <span className="bible-glass-control-content">{searchIcon}</span>
+      <button className="icon-button bible-glass-control bible-glass-search" type="button" data-bible-menu-toggle aria-label="Open Bible menu" aria-controls="bible-menu-drawer" aria-expanded="false">
+        <span className="bible-glass-control-content"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="10.8" cy="10.8" r="6.8" /><path d="m16 16 5 5" /></svg></span>
       </button>
     </>
   );
@@ -88,19 +82,12 @@ export function BibleParallelControls() {
   return (
     <>
       <button className={`parallel-toggle bible-glass-control bible-glass-parallel${state.parallelEnabled ? " is-active" : ""}`} type="button" onClick={bridge.toggleParallel}>
-        <span className="bible-glass-control-content">{columnsIcon}<span>Parallèle</span></span>
+        <span className="bible-glass-control-content">{columnsIcon}<span>Parallel</span></span>
       </button>
       <button className={`parallel-toggle reader-target-toggle bible-glass-control bible-glass-target${state.showHighlightsOnly ? " is-active" : ""}`} type="button" onClick={bridge.toggleTarget}>
-        <span className="bible-glass-control-content">{targetIcon}<span>Cible</span></span>
+        <span className="bible-glass-control-content">{targetIcon}<span>Highlights</span></span>
       </button>
-      <div className="parallel-selects" hidden={!state.parallelEnabled}>
-        <label aria-label="Compare with Bible version">
-          <select value={state.parallelVersionId} onChange={(event) => bridge.setParallelVersion(event.target.value)}>
-            <option value="">Comparer avec</option>
-            {state.parallelOptions.map((option) => <option key={option.id} value={option.id}>{option.label}</option>)}
-          </select>
-        </label>
-      </div>
+
     </>
   );
 }
@@ -137,11 +124,10 @@ export function BibleVerseActions() {
     ["copy", "Copy", "action-secondary"],
     ["share", "Share", "action-secondary"],
     ["bookmark", "Bookmark", "action-secondary"],
-    ["original-language", state.languageLabel || "Greek", "action-secondary"],
   ];
 
   return actions.map(([id, label, baseClass]) => (
-    <button className={`${baseClass}${state.active[id] ? " is-active" : ""}`} key={id} type="button" data-verse-action={id} disabled={id === "original-language"} aria-label={id === "original-language" ? "Greek indisponible" : undefined} onClick={() => bridge.runAction(id)}>
+    <button className={`${baseClass}${state.active[id] ? " is-active" : ""}`} key={id} type="button" data-verse-action={id} onClick={() => bridge.runAction(id)}>
       <VerseActionIcon name={id} />
       <span>{label}</span>
     </button>
@@ -223,17 +209,31 @@ function BibleEmptyState({ state }) {
   if (state.status === "loading") return <p className="reader-empty">Loading chapter...</p>;
   if (state.status === "error") return <div className="reader-empty"><strong>Could not load this version.</strong><span>{state.error}</span></div>;
   if (!state.verses.length) {
+    if (state.showHighlightsOnly) return <p className="reader-empty reader-empty-highlight">No highlighted verses.</p>;
     return <div className="reader-empty"><strong>{state.title}</strong><span>{state.copyright}</span></div>;
   }
-  return <div className="reader-empty"><strong>Aucun verset highlighté dans ce chapitre.</strong><span>Highlight un verset, puis utilise Cible pour l’isoler ici.</span></div>;
+  return <p className="reader-empty reader-empty-highlight">No highlighted verses.</p>;
 }
 
 function BibleParallelContent({ state, selection, bridge }) {
+  const [controls, readerBridge] = useBibleReaderState();
   return (
     <div className="parallel-scripture-grid">
       <div className="parallel-version-headers" aria-label="Bible versions">
-        <div className="parallel-version-header is-primary"><span>Current version</span><strong>{state.parallel.primary.label}</strong><small>{state.parallel.primary.name}</small></div>
-        <div className="parallel-version-header is-compare"><span>Compared version</span><strong>{state.parallel.compare.label}</strong><small>{state.parallel.compare.name}</small></div>
+        <label className="parallel-version-header is-primary">
+          <span>Current version</span><strong>{state.parallel.primary.label}</strong><small>{state.parallel.primary.name}</small>
+          <select aria-label="Choose current Bible version" value={controls.versionId} onChange={(event) => readerBridge.setVersion(event.target.value)}>
+            {controls.versionOptions.map((option) => option.separator
+              ? <option key="separator" disabled value="">────────────</option>
+              : <option key={option.id} value={option.id}>{option.label}</option>)}
+          </select>
+        </label>
+        <label className="parallel-version-header is-compare">
+          <span>Compared version</span><strong>{state.parallel.compare.label}</strong><small>{state.parallel.compare.name}</small>
+          <select aria-label="Choose compared Bible version" value={controls.parallelVersionId} onChange={(event) => readerBridge.setParallelVersion(event.target.value)}>
+            {controls.parallelOptions.map((option) => <option key={option.id} value={option.id}>{option.label}</option>)}
+          </select>
+        </label>
       </div>
       {state.parallel.rows.map((verse) => (
         <article
@@ -257,6 +257,12 @@ function BibleParallelContent({ state, selection, bridge }) {
 }
 
 function BibleChapterNavigation({ state, bridge }) {
+  const [quizOpen, setQuizOpen] = useState(false);
+  const [quizStarted, setQuizStarted] = useState(false);
+  const quizContainer = useRef(null);
+  useEffect(() => {
+    if (quizOpen) quizContainer.current?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+  }, [quizOpen]);
   const bookIndex = state.books.findIndex((book) => book.id === state.bookId);
   const atBibleBeginning = bookIndex <= 0 && state.chapter <= 1;
   const atBibleEnd = bookIndex >= state.books.length - 1 && state.chapter >= state.chapterCount;
@@ -267,14 +273,18 @@ function BibleChapterNavigation({ state, bridge }) {
   };
 
   return (
-    <nav className="bible-chapter-navigation" aria-label="Chapter navigation">
+    <><nav className="bible-chapter-navigation" aria-label="Chapter navigation">
       <button type="button" onClick={() => goToChapter(-1)} disabled={atBibleBeginning} aria-label="Previous chapter">
         <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
       </button>
+      <button className="bible-chapter-quiz-toggle" type="button" onClick={() => { setQuizStarted(true); setQuizOpen(open => !open); }} aria-expanded={quizOpen} aria-controls="bible-chapter-quiz"><span>Quiz</span></button>
       <button type="button" onClick={() => goToChapter(1)} disabled={atBibleEnd} aria-label="Next chapter">
         <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
       </button>
     </nav>
+    <div id="bible-chapter-quiz" ref={quizContainer} hidden={!quizOpen}>
+      {quizStarted && <ChapterQuiz source={state.quizSource} bridge={bridge} />}
+    </div></>
   );
 }
 
@@ -425,5 +435,5 @@ export function BibleChapterContent() {
   const content = state.parallelEnabled && state.parallel
     ? <BibleParallelContent state={state} selection={verseState} bridge={bridge} />
     : state.verses.map((verse) => <BibleVerseLine key={verse.key} verse={verse} selection={verseState} bridge={bridge} />);
-  return <>{content}<BibleChapterQuiz state={state} /><BibleChapterNavigation state={state} bridge={bridge} /></>;
+  return <>{content}<BibleChapterQuiz state={state} /><BibleChapterNavigation key={`${state.versionId}:${state.bookId}:${state.chapter}`} state={state} bridge={bridge} /></>;
 }
