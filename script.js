@@ -1108,13 +1108,14 @@ async function hydrateSupabaseState() {
       throw error;
     }
 
-    const localKeys = Object.keys(localStorage).filter((key) => key.startsWith("brother."));
+    const localKeys = Object.keys(localStorage).filter((key) => key.startsWith("brother.") && !key.startsWith("brother.studyChat."));
     const localRows = new Map(localKeys.map((key) => [key, localStorage.getItem(key)]));
     const remoteRows = new Map((rows || []).map((row) => [row.state_key, row.payload]));
     const missingRows = [];
 
     const pendingKeys = getPendingSyncKeys();
     remoteRows.forEach((payload, key) => {
+      if (key.startsWith("brother.studyChat.")) return;
       if (key === "brother.hapticsStrength") {
         const localStrength = localStorage.getItem(key);
         // Preserve levels already chosen on this device before cloud sync existed.
@@ -6261,6 +6262,22 @@ async function readQuizResponse(response) {
 }
 
 window.bibleReaderBridge = {
+  async prepareStudy(bookId, chapterNumber) {
+    const book = BOOKS.find(item => item.id === bookId);
+    if (!book) throw new Error("Please choose a book.");
+    readerState.bookId = book.id;
+    readerState.chapter = Math.max(1, Math.min(book.chapters, Number(chapterNumber) || 1));
+    renderBookOptions();
+    renderChapterOptions();
+    const chapter = await loadChapter();
+    if (!chapter) throw new Error(bibleChapterError || "Could not load this chapter. Please try again.");
+  },
+  openStudy() {
+    setScreen("bible");
+    if (appShell.dataset.activeScreen === "bible") {
+      document.querySelector('#bible [data-bible-menu-toggle]')?.click();
+    }
+  },
   async createChapterQuiz(source, signal) {
     const response = await fetch(apiUrl("/api/bible/quiz"), {
       method: "POST", headers: { "Content-Type": "application/json" },
@@ -7193,7 +7210,7 @@ window.aiBridge = {
 };
 initHomeStats();
 initAuthForm();
-initSupabase();
+const initialSupabaseReady = initSupabase();
 renderApologetics();
 refreshIcons();
 
@@ -7274,7 +7291,7 @@ refreshIcons();
     }
   }
   let studyView, disposeStudyView;
-  const studyViewReady = import('./scripts/bible-study-view.js?v=2');
+  const studyViewReady = import('./scripts/bible-study-view.js?v=12');
   const studyHelpersReady = import('./scripts/bible-study-tools.js?v=2');
   function displayStudyResult(result, tabName, snapshot = window.bibleReaderBridge.getChapterSnapshot()) {
     stopStudyProgress();
@@ -7285,7 +7302,7 @@ refreshIcons();
     }
     const draftKey = `${snapshot.versionId}.${snapshot.bookId}.${snapshot.chapter}.${tabName}`;
     disposeStudyView = studyView.mountStudyView({
-      panel: toolPanel, result, tabName, snapshot, formatText: renderRichText,
+      panel: toolPanel, result, tabName, snapshot, formatText: renderRichText, accountScope: supabaseUser?.id || 'guest', accountReady: initialSupabaseReady.then(()=>supabaseUser?.id || 'guest'),
       async loadPassage(reference, signal) {
         if (reference.bookId === snapshot.bookId && reference.chapter === snapshot.chapter) {
           return { verses: snapshot.quizSource.verses, version: snapshot.versionName };
@@ -7302,14 +7319,14 @@ refreshIcons();
         const chapter = normalizeApiChapter(payload.data, version);
         return { verses: chapter.verses, version: chapter.versionName || version.name };
       },
-      async ask({item,question,previous,signal}) {
+      async ask({item,question,history = [],signal}) {
         if (containsPersonalContactInfo(question)) throw new Error('Please leave email addresses and phone numbers out of your message.');
         const response = await fetch(apiUrl('/api/ai/verse'), {
           method: 'POST', headers: {'Content-Type':'application/json'}, signal,
           body: JSON.stringify({
             reference: result.reference, version: snapshot.versionName, audience: 'teen',
             text: snapshot.quizSource.verses.map(verse=>`[${verse.number}] ${verse.text}`).join('\n'),
-            question: `Bible Study section: ${tabName}. Card: ${item.title}. Study note (unverified): ${item.detail || ''} ${item.deeper || ''}\n${previous ? `Previous answer: ${previous.slice(0,2500)}\n` : ''}User question: ${question}\nAnswer in English, stay connected to this chapter, distinguish the passage from interpretation, and do not treat the study note as an established fact.`,
+            question: `Bible Study section: ${tabName}. Card: ${item.title}. Study note (unverified): ${item.detail || ''} ${item.deeper || ''}\n${history.length ? `Conversation so far:\n${history.filter(message=>!containsPersonalContactInfo(message.text)).slice(-10).map(message=>`${message.role}: ${message.text.slice(0,2500)}`).join('\n')}\n` : ''}User question: ${question}\nAnswer in English, stay connected to this chapter, distinguish the passage from interpretation, and do not treat the study note as an established fact. Start with a direct answer, use short paragraphs and at most three bullets when helpful, and keep the reply concise.`,
           }),
         });
         const payload = await response.json();

@@ -656,7 +656,7 @@ html body .app-shell .phone-frame:has(#bible.is-active) .page-top-spacer {
 }
 
 html body .app-shell .phone-frame #bible .parallel-controls {
-  margin-top: -7px;
+  margin-top: 1px;
   padding-top: 0;
 }
 
@@ -667,21 +667,21 @@ html body .app-shell .phone-frame #bible .parallel-controls {
   }
 
   html body .app-shell .phone-frame #bible .parallel-controls {
-    margin-top: -27px;
+    margin-top: -19px;
   }
 }
 
 html body .app-shell .phone-frame #home > .home-hero {
-  top: calc(16px + var(--page-top-space, 32px));
+  top: calc(8px + var(--page-top-space, 32px));
 }
 
 /* Bible selectors match the dark blue inactive category pills in Profile. */
 html body .app-shell .phone-frame #bible .reader-topbar > .bible-glass-search {
   position: relative;
-  flex: 0 0 46px;
-  width: 46px;
-  height: 46px;
-  min-height: 46px;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  min-height: 40px;
   padding: 0;
   overflow: hidden;
   border: 0 !important;
@@ -1018,12 +1018,12 @@ html body .app-shell #prayer.screen.is-active {
   }
 
   html body .app-shell .phone-frame #home .home-hero-app-title {
-    top: var(--page-heading-top);
-    transform: none;
+    top: 50%;
+    transform: translateY(-50%);
   }
 
   html body .app-shell .phone-frame #home > .home-hero {
-    top: var(--page-heading-top);
+    top: calc(var(--page-heading-top) - 12px);
   }
 
   html body .app-shell .phone-frame #profile .profile-hero-caption {

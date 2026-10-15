@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { SavedNoteCard } from "./saved-note-card.jsx";
 
@@ -50,6 +50,61 @@ function LibraryIcon({ name }) {
   );
 }
 
+function HomeStudyLauncher() {
+  const dialogRef = useRef(null);
+  const [selection, setSelection] = useState(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const book = selection?.books.find(item => item.id === selection.bookId);
+
+  function open() {
+    const snapshot = window.bibleReaderBridge?.getSnapshot();
+    if (!snapshot) return;
+    setSelection(snapshot);
+    setError("");
+    dialogRef.current.showModal();
+  }
+
+  async function start(event) {
+    event.preventDefault();
+    if (busy) return;
+    setBusy(true);
+    setError("");
+    try {
+      await window.bibleReaderBridge.prepareStudy(selection.bookId, selection.chapter);
+      dialogRef.current.close();
+      window.bibleReaderBridge.openStudy();
+    } catch (failure) {
+      setError(failure.message || "Could not open this chapter. Please try again.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return <>
+    <button type="button" className="home-study-launch" onClick={open} aria-haspopup="dialog">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg>
+      Bible Study
+    </button>
+    {createPortal(<dialog ref={dialogRef} className="home-study-dialog" aria-labelledby="home-study-heading" onCancel={event => { if (busy) event.preventDefault(); }}>
+      <form onSubmit={start}>
+        <header><h2 id="home-study-heading">Bible Study</h2><button type="button" aria-label="Close Bible Study selection" disabled={busy} onClick={() => dialogRef.current.close()}>×</button></header>
+        <p>Choose a chapter to explore.</p>
+        <div className="home-study-selectors">
+          <label>Book<select value={selection?.bookId || ""} disabled={busy} onChange={event => setSelection(current => ({...current, bookId: event.target.value, chapter: 1}))}>
+            {selection?.books.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}
+          </select></label>
+          <label>Chapter<select value={selection?.chapter || 1} disabled={busy} onChange={event => setSelection(current => ({...current, chapter: Number(event.target.value)}))}>
+            {Array.from({length: book?.chapters || 1}, (_, index) => <option key={index + 1} value={index + 1}>{index + 1}</option>)}
+          </select></label>
+        </div>
+        <p className="home-study-error" role="status" aria-live="polite">{error}</p>
+        <button className="home-study-start" type="submit" disabled={busy}>{busy ? "Opening chapter…" : "Start study"}</button>
+      </form>
+    </dialog>, document.body)}
+  </>;
+}
+
 export function HomeHero() {
   const [coverImage, setCoverImage] = useState(() => window.profileBridge?.getHero?.().coverImage || "assets/home-hero-mountain-sunrise.webp");
   const [verse, setVerse] = useState(readHomeVerse);
@@ -90,9 +145,10 @@ export function HomeHero() {
           </div>
           <strong>{verse.text}</strong>
         </div>
-        <button type="button" data-nav="bible">
-          Start reading {arrowIcon}
-        </button>
+        <div className="home-hero-actions">
+          <button type="button" data-nav="bible">Start reading {arrowIcon}</button>
+          <HomeStudyLauncher />
+        </div>
       </div>
     </>
   );

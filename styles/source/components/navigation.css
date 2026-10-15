@@ -219,12 +219,12 @@
   bottom: 0;
   left: 0;
   height: 2px;
-  border-radius: 999px;
+  border-radius: 0;
   background: linear-gradient(110deg, #4fc3ff 0%, #8bdcff 24%, #ff9d00 50%, #ffb6dc 76%, #4fc3ff 100%);
   background-size: 280% 100%;
   content: "";
   pointer-events: none;
-  box-shadow: 0 0 8px rgba(139, 220, 255, 0.72), 0 0 18px rgba(255, 157, 0, 0.3), 0 0 22px rgba(255, 182, 220, 0.28);
+  box-shadow: 0 -3px 8px rgba(139, 220, 255, 0.4);
   animation: homeHeroNeonShift 6s ease-in-out infinite;
 }
 
@@ -241,14 +241,14 @@
 
 .home-hero-app-title {
   position: absolute;
-  top: 46%;
+  top: 50%;
   right: 18px;
   z-index: 5;
   width: min(86%, 360px);
   margin: 0;
   color: transparent;
   font-family: var(--font-body);
-  font-size: clamp(52px, 13vw, 78px);
+  font-size: clamp(60px, 15cqw, 90px);
   font-weight: 800;
   line-height: 0.86;
   letter-spacing: -0.075em;

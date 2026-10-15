@@ -2405,3 +2405,28 @@ body:has(.app-shell[data-app-background="black"]) > .app-shell {
 .app-shell #home .home-bible-timeline {
   display: none !important;
 }
+
+/* A compact entry to chapter study from the Home hero. */
+.home-hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+#home .home-hero-actions .home-study-launch,
+.home-study-start {
+  background: linear-gradient(110deg, #4fc3ff 0%, #8bdcff 24%, #ff9d00 50%, #ffb6dc 76%, #4fc3ff 100%);
+  background-size: 280% 100%;
+  animation: homeHeroTitleGradient 7s ease-in-out infinite;
+  color: #fff;
+}
+.home-study-dialog { width: min(380px, calc(100vw - 32px)); max-height: calc(100dvh - 48px); overflow-y: auto; margin: auto; padding: 24px; border: 1px solid rgba(190, 225, 248, .35); border-radius: 24px; color: #fff; background: transparent; -webkit-backdrop-filter: blur(36px) saturate(120%); backdrop-filter: blur(36px) saturate(120%); scrollbar-width: none; }
+.home-study-dialog::backdrop { background: transparent; -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+.home-study-dialog header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.home-study-dialog h2 { margin: 0; font-size: 24px; color: #fff; }
+.home-study-dialog header button { width: 32px; height: 32px; padding: 0; border: 0; background: transparent; color: #fff; font-size: 26px; }
+.home-study-dialog p { margin: 12px 0 22px; color: #d9e8f4; font-size: 14px; }
+.home-study-selectors { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 12px; }
+.home-study-selectors label { display: grid; gap: 8px; color: #a6dccb; font-size: 12px; }
+.home-study-selectors select { width: 100%; min-height: 44px; padding: 0 12px; border: 1px solid rgba(190,225,248,.25); border-radius: 14px; color: #fff; background: #234275; font: inherit; font-size: 14px; }
+.home-study-dialog .home-study-error:empty { display: none; }
+.home-study-dialog .home-study-error { margin: 12px 0 0; color: #ffcae7; }
+.home-study-start { width: 100%; min-height: 46px; margin-top: 24px; border: 0; border-radius: 16px; font: inherit; font-weight: 800; }
+.home-study-dialog button:disabled { opacity: .6; cursor: wait; }
+.home-study-dialog :is(button, select):focus-visible { outline: 2px solid #8bdcff; outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { #home .home-hero-actions .home-study-launch, .home-study-start { animation: none; } }

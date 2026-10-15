@@ -2530,9 +2530,9 @@ body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is
 @media (prefers-reduced-motion: reduce) { #prayer .intercession-current-focus { animation: none; } .phone-frame .intercession-session-dialog { animation: none; } }
 #prayer .intercession-world-section { min-width: 0; }
 #prayer .intercession-world-section > h3 { margin: 0 0 18px; color: #edf6ff; font-size: 20px; font-size: clamp(20px, calc(16px + 1.25cqw), 21.6px); font-weight: 800; line-height: 1.25; text-align: left; }
-#prayer .intercession-world { position: relative; display: block; width: calc(100% + var(--prayer-page-gutter, 16px)); height: 560px; margin: 0 0 0 calc(-1 * var(--prayer-page-gutter, 16px)); overflow: hidden; background: transparent; }
-#prayer .intercession-globe-shell { position: absolute; top: 50%; left: -154px; width: 490px; height: 490px; transform: translateY(-50%); }
-#prayer .intercession-globe-canvas { display: block; width: 490px; height: 490px; cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; outline: 0; }
+#prayer .intercession-world { position: relative; display: block; width: calc(100% + var(--prayer-page-gutter, 16px)); height: 530px; margin: 0 0 0 calc(-1 * var(--prayer-page-gutter, 16px)); overflow: hidden; background: transparent; }
+#prayer .intercession-globe-shell { position: absolute; top: 50%; left: -144px; width: 460px; height: 460px; transform: translateY(-50%); }
+#prayer .intercession-globe-canvas { display: block; width: 460px; height: 460px; cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; outline: 0; }
 #prayer .intercession-globe-canvas:active { cursor: grabbing; }
 #prayer .intercession-globe-canvas:focus-visible { outline: 2px solid #a9d7ee; outline-offset: 4px; border-radius: 50%; }
 #prayer .intercession-world-copy { position: absolute; z-index: 1; top: 14px; right: 14px; bottom: auto; display: grid; gap: 4px; max-width: 38%; }
@@ -2567,9 +2567,9 @@ body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs button.is
 #prayer .intercession-panel :is(button, summary):focus-visible { outline: 2px solid #a9d7ee; outline-offset: 3px; }
 @keyframes intercession-live-pulse { 70% { box-shadow: 0 0 0 7px rgba(171, 216, 194, 0); } 100% { box-shadow: 0 0 0 0 rgba(171, 216, 194, 0); } }
 @media (max-width: 360px) {
-  #prayer .intercession-world { height: 500px; }
-  #prayer .intercession-globe-shell, #prayer .intercession-globe-canvas { width: 455px; height: 455px; }
-  #prayer .intercession-globe-shell { left: -136px; }
+  #prayer .intercession-world { height: 470px; }
+  #prayer .intercession-globe-shell, #prayer .intercession-globe-canvas { width: 425px; height: 425px; }
+  #prayer .intercession-globe-shell { left: -127px; }
   #prayer .intercession-world-copy { top: 12px; right: 10px; bottom: auto; max-width: 39%; }
   #prayer .intercession-world-copy strong { font-size: 32px; font-size: clamp(32px, calc(25.6px + 2cqw), 34.56px); }
   #prayer .prayer-page-tabs button { font-size: 9px; font-size: clamp(9px, calc(7.2px + 0.5625cqw), 9.72px); }

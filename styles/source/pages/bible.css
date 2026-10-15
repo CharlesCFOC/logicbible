@@ -629,7 +629,7 @@
   margin: 34px 0 12px;
 }
 
-.bible-chapter-navigation button {
+:is(.bible-chapter-navigation button, .bible-study-quiz-toggle) {
   display: grid;
   place-items: center;
   width: 44px;
@@ -642,23 +642,23 @@
   box-shadow: 0 7px 16px rgba(255, 106, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.26);
 }
 
-.bible-chapter-navigation button:hover:not(:disabled) {
+:is(.bible-chapter-navigation button, .bible-study-quiz-toggle):hover:not(:disabled) {
   filter: brightness(1.08) saturate(1.08);
 }
 
-.bible-chapter-navigation button:disabled {
+:is(.bible-chapter-navigation button, .bible-study-quiz-toggle):disabled {
   cursor: not-allowed;
   opacity: 0.34;
   filter: saturate(0.45);
 }
 
-.bible-chapter-navigation button svg {
+:is(.bible-chapter-navigation button, .bible-study-quiz-toggle) svg {
   width: 20px;
   height: 20px;
 }
 
 /* Match the active Home button's animated neon sweep on chapter navigation. */
-.bible-chapter-navigation button:not(:disabled) {
+:is(.bible-chapter-navigation button, .bible-study-quiz-toggle):not(:disabled) {
   position: relative;
   background: transparent !important;
   overflow: hidden;
@@ -670,9 +670,9 @@
   animation: none;
 }
 
-.bible-chapter-navigation button:disabled { animation: none; }
+:is(.bible-chapter-navigation button, .bible-study-quiz-toggle):disabled { animation: none; }
 
-.bible-chapter-navigation button:not(:disabled)::before {
+:is(.bible-chapter-navigation button, .bible-study-quiz-toggle):not(:disabled)::before {
   position: absolute;
   z-index: 0;
   top: 0;
@@ -687,7 +687,7 @@
   animation: homeNavColorSweep 4.6s ease-in-out infinite;
 }
 
-.bible-chapter-navigation button:not(:disabled) svg {
+:is(.bible-chapter-navigation button, .bible-study-quiz-toggle):not(:disabled) svg {
   position: relative;
   z-index: 1;
 }
@@ -1646,6 +1646,16 @@
 .study-insight-card--summary { border-left-color: rgba(156, 224, 190, .8); }
 .study-insight-card--veracity { border-left-color: rgba(190, 180, 255, .8); }
 .study-insight-card--manuscripts { border-left-color: rgba(139, 220, 255, .84); }
+.study-card-carousel { min-width: 0; }
+.study-card-indicators { display: flex; align-items: center; justify-content: center; gap: 2px; margin-bottom: 7px; }
+.study-card-indicators button { display: grid; place-items: center; width: 28px; height: 28px; min-height: 28px; padding: 0; border: 0; background: transparent; border-radius: 999px; }
+.study-card-indicators button > span { display: block; width: 6px; height: 6px; border-radius: 999px; background: rgba(190, 223, 238, .4); transition: width 180ms ease, background 180ms ease; }
+.study-card-indicators button[aria-current='true'] > span { width: 21px; background: #8fe8b8; }
+.study-card-track { position: relative; display: flex; align-items: flex-start; gap: 12px; min-width: 0; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.study-card-track::-webkit-scrollbar { display: none; }
+.study-card-track > .study-insight-card { flex: 0 0 100%; width: 100%; max-width: 100%; scroll-snap-align: start; scroll-snap-stop: always; animation: none; overflow-wrap: anywhere; }
+.study-card-track.is-dragging { cursor: grabbing; scroll-snap-type: none; user-select: none; }
+@media (prefers-reduced-motion: reduce) { .study-card-indicators button > span { transition: none; } }
 .study-manuscript-details { display: grid; gap: 7px; margin: 12px 0 0; }
 .study-manuscript-details > div { display: grid; grid-template-columns: minmax(92px, .72fr) minmax(0, 1.5fr); gap: 8px; padding: 7px 9px; border-radius: 9px; background: rgba(124, 186, 224, .075); }
 .study-manuscript-details dt { color: rgba(185, 223, 244, .66); font-size: 9px; font-weight: 750; line-height: 1.4; }
@@ -1668,8 +1678,10 @@
 .study-insight-grid:has(.study-insight-card--manuscripts) { grid-template-columns: minmax(0, 1fr); }
 .study-insight-grid:has(.study-insight-card--summary) { grid-template-columns: 1fr; }
 .study-insight-grid:has(.study-insight-card--biblical) .study-insight-card { min-height: 116px; }
-.bible-study-challenge { overflow: hidden; border-radius: 16px; background: linear-gradient(100deg, rgba(90, 164, 198, .15), rgba(94, 105, 190, .12)); }
-.bible-study-challenge summary { display: flex; align-items: center; gap: 8px; min-height: 48px; padding: 9px 12px; color: #f1fbff; font-size: 12px; font-size: clamp(12px, calc(9.6px + .75cqw), 12.96px); font-weight: 800; cursor: pointer; list-style: none; }
+.bible-study-challenge { background: transparent; }
+.bible-study-challenge > summary { display: grid; place-items: center; width: 112px; max-width: 100%; min-height: 44px; margin: 0 auto; padding: 10px 20px; color: #fff; font-size: 14px; font-size: clamp(14px, calc(11.2px + .875cqw), 15.12px); font-weight: 800; cursor: pointer; list-style: none; }
+.bible-study-quiz-toggle > span { position: relative; z-index: 1; color: #fff !important; }
+.bible-study-challenge[open] > .study-challenge-content { margin-top: 14px; padding: 14px; border-radius: 16px; background: rgba(6, 30, 52, .18); }
 .bible-study-challenge summary::-webkit-details-marker { display: none; }
 .study-challenge-spark { display: grid; place-items: center; width: 25px; height: 25px; border-radius: 9px; background: rgba(158, 224, 255, .16); color: #bceeff; }
 .study-challenge-hint { margin-left: auto; color: rgba(214, 235, 249, .56); font-size: 9px; font-weight: 650; }
@@ -1693,6 +1705,7 @@
 }
 
 /* Study content stays short; research, maps and conversations open on demand. */
+.bible-study-result .study-reflection { display: none; }
 .study-reference-button { display: inline-flex; align-items: center; gap: 5px; min-height: 30px; padding: 2px 0; border: 0; border-radius: 4px; background: transparent; text-align: left; cursor: pointer; }
 .study-reference-button:hover { text-decoration: underline; text-underline-offset: 3px; }
 .study-deeper { margin-top: 10px; border-top: 1px solid rgba(168, 220, 200, .12); }
@@ -1702,6 +1715,8 @@
 .study-deeper > summary::after,
 .study-geography > summary::after,
 .study-reflection > summary::after { content: '+'; color: #b0d8eb; font-size: 16px; font-weight: 500; }
+.study-deeper > summary,
+.study-deeper > summary::after { color: #ff9d00 !important; }
 .study-deeper[open] > summary::after,
 .study-geography[open] > summary::after,
 .study-reflection[open] > summary::after { content: '−'; }
@@ -1709,8 +1724,30 @@
 .study-geography > summary::-webkit-details-marker,
 .study-reflection > summary::-webkit-details-marker { display: none; }
 .study-deeper-content { display: grid; gap: 10px; padding: 2px 0 7px; }
-.study-deeper-content > p { margin: 0; }
+.study-deeper-content > p { margin: 0; color: #f3c398 !important; }
 .study-text-action { justify-self: start; min-height: 36px; padding: 4px 0; border: 0; background: transparent; color: #8fe8b8 !important; font-size: 11px; font-weight: 750; text-align: left; cursor: pointer; }
+.study-text-action[data-study-ask] { display: inline-flex; align-items: center; gap: 7px; color: #ffb6dc !important; }
+.study-text-action[data-study-ask] > span:last-child {
+  background: linear-gradient(100deg, #ff93cf 0%, #ffb6dc 25%, #7edaff 55%, #b6ebff 75%, #ff93cf 100%);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent !important;
+  animation: studyAiColorFlow 3.4s ease-in-out infinite;
+}
+.study-ai-icon {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  background: linear-gradient(100deg, #ff93cf 0%, #ffb6dc 25%, #7edaff 55%, #b6ebff 75%, #ff93cf 100%);
+  background-size: 300% 100%;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M10 2l2.5 6.5L19 11l-6.5 2.5L10 20l-2.5-6.5L1 11l6.5-2.5L10 2zm10 0l1.1 2.9L24 6l-2.9 1.1L20 10l-1.1-2.9L16 6l2.9-1.1L20 2zm-1 13l1.1 2.9L23 19l-2.9 1.1L19 23l-1.1-2.9L15 19l2.9-1.1L19 15z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M10 2l2.5 6.5L19 11l-6.5 2.5L10 20l-2.5-6.5L1 11l6.5-2.5L10 2zm10 0l1.1 2.9L24 6l-2.9 1.1L20 10l-1.1-2.9L16 6l2.9-1.1L20 2zm-1 13l1.1 2.9L23 19l-2.9 1.1L19 23l-1.1-2.9L15 19l2.9-1.1L19 15z'/%3E%3C/svg%3E") center / contain no-repeat;
+  animation: studyAiColorFlow 3.4s ease-in-out infinite;
+}
+@keyframes studyAiColorFlow { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+@media (prefers-reduced-motion: reduce) { .study-ai-icon, .study-text-action[data-study-ask] > span:last-child { animation: none; background-position: 50% 50%; } }
 .study-text-action:hover { text-decoration: underline; text-underline-offset: 3px; }
 .study-text-action:disabled { opacity: .5; cursor: wait; }
 .bible-study-result :is(button, summary, textarea, a):focus-visible { outline: 2px solid #8fe8b8; outline-offset: 4px; }
@@ -1768,6 +1805,64 @@
 .study-passage-content p { color: #edf5fa; font-size: 14px; line-height: 1.8; }
 .study-passage-content sup { color: #8fe8b8; font-size: 10px; }
 .study-passage-content .study-passage-version { color: #c0d6e6; font-size: 10px; }
+.study-discussion-preview[hidden] { display: none; }
+.study-discussion-preview { min-width: 0; margin-top: -3px; padding-left: 25px; }
+.study-discussion-resume { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 35px; padding: 5px 0; border: 0; background: transparent; text-align: left; }
+.study-discussion-title { display: block; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #cee4f3; font-size: 10px; font-weight: 600; }
+.study-discussion-meta { flex: 0 0 auto; color: rgba(211, 230, 244, .58); font-size: 9px; }
+.study-discussion-all { min-height: 30px; padding: 2px 0; background: transparent; color: #b8ddf2; font-size: 10px; }
+.study-chat-dialog { position: fixed; right: auto; bottom: auto; transform: translate(-50%, -50%); width: min(560px, calc(100vw - 32px)); height: min(680px, calc(100dvh - 32px)); max-height: calc(100dvh - 32px); margin: 0; padding: 0; overflow: hidden; border: 1px solid rgba(187, 225, 248, .3); border-radius: 24px; color: #f0f7fc; background: transparent; -webkit-backdrop-filter: blur(36px) saturate(120%); backdrop-filter: blur(36px) saturate(120%); box-shadow: 0 18px 60px rgba(5, 23, 45, .2); }
+.study-chat-dialog::backdrop { background: transparent; -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+.study-chat-layout { display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; height: 100%; min-width: 0; }
+.study-chat-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 20px 20px 10px; }
+.study-chat-header > div:first-child { min-width: 0; }
+.study-chat-header h3 { display: flex; align-items: center; gap: 7px; margin: 0; color: #f4f8fc !important; font-size: 16px; }
+.study-chat-header p { margin: 6px 0 0; color: #b9d7e9; font-size: 11px; line-height: 1.5; overflow-wrap: anywhere; }
+.study-chat-header-actions { display: flex; flex: 0 0 auto; gap: 2px; }
+.study-chat-header-actions button { display: grid; place-items: center; width: 32px; height: 32px; min-height: 32px; border: 0; border-radius: 50%; color: #d8eafa; background: transparent; font-size: 23px; }
+.study-chat-header-actions svg { width: 17px; height: 17px; }
+.study-chat-header-actions button:hover { background: rgba(180, 218, 245, .1); }
+.study-chat-context { margin: 0 20px; border-bottom: 1px solid rgba(180, 220, 244, .14); }
+.study-chat-context > summary { width: max-content; min-height: 30px; color: #b8d6e8; font-size: 10px; cursor: pointer; }
+.study-chat-context > p { max-height: 100px; overflow-y: auto; margin: 0 0 12px; color: #ffcae7; font-size: 12px; line-height: 1.6; }
+.study-chat-main { min-height: 0; overflow: hidden; }
+.study-chat-thread { height: 100%; overflow-y: auto; overscroll-behavior: contain; padding: 20px; scrollbar-width: none; }
+.study-chat-dialog, .study-chat-dialog * { scrollbar-width: none; }
+.study-chat-dialog::-webkit-scrollbar, .study-chat-dialog *::-webkit-scrollbar { display: none; }
+.study-chat-thread[hidden], .study-chat-history[hidden], .study-chat-composer[hidden] { display: none; }
+.study-chat-welcome { display: grid; justify-items: center; gap: 12px; max-width: 32ch; margin: 30px auto; text-align: center; }
+.study-chat-welcome > .study-ai-icon { width: 26px; height: 26px; }
+.study-chat-welcome h4 { margin: 0; color: #f2e5f2 !important; font-size: 16px; }
+.study-chat-welcome p { margin: 0; color: #c5ddeb; font-size: 13px; line-height: 1.65; }
+.study-chat-message { min-width: 0; margin-bottom: 22px; overflow-wrap: anywhere; }
+.study-chat-message--user { width: fit-content; max-width: 90%; margin-left: auto; padding: 10px 13px; border-radius: 15px 15px 4px 15px; background: rgba(255, 182, 220, .12); }
+.study-chat-message--assistant { padding-left: 12px; border-left: 2px solid rgba(139, 220, 255, .45); }
+.study-chat-speaker { display: block; margin-bottom: 6px; color: #ffcae7; font-size: 10px; font-weight: 800; }
+.study-chat-message--assistant > .study-chat-speaker { color: #a9e2fc; }
+.study-chat-message p { margin: 0 0 10px; color: #eef5fb; font-size: 13px; line-height: 1.7; }
+.study-chat-message p:last-child { margin-bottom: 0; }
+.study-chat-message :is(ul, ol) { margin: 8px 0; padding-left: 19px; color: #eef5fb; font-size: 13px; line-height: 1.7; }
+.study-chat-message li + li { margin-top: 7px; }
+.study-chat-composer { display: grid; gap: 7px; padding: 10px 18px 16px; border-top: 1px solid rgba(180, 220, 244, .14); }
+.study-chat-compose-row { display: flex; align-items: flex-end; gap: 10px; }
+.study-chat-compose-row textarea { display: block; flex: 1; min-width: 0; max-height: 110px; min-height: 52px; padding: 11px 12px; border: 1px solid rgba(185, 220, 245, .24); border-radius: 14px; color: #fff; background: transparent; font: inherit; font-size: 13px; line-height: 1.5; resize: none; }
+.study-chat-compose-row textarea::placeholder { color: rgba(217, 235, 247, .6); }
+dialog.study-chat-dialog .study-chat-compose-row textarea { background: transparent !important; }
+.study-chat-send { display: grid; place-items: center; flex: 0 0 42px; min-height: 42px; margin-bottom: 4px; padding: 0; border: 0; border-radius: 50%; color: #173b57; background: linear-gradient(120deg, #ffb6dc, #8bdcff); }
+.study-chat-send:disabled { opacity: .4; }
+.study-chat-send svg { width: 20px; height: 20px; }
+.study-chat-composer > small { color: rgba(204, 224, 240, .55); font-size: 9px; }
+.study-chat-feedback { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; color: #d0e2f2; font-size: 11px; line-height: 1.5; }
+.study-chat-feedback:empty { display: none; }
+.study-chat-feedback .bible-study-loading-spinner { flex-basis: 13px; width: 13px; height: 13px; }
+.study-chat-retry { min-height: 30px; padding: 2px 6px; border: 0; background: transparent; color: #ffcae7; text-decoration: underline; }
+.study-chat-history { height: 100%; overflow-y: auto; padding: 18px 20px; scrollbar-width: none; }
+.study-chat-history h4 { margin: 0 0 15px; color: #d9eaf7 !important; font-size: 13px; }
+.study-chat-history [data-history-thread] { display: grid; gap: 6px; width: 100%; min-height: 58px; padding: 12px 0; border: 0; border-bottom: 1px solid rgba(187, 221, 242, .13); background: transparent; text-align: left; }
+.study-chat-history strong { color: #e5eff8; font-size: 12px; font-weight: 650; line-height: 1.5; overflow-wrap: anywhere; }
+.study-chat-history [data-history-thread] > span { color: #afcbdc; font-size: 10px; }
+.study-chat-dialog :is(button, textarea, summary):focus-visible { outline: 2px solid #ffb6dc; outline-offset: 3px; }
+@media (max-width: 400px) { .study-chat-header { padding: 16px 14px 8px; } .study-chat-thread { padding: 16px 14px; } .study-chat-context { margin: 0 14px; } .study-chat-composer { padding: 9px 12px 14px; } }
 @media (max-width: 400px) {
   .study-insight-grid { grid-template-columns: minmax(0, 1fr); }
   .study-insight-topline { flex-wrap: wrap; }
@@ -1778,3 +1873,5 @@
   .bible-tool-tabs [role="tab"] { transition: none; animation: none !important; }
   .study-insight-card { animation: none; }
 }
+
+.bible-study-result .study-insight-card--manuscripts :is(.study-source-heading, .study-source-link strong) { color: #ffb6dc !important; }
