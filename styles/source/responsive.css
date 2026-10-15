@@ -34,6 +34,10 @@ body:has(.app-shell[data-app-background="black"]) .prayer-intro {
 }
 
 /* Responsive guardrails for narrow phones and embedded controls. */
+.phone-frame {
+  container-type: inline-size;
+}
+
 @media (max-width: 680px) {
   .phone-frame,
   .screen,
@@ -302,7 +306,7 @@ body:has(.app-shell[data-app-background="black"]) .prayer-intro {
   }
 
   h1 {
-    font-size: 27px;
+    font-size: 27px; font-size: clamp(27px, calc(21.6px + 1.6875cqw), 29.16px);
   }
 
   .interlinear-row {
@@ -519,7 +523,7 @@ body .app-shell[data-app-background="black"] #ai .ai-tabs button {
 
 /* Keep Prayer's page title aligned with the shared 28px page-title scale. */
 #prayer .prayer-header h1 {
-  font-size: 28px !important;
+  font-size: 28px !important; font-size: clamp(28px, calc(22.4px + 1.75cqw), 30.24px) !important;
   line-height: 1.1 !important;
 }
 
@@ -569,7 +573,7 @@ html body .app-shell #profile .profile-password-form label {
   display: grid;
   gap: 6px;
   color: #f0f4ff;
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
 }
 
 html body .app-shell #profile .profile-password-feedback {
@@ -609,7 +613,7 @@ html body .app-shell #profile .profile-tabs button {
   min-height: 40px;
   padding: 6px 4px;
   border-radius: 999px !important;
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
   -webkit-backdrop-filter: none !important;
   backdrop-filter: none !important;
@@ -671,7 +675,7 @@ html body .app-shell .phone-frame #bible .reader-topbar > .reader-select-label.b
   background: transparent !important;
   color: #f0f4ff !important;
   box-shadow: none !important;
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   font-weight: 800;
 }
 
@@ -760,7 +764,7 @@ html body .app-shell .phone-frame [data-verse-sheet] .action-grid button.action-
   overflow: hidden;
   border: 0 !important;
   color: #ffffff !important;
-  font-size: 14px;
+  font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px);
   font-weight: 800;
   background: var(--verse-action-gradient) !important;
   background-size: 100% 100% !important;
@@ -997,7 +1001,7 @@ html body .app-shell .phone-frame #kids-bible .kids-bible-header {
   background: #153552;
   color: #edf6ff;
   box-shadow: 0 5px 22px #0005;
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
   line-height: 1.45;
 }
 .mobile-update-notice span { flex: 1; }

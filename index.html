@@ -4,17 +4,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Think Bible</title>
-    <link rel="stylesheet" href="styles.css?v=refactor-125" />
+    <link rel="stylesheet" href="styles.css?v=refactor-137" />
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="bible-data.js" defer></script>
-    <script src="script.js?v=modules-29" defer></script>
+    <script src="script.js?v=modules-36" defer></script>
     <script src="scripts/navigation.js?v=modules-07" defer></script>
     <script src="scripts/prayer.js?v=modules-06" defer></script>
     <script src="scripts/notes.js?v=modules-05" defer></script>
     <script src="scripts/bible.js?v=modules-05" defer></script>
     <script src="scripts/profile.js?v=modules-06" defer></script>
-    <script src="assets/react/navigation.js?v=react-57" defer></script>
+    <script src="assets/react/navigation.js?v=react-72" defer></script>
   </head>
   <body>
     <div class="app-shell" data-theme="light" data-app-background="black">
@@ -557,23 +557,19 @@
 
         <div class="app-menu-layer" data-bible-menu-layer aria-hidden="true" inert>
           <button class="app-menu-scrim" type="button" data-bible-menu-close aria-label="Close menu"></button>
-          <aside id="bible-menu-drawer" class="app-menu-drawer" data-bible-menu-drawer role="dialog" aria-modal="true" aria-label="Search Scripture" tabindex="-1">
+          <aside id="bible-menu-drawer" class="app-menu-drawer" data-bible-menu-drawer role="dialog" aria-modal="true" aria-label="Bible tools" tabindex="-1">
             <header class="app-menu-drawer-header">
-              <div class="app-menu-brand"><strong>Search Scripture</strong></div>
-              <button class="app-menu-close" type="button" data-bible-menu-close aria-label="Close search"><i data-lucide="x" aria-hidden="true"></i></button>
+              <div class="app-menu-brand"><strong>Bible tools</strong></div>
+              <button class="app-menu-close" type="button" data-bible-menu-close aria-label="Close Bible tools"><i data-lucide="x" aria-hidden="true"></i></button>
             </header>
-            <form class="bible-menu-search" data-bible-search-form>
-              <label class="bible-menu-search-field"><i data-lucide="search" aria-hidden="true"></i><input type="search" aria-label="Search Scripture" placeholder="Try anxiety or forgiveness…" maxlength="120" required /></label>
-              <div class="app-menu-section bible-menu-search-filters" role="group" aria-label="Search filter">
-                <button type="button" class="is-active" data-bible-search-mode="topic" aria-pressed="true">Topic</button>
-                <button type="button" data-bible-search-mode="word" aria-pressed="false">Word</button>
-                <button type="button" data-bible-search-mode="expression" aria-pressed="false">Expression</button>
-              </div>
-              <div class="app-menu-section"><button type="submit" class="is-active bible-menu-search-submit">Search</button></div>
-            </form>
-            <p class="bible-menu-search-status" data-bible-search-status role="status">Choose a filter and enter your search.</p>
-            <div class="app-menu-section bible-menu-search-results" data-bible-search-results></div>
-            <div class="app-menu-section"><button type="button" data-bible-search-more hidden>Load more</button></div>
+            <div class="bible-tool-tabs" role="tablist" aria-label="Bible study tools">
+              <button id="bible-tool-tab-biblical" type="button" role="tab" aria-selected="true" aria-controls="bible-tool-panel" tabindex="0" data-bible-tool-tab="biblical">Biblical contexte</button>
+              <button id="bible-tool-tab-historical" type="button" role="tab" aria-selected="false" aria-controls="bible-tool-panel" tabindex="-1" data-bible-tool-tab="historical">Historical context</button>
+              <button id="bible-tool-tab-summary" type="button" role="tab" aria-selected="false" aria-controls="bible-tool-panel" tabindex="-1" data-bible-tool-tab="summary">Résumé</button>
+              <button id="bible-tool-tab-veracity" type="button" role="tab" aria-selected="false" aria-controls="bible-tool-panel" tabindex="-1" data-bible-tool-tab="veracity">Véracité</button>
+              <button id="bible-tool-tab-manuscripts" type="button" role="tab" aria-selected="false" aria-controls="bible-tool-panel" tabindex="-1" data-bible-tool-tab="manuscripts">Manuscrits</button>
+            </div>
+            <div id="bible-tool-panel" class="bible-tool-panel" role="tabpanel" aria-live="polite" aria-labelledby="bible-tool-tab-biblical" tabindex="0"></div>
           </aside>
         </div>
 

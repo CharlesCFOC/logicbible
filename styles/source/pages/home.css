@@ -84,7 +84,7 @@
   border-radius: 50%;
   background: linear-gradient(135deg, rgba(91, 213, 255, 0.82), rgba(102, 95, 242, 0.82));
   color: var(--accent-contrast, #fff);
-  font-size: 21px;
+  font-size: 21px; font-size: clamp(21px, calc(16.8px + 1.3125cqw), 22.68px);
   font-weight: 500;
   line-height: 1;
   box-shadow: 0 5px 12px rgba(47, 60, 74, 0.12);
@@ -118,7 +118,7 @@
 
 .saved-folder-create-heading span {
   color: #9edcff;
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -128,7 +128,7 @@
   margin: 3px 0 0;
   color: #fff;
   font-family: var(--font-display);
-  font-size: 27px;
+  font-size: 27px; font-size: clamp(27px, calc(21.6px + 1.6875cqw), 29.16px);
   line-height: 1;
 }
 
@@ -140,14 +140,14 @@
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.06);
   color: #e8f7ff;
-  font-size: 22px;
+  font-size: 22px; font-size: clamp(22px, calc(17.6px + 1.375cqw), 23.76px);
   line-height: 1;
 }
 
 .saved-folder-create-popover > p {
   margin: 0;
   color: #d5e8f2;
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   line-height: 1.5;
 }
 
@@ -159,7 +159,7 @@
   outline: 0;
   background: rgba(4, 12, 18, 0.42);
   color: #fff;
-  font-size: 14px;
+  font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px);
 }
 
 .saved-folder-create-popover > input:focus {
@@ -176,7 +176,7 @@
 .saved-folder-create-actions button {
   min-height: 42px;
   border-radius: 11px;
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   font-weight: 800;
 }
 
@@ -205,7 +205,7 @@
 .saved-folder-management-list > span {
   padding: 2px 2px 4px;
   color: #9edcff;
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -223,7 +223,7 @@
   min-width: 0;
   overflow: hidden;
   color: #e8f7ff;
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -235,7 +235,7 @@
   border-radius: 9px;
   background: rgba(255, 255, 255, 0.06);
   color: #e8f7ff;
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
 }
 
@@ -515,11 +515,11 @@
 }
 
 .app-shell[data-app-background="black"] #home .home-stat-card strong {
-  font-size: 19px !important;
+  font-size: 19px !important; font-size: clamp(19px, calc(15.2px + 1.1875cqw), 20.52px) !important;
 }
 
 .app-shell[data-app-background="black"] #home .home-stat-card span {
-  font-size: 10px !important;
+  font-size: 10px !important; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px) !important;
   line-height: 1.1;
 }
 
@@ -542,7 +542,7 @@
 }
 
 .app-shell[data-app-background="black"] #home .home-hero-verse strong {
-  font-size: 17px !important;
+  font-size: 17px !important; font-size: clamp(17px, calc(13.6px + 1.0625cqw), 18.36px) !important;
 }
 
 
@@ -608,7 +608,7 @@
 
 .app-shell #home .home-bible-timeline-track button > span {
   color: rgba(255, 255, 255, 0.7);
-  font-size: 9px;
+  font-size: 9px; font-size: clamp(9px, calc(7.2px + 0.5625cqw), 9.72px);
   font-weight: 800;
 }
 
@@ -617,7 +617,7 @@
   gap: 1px;
   overflow: hidden;
   color: #ffffff;
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   line-height: 1.15;
   white-space: normal;
 }
@@ -626,7 +626,7 @@
   display: block;
   overflow: hidden;
   color: inherit;
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   font-weight: 700;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -747,13 +747,13 @@
 
 .app-shell[data-app-background="black"] #home .home-bible-timeline-track button > span {
   color: rgba(255, 255, 255, 0.7);
-  font-size: 9px;
+  font-size: 9px; font-size: clamp(9px, calc(7.2px + 0.5625cqw), 9.72px);
   font-weight: 800;
 }
 
   .app-shell[data-app-background="black"] #home .home-bible-timeline-track button strong {
   color: #ffffff;
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   line-height: 1.15;
   display: grid;
   gap: 1px;
@@ -764,7 +764,7 @@
 .app-shell[data-app-background="black"] #home .home-bible-timeline-track .timeline-detail-item {
   display: block;
   color: #ffffff;
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   font-weight: 700;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1090,13 +1090,13 @@
 
 .home-prayer-card small {
   color: #748f82;
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
 }
 
 .home-prayer-card strong {
   overflow: hidden;
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1130,7 +1130,7 @@
 
 .home-content-label {
   color: var(--muted);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1138,20 +1138,20 @@
 
 .home-content-card strong {
   color: var(--ink);
-  font-size: 18px;
+  font-size: 18px; font-size: clamp(18px, calc(14.4px + 1.125cqw), 19.44px);
   line-height: 1.15;
 }
 
 .home-content-card--verse strong {
   max-width: 28ch;
   font-family: var(--font-display);
-  font-size: 21px;
+  font-size: 21px; font-size: clamp(21px, calc(16.8px + 1.3125cqw), 22.68px);
   font-weight: 700;
 }
 
 .home-content-card small {
   color: var(--muted);
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
 }
 
 .home-content-card button {
@@ -1198,13 +1198,13 @@
 .home-stat-card span,
 .home-stat-card small {
   color: var(--muted);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 700;
   letter-spacing: 0.01em;
 }
 
 .home-stat-card strong {
-  font-size: 23px;
+  font-size: 23px; font-size: clamp(23px, calc(18.4px + 1.4375cqw), 24.84px);
   line-height: 1;
   letter-spacing: -0.04em;
 }
@@ -1213,7 +1213,7 @@
 .label {
   margin: 0 0 7px;
   color: var(--cool);
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   font-weight: 760;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1228,7 +1228,7 @@ p {
 
 h1 {
   margin-bottom: 0;
-  font-size: 30px;
+  font-size: 30px; font-size: clamp(30px, calc(24px + 1.875cqw), 32.4px);
   line-height: 1.06;
   font-weight: 720;
   letter-spacing: -0.02em;
@@ -1237,7 +1237,7 @@ h1 {
 
 h2 {
   margin-bottom: 0;
-  font-size: 20px;
+  font-size: 20px; font-size: clamp(20px, calc(16px + 1.25cqw), 21.6px);
   line-height: 1.2;
   letter-spacing: -0.02em;
   font-family: var(--font-body);
@@ -1245,7 +1245,7 @@ h2 {
 
 h3 {
   margin-bottom: 6px;
-  font-size: 16px;
+  font-size: 16px; font-size: clamp(16px, calc(12.8px + 1cqw), 17.28px);
   line-height: 1.25;
   letter-spacing: -0.01em;
   font-family: var(--font-body);
@@ -1310,7 +1310,7 @@ p {
   max-width: 30ch;
   margin: 0;
   color: rgba(122, 111, 99, 0.66);
-  font-size: 9.6px;
+  font-size: 9.6px; font-size: clamp(9.6px, calc(7.68px + 0.6cqw), 10.368px);
   line-height: 1.5;
 }
 
@@ -1338,7 +1338,7 @@ p {
   border-radius: 999px;
   background: rgba(250, 247, 240, 0.96);
   color: rgba(120, 109, 97, 0.86);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 760;
 }
 
@@ -1392,7 +1392,7 @@ p {
     inset 0 1px 0 rgba(255, 255, 255, 0.985),
     0 4px 10px rgba(47, 60, 74, 0.004);
   color: var(--muted);
-  font-size: 9.5px;
+  font-size: 9.5px; font-size: clamp(9.5px, calc(7.6px + 0.5938cqw), 10.26px);
   font-weight: 720;
   text-align: center;
 }
@@ -1449,7 +1449,7 @@ p {
   border-radius: 11px;
   background: transparent;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   font-weight: 800;
   white-space: nowrap;
 }
@@ -1475,7 +1475,7 @@ p {
 
 .prayer-header h1 {
   margin: 0;
-  font-size: 28px;
+  font-size: 28px; font-size: clamp(28px, calc(22.4px + 1.75cqw), 30.24px);
   white-space: nowrap;
 }
 
@@ -1504,14 +1504,14 @@ p {
 .prayer-intro h2 {
   max-width: 18ch;
   margin: 0 0 7px;
-  font-size: 24px;
+  font-size: 24px; font-size: clamp(24px, calc(19.2px + 1.5cqw), 25.92px);
   animation: prayerPromptReveal 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .prayer-intro p {
   max-width: 34ch;
   margin: 0;
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
   animation: prayerPromptReveal 700ms 120ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
@@ -1537,7 +1537,7 @@ p {
 
 .prayer-compose > label {
   color: var(--ink);
-  font-size: 18px;
+  font-size: 18px; font-size: clamp(18px, calc(14.4px + 1.125cqw), 19.44px);
   font-weight: 800;
 }
 
@@ -1551,7 +1551,7 @@ p {
   outline: 0;
   background: rgba(28, 47, 60, 0.62);
   color: var(--ink);
-  font-size: 15px;
+  font-size: 15px; font-size: clamp(15px, calc(12px + 0.9375cqw), 16.2px);
   line-height: 1.55;
 }
 
@@ -1591,7 +1591,7 @@ p {
   border: 1px solid currentColor;
   border-radius: 999px;
   background: transparent;
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   font-weight: 800;
   transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
 }
@@ -1669,7 +1669,7 @@ p {
   border-radius: 999px;
   background: rgba(255, 167, 113, 0.06);
   color: var(--muted);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
   white-space: nowrap;
 }
@@ -1698,7 +1698,7 @@ p {
   gap: 5px;
   margin: 0;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
 }
 
 .prayer-privacy-note svg {
@@ -1718,7 +1718,7 @@ p {
 .prayer-compose-footer small,
 .prayer-form-feedback {
   color: var(--muted);
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
 }
 
 .prayer-compose-footer small.is-over-limit {
@@ -1735,7 +1735,7 @@ p {
   border: 1px solid #c8f2ff;
   background: #9be6ff;
   color: #000000 !important;
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   font-weight: 800;
   box-shadow: 0 4px 12px rgba(75, 185, 222, 0.28);
   transition: background-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
@@ -1809,7 +1809,7 @@ body:has(.app-shell[data-app-background="black"]) .prayer-compose-footer button 
   border: 0;
   background: transparent;
   color: var(--ink);
-  font-size: 16px;
+  font-size: 16px; font-size: clamp(16px, calc(12.8px + 1cqw), 17.28px);
   font-weight: 800;
 }
 
@@ -1839,7 +1839,7 @@ body:has(.app-shell[data-app-background="black"]) .prayer-compose-footer button 
 
 .prayer-board-label {
   color: var(--ink);
-  font-size: 14px;
+  font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px);
   font-weight: 800;
 }
 
@@ -1858,7 +1858,7 @@ body:has(.app-shell[data-app-background="black"]) .prayer-compose-footer button 
   border-radius: 10px;
   background: transparent;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   font-weight: 800;
   white-space: nowrap;
 }
@@ -1878,7 +1878,7 @@ body:has(.app-shell[data-app-background="black"]) .prayer-compose-footer button 
   outline: 0;
   background: #fffdf8;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 700;
 }
 
@@ -1908,7 +1908,7 @@ body:has(.app-shell[data-app-background="black"]) .prayer-compose-footer button 
   border-radius: 999px;
   background: #fffdf8;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
 }
 
@@ -1924,7 +1924,7 @@ body:has(.app-shell[data-app-background="black"]) .prayer-compose-footer button 
   border-radius: 18px;
   background: #f7f5f1;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
   text-align: center;
 }
 
@@ -1977,7 +1977,7 @@ body:has(.app-shell[data-app-background="black"]) .prayer-compose-footer button 
 .prayer-card p {
   margin: 0;
   color: var(--ink);
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
   line-height: 1.5;
 }
 
@@ -2006,7 +2006,7 @@ body:has(.app-shell[data-app-background="black"]) .prayer-compose-footer button 
 
 .prayer-card-toggle strong {
   color: var(--muted);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -2018,7 +2018,7 @@ body:has(.app-shell[data-app-background="black"]) .prayer-compose-footer button 
   margin: 0;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   line-height: 1.35;
   width: 100%;
   text-align: left !important;
@@ -2045,7 +2045,7 @@ body:has(.app-shell[data-app-background="black"]) .prayer-compose-footer button 
   justify-content: flex-end;
   gap: 10px;
   color: var(--muted);
-  font-size: 9px;
+  font-size: 9px; font-size: clamp(9px, calc(7.2px + 0.5625cqw), 9.72px);
 }
 
 .prayer-card-actions {
@@ -2072,7 +2072,7 @@ body:has(.app-shell[data-app-background="black"]) .prayer-compose-footer button 
   border-radius: 9px;
   background: #e6ece9;
   color: var(--ink);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
 }
 
@@ -2218,7 +2218,7 @@ body:has(.app-shell[data-app-background="black"]) > .app-shell {
 
 .app-shell #home .home-bible-timeline-track button > span {
   color: #367b9d;
-  font-size: 9px;
+  font-size: 9px; font-size: clamp(9px, calc(7.2px + 0.5625cqw), 9.72px);
   font-weight: 800;
 }
 
@@ -2227,7 +2227,7 @@ body:has(.app-shell[data-app-background="black"]) > .app-shell {
   gap: 1px;
   overflow: hidden;
   color: #17202a;
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   line-height: 1.15;
   white-space: normal;
 }
@@ -2236,7 +2236,7 @@ body:has(.app-shell[data-app-background="black"]) > .app-shell {
   display: block;
   overflow: hidden;
   color: inherit;
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   font-weight: 700;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -2330,7 +2330,7 @@ body:has(.app-shell[data-app-background="black"]) > .app-shell {
 
 .home-library-placeholder span {
   color: #748596;
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -2338,7 +2338,7 @@ body:has(.app-shell[data-app-background="black"]) > .app-shell {
 
 .home-library-placeholder strong {
   color: var(--ink);
-  font-size: 14px;
+  font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px);
 }
 
 .home-library-placeholder button {
@@ -2346,7 +2346,7 @@ body:has(.app-shell[data-app-background="black"]) > .app-shell {
   margin-top: 3px;
   color: var(--cool);
   background: transparent;
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   font-weight: 800;
 }
 
@@ -2371,14 +2371,14 @@ body:has(.app-shell[data-app-background="black"]) > .app-shell {
 
 .home-library-empty-state strong {
   color: inherit;
-  font-size: 14px;
+  font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px);
 }
 
 .home-library-empty-state p {
   max-width: 34ch;
   margin: 0;
   color: rgba(255, 255, 255, 0.7);
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   line-height: 1.45;
 }
 
@@ -2392,7 +2392,7 @@ body:has(.app-shell[data-app-background="black"]) > .app-shell {
   border-radius: 10px;
   background: rgba(60, 157, 204, 0.72);
   color: #ffffff;
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   font-weight: 800;
 }
 

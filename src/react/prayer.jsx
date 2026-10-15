@@ -553,10 +553,10 @@ export function PrayerPage() {
       <div className="prayer-header-band">
       <header className="prayer-header"><div><h1>Prayer room</h1><p>A place to pray together.</p></div></header>
       <div className="prayer-page-tabs" role="tablist" aria-label="Prayer sections">
-        <button className={state.pageTab === "board" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("board")}><span>Prayer</span></button>
-        <button className={state.pageTab === "request" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("request")}><span>Prayer request</span></button>
-        <button className={state.pageTab === "online" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("online")}><span>Online prayer</span></button>
-        <button className={state.pageTab === "intercession" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("intercession")}><span>Intercession</span></button>
+        <button data-prayer-page-tab="board" className={state.pageTab === "board" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("board")}><span>Prayer</span></button>
+        <button data-prayer-page-tab="request" className={state.pageTab === "request" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("request")}><span>Prayer request</span></button>
+        <button data-prayer-page-tab="online" className={state.pageTab === "online" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("online")}><span>Online prayer</span></button>
+        <button data-prayer-page-tab="intercession" className={state.pageTab === "intercession" ? "is-active" : ""} type="button" onClick={() => bridge.setPageTab("intercession")}><span>Intercession</span></button>
       </div>
       </div>
       {state.pageTab === "online" && <OnlinePrayerPanel />}

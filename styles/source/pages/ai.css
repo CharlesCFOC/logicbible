@@ -82,7 +82,7 @@
 
 .verse-ai-header span {
   color: var(--muted);
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   font-weight: 760;
   text-transform: uppercase;
 }
@@ -90,7 +90,7 @@
 .verse-ai-header strong {
   overflow: hidden;
   color: var(--ink);
-  font-size: 18px;
+  font-size: 18px; font-size: clamp(18px, calc(14.4px + 1.125cqw), 19.44px);
   line-height: 1.15;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -115,7 +115,7 @@
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.995), rgba(249, 251, 253, 0.982));
   color: var(--ink);
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px);
   line-height: 1.45;
 }
 
@@ -245,7 +245,7 @@
   border-radius: 10px;
   color: var(--muted);
   background: transparent;
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   font-weight: 800;
 }
 
@@ -315,7 +315,7 @@
 .ai-history-retention {
   margin: 12px 3px 0;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   line-height: 1.4;
   text-align: center;
 }
@@ -323,7 +323,7 @@
 .ai-history-item small,
 .ai-history-empty {
   color: var(--muted);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
 }
 
 .ai-history-item:hover {
@@ -346,7 +346,7 @@
 #ai .ai-tabs button {
   min-height: 40px;
   border-radius: 11px;
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
 }
 
 .chat-thread[hidden],
@@ -380,7 +380,7 @@
 
 .ai-topbar strong {
   color: var(--ink);
-  font-size: 28px;
+  font-size: 28px; font-size: clamp(28px, calc(22.4px + 1.75cqw), 30.24px);
   line-height: 1.1;
 }
 
@@ -392,7 +392,7 @@
 
 .ai-topbar span {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   font-weight: 650;
 }
 
@@ -489,7 +489,7 @@
   border-radius: 12px;
   color: var(--muted);
   background: #fffdf8;
-  font-size: 9px;
+  font-size: 9px; font-size: clamp(9px, calc(7.2px + 0.5625cqw), 9.72px);
 }
 
 .ai-bookmark-picker label {
@@ -508,7 +508,7 @@
   outline: 0;
   color: var(--ink);
   background: #fff;
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
 }
 
 .ai-bookmark-picker form {
@@ -533,7 +533,7 @@
   border-radius: 7px;
   color: #245b3a;
   background: #c9efd5;
-  font-size: 15px;
+  font-size: 15px; font-size: clamp(15px, calc(12px + 0.9375cqw), 16.2px);
   font-weight: 900;
 }
 
@@ -677,7 +677,7 @@
   align-items: center;
   gap: 7px;
   color: #748596;
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
 }
 
 .saved-ai-row-heading svg {
@@ -690,7 +690,7 @@
   overflow: hidden;
   margin: 0;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
   line-height: 1.45;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 4;
@@ -767,13 +767,13 @@
 .ai-safety-notice strong {
   display: block;
   color: #fff;
-  font-size: 14px;
+  font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px);
 }
 
 .ai-safety-notice p {
   margin: 6px 0 0;
   color: #d2e9ff;
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
   line-height: 1.4;
 }
 
@@ -788,7 +788,7 @@
   border-radius: 50% !important;
   background: linear-gradient(135deg, #34d5ed, #2774eb) !important;
   color: #ffffff !important;
-  font-size: 22px;
+  font-size: 22px; font-size: clamp(22px, calc(17.6px + 1.375cqw), 23.76px);
   box-shadow: 0 4px 12px rgba(60, 157, 204, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
 }
 

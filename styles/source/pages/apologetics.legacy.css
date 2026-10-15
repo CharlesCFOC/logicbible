@@ -217,7 +217,7 @@
   gap: 8px;
   min-width: 0;
   color: rgba(201, 214, 231, 0.66);
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
   font-weight: 650;
 }
 
@@ -226,7 +226,7 @@
   padding: 0;
   background: transparent;
   color: var(--cool);
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
   font-weight: 700;
 }
 
@@ -315,7 +315,7 @@
   border-left: 0;
   border-right: 0;
   color: rgba(255, 253, 249, 0.9);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   line-height: 1.55;
   text-align: center;
   text-shadow: 0 1px 8px rgba(7, 10, 14, 0.18);
@@ -343,7 +343,7 @@
   margin: 0;
   color: var(--ink);
   font-family: var(--font-body);
-  font-size: 24px;
+  font-size: 24px; font-size: clamp(24px, calc(19.2px + 1.5cqw), 25.92px);
   line-height: 1.02;
   letter-spacing: -0.045em;
   font-weight: 760;
@@ -353,7 +353,7 @@
   max-width: 34ch;
   margin: 0;
   color: rgba(124, 113, 101, 0.84);
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   line-height: 1.58;
 }
 
@@ -367,7 +367,7 @@
   margin: 0;
   color: var(--ink);
   font-family: var(--font-body);
-  font-size: 22px;
+  font-size: 22px; font-size: clamp(22px, calc(17.6px + 1.375cqw), 23.76px);
   line-height: 1.03;
   letter-spacing: -0.04em;
   font-weight: 760;
@@ -377,7 +377,7 @@
   max-width: 36ch;
   margin: 0;
   color: rgba(124, 113, 101, 0.82);
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   line-height: 1.58;
 }
 
@@ -408,20 +408,20 @@
 .apologetics-challenge-top small,
 .apologetics-challenge-meta span {
   color: rgba(124, 113, 101, 0.78);
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   font-weight: 700;
 }
 
 .apologetics-challenge-top strong {
   color: var(--cool);
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   font-weight: 800;
 }
 
 .apologetics-challenge-button h3 {
   margin: 0;
   color: var(--ink);
-  font-size: 20px;
+  font-size: 20px; font-size: clamp(20px, calc(16px + 1.25cqw), 21.6px);
   line-height: 1.12;
 }
 
@@ -494,7 +494,7 @@
 
 .apologetics-progress-card small {
   color: rgba(124, 113, 101, 0.78);
-  font-size: 9px;
+  font-size: 9px; font-size: clamp(9px, calc(7.2px + 0.5625cqw), 9.72px);
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -502,13 +502,13 @@
 
 .apologetics-progress-card strong {
   color: var(--ink);
-  font-size: 14px;
+  font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px);
   line-height: 1;
 }
 
 .apologetics-progress-card span {
   color: rgba(124, 113, 101, 0.76);
-  font-size: 8px;
+  font-size: 8px; font-size: clamp(8px, calc(6.4px + 0.5cqw), 8.64px);
   line-height: 1.4;
 }
 
@@ -556,7 +556,7 @@
 
 .apologetics-hero--track .apologetics-hero-copy h2 {
   margin: 0 0 4px;
-  font-size: 22px;
+  font-size: 22px; font-size: clamp(22px, calc(17.6px + 1.375cqw), 23.76px);
   line-height: 1.05;
   font-family: var(--font-body);
   font-weight: 700;
@@ -565,7 +565,7 @@
 
 .apologetics-hero--track .apologetics-hero-copy p {
   color: rgba(124, 113, 101, 0.8);
-  font-size: 14px;
+  font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px);
   line-height: 1.56;
 }
 
@@ -586,13 +586,13 @@
 
 .apologetics-hero-stats strong {
   color: var(--ink);
-  font-size: 17px;
+  font-size: 17px; font-size: clamp(17px, calc(13.6px + 1.0625cqw), 18.36px);
   line-height: 1;
 }
 
 .apologetics-hero-stats small {
   color: rgba(124, 113, 101, 0.78);
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   font-weight: 700;
   text-transform: uppercase;
 }
@@ -616,14 +616,14 @@
 .apologetics-track-progress-copy strong,
 .apologetics-rewards-head strong {
   color: var(--ink);
-  font-size: 14px;
+  font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px);
   font-weight: 760;
 }
 
 .apologetics-track-hero-progress-top span,
 .apologetics-rewards-head span {
   color: rgba(124, 113, 101, 0.78);
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   font-weight: 700;
 }
 
@@ -642,7 +642,7 @@
 .apologetics-track-progress-copy p {
   margin: 0;
   color: rgba(124, 113, 101, 0.82);
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
   line-height: 1.58;
 }
 
@@ -665,7 +665,7 @@
 
 .apologetics-quick-head strong {
   color: var(--ink);
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
   font-weight: 760;
   letter-spacing: 0.01em;
 }
@@ -686,7 +686,7 @@
   border-radius: 18px;
   color: var(--ink);
   background: rgba(255, 255, 255, 0.92);
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   font-weight: 650;
   text-align: left;
 }
@@ -706,7 +706,7 @@
   border-radius: 999px;
   color: var(--accent-contrast);
   background: var(--cool);
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   font-weight: 800;
 }
 
@@ -719,7 +719,7 @@
 .apologetics-framework-detail h3 {
   margin: 0;
   color: var(--ink);
-  font-size: 18px;
+  font-size: 18px; font-size: clamp(18px, calc(14.4px + 1.125cqw), 19.44px);
 }
 
 .apologetics-framework-grid {
@@ -739,14 +739,14 @@
 
 .apologetics-framework-grid strong {
   color: var(--ink);
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
   font-weight: 760;
 }
 
 .apologetics-framework-grid p {
   margin: 0;
   color: rgba(124, 113, 101, 0.82);
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
   line-height: 1.58;
 }
 
@@ -773,21 +773,21 @@
 
 .apologetics-rewards-grid small {
   color: rgba(124, 113, 101, 0.78);
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   font-weight: 800;
   text-transform: uppercase;
 }
 
 .apologetics-rewards-grid strong {
   color: var(--ink);
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
   line-height: 1.35;
 }
 
 .apologetics-selection-line {
   margin: 0 0 14px;
   color: rgba(124, 113, 101, 0.78);
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
   line-height: 1.5;
 }
 
@@ -850,21 +850,21 @@
 
 .apologetics-track-card-top small {
   color: rgba(118, 107, 96, 0.88);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
   text-transform: uppercase;
 }
 
 .apologetics-track-card > strong {
   color: var(--ink);
-  font-size: 14px;
+  font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px);
   font-weight: 760;
 }
 
 .apologetics-track-card p {
   color: rgba(124, 113, 101, 0.84);
   margin-bottom: 0;
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   line-height: 1.5;
 }
 
@@ -883,13 +883,13 @@
 
 .apologetics-track-card-metrics strong {
   color: var(--ink);
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   line-height: 1;
 }
 
 .apologetics-track-card-metrics small {
   color: rgba(124, 113, 101, 0.76);
-  font-size: 9px;
+  font-size: 9px; font-size: clamp(9px, calc(7.2px + 0.5625cqw), 9.72px);
   font-weight: 700;
   text-transform: uppercase;
 }
@@ -925,7 +925,7 @@
   border-radius: 18px;
   color: var(--ink);
   background: rgba(242, 228, 210, 0.88);
-  font-size: 9.5px;
+  font-size: 9.5px; font-size: clamp(9.5px, calc(7.6px + 0.5938cqw), 10.26px);
   font-weight: 800;
 }
 
@@ -939,7 +939,7 @@
   border-radius: 999px;
   color: #5d6672;
   background: rgba(255, 255, 255, 0.92);
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   font-weight: 700;
 }
 
@@ -974,7 +974,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.96),
     0 3px 8px rgba(47, 60, 74, 0.005);
   color: rgba(124, 113, 101, 0.8);
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
   font-weight: 700;
 }
 
@@ -995,7 +995,7 @@
 
 .apologetics-topic-count {
   color: var(--cool);
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
   font-weight: 700;
 }
 
@@ -1062,7 +1062,7 @@
 
 .apologetics-featured-group-heading-copy small {
   color: var(--cool);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1071,7 +1071,7 @@
 .apologetics-featured-group-heading h3 {
   margin: 0;
   color: var(--ink);
-  font-size: 15px;
+  font-size: 15px; font-size: clamp(15px, calc(12px + 0.9375cqw), 16.2px);
   line-height: 1.05;
   letter-spacing: -0.025em;
 }
@@ -1079,7 +1079,7 @@
 .apologetics-featured-group-heading p {
   margin: 0;
   color: rgba(124, 113, 101, 0.76);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   line-height: 1.5;
 }
 
@@ -1101,7 +1101,7 @@
   border-radius: 999px;
   background: rgba(242, 228, 210, 0.88);
   color: var(--cool);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 760;
 }
 
@@ -1125,7 +1125,7 @@
   border-radius: 0;
   background: transparent;
   color: rgba(124, 113, 101, 0.76);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1229,7 +1229,7 @@
   border-radius: 999px;
   color: #5b625d;
   background: rgba(241, 234, 223, 0.92);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 760;
 }
 
@@ -1249,7 +1249,7 @@
   border-radius: 999px;
   color: rgba(124, 113, 101, 0.78);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(247, 249, 252, 0.96));
-  font-size: 9px;
+  font-size: 9px; font-size: clamp(9px, calc(7.2px + 0.5625cqw), 9.72px);
   font-weight: 700;
 }
 
@@ -1290,7 +1290,7 @@
 
 .apologetics-topic-card > strong {
   color: var(--ink);
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
   line-height: 1.3;
   font-family: var(--font-body);
   font-weight: 760;
@@ -1310,7 +1310,7 @@
 
 .apologetics-topic-meta small {
   color: rgba(124, 113, 101, 0.78);
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   font-weight: 750;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -1325,7 +1325,7 @@
   border-radius: 999px;
   color: rgba(124, 113, 101, 0.8);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.996), rgba(247, 249, 252, 0.99));
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 750;
 }
 
@@ -1365,7 +1365,7 @@
   border-radius: 999px;
   background: transparent;
   color: rgba(124, 113, 101, 0.8);
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
   font-weight: 700;
 }
 
@@ -1399,7 +1399,7 @@
 
 .apologetics-intro-kicker {
   color: var(--cool);
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   font-weight: 760;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1408,14 +1408,14 @@
 .apologetics-intro-header h2 {
   margin: 0;
   color: var(--ink);
-  font-size: 24px;
+  font-size: 24px; font-size: clamp(24px, calc(19.2px + 1.5cqw), 25.92px);
   line-height: 1.08;
 }
 
 .apologetics-intro-header .apologetics-summary {
   max-width: 36ch;
   color: rgba(124, 113, 101, 0.84);
-  font-size: 15px;
+  font-size: 15px; font-size: clamp(15px, calc(12px + 0.9375cqw), 16.2px);
   line-height: 1.65;
 }
 
@@ -1431,7 +1431,7 @@
 
 .apologetics-intro-block strong {
   color: var(--ink);
-  font-size: 15px;
+  font-size: 15px; font-size: clamp(15px, calc(12px + 0.9375cqw), 16.2px);
   font-weight: 760;
 }
 
@@ -1453,7 +1453,7 @@
   border-radius: 18px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.992), rgba(247, 249, 252, 0.972));
   color: transparent;
-  font-size: 15px;
+  font-size: 15px; font-size: clamp(15px, calc(12px + 0.9375cqw), 16.2px);
   font-weight: 800;
   letter-spacing: 0.01em;
   box-shadow: 0 -8px 18px rgba(46, 58, 74, 0.05);
@@ -1503,7 +1503,7 @@
   border-radius: 999px;
   color: rgba(124, 113, 101, 0.8);
   background: transparent;
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
   font-weight: 700;
 }
 

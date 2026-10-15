@@ -1,10 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import { createIntercessionStore, intercessionTopics, getPrayerTopics, formatIntercessionClock, formatIntercessionTime, formatPrayerDuration, getGlobalIntercessionSchedule, getIntercessionPhase } from '../../lib/prayer/intercession.js';
 import { globePoint, loadCoastline, loadCountryBorders, projectGlobePoint } from '../../lib/prayer/interactive-globe.js';
-import { mountainRanges } from '../../lib/prayer/mountain-ranges.js';
 import { bathymetryBands } from '../../lib/prayer/bathymetry.js';
-import { continentalReliefPoints } from '../../lib/prayer/relief-points.js';
 import { getPublishedPrayerLines, PRAYER_LINE_MS, PRAYER_LINES_PER_FOCUS, validatePrayerJournal } from '../../lib/prayer/intercession-journal.js';
 import { createIntercessionPresence } from '../../lib/prayer/intercession-live.js';
 import { countReminderSlots, normalizeReminderSchedule, readReminderSchedule, reminderDays, reminderSlots, writeReminderSchedule } from '../../lib/prayer/intercession-reminders.js';
@@ -39,6 +37,13 @@ function countryLabel(code) {
   try { return new Intl.DisplayNames(['en'], { type: 'region' }).of(code) || code; } catch { return code; }
 }
 
+function formatTotalPrayerTime(seconds) {
+  const safe = Math.max(0, Math.floor(Number(seconds) || 0));
+  const hours = Math.floor(safe / 3600);
+  const minutes = Math.floor((safe % 3600) / 60);
+  return hours ? `${hours} h ${minutes} min` : `${minutes} min`;
+}
+
 function atlasIdForCountryCode(code, countries) {
   if (!/^[A-Z]{2}$/.test(code || '')) return null;
   let displayName = '';
@@ -50,7 +55,7 @@ function atlasIdForCountryCode(code, countries) {
 function InteractiveGlobe({ countryCodes = [] }) {
   const canvasRef = useRef(null);
   const centeredOnLiveCountry = useRef(false);
-  const rotationRef = useRef({ yaw: -1.92, pitch: -0.23, zoom: 1.16, velocityX: 0, velocityY: 0, dragging: false, pointerId: null, x: 0, y: 0, pointers: new Map(), pinchDistance: 0, pinchZoom: 1 });
+  const rotationRef = useRef({ yaw: -1.92, pitch: -0.23, zoom: 1.16, velocityX: 0, velocityY: 0, dragging: false, pointerId: null, x: 0, y: 0, pointers: new Map() });
   const [countryBorders, setCountryBorders] = useState([]);
   const [coastline, setCoastline] = useState([]);
   const prayingCountryIds = useMemo(() => new Set(countryCodes.map(code => atlasIdForCountryCode(code, countryBorders)).filter(Boolean)), [countryCodes, countryBorders]);
@@ -88,6 +93,7 @@ function InteractiveGlobe({ countryCodes = [] }) {
     if (!canvas || !context) return undefined;
     let frame;
     let lastDraw = 0;
+    const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches || false;
     const draw = () => {
       frame = window.requestAnimationFrame(draw);
       const timestamp = performance.now();
@@ -111,7 +117,6 @@ function InteractiveGlobe({ countryCodes = [] }) {
         rotation.velocityX *= .94;
         rotation.velocityY *= .94;
       }
-      const renderDetail = !rotation.dragging && rotation.pointers.size === 0 && Math.abs(rotation.velocityX) < .001 && Math.abs(rotation.velocityY) < .001;
       const atmosphere = context.createRadialGradient(centerX, centerY, radius * .88, centerX, centerY, radius * 1.07);
       atmosphere.addColorStop(0, 'rgba(126, 231, 255, 0)');
       atmosphere.addColorStop(.3, 'rgba(126, 231, 255, .16)');
@@ -123,8 +128,9 @@ function InteractiveGlobe({ countryCodes = [] }) {
       const ocean = context.createRadialGradient(centerX - radius * .34, centerY - radius * .42, radius * .04, centerX, centerY, radius * 1.1);
       ocean.addColorStop(0, 'rgba(64, 190, 226, .88)');
       ocean.addColorStop(.28, 'rgba(13, 103, 157, .92)');
-      ocean.addColorStop(.68, 'rgba(5, 57, 104, .95)');
-      ocean.addColorStop(1, 'rgba(2, 24, 59, .98)');
+      ocean.addColorStop(.68, 'rgba(10, 78, 124, .96)');
+      ocean.addColorStop(.9, 'rgba(15, 101, 148, .96)');
+      ocean.addColorStop(1, 'rgba(20, 112, 158, .95)');
       context.fillStyle = ocean; context.fillRect(centerX - radius, centerY - radius, radius * 2, radius * 2);
       const project = point => {
         const projected = projectGlobePoint(point, rotation.yaw, rotation.pitch);
@@ -148,17 +154,15 @@ function InteractiveGlobe({ countryCodes = [] }) {
         });
         fillSegment();
       };
-      if (renderDetail) {
-        bathymetryBands.forEach(band => {
-          const fill = band.depth <= 200 ? 'rgba(18, 101, 159, .22)'
-            : band.depth <= 1000 ? 'rgba(8, 75, 134, .22)'
-              : band.depth <= 2000 ? 'rgba(6, 60, 116, .24)'
-                : band.depth <= 4000 ? 'rgba(4, 45, 94, .26)'
-                  : band.depth <= 6000 ? 'rgba(2, 34, 75, .29)'
-                    : 'rgba(1, 22, 56, .32)';
-          band.rings.forEach(ring => drawBathymetryRing(ring, fill));
-        });
-      }
+      bathymetryBands.forEach(band => {
+        const fill = band.depth <= 200 ? 'rgba(18, 101, 159, .22)'
+          : band.depth <= 1000 ? 'rgba(8, 75, 134, .22)'
+            : band.depth <= 2000 ? 'rgba(6, 60, 116, .24)'
+              : band.depth <= 4000 ? 'rgba(4, 45, 94, .26)'
+                : band.depth <= 6000 ? 'rgba(2, 34, 75, .29)'
+                  : 'rgba(1, 22, 56, .32)';
+        band.rings.forEach(ring => drawBathymetryRing(ring, fill));
+      });
       const drawCoastlineHalo = ring => {
         let segment = [];
         const strokeSegment = () => {
@@ -189,6 +193,11 @@ function InteractiveGlobe({ countryCodes = [] }) {
         coastline.forEach(drawCoastlineHalo);
         context.restore();
       }
+      const gradientShift = reduceMotion ? 0 : Math.sin(timestamp * .0008) * radius * .68;
+      const prayerCountryGradient = context.createLinearGradient(centerX - radius + gradientShift, centerY, centerX + radius + gradientShift, centerY);
+      prayerCountryGradient.addColorStop(0, '#22cfa2');
+      prayerCountryGradient.addColorStop(.48, '#258fd8');
+      prayerCountryGradient.addColorStop(1, '#8062f2');
       const drawCountry = (ring, active, countryId) => {
         let segment = [];
         const fillSegment = () => {
@@ -198,9 +207,9 @@ function InteractiveGlobe({ countryCodes = [] }) {
           context.closePath();
           const prayerHighlight = active;
           context.save();
-          context.fillStyle = prayerHighlight ? '#ff8d43' : countryBlue(countryId);
+          context.fillStyle = prayerHighlight ? prayerCountryGradient : countryBlue(countryId);
           if (prayerHighlight) {
-            context.shadowColor = 'rgba(255, 112, 35, .92)';
+            context.shadowColor = 'rgba(60, 207, 220, .9)';
             context.shadowBlur = 14;
           }
           context.fill();
@@ -219,55 +228,8 @@ function InteractiveGlobe({ countryCodes = [] }) {
           country.rings.forEach(ring => drawCountry(ring, active, country.id));
         });
       }
-      if (renderDetail) {
-        context.save();
-        context.globalCompositeOperation = 'multiply';
-        continentalReliefPoints.forEach(point => {
-          const projected = project(globePoint(point.latitude, point.longitude));
-          if (projected.z < .05) return;
-          const elevationRatio = Math.max(0, Math.min(1, (point.elevation - 300) / 8500));
-          const patchRadius = radius * (.045 + elevationRatio * .055);
-          const relief = context.createRadialGradient(projected.x, projected.y, 0, projected.x, projected.y, patchRadius);
-          relief.addColorStop(0, `rgba(1, 22, 53, ${.16 + elevationRatio * .13})`);
-          relief.addColorStop(.58, `rgba(4, 39, 76, ${.08 + elevationRatio * .08})`);
-          relief.addColorStop(1, 'rgba(4, 39, 76, 0)');
-          context.fillStyle = relief;
-          context.beginPath(); context.ellipse(projected.x, projected.y, patchRadius * 1.35, patchRadius * .72, .28, 0, Math.PI * 2); context.fill();
-        });
-        context.restore();
-        const drawMountainRing = (ring, rank, shade) => {
-          let segment = [];
-          const fillSegment = () => {
-            if (segment.length < 3) return;
-            context.beginPath();
-            segment.forEach((point, index) => index ? context.lineTo(point.x, point.y) : context.moveTo(point.x, point.y));
-            context.closePath();
-            context.fillStyle = shade;
-            context.shadowColor = 'rgba(2, 20, 48, .38)';
-            context.shadowBlur = rank <= 2 ? 7 : 4;
-            context.fill();
-            segment = [];
-          };
-          ring.forEach(([latitude, longitude]) => {
-            const projected = project(globePoint(latitude, longitude));
-            if (projected.z > .04) segment.push(projected);
-            else fillSegment();
-          });
-          fillSegment();
-        };
-        context.save();
-        context.globalCompositeOperation = 'source-over';
-        mountainRanges.forEach(range => {
-          const shades = range.rank <= 1
-            ? ['rgba(4, 34, 70, .34)', 'rgba(7, 43, 82, .31)', 'rgba(9, 51, 92, .28)']
-            : ['rgba(7, 43, 82, .25)', 'rgba(10, 53, 96, .22)', 'rgba(15, 64, 108, .2)'];
-          const shade = shades[(range.name.length + range.rank) % shades.length];
-          range.rings.forEach(ring => drawMountainRing(ring, range.rank, shade));
-        });
-        context.restore();
-      }
-      // Keep live countries in the foreground so the relief and mountain overlays
-      // cannot mute the neon prayer color.
+      // Keep live countries in the foreground so coastline details cannot mute
+      // the neon prayer color.
       countryBorders.forEach(country => {
         if (!prayingCountryIds.has(country.id)) return;
         country.rings.forEach(ring => drawCountry(ring, true, country.id));
@@ -296,9 +258,6 @@ function InteractiveGlobe({ countryCodes = [] }) {
       rotation.velocityX = deltaX * .0023;
       rotation.velocityY = deltaY * .0023;
       rotation.x = event.clientX; rotation.y = event.clientY;
-    } else if (rotation.pointers.size === 2) {
-      const [first, second] = [...rotation.pointers.values()];
-      rotation.zoom = Math.max(.9, Math.min(1.75, rotation.pinchZoom * (Math.hypot(first.x - second.x, first.y - second.y) / rotation.pinchDistance)));
     }
   };
   const end = event => {
@@ -323,12 +282,6 @@ function InteractiveGlobe({ countryCodes = [] }) {
       window.removeEventListener('pointercancel', handleEnd);
     };
   }, []);
-  const wheelZoom = event => {
-    event.preventDefault();
-    const rotation = rotationRef.current;
-    rotation.zoom = Math.max(.9, Math.min(1.75, rotation.zoom * Math.exp(-event.deltaY * .001)));
-    rotation.velocityX = 0; rotation.velocityY = 0;
-  };
   const keyboardRotate = event => {
     const rotation = rotationRef.current;
     const amount = degrees(12);
@@ -339,13 +292,12 @@ function InteractiveGlobe({ countryCodes = [] }) {
     if (event.key === 'ArrowUp') rotation.pitch = Math.max(-1.2, rotation.pitch - amount);
     if (event.key === 'ArrowDown') rotation.pitch = Math.min(1.2, rotation.pitch + amount);
   };
-  return <canvas ref={canvasRef} className="intercession-globe-canvas" tabIndex={0} role="img" aria-label="Interactive 3D globe showing prayer activity by country. Drag, pinch, or use arrow keys to explore it." onPointerDown={event => {
+  return <canvas ref={canvasRef} className="intercession-globe-canvas" tabIndex={0} role="img" aria-label="Interactive 3D globe showing prayer activity by country. Drag or use arrow keys to rotate it." onPointerDown={event => {
     event.preventDefault();
     const rotation = rotationRef.current;
     rotation.pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
     rotation.dragging = rotation.pointers.size === 1; rotation.pointerId = event.pointerId; rotation.x = event.clientX; rotation.y = event.clientY; rotation.velocityX = 0; rotation.velocityY = 0;
-    if (rotation.pointers.size === 2) { const [first, second] = [...rotation.pointers.values()]; rotation.pinchDistance = Math.max(1, Math.hypot(first.x - second.x, first.y - second.y)); rotation.pinchZoom = rotation.zoom; }
-  }} onContextMenu={event => event.preventDefault()} onWheel={wheelZoom} onKeyDown={keyboardRotate} />;
+  }} onContextMenu={event => event.preventDefault()} onKeyDown={keyboardRotate} />;
 }
 
 function PrayerGlobe({ activity }) {
@@ -358,7 +310,7 @@ function PrayerGlobe({ activity }) {
     <h3 id="intercession-world-title">Where people are praying</h3>
     <div className="intercession-world" aria-label={description}>
       <div className="intercession-globe-shell"><InteractiveGlobe countryCodes={countryCodes} /></div>
-      <div className="intercession-world-copy"><span className="intercession-live-dot" aria-hidden="true" /><span className="intercession-kicker">{activity.connected ? 'LIVE SESSION' : 'SESSION ACTIVITY'}</span><strong>{activity.connected ? activity.count : 76}</strong><span>{activity.connected ? `${activity.count === 1 ? 'person' : 'people'} connected now` : 'people praying · 7 countries'}</span>{!activity.connected && <small>Activity preview</small>}</div>
+      <div className="intercession-world-copy"><span className="intercession-live-dot" aria-hidden="true" /><span className="intercession-kicker">{activity.connected ? `${activity.count === 1 ? 'person' : 'people'} connected` : 'SESSION ACTIVITY'}</span><strong>{activity.connected ? activity.count : 76}</strong>{!activity.connected && <><span>people praying · 7 countries</span><small>Activity preview</small></>}</div>
     </div>
   </section>;
 }
@@ -598,6 +550,46 @@ export function IntercessionPanel() {
   const [prayerSlide, setPrayerSlide] = useState(0);
   const prayerCarouselRef = useRef(null);
   const intercessionEntered = useRef(false);
+  const pendingNavigationRef = useRef(null);
+  const joinedRef = useRef(joined);
+  joinedRef.current = joined;
+  const returnToPrayer = useCallback(() => {
+    pendingNavigationRef.current = null;
+    setSessionDialog(null);
+    window.prayerBridge?.setPageTab?.('board');
+  }, []);
+  const continuePendingNavigation = useCallback(() => {
+    const pending = pendingNavigationRef.current;
+    pendingNavigationRef.current = null;
+    setSessionDialog(null);
+    if (!pending) return;
+    if (pending.kind === 'prayer-tab') window.prayerBridge?.setPageTab?.(pending.id);
+    else window.appNavigate?.(pending.id);
+  }, []);
+  const dismissSessionDialog = useCallback(() => {
+    if (sessionDialog === 'join' || sessionDialog === 'reminders') return returnToPrayer();
+    if (sessionDialog === 'summary') return continuePendingNavigation();
+    pendingNavigationRef.current = null;
+    setSessionDialog(null);
+  }, [continuePendingNavigation, returnToPrayer, sessionDialog]);
+  const requestNavigation = useCallback((target, event) => {
+    if (!joinedRef.current) return true;
+    if ((target.kind === 'screen' && target.id === 'prayer') || (target.kind === 'prayer-tab' && target.id === 'intercession')) return true;
+    pendingNavigationRef.current = target;
+    event.preventDefault();
+    setSessionDialog('finish');
+    return true;
+  }, []);
+  useLayoutEffect(() => {
+    const beforeScreenChange = event => requestNavigation({ kind: 'screen', id: event.detail?.id }, event);
+    const beforePrayerTabChange = event => requestNavigation({ kind: 'prayer-tab', id: event.detail?.id }, event);
+    window.addEventListener('app:before-screen-change', beforeScreenChange);
+    window.addEventListener('prayer:before-page-tab-change', beforePrayerTabChange);
+    return () => {
+      window.removeEventListener('app:before-screen-change', beforeScreenChange);
+      window.removeEventListener('prayer:before-page-tab-change', beforePrayerTabChange);
+    };
+  }, [requestNavigation]);
   useEffect(() => {
     if (intercessionEntered.current) return;
     intercessionEntered.current = true;
@@ -606,10 +598,10 @@ export function IntercessionPanel() {
   useEffect(() => { setPrayerSlide(0); prayerCarouselRef.current?.scrollTo({ left: 0, behavior: 'auto' }); }, [themeId, sessionStart]);
   useEffect(() => {
     if (!sessionDialog) return undefined;
-    const closeOnEscape = event => { if (event.key === 'Escape') setSessionDialog(null); };
+    const closeOnEscape = event => { if (event.key === 'Escape') { event.preventDefault(); dismissSessionDialog(); } };
     document.addEventListener('keydown', closeOnEscape);
     return () => document.removeEventListener('keydown', closeOnEscape);
-  }, [sessionDialog]);
+  }, [dismissSessionDialog, sessionDialog]);
   const selectPrayerSlide = index => {
     setPrayerSlide(index);
     const carousel = prayerCarouselRef.current;
@@ -636,16 +628,7 @@ export function IntercessionPanel() {
       setReminderSaving(false);
     }
   };
-  const returnToPrayer = useCallback(() => {
-    setSessionDialog(null);
-    window.prayerBridge?.setPageTab?.('board');
-  }, []);
-  const dismissSessionDialog = () => {
-    if (sessionDialog === 'join' || sessionDialog === 'reminders') returnToPrayer();
-    else setSessionDialog(null);
-  };
   return <section className="intercession-panel" aria-labelledby="intercession-title">
-    {joined && <div className="intercession-top-actions"><div className="intercession-session-elapsed" role="status" aria-label={`You are praying since ${formatPrayerDuration(Math.max(0, Math.floor((now - (state.session?.startedAt || now)) / 1000)))}`}><span>You are praying since</span><strong>{formatPrayerDuration(Math.max(0, Math.floor((now - (state.session?.startedAt || now)) / 1000)))}</strong></div><button className="intercession-session-finish" type="button" aria-haspopup="dialog" onClick={() => setSessionDialog('finish')}>Finish the prayer</button></div>}
     <div className="intercession-prayer-carousel" aria-label="Prayer focus and guided prayer">
       <div className="intercession-prayer-indicators" role="tablist" aria-label="Prayer views">
         {['Prayer focus', 'Guided prayer'].map((label, index) => <button key={label} id={`intercession-view-tab-${index}`} type="button" role="tab" aria-selected={prayerSlide === index} aria-controls={`intercession-view-panel-${index}`} className={prayerSlide === index ? 'is-active' : ''} onClick={() => selectPrayerSlide(index)}><span aria-hidden="true" />{label}</button>)}
@@ -679,7 +662,7 @@ export function IntercessionPanel() {
     </div>
     <PrayerThemeCarousel voting={voting?.sessionStart === sessionStart ? voting : null} pending={pendingVote} message={voteMessage} onVote={vote} />
     <PrayerGlobe activity={activity} />
-    <p className="intercession-personal">{completedSessions} completed {completedSessions === 1 ? 'session' : 'sessions'} · {formatPrayerDuration(totalPrayerSeconds)} prayed</p>
-    {sessionDialog && createPortal(<div className="intercession-session-modal" role="presentation" onMouseDown={event => event.target === event.currentTarget && dismissSessionDialog()}>{sessionDialog === 'reminders' ? <SessionReminderDialog schedule={reminderSchedule} onChange={setReminderSchedule} onSave={saveReminders} onClose={returnToPrayer} onBack={() => { setReminderMessage(''); setSessionDialog('join'); }} saving={reminderSaving} message={reminderMessage} /> : <section className="intercession-session-dialog" role="dialog" aria-modal="true" aria-labelledby="intercession-session-dialog-title" aria-describedby="intercession-session-dialog-description"><button type="button" className="intercession-session-close" onClick={sessionDialog === 'join' ? returnToPrayer : () => setSessionDialog(null)} aria-label="Close">×</button><span className="intercession-kicker">{sessionDialog === 'join' ? 'GLOBAL INTERCESSION' : sessionDialog === 'summary' ? 'PRAYER COMPLETE' : 'SESSION ACTIVE'}</span><h2 id="intercession-session-dialog-title">{sessionDialog === 'join' ? 'Join the global prayer?' : sessionDialog === 'summary' ? 'Your prayer time is counted.' : 'Finish this prayer session?'}</h2><p id="intercession-session-dialog-description">{sessionDialog === 'join' ? 'Follow this prayer focus with everyone connected in the room.' : sessionDialog === 'summary' ? 'Thank you for making space to pray with the global room.' : 'Your session will be marked complete on this device.'}</p><div className="intercession-session-dialog-details">{sessionDialog === 'summary' ? <><span className="intercession-session-stat"><strong>{formatPrayerDuration(state.session?.durationSeconds || 0)}</strong><small>this session</small></span><span className="intercession-session-stat"><strong>{formatPrayerDuration(totalPrayerSeconds)}</strong><small>total prayer time</small></span></> : <><span>{theme.label}</span><span>{topic.title}</span><span>{`10-minute session · next topic in ${formatIntercessionTime(schedule.nextTopicSeconds)}`}</span></>}</div>{sessionDialog === 'join' && <button type="button" className="intercession-session-reminder-link" onClick={() => { setReminderMessage(''); setSessionDialog('reminders'); }}>Set session reminders</button>}<div className="intercession-session-dialog-actions"><button type="button" className="intercession-session-dialog-secondary" aria-label={sessionDialog === 'join' ? 'Not now' : 'Close'} onClick={sessionDialog === 'join' ? returnToPrayer : () => setSessionDialog(null)}>{sessionDialog === 'join' ? 'Not now' : '×'}</button>{sessionDialog !== 'summary' && <button type="button" className="intercession-session-dialog-primary" onClick={() => { if (sessionDialog === 'join') { store.joinGlobal(themeId); setSessionDialog(null); } else { const result = store.finishGlobal(); if (result) setSessionDialog('summary'); } setNow(Date.now() + clockOffset.current); }}>{sessionDialog === 'join' ? 'Join prayer' : 'Finish session'}</button>}</div></section>}</div>, document.querySelector('.phone-frame') || document.body)}
+    {joined && <section className="intercession-session-card" aria-label="Prayer session summary"><div className="intercession-session-card-heading"><div className="intercession-session-elapsed" role="status" aria-label={`You are praying since ${formatPrayerDuration(Math.max(0, Math.floor((now - (state.session?.startedAt || now)) / 1000)))}`}><span>You are praying since</span><strong>{formatPrayerDuration(Math.max(0, Math.floor((now - (state.session?.startedAt || now)) / 1000)))}</strong></div><button className="intercession-session-finish" type="button" aria-haspopup="dialog" onClick={() => setSessionDialog('finish')}>Finish the prayer</button></div><div className="intercession-session-card-stats"><div><strong>{formatTotalPrayerTime(totalPrayerSeconds)}</strong><span>Total prayer</span></div><div><strong>{completedSessions}</strong><span>{completedSessions === 1 ? 'Session' : 'Sessions'}</span></div></div></section>}
+    {sessionDialog && createPortal(<div className="intercession-session-modal" role="presentation" onMouseDown={event => event.target === event.currentTarget && dismissSessionDialog()}>{sessionDialog === 'reminders' ? <SessionReminderDialog schedule={reminderSchedule} onChange={setReminderSchedule} onSave={saveReminders} onClose={returnToPrayer} onBack={() => { setReminderMessage(''); setSessionDialog('join'); }} saving={reminderSaving} message={reminderMessage} /> : <section className="intercession-session-dialog" role="dialog" aria-modal="true" aria-labelledby="intercession-session-dialog-title" aria-describedby="intercession-session-dialog-description"><button type="button" className="intercession-session-close" onClick={dismissSessionDialog} aria-label="Close">×</button><span className="intercession-kicker">{sessionDialog === 'join' ? 'GLOBAL INTERCESSION' : sessionDialog === 'summary' ? 'PRAYER COMPLETE' : 'SESSION ACTIVE'}</span><h2 id="intercession-session-dialog-title">{sessionDialog === 'join' ? 'Join the global prayer?' : sessionDialog === 'summary' ? 'Your prayer time is counted.' : 'Finish this prayer session?'}</h2><p id="intercession-session-dialog-description">{sessionDialog === 'join' ? 'Follow this prayer focus with everyone connected in the room.' : sessionDialog === 'summary' ? 'Thank you for making space to pray with the global room.' : 'Your session will be marked complete on this device.'}</p><div className="intercession-session-dialog-details">{sessionDialog === 'summary' ? <><span className="intercession-session-stat"><strong>{formatPrayerDuration(state.session?.durationSeconds || 0)}</strong><small>this session</small></span><span className="intercession-session-stat"><strong>{formatPrayerDuration(totalPrayerSeconds)}</strong><small>total prayer time</small></span></> : <><span>{theme.label}</span><span>{topic.title}</span><span>{`10-minute session · next topic in ${formatIntercessionTime(schedule.nextTopicSeconds)}`}</span></>}</div>{sessionDialog === 'join' && <button type="button" className="intercession-session-reminder-link" onClick={() => { setReminderMessage(''); setSessionDialog('reminders'); }}>Set session reminders</button>}<div className="intercession-session-dialog-actions"><button type="button" className="intercession-session-dialog-secondary" aria-label={sessionDialog === 'join' ? 'Not now' : 'Close'} onClick={dismissSessionDialog}>{sessionDialog === 'join' ? 'Not now' : '×'}</button>{sessionDialog !== 'summary' && <button type="button" className="intercession-session-dialog-primary" onClick={() => { if (sessionDialog === 'join') { store.joinGlobal(themeId); setSessionDialog(null); } else { const result = store.finishGlobal(); if (result) setSessionDialog('summary'); } setNow(Date.now() + clockOffset.current); }}>{sessionDialog === 'join' ? 'Join prayer' : 'Finish session'}</button>}</div></section>}</div>, document.querySelector('.phone-frame') || document.body)}
   </section>;
 }

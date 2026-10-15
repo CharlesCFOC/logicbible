@@ -225,7 +225,7 @@
 #profile .haptics-strength-control button {
   min-height: 44px;
   padding-inline: 2px;
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
 }
 
 .app-shell[data-app-background="black"] #profile .text-size-preview span,
@@ -351,14 +351,14 @@
 .profile-hero h1 {
   color: var(--ink);
   font-family: var(--font-display);
-  font-size: 27px;
+  font-size: 27px; font-size: clamp(27px, calc(21.6px + 1.6875cqw), 29.16px);
   line-height: 0.92;
   letter-spacing: -0.03em;
 }
 
 .profile-hero p:not(.eyebrow) {
   color: rgba(124, 113, 101, 0.8);
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
 }
 
 .profile-tabs {
@@ -409,7 +409,7 @@
   border-radius: 13px;
   color: #75695e;
   background: transparent;
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
   pointer-events: auto !important;
   touch-action: manipulation;
@@ -533,7 +533,7 @@
   background: #fffdf8;
   color: var(--ink);
   font: inherit;
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
 }
 
 .profile-auth-form input:focus {
@@ -553,7 +553,7 @@
   border-radius: 12px;
   background: #eeeae4;
   color: var(--ink);
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   font-weight: 800;
 }
 
@@ -593,7 +593,7 @@
 .profile-auth-form p {
   margin: 0;
   color: #655b51;
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
 }
 
 .profile-auth-form p[data-state="error"] {
@@ -607,7 +607,7 @@
   border-radius: 11px;
   color: #fff;
   background: #b83c4a;
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
   white-space: nowrap;
 }
@@ -651,14 +651,14 @@
   border-radius: 50%;
   color: #fff;
   background: linear-gradient(145deg, #e9576d, #a92d47);
-  font-size: 22px;
+  font-size: 22px; font-size: clamp(22px, calc(17.6px + 1.375cqw), 23.76px);
   font-weight: 850;
   box-shadow: 0 8px 18px rgba(220, 59, 89, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .profile-delete-dialog-eyebrow {
   color: #ffadb8;
-  font-size: 9px;
+  font-size: 9px; font-size: clamp(9px, calc(7.2px + 0.5625cqw), 9.72px);
   font-weight: 850;
   letter-spacing: 0.14em;
 }
@@ -666,13 +666,13 @@
 .profile-delete-dialog h3 {
   margin: 2px 0 0;
   color: #fff;
-  font-size: 19px;
+  font-size: 19px; font-size: clamp(19px, calc(15.2px + 1.1875cqw), 20.52px);
 }
 
 .profile-delete-dialog p {
   margin: 0 0 8px;
   color: #d7e2e8;
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   line-height: 1.5;
 }
 
@@ -688,7 +688,7 @@
   border: 1px solid rgba(170, 215, 238, 0.34);
   background: rgba(54, 82, 103, 0.72);
   color: #fff;
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
 }
 
@@ -723,7 +723,7 @@
 .profile-admin-entry span {
   display: block;
   color: #2d7495;
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   font-weight: 900;
   letter-spacing: .08em;
   text-transform: uppercase;
@@ -733,13 +733,13 @@
   display: block;
   margin-top: 2px;
   color: #244b61;
-  font-size: 14px;
+  font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px);
 }
 
 .profile-admin-entry p {
   margin: 3px 0 0;
   color: #42677b;
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   line-height: 1.4;
 }
 
@@ -751,7 +751,7 @@
   color: #fff;
   background: linear-gradient(135deg, #277ba5, #4aa6c7);
   font: inherit;
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   font-weight: 900;
 }
 
@@ -821,7 +821,7 @@
 .profile-account-tile-heading span {
   overflow: hidden;
   color: rgba(124, 113, 101, 0.92);
-  font-size: 9px;
+  font-size: 9px; font-size: clamp(9px, calc(7.2px + 0.5625cqw), 9.72px);
   font-weight: 800;
   letter-spacing: 0.045em;
   text-overflow: ellipsis;
@@ -832,7 +832,7 @@
 .profile-account-tile strong {
   color: var(--ink);
   overflow: hidden;
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   line-height: 1.4;
   word-break: break-word;
   text-overflow: ellipsis;
@@ -852,7 +852,7 @@
 
 .profile-field span {
   color: #554b42;
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
   letter-spacing: 0.02em;
 }
@@ -906,7 +906,7 @@
   border-radius: 14px;
   background: #8a7764;
   color: #fff;
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   font-weight: 800;
   white-space: nowrap;
 }
@@ -918,7 +918,7 @@
 .profile-info-actions p {
   margin: 0;
   color: #655b51;
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   line-height: 1.35;
 }
 
@@ -1097,7 +1097,7 @@
 }
 
 .app-shell #profile .profile-preference-section .preference-copy h3 {
-  font-size: 28px;
+  font-size: 28px; font-size: clamp(28px, calc(22.4px + 1.75cqw), 30.24px);
   font-weight: 800;
   line-height: 1.2;
 }
@@ -1218,7 +1218,7 @@
   border-radius: 12px;
   background: rgba(17, 27, 34, 0.58);
   color: #ffffff;
-  font-size: 24px;
+  font-size: 24px; font-size: clamp(24px, calc(19.2px + 1.5cqw), 25.92px);
   line-height: 1;
 }
 
@@ -1265,7 +1265,7 @@
   z-index: 1;
   overflow: hidden;
   color: #ffffff;
-  font-size: 9px;
+  font-size: 9px; font-size: clamp(9px, calc(7.2px + 0.5625cqw), 9.72px);
   font-weight: 800;
   text-overflow: ellipsis;
   white-space: nowrap;

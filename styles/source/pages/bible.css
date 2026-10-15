@@ -101,7 +101,7 @@
 .reader-screen .parallel-toggle {
   min-height: 36px !important;
   gap: 6px;
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
 }
 
 .reader-screen .parallel-toggle svg {
@@ -246,7 +246,7 @@
 .interlinear-original span {
   margin: 0;
   color: var(--cool);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -263,7 +263,7 @@
 
 .interlinear-verse-card p {
   color: var(--ink);
-  font-size: 14px;
+  font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px);
 }
 
 .interlinear-verse-card p span {
@@ -287,7 +287,7 @@
   padding-top: 7px;
   border-top: 1px solid rgba(190, 227, 246, 0.2);
   color: #bdeaff;
-  font-size: 16px;
+  font-size: 16px; font-size: clamp(16px, calc(12.8px + 1cqw), 17.28px);
   line-height: 1.5;
 }
 
@@ -441,7 +441,7 @@
   min-width: 0;
   flex: 1;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 760;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -476,7 +476,7 @@
   color: #2b2926;
   background: #eeeae4;
   background-image: none;
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   font-weight: 760;
   text-align: center;
   text-align-last: center;
@@ -533,7 +533,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.98),
     0 3px 8px rgba(47, 60, 74, 0.0014);
   color: var(--muted);
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
   font-weight: 760;
 }
 
@@ -578,7 +578,7 @@
 .reader-screen .parallel-version-select select.bible-glass-select-input {
   min-height: 34px;
   padding: 0 30px 0 12px;
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   text-overflow: ellipsis;
   appearance: none;
 }
@@ -601,7 +601,7 @@
   outline: 0;
   color: var(--ink);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(249, 251, 253, 0.986));
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   font-weight: 760;
 }
 
@@ -698,7 +698,7 @@
 
 .bible-chapter-quiz-eyebrow {
   color: #718392;
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -718,7 +718,7 @@
 .bible-chapter-quiz-result p {
   margin: 0;
   color: #66717b;
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
   line-height: 1.55;
 }
 
@@ -734,7 +734,7 @@
   border-radius: 999px;
   color: #fff;
   background: #293d4d;
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
   font-weight: 750;
   transition: transform 160ms ease, background 160ms ease;
 }
@@ -756,7 +756,7 @@
   align-items: center;
   gap: 11px;
   color: #536675;
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
   font-weight: 650;
 }
 
@@ -784,7 +784,7 @@
   justify-content: space-between;
   gap: 12px;
   color: #293d4d;
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   font-weight: 800;
 }
 
@@ -834,7 +834,7 @@
   border-radius: 15px;
   color: #3e4b55;
   background: rgba(255, 255, 255, 0.72);
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
   line-height: 1.45;
   text-align: left;
   transition: background 160ms ease, color 160ms ease, transform 160ms ease;
@@ -858,7 +858,7 @@
   border-radius: 50%;
   color: #617887;
   background: rgba(41, 61, 77, 0.08);
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   font-weight: 800;
 }
 
@@ -887,14 +887,14 @@
   gap: 7px;
   padding-top: 2px;
   color: #59666e;
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   line-height: 1.5;
 }
 
 .bible-chapter-quiz-feedback p {
   margin: 0;
   color: #314f62;
-  font-size: 14px;
+  font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px);
   font-weight: 800;
 }
 
@@ -904,7 +904,7 @@
 
 .bible-chapter-quiz-feedback small {
   color: #718392;
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   font-weight: 700;
 }
 
@@ -922,7 +922,7 @@
 .bible-chapter-quiz-result-score {
   color: #293d4d;
   font-family: var(--font-display, Georgia, serif);
-  font-size: 45px;
+  font-size: 45px; font-size: clamp(45px, calc(36px + 2.8125cqw), 48.6px);
   font-weight: 650;
   line-height: 1;
 }
@@ -930,7 +930,7 @@
 .bible-chapter-quiz-result-score span {
   color: #84919a;
   font-family: var(--font-body, sans-serif);
-  font-size: 16px;
+  font-size: 16px; font-size: clamp(16px, calc(12.8px + 1cqw), 17.28px);
   font-weight: 650;
 }
 
@@ -939,7 +939,7 @@
   border: 0;
   color: #385c70;
   background: transparent;
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   font-weight: 800;
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -948,7 +948,7 @@
 .bible-chapter-quiz-error {
   margin: 0 0 10px;
   color: #9b5d53;
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
 }
 
 .app-shell[data-theme="dark"] .reader-screen .bible-chapter-quiz,
@@ -1002,7 +1002,7 @@
   .bible-chapter-quiz-start-button,
   .bible-chapter-quiz-next {
     min-height: 44px;
-    font-size: 12px;
+    font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   }
 }
 
@@ -1031,7 +1031,7 @@
   margin-right: 6px;
   color: var(--cool);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   font-weight: 760;
 }
 
@@ -1099,7 +1099,7 @@
 
 .parallel-version-header span {
   color: #9dddf8;
-  font-size: 9px;
+  font-size: 9px; font-size: clamp(9px, calc(7.2px + 0.5625cqw), 9.72px);
   font-weight: 800;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -1108,7 +1108,7 @@
 .parallel-version-header strong {
   overflow: hidden;
   color: #ffffff;
-  font-size: 14px;
+  font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1116,7 +1116,7 @@
 .parallel-version-header small {
   overflow: hidden;
   color: rgba(220, 236, 245, 0.72);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1257,7 +1257,7 @@
   margin-right: 6px;
   color: var(--cool);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   font-weight: 760;
 }
 
@@ -1276,7 +1276,7 @@
   border-radius: 18px;
   background: var(--cool-soft);
   color: var(--ink);
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   font-weight: 760;
 }
 
@@ -1286,7 +1286,7 @@
   border-radius: 999px;
   background: var(--cool);
   color: var(--accent-contrast, #fff);
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   font-weight: 760;
 }
 
@@ -1418,13 +1418,13 @@
 
 .saved-verse-open strong {
   color: var(--ink);
-  font-size: 14px;
+  font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px);
 }
 
 .saved-verse-open small {
   margin-top: 1px;
   color: var(--cool);
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   font-weight: 760;
 }
 
@@ -1435,34 +1435,9 @@
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
 }
 
-
-/* Search content only: the surface, backdrop and drawer come from Home. */
-.bible-menu-search { display: grid; gap: 14px; }
-.app-shell .bible-menu-search-field {
-  display: flex; align-items: center; gap: 10px; min-height: 52px;
-  padding: 0 14px; border: 1px solid rgba(151, 225, 255, .38); border-radius: 14px; color: #93e2ff;
-}
-.app-shell[data-app-background] #bible-menu-drawer .bible-menu-search-field input {
-  flex: 1; min-width: 0; width: 100%; height: 50px; padding: 0;
-  border: 0 !important; border-radius: 0; background: transparent !important;
-  box-shadow: none !important; color: #f6fbff !important; font-size: 16px;
-}
-.bible-menu-search-field:focus-within { outline: 1px solid #93e2ff; }
-.bible-menu-search-field svg { flex: 0 0 20px; width: 20px; height: 20px; }
-.bible-menu-search-filters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-.bible-menu-search .app-menu-section { margin: 0; padding: 0; border-top: 0; }
-.app-menu-section.bible-menu-search-filters button,
-.app-menu-section .bible-menu-search-submit { justify-content: center; text-align: center; }
-.bible-menu-search-status { margin: 18px 0; color: #dceeff; font-size: 13px; line-height: 1.5; }
-.bible-menu-search-results { display: grid; gap: 10px; }
-.app-menu-section .bible-menu-search-result { display: grid; gap: 8px; padding: 14px 10px; border-color: rgba(151, 225, 255, .25); }
-.bible-menu-search-result strong { color: #ffb066; font-size: 16px; }
-.bible-menu-search-result span { font-size: 14px; font-weight: 400; line-height: 1.5; }
-#bible-menu-drawer [hidden] { display: none !important; }
-.bible-menu-search-submit:disabled { opacity: .6; }
 
 /* Chapter quiz opens inline below the reader, with independent navigation. */
 #bible .bible-chapter-navigation .bible-chapter-quiz-toggle {
@@ -1470,7 +1445,7 @@
   width: auto;
   min-width: 86px;
   padding: 10px 20px;
-  font-size: 14px;
+  font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px);
   font-weight: 800;
 }
 #bible .bible-chapter-quiz-toggle span { position: relative; z-index: 1; }
@@ -1486,30 +1461,30 @@
   box-shadow: 0 8px 22px rgba(5, 23, 48, .18);
 }
 #bible .chapter-quiz-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 22px; }
-#bible .chapter-quiz-header span, #bible .chapter-quiz-progress { color: #bdeaff; font-size: 12px; font-weight: 700; }
-#bible .chapter-quiz h2 { margin: 5px 0 0; color: #fff; font-size: 22px; line-height: 1.2; }
-#bible .chapter-quiz h3 { margin: 0 0 18px; color: #fff; font-size: 18px; line-height: 1.45; overflow-wrap: anywhere; }
-#bible .chapter-quiz p { font-size: 14px; line-height: 1.6; }
+#bible .chapter-quiz-header span, #bible .chapter-quiz-progress { color: #bdeaff; font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px); font-weight: 700; }
+#bible .chapter-quiz h2 { margin: 5px 0 0; color: #fff; font-size: 22px; font-size: clamp(22px, calc(17.6px + 1.375cqw), 23.76px); line-height: 1.2; }
+#bible .chapter-quiz h3 { margin: 0 0 18px; color: #fff; font-size: 18px; font-size: clamp(18px, calc(14.4px + 1.125cqw), 19.44px); line-height: 1.45; overflow-wrap: anywhere; }
+#bible .chapter-quiz p { font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px); line-height: 1.6; }
 #bible .chapter-quiz-options { display: grid; gap: 10px; margin: 0 0 16px; padding: 0; border: 0; min-width: 0; }
-#bible .chapter-quiz-option { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; min-height: 52px; padding: 12px; border: 1px solid rgba(169, 217, 248, .25); border-radius: 16px; background: rgba(6, 26, 49, .32); font-size: 14px; line-height: 1.5; cursor: pointer; }
+#bible .chapter-quiz-option { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; min-height: 52px; padding: 12px; border: 1px solid rgba(169, 217, 248, .25); border-radius: 16px; background: rgba(6, 26, 49, .32); font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px); line-height: 1.5; cursor: pointer; }
 #bible .chapter-quiz-option > span:not(.chapter-quiz-letter) { flex: 1; min-width: 0; overflow-wrap: anywhere; }
 #bible .chapter-quiz-option input { flex: 0 0 auto; accent-color: #8bdcff; width: 18px; height: 18px; margin: 0; }
-#bible .chapter-quiz-letter { color: #bdeaff; font-size: 12px; font-weight: 800; }
+#bible .chapter-quiz-letter { color: #bdeaff; font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px); font-weight: 800; }
 #bible .chapter-quiz-option.is-selected { border-color: #8bdcff; background: rgba(88, 169, 229, .22); }
 #bible .chapter-quiz-option.is-correct { border-color: #91e1b7; background: rgba(49, 149, 102, .23); }
 #bible .chapter-quiz-option.is-incorrect { border-color: #ffb2ae; background: rgba(195, 78, 85, .23); }
-#bible .chapter-quiz-option .chapter-quiz-answer-label { flex-basis: 100%; padding-left: 28px; font-size: 11px; font-weight: 800; }
-#bible .chapter-quiz button { min-height: 44px; padding: 10px 16px; border: 0; border-radius: 14px; color: #fff; background: #286899; font-weight: 750; font-size: 14px; }
+#bible .chapter-quiz-option .chapter-quiz-answer-label { flex-basis: 100%; padding-left: 28px; font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px); font-weight: 800; }
+#bible .chapter-quiz button { min-height: 44px; padding: 10px 16px; border: 0; border-radius: 14px; color: #fff; background: #286899; font-weight: 750; font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px); }
 #bible .chapter-quiz button:disabled { opacity: .4; cursor: not-allowed; }
 #bible .chapter-quiz button:focus-visible, #bible .chapter-quiz-option:focus-within { outline: 2px solid #a2e7ff; outline-offset: 3px; }
 #bible .chapter-quiz .chapter-quiz-validate { width: 100%; background: linear-gradient(135deg, #3383bd, #2f65a6); }
-#bible .chapter-quiz-feedback { padding: 14px; border-radius: 16px; background: rgba(3, 20, 40, .36); font-size: 14px; line-height: 1.6; }
+#bible .chapter-quiz-feedback { padding: 14px; border-radius: 16px; background: rgba(3, 20, 40, .36); font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px); line-height: 1.6; }
 #bible .chapter-quiz-feedback p { margin: 6px 0; }
-#bible .chapter-quiz-feedback blockquote { margin: 12px 0 4px; color: #bdeaff; font-size: 13px; }
+#bible .chapter-quiz-feedback blockquote { margin: 12px 0 4px; color: #bdeaff; font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px); }
 #bible .chapter-quiz-navigation { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 20px; }
-#bible .chapter-quiz-navigation span { font-size: 12px; color: #bdeaff; }
+#bible .chapter-quiz-navigation span { font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px); color: #bdeaff; }
 #bible .chapter-quiz-result { text-align: center; }
-#bible .chapter-quiz-result .chapter-quiz-score { font-size: 36px; color: #a8e4ff; font-weight: 800; }
+#bible .chapter-quiz-result .chapter-quiz-score { font-size: 36px; font-size: clamp(36px, calc(28.8px + 2.25cqw), 38.88px); color: #a8e4ff; font-weight: 800; }
 #bible .chapter-quiz-result button { margin: 4px; }
 #bible .chapter-quiz { scroll-margin-top: 112px; }
 
@@ -1517,13 +1492,167 @@
 #bible .chapter-quiz-loading { display: grid; justify-items: center; gap: 16px; padding: 14px 6px 18px; text-align: center; }
 #bible .chapter-quiz-loading-ring { position: relative; display: grid; place-items: center; width: 108px; height: 108px; }
 #bible .chapter-quiz-spinner { position: absolute; inset: 0; border: 5px solid rgba(177, 223, 255, .14); border-top-color: #8bdcff; border-right-color: #d0b8f7; border-radius: 50%; animation: chapterQuizSpin 1s linear infinite; }
-#bible .chapter-quiz-loading-ring strong { color: #f1fbff; font-size: 29px; line-height: 1; font-variant-numeric: tabular-nums; }
-#bible .chapter-quiz-loading-ring small { margin-left: 2px; color: #bdeaff !important; font-size: 14px; }
+#bible .chapter-quiz-loading-ring strong { color: #f1fbff; font-size: 29px; font-size: clamp(29px, calc(23.2px + 1.8125cqw), 31.32px); line-height: 1; font-variant-numeric: tabular-nums; }
+#bible .chapter-quiz-loading-ring small { margin-left: 2px; color: #bdeaff !important; font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px); }
 #bible .chapter-quiz-loading p { margin: 0; color: #e6f5ff; font-weight: 700; text-align: center; }
 #bible .chapter-quiz-loading-bar { width: 100%; height: 7px; border-radius: 999px; overflow: hidden; background: rgba(7, 27, 50, .5); }
 #bible .chapter-quiz-loading-bar span { display: block; width: 100%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #62c9ef, #afc5ff); transform-origin: left; transition: transform 400ms ease; }
-#bible .chapter-quiz-loading-note { color: #b0cbe0; font-size: 11px; }
+#bible .chapter-quiz-loading-note { color: #b0cbe0; font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px); }
 #bible .chapter-quiz-loading.is-complete .chapter-quiz-spinner { animation: none; border-color: #91e1b7; }
 @keyframes chapterQuizSpin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { #bible .chapter-quiz-spinner { animation: none; } #bible .chapter-quiz-loading-bar span { transition: none; } }
 #bible .chapter-quiz-loading.is-complete .chapter-quiz-loading-bar span { transition-duration: 180ms; background: #91e1b7; }
+
+/* Bible study tab content follows the chapter currently open in the reader. */
+#bible-menu-drawer {
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  -webkit-backdrop-filter: blur(28px) !important;
+  backdrop-filter: blur(28px) !important;
+}
+.bible-tool-tabs {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+}
+.bible-tool-tabs [role="tab"]:nth-child(-n+2) { grid-column: span 3; }
+.bible-tool-tabs [role="tab"]:nth-child(n+3) { grid-column: span 2; }
+.bible-tool-tabs [role="tab"] {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 54px;
+  padding: 8px 7px;
+  border: 0;
+  border-radius: 14px;
+  background: rgba(8, 39, 70, .28);
+  box-shadow: 0 8px 18px rgba(0, 8, 24, .28);
+  color: rgba(235, 247, 255, .88);
+  font: inherit;
+  font-size: 12px;
+  font-size: clamp(11px, calc(9px + .625cqw), 12px);
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: center;
+  cursor: pointer;
+  transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+.bible-tool-tabs [role="tab"]:hover,
+.bible-tool-tabs [role="tab"][aria-selected="true"] {
+  background: linear-gradient(135deg, rgba(69, 160, 207, .48), rgba(97, 111, 211, .3));
+  box-shadow: 0 10px 22px rgba(0, 8, 24, .34);
+  color: #fff;
+}
+.bible-tool-tabs [role="tab"]:active { transform: scale(.98); }
+.bible-tool-tabs [role="tab"]:focus-visible,
+.bible-tool-panel:focus-visible { outline: 2px solid #a8ebff; outline-offset: 3px; }
+.bible-tool-panel { min-height: 180px; padding-top: 20px; }
+.bible-study-status { margin: 0; color: rgba(235, 247, 255, .78); font-size: 14px; font-size: clamp(14px, calc(11.2px + .875cqw), 15.12px); line-height: 1.55; }
+.bible-study-status.is-loading { display: flex; align-items: center; gap: 10px; min-height: 32px; }
+.bible-study-loading-spinner { flex: 0 0 19px; width: 19px; height: 19px; border: 2px solid rgba(169, 226, 255, .2); border-top-color: #9ce6ff; border-right-color: #b7b4ff; border-radius: 50%; animation: bibleStudySpin .8s linear infinite; box-shadow: 0 0 12px rgba(117, 216, 255, .15); }
+@keyframes bibleStudySpin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .bible-study-loading-spinner { animation: none; } }
+.bible-study-retry { margin-top: 14px; padding: 9px 14px; border: 0; border-radius: 12px; background: rgba(115, 199, 236, .18); color: #eaf8ff; font: inherit; font-size: 13px; font-size: clamp(13px, calc(10.4px + .8125cqw), 14.04px); font-weight: 750; cursor: pointer; }
+.bible-study-result { display: grid; gap: 12px; }
+.bible-study-reference { margin: 0; color: #a8e5ff; font-size: 11px; font-size: clamp(11px, calc(8.8px + .6875cqw), 11.88px); font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.bible-study-copy { color: rgba(244, 249, 255, .92); font-size: 14px; font-size: clamp(14px, calc(11.2px + .875cqw), 15.12px); line-height: 1.65; overflow-wrap: anywhere; }
+.bible-study-copy > :first-child { margin-top: 0; }
+.bible-study-copy > :last-child { margin-bottom: 0; }
+.bible-study-copy h2,
+.bible-study-copy h3 { margin: 18px 0 7px; color: #fff; font-size: 17px; font-size: clamp(17px, calc(13.6px + 1.0625cqw), 18.36px); line-height: 1.35; }
+.bible-study-copy p { margin: 8px 0; }
+.bible-study-copy ul,
+.bible-study-copy ol { display: grid; gap: 6px; margin: 8px 0; padding-left: 22px; }
+.bible-study-copy blockquote { margin: 12px 0; padding-left: 12px; border-left: 2px solid rgba(145, 225, 183, .8); color: #d8f2ff; }
+.bible-study-disclaimer { margin: 4px 0 0; color: rgba(208, 228, 242, .64); font-size: 10px; font-size: clamp(10px, calc(8px + .625cqw), 10.8px); line-height: 1.5; }
+.bible-study-result { gap: 16px; }
+.bible-study-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 16px;
+  border-radius: 20px;
+  background: radial-gradient(ellipse at 8% 0%, rgba(119, 221, 255, .18), transparent 62%), linear-gradient(145deg, rgba(47, 111, 153, .48), rgba(18, 49, 83, .42));
+  box-shadow: 0 12px 28px rgba(0, 9, 28, .2);
+}
+.bible-study-hero::after { position: absolute; top: -31px; right: -17px; width: 102px; height: 102px; border: 1px solid rgba(160, 231, 255, .14); border-radius: 50%; content: ""; box-shadow: 0 0 0 13px rgba(160, 231, 255, .035), 0 0 0 27px rgba(160, 231, 255, .025); pointer-events: none; }
+.study-mode-row { position: relative; z-index: 1; display: flex; align-items: center; gap: 8px; color: #b9eaff; font-size: 9px; font-size: clamp(9px, calc(7.2px + .5625cqw), 9.72px); font-weight: 850; letter-spacing: .13em; }
+.study-mode-glyph { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 8px; background: rgba(139, 220, 255, .14); color: #d9f5ff; font-size: 14px; letter-spacing: 0; }
+.study-reference-chip { margin-left: auto; padding: 5px 8px; border-radius: 999px; background: rgba(3, 26, 49, .3); color: #eaf8ff; font-size: 10px; font-size: clamp(10px, calc(8px + .625cqw), 10.8px); letter-spacing: .02em; white-space: nowrap; }
+.bible-study-hero h2 { position: relative; z-index: 1; margin: 12px 0 5px; color: #fff; font-size: 21px; font-size: clamp(21px, calc(16.8px + 1.3125cqw), 22.68px); line-height: 1.18; }
+.bible-study-hero p { position: relative; z-index: 1; max-width: 42ch; margin: 0; color: rgba(236, 247, 255, .82); font-size: 13px; font-size: clamp(13px, calc(10.4px + .8125cqw), 14.04px); line-height: 1.5; }
+.study-steps { position: relative; display: grid; gap: 8px; }
+.study-step { position: relative; min-width: 0; }
+.study-step-copy { min-width: 0; }
+.study-step-index { display: grid; place-items: center; width: 27px; height: 27px; border-radius: 50%; background: rgba(113, 208, 245, .15); color: #c4f0ff; font-size: 10px; font-weight: 850; font-variant-numeric: tabular-nums; }
+.study-step-label { display: block; margin-bottom: 4px; color: #a8e5ff; font-size: 9px; font-size: clamp(9px, calc(7.2px + .5625cqw), 9.72px); font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
+.study-step h3,
+.study-insight-card h3 { margin: 0; color: #fff; font-size: 14px; font-size: clamp(14px, calc(11.2px + .875cqw), 15.12px); line-height: 1.35; }
+.study-step p,
+.study-insight-card p { margin: 5px 0 0; color: rgba(231, 243, 253, .78); font-size: 12px; font-size: clamp(12px, calc(9.6px + .75cqw), 12.96px); line-height: 1.5; }
+.study-step-reference { display: inline-block; margin-top: 5px; color: #a9d8f2; font-size: 10px; font-size: clamp(10px, calc(8px + .625cqw), 10.8px); font-weight: 700; }
+.study-steps--map { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; padding-top: 8px; }
+.study-steps--map::before { position: absolute; top: 21px; right: 12%; left: 12%; height: 1px; background: linear-gradient(90deg, rgba(122, 216, 251, .18), rgba(122, 216, 251, .72), rgba(122, 216, 251, .18)); content: ""; }
+.study-steps--map .study-step { z-index: 1; display: grid; justify-items: center; align-content: start; gap: 9px; text-align: center; }
+.study-steps--map .study-step-copy { width: 100%; padding: 9px 7px 10px; border-radius: 14px; background: rgba(8, 36, 64, .34); }
+.study-steps--map .study-step-label { font-size: 8px; letter-spacing: .08em; }
+.study-steps--map .study-step h3 { font-size: 11px; font-size: clamp(11px, calc(8.8px + .6875cqw), 11.88px); }
+.study-steps--map .study-step p { font-size: 10px; font-size: clamp(10px, calc(8px + .625cqw), 10.8px); }
+.study-steps--map .study-step:nth-child(2) .study-step-index { background: linear-gradient(135deg, #89dcff, #92e4bd); color: #143a58; box-shadow: 0 0 20px rgba(119, 222, 255, .24); }
+.study-steps--timeline { gap: 0; padding-left: 4px; }
+.study-steps--timeline::before { position: absolute; top: 16px; bottom: 16px; left: 17px; width: 1px; background: linear-gradient(#8ae0ff, rgba(138, 224, 255, .12)); content: ""; }
+.study-steps--timeline .study-step { display: grid; grid-template-columns: 35px minmax(0, 1fr); gap: 10px; padding: 7px 0; }
+.study-steps--timeline .study-step-index { z-index: 1; width: 27px; height: 27px; border: 1px solid rgba(148, 222, 255, .2); background: #17466e; }
+.study-steps--timeline .study-step-copy { padding: 9px 12px; border-radius: 14px; background: linear-gradient(100deg, rgba(44, 98, 137, .3), rgba(8, 38, 68, .28)); }
+.study-steps--story { gap: 8px; }
+.study-steps--story .study-step { display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: 10px; align-items: start; padding: 11px; border-radius: 16px; background: linear-gradient(100deg, rgba(25, 70, 107, .46), rgba(6, 35, 63, .25)); }
+.study-steps--story .study-step-index { width: 34px; height: 34px; border-radius: 12px; background: linear-gradient(145deg, rgba(116, 215, 250, .27), rgba(125, 151, 246, .18)); font-size: 12px; }
+.study-steps--story .study-step-label { margin-bottom: 2px; }
+.study-insight-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.study-insight-card { min-width: 0; padding: 12px; border-left: 2px solid rgba(116, 215, 250, .72); border-radius: 4px 14px 14px 4px; background: rgba(9, 37, 65, .3); box-shadow: 0 7px 16px rgba(0, 8, 24, .12); animation: studyCardRise 360ms both; animation-delay: calc(var(--insight-index, 0) * 70ms); }
+.study-insight-card--historical { border-left-color: rgba(255, 190, 127, .8); }
+.study-insight-card--summary { border-left-color: rgba(156, 224, 190, .8); }
+.study-insight-card--veracity { border-left-color: rgba(190, 180, 255, .8); }
+.study-insight-card--manuscripts { border-left-color: rgba(139, 220, 255, .84); }
+.study-manuscript-details { display: grid; gap: 7px; margin: 12px 0 0; }
+.study-manuscript-details > div { display: grid; grid-template-columns: minmax(92px, .72fr) minmax(0, 1.5fr); gap: 8px; padding: 7px 9px; border-radius: 9px; background: rgba(124, 186, 224, .075); }
+.study-manuscript-details dt { color: rgba(185, 223, 244, .66); font-size: 9px; font-weight: 750; line-height: 1.4; }
+.study-manuscript-details dd { margin: 0; color: rgba(237, 248, 255, .9); font-size: 10px; font-size: clamp(10px, calc(8px + .625cqw), 10.8px); line-height: 1.45; overflow-wrap: anywhere; }
+.study-source-trails { display: grid; gap: 7px; margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(177, 218, 244, .12); }
+.study-source-heading { color: rgba(195, 224, 243, .62); font-size: 8px; font-weight: 850; letter-spacing: .12em; }
+.study-source-link, .study-source-search { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-width: 0; padding: 9px 10px; border-radius: 11px; background: rgba(116, 175, 220, .09); color: #dff4ff; text-decoration: none; transition: background 160ms ease, transform 160ms ease; }
+.study-source-link:hover, .study-source-search:hover { background: rgba(116, 200, 236, .17); transform: translateY(-1px); }
+.study-source-link > span:first-child { display: grid; gap: 3px; min-width: 0; }
+.study-source-link strong { overflow-wrap: anywhere; font-size: 11px; font-size: clamp(11px, calc(8.8px + .6875cqw), 11.88px); line-height: 1.35; }
+.study-source-link small { color: rgba(212, 233, 247, .65); font-size: 9px; font-size: clamp(9px, calc(7.2px + .5625cqw), 9.72px); line-height: 1.4; }
+.study-source-link > span:last-child, .study-source-search > span { flex: 0 0 auto; color: #a9e8ff; font-size: 13px; }
+.study-source-search { min-height: 34px; color: #b9eaff; font-size: 10px; font-weight: 750; }
+.study-insight-topline { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 7px; color: #b7e8fb; font-size: 8px; font-size: clamp(8px, calc(6.4px + .5cqw), 8.64px); font-weight: 850; letter-spacing: .09em; text-transform: uppercase; }
+.study-evidence-status { padding: 3px 6px; border-radius: 999px; background: rgba(156, 224, 190, .12); color: #b9f0d3; letter-spacing: .02em; }
+.study-insight-card--veracity:nth-child(2) .study-evidence-status { background: rgba(255, 190, 127, .13); color: #ffd5ac; }
+.study-insight-card--veracity:nth-child(3) .study-evidence-status { background: rgba(190, 180, 255, .13); color: #d8d0ff; }
+.study-insight-grid:has(.study-insight-card--veracity),
+.study-insight-grid:has(.study-insight-card--historical) { grid-template-columns: 1fr; }
+.study-insight-grid:has(.study-insight-card--manuscripts) { grid-template-columns: minmax(0, 1fr); }
+.study-insight-grid:has(.study-insight-card--summary) { grid-template-columns: 1fr; }
+.study-insight-grid:has(.study-insight-card--biblical) .study-insight-card { min-height: 116px; }
+.bible-study-challenge { overflow: hidden; border-radius: 16px; background: linear-gradient(100deg, rgba(90, 164, 198, .15), rgba(94, 105, 190, .12)); }
+.bible-study-challenge summary { display: flex; align-items: center; gap: 8px; min-height: 48px; padding: 9px 12px; color: #f1fbff; font-size: 12px; font-size: clamp(12px, calc(9.6px + .75cqw), 12.96px); font-weight: 800; cursor: pointer; list-style: none; }
+.bible-study-challenge summary::-webkit-details-marker { display: none; }
+.study-challenge-spark { display: grid; place-items: center; width: 25px; height: 25px; border-radius: 9px; background: rgba(158, 224, 255, .16); color: #bceeff; }
+.study-challenge-hint { margin-left: auto; color: rgba(214, 235, 249, .56); font-size: 9px; font-weight: 650; }
+.study-challenge-content { padding: 0 12px 12px; }
+.study-challenge-content > p:first-child { margin: 4px 0 10px; color: #fff; font-size: 13px; font-size: clamp(13px, calc(10.4px + .8125cqw), 14.04px); font-weight: 700; line-height: 1.45; }
+.study-challenge-choices { display: grid; gap: 6px; }
+.study-challenge-choices button { min-height: 38px; padding: 8px 10px; border: 0; border-radius: 10px; background: rgba(4, 29, 54, .3); color: rgba(238, 248, 255, .86); font: inherit; font-size: 11px; font-size: clamp(11px, calc(8.8px + .6875cqw), 11.88px); text-align: left; cursor: pointer; }
+.study-challenge-choices button:hover:not(:disabled),
+.study-challenge-choices button:focus-visible { background: rgba(99, 180, 220, .25); outline: 1px solid rgba(163, 228, 255, .42); }
+.study-challenge-choices button:disabled { opacity: .58; }
+.study-challenge-feedback { min-height: 0; margin: 8px 0 0; color: rgba(230, 243, 253, .78); font-size: 11px; font-size: clamp(11px, calc(8.8px + .6875cqw), 11.88px); line-height: 1.5; }
+.study-challenge-feedback:empty { display: none; }
+.study-challenge-feedback.is-correct { color: #b5f0d0; }
+@keyframes studyCardRise { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) {
+  .bible-tool-tabs [role="tab"] { transition: none; }
+  .study-insight-card { animation: none; }
+}

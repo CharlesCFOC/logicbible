@@ -1912,6 +1912,10 @@ function applyPreferences() {
   savedPreferences.accent = normalizeAccentKey(savedPreferences.accent);
   const accent = accentOptions[savedPreferences.accent] || accentOptions[defaultPreferences.accent];
   const textSize = textSizeOptions[savedPreferences.textSize] || textSizeOptions[defaultPreferences.textSize];
+  const textSizePx = Number.parseFloat(textSize);
+  const responsiveTextSize = Number.isFinite(textSizePx)
+    ? `clamp(${textSizePx}px, calc(${textSizePx * 0.8}px + ${textSizePx * 0.0625}cqw), ${textSizePx * 1.08}px)`
+    : textSize;
   savedPreferences.background = "black";
   const background = "black";
   savedPreferences.background = background;
@@ -1921,10 +1925,10 @@ function applyPreferences() {
   appShell.style.setProperty("--gold-soft", accent.soft);
   appShell.style.setProperty("--beige", accent.soft);
   appShell.style.setProperty("--accent-contrast", accent.contrast);
-  appShell.style.setProperty("--reader-text-size", textSize);
-  appShell.style.setProperty("--chat-text-size", textSize);
-  appShell.querySelector(".phone-frame")?.style.setProperty("--reader-text-size", textSize);
-  appShell.querySelector(".phone-frame")?.style.setProperty("--chat-text-size", textSize);
+  appShell.style.setProperty("--reader-text-size", responsiveTextSize);
+  appShell.style.setProperty("--chat-text-size", responsiveTextSize);
+  appShell.querySelector(".phone-frame")?.style.setProperty("--reader-text-size", responsiveTextSize);
+  appShell.querySelector(".phone-frame")?.style.setProperty("--chat-text-size", responsiveTextSize);
 
   setActivePreference(backgroundOptionButtons, savedPreferences.background, "backgroundOption");
   setActivePreference(textSizeOptionButtons, savedPreferences.textSize, "textSizeOption");
@@ -2766,6 +2770,8 @@ function refreshIcons() {
 }
 
 function setScreen(id) {
+  const navigationRequest = new CustomEvent("app:before-screen-change", { cancelable: true, detail: { id } });
+  if (!window.dispatchEvent(navigationRequest)) return;
   if (!screens.some((screen) => screen.id === id)) return;
   if (noteEditorPanel?.classList.contains("is-visible")) {
     closeModal();
@@ -6880,7 +6886,10 @@ window.prayerBridge = {
     };
   },
   setPageTab(tab) {
-    prayerState.pageTab = ["board", "request", "online", "intercession"].includes(tab) ? tab : "board";
+    const nextTab = ["board", "request", "online", "intercession"].includes(tab) ? tab : "board";
+    const navigationRequest = new CustomEvent("prayer:before-page-tab-change", { cancelable: true, detail: { id: nextTab } });
+    if (!window.dispatchEvent(navigationRequest)) return;
+    prayerState.pageTab = nextTab;
     if (prayerState.pageTab === "request") startPrayerPromptRotation();
     else stopPrayerPromptRotation();
     renderPrayerPage();
@@ -7189,14 +7198,185 @@ renderApologetics();
 refreshIcons();
 
 
-// Bible search uses the Home navigation drawer surface and container.
+// Bible tools keep the shared Home navigation drawer shell and close behavior.
 (() => {
   const layer = document.querySelector('[data-bible-menu-layer]');
   const drawer = document.querySelector('[data-bible-menu-drawer]');
   if (!layer || !drawer) return;
   let lastFocus;
+  const toolTabs = [...drawer.querySelectorAll('[data-bible-tool-tab]')];
+  const toolPanel = drawer.querySelector('#bible-tool-panel');
+  const studyCache = new Map();
+  let studyController;
+  let studyRequestId = 0;
+  function displayStudyStatus(message, retry = false) {
+    toolPanel.replaceChildren();
+    const status = document.createElement('p');
+    status.className = 'bible-study-status';
+    status.setAttribute('role', 'status');
+    status.setAttribute('aria-live', 'polite');
+    if (message.startsWith('Preparing ')) {
+      status.classList.add('is-loading');
+      const spinner = document.createElement('span');
+      spinner.className = 'bible-study-loading-spinner';
+      spinner.setAttribute('aria-hidden', 'true');
+      const label = document.createElement('span');
+      label.textContent = message;
+      status.append(spinner, label);
+    } else {
+      status.textContent = message;
+    }
+    toolPanel.append(status);
+    if (retry) {
+      const button = document.createElement('button');
+      button.className = 'bible-study-retry';
+      button.type = 'button';
+      button.textContent = 'Try again';
+      button.addEventListener('click', () => {
+        const selectedTab = toolTabs.find(item => item.getAttribute('aria-selected') === 'true');
+        if (selectedTab) loadToolTab(selectedTab, true);
+      });
+      toolPanel.append(button);
+    }
+  }
+  function displayStudyResult(result, tabName) {
+    const study = result.study;
+    if (!study) {
+      toolPanel.innerHTML = `<div class="bible-study-result"><p class="bible-study-reference">${escapeHtml(result.reference)}</p><div class="bible-study-copy">${renderRichText(result.text)}</div><p class="bible-study-disclaimer">AI-generated study notes. Verify historical details with trusted sources.</p></div>`;
+      return;
+    }
+    const visualNames = {
+      biblical: "MAP OF THE BOOK",
+      historical: "TIME TRAIL",
+      summary: "CHAPTER STORY",
+      veracity: "EVIDENCE FILE",
+      manuscripts: "MANUSCRIPT TRAIL",
+    };
+    const steps = Array.isArray(study.steps) ? study.steps : [];
+    const cards = Array.isArray(study.cards) ? study.cards : [];
+    const stepMarkup = steps.map((step, index) => `
+      <article class="study-step">
+        <span class="study-step-index">${String(index + 1).padStart(2, "0")}</span>
+        <div class="study-step-copy">
+          <span class="study-step-label">${escapeHtml(step.label || "Study point")}</span>
+          <h3>${escapeHtml(step.title || "")}</h3>
+          ${step.reference ? `<span class="study-step-reference">${escapeHtml(step.reference)}</span>` : ""}
+          <p>${escapeHtml(step.detail || "")}</p>
+        </div>
+      </article>`).join("");
+    const cardMarkup = cards.map((card, index) => {
+      const sources = Array.isArray(card.sources) ? card.sources.slice(0, 2) : [];
+      const searchQuery = String(card.researchQuery || [card.title, card.reference, result.reference].filter(Boolean).join(" ")).trim();
+      const manuscript = card.manuscript && typeof card.manuscript === "object" ? card.manuscript : {};
+      const manuscriptMarkup = tabName === "manuscripts" ? `
+        <dl class="study-manuscript-details">
+          ${[["Witness", manuscript.witness], ["Copy date", manuscript.dateRange], ["Held at", manuscript.location], ["Discovered", manuscript.discovered], ["Findspot / provenance", manuscript.discovery], ["Chapter text preserved", manuscript.coverage]].filter(([, value]) => value).map(([label, value]) => `<div><dt>${label}</dt><dd>${escapeHtml(value)}</dd></div>`).join("")}
+        </dl>` : "";
+      const sourceMarkup = ["veracity", "manuscripts"].includes(tabName) ? `
+        <div class="study-source-trails">
+          <span class="study-source-heading">${sources.length ? (tabName === "manuscripts" ? "CATALOGUES & RESEARCH" : "GO DEEPER") : (tabName === "manuscripts" ? "TRACE THIS WITNESS" : "RESEARCH THIS CLAIM")}</span>
+          ${sources.map(source => {
+            const title = String(source.title || "Source").trim();
+            const query = [source.author, title].filter(Boolean).join(" ");
+            const href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+            return `<a class="study-source-link" href="${href}" target="_blank" rel="noopener noreferrer"><span><strong>${escapeHtml(title)}</strong>${source.author ? `<small>${escapeHtml(source.author)}${source.kind ? ` · ${escapeHtml(source.kind)}` : ""}</small>` : ""}${source.why ? `<small>${escapeHtml(source.why)}</small>` : ""}</span><span aria-hidden="true">↗</span></a>`;
+          }).join("")}
+          ${searchQuery ? `<a class="study-source-search" href="https://www.google.com/search?q=${encodeURIComponent(searchQuery)}" target="_blank" rel="noopener noreferrer">${tabName === "manuscripts" ? "Search manuscript catalogues on Google" : "Search this claim on Google"} <span aria-hidden="true">↗</span></a>` : ""}
+        </div>` : "";
+      return `
+      <article class="study-insight-card study-insight-card--${tabName}" style="--insight-index:${index}">
+        <div class="study-insight-topline"><span>${escapeHtml(card.label || "Insight")}</span>${card.status ? `<span class="study-evidence-status">${escapeHtml(card.status)}</span>` : ""}</div>
+        <h3>${escapeHtml(card.title || "")}</h3>
+        <p>${escapeHtml(card.detail || "")}</p>
+        ${manuscriptMarkup}
+        ${card.reference ? `<span class="study-step-reference">${escapeHtml(card.reference)}</span>` : ""}
+        ${sourceMarkup}
+      </article>`;
+    }).join("");
+    const challenge = study.challenge || {};
+    const choices = Array.isArray(challenge.choices) ? challenge.choices.slice(0, 3) : [];
+    const challengeMarkup = tabName !== "manuscripts" && challenge.question && choices.length === 3 ? `
+      <details class="bible-study-challenge">
+        <summary><span class="study-challenge-spark">✦</span><span>Quick check</span><span class="study-challenge-hint">Tap to test your reading</span></summary>
+        <div class="study-challenge-content">
+          <p>${escapeHtml(challenge.question)}</p>
+          <div class="study-challenge-choices">${choices.map((choice, index) => `<button type="button" data-study-choice="${index}">${escapeHtml(choice)}</button>`).join("")}</div>
+          <p class="study-challenge-feedback" data-study-feedback aria-live="polite"></p>
+        </div>
+      </details>` : "";
+    const layoutClass = tabName === "biblical" ? "study-steps--map"
+      : tabName === "historical" ? "study-steps--timeline"
+        : tabName === "summary" ? "study-steps--story"
+          : tabName === "manuscripts" ? "study-steps--evidence"
+            : "study-steps--evidence";
+    toolPanel.innerHTML = `
+      <div class="bible-study-result bible-study-result--${escapeHtml(tabName)}">
+        <header class="bible-study-hero">
+          <div class="study-mode-row"><span class="study-mode-glyph" aria-hidden="true">${tabName === "biblical" ? "⌘" : tabName === "historical" ? "◷" : tabName === "summary" ? "▶" : tabName === "manuscripts" ? "▤" : "✳"}</span><span>${visualNames[tabName] || "CHAPTER STUDY"}</span><span class="study-reference-chip">${escapeHtml(result.reference)}</span></div>
+          <h2>${escapeHtml(study.headline)}</h2>
+          <p>${escapeHtml(study.intro)}</p>
+        </header>
+        ${stepMarkup ? `<div class="study-steps ${layoutClass}">${stepMarkup}</div>` : ""}
+        ${cardMarkup ? `<div class="study-insight-grid">${cardMarkup}</div>` : ""}
+        ${challengeMarkup}
+        <p class="bible-study-disclaimer">AI-generated study notes · historical details can be uncertain.</p>
+      </div>`;
+    const feedback = toolPanel.querySelector("[data-study-feedback]");
+    toolPanel.querySelectorAll("[data-study-choice]").forEach(button => button.addEventListener("click", () => {
+      const isCorrect = Number(button.dataset.studyChoice) === Number(challenge.correctIndex);
+      feedback.textContent = isCorrect ? challenge.explanation : "Look again at the chapter and try another answer.";
+      feedback.classList.toggle("is-correct", isCorrect);
+      if (isCorrect) toolPanel.querySelectorAll("[data-study-choice]").forEach(choice => { choice.disabled = true; });
+    }));
+  }
+  async function loadToolTab(tab, force = false) {
+    if (!tab || !toolPanel || !window.bibleReaderBridge) return;
+    const snapshot = window.bibleReaderBridge.getChapterSnapshot();
+    const source = snapshot.quizSource;
+    const cacheKey = `${snapshot.bookId}.${snapshot.chapter}.${snapshot.versionId}.${tab.dataset.bibleToolTab}`;
+    if (!force && studyCache.has(cacheKey)) {
+      displayStudyResult(studyCache.get(cacheKey), tab.dataset.bibleToolTab);
+      return;
+    }
+    if (snapshot.status !== 'ready' || !source?.verses?.length) {
+      displayStudyStatus('The active chapter is still loading. Try again in a moment.', true);
+      return;
+    }
+    studyController?.abort();
+    const controller = new AbortController();
+    studyController = controller;
+    const requestId = ++studyRequestId;
+    displayStudyStatus(`Preparing ${source.reference}…`);
+    try {
+      const response = await fetch(apiUrl('/api/bible/study'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tab: tab.dataset.bibleToolTab,
+          book: snapshot.bookName,
+          chapter: snapshot.chapter,
+          version: source.version,
+          language: snapshot.versionLanguage,
+          verses: source.verses,
+        }),
+        signal: controller.signal,
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(payload.error || 'The chapter study could not be loaded.');
+      const result = { reference: payload.reference || source.reference, study: payload.study || null, text: payload.text || '' };
+      studyCache.set(cacheKey, result);
+      if (requestId === studyRequestId && layer.classList.contains('is-open') && tab.getAttribute('aria-selected') === 'true') {
+        displayStudyResult(result, tab.dataset.bibleToolTab);
+      }
+    } catch (error) {
+      if (error.name !== 'AbortError' && requestId === studyRequestId && layer.classList.contains('is-open')) {
+        displayStudyStatus(error.message || 'The chapter study is temporarily unavailable.', true);
+      }
+    }
+  }
   function close(restoreFocus = true) {
     if (!layer.classList.contains('is-open')) return;
+    studyController?.abort();
     layer.classList.remove('is-open');
     layer.setAttribute('aria-hidden', 'true');
     layer.inert = true;
@@ -7212,78 +7392,39 @@ refreshIcons();
     layer.setAttribute('aria-hidden', 'false');
     layer.inert = false;
     toggle.setAttribute('aria-expanded', 'true');
-    drawer.querySelectorAll('[data-nav]').forEach(button => button.classList.toggle('is-active', button.dataset.nav === 'bible'));
     drawer.querySelector('[data-bible-menu-close]')?.focus();
+    loadToolTab(toolTabs.find(item => item.getAttribute('aria-selected') === 'true'));
   });
   layer.querySelectorAll('[data-bible-menu-close]').forEach(button => button.addEventListener('click', () => close()));
-  drawer.querySelectorAll('[data-nav]').forEach(button => button.addEventListener('click', () => {
-    close(false);
-    setScreen(button.dataset.nav);
-  }));
+  function selectToolTab(tab) {
+    toolTabs.forEach(item => {
+      const selected = item === tab;
+      item.setAttribute('aria-selected', String(selected));
+      item.tabIndex = selected ? 0 : -1;
+    });
+    drawer.querySelector('#bible-tool-panel')?.setAttribute('aria-labelledby', tab.id);
+    loadToolTab(tab);
+  }
+  toolTabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => selectToolTab(tab));
+    tab.addEventListener('keydown', event => {
+      const direction = ['ArrowRight', 'ArrowDown'].includes(event.key) ? 1 : ['ArrowLeft', 'ArrowUp'].includes(event.key) ? -1 : 0;
+      if (!direction) return;
+      event.preventDefault();
+      const next = toolTabs[(index + direction + toolTabs.length) % toolTabs.length];
+      selectToolTab(next);
+      next.focus();
+    });
+  });
   document.addEventListener('keydown', event => {
     if (!layer.classList.contains('is-open')) return;
     if (event.key === 'Escape') { event.preventDefault(); close(); return; }
     if (event.key !== 'Tab') return;
     const controls = [...drawer.querySelectorAll('a[href], button:not([disabled]), input:not([disabled])')].filter(element => !element.hidden);
     const first = controls[0], last = controls.at(-1);
+    if (!first) { event.preventDefault(); drawer.focus(); return; }
     if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
     else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
   });
-  const form = drawer.querySelector('[data-bible-search-form]');
-  const input = form.querySelector('input');
-  const status = drawer.querySelector('[data-bible-search-status]');
-  const results = drawer.querySelector('[data-bible-search-results]');
-  const more = drawer.querySelector('[data-bible-search-more]');
-  const submit = form.querySelector('[type="submit"]');
-  const placeholders = { topic: 'Try anxiety or forgiveness…', word: 'Try mercy…', expression: 'Try love your enemies…' };
-  let mode = 'topic', offset = 0, shown = 0, controller, searchVersion;
-  function setMode(next) {
-    controller?.abort();
-    mode = next;
-    form.querySelectorAll('[data-bible-search-mode]').forEach(button => {
-      const selected = button.dataset.bibleSearchMode === mode;
-      button.classList.toggle('is-active', selected);
-      button.setAttribute('aria-pressed', String(selected));
-    });
-    input.placeholder = placeholders[mode];
-    results.replaceChildren(); more.hidden = true; submit.disabled = false;
-    status.textContent = 'Choose a filter and enter your search.';
-  }
-  async function search(append = false) {
-    const query = input.value.trim();
-    if (!query) { input.focus(); return; }
-    controller?.abort();
-    const current = new AbortController(); controller = current;
-    if (!append) { searchVersion = getVersion(readerState.versionId); offset = 0; shown = 0; results.replaceChildren(); }
-    const remote = searchVersion.source === 'local' ? getRemoteFallbackVersion(searchVersion.id) : searchVersion;
-    if (!remote) { status.textContent = 'Search needs an online Bible translation. Please wait for translations to load.'; return; }
-    more.hidden = true; submit.disabled = true;
-    status.textContent = `Searching ${searchVersion.abbreviation || searchVersion.name}…`;
-    try {
-      const params = new URLSearchParams({ bibleId: remote.id, query, mode, offset: String(offset) });
-      const response = await fetch(apiUrl(`/api/bible/search?${params}`), { signal: current.signal });
-      const payload = await response.json();
-      if (!response.ok) throw new Error(payload.error || 'Search could not be completed.');
-      if (controller !== current) return;
-      for (const verse of payload.results || []) {
-        const match = verse.id?.match(/^([A-Z0-9]{3})\.(\d+)\.(\d+)/);
-        if (!match) continue;
-        const button = document.createElement('button'); button.type = 'button'; button.className = 'bible-menu-search-result';
-        const reference = document.createElement('strong'); reference.textContent = verse.reference;
-        const text = document.createElement('span'); text.textContent = new DOMParser().parseFromString(verse.text || '', 'text/html').body.textContent.trim();
-        button.append(reference, text);
-        const versionId = searchVersion.id;
-        button.addEventListener('click', async () => { close(false); readerState.versionId = versionId; await openSavedVerse({ bookId: match[1], chapter: Number(match[2]), number: Number(match[3]) }); });
-        results.append(button); shown++;
-      }
-      offset = payload.nextOffset || 0; more.hidden = !payload.hasMore;
-      status.textContent = payload.message || (shown ? `${payload.topic ? payload.topic + ' · ' : ''}${shown} results · ${searchVersion.abbreviation || searchVersion.name}` : payload.hasMore ? 'Load more to look for additional matches.' : 'No matching verses. Try another search or translation.');
-    } catch (error) { if (error.name !== 'AbortError') status.textContent = error.message || 'Search is unavailable. Please try again.'; }
-    finally { if (controller === current) submit.disabled = false; }
-  }
-  form.addEventListener('submit', event => { event.preventDefault(); search(); });
-  form.querySelectorAll('[data-bible-search-mode]').forEach(button => button.addEventListener('click', () => setMode(button.dataset.bibleSearchMode)));
-  input.addEventListener('input', () => { controller?.abort(); more.hidden = true; submit.disabled = false; });
-  more.addEventListener('click', () => search(true));
   window.addEventListener('app:screen-change', () => close(false));
 })();

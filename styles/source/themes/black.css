@@ -534,14 +534,14 @@ html:has(.app-shell[data-app-background="black"]) {
 
 .app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="highlights"] .saved-verse-open strong {
   color: #ffffff !important;
-  font-size: 14px !important;
+  font-size: 14px !important; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px) !important;
   line-height: 1.2;
 }
 
 .app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="highlights"] .saved-verse-open small {
   margin-top: 4px;
   color: #a8e6ff !important;
-  font-size: 10px !important;
+  font-size: 10px !important; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px) !important;
   font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -550,7 +550,7 @@ html:has(.app-shell[data-app-background="black"]) {
 .app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="highlights"] .saved-verse-open p {
   margin-top: 8px !important;
   color: rgba(255, 255, 255, 0.86) !important;
-  font-size: 12px !important;
+  font-size: 12px !important; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px) !important;
   line-height: 1.45;
   text-align: left !important;
   -webkit-line-clamp: 3;
@@ -584,7 +584,7 @@ html:has(.app-shell[data-app-background="black"]) {
   min-height: 44px;
   border: 0 !important;
   border-radius: 14px !important;
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   font-weight: 850;
   text-shadow: none;
 }
@@ -788,13 +788,13 @@ html:has(.app-shell[data-app-background="black"]) {
 
 .app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="notes"] .saved-note-card-title {
   color: #ffffff !important;
-  font-size: 14px !important;
+  font-size: 14px !important; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px) !important;
   line-height: 1.2;
 }
 
 .app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="notes"] .saved-note-card-heading {
   color: #a8e6ff !important;
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -806,13 +806,13 @@ html:has(.app-shell[data-app-background="black"]) {
 
 .app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="notes"] .saved-note-references {
   color: #a8e6ff !important;
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
 }
 
 .app-shell[data-app-background="black"] #home .home-library-panel[data-home-library-view="notes"] .saved-note-open p {
   margin-top: 2px;
   color: rgba(255, 255, 255, 0.86) !important;
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   line-height: 1.45;
 }
 
@@ -1400,7 +1400,7 @@ html:has(.app-shell[data-app-background="black"]) {
 }
 
 .app-shell[data-app-background="black"] #ai .ai-history-item span {
-  font-size: 14px;
+  font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px);
 }
 
 .app-shell[data-app-background="black"] #ai .ai-history-retention {
@@ -1612,7 +1612,7 @@ body .app-shell[data-app-background="black"] .phone-frame:has(#prayer.is-active)
 body .app-shell[data-app-background="black"] #prayer.prayer-screen { background: transparent !important; color: #f8faff !important; }
 body .app-shell[data-app-background="black"] #prayer .prayer-header { margin-bottom: 15px; }
 body .app-shell[data-app-background="black"] #prayer .prayer-header h1 { color: #fff !important; font-size: clamp(38px, 10vw, 48px); letter-spacing: -.06em; text-shadow: 0 4px 24px rgba(141, 182, 255, .24); }
-body .app-shell[data-app-background="black"] #prayer .prayer-header p { color: #c7d9ff !important; font-size: 16px; }
+body .app-shell[data-app-background="black"] #prayer .prayer-header p { color: #c7d9ff !important; font-size: 16px; font-size: clamp(16px, calc(12.8px + 1cqw), 17.28px); }
 body .app-shell[data-app-background="black"] #prayer .prayer-page-tabs { gap: 5px; margin-bottom: 14px; }
 
 body .app-shell[data-app-background="black"] :is(#prayer .prayer-page-tabs, #kids-bible .kids-page-tabs) button:not(.is-active),
@@ -1678,7 +1678,7 @@ body .app-shell[data-app-background="black"] #prayer .prayer-spotlight::before {
 body .app-shell[data-app-background="black"] #prayer .prayer-spotlight::after { top: 16px; bottom: 16px; width: 5px; background: linear-gradient(#83efff, #79aaff 48%, #ffd080) !important; box-shadow: 0 0 15px rgba(123, 210, 255, .86), 0 0 24px rgba(255, 177, 104, .38) !important; }
 
 body .app-shell[data-app-background="black"] #prayer .prayer-spotlight-label { color: #e1eaff !important; }
-body .app-shell[data-app-background="black"] #prayer .prayer-spotlight h2 { color: #fff !important; font-size: 25px; text-shadow: 0 3px 18px rgba(4, 15, 43, .4); }
+body .app-shell[data-app-background="black"] #prayer .prayer-spotlight h2 { color: #fff !important; font-size: 25px; font-size: clamp(25px, calc(20px + 1.5625cqw), 27px); text-shadow: 0 3px 18px rgba(4, 15, 43, .4); }
 body .app-shell[data-app-background="black"] #prayer .prayer-spotlight p { color: #d5e3ff !important; }
 body .app-shell[data-app-background="black"] #prayer .prayer-spotlight footer { border-color: rgba(221, 233, 255, .32) !important; }
 body .app-shell[data-app-background="black"] #prayer .prayer-spotlight footer > span:first-child { border: 1px solid rgba(202, 222, 255, .33) !important; border-radius: 999px; color: #e7efff !important; background: rgba(139, 177, 237, .2) !important; }
@@ -2126,7 +2126,7 @@ html body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-i
   max-width: 36ch;
   margin: 0;
   color: rgba(224, 236, 255, .9) !important;
-  font-size: 14px;
+  font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px);
   line-height: 1.5;
 }
 
@@ -2222,7 +2222,7 @@ html body .app-shell[data-app-background="black"] .phone-frame .prayer-report-fo
 .app-shell[data-app-background="black"] #profile .profile-saved-note-list .saved-note-card-title,
 .app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card-title {
   color: #fff !important;
-  font-size: 14px !important;
+  font-size: 14px !important; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px) !important;
   line-height: 1.2;
 }
 
@@ -2235,7 +2235,7 @@ html body .app-shell[data-app-background="black"] .phone-frame .prayer-report-fo
 
 .app-shell[data-app-background="black"] #profile .profile-saved-note-list .saved-note-card-heading,
 .app-shell[data-app-background="black"] #home .home-library-panel .saved-note-card-heading {
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
   letter-spacing: .04em;
   text-transform: uppercase;
@@ -2244,14 +2244,14 @@ html body .app-shell[data-app-background="black"] .phone-frame .prayer-report-fo
 .app-shell[data-app-background="black"] #profile .profile-saved-note-list .saved-note-references,
 .app-shell[data-app-background="black"] #home .home-library-panel .saved-note-references {
   color: #a8e6ff !important;
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
 }
 
 .app-shell[data-app-background="black"] #profile .profile-saved-note-list .saved-note-open p,
 .app-shell[data-app-background="black"] #home .home-library-panel .saved-note-open p {
   margin: 2px 0 0;
   color: rgba(255, 255, 255, .86) !important;
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   line-height: 1.45;
 }
 
@@ -2286,7 +2286,7 @@ body .app-shell[data-app-background="black"] :is(#prayer, #profile) .prayer-list
   justify-content: start !important;
   align-items: center !important;
   gap: 7px !important;
-  font-size: 14px !important;
+  font-size: 14px !important; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px) !important;
   font-variant-numeric: tabular-nums !important;
 }
 
@@ -2341,7 +2341,7 @@ html body .app-shell #home .home-library-tabs button {
   padding: 0 10px;
   border: 0 !important;
   border-radius: 999px !important;
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   font-weight: 800;
   -webkit-backdrop-filter: none !important;
   backdrop-filter: none !important;
@@ -2379,7 +2379,7 @@ html body .app-shell #home .home-library-tabs {
 
 html body .app-shell #home .home-library-tabs button {
   padding: 6px 4px;
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
 }
 
 html body .app-shell #home .home-library-tabs button:not(.is-active),

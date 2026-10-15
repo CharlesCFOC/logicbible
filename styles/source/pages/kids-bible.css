@@ -28,13 +28,13 @@
 
 .kids-bible-header h1 {
   color: #ffffff;
-  font-size: 28px;
+  font-size: 28px; font-size: clamp(28px, calc(22.4px + 1.75cqw), 30.24px);
 }
 
 .kids-bible-header p {
   margin-top: 5px;
   color: rgba(220, 236, 245, 0.76);
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
 }
 
 .kids-bible-header > svg {
@@ -46,85 +46,85 @@
 /* Two curated adventures: French reading, playful practice, local progress. */
 #kids-bible .kids-adventure-hub, #kids-bible .kids-adventure { --adventure-accent: #78d5ed; --adventure-dark: #164a67; }
 #kids-bible .kids-adventure--garden { --adventure-accent: #b9e197; --adventure-dark: #376d4b; }
-#kids-bible .kids-adventure-eyebrow { color: #bdeaff; font-size: 11px; font-weight: 800; letter-spacing: .02em; }
+#kids-bible .kids-adventure-eyebrow { color: #bdeaff; font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px); font-weight: 800; letter-spacing: .02em; }
 #kids-bible .kids-adventure-welcome { margin-bottom: 24px; }
 #kids-bible .kids-adventure-welcome h2 { margin: 10px 0; color: #fff; font-size: clamp(25px, 7vw, 30px); line-height: 1.14; letter-spacing: -.045em; }
-#kids-bible .kids-adventure-welcome p { margin: 0; color: #cfdef3; font-size: 13px; line-height: 1.6; }
+#kids-bible .kids-adventure-welcome p { margin: 0; color: #cfdef3; font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px); line-height: 1.6; }
 #kids-bible .kids-adventure-card-grid { display: grid; gap: 16px; }
 #kids-bible .kids-adventure-card { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); width: 100%; min-height: 218px; padding: 0; overflow: hidden; border: 0; border-radius: 24px; background: #eaf5fb; text-align: left; box-shadow: 0 8px 20px rgba(0, 14, 38, .18); }
 #kids-bible .kids-adventure-card.kids-adventure--garden { background: #f0f5e8; }
 #kids-bible .kids-adventure-cover { position: relative; min-width: 0; height: 100%; overflow: hidden; }
 #kids-bible .kids-adventure-cover img { display: block; width: 100%; height: 100%; position: absolute; inset: 0; object-fit: cover; }
-#kids-bible .kids-adventure-cover > span { position: absolute; left: 12px; bottom: 12px; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 16px; background: #fff3d9; font-size: 25px; box-shadow: 0 3px 12px rgba(0, 15, 30, .16); }
+#kids-bible .kids-adventure-cover > span { position: absolute; left: 12px; bottom: 12px; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 16px; background: #fff3d9; font-size: 25px; font-size: clamp(25px, calc(20px + 1.5625cqw), 27px); box-shadow: 0 3px 12px rgba(0, 15, 30, .16); }
 #kids-bible .kids-adventure-card-copy { position: relative; display: flex; flex-direction: column; gap: 8px; padding: 18px 14px; min-width: 0; }
-#kids-bible .kids-adventure-card-copy small { color: var(--adventure-dark) !important; font-size: 10px; font-weight: 800; }
-#kids-bible .kids-adventure-card-copy h3 { margin: 0; color: #16344b; font-size: 21px; line-height: 1.08; letter-spacing: -.035em; }
-#kids-bible .kids-adventure-card-copy p { margin: 0; color: #486074; font-size: 12px; line-height: 1.5; }
-#kids-bible .kids-adventure-card-meta { color: #5b7280; font-size: 10px; line-height: 1.6; }
-#kids-bible .kids-adventure-card-action { margin-top: auto; color: var(--adventure-dark); font-size: 12px; line-height: 1.6; }
+#kids-bible .kids-adventure-card-copy small { color: var(--adventure-dark) !important; font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px); font-weight: 800; }
+#kids-bible .kids-adventure-card-copy h3 { margin: 0; color: #16344b; font-size: 21px; font-size: clamp(21px, calc(16.8px + 1.3125cqw), 22.68px); line-height: 1.08; letter-spacing: -.035em; }
+#kids-bible .kids-adventure-card-copy p { margin: 0; color: #486074; font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px); line-height: 1.5; }
+#kids-bible .kids-adventure-card-meta { color: #5b7280; font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px); line-height: 1.6; }
+#kids-bible .kids-adventure-card-action { margin-top: auto; color: var(--adventure-dark); font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px); line-height: 1.6; }
 #kids-bible .kids-adventure-resume { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 74px; margin-bottom: 18px; padding: 12px 16px; border: 0; border-radius: 20px; background: #ffe8b0; color: #483b22; text-align: left; }
-#kids-bible .kids-adventure-resume > span:first-child { font-size: 30px; }
+#kids-bible .kids-adventure-resume > span:first-child { font-size: 30px; font-size: clamp(30px, calc(24px + 1.875cqw), 32.4px); }
 #kids-bible .kids-adventure-resume > span:nth-child(2) { flex: 1; display: grid; gap: 4px; }
-#kids-bible .kids-adventure-resume small { color: #6a5123 !important; font-size: 11px; }
-#kids-bible .kids-adventure-resume strong { font-size: 14px; }
+#kids-bible .kids-adventure-resume small { color: #6a5123 !important; font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px); }
+#kids-bible .kids-adventure-resume strong { font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px); }
 #kids-bible .kids-adventure-collection { margin-top: 26px; padding: 18px; border-radius: 22px; background: rgba(27, 58, 102, .55); }
 #kids-bible .kids-adventure-collection > div:first-child { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-#kids-bible .kids-adventure-collection h2 { color: #fff; margin: 0; font-size: 18px; }
-#kids-bible .kids-adventure-collection > div > span { color: #c8e5ff; font-size: 12px; }
-#kids-bible .kids-adventure-collection p { color: #c8dcef; font-size: 12px; line-height: 1.6; }
+#kids-bible .kids-adventure-collection h2 { color: #fff; margin: 0; font-size: 18px; font-size: clamp(18px, calc(14.4px + 1.125cqw), 19.44px); }
+#kids-bible .kids-adventure-collection > div > span { color: #c8e5ff; font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px); }
+#kids-bible .kids-adventure-collection p { color: #c8dcef; font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px); line-height: 1.6; }
 #kids-bible .kids-adventure-earned { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
 #kids-bible .kids-adventure-earned > span { display: grid; justify-items: center; gap: 7px; }
-#kids-bible .kids-adventure-earned > span > span { display: grid; place-items: center; width: 55px; height: 55px; border-radius: 50%; background: #fff1c9; font-size: 30px; }
-#kids-bible .kids-adventure-earned strong { color: #e4f2ff; font-size: 11px; }
-#kids-bible .kids-adventure-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 16px; color: #cce7fb; font-size: 12px; }
-#kids-bible .kids-adventure button { min-height: 46px; padding: 11px 15px; border: 0; border-radius: 16px; background: rgba(18, 57, 90, .85); color: #f4fbff; font-size: 14px; font-weight: 800; line-height: 1.4; }
+#kids-bible .kids-adventure-earned > span > span { display: grid; place-items: center; width: 55px; height: 55px; border-radius: 50%; background: #fff1c9; font-size: 30px; font-size: clamp(30px, calc(24px + 1.875cqw), 32.4px); }
+#kids-bible .kids-adventure-earned strong { color: #e4f2ff; font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px); }
+#kids-bible .kids-adventure-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 16px; color: #cce7fb; font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px); }
+#kids-bible .kids-adventure button { min-height: 46px; padding: 11px 15px; border: 0; border-radius: 16px; background: rgba(18, 57, 90, .85); color: #f4fbff; font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px); font-weight: 800; line-height: 1.4; }
 #kids-bible .kids-adventure button:disabled { opacity: .45; cursor: not-allowed; }
 #kids-bible .kids-adventure-track { display: flex; gap: 5px; margin-bottom: 20px; }
 #kids-bible .kids-adventure-track span { flex: 1; height: 5px; border-radius: 999px; background: rgba(140, 181, 218, .22); }
 #kids-bible .kids-adventure-track .is-reached { background: var(--adventure-accent); }
-#kids-bible .kids-adventure h2 { margin: 8px 0 20px; color: #fff; font-size: 28px; line-height: 1.2; letter-spacing: -.035em; }
-#kids-bible .kids-adventure h3 { margin: 12px 0; color: #f1f9ff; font-size: 21px; line-height: 1.4; }
-#kids-bible .kids-adventure > p { color: #d6eaf6; font-size: 16px; line-height: 1.6; }
+#kids-bible .kids-adventure h2 { margin: 8px 0 20px; color: #fff; font-size: 28px; font-size: clamp(28px, calc(22.4px + 1.75cqw), 30.24px); line-height: 1.2; letter-spacing: -.035em; }
+#kids-bible .kids-adventure h3 { margin: 12px 0; color: #f1f9ff; font-size: 21px; font-size: clamp(21px, calc(16.8px + 1.3125cqw), 22.68px); line-height: 1.4; }
+#kids-bible .kids-adventure > p { color: #d6eaf6; font-size: 16px; font-size: clamp(16px, calc(12.8px + 1cqw), 17.28px); line-height: 1.6; }
 #kids-bible .kids-adventure-illustration { display: block; width: 100%; height: 235px; object-fit: cover; border-radius: 24px 24px 0 0; }
 #kids-bible .kids-adventure-reading { margin-bottom: 18px; padding: 20px; border-radius: 0 0 24px 24px; color: #213b4d; background: #fff7e7; }
-#kids-bible .kids-adventure-reading p { margin: 10px 0; color: #213b4d; font-size: 18px; line-height: 1.65; }
-#kids-bible .kids-adventure-reading h3 { color: #21425b; font-size: 18px; }
+#kids-bible .kids-adventure-reading p { margin: 10px 0; color: #213b4d; font-size: 18px; font-size: clamp(18px, calc(14.4px + 1.125cqw), 19.44px); line-height: 1.65; }
+#kids-bible .kids-adventure-reading h3 { color: #21425b; font-size: 18px; font-size: clamp(18px, calc(14.4px + 1.125cqw), 19.44px); }
 #kids-bible .kids-adventure-reading h3:not(:first-child) { margin-top: 28px; }
-#kids-bible .kids-adventure-scene-count { color: #bfdcf1; font-size: 12px; font-weight: 800; }
+#kids-bible .kids-adventure-scene-count { color: #bfdcf1; font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px); font-weight: 800; }
 #kids-bible .kids-adventure-reading .kids-adventure-scene-count { color: #47636d; }
-#kids-bible .kids-adventure-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; color: #527180; font-size: 11px; }
+#kids-bible .kids-adventure-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; color: #527180; font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px); }
 #kids-bible .kids-adventure .kids-adventure-primary { background: var(--adventure-accent); color: #16364b; box-shadow: 0 4px 12px rgba(0, 18, 30, .12); }
 #kids-bible .kids-adventure > .kids-adventure-primary { width: 100%; }
 #kids-bible .kids-adventure-controls { display: flex; justify-content: space-between; align-items: stretch; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
 #kids-bible .kids-adventure-controls button { flex: 1; }
 #kids-bible .kids-adventure-choices { display: grid; gap: 12px; padding: 0; margin: 18px 0; min-width: 0; border: 0; }
-#kids-bible .kids-adventure-choices label { display: flex; align-items: center; gap: 12px; min-height: 74px; padding: 14px; border: 2px solid transparent; border-radius: 20px; background: #eef6fc; color: #193b54; font-size: 16px; line-height: 1.4; cursor: pointer; }
+#kids-bible .kids-adventure-choices label { display: flex; align-items: center; gap: 12px; min-height: 74px; padding: 14px; border: 2px solid transparent; border-radius: 20px; background: #eef6fc; color: #193b54; font-size: 16px; font-size: clamp(16px, calc(12.8px + 1cqw), 17.28px); line-height: 1.4; cursor: pointer; }
 #kids-bible .kids-adventure-choices input { accent-color: #267699; width: 18px; height: 18px; margin: 0; flex: 0 0 auto; }
-#kids-bible .kids-adventure-choices label > span:first-of-type { font-size: 32px; }
+#kids-bible .kids-adventure-choices label > span:first-of-type { font-size: 32px; font-size: clamp(32px, calc(25.6px + 2cqw), 34.56px); }
 #kids-bible .kids-adventure-choices label > span:last-child { flex: 1; min-width: 0; }
 #kids-bible .kids-adventure-choices label.is-selected { border-color: #71cee9; background: #def3fb; }
 #kids-bible .kids-adventure-choices label.is-correct { border-color: #97cfaa; background: #e3f3dc; }
-#kids-bible .kids-adventure-choices small { display: block; margin-top: 5px; color: #366246 !important; font-size: 12px; }
-#kids-bible .kids-adventure-feedback { padding: 16px; border-radius: 18px; background: #e9f4d9; color: #294a3b !important; font-size: 15px; line-height: 1.6; }
+#kids-bible .kids-adventure-choices small { display: block; margin-top: 5px; color: #366246 !important; font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px); }
+#kids-bible .kids-adventure-feedback { padding: 16px; border-radius: 18px; background: #e9f4d9; color: #294a3b !important; font-size: 15px; font-size: clamp(15px, calc(12px + 0.9375cqw), 16.2px); line-height: 1.6; }
 #kids-bible .kids-adventure-feedback p { margin: 8px 0 0; }
 #kids-bible .kids-adventure-order-slots { display: flex; gap: 12px; margin: 24px 0; }
-#kids-bible .kids-adventure-order-slots > span { display: grid; place-items: center; flex: 1; min-height: 68px; border: 2px dashed #93cde4; border-radius: 18px; color: #c4e9ff; font-size: 24px; }
+#kids-bible .kids-adventure-order-slots > span { display: grid; place-items: center; flex: 1; min-height: 68px; border: 2px dashed #93cde4; border-radius: 18px; color: #c4e9ff; font-size: 24px; font-size: clamp(24px, calc(19.2px + 1.5cqw), 25.92px); }
 #kids-bible .kids-adventure-order-cards { display: grid; gap: 12px; }
 #kids-bible .kids-adventure-order-cards button { display: flex; align-items: center; gap: 12px; min-height: 78px; background: #f3f7e8; color: #274839; text-align: left; }
-#kids-bible .kids-adventure-order-cards button > span:first-child { font-size: 32px; }
+#kids-bible .kids-adventure-order-cards button > span:first-child { font-size: 32px; font-size: clamp(32px, calc(25.6px + 2cqw), 34.56px); }
 #kids-bible .kids-adventure-order-cards button > span:nth-child(2) { flex: 1; }
 #kids-bible .kids-adventure-order-cards b { display: grid; place-items: center; width: 28px; height: 28px; background: #d0e5b9; border-radius: 50%; }
 #kids-bible .kids-adventure-takeaway { margin: 20px 0; padding: 24px; border-radius: 24px; background: #e5f3ff; color: #1b425d; }
-#kids-bible .kids-adventure-takeaway > span:first-child { display: block; font-size: 40px; }
-#kids-bible .kids-adventure-takeaway > span:nth-child(2) { font-size: 12px; font-weight: 800; }
-#kids-bible .kids-adventure-takeaway p { font-size: 21px; line-height: 1.45; font-weight: 750; }
+#kids-bible .kids-adventure-takeaway > span:first-child { display: block; font-size: 40px; font-size: clamp(40px, calc(32px + 2.5cqw), 43.2px); }
+#kids-bible .kids-adventure-takeaway > span:nth-child(2) { font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px); font-weight: 800; }
+#kids-bible .kids-adventure-takeaway p { font-size: 21px; font-size: clamp(21px, calc(16.8px + 1.3125cqw), 22.68px); line-height: 1.45; font-weight: 750; }
 #kids-bible .kids-adventure-finish { text-align: center; }
-#kids-bible .kids-adventure-finish p { color: #d8eafa; font-size: 16px; line-height: 1.6; }
+#kids-bible .kids-adventure-finish p { color: #d8eafa; font-size: 16px; font-size: clamp(16px, calc(12.8px + 1cqw), 17.28px); line-height: 1.6; }
 #kids-bible .kids-adventure-finish button { display: block; width: 100%; margin-top: 12px; }
-#kids-bible .kids-adventure-badge { display: grid; place-items: center; width: 110px; height: 110px; margin: 24px auto; border: 6px solid #ffdb85; border-radius: 50%; background: #fff2ce; box-shadow: 0 0 0 10px rgba(255, 221, 140, .08); font-size: 54px; }
+#kids-bible .kids-adventure-badge { display: grid; place-items: center; width: 110px; height: 110px; margin: 24px auto; border: 6px solid #ffdb85; border-radius: 50%; background: #fff2ce; box-shadow: 0 0 0 10px rgba(255, 221, 140, .08); font-size: 54px; font-size: clamp(54px, calc(43.2px + 3.375cqw), 58.32px); }
 #kids-bible :is(.kids-adventure-hub, .kids-adventure) button:focus-visible, #kids-bible .kids-adventure-choices label:focus-within { outline: 3px solid #ffe2a1; outline-offset: 3px; }
 #kids-bible .kids-adventure h2:focus { outline: none; }
-@media (max-width: 360px) { #kids-bible .kids-adventure-card { grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); } #kids-bible .kids-adventure-card-copy { padding: 16px 12px; } #kids-bible .kids-adventure-card-copy h3 { font-size: 19px; } }
+@media (max-width: 360px) { #kids-bible .kids-adventure-card { grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); } #kids-bible .kids-adventure-card-copy { padding: 16px 12px; } #kids-bible .kids-adventure-card-copy h3 { font-size: 19px; font-size: clamp(19px, calc(15.2px + 1.1875cqw), 20.52px); } }
 #kids-bible :is(.kids-adventure-reading, .kids-adventure-card-copy) p { text-align: left; text-justify: auto; }
 #kids-bible .kids-adventure-finish p { text-align: center; text-justify: auto; }
 #kids-bible .kids-adventure-takeaway + .kids-adventure-reading { border-radius: 24px; }
@@ -136,9 +136,9 @@
 #kids-bible .kids-adventure-choices label.is-incorrect { border-color: #a64b2b; background: #fff0e3; color: #68331f; }
 #kids-bible .kids-adventure-choices label.is-incorrect small { color: #68331f !important; }
 #kids-bible .kids-adventure-feedback.is-incorrect { background: #fff0e3; color: #68331f !important; }
-#kids-bible .kids-adventure .kids-adventure-score { color: #e6f2ff; font-size: 14px; font-weight: 800; }
+#kids-bible .kids-adventure .kids-adventure-score { color: #e6f2ff; font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px); font-weight: 800; }
 
-#kids-bible .kids-adventure-hub-title { margin: 0 0 20px; color: #e6f2ff; font-size: 18px; }
+#kids-bible .kids-adventure-hub-title { margin: 0 0 20px; color: #e6f2ff; font-size: 18px; font-size: clamp(18px, calc(14.4px + 1.125cqw), 19.44px); }
 
 /* Blue story cards keep the same readable palette in every app theme. */
 #kids-bible .kids-adventure-card,
@@ -157,59 +157,59 @@
 
 #kids-bible .kids-adventure-book-grid { display: grid; gap: 14px; }
 #kids-bible .kids-adventure-book { display: flex; align-items: center; gap: 14px; width: 100%; padding: 20px 16px; border: 1px solid #477393; border-radius: 24px; background: #153552; color: #edf6ff; text-align: left; }
-#kids-bible .kids-adventure-book > span:first-child { display: grid; place-items: center; flex: 0 0 60px; height: 70px; border-radius: 20px; background: #224e70; font-size: 38px; }
+#kids-bible .kids-adventure-book > span:first-child { display: grid; place-items: center; flex: 0 0 60px; height: 70px; border-radius: 20px; background: #224e70; font-size: 38px; font-size: clamp(38px, calc(30.4px + 2.375cqw), 41.04px); }
 #kids-bible .kids-adventure-book > span:nth-child(2) { display: grid; gap: 7px; flex: 1; min-width: 0; }
-#kids-bible .kids-adventure-book strong { color: #edf6ff; font-size: 23px; }
-#kids-bible .kids-adventure-book span { color: inherit; font-size: 13px; line-height: 1.5; }
-#kids-bible .kids-adventure-book small { color: #afe7ff !important; font-size: 11px; }
-#kids-bible .kids-adventure-books-back { min-height: 44px; margin: 0 0 18px; padding: 10px 14px; border: 1px solid #477393; border-radius: 14px; background: #153552; color: #edf6ff; font-size: 13px; font-weight: 800; }
+#kids-bible .kids-adventure-book strong { color: #edf6ff; font-size: 23px; font-size: clamp(23px, calc(18.4px + 1.4375cqw), 24.84px); }
+#kids-bible .kids-adventure-book span { color: inherit; font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px); line-height: 1.5; }
+#kids-bible .kids-adventure-book small { color: #afe7ff !important; font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px); }
+#kids-bible .kids-adventure-books-back { min-height: 44px; margin: 0 0 18px; padding: 10px 14px; border: 1px solid #477393; border-radius: 14px; background: #153552; color: #edf6ff; font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px); font-weight: 800; }
 #kids-bible .kids-adventure-book-grid button:focus-visible, #kids-bible .kids-adventure-books-back:focus-visible { outline: 3px solid #ffe2a1; outline-offset: 3px; }
 #kids-bible .kids-adventure-welcome p { text-align: left; text-justify: auto; }
 
 /* An illustrated notebook and an open story trail. */
 #kids-bible .kids-adventure-welcome.is-notebook { position: relative; overflow: hidden; padding: 22px 20px; border: 1px solid #6c9cbd55; border-radius: 26px; background: linear-gradient(135deg, #224f77, #153552); }
-#kids-bible .kids-adventure-welcome.is-notebook h2 { font-size: 32px; line-height: 1.12; margin: 12px 0; }
+#kids-bible .kids-adventure-welcome.is-notebook h2 { font-size: 32px; font-size: clamp(32px, calc(25.6px + 2cqw), 34.56px); line-height: 1.12; margin: 12px 0; }
 #kids-bible .kids-notebook-stamps { display: flex; gap: 9px; margin-top: 20px; }
-#kids-bible .kids-notebook-stamps span { display: grid; place-items: center; width: 42px; height: 42px; border: 1px dashed #a2cce9; border-radius: 13px; background: #153552; font-size: 24px; transform: rotate(-7deg); }
+#kids-bible .kids-notebook-stamps span { display: grid; place-items: center; width: 42px; height: 42px; border: 1px dashed #a2cce9; border-radius: 13px; background: #153552; font-size: 24px; font-size: clamp(24px, calc(19.2px + 1.5cqw), 25.92px); transform: rotate(-7deg); }
 #kids-bible .kids-notebook-stamps span:nth-child(2n) { transform: rotate(7deg); }
 #kids-bible .kids-adventure-book-grid { gap: 22px; }
 #kids-bible .kids-adventure-book { display: block; overflow: hidden; padding: 0; border: 1px solid #477393; border-radius: 26px; box-shadow: 0 9px 20px #00192e25; }
 #kids-bible .kids-adventure-book-art { position: relative; height: 166px; overflow: hidden; background: #224e70; }
 #kids-bible .kids-adventure-book-art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 28%; }
 #kids-bible .kids-adventure-book--genesis .kids-adventure-book-art img { object-position: 50% 52%; }
-#kids-bible .kids-adventure-book .kids-book-art-icon { position: absolute; left: 16px; bottom: 12px; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 16px; background: #153552; font-size: 29px; box-shadow: 0 3px 12px #00192e40; }
-#kids-bible .kids-adventure-book .kids-book-art-count { position: absolute; top: 12px; right: 12px; padding: 5px 10px; border-radius: 999px; background: #153552; color: #edf6ff; font-size: 11px; font-weight: 800; }
+#kids-bible .kids-adventure-book .kids-book-art-icon { position: absolute; left: 16px; bottom: 12px; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 16px; background: #153552; font-size: 29px; font-size: clamp(29px, calc(23.2px + 1.8125cqw), 31.32px); box-shadow: 0 3px 12px #00192e40; }
+#kids-bible .kids-adventure-book .kids-book-art-count { position: absolute; top: 12px; right: 12px; padding: 5px 10px; border-radius: 999px; background: #153552; color: #edf6ff; font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px); font-weight: 800; }
 #kids-bible .kids-adventure-book-info { display: grid; gap: 10px; padding: 20px; }
-#kids-bible .kids-adventure-book-info > strong { font-size: 27px; line-height: 1.2; }
-#kids-bible .kids-adventure-book-info p { margin: 0; color: #c6dced; font-size: 13px; line-height: 1.6; text-align: left; }
+#kids-bible .kids-adventure-book-info > strong { font-size: 27px; font-size: clamp(27px, calc(21.6px + 1.6875cqw), 29.16px); line-height: 1.2; }
+#kids-bible .kids-adventure-book-info p { margin: 0; color: #c6dced; font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px); line-height: 1.6; text-align: left; }
 #kids-bible .kids-book-discoveries { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin: 4px 0; }
-#kids-bible .kids-book-discoveries > span { display: grid; place-items: center; width: 23px; height: 23px; border-radius: 50%; background: #294d6b; color: #bed6e8; font-size: 12px; }
+#kids-bible .kids-book-discoveries > span { display: grid; place-items: center; width: 23px; height: 23px; border-radius: 50%; background: #294d6b; color: #bed6e8; font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px); }
 #kids-bible .kids-book-discoveries > span.is-earned { background: #b7e8c6; color: #1b4635; }
 #kids-bible .kids-book-discoveries small { margin-left: 5px; }
-#kids-bible .kids-adventure-book .kids-book-open { display: flex; justify-content: space-between; align-items: center; min-height: 44px; margin-top: 4px; padding: 9px 14px; border-radius: 13px; background: #afe7ff; color: #153552; font-size: 13px; font-weight: 800; }
+#kids-bible .kids-adventure-book .kids-book-open { display: flex; justify-content: space-between; align-items: center; min-height: 44px; margin-top: 4px; padding: 9px 14px; border-radius: 13px; background: #afe7ff; color: #153552; font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px); font-weight: 800; }
 #kids-bible .kids-adventure-path-summary { display: grid; gap: 7px; margin: 0 0 24px; color: #c6dced; }
-#kids-bible .kids-adventure-path-summary > span { color: #afe7ff; font-size: 13px; font-weight: 800; }
-#kids-bible .kids-adventure-path-summary small { color: #c6dced !important; font-size: 11px; line-height: 1.5; }
+#kids-bible .kids-adventure-path-summary > span { color: #afe7ff; font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px); font-weight: 800; }
+#kids-bible .kids-adventure-path-summary small { color: #c6dced !important; font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px); line-height: 1.5; }
 #kids-bible .kids-adventure-path { position: relative; list-style: none; margin: 0; padding: 0 0 0 34px; gap: 26px; }
 #kids-bible .kids-adventure-path::before { content: ''; position: absolute; left: 13px; top: 22px; bottom: 22px; border-left: 2px dashed #84b7d0; }
 #kids-bible .kids-adventure-path-stop { position: relative; min-width: 0; }
-#kids-bible .kids-adventure-path-number { position: absolute; left: -34px; top: 24px; display: grid; place-items: center; width: 28px; height: 28px; border: 2px solid #83b5d0; border-radius: 50%; background: #153552; color: #edf6ff; font-size: 12px; font-weight: 800; }
+#kids-bible .kids-adventure-path-number { position: absolute; left: -34px; top: 24px; display: grid; place-items: center; width: 28px; height: 28px; border: 2px solid #83b5d0; border-radius: 50%; background: #153552; color: #edf6ff; font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px); font-weight: 800; }
 #kids-bible .kids-adventure-path-number.is-earned { border-color: #b7e8c6; background: #b7e8c6; color: #1b4635; }
 #kids-bible .kids-adventure-path .kids-adventure-card { display: block; min-height: 0; border: 1px solid #477393; border-radius: 24px; }
 #kids-bible .kids-adventure-path .kids-adventure-cover { height: 176px; }
-#kids-bible .kids-adventure-cover > .kids-adventure-state { top: 12px; right: 12px; bottom: auto; left: auto; width: auto; height: auto; padding: 5px 10px; border-radius: 999px; background: #153552; color: #edf6ff; font-size: 11px; font-weight: 800; }
+#kids-bible .kids-adventure-cover > .kids-adventure-state { top: 12px; right: 12px; bottom: auto; left: auto; width: auto; height: auto; padding: 5px 10px; border-radius: 999px; background: #153552; color: #edf6ff; font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px); font-weight: 800; }
 #kids-bible .kids-adventure-cover > .kids-adventure-state.is-current { background: #afe7ff; color: #153552; }
 #kids-bible .kids-adventure-cover > .kids-adventure-state.is-earned { background: #b7e8c6; color: #1b4635; }
 #kids-bible .kids-adventure-path .kids-adventure-card-copy { gap: 10px; padding: 18px; }
-#kids-bible .kids-adventure-path .kids-adventure-card-copy h3 { font-size: 23px; line-height: 1.15; }
-#kids-bible .kids-adventure-path .kids-adventure-card-action { display: flex; align-items: center; justify-content: center; min-height: 44px; margin-top: 6px; padding: 10px; border-radius: 13px; background: #afe7ff; color: #153552 !important; font-size: 12px; }
+#kids-bible .kids-adventure-path .kids-adventure-card-copy h3 { font-size: 23px; font-size: clamp(23px, calc(18.4px + 1.4375cqw), 24.84px); line-height: 1.15; }
+#kids-bible .kids-adventure-path .kids-adventure-card-action { display: flex; align-items: center; justify-content: center; min-height: 44px; margin-top: 6px; padding: 10px; border-radius: 13px; background: #afe7ff; color: #153552 !important; font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px); }
 #kids-bible .kids-adventure-collection { padding: 20px; border: 1px solid #477393; background: #153552; }
 #kids-bible .kids-adventure-earned { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 #kids-bible .kids-adventure-earned > span { padding: 13px 9px; border: 1px dashed #547c9b; border-radius: 18px; text-align: center; background: #1a405f; }
 #kids-bible .kids-adventure-earned > span.is-earned { border-style: solid; border-color: #b7e8c6; }
-#kids-bible .kids-adventure-earned > span.is-waiting > span { background: #294d6b; color: #c6dced; font-size: 26px; }
-#kids-bible .kids-adventure-earned strong { font-size: 11px; line-height: 1.4; }
-#kids-bible .kids-adventure-earned small { color: #afe7ff !important; font-size: 10px; }
+#kids-bible .kids-adventure-earned > span.is-waiting > span { background: #294d6b; color: #c6dced; font-size: 26px; font-size: clamp(26px, calc(20.8px + 1.625cqw), 28.08px); }
+#kids-bible .kids-adventure-earned strong { font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px); line-height: 1.4; }
+#kids-bible .kids-adventure-earned small { color: #afe7ff !important; font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px); }
 @media (min-width: 740px) {
   #kids-bible .kids-adventure-book-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
@@ -221,25 +221,25 @@
 }
 
 #kids-bible .kids-bible-header h1 { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
-#kids-bible .kids-bible-book-title { color: #c6e7ff; font-size: 20px; font-weight: 600; font-style: italic; letter-spacing: -.02em; }
+#kids-bible .kids-bible-book-title { color: #c6e7ff; font-size: 20px; font-size: clamp(20px, calc(16px + 1.25cqw), 21.6px); font-weight: 600; font-style: italic; letter-spacing: -.02em; }
 
 #kids-bible .kids-page-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin: 0 0 10px; padding: 0; border: 0; background: transparent; }
-#kids-bible .kids-page-tabs button { display: flex; justify-content: center; align-items: center; gap: 7px; min-height: 40px; padding: 6px 4px; border: 0; border-radius: 14px; background: transparent; color: #cadbe8; font-size: 10px; font-weight: 800; }
+#kids-bible .kids-page-tabs button { display: flex; justify-content: center; align-items: center; gap: 7px; min-height: 40px; padding: 6px 4px; border: 0; border-radius: 14px; background: transparent; color: #cadbe8; font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px); font-weight: 800; }
 #kids-bible .kids-page-tabs button > span { color: inherit; }
-#kids-bible .kids-page-tabs .kids-tab-count { padding: 2px 6px; border-radius: 999px; background: #ffffff22; color: inherit; font-size: 11px; }
+#kids-bible .kids-page-tabs .kids-tab-count { padding: 2px 6px; border-radius: 999px; background: #ffffff22; color: inherit; font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px); }
 #kids-bible .kids-page-tabs button:focus-visible { outline: 3px solid #ffe2a1; outline-offset: 2px; }
 #kids-bible .kids-badges-page { margin-top: 0; }
 #kids-bible .kids-badges-page .kids-badges-sync { margin: 15px 0 20px; text-align: left; }
 #kids-bible .kids-badges-empty { padding: 20px 0 4px; text-align: center; }
-#kids-bible .kids-badges-empty > span { display: grid; place-items: center; width: 90px; height: 90px; margin: 0 auto 20px; border: 2px dashed #87b1d0; border-radius: 50%; background: #234c6a; color: #afe7ff; font-size: 42px; }
-#kids-bible .kids-badges-empty h3 { color: #edf6ff; font-size: 20px; }
+#kids-bible .kids-badges-empty > span { display: grid; place-items: center; width: 90px; height: 90px; margin: 0 auto 20px; border: 2px dashed #87b1d0; border-radius: 50%; background: #234c6a; color: #afe7ff; font-size: 42px; font-size: clamp(42px, calc(33.6px + 2.625cqw), 45.36px); }
+#kids-bible .kids-badges-empty h3 { color: #edf6ff; font-size: 20px; font-size: clamp(20px, calc(16px + 1.25cqw), 21.6px); }
 #kids-bible .kids-badges-empty p { text-align: center; }
-#kids-bible :is(.kids-badges-empty button, .kids-badges-retry) { min-height: 44px; padding: 10px 14px; border: 0; border-radius: 13px; background: #afe7ff; color: #153552; font-size: 13px; font-weight: 800; }
+#kids-bible :is(.kids-badges-empty button, .kids-badges-retry) { min-height: 44px; padding: 10px 14px; border: 0; border-radius: 13px; background: #afe7ff; color: #153552; font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px); font-weight: 800; }
 #kids-bible .kids-earned-badge { display: grid; justify-items: center; align-content: start; gap: 9px; min-width: 0; padding: 20px 10px; border: 1px solid #8ac5a6; border-radius: 22px; background: #1a405f; text-align: center; }
-#kids-bible .kids-earned-badge > span { display: grid; place-items: center; width: 64px; height: 64px; border: 3px solid #ffdb85; border-radius: 50%; background: #fff2ce; font-size: 35px; }
-#kids-bible .kids-earned-badge h3 { margin: 2px 0 0; color: #edf6ff; font-size: 14px; line-height: 1.4; }
-#kids-bible .kids-earned-badge p { margin: 0; color: #c6dced; font-size: 11px; line-height: 1.5; text-align: center; }
-#kids-bible .kids-earned-badge small { color: #afe7ff !important; font-size: 11px; }
+#kids-bible .kids-earned-badge > span { display: grid; place-items: center; width: 64px; height: 64px; border: 3px solid #ffdb85; border-radius: 50%; background: #fff2ce; font-size: 35px; font-size: clamp(35px, calc(28px + 2.1875cqw), 37.8px); }
+#kids-bible .kids-earned-badge h3 { margin: 2px 0 0; color: #edf6ff; font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px); line-height: 1.4; }
+#kids-bible .kids-earned-badge p { margin: 0; color: #c6dced; font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px); line-height: 1.5; text-align: center; }
+#kids-bible .kids-earned-badge small { color: #afe7ff !important; font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px); }
 #kids-bible :is(.kids-badges-empty button, .kids-badges-retry):focus-visible { outline: 3px solid #ffe2a1; outline-offset: 3px; }
 #kids-bible .kids-page-tabs button { transition: background-color 180ms ease, color 180ms ease, transform 140ms ease, box-shadow 180ms ease; }
 .app-shell[data-app-background="black"] #kids-bible .kids-page-tabs button { border-radius: 999px; }

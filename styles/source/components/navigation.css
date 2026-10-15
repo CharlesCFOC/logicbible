@@ -304,7 +304,7 @@
 
 .home-hero-image-copy span {
   color: rgba(255, 253, 248, 0.78);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -323,7 +323,7 @@
   max-width: 27ch;
   margin: 0;
   color: rgba(255, 253, 248, 0.82);
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   line-height: 1.4;
 }
 
@@ -348,7 +348,7 @@
 .home-hero-verse-heading span,
 .home-hero-verse-heading small {
   color: rgba(49, 24, 8, 0.72);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   letter-spacing: 0.04em;
   text-transform: none;
 }
@@ -356,7 +356,7 @@
 .home-hero-verse strong {
   color: #000000;
   font-family: var(--font-body);
-  font-size: 15px;
+  font-size: 15px; font-size: clamp(15px, calc(12px + 0.9375cqw), 16.2px);
   font-weight: 700;
   letter-spacing: -0.025em;
   line-height: 1.12;
@@ -374,7 +374,7 @@
   border-radius: 999px;
   background: linear-gradient(135deg, #ff9d00 0%, #ff6a00 52%, #e84a00 100%);
   color: #ffffff;
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   font-weight: 800;
 }
 
@@ -409,12 +409,12 @@
 
 .home-stat-card--continue span {
   color: var(--muted);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
 }
 
 .home-stat-card--continue strong {
-  font-size: 16px;
+  font-size: 16px; font-size: clamp(16px, calc(12.8px + 1cqw), 17.28px);
 }
 
 .home-stat-card--continue svg {
@@ -557,7 +557,7 @@
   color: #245b3a;
   background: #c9efd5;
   box-shadow: 0 5px 14px rgba(48, 103, 70, 0.16);
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   font-weight: 850;
 }
 
@@ -654,7 +654,7 @@
   border-radius: 17px;
   background: transparent;
   color: rgba(118, 107, 96, 0.88);
-  font-size: 8.5px;
+  font-size: 8.5px; font-size: clamp(8.5px, calc(6.8px + 0.5312cqw), 9.18px);
   font-weight: 700;
   -webkit-tap-highlight-color: transparent;
   transition: transform 100ms ease;
@@ -921,7 +921,7 @@
   gap: 9px;
   min-width: 0;
   color: #fff;
-  font-size: 18px;
+  font-size: 18px; font-size: clamp(18px, calc(14.4px + 1.125cqw), 19.44px);
   letter-spacing: -0.03em;
 }
 
@@ -943,7 +943,7 @@
 .app-menu-section > p {
   margin: 0 0 5px 8px;
   color: rgba(204, 235, 255, 0.72);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -959,7 +959,7 @@
   border-radius: 14px;
   background: transparent;
   color: rgba(246, 251, 255, 0.9);
-  font-size: 14px;
+  font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px);
   font-weight: 700;
   text-align: left;
   text-decoration: none;
@@ -1003,7 +1003,7 @@
 .app-menu-section--secondary a {
   min-height: 44px;
   color: rgba(224, 241, 255, 0.82);
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
 }
 
 @media (prefers-reduced-motion: reduce) {

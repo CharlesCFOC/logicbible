@@ -186,7 +186,7 @@
   min-height: 32px !important;
   padding: 0 9px !important;
   border-radius: 10px !important;
-  font-size: 11px !important;
+  font-size: 11px !important; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px) !important;
 }
 
 .note-editor-header-actions .note-save-button {
@@ -234,12 +234,12 @@ body .app-shell[data-app-background="black"] .note-editor-toolbar .note-format-s
   min-width: 24px !important;
   min-height: 24px !important;
   border-radius: 7px !important;
-  font-size: 10px !important;
+  font-size: 10px !important; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px) !important;
 }
 
 body .app-shell[data-app-background="black"] .note-editor-toolbar [data-note-size-decrease],
 body .app-shell[data-app-background="black"] .note-editor-toolbar [data-note-size-increase] {
-  font-size: 11px !important;
+  font-size: 11px !important; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px) !important;
   font-weight: 900 !important;
   letter-spacing: -0.04em;
 }
@@ -368,7 +368,7 @@ body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-hea
   border-radius: 0 !important;
   background: transparent !important;
   color: #ffffff !important;
-  font-size: 30px !important;
+  font-size: 30px !important; font-size: clamp(30px, calc(24px + 1.875cqw), 32.4px) !important;
   font-weight: 800 !important;
   line-height: 1.12 !important;
   outline: none !important;
@@ -418,7 +418,7 @@ body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-ver
 body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-verse-summary-copy strong {
   flex: 0 0 auto;
   color: #9edfff;
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   white-space: nowrap;
 }
 
@@ -482,7 +482,7 @@ body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-ver
 
 body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-verse-item-heading strong {
   color: #9edfff;
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
 }
 
 body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-verse-item-heading button {
@@ -496,7 +496,7 @@ body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-ver
   border-radius: 0;
   color: rgba(217, 242, 255, 0.72);
   background: transparent !important;
-  font-size: 15px;
+  font-size: 15px; font-size: clamp(15px, calc(12px + 0.9375cqw), 16.2px);
   font-weight: 700;
   line-height: 1;
 }
@@ -509,7 +509,7 @@ body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-ver
 body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-verse-item p {
   margin: 5px 0 0;
   color: #eef8fc;
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   line-height: 1.45;
 }
 
@@ -521,7 +521,7 @@ body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-pan
 }
 
 body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-heading-title {
-  font-size: 20px !important;
+  font-size: 20px !important; font-size: clamp(20px, calc(16px + 1.25cqw), 21.6px) !important;
   line-height: 1.2 !important;
 }
 
@@ -535,7 +535,7 @@ body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-ver
 }
 
 body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-verse-summary-copy strong {
-  font-size: 10px !important;
+  font-size: 10px !important; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px) !important;
 }
 
 body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-verse-summary > svg {
@@ -600,7 +600,7 @@ body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-con
   display: block;
   margin-bottom: 4px;
   color: var(--cool);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -609,7 +609,7 @@ body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-con
 .verse-note-tooltip p {
   margin: 0 0 8px;
   color: var(--ink);
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   font-weight: 500;
   line-height: 1.45;
   text-align: left;
@@ -621,7 +621,7 @@ body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-con
   border-radius: 9px;
   color: #fff;
   background: var(--cool);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
 }
 
@@ -707,7 +707,7 @@ body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-con
 
 .note-editor-panel-header span {
   color: var(--cool);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -715,7 +715,7 @@ body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-con
 
 .note-editor-panel-header strong {
   color: var(--ink);
-  font-size: 20px;
+  font-size: 20px; font-size: clamp(20px, calc(16px + 1.25cqw), 21.6px);
 }
 
 .note-editor-verse-chips {
@@ -747,13 +747,13 @@ body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-con
   border-radius: 999px;
   color: #3975b8;
   background: #edf5ff;
-  font-size: 9px;
+  font-size: 9px; font-size: clamp(9px, calc(7.2px + 0.5625cqw), 9.72px);
   font-weight: 800;
   white-space: nowrap;
 }
 
 .note-editor-add-verse span {
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   line-height: 0;
   vertical-align: -1px;
 }
@@ -777,7 +777,7 @@ body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-con
   border-radius: 999px;
   color: var(--ink);
   background: #f5efe7;
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   font-weight: 800;
 }
 
@@ -790,7 +790,7 @@ body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-con
   border-radius: 50%;
   color: #75695e;
   background: #fffdf8;
-  font-size: 15px;
+  font-size: 15px; font-size: clamp(15px, calc(12px + 0.9375cqw), 16.2px);
   line-height: 1;
 }
 
@@ -801,7 +801,7 @@ body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-con
 
 .note-editor-no-verses {
   color: var(--muted);
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   font-style: italic;
 }
 
@@ -836,7 +836,7 @@ body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-con
   outline: 0;
   color: var(--ink);
   background: #fffdf8;
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
   font-weight: 760;
 }
 
@@ -871,7 +871,7 @@ body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-con
   border-radius: 9px;
   color: var(--ink);
   background: #f3eee7;
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   font-weight: 800;
 }
 
@@ -921,7 +921,7 @@ body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-con
   gap: 8px;
   padding: 7px 0 2px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   font-weight: 800;
 }
 
@@ -934,12 +934,12 @@ body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-con
 .note-editor-size-row strong {
   min-width: 42px;
   color: var(--ink);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   text-align: right;
 }
 
 .note-editor-size-large {
-  font-size: 18px;
+  font-size: 18px; font-size: clamp(18px, calc(14.4px + 1.125cqw), 19.44px);
 }
 
 .note-editor-content:focus {
@@ -964,7 +964,7 @@ body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-con
 
 .note-editor-footer span {
   color: var(--muted);
-  font-size: 10px;
+  font-size: 10px; font-size: clamp(10px, calc(8px + 0.625cqw), 10.8px);
   line-height: 1.35;
 }
 
@@ -1029,7 +1029,7 @@ body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-con
   display: grid;
   gap: 8px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
   font-weight: 760;
   text-transform: uppercase;
 }
@@ -1044,7 +1044,7 @@ body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-con
   outline: 0;
   color: var(--ink);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(247, 249, 252, 0.96));
-  font-size: 14px;
+  font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px);
   line-height: 1.45;
   text-transform: none;
 }
@@ -1109,13 +1109,13 @@ body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-con
   align-items: center;
   gap: 7px;
   color: #748596;
-  font-size: 12px;
+  font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px);
 }
 
 .saved-note-card-title {
   display: block;
   color: var(--ink);
-  font-size: 15px;
+  font-size: 15px; font-size: clamp(15px, calc(12px + 0.9375cqw), 16.2px);
   line-height: 1.2;
 }
 
@@ -1131,7 +1131,7 @@ body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-con
 .saved-note-references {
   overflow: hidden;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px);
   font-weight: 760;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1142,7 +1142,7 @@ body .app-shell[data-app-background="black"][data-modal="note"] .note-editor-con
   overflow: hidden;
   margin: 0;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px);
   line-height: 1.45;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
