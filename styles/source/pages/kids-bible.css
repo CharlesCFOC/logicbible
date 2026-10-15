@@ -43,7 +43,7 @@
   color: #9edcff;
 }
 
-/* Two curated adventures: French reading, playful practice, local progress. */
+/* English story reading, playful practice, and saved progress. */
 #kids-bible .kids-adventure-hub, #kids-bible .kids-adventure { --adventure-accent: #78d5ed; --adventure-dark: #164a67; }
 #kids-bible .kids-adventure--garden { --adventure-accent: #b9e197; --adventure-dark: #376d4b; }
 #kids-bible .kids-adventure-eyebrow { color: #bdeaff; font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px); font-weight: 800; letter-spacing: .02em; }
@@ -190,19 +190,19 @@
 #kids-bible .kids-adventure-path-summary { display: grid; gap: 7px; margin: 0 0 24px; color: #c6dced; }
 #kids-bible .kids-adventure-path-summary > span { color: #afe7ff; font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px); font-weight: 800; }
 #kids-bible .kids-adventure-path-summary small { color: #c6dced !important; font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px); line-height: 1.5; }
-#kids-bible .kids-adventure-path { position: relative; list-style: none; margin: 0; padding: 0 0 0 34px; gap: 26px; }
+#kids-bible .kids-adventure-path { position: relative; list-style: none; margin: 0; padding: 0 0 0 34px; gap: 12px; }
 #kids-bible .kids-adventure-path::before { content: ''; position: absolute; left: 13px; top: 22px; bottom: 22px; border-left: 2px dashed #84b7d0; }
 #kids-bible .kids-adventure-path-stop { position: relative; min-width: 0; }
 #kids-bible .kids-adventure-path-number { position: absolute; left: -34px; top: 24px; display: grid; place-items: center; width: 28px; height: 28px; border: 2px solid #83b5d0; border-radius: 50%; background: #153552; color: #edf6ff; font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px); font-weight: 800; }
 #kids-bible .kids-adventure-path-number.is-earned { border-color: #b7e8c6; background: #b7e8c6; color: #1b4635; }
-#kids-bible .kids-adventure-path .kids-adventure-card { display: block; min-height: 0; border: 1px solid #477393; border-radius: 24px; }
-#kids-bible .kids-adventure-path .kids-adventure-cover { height: 176px; }
+#kids-bible .kids-adventure-path .kids-adventure-card { display: grid; grid-template-columns: 88px minmax(0, 1fr); min-height: 148px; border: 1px solid #477393; border-radius: 18px; }
+#kids-bible .kids-adventure-path .kids-adventure-cover { height: auto; align-self: stretch; }
 #kids-bible .kids-adventure-cover > .kids-adventure-state { top: 12px; right: 12px; bottom: auto; left: auto; width: auto; height: auto; padding: 5px 10px; border-radius: 999px; background: #153552; color: #edf6ff; font-size: 11px; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px); font-weight: 800; }
 #kids-bible .kids-adventure-cover > .kids-adventure-state.is-current { background: #afe7ff; color: #153552; }
 #kids-bible .kids-adventure-cover > .kids-adventure-state.is-earned { background: #b7e8c6; color: #1b4635; }
-#kids-bible .kids-adventure-path .kids-adventure-card-copy { gap: 10px; padding: 18px; }
-#kids-bible .kids-adventure-path .kids-adventure-card-copy h3 { font-size: 23px; font-size: clamp(23px, calc(18.4px + 1.4375cqw), 24.84px); line-height: 1.15; }
-#kids-bible .kids-adventure-path .kids-adventure-card-action { display: flex; align-items: center; justify-content: center; min-height: 44px; margin-top: 6px; padding: 10px; border-radius: 13px; background: #afe7ff; color: #153552 !important; font-size: 12px; font-size: clamp(12px, calc(9.6px + 0.75cqw), 12.96px); }
+#kids-bible .kids-adventure-path .kids-adventure-card-copy { gap: 4px; padding: 10px 12px; }
+#kids-bible .kids-adventure-path .kids-adventure-card-copy h3 { font-size: clamp(17px, 4.2cqw, 19px); line-height: 1.2; }
+#kids-bible .kids-adventure-path .kids-adventure-card-action { display: flex; align-items: center; justify-content: flex-start; min-height: 22px; margin-top: auto; padding: 0; border-radius: 0; background: transparent; color: #afe7ff !important; font-size: 12px; }
 #kids-bible .kids-adventure-collection { padding: 20px; border: 1px solid #477393; background: #153552; }
 #kids-bible .kids-adventure-earned { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 #kids-bible .kids-adventure-earned > span { padding: 13px 9px; border: 1px dashed #547c9b; border-radius: 18px; text-align: center; background: #1a405f; }
@@ -217,7 +217,7 @@
   #kids-bible .kids-adventure-path { padding-left: 30px; }
   #kids-bible .kids-adventure-path-number { left: -30px; width: 25px; height: 25px; }
   #kids-bible .kids-adventure-path::before { left: 12px; }
-  #kids-bible .kids-adventure-path .kids-adventure-card-copy { padding: 15px; }
+  #kids-bible .kids-adventure-path .kids-adventure-card-copy { padding: 10px; }
 }
 
 #kids-bible .kids-bible-header h1 { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
@@ -243,3 +243,30 @@
 #kids-bible :is(.kids-badges-empty button, .kids-badges-retry):focus-visible { outline: 3px solid #ffe2a1; outline-offset: 3px; }
 #kids-bible .kids-page-tabs button { transition: background-color 180ms ease, color 180ms ease, transform 140ms ease, box-shadow 180ms ease; }
 .app-shell[data-app-background="black"] #kids-bible .kids-page-tabs button { border-radius: 999px; }
+
+/* Keep the expanded Genesis library compact and the 3/4-scene reader flexible. */
+#kids-bible .kids-adventure-collection-picker { display: grid; gap: 8px; margin: 0 0 22px; font-size: 12px; }
+#kids-bible .kids-adventure-collection-picker .kids-collection-label { color: #a6dccb !important; font-size: 12px; font-weight: 750; letter-spacing: .025em; padding-left: 3px; }
+#kids-bible .kids-collection-select { position: relative; display: block; min-width: 0; border-radius: 18px; background: linear-gradient(115deg, rgba(90, 170, 213, .23), rgba(37, 75, 122, .35)); }
+#kids-bible .kids-adventure-collection-picker select { display: block; width: 100%; min-height: 54px; padding: 12px 50px 12px 16px; border: 1px solid rgba(153, 214, 239, .32); border-color: rgba(153, 214, 239, .32) !important; border-radius: inherit; color: #f3f9ff !important; background: transparent !important; font: inherit; font-size: 14px; font-weight: 750; appearance: none; -webkit-appearance: none; cursor: pointer; transition: border-color 160ms ease, background-color 160ms ease; }
+#kids-bible .kids-adventure-collection-picker select:hover { border-color: rgba(166, 220, 203, .7) !important; background: rgba(123, 192, 220, .06) !important; }
+#kids-bible .kids-adventure-collection-picker select:focus-visible { outline: 2px solid #a6dccb; outline-offset: 3px; }
+#kids-bible .kids-adventure-collection-picker select option { color: #f3f9ff; background: #214266; }
+#kids-bible .kids-collection-chevron { position: absolute; right: 19px; top: 22px; width: 9px; height: 9px; border-right: 2px solid #a6dccb; border-bottom: 2px solid #a6dccb; transform: rotate(45deg); pointer-events: none; }
+#kids-bible #kids-collection-description { color: #c4dceb; font-size: 12px; font-weight: 400; padding-left: 3px; }
+#kids-bible .kids-book-discoveries progress { flex: 1; min-width: 36px; height: 7px; border: 0; border-radius: 6px; overflow: hidden; background: rgba(169, 218, 245, .2); accent-color: #a6dccb; }
+#kids-bible .kids-book-discoveries progress::-webkit-progress-bar { background: rgba(169, 218, 245, .2); }
+#kids-bible .kids-book-discoveries progress::-webkit-progress-value { background: #a6dccb; }
+#kids-bible .kids-book-discoveries progress::-moz-progress-bar { background: #a6dccb; }
+#kids-bible .kids-adventure-reading .kids-adventure-reading-note { margin: 16px 0 0; padding-top: 12px; border-top: 1px solid rgba(33, 59, 77, .15); font-size: 13px; line-height: 1.6; }
+#kids-bible .kids-adventure-reading-note strong { display: block; margin-bottom: 4px; }
+#kids-bible .kids-adventure-controls[aria-label="Story navigation"] { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+#kids-bible .kids-adventure-controls[aria-label="Story navigation"] button { min-width: 0; padding-inline: 8px; font-size: 13px; }
+
+#kids-bible .kids-adventure--sunrise { --adventure-accent: #ffd29e; --adventure-dark: #704722; }
+
+/* Story choices are compact rows; the entire row remains a single tap target. */
+#kids-bible .kids-adventure-path .kids-adventure-card-copy > small { display: none; }
+#kids-bible .kids-adventure-path .kids-adventure-card-copy p { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; font-size: 12px; line-height: 1.35; }
+#kids-bible .kids-adventure-path .kids-adventure-cover > span:not(.kids-adventure-state) { left: 8px; bottom: 8px; width: 28px; height: 28px; border-radius: 10px; font-size: 18px; }
+#kids-bible .kids-adventure-path .kids-adventure-state { top: 8px; right: 5px; left: 5px; padding: 4px 3px; font-size: 9px; text-align: center; }

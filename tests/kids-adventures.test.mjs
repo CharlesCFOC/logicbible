@@ -1,4 +1,6 @@
 import test from "node:test";
+import fs from "node:fs";
+import { genesisCollections } from "../src/react/kids-genesis-data.js";
 import assert from "node:assert/strict";
 import { kidsAdventures, kidsBooks, newAdventureProgress, readAdventureProgress, saveAdventureProgress } from "../src/react/kids-adventures-data.js";
 
@@ -36,9 +38,9 @@ test("earned badges survive replay and unavailable storage does not block readin
   assert.doesNotThrow(() => saveAdventureProgress("storm", newAdventureProgress(), denied));
 });
 
-test("each curated story has three scenes, three unambiguous question choices and a three-event ordering game", () => {
+test("each story has 3–4 scenes, three unambiguous questions and a three-event ordering game", () => {
   for (const a of kidsAdventures) {
-    assert.equal(a.scenes.length, 3);assert.equal(a.questions.length, 3);assert.equal(a.order.length, 3);
+    assert.ok([3, 4].includes(a.scenes.length), a.id);assert.equal(a.questions.length, 3);assert.equal(a.order.length, 3);
     for (const q of a.questions) {
       assert.equal(q.choices.length, 3);assert.equal(new Set(q.choices.map(c => c[1])).size, 3);
       assert.ok(Number.isInteger(q.correct) && q.correct >= 0 && q.correct < 3);
@@ -46,9 +48,52 @@ test("each curated story has three scenes, three unambiguous question choices an
   }
 });
 
-test("book navigation includes four Genesis stories and preserves the existing Mark progress IDs", () => {
+test("book navigation includes 65 Genesis stories and preserves all existing progress IDs", () => {
   assert.equal(new Set(kidsAdventures.map(a => a.id)).size, kidsAdventures.length);
-  assert.equal(kidsAdventures.filter(a => a.bookId === "genesis").length, 4);
+  assert.equal(kidsAdventures.filter(a => a.bookId === "genesis").length, 65);
   assert.deepEqual(kidsAdventures.filter(a => a.bookId === "mark").map(a => a.id), ["storm", "seeds"]);
   for (const a of kidsAdventures) assert.ok(kidsBooks.some(b => b.id === a.bookId));
+});
+
+
+test("a fourth scene survives reload while invalid scene indexes are rejected", () => {
+  const storage = memory();
+  const four = kidsAdventures.find(a => a.scenes.length === 4);
+  saveAdventureProgress(four.id, { ...newAdventureProgress(), stage: 1, scene: 3 }, storage);
+  assert.equal(readAdventureProgress(four.id, storage).scene, 3);
+  saveAdventureProgress("storm", { ...newAdventureProgress(), stage: 1, scene: 3 }, storage);
+  assert.equal(readAdventureProgress("storm", storage).scene, 0);
+  saveAdventureProgress(four.id, { ...newAdventureProgress(), stage: 1, scene: 4 }, storage);
+  assert.equal(readAdventureProgress(four.id, storage).scene, 0);
+});
+
+test("all five collections are populated with complete, distinct episodes and shipped artwork", () => {
+  const genesis = kidsAdventures.filter(a => a.bookId === "genesis");
+  assert.equal(new Set(genesis.map(a => a.title)).size, 65);
+  assert.deepEqual(genesisCollections.map(group => genesis.filter(a => a.collection === group.id).length), [12, 17, 7, 11, 18]);
+  assert.ok(genesis.some(a => a.scenes.length === 3));
+  assert.ok(genesis.some(a => a.scenes.length === 4));
+  for (const a of genesis) {
+    for (const key of ["title", "subtitle", "intro", "reference", "theme", "badge", "takeaway", "mission", "prayer"]) {
+      assert.ok(typeof a[key] === "string" && a[key].length > 0, `${a.id}: missing ${key}`);
+    }
+    assert.ok(a.reference.startsWith("Genesis "), a.id);
+    assert.ok(fs.existsSync(new URL(`../${a.image}`, import.meta.url)), a.image);
+    for (const scene of a.scenes) assert.ok(scene.title && scene.text.length >= 100, a.id);
+    assert.equal(new Set(a.order.map(event => event[1])).size, 3);
+    assert.ok(a.questions.every(q => q.explanation.length > 15), a.id);
+  }
+  for (const id of ["genesis-creation", "genesis-noah", "genesis-abraham", "genesis-joseph"]) {
+    assert.ok(genesis.some(a => a.id === id), `${id}: old badge and progress ID must remain valid`);
+  }
+});
+
+
+test("expanded legacy episodes retain completion but reset answers from the old overview", () => {
+  const storage = memory();
+  storage.setItem("brother.kidsAdventure.v1.genesis-noah", JSON.stringify({ ...newAdventureProgress(), stage: 5, completed: true, answers: {0: 1, 1: 2, 2: 0} }));
+  assert.deepEqual(readAdventureProgress("genesis-noah", storage), {...newAdventureProgress(), completed: true});
+  saveAdventureProgress("genesis-noah", {...newAdventureProgress(), stage: 2, answers: {0: 1}}, storage);
+  assert.equal(readAdventureProgress("genesis-noah", storage).stage, 2);
+  assert.deepEqual(readAdventureProgress("genesis-noah", storage).answers, {0: 1});
 });

@@ -55,8 +55,12 @@ export function readAdventureProgress(id, storage = window.localStorage) {
   try {
     const p = JSON.parse(storage.getItem(`brother.kidsAdventure.v1.${id}`));
     if (p?.version !== 1 || !Number.isInteger(p.stage) || p.stage < 0 || p.stage > 5) return newAdventureProgress();
+    const adventure = kidsAdventures.find(a => a.id === id);
+    if ((p.contentRevision || 1) !== (adventure?.contentRevision || 1)) {
+      return { ...newAdventureProgress(), completed: p.completed === true || p.stage === 5 };
+    }
     return { ...newAdventureProgress(), stage: p.stage,
-      scene: Number.isInteger(p.scene) && p.scene >= 0 && p.scene <= 2 ? p.scene : 0,
+      scene: Number.isInteger(p.scene) && p.scene >= 0 && p.scene < (adventure?.scenes.length || 3) ? p.scene : 0,
       question: Number.isInteger(p.question) && p.question >= 0 && p.question <= 2 ? p.question : 0,
       answers: Object.fromEntries(Object.entries(p.answers || {}).filter(([k, v]) => ["0", "1", "2"].includes(k) && Number.isInteger(v) && v >= 0 && v <= 2)),
       order: Array.isArray(p.order) ? [...new Set(p.order.filter(n => [0, 1, 2].includes(n)))] : [], ordered: p.ordered === true, completed: p.completed === true || p.stage === 5,
@@ -65,5 +69,7 @@ export function readAdventureProgress(id, storage = window.localStorage) {
 }
 
 export function saveAdventureProgress(id, progress, storage = window.localStorage) {
-  try { storage.setItem(`brother.kidsAdventure.v1.${id}`, JSON.stringify(progress)); storage.setItem("brother.kidsAdventure.last", id); } catch { /* Reading remains available without storage. */ }
+  try { storage.setItem(`brother.kidsAdventure.v1.${id}`, JSON.stringify({ ...progress, contentRevision: kidsAdventures.find(a => a.id === id)?.contentRevision || 1 })); storage.setItem("brother.kidsAdventure.last", id);
+    if (typeof window !== "undefined" && storage === window.localStorage) window.kidsAdventureProgressBridge?.queue(id);
+  } catch { /* Reading remains available without storage. */ }
 }

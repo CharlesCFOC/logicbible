@@ -1022,7 +1022,7 @@ async function syncStateKey(key, value) {
     return false;
   }
   // A newer vibration choice must remain queued while an older write finishes.
-  if (key !== "brother.hapticsStrength" || (supabaseUser?.id === userId && localStorage.getItem(key) === rawValue)) {
+  if ((key !== "brother.hapticsStrength" && !key.startsWith("brother.kidsAdventure.")) || (supabaseUser?.id === userId && localStorage.getItem(key) === rawValue)) {
     clearPendingSync(key);
   }
   return true;
@@ -1045,6 +1045,14 @@ async function syncPendingState() {
       if (key === "brother.notes") {
         await syncStateKey(key, readJson(key, {}));
       }
+    }
+    // Serialize story progress so a slower write cannot restore an earlier scene.
+    while (supabaseUser?.id === userId && !isHydratingSupabase) {
+      const key = [...getPendingSyncKeys()].find(item => item.startsWith("brother.kidsAdventure."));
+      if (!key) break;
+      const value = localStorage.getItem(key);
+      if (value === null) { clearPendingSync(key); continue; }
+      if (!(await syncStateKey(key, value))) break;
     }
     // Serialize vibration writes so rapid taps cannot save an older level last.
     while (supabaseUser?.id === userId && !isHydratingSupabase && getPendingSyncKeys().has("brother.hapticsStrength")) {
@@ -6230,6 +6238,15 @@ function getBibleChapterSnapshot() {
       : null,
   };
 }
+
+// Keep story progress in the existing account sync queue as well as local storage.
+window.kidsAdventureProgressBridge = {
+  queue(adventureId) {
+    markPendingSync(`brother.kidsAdventure.v1.${adventureId}`);
+    markPendingSync("brother.kidsAdventure.last");
+    void syncPendingState();
+  },
+};
 
 // Private badge records use the existing per-user state table and its RLS policies.
 window.kidsBadgesBridge = {
