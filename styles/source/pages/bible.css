@@ -402,6 +402,18 @@
   gap: 6px;
 }
 
+#bible [data-bible-menu-toggle] > i,
+#bible [data-bible-menu-toggle] > svg {
+  width: 17px;
+  height: 17px;
+}
+
+#bible [data-bible-menu-toggle] {
+  width: 40px;
+  height: 40px;
+  min-height: 40px;
+}
+
 .bottom-nav .reader-reading-progress {
   position: absolute;
   right: 0;
@@ -492,7 +504,7 @@
 
 .parallel-controls {
   position: sticky;
-  top: 58px;
+  top: 44px;
   z-index: 5;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1508,9 +1520,12 @@
   background: transparent !important;
   background-image: none !important;
   background-color: transparent !important;
+  border-right: 1px solid rgba(159, 225, 255, .42) !important;
+  box-shadow: none !important;
   -webkit-backdrop-filter: blur(28px) !important;
   backdrop-filter: blur(28px) !important;
 }
+[data-bible-menu-layer] .app-menu-scrim { background: transparent !important; }
 .bible-tool-tabs {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -1519,15 +1534,17 @@
 .bible-tool-tabs [role="tab"]:nth-child(-n+2) { grid-column: span 3; }
 .bible-tool-tabs [role="tab"]:nth-child(n+3) { grid-column: span 2; }
 .bible-tool-tabs [role="tab"] {
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   min-width: 0;
   min-height: 54px;
   padding: 8px 7px;
   border: 0;
   border-radius: 14px;
-  background: rgba(8, 39, 70, .28);
-  box-shadow: 0 8px 18px rgba(0, 8, 24, .28);
+  background: linear-gradient(145deg, rgba(35, 66, 117, .75), rgba(20, 43, 83, .75));
+  box-shadow: none !important;
   color: rgba(235, 247, 255, .88);
   font: inherit;
   font-size: 12px;
@@ -1538,21 +1555,36 @@
   cursor: pointer;
   transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
 }
+.bible-tool-tabs [role="tab"] svg { flex: 0 0 16px; width: 16px; height: 16px; }
+.bible-tool-tabs [role="tab"] span { min-width: 0; }
 .bible-tool-tabs [role="tab"]:hover,
 .bible-tool-tabs [role="tab"][aria-selected="true"] {
   background: linear-gradient(135deg, rgba(69, 160, 207, .48), rgba(97, 111, 211, .3));
-  box-shadow: 0 10px 22px rgba(0, 8, 24, .34);
+  box-shadow: none !important;
   color: #fff;
+}
+.bible-tool-tabs [role="tab"][aria-selected="true"] {
+  background: linear-gradient(110deg, #4fc3ff 0%, #8bdcff 24%, #ff9d00 50%, #ffb6dc 76%, #4fc3ff 100%) !important;
+  background-size: 280% 100% !important;
+  background-position: 0% 50%;
+  box-shadow: none !important;
+  animation: homeHeroTitleGradient 7s ease-in-out infinite;
 }
 .bible-tool-tabs [role="tab"]:active { transform: scale(.98); }
 .bible-tool-tabs [role="tab"]:focus-visible,
 .bible-tool-panel:focus-visible { outline: 2px solid #a8ebff; outline-offset: 3px; }
 .bible-tool-panel { min-height: 180px; padding-top: 20px; }
+.bible-study-empty { margin: 0; color: rgba(235, 247, 255, .68); font-size: 13px; font-size: clamp(13px, calc(10.4px + .8125cqw), 14.04px); line-height: 1.5; }
 .bible-study-status { margin: 0; color: rgba(235, 247, 255, .78); font-size: 14px; font-size: clamp(14px, calc(11.2px + .875cqw), 15.12px); line-height: 1.55; }
 .bible-study-status.is-loading { display: flex; align-items: center; gap: 10px; min-height: 32px; }
 .bible-study-loading-spinner { flex: 0 0 19px; width: 19px; height: 19px; border: 2px solid rgba(169, 226, 255, .2); border-top-color: #9ce6ff; border-right-color: #b7b4ff; border-radius: 50%; animation: bibleStudySpin .8s linear infinite; box-shadow: 0 0 12px rgba(117, 216, 255, .15); }
+.bible-study-progress { display: grid; gap: 9px; margin-top: 16px; }
+.bible-study-progress-caption { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: rgba(212, 233, 247, .7); font-size: 11px; }
+.bible-study-progress-value { color: #8fe8b8; font-size: 13px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.bible-study-progress-track { height: 5px; overflow: hidden; border-radius: 999px; background: rgba(174, 219, 244, .15); }
+.bible-study-progress-fill { display: block; width: 1%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #7acfff, #8fe8b8); transition: width 250ms ease-out; }
 @keyframes bibleStudySpin { to { transform: rotate(360deg); } }
-@media (prefers-reduced-motion: reduce) { .bible-study-loading-spinner { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .bible-study-loading-spinner { animation: none; } .bible-study-progress-fill { transition: none; } }
 .bible-study-retry { margin-top: 14px; padding: 9px 14px; border: 0; border-radius: 12px; background: rgba(115, 199, 236, .18); color: #eaf8ff; font: inherit; font-size: 13px; font-size: clamp(13px, calc(10.4px + .8125cqw), 14.04px); font-weight: 750; cursor: pointer; }
 .bible-study-result { display: grid; gap: 12px; }
 .bible-study-reference { margin: 0; color: #a8e5ff; font-size: 11px; font-size: clamp(11px, calc(8.8px + .6875cqw), 11.88px); font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
@@ -1565,7 +1597,7 @@
 .bible-study-copy ul,
 .bible-study-copy ol { display: grid; gap: 6px; margin: 8px 0; padding-left: 22px; }
 .bible-study-copy blockquote { margin: 12px 0; padding-left: 12px; border-left: 2px solid rgba(145, 225, 183, .8); color: #d8f2ff; }
-.bible-study-disclaimer { margin: 4px 0 0; color: rgba(208, 228, 242, .64); font-size: 10px; font-size: clamp(10px, calc(8px + .625cqw), 10.8px); line-height: 1.5; }
+.bible-study-disclaimer { margin: 4px 0 22px; color: rgba(208, 228, 242, .64); font-size: 10px; font-size: clamp(10px, calc(8px + .625cqw), 10.8px); line-height: 1.5; }
 .bible-study-result { gap: 16px; }
 .bible-study-hero {
   position: relative;
@@ -1651,8 +1683,98 @@
 .study-challenge-feedback { min-height: 0; margin: 8px 0 0; color: rgba(230, 243, 253, .78); font-size: 11px; font-size: clamp(11px, calc(8.8px + .6875cqw), 11.88px); line-height: 1.5; }
 .study-challenge-feedback:empty { display: none; }
 .study-challenge-feedback.is-correct { color: #b5f0d0; }
+
+/* Use the same mint headings throughout all five Bible Study views. */
+.bible-study-result :is(h2, h3, h4, .study-step-label, .study-source-heading, .study-manuscript-details dt, .study-source-link strong),
+.bible-study-result .study-mode-row > span:first-child,
+.bible-study-result .study-insight-topline > span:first-child,
+.bible-study-result .bible-study-challenge summary > span:nth-child(2) {
+  color: #8fe8b8 !important;
+}
+
+/* Study content stays short; research, maps and conversations open on demand. */
+.study-reference-button { display: inline-flex; align-items: center; gap: 5px; min-height: 30px; padding: 2px 0; border: 0; border-radius: 4px; background: transparent; text-align: left; cursor: pointer; }
+.study-reference-button:hover { text-decoration: underline; text-underline-offset: 3px; }
+.study-deeper { margin-top: 10px; border-top: 1px solid rgba(168, 220, 200, .12); }
+.study-deeper > summary,
+.study-geography > summary,
+.study-reflection > summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 38px; color: #8fe8b8 !important; font-size: 11px; font-weight: 750; cursor: pointer; list-style: none; }
+.study-deeper > summary::after,
+.study-geography > summary::after,
+.study-reflection > summary::after { content: '+'; color: #b0d8eb; font-size: 16px; font-weight: 500; }
+.study-deeper[open] > summary::after,
+.study-geography[open] > summary::after,
+.study-reflection[open] > summary::after { content: '−'; }
+.study-deeper > summary::-webkit-details-marker,
+.study-geography > summary::-webkit-details-marker,
+.study-reflection > summary::-webkit-details-marker { display: none; }
+.study-deeper-content { display: grid; gap: 10px; padding: 2px 0 7px; }
+.study-deeper-content > p { margin: 0; }
+.study-text-action { justify-self: start; min-height: 36px; padding: 4px 0; border: 0; background: transparent; color: #8fe8b8 !important; font-size: 11px; font-weight: 750; text-align: left; cursor: pointer; }
+.study-text-action:hover { text-decoration: underline; text-underline-offset: 3px; }
+.study-text-action:disabled { opacity: .5; cursor: wait; }
+.bible-study-result :is(button, summary, textarea, a):focus-visible { outline: 2px solid #8fe8b8; outline-offset: 4px; }
+.study-inline-chat[hidden] { display: none; }
+.study-inline-chat form,
+.study-reflection form { display: grid; gap: 9px; }
+.study-inline-chat label,
+.study-reflection label { display: grid; gap: 8px; color: #e4eff7; font-size: 12px; line-height: 1.5; }
+.study-inline-chat textarea,
+.study-reflection textarea { width: 100%; min-width: 0; max-height: 220px; padding: 11px; border: 1px solid rgba(168, 220, 200, .22); border-radius: 12px; color: #fff; background: rgba(6, 28, 49, .14); font: inherit; font-size: 13px; line-height: 1.55; resize: vertical; }
+.study-inline-chat textarea::placeholder,
+.study-reflection textarea::placeholder { color: rgba(221, 238, 250, .55); }
+.study-chat-status,
+.study-source-note { color: rgba(212, 233, 247, .65) !important; font-size: 10px !important; line-height: 1.5; }
+.study-chat-status:empty,
+.study-chat-answer:empty { display: none; }
+.study-chat-answer { max-width: 100%; margin-top: 10px; padding-left: 10px; border-left: 2px solid rgba(143, 232, 184, .5); overflow-wrap: anywhere; }
+.study-chat-answer p { font-size: 12px; }
+.study-geography,
+.study-reflection { border-top: 1px solid rgba(168, 220, 200, .16); border-bottom: 1px solid rgba(168, 220, 200, .1); padding: 2px 0; }
+.study-geography > summary,
+.study-reflection > summary { min-height: 44px; font-size: 12px; }
+.study-reflection form { padding: 4px 0 12px; }
+.study-reflection-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.study-reflection-footer [role='status'] { max-width: 55%; color: rgba(216, 239, 232, .75); font-size: 10px; text-align: right; }
+.study-steps--story { padding-left: 4px; }
+.study-steps--story::before { position: absolute; top: 22px; bottom: 28px; left: 31px; width: 1px; background: rgba(143, 232, 184, .22); content: ''; }
+.study-steps--story .study-step { background: transparent; }
+.study-steps--story .study-step-index { z-index: 1; }
+.study-steps--map { grid-template-columns: 1fr; gap: 6px; }
+.study-steps--map::before { top: 15px; bottom: 18px; left: 13px; width: 1px; height: auto; background: rgba(143, 232, 184, .24); }
+.study-steps--map .study-step { display: grid; grid-template-columns: 27px minmax(0, 1fr); align-items: start; justify-items: stretch; gap: 10px; text-align: left; }
+.study-steps--map .study-step-copy { padding: 9px 12px; }
+.study-steps--map .study-step h3 { font-size: 14px; }
+.study-steps--map .study-step p { font-size: 12px; }
+.study-witness-journey { display: grid; gap: 13px; margin: 4px 0 0; padding: 0 0 0 14px; list-style: none; }
+.study-witness-journey li { position: relative; padding-left: 9px; border-left: 1px solid rgba(143, 232, 184, .3); }
+.study-witness-journey li::before { position: absolute; top: 4px; left: -3px; width: 5px; height: 5px; border-radius: 50%; background: #8fe8b8; content: ''; }
+.study-witness-journey li > span { color: #8fe8b8 !important; font-size: 10px; font-weight: 750; }
+.study-witness-journey p { margin-top: 3px; }
+.study-place-map { display: block; width: 100%; height: auto; max-height: 230px; border-radius: 12px; background: rgba(8, 43, 73, .22); }
+.study-place-map > path { fill: rgba(133, 192, 213, .25); stroke: rgba(167, 218, 234, .5); stroke-width: .6; }
+.study-place-map circle { fill: #8fe8b8; stroke: #164265; stroke-width: 1; }
+.study-place-map text { fill: #164265; font-family: var(--font-body); font-size: 7px; font-weight: 850; text-anchor: middle; }
+.study-place-legend { display: flex; flex-wrap: wrap; gap: 7px 20px; padding-left: 19px; margin: 12px 0; color: #8fe8b8; font-size: 11px; }
+.study-place-legend a { color: #def3fa; text-decoration: none; }
+.study-map-caption { color: rgba(212, 233, 247, .65); font-size: 9px; line-height: 1.6; margin: 10px 0 14px; }
+.study-map-caption a { color: inherit; }
+.study-passage-dialog { width: min(460px, calc(100vw - 32px)); max-height: min(70dvh, 580px); margin: auto; padding: 18px; border: 1px solid rgba(168, 220, 200, .32); border-radius: 20px; color: #f1f7fb; background: rgba(22, 60, 92, .68); -webkit-backdrop-filter: blur(28px); backdrop-filter: blur(28px); box-shadow: 0 16px 50px rgba(3, 18, 37, .16); }
+.study-passage-dialog::backdrop { background: transparent; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.study-passage-dialog > header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.study-passage-dialog h3 { margin: 0; color: #8fe8b8 !important; font-size: 16px; }
+.study-passage-close { width: 36px; height: 36px; min-height: 36px; border: 0; border-radius: 50%; color: #e2f2fb; background: transparent; font-size: 24px; }
+.study-passage-content { overflow-y: auto; max-height: 52dvh; padding: 0 4px; scrollbar-width: thin; }
+.study-passage-content p { color: #edf5fa; font-size: 14px; line-height: 1.8; }
+.study-passage-content sup { color: #8fe8b8; font-size: 10px; }
+.study-passage-content .study-passage-version { color: #c0d6e6; font-size: 10px; }
+@media (max-width: 400px) {
+  .study-insight-grid { grid-template-columns: minmax(0, 1fr); }
+  .study-insight-topline { flex-wrap: wrap; }
+}
+
 @keyframes studyCardRise { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) {
-  .bible-tool-tabs [role="tab"] { transition: none; }
+  .bible-tool-tabs [role="tab"] { transition: none; animation: none !important; }
   .study-insight-card { animation: none; }
 }

@@ -618,11 +618,20 @@ export function IntercessionPanel() {
     setReminderMessage('');
     const next = writeReminderSchedule(window.localStorage, reminderSchedule);
     setReminderSchedule(next);
+    // Notification permission is optional and browser-dependent. Never let it
+    // prevent the schedule itself from syncing to the signed-in account.
     try {
       if ('Notification' in window && Notification.permission === 'default') await Notification.requestPermission();
-      await window.prayerBridge?.intercessionReminders?.({ timeZone: next.timeZone, schedule: next.days });
+    } catch (error) {
+      console.info('Prayer reminder notification permission was unavailable.', error);
+    }
+    try {
+      const syncReminders = window.prayerBridge?.intercessionReminders;
+      if (typeof syncReminders !== 'function') throw new Error('Reminder sync is unavailable. Reload the app and try again.');
+      await syncReminders({ timeZone: next.timeZone, schedule: next.days });
       setReminderMessage('Reminders saved for your weekly rhythm.');
     } catch (error) {
+      console.warn('Could not sync prayer reminders.', error);
       setReminderMessage(error?.status === 401 ? 'Saved on this device. Sign in to sync across devices.' : 'Saved on this device. We could not sync it yet.');
     } finally {
       setReminderSaving(false);

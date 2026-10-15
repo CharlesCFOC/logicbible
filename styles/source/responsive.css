@@ -649,11 +649,82 @@ html body .app-shell .phone-frame:has(:is(#home, #profile).is-active) .page-top-
   background: transparent !important;
 }
 
+/* Bring the Bible reading controls closer to the top of the reader. */
+html body .app-shell .phone-frame:has(#bible.is-active) .page-top-spacer {
+  flex-basis: 12px;
+  height: 12px;
+}
+
+html body .app-shell .phone-frame #bible .parallel-controls {
+  margin-top: -7px;
+  padding-top: 0;
+}
+
+@media (max-width: 680px) {
+  html body .app-shell .phone-frame #bible .reader-topbar {
+    padding-top: 14px;
+    padding-bottom: 4px;
+  }
+
+  html body .app-shell .phone-frame #bible .parallel-controls {
+    margin-top: -27px;
+  }
+}
+
 html body .app-shell .phone-frame #home > .home-hero {
   top: calc(16px + var(--page-top-space, 32px));
 }
 
 /* Bible selectors match the dark blue inactive category pills in Profile. */
+html body .app-shell .phone-frame #bible .reader-topbar > .bible-glass-search {
+  position: relative;
+  flex: 0 0 46px;
+  width: 46px;
+  height: 46px;
+  min-height: 46px;
+  padding: 0;
+  overflow: hidden;
+  border: 0 !important;
+  border-radius: 50%;
+  color: #ffffff !important;
+  background: linear-gradient(110deg, #4fc3ff 0%, #8bdcff 24%, #ff9d00 50%, #ffb6dc 76%, #4fc3ff 100%) !important;
+  background-image: linear-gradient(110deg, #4fc3ff 0%, #8bdcff 24%, #ff9d00 50%, #ffb6dc 76%, #4fc3ff 100%) !important;
+  background-size: 280% 100% !important;
+  background-position: 0% 50%;
+  box-shadow: 0 5px 16px rgba(79, 195, 255, .24), 0 4px 14px rgba(255, 157, 0, .2) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  isolation: isolate;
+}
+
+html body .app-shell .phone-frame #bible .reader-topbar > .bible-glass-search::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0 auto 0 0;
+  width: 280%;
+  border-radius: inherit;
+  background: linear-gradient(110deg, #4fc3ff 0%, #8bdcff 24%, #ff9d00 50%, #ffb6dc 76%, #4fc3ff 100%);
+  content: "";
+  pointer-events: none;
+  transform: translateX(0);
+  animation: homeNavColorSweep 3.4s ease-in-out infinite !important;
+  animation-duration: 3.4s !important;
+}
+
+html body .app-shell .phone-frame #bible .reader-topbar > .bible-glass-search svg {
+  position: relative;
+  z-index: 1;
+  width: 21px;
+  height: 21px;
+  color: #ffffff !important;
+}
+
+html body .app-shell .phone-frame #bible .reader-topbar > .bible-glass-search:hover,
+html body .app-shell .phone-frame #bible .reader-topbar > .bible-glass-search:focus-visible {
+  filter: brightness(1.08) saturate(1.08);
+  transform: translateY(-1px);
+}
+
 html body .app-shell .phone-frame #bible .reader-topbar > .reader-select-label.bible-glass-select {
   position: relative;
   isolation: isolate;

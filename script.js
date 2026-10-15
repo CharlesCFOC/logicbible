@@ -7209,7 +7209,22 @@ refreshIcons();
   const studyCache = new Map();
   let studyController;
   let studyRequestId = 0;
+  let studyProgressTimer;
+  let studyProgress;
+  function stopStudyProgress() {
+    clearInterval(studyProgressTimer);
+    studyProgressTimer = undefined;
+    studyProgress = undefined;
+    toolPanel.setAttribute('aria-busy', 'false');
+  }
+  function updateStudyProgress(percent) {
+    if (!studyProgress) return;
+    studyProgress.meter.setAttribute('aria-valuenow', String(percent));
+    studyProgress.fill.style.width = `${percent}%`;
+    studyProgress.value.textContent = `${percent}%`;
+  }
   function displayStudyStatus(message, retry = false) {
+    stopStudyProgress();
     toolPanel.replaceChildren();
     const status = document.createElement('p');
     status.className = 'bible-study-status';
@@ -7227,6 +7242,25 @@ refreshIcons();
       status.textContent = message;
     }
     toolPanel.append(status);
+    if (status.classList.contains('is-loading')) {
+      toolPanel.setAttribute('aria-busy', 'true');
+      const progress = document.createElement('div');
+      progress.className = 'bible-study-progress';
+      progress.innerHTML = '<div class="bible-study-progress-caption"><span>Estimated progress</span><span class="bible-study-progress-value" aria-hidden="true">1%</span></div><div class="bible-study-progress-track" role="progressbar" aria-label="Study preparation — estimated progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="1"><span class="bible-study-progress-fill"></span></div>';
+      toolPanel.append(progress);
+      studyProgress = {
+        meter: progress.querySelector('[role="progressbar"]'),
+        fill: progress.querySelector('.bible-study-progress-fill'),
+        value: progress.querySelector('.bible-study-progress-value'),
+      };
+      const startedAt = performance.now();
+      updateStudyProgress(1);
+      // The API has no measurable progress; reserve completion for a successful response.
+      studyProgressTimer = setInterval(() => {
+        const elapsed = performance.now() - startedAt;
+        updateStudyProgress(Math.min(95, Math.floor(1 + 95 * (1 - Math.exp(-elapsed / 20000)))));
+      }, 300);
+    }
     if (retry) {
       const button = document.createElement('button');
       button.className = 'bible-study-retry';
@@ -7239,134 +7273,134 @@ refreshIcons();
       toolPanel.append(button);
     }
   }
-  function displayStudyResult(result, tabName) {
-    const study = result.study;
-    if (!study) {
-      toolPanel.innerHTML = `<div class="bible-study-result"><p class="bible-study-reference">${escapeHtml(result.reference)}</p><div class="bible-study-copy">${renderRichText(result.text)}</div><p class="bible-study-disclaimer">AI-generated study notes. Verify historical details with trusted sources.</p></div>`;
+  let studyView, disposeStudyView;
+  const studyViewReady = import('./scripts/bible-study-view.js?v=2');
+  const studyHelpersReady = import('./scripts/bible-study-tools.js?v=2');
+  function displayStudyResult(result, tabName, snapshot = window.bibleReaderBridge.getChapterSnapshot()) {
+    stopStudyProgress();
+    disposeStudyView?.();
+    if (!result.study) {
+      toolPanel.innerHTML = `<div class="bible-study-result"><p class="bible-study-reference">${escapeHtml(result.reference)}</p><div class="bible-study-copy">${renderRichText(result.text)}</div><p class="bible-study-disclaimer">AI-generated study notes · historical details can be uncertain.</p></div>`;
       return;
     }
-    const visualNames = {
-      biblical: "MAP OF THE BOOK",
-      historical: "TIME TRAIL",
-      summary: "CHAPTER STORY",
-      veracity: "EVIDENCE FILE",
-      manuscripts: "MANUSCRIPT TRAIL",
-    };
-    const steps = Array.isArray(study.steps) ? study.steps : [];
-    const cards = Array.isArray(study.cards) ? study.cards : [];
-    const stepMarkup = steps.map((step, index) => `
-      <article class="study-step">
-        <span class="study-step-index">${String(index + 1).padStart(2, "0")}</span>
-        <div class="study-step-copy">
-          <span class="study-step-label">${escapeHtml(step.label || "Study point")}</span>
-          <h3>${escapeHtml(step.title || "")}</h3>
-          ${step.reference ? `<span class="study-step-reference">${escapeHtml(step.reference)}</span>` : ""}
-          <p>${escapeHtml(step.detail || "")}</p>
-        </div>
-      </article>`).join("");
-    const cardMarkup = cards.map((card, index) => {
-      const sources = Array.isArray(card.sources) ? card.sources.slice(0, 2) : [];
-      const searchQuery = String(card.researchQuery || [card.title, card.reference, result.reference].filter(Boolean).join(" ")).trim();
-      const manuscript = card.manuscript && typeof card.manuscript === "object" ? card.manuscript : {};
-      const manuscriptMarkup = tabName === "manuscripts" ? `
-        <dl class="study-manuscript-details">
-          ${[["Witness", manuscript.witness], ["Copy date", manuscript.dateRange], ["Held at", manuscript.location], ["Discovered", manuscript.discovered], ["Findspot / provenance", manuscript.discovery], ["Chapter text preserved", manuscript.coverage]].filter(([, value]) => value).map(([label, value]) => `<div><dt>${label}</dt><dd>${escapeHtml(value)}</dd></div>`).join("")}
-        </dl>` : "";
-      const sourceMarkup = ["veracity", "manuscripts"].includes(tabName) ? `
-        <div class="study-source-trails">
-          <span class="study-source-heading">${sources.length ? (tabName === "manuscripts" ? "CATALOGUES & RESEARCH" : "GO DEEPER") : (tabName === "manuscripts" ? "TRACE THIS WITNESS" : "RESEARCH THIS CLAIM")}</span>
-          ${sources.map(source => {
-            const title = String(source.title || "Source").trim();
-            const query = [source.author, title].filter(Boolean).join(" ");
-            const href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-            return `<a class="study-source-link" href="${href}" target="_blank" rel="noopener noreferrer"><span><strong>${escapeHtml(title)}</strong>${source.author ? `<small>${escapeHtml(source.author)}${source.kind ? ` · ${escapeHtml(source.kind)}` : ""}</small>` : ""}${source.why ? `<small>${escapeHtml(source.why)}</small>` : ""}</span><span aria-hidden="true">↗</span></a>`;
-          }).join("")}
-          ${searchQuery ? `<a class="study-source-search" href="https://www.google.com/search?q=${encodeURIComponent(searchQuery)}" target="_blank" rel="noopener noreferrer">${tabName === "manuscripts" ? "Search manuscript catalogues on Google" : "Search this claim on Google"} <span aria-hidden="true">↗</span></a>` : ""}
-        </div>` : "";
-      return `
-      <article class="study-insight-card study-insight-card--${tabName}" style="--insight-index:${index}">
-        <div class="study-insight-topline"><span>${escapeHtml(card.label || "Insight")}</span>${card.status ? `<span class="study-evidence-status">${escapeHtml(card.status)}</span>` : ""}</div>
-        <h3>${escapeHtml(card.title || "")}</h3>
-        <p>${escapeHtml(card.detail || "")}</p>
-        ${manuscriptMarkup}
-        ${card.reference ? `<span class="study-step-reference">${escapeHtml(card.reference)}</span>` : ""}
-        ${sourceMarkup}
-      </article>`;
-    }).join("");
-    const challenge = study.challenge || {};
-    const choices = Array.isArray(challenge.choices) ? challenge.choices.slice(0, 3) : [];
-    const challengeMarkup = tabName !== "manuscripts" && challenge.question && choices.length === 3 ? `
-      <details class="bible-study-challenge">
-        <summary><span class="study-challenge-spark">✦</span><span>Quick check</span><span class="study-challenge-hint">Tap to test your reading</span></summary>
-        <div class="study-challenge-content">
-          <p>${escapeHtml(challenge.question)}</p>
-          <div class="study-challenge-choices">${choices.map((choice, index) => `<button type="button" data-study-choice="${index}">${escapeHtml(choice)}</button>`).join("")}</div>
-          <p class="study-challenge-feedback" data-study-feedback aria-live="polite"></p>
-        </div>
-      </details>` : "";
-    const layoutClass = tabName === "biblical" ? "study-steps--map"
-      : tabName === "historical" ? "study-steps--timeline"
-        : tabName === "summary" ? "study-steps--story"
-          : tabName === "manuscripts" ? "study-steps--evidence"
-            : "study-steps--evidence";
-    toolPanel.innerHTML = `
-      <div class="bible-study-result bible-study-result--${escapeHtml(tabName)}">
-        <header class="bible-study-hero">
-          <div class="study-mode-row"><span class="study-mode-glyph" aria-hidden="true">${tabName === "biblical" ? "⌘" : tabName === "historical" ? "◷" : tabName === "summary" ? "▶" : tabName === "manuscripts" ? "▤" : "✳"}</span><span>${visualNames[tabName] || "CHAPTER STUDY"}</span><span class="study-reference-chip">${escapeHtml(result.reference)}</span></div>
-          <h2>${escapeHtml(study.headline)}</h2>
-          <p>${escapeHtml(study.intro)}</p>
-        </header>
-        ${stepMarkup ? `<div class="study-steps ${layoutClass}">${stepMarkup}</div>` : ""}
-        ${cardMarkup ? `<div class="study-insight-grid">${cardMarkup}</div>` : ""}
-        ${challengeMarkup}
-        <p class="bible-study-disclaimer">AI-generated study notes · historical details can be uncertain.</p>
-      </div>`;
-    const feedback = toolPanel.querySelector("[data-study-feedback]");
-    toolPanel.querySelectorAll("[data-study-choice]").forEach(button => button.addEventListener("click", () => {
-      const isCorrect = Number(button.dataset.studyChoice) === Number(challenge.correctIndex);
-      feedback.textContent = isCorrect ? challenge.explanation : "Look again at the chapter and try another answer.";
-      feedback.classList.toggle("is-correct", isCorrect);
-      if (isCorrect) toolPanel.querySelectorAll("[data-study-choice]").forEach(choice => { choice.disabled = true; });
-    }));
+    const draftKey = `${snapshot.versionId}.${snapshot.bookId}.${snapshot.chapter}.${tabName}`;
+    disposeStudyView = studyView.mountStudyView({
+      panel: toolPanel, result, tabName, snapshot, formatText: renderRichText,
+      async loadPassage(reference, signal) {
+        if (reference.bookId === snapshot.bookId && reference.chapter === snapshot.chapter) {
+          return { verses: snapshot.quizSource.verses, version: snapshot.versionName };
+        }
+        const local = LOCAL_BIBLE[snapshot.versionId]?.[`${reference.bookId}.${reference.chapter}`];
+        if (local?.verses?.length) return { verses: local.verses, version: snapshot.versionName };
+        const selectedVersion = getVersion(snapshot.versionId);
+        const version = selectedVersion.source === 'local' ? getRemoteFallbackVersion(selectedVersion.id) : selectedVersion;
+        if (!version) throw new Error('This chapter is not available in the selected translation.');
+        const params = new URLSearchParams({ bibleId: version.id, bookId: reference.bookId, chapter: String(reference.chapter) });
+        const response = await fetch(apiUrl(`/api/bible/chapter?${params}`), { signal });
+        const payload = await response.json();
+        if (!response.ok) throw new Error(payload.error || 'The passage could not be loaded.');
+        const chapter = normalizeApiChapter(payload.data, version);
+        return { verses: chapter.verses, version: chapter.versionName || version.name };
+      },
+      async ask({item,question,previous,signal}) {
+        if (containsPersonalContactInfo(question)) throw new Error('Please leave email addresses and phone numbers out of your message.');
+        const response = await fetch(apiUrl('/api/ai/verse'), {
+          method: 'POST', headers: {'Content-Type':'application/json'}, signal,
+          body: JSON.stringify({
+            reference: result.reference, version: snapshot.versionName, audience: 'teen',
+            text: snapshot.quizSource.verses.map(verse=>`[${verse.number}] ${verse.text}`).join('\n'),
+            question: `Bible Study section: ${tabName}. Card: ${item.title}. Study note (unverified): ${item.detail || ''} ${item.deeper || ''}\n${previous ? `Previous answer: ${previous.slice(0,2500)}\n` : ''}User question: ${question}\nAnswer in English, stay connected to this chapter, distinguish the passage from interpretation, and do not treat the study note as an established fact.`,
+          }),
+        });
+        const payload = await response.json();
+        if(!response.ok) throw new Error(payload.error || 'Brother AI could not answer. Please try again.');
+        return payload.text || 'No answer was returned. Please try again.';
+      },
+      readReflection(tab, draft) {
+        const drafts = readJson('brother.studyReflectionDrafts', {});
+        if (draft) { drafts[draftKey] = draft; localStorage.setItem('brother.studyReflectionDrafts',JSON.stringify(drafts)); }
+        if(drafts[draftKey]) return drafts[draftKey];
+        const first = snapshot.verses[0] || (snapshot.quizSource.verses[0] ? getBibleVerseSnapshot(snapshot.quizSource.verses[0]) : null);
+        return savedState.notes[first?.key]?.studyReflections?.[tab] || {};
+      },
+      async saveReflection({tab,question,answer}) {
+        const helpers = await studyHelpersReady;
+        const first = snapshot.verses[0] || (snapshot.quizSource.verses[0] ? getBibleVerseSnapshot(snapshot.quizSource.verses[0]) : null);
+        if(!first) throw new Error('The chapter has no verse to attach this reflection to.');
+        const existing = savedState.notes[first.key] || {};
+        const merged = helpers.mergeStudyReflection(existing,{tab,question,answer,reference:result.reference});
+        const group = existing.noteGroupId ? Object.values(savedState.notes).filter(note=>note.noteGroupId===existing.noteGroupId) : [{...first,...existing}];
+        const groupId = existing.noteGroupId || `study-note-${Date.now()}`;
+        for (const item of group) {
+          savedState.notes[item.key] = {...item,...merged,noteTitle:item.noteTitle || `Reflection · ${result.reference}`,noteGroupId:groupId,updatedAt:new Date().toISOString()};
+        }
+        writeJson('brother.notes',savedState.notes);
+        refreshProfilePanel();
+        document.dispatchEvent(new CustomEvent('home:library-data-change',{detail:{tab:'notes'}}));
+        document.dispatchEvent(new CustomEvent('bible:reader-change'));
+        syncPendingState().catch(error=>console.warn('Reflection sync will retry:',error.message));
+      },
+    });
   }
   async function loadToolTab(tab, force = false) {
     if (!tab || !toolPanel || !window.bibleReaderBridge) return;
+    studyController?.abort();
+    stopStudyProgress();
+    const requestId = ++studyRequestId;
+    disposeStudyView?.();
+    try { studyView = await studyViewReady; } catch { displayStudyStatus('The study tools could not load. Please reload the page.', true); return; }
+    if (requestId !== studyRequestId) return;
     const snapshot = window.bibleReaderBridge.getChapterSnapshot();
     const source = snapshot.quizSource;
     const cacheKey = `${snapshot.bookId}.${snapshot.chapter}.${snapshot.versionId}.${tab.dataset.bibleToolTab}`;
     if (!force && studyCache.has(cacheKey)) {
-      displayStudyResult(studyCache.get(cacheKey), tab.dataset.bibleToolTab);
+      displayStudyResult(studyCache.get(cacheKey), tab.dataset.bibleToolTab, snapshot);
       return;
     }
     if (snapshot.status !== 'ready' || !source?.verses?.length) {
       displayStudyStatus('The active chapter is still loading. Try again in a moment.', true);
       return;
     }
-    studyController?.abort();
     const controller = new AbortController();
     studyController = controller;
-    const requestId = ++studyRequestId;
-    displayStudyStatus(`Preparing ${source.reference}…`);
+    toolPanel.replaceChildren();
+    toolPanel.setAttribute('aria-busy', 'true');
     try {
-      const response = await fetch(apiUrl('/api/bible/study'), {
+      const requestBody = {
+        tab: tab.dataset.bibleToolTab,
+        book: snapshot.bookName,
+        chapter: snapshot.chapter,
+        version: source.version,
+        language: 'eng',
+        verses: source.verses,
+      };
+      const fetchStudy = (cacheOnly) => fetch(apiUrl('/api/bible/study'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          tab: tab.dataset.bibleToolTab,
-          book: snapshot.bookName,
-          chapter: snapshot.chapter,
-          version: source.version,
-          language: snapshot.versionLanguage,
-          verses: source.verses,
-        }),
+        body: JSON.stringify({ ...requestBody, cacheOnly }),
         signal: controller.signal,
       });
-      const payload = await response.json().catch(() => ({}));
+      let response = await fetchStudy(true);
+      let payload = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(payload.error || 'The chapter study could not be loaded.');
+      if (payload.cached === false && !payload.study) {
+        if (requestId !== studyRequestId || controller.signal.aborted) return;
+        displayStudyStatus(`Preparing ${source.reference} for the study`);
+        response = await fetchStudy(false);
+        payload = await response.json().catch(() => ({}));
+      }
       if (!response.ok) throw new Error(payload.error || 'The chapter study could not be loaded.');
       const result = { reference: payload.reference || source.reference, study: payload.study || null, text: payload.text || '' };
       studyCache.set(cacheKey, result);
       if (requestId === studyRequestId && layer.classList.contains('is-open') && tab.getAttribute('aria-selected') === 'true') {
-        displayStudyResult(result, tab.dataset.bibleToolTab);
+        if (studyProgress) {
+          clearInterval(studyProgressTimer);
+          updateStudyProgress(100);
+          await new Promise(resolve => setTimeout(resolve, 200));
+        }
+        if (requestId === studyRequestId && layer.classList.contains('is-open') && tab.getAttribute('aria-selected') === 'true') {
+          displayStudyResult(result, tab.dataset.bibleToolTab, snapshot);
+        }
       }
     } catch (error) {
       if (error.name !== 'AbortError' && requestId === studyRequestId && layer.classList.contains('is-open')) {
@@ -7377,23 +7411,37 @@ refreshIcons();
   function close(restoreFocus = true) {
     if (!layer.classList.contains('is-open')) return;
     studyController?.abort();
+    disposeStudyView?.();
+    stopStudyProgress();
     layer.classList.remove('is-open');
     layer.setAttribute('aria-hidden', 'true');
     layer.inert = true;
     document.querySelectorAll('[data-bible-menu-toggle]').forEach(button => button.setAttribute('aria-expanded', 'false'));
     if (restoreFocus && lastFocus?.isConnected) lastFocus.focus();
   }
+  function resetToolSelection() {
+    studyController?.abort();
+    stopStudyProgress();
+    studyController = undefined;
+    studyRequestId += 1;
+    toolTabs.forEach(tab => {
+      tab.setAttribute('aria-selected', 'false');
+      tab.tabIndex = 0;
+    });
+    toolPanel.removeAttribute('aria-labelledby');
+    toolPanel.innerHTML = '<p class="bible-study-empty">Choose a study tab to explore this chapter.</p>';
+  }
   document.addEventListener('click', event => {
     const toggle = event.target.closest('[data-bible-menu-toggle]');
     if (!toggle) return;
     closeHomeMenu({ restoreFocus: false });
+    resetToolSelection();
     lastFocus = toggle;
     layer.classList.add('is-open');
     layer.setAttribute('aria-hidden', 'false');
     layer.inert = false;
     toggle.setAttribute('aria-expanded', 'true');
     drawer.querySelector('[data-bible-menu-close]')?.focus();
-    loadToolTab(toolTabs.find(item => item.getAttribute('aria-selected') === 'true'));
   });
   layer.querySelectorAll('[data-bible-menu-close]').forEach(button => button.addEventListener('click', () => close()));
   function selectToolTab(tab) {
@@ -7418,13 +7466,15 @@ refreshIcons();
   });
   document.addEventListener('keydown', event => {
     if (!layer.classList.contains('is-open')) return;
+    if (drawer.querySelector('dialog[open]')) return;
     if (event.key === 'Escape') { event.preventDefault(); close(); return; }
     if (event.key !== 'Tab') return;
-    const controls = [...drawer.querySelectorAll('a[href], button:not([disabled]), input:not([disabled])')].filter(element => !element.hidden);
+    const controls = [...drawer.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), textarea, summary, select')].filter(element => element.getClientRects().length && !element.closest('dialog:not([open])'));
     const first = controls[0], last = controls.at(-1);
     if (!first) { event.preventDefault(); drawer.focus(); return; }
     if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
     else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
   });
   window.addEventListener('app:screen-change', () => close(false));
+  document.addEventListener('bible:chapter-change', () => close(false));
 })();
