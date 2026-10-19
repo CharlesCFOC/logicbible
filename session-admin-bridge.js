@@ -18,6 +18,9 @@ window.churchBridge = {
   async startOpenSessionActivity(accessCode, adminPassword, activityIndex) {
     return this.sessionRequest("activity", { accessCode, adminPassword, activityIndex });
   },
+  async highlightOpenSessionText(accessCode, adminPassword, text, mode = "passage") {
+    return this.sessionRequest("highlight", { accessCode, adminPassword, text, mode });
+  },
   async endOpenSession(accessCode, adminPassword) {
     return this.sessionRequest("end", { accessCode, adminPassword });
   },

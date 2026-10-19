@@ -907,7 +907,7 @@ function withinRateLimit(store, key, limit, windowMs) {
 
 function publicSession(row) {
   const activity = row?.projection_activity;
-  return row ? { id: row.id, name: row.name, accessCode: row.access_code, scheduledAt: row.scheduled_at, status: row.status, startedAt: row.started_at, projectionSlides: row.projection_slides || [], projectionIndex: row.projection_index || 0, projectionUpdatedAt: row.projection_updated_at || null, projectionMedia: row.projection_media || [], projectionActivity: activity ? { index: activity.index, instance: activity.instance, kind: activity.kind, prompt: activity.prompt, options: activity.options } : null } : null;
+  return row ? { id: row.id, name: row.name, accessCode: row.access_code, scheduledAt: row.scheduled_at, status: row.status, startedAt: row.started_at, projectionSlides: row.projection_slides || [], projectionIndex: row.projection_index || 0, projectionUpdatedAt: row.projection_updated_at || null, projectionMedia: row.projection_media || [], projectionActivity: activity ? { index: activity.index, instance: activity.instance, kind: activity.kind, prompt: activity.prompt, options: activity.options, text: activity.text, mode: activity.mode } : null } : null;
 }
 
 async function adminSessionPayload(admin, row) {
@@ -971,14 +971,14 @@ async function handleSessionCreate(req, res) {
   const fileExtension = ({ "application/pdf": "pdf", "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp" })[mimeType];
   const sourceDocumentPath = `${randomUUID()}.${fileExtension}`;
   const sourceText = String(courseContent.sourceText || "");
-  const slides = Array.isArray(courseContent.slides) ? courseContent.slides.map(value => String(value)).filter(value => value.trim()) : [];
   if (!sourceText.trim()) { sendJson(res, 400, { error: "Ajoutez le texte extrait du cours avant de publier." }); return; }
-  if (sourceText.length > 60_000 || slides.length > 6 || slides.some(slide => slide.length > 2_000)) {
-    sendJson(res, 400, { error: "Le cours ou ses diapositives dépassent les limites autorisées." }); return;
+  if (sourceText.length > 60_000) {
+    sendJson(res, 400, { error: "Le texte extrait dépasse la limite autorisée de 60 000 caractères." }); return;
   }
   const sourceSlides = splitCourseText(sourceText);
-  const allSlides = [...sourceSlides, ...slides];
-  if (allSlides.length > 40) { sendJson(res, 400, { error: "Le cours est trop long pour une session de 40 diapositives maximum." }); return; }
+  const allSlides = sourceSlides;
+  if (allSlides.length > 40) { sendJson(res, 400, { error: "Le cours est trop long pour une session de 40 passages maximum." }); return; }
+  courseContent.activities = Array.isArray(courseContent.activities) ? courseContent.activities : [];
   courseContent.activities = Array.isArray(courseContent.activities) ? courseContent.activities.slice(0, 8).map(activity => {
     const options = Array.isArray(activity?.options) ? activity.options.slice(0, 6).map(option => String(option).slice(0, 300)) : [];
     const correctIndex = Number.isInteger(activity?.correctIndex) ? activity.correctIndex : 0;
@@ -987,6 +987,7 @@ async function handleSessionCreate(req, res) {
       prompt: String(activity?.prompt || "").slice(0, 800), options,
       correctIndex: Math.max(0, Math.min(Math.max(0, options.length - 1), correctIndex)),
       explanation: String(activity?.explanation || "").slice(0, 500),
+      afterPage: Math.max(0, Math.min(sourceSlides.length - 1, Number.isInteger(Number(activity?.afterPage)) ? Number(activity.afterPage) : 0)),
     };
   }).filter(activity => activity.prompt && activity.options.length >= 2) : [];
   const projectionMedia = Array.isArray(courseContent.imageIdeas) ? courseContent.imageIdeas.slice(0, 12).map(idea => {
@@ -994,7 +995,7 @@ async function handleSessionCreate(req, res) {
     try { const parsed = new URL(String(idea?.url || "").slice(0, 2000)); if (parsed.protocol === "https:") url = parsed.toString(); } catch { /* Ignore invalid image URLs. */ }
     return { slideIndex: Math.max(0, Number(idea?.afterSection) || 0), url, alt: String(idea?.alt || idea?.query || "Illustration").slice(0, 240) };
   }).filter(idea => idea.url) : [];
-  courseContent.slides = slides;
+  courseContent.slides = [];
   courseContent.sourceSlideCount = sourceSlides.length;
   const admin = getSupabaseAdminClient();
   const { error: uploadError } = await admin.storage.from("bible-session-courses")
@@ -1038,9 +1039,8 @@ async function handleSessionPrepare(req, res) {
   const prompt = [
     "Analyse le document joint pour préparer une session d’étude biblique.",
     "Transcris d’abord son texte fidèlement dans sourceText. Ne corrige pas, ne résume pas et ne réécris pas le texte; conserve les titres, la ponctuation, les listes et l’ordre de lecture. Si un passage est illisible, insère [illisible] à son emplacement. Si le document contient des pages, conserve leur ordre.",
-    "À partir de cette transcription, propose uniquement des slides complémentaires, des activités et des idées d’images web. Le texte source sera lui-même projeté mot pour mot, dans son ordre original; aucune slide complémentaire ne doit remplacer ni reformuler ce texte. Chaque activité doit être vérifiable à partir du texte fourni. Les types proposés peuvent être multiple_choice, true_false, event_order ou matching. N’invente pas des citations bibliques. Les réponses correctes doivent être fondées sur le texte.",
-    "Retourne uniquement un objet JSON de cette forme : {\"sourceText\":\"transcription complète\",\"slides\":[\"slide complémentaire clairement distincte du cours original\"],\"activities\":[{\"kind\":\"multiple_choice\",\"prompt\":\"question\",\"options\":[\"...\",\"...\"],\"correctIndex\":0,\"explanation\":\"...\"}],\"imageIdeas\":[{\"query\":\"mots de recherche d’une image web\",\"afterSection\":0,\"alt\":\"description\"}]}.",
-    "Propose au maximum 6 slides complémentaires, 8 activités et 6 idées d’images. N’inclus pas de liens d’image inventés.",
+    "À partir de cette transcription, propose seulement des jeux et challenges courts qui s’insèrent après un passage précis du texte. Le texte original reste le contenu principal, projeté dans son ordre exact; ne le résume pas et ne crée aucune diapositive de remplacement. Chaque activité doit être vérifiable à partir du texte. Les types proposés peuvent être multiple_choice, true_false, event_order ou matching. N’invente pas des citations bibliques.",
+    "Retourne uniquement un objet JSON de cette forme : {\"sourceText\":\"transcription complète\",\"activities\":[{\"kind\":\"multiple_choice\",\"prompt\":\"question\",\"options\":[\"...\",\"...\"],\"correctIndex\":0,\"explanation\":\"...\",\"afterPage\":0}]}. afterPage indique le numéro de passage du texte après lequel placer l’activité, en commençant à 0. Propose au maximum 8 activités; retourne une liste vide si le document ne s’y prête pas.",
   ].join(" ");
   const input = [{ role: "user", content: [
     { type: "input_text", text: `Nom du fichier : ${fileName}. ${prompt}` },
@@ -1054,22 +1054,13 @@ async function handleSessionPrepare(req, res) {
   const sourceText = String(content.sourceText || "");
   if (!sourceText.trim()) { sendJson(res, 502, { error: "Aucun texte lisible n’a été extrait du document." }); return; }
   if (sourceText.length > 60_000) { sendJson(res, 413, { error: "Le texte extrait dépasse 60 000 caractères. Réduisez le document et importez-le en plusieurs parties." }); return; }
-  const slides = Array.isArray(content.slides) ? content.slides.slice(0, 6).map(item => String(item).slice(0, 2_000)) : [];
+  res.setHeader("Cache-Control", "no-store");
+  const sourcePages = splitCourseText(sourceText);
   const activities = Array.isArray(content.activities) ? content.activities.slice(0, 8).map(item => {
     const options = Array.isArray(item?.options) ? item.options.slice(0, 6).map(option => String(option).slice(0, 300)) : [];
-    const correctIndex = Number.isInteger(item?.correctIndex) ? item.correctIndex : 0;
-    return {
-      kind: ["multiple_choice", "true_false", "event_order", "matching", "verse_challenge"].includes(item?.kind) ? item.kind : "multiple_choice",
-      prompt: String(item?.prompt || "").slice(0, 800), options,
-      correctIndex: Math.max(0, Math.min(Math.max(0, options.length - 1), correctIndex)),
-      explanation: String(item?.explanation || "").slice(0, 500),
-    };
+    return { kind: ["multiple_choice", "true_false", "event_order", "matching"].includes(item?.kind) ? item.kind : "multiple_choice", prompt: String(item?.prompt || "").slice(0, 800), options, correctIndex: Math.max(0, Math.min(Math.max(0, options.length - 1), Number.isInteger(item?.correctIndex) ? item.correctIndex : 0)), explanation: String(item?.explanation || "").slice(0, 500), afterPage: Math.max(0, Math.min(sourcePages.length - 1, Number.isInteger(item?.afterPage) ? item.afterPage : 0)) };
   }).filter(item => item.prompt && item.options.length >= 2) : [];
-  const imageIdeas = Array.isArray(content.imageIdeas) ? content.imageIdeas.slice(0, 6).map(item => ({
-    query: String(item?.query || "").slice(0, 240), afterSection: Math.max(0, Number(item?.afterSection) || 0), alt: String(item?.alt || "").slice(0, 240),
-  })).filter(item => item.query) : [];
-  res.setHeader("Cache-Control", "no-store");
-  sendJson(res, 200, { courseContent: { sourceText, slides, activities, imageIdeas }, sourceDocumentName: fileName, reviewRequired: true });
+  sendJson(res, 200, { courseContent: { sourceText, slides: [], activities, imageIdeas: [] }, sourceDocumentName: fileName, reviewRequired: true });
 }
 
 async function handleSessionLookup(req, res) {
@@ -1128,6 +1119,18 @@ async function handleSessionAdmin(req, res, action) {
     sendJson(res, 200, await adminSessionPayload(admin, updated));
     return;
   }
+  if (action === "highlight") {
+    if (row.status !== "live") { sendJson(res, 409, { error: "Démarrez la session avant de projeter un passage." }); return; }
+    const text = String(body.text || "").trim().slice(0, 1200);
+    const mode = body.mode === "word" ? "word" : "passage";
+    if (!text) { sendJson(res, 400, { error: "Sélectionnez un mot ou un passage dans le cours." }); return; }
+    const { data: updated, error: highlightError } = await admin.from("bible_sessions").update({ projection_activity: { instance: randomUUID(), kind: "highlight", mode, text } }).eq("id", row.id)
+      .select("id, name, access_code, scheduled_at, status, started_at, projection_slides, projection_index, projection_updated_at, projection_media, projection_activity, course_content, source_document_name, source_document_path").single();
+    if (highlightError) throwSessionDatabaseError(highlightError);
+    res.setHeader("Cache-Control", "no-store");
+    sendJson(res, 200, await adminSessionPayload(admin, updated));
+    return;
+  }
   if (action === "control") {
     if (row.status !== "live") { sendJson(res, 409, { error: "Démarrez la session avant de piloter la projection." }); return; }
     const slides = Array.isArray(body.slides) ? body.slides.map(value => String(value)).filter(value => value.trim()) : null;
@@ -1173,7 +1176,7 @@ async function handleSessionAnswer(req, res) {
     .select("status, projection_activity").eq("access_code", code).maybeSingle();
   if (error) throwSessionDatabaseError(error);
   const activity = row?.projection_activity;
-  if (row?.status !== "live" || !activity) { sendJson(res, 409, { error: "Aucune activité n’est ouverte." }); return; }
+  if (row?.status !== "live" || !activity || activity.kind === "highlight" || !Array.isArray(activity.options)) { sendJson(res, 409, { error: "Aucune activité n’est ouverte." }); return; }
   if (String(body.activityInstance || "") !== activity.instance) { sendJson(res, 409, { error: "Cette activité vient de changer. Actualisez l’écran et répondez à nouveau." }); return; }
   if (answer >= activity.options.length) { sendJson(res, 400, { error: "Cette réponse n’est pas disponible." }); return; }
   res.setHeader("Cache-Control", "no-store");
@@ -1634,6 +1637,10 @@ async function requestHandler(req, res) {
     }
     if (req.url.split("?")[0] === "/api/sessions/activity") {
       await handleSessionAdmin(req, res, "activity");
+      return;
+    }
+    if (req.url.split("?")[0] === "/api/sessions/highlight") {
+      await handleSessionAdmin(req, res, "highlight");
       return;
     }
     if (req.url.split("?")[0] === "/api/sessions/answer") {

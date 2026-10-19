@@ -1302,6 +1302,7 @@ window.churchBridge = {
   async startOpenSession(accessCode, adminPassword) { return this.sessionRequest("start", { accessCode, adminPassword }); },
   async controlOpenSession(accessCode, adminPassword, slides, index) { return this.sessionRequest("control", { accessCode, adminPassword, slides, index }); },
   async startOpenSessionActivity(accessCode, adminPassword, activityIndex) { return this.sessionRequest("activity", { accessCode, adminPassword, activityIndex }); },
+  async highlightOpenSessionText(accessCode, adminPassword, text, mode = "passage") { return this.sessionRequest("highlight", { accessCode, adminPassword, text, mode }); },
   async answerOpenSessionActivity(accessCode, answer, activityInstance) {
     const response = await fetch(apiUrl("/api/sessions/answer"), { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ accessCode, answer, activityInstance }) });
     const result = await response.json().catch(() => ({}));

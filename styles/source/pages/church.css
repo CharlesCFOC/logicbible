@@ -107,8 +107,25 @@
 .projection-step { margin: 0; color: #ccd6c6; font-size: clamp(12px, 1.5vw, 18px); font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
 .projection-content > strong { max-width: 900px; color: #f7f1e5; font: 500 clamp(26px, 5vw, 58px)/1.3 var(--font-display); }
 .projection-content > strong.projection-slide-text { max-width: 1200px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.projection-content > strong.projection-highlight-word { max-width: 1200px; padding: .08em .24em; border-radius: .2em; color: #17271d; background: #f2d37c; font-size: clamp(48px, 12vw, 144px); }
 .projection-slide-image { display: block; width: min(100%, 960px); max-height: 48vh; object-fit: contain; border-radius: 18px; }
 .church-course-review { display: grid; gap: 12px; }
+.church-course-book-preview, .church-course-book { display: grid; gap: 14px; }
+.church-course-book-preview { margin-top: 8px; padding: 14px; border-radius: 18px; background: var(--bg-soft); }
+.church-course-book-preview > span, .church-reader-activity > span { color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .1em; }
+.church-course-book-page { display: grid; gap: 12px; padding: clamp(18px, 4vw, 34px); border: 1px solid var(--line); border-radius: 16px; background: #fffdf8; box-shadow: 0 8px 22px rgba(32,28,23,.06); }
+.church-course-book-page > small { color: var(--muted); font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.church-course-book-page > p { margin: 0; color: #2b2925; font: 400 clamp(17px, 2vw, 21px)/1.75 Georgia, "Times New Roman", serif; white-space: pre-wrap; overflow-wrap: anywhere; user-select: text; }
+.church-course-book-page > .church-reader-line { cursor: pointer; border-radius: 5px; transition: background .16s ease; }
+.church-course-book-page > .church-reader-line:hover, .church-course-book-page > .church-reader-line:focus-visible { outline: none; background: #f1ecdf; }
+.church-reader-page-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.church-reader-page-heading button, .church-reader-selection button, .church-reader-activity button { min-height: 42px; padding: 8px 14px; border-radius: 12px; color: #fff; background: #315e43; font-size: 13px; font-weight: 800; }
+.church-reader-selection { position: sticky; z-index: 2; top: 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 12px; border: 1px solid var(--line); border-radius: 14px; background: #fffdf8; box-shadow: 0 8px 20px rgba(32,28,23,.1); }
+.church-reader-selection p { flex: 1 1 100%; margin: 0; font: 400 16px/1.5 Georgia, "Times New Roman", serif; }
+.church-reader-activity { display: grid; gap: 8px; padding-top: 14px; border-top: 1px solid var(--line); }
+.church-reader-activity strong { font-size: 15px; }
+.church-current-projection { display: grid; gap: 8px; }
+.church-current-projection p { margin: 0; font: 400 19px/1.6 Georgia, "Times New Roman", serif; }
 .church-course-review h3 { margin: 12px 0 0; }
 .church-course-review textarea { width: 100%; }
 .church-course-activity { display: grid; gap: 8px; padding: 14px; border: 1px solid var(--line); border-radius: 16px; }
