@@ -1044,7 +1044,9 @@ async function handleSessionPrepare(req, res) {
   ].join(" ");
   const input = [{ role: "user", content: [
     { type: "input_text", text: `Nom du fichier : ${fileName}. ${prompt}` },
-    { type: "input_file", filename: fileName.replace(/[^\w.-]/g, "_").slice(0, 100), file_data: `data:${mimeType};base64,${data}` },
+    mimeType === "application/pdf"
+      ? { type: "input_file", filename: fileName.replace(/[^\w.-]/g, "_").slice(0, 100), file_data: `data:${mimeType};base64,${data}` }
+      : { type: "input_image", image_url: `data:${mimeType};base64,${data}`, detail: "high" },
   ] }];
   const { text: output, incomplete } = await openAiResponse({ instructions: prompt, input, maxOutputTokens: 9000, jsonMode: true });
   if (incomplete) { sendJson(res, 502, { error: "Le document est trop long pour être analysé en une fois. Réduisez-le ou importez-le en plusieurs parties." }); return; }
@@ -1241,7 +1243,9 @@ async function handleChurchStudyAi(req, res, mode) {
     prompt = `Transcris fidèlement ce support de cours biblique, puis organise son contenu dans le JSON demandé. Conserve les formulations et commentaires du pasteur comme source originale, n’invente pas de contenu manquant, et marque chaque ajout éventuel de ta part source=proposition_ia. Sépare titres, points, références et progression. Les questions sont des propositions IA clairement identifiables, avec réponses vérifiables. Ne transforme jamais un verset cité et ne fabrique pas de citation. Si un passage est illisible, indique-le dans le texte. Durée visée: ${study.duration_minutes} minutes. Format: ${schemaHint}`;
     input = [{ role: "user", content: [
       { type: "input_text", text: `Fichier: ${String(fileName || "support").slice(0, 180)}. ${prompt}` },
-      { type: "input_file", filename: String(fileName || "support").replace(/[^\w.-]/g, "_").slice(0, 100), file_data: `data:${mimeType};base64,${data}` },
+      mimeType === "application/pdf"
+        ? { type: "input_file", filename: String(fileName || "support").replace(/[^\w.-]/g, "_").slice(0, 100), file_data: `data:${mimeType};base64,${data}` }
+        : { type: "input_image", image_url: `data:${mimeType};base64,${data}`, detail: "high" },
     ] }];
   } else if (mode === "generate") {
     const theme = String(body.theme || study.theme || "").trim().slice(0, 500);
