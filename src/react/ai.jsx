@@ -32,7 +32,7 @@ export function AiComposer({ value, onChange, onSubmit, placeholder, ariaLabel, 
     textarea.style.height = "auto";
     const maxHeight = 180;
     textarea.style.height = `${Math.min(textarea.scrollHeight, maxHeight)}px`;
-    textarea.style.overflowY = textarea.scrollHeight > maxHeight ? "auto" : "hidden";
+    textarea.style.overflowY = "hidden";
   };
 
   useEffect(() => {

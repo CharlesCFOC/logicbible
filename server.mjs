@@ -9,7 +9,7 @@ import { readPrayerVoteSummary, savePrayerVote } from "./lib/prayer/intercession
 import { readIntercessionReminders, readIntercessionStats, saveIntercessionReminders, saveIntercessionSession } from "./lib/prayer/intercession-sessions.js";
 import { cancelPrayer } from "./lib/supabase/prayer-cancel.js";
 import { findSearchTopic, literalSearchQuery, searchTopics } from "./lib/bible/search.js";
-import { createHash } from "node:crypto";
+import { createHash, randomBytes, randomUUID, scryptSync, timingSafeEqual } from "node:crypto";
 import { generateChapterQuiz, validateQuizSource } from "./lib/bible/chapter-quiz.js";
 import { limitStudySections } from "./scripts/bible-study-tools.js";
 
@@ -50,6 +50,10 @@ let originalLanguageCache = null;
 let doctrineLibraryCache = null;
 const chapterQuizCache = new Map();
 const bibleStudyCache = new Map();
+const churchAiLastUse = new Map();
+const sessionCreateAttempts = new Map();
+const sessionAdminAttempts = new Map();
+const sessionAnswerAttempts = new Map();
 const BIBLE_STUDY_PROMPT_VERSION = 2;
 
 await loadEnv(".env.local");
@@ -132,11 +136,11 @@ function getAiSafetyInstructions(audience = "adult") {
   return shared.join(" ");
 }
 
-async function readJsonBody(req) {
+async function readJsonBody(req, maxBytes = 64_000) {
   let body = "";
   for await (const chunk of req) {
     body += chunk;
-    if (body.length > 64_000) {
+    if (body.length > maxBytes) {
       const error = new Error("Request body is too large.");
       error.status = 413;
       throw error;
@@ -865,6 +869,410 @@ async function handleIntercessionJournal(req, res) {
   sendJson(res, 200, { themeId, lines, serverTime: Date.now() });
 }
 
+async function handleChurchProjection(req, res) {
+  if (req.method !== "GET") {
+    sendJson(res, 405, { error: "Use GET." });
+    return;
+  }
+  const token = new URL(req.url, "http://localhost").searchParams.get("token") || "";
+  if (!/^[0-9a-f-]{36}$/i.test(token)) {
+    sendJson(res, 400, { error: "Projection link is invalid." });
+    return;
+  }
+  const { data, error } = await getSupabaseAdminClient()
+    .from("church_live_sessions")
+    .select("state, status, expires_at")
+    .eq("projection_token", token)
+    .eq("status", "active")
+    .gt("expires_at", new Date().toISOString())
+    .maybeSingle();
+  if (error) throw error;
+  res.setHeader("Cache-Control", "no-store");
+  sendJson(res, 200, data ? { state: data.state, status: data.status, expiresAt: data.expires_at } : null);
+}
+
+function sessionClientIp(req) {
+  return String(req.headers["x-forwarded-for"] || req.socket.remoteAddress || "unknown").split(",")[0].trim();
+}
+
+function withinRateLimit(store, key, limit, windowMs) {
+  const now = Date.now();
+  const attempts = (store.get(key) || []).filter(at => now - at < windowMs);
+  if (attempts.length >= limit) { store.set(key, attempts); return false; }
+  attempts.push(now);
+  store.set(key, attempts);
+  if (store.size > 5000) for (const [entry, times] of store) if (!times.some(at => now - at < windowMs)) store.delete(entry);
+  return true;
+}
+
+function publicSession(row) {
+  const activity = row?.projection_activity;
+  return row ? { id: row.id, name: row.name, accessCode: row.access_code, scheduledAt: row.scheduled_at, status: row.status, startedAt: row.started_at, projectionSlides: row.projection_slides || [], projectionIndex: row.projection_index || 0, projectionUpdatedAt: row.projection_updated_at || null, projectionMedia: row.projection_media || [], projectionActivity: activity ? { index: activity.index, instance: activity.instance, kind: activity.kind, prompt: activity.prompt, options: activity.options } : null } : null;
+}
+
+async function adminSessionPayload(admin, row) {
+  let sourceDocumentUrl = "";
+  if (row?.source_document_path) {
+    try {
+      const { data } = await admin.storage.from("bible-session-courses").createSignedUrl(row.source_document_path, 3600);
+      sourceDocumentUrl = data?.signedUrl || "";
+    } catch { /* The session remains available if the private source link cannot be signed. */ }
+  }
+  return { ...publicSession(row), courseContent: row?.course_content || {}, sourceDocumentName: row?.source_document_name || "", sourceDocumentUrl };
+}
+
+function splitCourseText(text, maxLength = 1800) {
+  const slides = [];
+  let start = 0;
+  while (start < text.length) {
+    let end = Math.min(start + maxLength, text.length);
+    if (end < text.length) {
+      const boundary = Math.max(text.lastIndexOf("\n", end), text.lastIndexOf(" ", end));
+      if (boundary > start + Math.floor(maxLength / 2)) end = boundary + 1;
+    }
+    slides.push(text.slice(start, end));
+    start = end;
+  }
+  return slides;
+}
+
+function throwSessionDatabaseError(error) {
+  if (error?.code === "PGRST205" || error?.code === "42P01" || error?.code === "42703") {
+    const unavailable = new Error("Le schéma des sessions n’est pas à jour dans Supabase. Appliquez les migrations bible_sessions_without_churches, bible_session_projection_controls et bible_session_course_content au projet de l’application.");
+    unavailable.status = 503;
+    throw unavailable;
+  }
+  throw error;
+}
+
+async function handleSessionCreate(req, res) {
+  if (req.method !== "POST") { sendJson(res, 405, { error: "Méthode non autorisée." }); return; }
+  if (!withinRateLimit(sessionCreateAttempts, sessionClientIp(req), 5, 60 * 60 * 1000)) { sendJson(res, 429, { error: "Trop de créations depuis cet appareil. Réessayez plus tard." }); return; }
+  const body = await readJsonBody(req, 4_000_000);
+  const name = String(body.name || "").trim().replace(/\s+/g, " ");
+  const password = String(body.adminPassword || "");
+  if (name.length < 2 || name.length > 120) { sendJson(res, 400, { error: "Le nom doit contenir de 2 à 120 caractères." }); return; }
+  if (password.length < 8 || password.length > 128) { sendJson(res, 400, { error: "Le mot de passe administrateur doit contenir au moins 8 caractères." }); return; }
+  let scheduledAt = null;
+  if (body.scheduledAt) {
+    const date = new Date(body.scheduledAt);
+    if (!Number.isFinite(date.getTime())) { sendJson(res, 400, { error: "Date de programmation invalide." }); return; }
+    if (date.getTime() <= Date.now()) { sendJson(res, 400, { error: "Choisissez une date future ou laissez ce champ vide pour une session sans horaire." }); return; }
+    scheduledAt = date.toISOString();
+  }
+  const courseContent = body.courseContent && typeof body.courseContent === "object" ? body.courseContent : {};
+  const fileName = String(body.sourceDocumentName || "cours").slice(0, 180);
+  const mimeType = String(body.sourceDocumentMimeType || "");
+  const fileData = String(body.sourceDocumentData || "");
+  const allowedCourseTypes = new Set(["application/pdf", "image/jpeg", "image/png", "image/webp"]);
+  if (!allowedCourseTypes.has(mimeType) || !fileData.length || fileData.length > 3_500_000 || !/^[A-Za-z0-9+/]+={0,2}$/.test(fileData)) {
+    sendJson(res, 400, { error: "Le document source a expiré. Réimportez-le avant de publier." }); return;
+  }
+  const fileExtension = ({ "application/pdf": "pdf", "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp" })[mimeType];
+  const sourceDocumentPath = `${randomUUID()}.${fileExtension}`;
+  const sourceText = String(courseContent.sourceText || "");
+  const slides = Array.isArray(courseContent.slides) ? courseContent.slides.map(value => String(value)).filter(value => value.trim()) : [];
+  if (!sourceText.trim()) { sendJson(res, 400, { error: "Ajoutez le texte extrait du cours avant de publier." }); return; }
+  if (sourceText.length > 60_000 || slides.length > 6 || slides.some(slide => slide.length > 2_000)) {
+    sendJson(res, 400, { error: "Le cours ou ses diapositives dépassent les limites autorisées." }); return;
+  }
+  const sourceSlides = splitCourseText(sourceText);
+  const allSlides = [...sourceSlides, ...slides];
+  if (allSlides.length > 40) { sendJson(res, 400, { error: "Le cours est trop long pour une session de 40 diapositives maximum." }); return; }
+  courseContent.activities = Array.isArray(courseContent.activities) ? courseContent.activities.slice(0, 8).map(activity => {
+    const options = Array.isArray(activity?.options) ? activity.options.slice(0, 6).map(option => String(option).slice(0, 300)) : [];
+    const correctIndex = Number.isInteger(activity?.correctIndex) ? activity.correctIndex : 0;
+    return {
+      kind: ["multiple_choice", "true_false", "event_order", "matching", "verse_challenge"].includes(activity?.kind) ? activity.kind : "multiple_choice",
+      prompt: String(activity?.prompt || "").slice(0, 800), options,
+      correctIndex: Math.max(0, Math.min(Math.max(0, options.length - 1), correctIndex)),
+      explanation: String(activity?.explanation || "").slice(0, 500),
+    };
+  }).filter(activity => activity.prompt && activity.options.length >= 2) : [];
+  const projectionMedia = Array.isArray(courseContent.imageIdeas) ? courseContent.imageIdeas.slice(0, 12).map(idea => {
+    let url = "";
+    try { const parsed = new URL(String(idea?.url || "").slice(0, 2000)); if (parsed.protocol === "https:") url = parsed.toString(); } catch { /* Ignore invalid image URLs. */ }
+    return { slideIndex: Math.max(0, Number(idea?.afterSection) || 0), url, alt: String(idea?.alt || idea?.query || "Illustration").slice(0, 240) };
+  }).filter(idea => idea.url) : [];
+  courseContent.slides = slides;
+  courseContent.sourceSlideCount = sourceSlides.length;
+  const admin = getSupabaseAdminClient();
+  const { error: uploadError } = await admin.storage.from("bible-session-courses")
+    .upload(sourceDocumentPath, Buffer.from(fileData, "base64"), { contentType: mimeType, upsert: false, cacheControl: "3600" });
+  if (uploadError) throw uploadError;
+  let row;
+  let error;
+  for (let tries = 0; tries < 5; tries++) {
+    const accessCode = String(randomBytes(4).readUInt32BE(0) % 100_000_000).padStart(8, "0");
+    const salt = randomBytes(16).toString("hex");
+    const passwordHash = scryptSync(password, salt, 64).toString("hex");
+    const result = await admin.from("bible_sessions").insert({ name, access_code: accessCode, admin_password_salt: salt, admin_password_hash: passwordHash, scheduled_at: scheduledAt, course_content: courseContent, source_document_name: fileName.slice(0, 240) || null, source_document_path: sourceDocumentPath, projection_slides: allSlides, projection_index: 0, projection_media: projectionMedia, projection_activity: null }).select("id, name, access_code, scheduled_at, status, started_at, projection_slides, projection_index, projection_media").single();
+    row = result.data; error = result.error;
+    if (!error) break;
+    if (error.code === "PGRST205" || error.code === "42P01" || error.code === "42703") {
+      await admin.storage.from("bible-session-courses").remove([sourceDocumentPath]);
+      throwSessionDatabaseError(error);
+    }
+    if (error.code !== "23505") {
+      await admin.storage.from("bible-session-courses").remove([sourceDocumentPath]);
+      throw error;
+    }
+  }
+  if (error) { await admin.storage.from("bible-session-courses").remove([sourceDocumentPath]); throw error; }
+  res.setHeader("Cache-Control", "no-store");
+  sendJson(res, 201, publicSession(row));
+}
+
+async function handleSessionPrepare(req, res) {
+  if (req.method !== "POST") { sendJson(res, 405, { error: "Méthode non autorisée." }); return; }
+  const ip = sessionClientIp(req);
+  if (!withinRateLimit(sessionCreateAttempts, `prepare:${ip}`, 5, 60 * 60 * 1000)) { sendJson(res, 429, { error: "Trop d’analyses depuis cet appareil. Réessayez plus tard." }); return; }
+  const body = await readJsonBody(req, 3_800_000);
+  const fileName = String(body.fileName || "support").slice(0, 180);
+  const mimeType = String(body.mimeType || "");
+  const data = String(body.data || "");
+  const allowed = new Set(["application/pdf", "image/jpeg", "image/png", "image/webp"]);
+  if (!allowed.has(mimeType) || !data.length || data.length > 3_500_000 || !/^[A-Za-z0-9+/]+={0,2}$/.test(data)) {
+    sendJson(res, 400, { error: "Formats acceptés : PDF, JPEG, PNG ou WebP (2,5 Mo maximum)." }); return;
+  }
+  const prompt = [
+    "Analyse le document joint pour préparer une session d’étude biblique.",
+    "Transcris d’abord son texte fidèlement dans sourceText. Ne corrige pas, ne résume pas et ne réécris pas le texte; conserve les titres, la ponctuation, les listes et l’ordre de lecture. Si un passage est illisible, insère [illisible] à son emplacement. Si le document contient des pages, conserve leur ordre.",
+    "À partir de cette transcription, propose uniquement des slides complémentaires, des activités et des idées d’images web. Le texte source sera lui-même projeté mot pour mot, dans son ordre original; aucune slide complémentaire ne doit remplacer ni reformuler ce texte. Chaque activité doit être vérifiable à partir du texte fourni. Les types proposés peuvent être multiple_choice, true_false, event_order ou matching. N’invente pas des citations bibliques. Les réponses correctes doivent être fondées sur le texte.",
+    "Retourne uniquement un objet JSON de cette forme : {\"sourceText\":\"transcription complète\",\"slides\":[\"slide complémentaire clairement distincte du cours original\"],\"activities\":[{\"kind\":\"multiple_choice\",\"prompt\":\"question\",\"options\":[\"...\",\"...\"],\"correctIndex\":0,\"explanation\":\"...\"}],\"imageIdeas\":[{\"query\":\"mots de recherche d’une image web\",\"afterSection\":0,\"alt\":\"description\"}]}.",
+    "Propose au maximum 6 slides complémentaires, 8 activités et 6 idées d’images. N’inclus pas de liens d’image inventés.",
+  ].join(" ");
+  const input = [{ role: "user", content: [
+    { type: "input_text", text: `Nom du fichier : ${fileName}. ${prompt}` },
+    { type: "input_file", filename: fileName.replace(/[^\w.-]/g, "_").slice(0, 100), file_data: `data:${mimeType};base64,${data}` },
+  ] }];
+  const { text: output, incomplete } = await openAiResponse({ instructions: prompt, input, maxOutputTokens: 9000, jsonMode: true });
+  if (incomplete) { sendJson(res, 502, { error: "Le document est trop long pour être analysé en une fois. Réduisez-le ou importez-le en plusieurs parties." }); return; }
+  const content = parseAiJson(output);
+  const sourceText = String(content.sourceText || "");
+  if (!sourceText.trim()) { sendJson(res, 502, { error: "Aucun texte lisible n’a été extrait du document." }); return; }
+  if (sourceText.length > 60_000) { sendJson(res, 413, { error: "Le texte extrait dépasse 60 000 caractères. Réduisez le document et importez-le en plusieurs parties." }); return; }
+  const slides = Array.isArray(content.slides) ? content.slides.slice(0, 6).map(item => String(item).slice(0, 2_000)) : [];
+  const activities = Array.isArray(content.activities) ? content.activities.slice(0, 8).map(item => {
+    const options = Array.isArray(item?.options) ? item.options.slice(0, 6).map(option => String(option).slice(0, 300)) : [];
+    const correctIndex = Number.isInteger(item?.correctIndex) ? item.correctIndex : 0;
+    return {
+      kind: ["multiple_choice", "true_false", "event_order", "matching", "verse_challenge"].includes(item?.kind) ? item.kind : "multiple_choice",
+      prompt: String(item?.prompt || "").slice(0, 800), options,
+      correctIndex: Math.max(0, Math.min(Math.max(0, options.length - 1), correctIndex)),
+      explanation: String(item?.explanation || "").slice(0, 500),
+    };
+  }).filter(item => item.prompt && item.options.length >= 2) : [];
+  const imageIdeas = Array.isArray(content.imageIdeas) ? content.imageIdeas.slice(0, 6).map(item => ({
+    query: String(item?.query || "").slice(0, 240), afterSection: Math.max(0, Number(item?.afterSection) || 0), alt: String(item?.alt || "").slice(0, 240),
+  })).filter(item => item.query) : [];
+  res.setHeader("Cache-Control", "no-store");
+  sendJson(res, 200, { courseContent: { sourceText, slides, activities, imageIdeas }, sourceDocumentName: fileName, reviewRequired: true });
+}
+
+async function handleSessionLookup(req, res) {
+  if (req.method !== "POST") { sendJson(res, 405, { error: "Méthode non autorisée." }); return; }
+  const body = await readJsonBody(req, 2000);
+  const code = String(body.accessCode || "").replace(/\D/g, "");
+  if (!/^\d{8}$/.test(code)) { sendJson(res, 400, { error: "Entrez le code public à 8 chiffres." }); return; }
+  const { data, error } = await getSupabaseAdminClient().from("bible_sessions").select("id, name, access_code, scheduled_at, status, started_at").eq("access_code", code).maybeSingle();
+  if (error) throwSessionDatabaseError(error);
+  res.setHeader("Cache-Control", "no-store");
+  sendJson(res, data ? 200 : 404, data ? publicSession(data) : { error: "Aucune session ne correspond à ce code." });
+}
+
+async function handleActiveSessions(req, res) {
+  if (req.method !== "GET") { sendJson(res, 405, { error: "Méthode non autorisée." }); return; }
+  const { data, error } = await getSupabaseAdminClient().from("bible_sessions")
+    .select("name, access_code, started_at")
+    .eq("status", "live")
+    .order("started_at", { ascending: false })
+    .limit(50);
+  if (error) throwSessionDatabaseError(error);
+  res.setHeader("Cache-Control", "no-store");
+  sendJson(res, 200, { sessions: (data || []).map(row => ({ name: row.name, accessCode: row.access_code, startedAt: row.started_at })) });
+}
+
+async function handleSessionAdmin(req, res, action) {
+  if (req.method !== "POST") { sendJson(res, 405, { error: "Méthode non autorisée." }); return; }
+  const body = await readJsonBody(req, 120_000);
+  const code = String(body.accessCode || "").replace(/\D/g, "");
+  const attemptKey = `${sessionClientIp(req)}:${code}`;
+  if (!withinRateLimit(sessionAdminAttempts, attemptKey, 8, 15 * 60 * 1000)) { sendJson(res, 429, { error: "Trop d’essais. Réessayez dans 15 minutes." }); return; }
+  if (!/^\d{8}$/.test(code) || typeof body.adminPassword !== "string") { sendJson(res, 400, { error: "Code ou mot de passe invalide." }); return; }
+  const admin = getSupabaseAdminClient();
+  let { data: row, error } = await admin.from("bible_sessions").select("id, name, access_code, admin_password_salt, admin_password_hash, scheduled_at, status, started_at, projection_slides, projection_index, projection_updated_at, projection_media, projection_activity, course_content, source_document_name, source_document_path").eq("access_code", code).maybeSingle();
+  if (error?.code === "42703" && action !== "control") {
+    ({ data: row, error } = await admin.from("bible_sessions").select("id, name, access_code, admin_password_salt, admin_password_hash, scheduled_at, status, started_at").eq("access_code", code).maybeSingle());
+  }
+  if (error) throwSessionDatabaseError(error);
+  if (!row) { sendJson(res, 404, { error: "Session introuvable." }); return; }
+  const supplied = scryptSync(body.adminPassword, row.admin_password_salt, 64);
+  const expected = Buffer.from(row.admin_password_hash, "hex");
+  if (expected.length !== supplied.length || !timingSafeEqual(expected, supplied)) { sendJson(res, 403, { error: "Mot de passe administrateur incorrect." }); return; }
+  sessionAdminAttempts.delete(attemptKey);
+  if (action === "activity") {
+    if (row.status !== "live") { sendJson(res, 409, { error: "Démarrez la session avant de lancer une activité." }); return; }
+    const activityIndex = body.activityIndex === null ? null : Number(body.activityIndex);
+    const source = Number.isInteger(activityIndex) && activityIndex !== null ? row.course_content?.activities?.[activityIndex] : null;
+    if (activityIndex !== null && (!source || !source.prompt || !Array.isArray(source.options) || source.options.length < 2)) {
+      sendJson(res, 400, { error: "Cette activité n’est pas disponible." }); return;
+    }
+    const activeActivity = source ? { index: activityIndex, instance: randomUUID(), kind: source.kind, prompt: source.prompt, options: source.options, correctIndex: source.correctIndex, explanation: source.explanation } : null;
+    const { data: updated, error: activityError } = await admin.from("bible_sessions").update({ projection_activity: activeActivity }).eq("id", row.id)
+      .select("id, name, access_code, scheduled_at, status, started_at, projection_slides, projection_index, projection_updated_at, projection_media, projection_activity, course_content, source_document_name, source_document_path").single();
+    if (activityError) throwSessionDatabaseError(activityError);
+    res.setHeader("Cache-Control", "no-store");
+    sendJson(res, 200, await adminSessionPayload(admin, updated));
+    return;
+  }
+  if (action === "control") {
+    if (row.status !== "live") { sendJson(res, 409, { error: "Démarrez la session avant de piloter la projection." }); return; }
+    const slides = Array.isArray(body.slides) ? body.slides.map(value => String(value)).filter(value => value.trim()) : null;
+    const index = Number(body.index);
+    if (!slides || slides.length > 40 || slides.some(slide => slide.length > 2000) || !Number.isInteger(index) || index < 0 || index >= slides.length) {
+      sendJson(res, 400, { error: "Ajoutez de 1 à 40 diapositives (2 000 caractères maximum chacune) et choisissez une diapositive valide." }); return;
+    }
+    const { data: updated, error: updateError } = await admin.from("bible_sessions").update({ projection_slides: slides, projection_index: index, projection_updated_at: new Date().toISOString(), projection_activity: null }).eq("id", row.id).select("id, name, access_code, scheduled_at, status, started_at, projection_slides, projection_index, projection_updated_at, projection_media, projection_activity, course_content, source_document_name, source_document_path").single();
+    if (updateError) throwSessionDatabaseError(updateError);
+    res.setHeader("Cache-Control", "no-store");
+    sendJson(res, 200, await adminSessionPayload(admin, { ...updated, course_content: updated.course_content || row.course_content, source_document_name: updated.source_document_name || row.source_document_name, source_document_path: updated.source_document_path || row.source_document_path }));
+    return;
+  }
+  if (action === "start" && row.status === "ended") { sendJson(res, 409, { error: "Cette session est déjà terminée." }); return; }
+  const changes = action === "start" ? { status: "live", started_at: row.started_at || new Date().toISOString() } : { status: "ended", ended_at: new Date().toISOString() };
+  const { data: updated, error: updateError } = await admin.from("bible_sessions").update({ ...changes, ...(action === "end" ? { projection_activity: null } : {}) }).eq("id", row.id).select("id, name, access_code, scheduled_at, status, started_at, projection_slides, projection_index, projection_updated_at, projection_media, projection_activity, course_content, source_document_name, source_document_path").single();
+  if (updateError) throwSessionDatabaseError(updateError);
+  res.setHeader("Cache-Control", "no-store");
+  sendJson(res, 200, await adminSessionPayload(admin, { ...updated, course_content: updated.course_content || row.course_content, source_document_name: updated.source_document_name || row.source_document_name, source_document_path: updated.source_document_path || row.source_document_path }));
+}
+
+async function handleSessionStatus(req, res) {
+  if (req.method !== "GET") { sendJson(res, 405, { error: "Méthode non autorisée." }); return; }
+  const code = new URL(req.url, "http://localhost").searchParams.get("code") || "";
+  if (!/^\d{8}$/.test(code)) { sendJson(res, 400, { error: "Code de session invalide." }); return; }
+  const admin = getSupabaseAdminClient();
+  let { data, error } = await admin.from("bible_sessions").select("id, name, access_code, scheduled_at, status, started_at, projection_slides, projection_index, projection_updated_at, projection_media, projection_activity").eq("access_code", code).maybeSingle();
+  if (error?.code === "42703") ({ data, error } = await admin.from("bible_sessions").select("id, name, access_code, scheduled_at, status, started_at").eq("access_code", code).maybeSingle());
+  if (error) throwSessionDatabaseError(error);
+  res.setHeader("Cache-Control", "no-store");
+  sendJson(res, data ? 200 : 404, data ? publicSession(data) : null);
+}
+
+async function handleSessionAnswer(req, res) {
+  if (req.method !== "POST") { sendJson(res, 405, { error: "Méthode non autorisée." }); return; }
+  const body = await readJsonBody(req, 2000);
+  const code = String(body.accessCode || "").replace(/\D/g, "");
+  const answer = Number(body.answer);
+  if (!/^\d{8}$/.test(code) || !Number.isInteger(answer) || answer < 0 || answer > 5) { sendJson(res, 400, { error: "Réponse invalide." }); return; }
+  const attemptKey = `${sessionClientIp(req)}:${code}`;
+  if (!withinRateLimit(sessionAnswerAttempts, attemptKey, 30, 60_000)) { sendJson(res, 429, { error: "Attendez un instant avant de réessayer." }); return; }
+  const { data: row, error } = await getSupabaseAdminClient().from("bible_sessions")
+    .select("status, projection_activity").eq("access_code", code).maybeSingle();
+  if (error) throwSessionDatabaseError(error);
+  const activity = row?.projection_activity;
+  if (row?.status !== "live" || !activity) { sendJson(res, 409, { error: "Aucune activité n’est ouverte." }); return; }
+  if (String(body.activityInstance || "") !== activity.instance) { sendJson(res, 409, { error: "Cette activité vient de changer. Actualisez l’écran et répondez à nouveau." }); return; }
+  if (answer >= activity.options.length) { sendJson(res, 400, { error: "Cette réponse n’est pas disponible." }); return; }
+  res.setHeader("Cache-Control", "no-store");
+  sendJson(res, 200, { correct: answer === activity.correctIndex, explanation: String(activity.explanation || "") });
+}
+
+function requireChurchAuth(req) {
+  const token = String(req.headers.authorization || "").replace(/^Bearer\s+/i, "").trim();
+  if (!token) {
+    const error = new Error("Connectez-vous pour continuer.");
+    error.status = 401;
+    throw error;
+  }
+  return getSupabaseServerClient().auth.getUser(token).then(({ data, error: authError }) => {
+    if (authError || !data.user) {
+      const error = new Error("Votre session a expiré. Reconnectez-vous.");
+      error.status = 401;
+      throw error;
+    }
+    return { user: data.user, token };
+  });
+}
+
+async function requireChurchStudyAccess(req, studyId, { canManage = false } = {}) {
+  if (!/^[0-9a-f-]{36}$/i.test(String(studyId || ""))) {
+    const error = new Error("Étude introuvable."); error.status = 400; throw error;
+  }
+  const { user, token } = await requireChurchAuth(req);
+  const admin = getSupabaseAdminClient();
+  const { data: study, error: studyError } = await admin.from("church_studies")
+    .select("id, church_id, title, theme, duration_minutes, status, content")
+    .eq("id", studyId).maybeSingle();
+  if (studyError) throw studyError;
+  if (!study) { const error = new Error("Étude introuvable."); error.status = 404; throw error; }
+  const { data: membership, error: membershipError } = await admin.from("church_memberships")
+    .select("role, status").eq("church_id", study.church_id).eq("user_id", user.id).eq("status", "active").maybeSingle();
+  if (membershipError) throw membershipError;
+  if (!membership || (canManage && !["manager", "teacher"].includes(membership.role))) {
+    const error = new Error("Vous n’avez pas accès à cette étude."); error.status = 403; throw error;
+  }
+  return { admin, user, token, study, membership };
+}
+
+function parseAiJson(text) {
+  try { return JSON.parse(text); }
+  catch {
+    const error = new Error("La réponse de l’IA est invalide. Réessayez."); error.status = 502; throw error;
+  }
+}
+
+async function handleChurchStudyAi(req, res, mode) {
+  if (req.method !== "POST") { sendJson(res, 405, { error: "Use POST." }); return; }
+  const body = await readJsonBody(req, mode === "import" ? 3_800_000 : 64_000);
+  const { admin, user, study } = await requireChurchStudyAccess(req, body.studyId, { canManage: mode !== "translate" });
+  const lastAiUse = churchAiLastUse.get(user.id) || 0;
+  if (Date.now() - lastAiUse < 8_000) { sendJson(res, 429, { error: "Attendez quelques secondes avant une nouvelle demande IA." }); return; }
+  churchAiLastUse.set(user.id, Date.now());
+  if (study.status !== "draft") { sendJson(res, 409, { error: "Seul un brouillon peut être modifié." }); return; }
+  let prompt, input;
+  const schemaHint = '{"title":"…","theme":"…","sections":[{"text":"…","references":["Jn 3:16"],"source":"original|proposition_ia"}],"questions":[{"prompt":"…","options":["…","…"],"correctIndex":0,"explanation":"…"}]}';
+  if (mode === "import") {
+    const { fileName, mimeType, data } = body;
+    const allowed = new Set(["application/pdf", "image/jpeg", "image/png", "image/webp"]);
+    if (!allowed.has(mimeType) || typeof data !== "string" || data.length > 3_500_000 || !/^[A-Za-z0-9+/]+={0,2}$/.test(data)) {
+      sendJson(res, 400, { error: "Importez un PDF ou une image de 2,5 Mo maximum." }); return;
+    }
+    prompt = `Transcris fidèlement ce support de cours biblique, puis organise son contenu dans le JSON demandé. Conserve les formulations et commentaires du pasteur comme source originale, n’invente pas de contenu manquant, et marque chaque ajout éventuel de ta part source=proposition_ia. Sépare titres, points, références et progression. Les questions sont des propositions IA clairement identifiables, avec réponses vérifiables. Ne transforme jamais un verset cité et ne fabrique pas de citation. Si un passage est illisible, indique-le dans le texte. Durée visée: ${study.duration_minutes} minutes. Format: ${schemaHint}`;
+    input = [{ role: "user", content: [
+      { type: "input_text", text: `Fichier: ${String(fileName || "support").slice(0, 180)}. ${prompt}` },
+      { type: "input_file", filename: String(fileName || "support").replace(/[^\w.-]/g, "_").slice(0, 100), file_data: `data:${mimeType};base64,${data}` },
+    ] }];
+  } else if (mode === "generate") {
+    const theme = String(body.theme || study.theme || "").trim().slice(0, 500);
+    if (theme.length < 3) { sendJson(res, 400, { error: "Saisissez un thème d’au moins trois caractères." }); return; }
+    prompt = `Crée une étude biblique pédagogique et fidèle aux textes, pour ${study.duration_minutes} minutes, sur le thème: ${theme}. Ne cite pas de longs textes bibliques et ne prétends pas reproduire une traduction biblique sous licence. Donne des références vérifiables, indique le contexte, propose 4 à 6 séquences et 2 questions de quiz avec corrections et explications. Toute interprétation ou activité générée doit porter source=proposition_ia. Format: ${schemaHint}`;
+    input = prompt;
+  } else {
+    const language = String(body.language || "").trim().slice(0, 60);
+    if (!language) { sendJson(res, 400, { error: "Choisissez une langue." }); return; }
+    if (study.status === "draft") { sendJson(res, 403, { error: "La traduction est disponible après publication." }); return; }
+    const { data: cached, error: cacheError } = await admin.from("church_study_translations")
+      .select("translated_content").eq("study_id", study.id).eq("locale", language).maybeSingle();
+    if (cacheError) throw cacheError;
+    if (cached) { sendJson(res, 200, { content: cached.translated_content, cached: true, verseNotice: "Les références bibliques sont conservées. Les citations de versets ne sont pas remplacées par une traduction IA." }); return; }
+    prompt = `Traduis le contenu d’enseignement en ${language}. Préserve exactement les références bibliques, indices de bonnes réponses et nombres. Ne traduis pas les citations bibliques elles-mêmes et n’invente pas de texte biblique; conserve les références et ajoute un avis que la traduction biblique officielle doit être obtenue dans une édition autorisée. Retourne uniquement un objet JSON de même structure, sans autre texte.`;
+    const { data: activityRows, error: activityError } = await admin.from("church_study_activities")
+      .select("id, kind, prompt, options, explanation").eq("study_id", study.id).order("position");
+    if (activityError) throw activityError;
+    input = JSON.stringify({ ...study.content, activities: activityRows || [] });
+  }
+  const { text: output } = await openAiResponse({ instructions: prompt, input, maxOutputTokens: mode === "import" ? 2600 : 1800, jsonMode: true });
+  const content = parseAiJson(output);
+  if (mode === "translate") {
+    const locale = String(body.language).trim().slice(0, 60);
+    const { error } = await admin.from("church_study_translations").upsert({ study_id: study.id, locale, translated_content: content, updated_by: user.id }, { onConflict: "study_id,locale" });
+    if (error) throw error;
+    sendJson(res, 200, { content, cached: false, verseNotice: "Les références bibliques sont conservées. Utilisez une édition autorisée pour lire le verset dans cette langue." }); return;
+  }
+  sendJson(res, 200, { content, generated: true });
+}
+
 async function handleIntercessionVotes(req, res) {
   if (!["GET", "POST"].includes(req.method)) {
     sendJson(res, 405, { error: "Use GET or POST." });
@@ -1196,6 +1604,47 @@ async function requestHandler(req, res) {
       return;
     }
 
+    if (req.url.split("?")[0] === "/api/sessions/create") {
+      await handleSessionCreate(req, res);
+      return;
+    }
+    if (req.url.split("?")[0] === "/api/sessions/prepare") {
+      await handleSessionPrepare(req, res);
+      return;
+    }
+    if (req.url.split("?")[0] === "/api/sessions/lookup") {
+      await handleSessionLookup(req, res);
+      return;
+    }
+    if (req.url.split("?")[0] === "/api/sessions/active") {
+      await handleActiveSessions(req, res);
+      return;
+    }
+    if (req.url.split("?")[0] === "/api/sessions/start") {
+      await handleSessionAdmin(req, res, "start");
+      return;
+    }
+    if (req.url.split("?")[0] === "/api/sessions/control") {
+      await handleSessionAdmin(req, res, "control");
+      return;
+    }
+    if (req.url.split("?")[0] === "/api/sessions/activity") {
+      await handleSessionAdmin(req, res, "activity");
+      return;
+    }
+    if (req.url.split("?")[0] === "/api/sessions/answer") {
+      await handleSessionAnswer(req, res);
+      return;
+    }
+    if (req.url.split("?")[0] === "/api/sessions/end") {
+      await handleSessionAdmin(req, res, "end");
+      return;
+    }
+    if (req.url.split("?")[0] === "/api/sessions/status") {
+      await handleSessionStatus(req, res);
+      return;
+    }
+
     if (req.url.split("?")[0] === "/api/prayer/intercession-location") {
       const countryCode = String(req.headers["x-vercel-ip-country"] || req.headers["cf-ipcountry"] || "").toUpperCase();
       res.setHeader("Cache-Control", "no-store");
@@ -1210,6 +1659,26 @@ async function requestHandler(req, res) {
 
     if (req.url.split("?")[0] === "/api/prayer/intercession-journal") {
       await handleIntercessionJournal(req, res);
+      return;
+    }
+
+    if (req.url.split("?")[0] === "/api/church/projection") {
+      await handleChurchProjection(req, res);
+      return;
+    }
+
+    if (req.url.split("?")[0] === "/api/church/study/import") {
+      await handleChurchStudyAi(req, res, "import");
+      return;
+    }
+
+    if (req.url.split("?")[0] === "/api/church/study/generate") {
+      await handleChurchStudyAi(req, res, "generate");
+      return;
+    }
+
+    if (req.url.split("?")[0] === "/api/church/study/translate") {
+      await handleChurchStudyAi(req, res, "translate");
       return;
     }
 

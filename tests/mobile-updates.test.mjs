@@ -7,9 +7,10 @@ const source = await fs.readFile(new URL("../src/react/mobile-updates.js", impor
 const id = "a".repeat(64);
 const latest = { nativeVersion: "1.1", bundleId: id, checksum: "b".repeat(64), url: `/mobile-updates/${id}.zip` };
 
-async function run({ manifest = latest, offline = false, blocked = [], current = null, platform = "android" } = {}) {
+async function run({ manifest = latest, offline = false, blocked = [], current = null, platform = "android", builtAt } = {}) {
   const calls = [];
   const updater = {
+    addListener: async () => ({ remove: async () => {} }),
     ready: async () => { calls.push("ready"); },
     getVersionName: async () => ({ versionName: "1.1" }),
     getCurrentBundle: async () => ({ bundleId: current }),
@@ -20,11 +21,16 @@ async function run({ manifest = latest, offline = false, blocked = [], current =
   };
   const context = vm.createContext({
     URL, AbortSignal, console: { warn() {} },
-    document: { addEventListener() {} },
+    Date,
+    window: { setInterval() {}, addEventListener() {} },
+    document: {
+      addEventListener() {}, body: { append() {} },
+      createElement: () => ({ replaceChildren() {}, setAttribute() {}, append() {}, addEventListener() {} }),
+    },
     fetch: async url => {
       calls.push(["fetch", url]);
       if (offline) throw new Error("Offline");
-      return { ok: true, json: async () => url === "mobile-version.json" ? { bundleId: "c".repeat(64) } : manifest };
+      return { ok: true, json: async () => url === "mobile-version.json" ? { bundleId: "c".repeat(64), builtAt } : manifest };
     },
   });
   const mod = new vm.SourceTextModule(source, { context });
@@ -73,4 +79,15 @@ test("does not reinstall the current bundle or a rolled back bundle", async () =
 
 test("web browser does not invoke native update APIs", async () => {
   assert.deepEqual(await run({ platform: "web" }), []);
+});
+
+
+test("fresh APK rejects older or undated publications and accepts newer ones", async () => {
+  const builtAt = "2026-10-16T18:00:00.000Z";
+  for (const publishedAt of [undefined, "invalid", "2026-10-15T18:00:00.000Z", builtAt]) {
+    const calls = await run({ builtAt, manifest: { ...latest, builtAt: publishedAt } });
+    assert.equal(calls.some(c => c[0] === "download"), false);
+  }
+  const calls = await run({ builtAt, manifest: { ...latest, builtAt: "2026-10-17T18:00:00.000Z" } });
+  assert.equal(calls.some(c => c[0] === "next"), true);
 });

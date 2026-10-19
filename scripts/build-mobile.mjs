@@ -7,7 +7,7 @@ import { kidsAdventures } from "../src/react/kids-adventures-data.js";
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const outputDir = path.join(projectRoot, "dist");
 
-const requiredFiles = ["index.html", "styles.css", "script.js", "bible-data.js", "privacy.html", "terms.html", "community-guidelines.html"];
+const requiredFiles = ["index.html", "projection.html", "session-admin.html", "session-admin-bridge.js", "styles.css", "script.js", "bible-data.js", "privacy.html", "terms.html", "community-guidelines.html"];
 const requiredDirectories = ["scripts", "assets"];
 const adventureImages = kidsAdventures.map(adventure => adventure.image);
 
@@ -53,5 +53,6 @@ if (!nativeBuild.includes(`versionName "${config.nativeVersion}"`)) {
 }
 fs.writeFileSync(path.join(outputDir, "mobile-version.json"), JSON.stringify({
   bundleId: hash.digest("hex"), nativeVersion: config.nativeVersion,
+  builtAt: new Date().toISOString(),
 }));
 console.log(`Prepared local Android web assets in ${path.relative(projectRoot, outputDir)}.`);

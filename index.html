@@ -4,17 +4,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Think Bible</title>
-    <link rel="stylesheet" href="styles.css?v=refactor-163" />
+    <link rel="stylesheet" href="styles.css?v=session-hub-7" />
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="bible-data.js" defer></script>
-    <script src="script.js?v=modules-53" defer></script>
+    <script src="script.js?v=modules-54" defer></script>
     <script src="scripts/navigation.js?v=modules-07" defer></script>
     <script src="scripts/prayer.js?v=modules-06" defer></script>
     <script src="scripts/notes.js?v=modules-05" defer></script>
     <script src="scripts/bible.js?v=modules-05" defer></script>
     <script src="scripts/profile.js?v=modules-06" defer></script>
-    <script src="assets/react/navigation.js?v=react-78" defer></script>
+    <script src="assets/react/navigation.js?v=react-86" defer></script>
   </head>
   <body>
     <div class="app-shell" data-theme="light" data-app-background="black">
@@ -505,6 +505,7 @@
           <section class="profile-saved-panel" data-profile-panel="saved" data-profile-saved-panel hidden></section>
         </section>
 
+        <section id="my-church" class="screen church-screen" data-screen data-react-church-root></section>
         <section id="admin" class="screen admin-screen" data-screen data-react-admin-root></section>
 
         <button class="apologetics-begin-button is-disabled" type="button" data-apologetics-begin aria-disabled="true" hidden>Continue Learning</button>
@@ -540,6 +541,7 @@
               <button type="button" data-nav="bible"><i data-lucide="book-open" aria-hidden="true"></i><span>Bible</span><i data-lucide="chevron-right" aria-hidden="true"></i></button>
               <button type="button" data-nav="kids-bible"><i data-lucide="book-image" aria-hidden="true"></i><span>Kids Bible</span><i data-lucide="chevron-right" aria-hidden="true"></i></button>
               <button type="button" data-nav="prayer"><i data-lucide="hand-heart" aria-hidden="true"></i><span>Prayer room</span><i data-lucide="chevron-right" aria-hidden="true"></i></button>
+              <button type="button" data-nav="my-church"><i data-lucide="calendar-days" aria-hidden="true"></i><span>Sessions</span><i data-lucide="chevron-right" aria-hidden="true"></i></button>
               <button type="button" data-nav="apologetics"><i data-lucide="shield" aria-hidden="true"></i><span>Think room</span><i data-lucide="chevron-right" aria-hidden="true"></i></button>
               <button type="button" data-nav="ai"><i data-lucide="sparkles" aria-hidden="true"></i><span>Brother AI</span><i data-lucide="chevron-right" aria-hidden="true"></i></button>
               <button type="button" data-nav="profile"><i data-lucide="user-round" aria-hidden="true"></i><span>Profile</span><i data-lucide="chevron-right" aria-hidden="true"></i></button>

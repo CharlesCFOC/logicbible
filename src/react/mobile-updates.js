@@ -54,6 +54,9 @@ export async function startMobileUpdates() {
       const { bundleId } = await LiveUpdate.getCurrentBundle();
       const builtin = await fetch("mobile-version.json").then(r => r.json());
       if (latest.bundleId === (bundleId || builtin.bundleId)) return;
+      // A freshly installed APK must not replace its assets with an older publication.
+      if (builtin.builtAt && (!Number.isFinite(Date.parse(latest.builtAt))
+        || Date.parse(latest.builtAt) <= Date.parse(builtin.builtAt))) return;
       const blocked = await LiveUpdate.getBlockedBundles();
       if (blocked.bundleIds.includes(latest.bundleId)) return;
       const downloaded = await LiveUpdate.getDownloadedBundles();

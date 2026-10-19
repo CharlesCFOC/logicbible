@@ -13,6 +13,7 @@ import { KidsBiblePage } from "./kids-bible.jsx";
 import { ApologeticsDebatePage, ThinkRoomResume } from "./apologetics-debate.jsx";
 import { ApologeticsCoachPage, ApologeticsXpCard } from "./apologetics-coach.jsx";
 import { AdminPage } from "./admin.jsx";
+import { ChurchSpace, ProjectionScreen, SessionAdmin } from "./church.jsx";
 import { PageTopSpacer } from "./page-top-spacer.jsx";
 import { startMobileUpdates } from "./mobile-updates.js";
 
@@ -20,6 +21,13 @@ const pageTopSpacerNode = document.querySelector("[data-react-page-top-spacer-ro
 if (pageTopSpacerNode) {
   createRoot(pageTopSpacerNode).render(<PageTopSpacer />);
 }
+
+const churchSpaceNode = document.querySelector("[data-react-church-root]");
+if (churchSpaceNode) createRoot(churchSpaceNode).render(<ChurchSpace />);
+const projectionNode = document.querySelector("[data-projection-root]");
+if (projectionNode) createRoot(projectionNode).render(<ProjectionScreen />);
+const sessionAdminNode = document.querySelector("[data-session-admin-root]");
+if (sessionAdminNode) createRoot(sessionAdminNode).render(<SessionAdmin />);
 
 if (Capacitor.isNativePlatform()) {
   const gentleHaptics = registerPlugin("GentleHaptics");

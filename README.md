@@ -24,6 +24,8 @@ and when returning to the foreground (at most once every ten minutes).
 Updates download in the background and apply on the next cold start; the app
 keeps its local bundle when offline. A SHA-256 checksum verifies each download.
 A bundle that fails to confirm startup within 15 seconds rolls back and is blocked.
+New builds include a `builtAt` timestamp. The updater rejects older or undated
+publications so a fresh APK cannot be replaced by an outdated hosted bundle.
 
 `npm run build:updates` generates the website, an update ZIP, and its manifest in
 `dist/`. Vercel runs this through `vercel-build`. Publish the code to the production
@@ -85,67 +87,26 @@ Files added for the backend foundation:
 - [supabase/008_prayer_toggle.sql](supabase/008_prayer_toggle.sql)
 - [supabase/009_family_safety_and_prayer_moderation.sql](supabase/009_family_safety_and_prayer_moderation.sql)
 
-## Prayer Community moderation
+## Mon Église — Bible Study Live
 
-Prayer requests are visible immediately. Users can report a request, and a moderator can review the report or hide the request from the Admin review page. After migration 009, add a trusted moderator in the Supabase SQL editor (replace the value with their Auth user UUID):
+L’espace Mon Église comprend les adhésions et rôles par église, les brouillons,
+la duplication, les notes privées, les supports privés, l’import de notes en PDF
+ou image, la génération et la traduction assistées par IA, les quiz, les sessions
+synchronisées, la projection web, la participation anonyme par lien, les scores,
+le replay et les traductions personnelles. Les propositions IA restent en
+aperçu jusqu’à leur application au brouillon. Les réponses correctes restent
+séparées des données visibles aux participants.
 
-```sql
-insert into public.app_moderators (user_id)
-values ('YOUR_AUTH_USER_UUID');
-```
+Pour activer ces fonctions, configurez `SUPABASE_URL`, `SUPABASE_ANON_KEY` et
+`SUPABASE_SERVICE_ROLE_KEY`, ainsi que `OPENAI_API_KEY` pour les fonctions IA.
+Appliquez les migrations datées dans `supabase/migrations/` par ordre
+chronologique après les migrations Supabase déjà utilisées par l’application.
+Les fichiers de cours vont dans un bucket Storage privé, avec des liens signés
+à durée limitée. Aucune migration n’est appliquée automatiquement par le build.
 
-The moderator will see the review queue in Prayer room after signing in. Users can report a post or hide another author; reports are visible only to moderators.
-
-Data model included in the initial schema:
-
-- `profiles`
-- `user_preferences`
-- `user_topic_progress`
-- `user_saved_items`
-- `ai_conversations`
-
-## Intercession prayer journal
-
-Brother AI uses prewritten prayers from `public.intercession_prayer_lines`: 12 messages per focus, published every 10 seconds against the shared 10-minute session clock. The journal shows earlier messages when someone joins late and preserves their scroll position while they read the history.
-
-For a new Supabase project, run [the journal migration](supabase/migrations/20261014185525_intercession_prayer_journal.sql), then seed the catalogue using the server credentials in `.env.local`:
-
-```bash
-npm run seed:intercession-journal
-```
-
-The seed command fills missing messages and preserves existing database edits. Edit `body` in the Supabase table to adjust an individual prayer; `sequence` runs from 0 to 11 within each `focus_id`. Updated content is loaded when the journal opens or the next session begins.
-
-The initial catalogue comes from [intercession-petitions.json](data/prayer/intercession-petitions.json). To rebuild it, run `npm run build:intercession-journal`. Use `npm run seed:intercession-journal -- --replace` only when intentionally replacing the stored prayers with that rebuilt catalogue.
-
-## How Bible versions work
-
-- `KJV` is the local/offline sample in `bible-data.js`.
-- When `API_BIBLE_KEY` is present, `server.mjs` calls API.Bible from the backend.
-- The browser calls `/api/bible/versions` to list available English Bible versions from your API.Bible account.
-- The browser calls `/api/bible/chapter?bibleId=...&bookId=JHN&chapter=15` to load a chapter.
-- The API key never goes to the frontend.
-
-## Original Greek and Hebrew
-
-The Greek and Hebrew word data comes from [STEPBible-Data](https://github.com/STEPBible/STEPBible-Data).
-
-To regenerate it:
-
-```bash
-npm run import:step
-```
-
-The importer clones the STEP data into `.cache/STEPBible-Data`, reads the TAGNT and TAHOT files, and writes `data/original-language.json`.
-
-If you already have a local clone:
-
-```bash
-npm run import:step -- --source=/path/to/STEPBible-Data
-```
-
-The browser calls `/api/original-language?bookId=GAL&chapter=6&verse=6` when the verse action sheet opens `Greek` or `Hebrew`.
-
-## Christian reference library
-
-The five supplied Christian books are stored in [`data/doctrine`](data/doctrine), with `manifest.json` indexing their chapters. The general Brother AI chat performs a lightweight local relevance search over the 64 chapters and sends only the best matching excerpts to OpenAI as optional reference context. The books are not injected into unrelated answers and are treated as source material, not as system instructions.
+Le rôle d’administrateur global doit être défini dans `app_metadata.role` avec la
+valeur `global_admin`, côté serveur ou dans l’administration Supabase. Les
+enseignants et gestionnaires peuvent lancer une session; les visiteurs reçoivent
+un lien limité à la session active et n’obtiennent aucun accès aux archives.
+Le lien de projection expire avec la session. L’URL de participation visiteur est
+accessible depuis le panneau de session active.

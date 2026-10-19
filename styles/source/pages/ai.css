@@ -710,7 +710,7 @@
 
 .reusable-ai-composer::before {
   position: absolute;
-  z-index: 0;
+  z-index: 2;
   inset: 0;
   padding: 1.5px;
   border-radius: inherit;
@@ -726,7 +726,7 @@
 .reusable-ai-composer textarea,
 .reusable-ai-composer button {
   position: relative;
-  z-index: 1;
+  z-index: 3;
 }
 
 .reusable-ai-composer textarea {
@@ -861,8 +861,26 @@
   backdrop-filter: blur(16px) saturate(125%);
 }
 
+.app-shell .phone-frame .reusable-ai-composer.brother-ai-composer {
+  overflow: hidden;
+  border-radius: 30px !important;
+  background: transparent !important;
+  -webkit-backdrop-filter: blur(16px) saturate(125%) !important;
+  backdrop-filter: blur(16px) saturate(125%) !important;
+}
+
 .app-shell .phone-frame .brother-ai-composer textarea {
   color: #f4fbff !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  overflow-y: hidden !important;
+  scrollbar-width: none;
+}
+
+.app-shell .phone-frame .brother-ai-composer textarea::-webkit-scrollbar {
+  display: none;
 }
 
 /* Prevent the global input theme from painting a rectangle inside the composer. */
@@ -887,6 +905,14 @@
   -webkit-backdrop-filter: none !important;
   backdrop-filter: none !important;
   animation: none !important;
+}
+
+.app-shell[data-app-background] .phone-frame .reusable-ai-composer.brother-ai-composer {
+  overflow: hidden;
+  border-radius: 30px !important;
+  background: transparent !important;
+  -webkit-backdrop-filter: blur(16px) saturate(125%) !important;
+  backdrop-filter: blur(16px) saturate(125%) !important;
 }
 
 /* Brother AI response headings use a static soft green color. */
