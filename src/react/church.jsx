@@ -1,22 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
+import { coursePassages, distributeCourseActivities, splitCourseText } from "../shared/session-course.js";
 
 const bridge = () => window.churchBridge;
-
-function splitCourseText(text, maxLength = 1800) {
-  const pages = [];
-  let start = 0;
-  while (start < text.length) {
-    let end = Math.min(start + maxLength, text.length);
-    if (end < text.length) {
-      const boundary = Math.max(text.lastIndexOf("\n", end), text.lastIndexOf(" ", end));
-      if (boundary > start + Math.floor(maxLength / 2)) end = boundary + 1;
-    }
-    pages.push(text.slice(start, end));
-    start = end;
-  }
-  return pages;
-}
 
 function churchErrorMessage(failure) {
   const message = String(failure?.message || "");
@@ -29,8 +15,9 @@ function churchErrorMessage(failure) {
 function OpenSessions() {
   const [name, setName] = useState("");
   const [scheduledAt, setScheduledAt] = useState("");
+  const scheduledAtInput = useRef(null);
+  const courseFileInput = useRef(null);
   const [createPassword, setCreatePassword] = useState("");
-  const [confirmCreatePassword, setConfirmCreatePassword] = useState("");
   const [courseFile, setCourseFile] = useState(null);
   const [courseContent, setCourseContent] = useState(null);
   const [sourceDocumentName, setSourceDocumentName] = useState("");
@@ -42,6 +29,10 @@ function OpenSessions() {
   const [activeSessions, setActiveSessions] = useState([]);
   const [activeSessionsError, setActiveSessionsError] = useState("");
   const [activeSessionsLoaded, setActiveSessionsLoaded] = useState(false);
+  const sessionCarousel = useRef(null);
+  const [sessionCarouselIndex, setSessionCarouselIndex] = useState(0);
+  const draftCarousel = useRef(null);
+  const [draftCardIndex, setDraftCardIndex] = useState(0);
   const [adminCode, setAdminCode] = useState("");
   const [adminPassword, setAdminPassword] = useState("");
   const [showAdminPassword, setShowAdminPassword] = useState(false);
@@ -80,42 +71,105 @@ function OpenSessions() {
     finally { setBusy(false); }
   }
 
-  const reviewPages = courseContent?.sourceText ? splitCourseText(courseContent.sourceText) : [];
+  function updateActivity(index, transform) {
+    setCourseContent(current => ({ ...current, activities: (current.activities || []).map((activity, activityIndex) => activityIndex === index ? transform(activity) : activity) }));
+  }
+
+  async function generateActivity(afterPage) {
+    const passage = reviewPages[afterPage];
+    if (!passage || (courseContent.activities || []).some(activity => Number(activity.afterPage) === afterPage)) return;
+    await act(async () => {
+      const activity = await bridge().generateOpenSessionActivity(passage);
+      setCourseContent(current => {
+        const activities = current.activities || [];
+        if (activities.some(item => Number(item.afterPage) === afterPage) || activities.length >= 8) return current;
+        return { ...current, activities: distributeCourseActivities([...activities, { ...activity, afterPage }], splitCourseText(current.sourceText).length) };
+      });
+    }, "Jeu généré à partir de cette partie du texte.");
+  }
+
+  function moveActivity(index, direction) {
+    setCourseContent(current => {
+      const activities = current.activities || [];
+      const page = Math.max(0, Number(activities[index]?.afterPage) || 0);
+      const occupied = new Set(activities.map((activity, activityIndex) => activityIndex === index ? null : Number(activity.afterPage)));
+      for (let target = page + direction; target >= 0 && target < reviewPages.length; target += direction) {
+        if (!occupied.has(target)) return { ...current, activities: activities.map((activity, activityIndex) => activityIndex === index ? { ...activity, afterPage: target } : activity) };
+      }
+      return current;
+    });
+  }
+
+  const passagesAreCurrent = Boolean(courseContent?.sourceText && Array.isArray(courseContent.passages) && courseContent.passages.length && courseContent.passages.join("") === courseContent.sourceText);
+  const reviewPages = passagesAreCurrent ? courseContent.passages : [];
+  const flowItems = reviewPages.flatMap((page, pageIndex) => {
+    const activities = courseContent?.activities || [];
+    const placedActivityIndex = activities.findIndex(activity => Math.max(0, Number(activity.afterPage) || 0) === pageIndex);
+    return [
+      { type: "text", page, pageIndex },
+      placedActivityIndex >= 0
+        ? { type: "activity", activity: activities[placedActivityIndex], activityIndex: placedActivityIndex, pageIndex }
+        : { type: "generate", pageIndex },
+    ];
+  });
+  function goToDraftCard(index, behavior = "smooth") {
+    const nextIndex = Math.max(0, Math.min(flowItems.length - 1, index));
+    setDraftCardIndex(nextIndex);
+    const track = draftCarousel.current;
+    track?.scrollTo({ left: nextIndex * (track.clientWidth || 0), behavior });
+  }
+
+  useEffect(() => {
+    const nextIndex = Math.min(draftCardIndex, Math.max(0, flowItems.length - 1));
+    if (nextIndex !== draftCardIndex) setDraftCardIndex(nextIndex);
+    draftCarousel.current?.scrollTo({ left: nextIndex * (draftCarousel.current.clientWidth || 0), behavior: "auto" });
+  }, [flowItems.length]);
 
   return <div className="church-session-hub">
     {error && <p className="church-feedback is-error" role="alert">{error}</p>}
     {message && <p className="church-feedback" role="status">{message}</p>}
     <section className="church-panel">
-      <div><h2>{courseContent ? "Relire le cours et placer les activités" : "Créer une session"}</h2><p>{courseContent ? "Le texte extrait est le cours. Les jeux et challenges viennent après les passages que vous choisissez." : "Choisissez un nom, un mot de passe, une date facultative et importez le document du cours."}</p></div>
-      {!courseContent ? <form className="church-form" onSubmit={event => { event.preventDefault(); if (createPassword !== confirmCreatePassword) { setError("Les deux mots de passe ne correspondent pas."); return; } act(async () => {
+      <div><h2>{courseContent ? "Relire le cours et placer les activités" : "Créer une session"}</h2></div>
+      {!courseContent ? <form className="church-form" onSubmit={event => { event.preventDefault(); if (!courseFile) { setError("Choisissez le document du cours."); return; } act(async () => {
         const result = await bridge().prepareOpenSession(courseFile);
-        setCourseContent(result.courseContent); setSourceDocumentName(result.sourceDocumentName);
+        const pages = coursePassages(result.courseContent?.sourceText || "", result.courseContent?.passages).length;
+        setCourseContent({ ...result.courseContent, activities: distributeCourseActivities(result.courseContent?.activities, pages) }); setSourceDocumentName(result.sourceDocumentName);
       }, "Le document est extrait. Vérifiez le texte avant de continuer."); }}>
-        <label className="church-label">Nom de la session<input required minLength="2" maxLength="120" value={name} onChange={event => setName(event.target.value)} placeholder="Ex. Étude biblique de vendredi" /></label>
-        <label className="church-label">Date et heure (facultatif)<input type="datetime-local" value={scheduledAt} onChange={event => setScheduledAt(event.target.value)} /></label>
-        <label className="church-label">Mot de passe administrateur<input type={showCreatePassword ? "text" : "password"} required minLength="8" maxLength="128" autoComplete="new-password" value={createPassword} onChange={event => setCreatePassword(event.target.value)} placeholder="8 caractères minimum" /><button type="button" className="is-quiet" onClick={() => setShowCreatePassword(value => !value)}>{showCreatePassword ? "Masquer" : "Afficher"}</button></label>
-        <label className="church-label">Confirmer le mot de passe<input type={showCreatePassword ? "text" : "password"} required minLength="8" maxLength="128" autoComplete="new-password" value={confirmCreatePassword} onChange={event => setConfirmCreatePassword(event.target.value)} /></label>
-        <label className="church-label">Document du cours (PDF ou photo, 2,5 Mo maximum)<input type="file" accept="application/pdf,image/jpeg,image/png,image/webp" required onChange={event => setCourseFile(event.target.files?.[0] || null)} /></label>
+        <label className="church-label">Nom de la session<input className="church-session-minimal-input" required minLength="2" maxLength="120" value={name} onChange={event => setName(event.target.value)} placeholder="Ex. Étude biblique de vendredi" /></label>
+        <label className="church-label church-session-password">Mot de passe administrateur<input className="church-session-minimal-input" type={showCreatePassword ? "text" : "password"} required minLength="2" maxLength="128" autoComplete="new-password" value={createPassword} onChange={event => setCreatePassword(event.target.value)} /><button type="button" className="is-quiet" onClick={() => setShowCreatePassword(value => !value)}>{showCreatePassword ? "Masquer" : "Afficher"}</button></label>
+        <div className="church-label church-session-date-picker"><span>Date et heure (facultatif)</span><button type="button" className="church-session-date-button" aria-label={scheduledAt ? `Changer la date et l’heure : ${new Date(scheduledAt).toLocaleString("fr-CA")}` : "Choisir une date et une heure"} onClick={() => { const input = scheduledAtInput.current; if (!input) return; if (typeof input.showPicker === "function") input.showPicker(); else input.click(); }}><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg></button>{scheduledAt && <small className="church-session-date-value">{new Date(scheduledAt).toLocaleString("fr-CA", { dateStyle: "medium", timeStyle: "short" })}</small>}<input ref={scheduledAtInput} className="church-session-date-native" type="datetime-local" value={scheduledAt} aria-hidden="true" tabIndex={-1} onChange={event => setScheduledAt(event.target.value)} /></div>
+        <div className="church-label church-session-document"><span>Document du cours (PDF ou photo, 2,5 Mo maximum)</span><div className="church-session-upload-control"><input ref={courseFileInput} className="church-session-minimal-input church-session-file-input" type="file" accept="application/pdf,image/jpeg,image/png,image/webp" aria-hidden="true" tabIndex={-1} onChange={event => setCourseFile(event.target.files?.[0] || null)} /><button type="button" className="church-session-file-trigger" aria-label="Choisir un document du cours" title="Choisir un document" onClick={() => courseFileInput.current?.click()}><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><path d="M12 16V3m0 0L7 8m5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg></button><small className="church-session-file-name" aria-live="polite">{courseFile?.name || "Aucun fichier choisi"}</small></div></div>
         {busy && <div className="church-ai-progress" role="status"><span /><progress aria-label="Analyse du cours" />Analyse du cours en cours…</div>}
-        <button disabled={busy || !courseFile}>Analyser le cours</button>
+        <button type="submit" disabled={busy || !courseFile}>Analyser le document</button>
       </form> : <div className="church-course-review">
-        <p className="church-feedback">Document analysé : <strong>{sourceDocumentName}</strong>. Vérifiez la transcription contre le document, surtout si le fichier est une photo ou un scan. L’IA peut mal lire certains passages.</p>
-        <p>Le cours sera présenté comme une lecture, dans l’ordre du document. Corrigez la transcription au besoin, puis choisissez où apparaîtront les jeux.</p>
-        <label className="church-label">Texte original extrait · modifiable<textarea rows="12" maxLength="60000" value={courseContent.sourceText || ""} onChange={event => setCourseContent(current => ({ ...current, sourceText: event.target.value }))} /></label>
-        <div className="church-course-book-preview" aria-label="Aperçu de la lecture"><span>APERÇU DE LA LECTURE · {reviewPages.length} passages</span>{reviewPages.slice(0, 3).map((page, index) => <article className="church-course-book-page" key={index}><small>Passage {index + 1}</small><p>{page}</p></article>)}{reviewPages.length > 3 && <p>La lecture continue sur {reviewPages.length - 3} autres passages.</p>}</div>
-        <h3>Jeux et challenges à insérer dans le cours</h3>
-        {(courseContent.activities || []).map((activity, index) => <article className="church-course-activity" key={index}>
-          <label className="church-label">Question<input maxLength="800" value={activity.prompt} onChange={event => setCourseContent(current => ({ ...current, activities: current.activities.map((item, itemIndex) => itemIndex === index ? { ...item, prompt: event.target.value } : item) }))} /></label>
-          <label className="church-label">Insérer après<select value={Math.min(activity.afterPage || 0, Math.max(0, reviewPages.length - 1))} onChange={event => setCourseContent(current => ({ ...current, activities: current.activities.map((item, itemIndex) => itemIndex === index ? { ...item, afterPage: Number(event.target.value) } : item) }))}>{reviewPages.map((_, pageIndex) => <option key={pageIndex} value={pageIndex}>Passage {pageIndex + 1}</option>)}</select></label>
-          <label className="church-label">Type<select value={activity.kind} onChange={event => setCourseContent(current => ({ ...current, activities: current.activities.map((item, itemIndex) => itemIndex === index ? { ...item, kind: event.target.value } : item) }))}><option value="multiple_choice">Choix multiple</option><option value="true_false">Vrai ou faux</option><option value="event_order">Remettre en ordre</option><option value="matching">Association</option><option value="verse_challenge">Défi de référence biblique</option></select></label>
-          {(activity.options || []).map((option, optionIndex) => <label className="church-label" key={optionIndex}>Réponse {optionIndex + 1}<input maxLength="300" value={option} onChange={event => setCourseContent(current => ({ ...current, activities: current.activities.map((item, itemIndex) => itemIndex === index ? { ...item, options: item.options.map((answer, answerIndex) => answerIndex === optionIndex ? event.target.value : answer) } : item) }))} /></label>)}
-          <label className="church-label">Bonne réponse<select value={activity.correctIndex} onChange={event => setCourseContent(current => ({ ...current, activities: current.activities.map((item, itemIndex) => itemIndex === index ? { ...item, correctIndex: Number(event.target.value) } : item) }))}>{(activity.options || []).map((option, optionIndex) => <option value={optionIndex} key={optionIndex}>{option || `Réponse ${optionIndex + 1}`}</option>)}</select></label>
-          <button type="button" className="is-quiet" onClick={() => setCourseContent(current => ({ ...current, activities: current.activities.filter((_, itemIndex) => itemIndex !== index) }))}>Retirer cette activité</button>
-        </article>)}
-        {!(courseContent.activities || []).length && <p className="church-empty">Aucun jeu proposé pour ce document. Vous pouvez en ajouter un ici.</p>}
-        <button type="button" className="is-quiet" disabled={(courseContent.activities || []).length >= 8 || !reviewPages.length} onClick={() => setCourseContent(current => ({ ...current, activities: [...(current.activities || []), { kind: "multiple_choice", prompt: "", options: ["", "", "", ""], correctIndex: 0, explanation: "", afterPage: 0 }] }))}>Ajouter un jeu ou un challenge</button>
+        <p className="church-feedback">Document analysé : <strong>{sourceDocumentName}</strong>.</p>
+        <details className="church-course-source-editor"><summary>Modifier la transcription complète</summary><label className="church-label">Texte original extrait · modifiable<textarea rows="12" maxLength="60000" value={courseContent.sourceText || ""} onChange={event => setCourseContent(current => ({ ...current, sourceText: event.target.value, passages: [], activities: distributeCourseActivities(current.activities, splitCourseText(event.target.value).length) }))} /></label><button type="button" className="is-quiet" disabled={busy || !courseContent.sourceText?.trim()} onClick={() => act(async () => { const passages = await bridge().segmentOpenSession(courseContent.sourceText); setCourseContent(current => ({ ...current, passages, activities: distributeCourseActivities(current.activities, passages.length) })); }, "Le texte a été réorganisé en cartes de lecture.")}>Réorganiser les cartes avec l’IA</button></details>
+        {!passagesAreCurrent && <p className="church-feedback" role="status">Le texte a changé. Réorganise les cartes avec l’IA avant de continuer.</p>}
+        <div className="church-draft-carousel" aria-label="Cartes du cours" aria-roledescription="carrousel">
+          <div className="church-draft-carousel-controls">
+            <button type="button" aria-label="Carte précédente" disabled={draftCardIndex <= 0} onClick={() => goToDraftCard(draftCardIndex - 1)}>←</button>
+            <span aria-live="polite">{flowItems[draftCardIndex]?.type === "activity" ? `Jeu après la partie ${flowItems[draftCardIndex].pageIndex + 1}` : flowItems[draftCardIndex]?.type === "generate" ? `Jeu à générer · partie ${flowItems[draftCardIndex].pageIndex + 1}` : `Lecture · partie ${(flowItems[draftCardIndex]?.pageIndex || 0) + 1}`} · {draftCardIndex + 1} / {flowItems.length}</span>
+            <button type="button" aria-label="Carte suivante" disabled={draftCardIndex >= flowItems.length - 1} onClick={() => goToDraftCard(draftCardIndex + 1)}>→</button>
+          </div>
+          <div className="church-draft-carousel-track" ref={draftCarousel} onScroll={event => { const track = event.currentTarget; setDraftCardIndex(Math.round(track.scrollLeft / Math.max(1, track.clientWidth))); }}>
+            {flowItems.map((item, cardIndex) => item.type === "text" ? <article className="church-course-book-page church-draft-slide" key={`passage-${item.pageIndex}`} aria-label={`Texte, partie ${item.pageIndex + 1}`}>
+              <div className="church-course-flow-part-heading"><small>LECTURE · PARTIE {item.pageIndex + 1} / {reviewPages.length}</small><span>Texte original</span></div><p>{item.page}</p>
+            </article> : item.type === "generate" ? <article className="church-draft-slide church-draft-game-empty" key={`generate-${item.pageIndex}`} aria-label={`Jeu à générer après la partie ${item.pageIndex + 1}`}><span>ACTIVITÉ · APRÈS LA PARTIE {item.pageIndex + 1}</span><p>Un jeu peut être créé à partir du passage que vous venez de lire.</p><button type="button" disabled={busy || (courseContent.activities || []).length >= Math.min(8, reviewPages.length)} onClick={() => generateActivity(item.pageIndex)}>{busy ? "Génération en cours…" : "Générer un jeu"}</button></article> : <article className="church-course-activity church-course-flow-activity church-draft-slide" key={`activity-${item.activityIndex}`} aria-label={`Jeu ${item.activityIndex + 1}, après la partie ${item.pageIndex + 1}`}>
+              <div className="church-course-flow-activity-heading"><span>JEU {item.activityIndex + 1} · APRÈS LA PARTIE {item.pageIndex + 1}</span><div className="church-course-flow-move"><button type="button" className="is-quiet" aria-label="Déplacer le jeu vers une partie précédente" title="Déplacer vers une partie précédente" disabled={!reviewPages.slice(0, item.pageIndex).some((_, index) => !courseContent.activities.some((other, otherIndex) => otherIndex !== item.activityIndex && Number(other.afterPage) === index))} onClick={() => moveActivity(item.activityIndex, -1)}>↑</button><button type="button" className="is-quiet" aria-label="Déplacer le jeu vers une partie suivante" title="Déplacer vers une partie suivante" disabled={!reviewPages.slice(item.pageIndex + 1).some((_, offset) => !courseContent.activities.some((other, otherIndex) => otherIndex !== item.activityIndex && Number(other.afterPage) === item.pageIndex + 1 + offset))} onClick={() => moveActivity(item.activityIndex, 1)}>↓</button><button type="button" className="is-quiet" onClick={() => setCourseContent(current => ({ ...current, activities: current.activities.filter((_, index) => index !== item.activityIndex) }))}>Retirer</button></div></div>
+              <div className="church-course-flow-fields">
+                <label className="church-label">Question ou consigne<input maxLength="800" value={item.activity.prompt} onChange={event => updateActivity(item.activityIndex, activity => ({ ...activity, prompt: event.target.value }))} placeholder="Écrire la question du jeu" /></label>
+                <label className="church-label">Format du jeu<select value={item.activity.kind} onChange={event => updateActivity(item.activityIndex, activity => ({ ...activity, kind: event.target.value }))}><option value="multiple_choice">Choix multiple</option><option value="true_false">Vrai ou faux</option><option value="event_order">Remettre en ordre</option><option value="matching">Association</option><option value="verse_challenge">Défi de référence biblique</option></select></label>
+                <label className="church-label">Placer après<select value={Math.min(Number(item.activity.afterPage) || 0, Math.max(0, reviewPages.length - 1))} onChange={event => updateActivity(item.activityIndex, activity => ({ ...activity, afterPage: Number(event.target.value) }))}>{reviewPages.map((_, index) => ({ index, occupied: courseContent.activities.some((other, otherIndex) => otherIndex !== item.activityIndex && Number(other.afterPage) === index) })).filter(page => !page.occupied || page.index === Number(item.activity.afterPage)).map(({ index }) => <option key={index} value={index}>Partie {index + 1}</option>)}</select></label>
+                {(item.activity.options || []).map((option, optionIndex) => <label className="church-label" key={optionIndex}>Réponse {optionIndex + 1}<input maxLength="300" value={option} onChange={event => updateActivity(item.activityIndex, activity => ({ ...activity, options: activity.options.map((answer, index) => index === optionIndex ? event.target.value : answer) }))} /></label>)}
+                <label className="church-label">Bonne réponse<select value={item.activity.correctIndex} onChange={event => updateActivity(item.activityIndex, activity => ({ ...activity, correctIndex: Number(event.target.value) }))}>{(item.activity.options || []).map((option, optionIndex) => <option value={optionIndex} key={optionIndex}>{option || `Réponse ${optionIndex + 1}`}</option>)}</select></label>
+                <label className="church-label">Explication après la réponse<input maxLength="500" value={item.activity.explanation || ""} onChange={event => updateActivity(item.activityIndex, activity => ({ ...activity, explanation: event.target.value }))} placeholder="Facultatif" /></label>
+                {item.activity.sourceQuote && <blockquote className="church-generated-quote">Appui dans le texte : « {item.activity.sourceQuote} »</blockquote>}
+              </div>
+            </article>)}
+          </div>
+        </div>
         {busy && <div className="church-ai-progress" role="status"><span /><progress aria-label="Publication de la session" />Publication de la session…</div>}
-        <div className="church-review-actions"><button type="button" className="is-quiet" disabled={busy} onClick={() => setCourseContent(null)}>Retour au formulaire</button><button type="button" disabled={busy || !name.trim() || !courseContent.sourceText?.trim()} onClick={() => act(async () => {
+        <div className="church-review-actions"><button type="button" className="is-quiet" disabled={busy} onClick={() => setCourseContent(null)}>Retour au formulaire</button><button type="button" disabled={busy || !passagesAreCurrent || !name.trim() || !courseContent.sourceText?.trim()} onClick={() => act(async () => {
           const session = await bridge().createOpenSession(name, createPassword, scheduledAt ? new Date(scheduledAt).toISOString() : null, courseContent, sourceDocumentName, courseFile);
           setCreated(session); setAdminCode(session.accessCode);
         }, "Session validée. Votre code et votre QR sont prêts.")}>Valider et créer le QR code</button></div>
@@ -123,9 +177,17 @@ function OpenSessions() {
       {created && <div className="church-session-created" role="status"><div><span className="church-live-indicator">SESSION PRÊTE</span><h3>{created.name}</h3><p>Code public</p><strong className="church-session-code">{created.accessCode}</strong>{created.scheduledAt && <p>Programmée le {new Date(created.scheduledAt).toLocaleString("fr-CA", { dateStyle: "long", timeStyle: "short" })}</p>}<a className="church-projection-link" href={`projection.html?code=${created.accessCode}`} target="_blank" rel="noreferrer">Ouvrir la page de la session ↗</a><a className="church-projection-link" href={`session-admin.html?code=${created.accessCode}`} target="_blank" rel="noreferrer">Ouvrir le pupitre administrateur ↗</a></div>{qr && <img className="church-session-qr" src={qr} alt={`QR code pour rejoindre ${created.name}`} />}</div>}
     </section>
 
-    <section className="church-panel"><div><h2>Sessions en direct</h2><p>Sessions actuellement ouvertes · actualisation automatique</p></div>{activeSessionsError ? <p className="church-feedback is-error" role="alert">{activeSessionsError}</p> : activeSessions.length ? <div className="church-active-session-list">{activeSessions.map(session => <article className="church-active-session" key={session.accessCode}><div><span className="church-live-indicator">EN DIRECT</span><strong>{session.name}</strong><small>Code public · {session.accessCode}{session.startedAt ? ` · démarrée à ${new Date(session.startedAt).toLocaleTimeString("fr-CA", { hour: "2-digit", minute: "2-digit" })}` : ""}</small></div><div className="church-active-session-links"><a href={`projection.html?code=${session.accessCode}`} target="_blank" rel="noreferrer">Lien public ↗</a><a href={`session-admin.html?code=${session.accessCode}`} target="_blank" rel="noreferrer">Lien admin ↗</a></div></article>)}</div> : activeSessionsLoaded ? <p className="church-empty">Aucune session n’est en direct pour le moment.</p> : <p className="church-empty">Chargement des sessions actives…</p>}</section>
-
-    <section className="church-panel"><div><h2>Rejoindre une session</h2><p>Entrez le code public à 8 chiffres ou scannez le QR code partagé par l’organisateur. Aucun compte n’est nécessaire.</p></div><form className="church-inline-form" onSubmit={event => { event.preventDefault(); act(async () => { setFound(null); setFound(await bridge().findOpenSession(joinCode)); }, "Session trouvée."); }}><input inputMode="numeric" autoComplete="one-time-code" maxLength="8" pattern="[0-9]{8}" aria-label="Code public à 8 chiffres" value={joinCode} onChange={event => setJoinCode(event.target.value.replace(/\D/g, "").slice(0, 8))} placeholder="Code à 8 chiffres" required /><button disabled={busy || joinCode.length !== 8}>Rechercher</button></form>{found && <div className="church-session-result"><strong>{found.name}</strong><span>{found.status === "live" ? "En direct" : found.status === "ended" ? "Terminée" : found.scheduledAt ? `Programmée · ${new Date(found.scheduledAt).toLocaleString("fr-CA", { dateStyle: "medium", timeStyle: "short" })}` : "En attente de l’administrateur"}</span><a className="church-projection-link" href={`projection.html?code=${found.accessCode}`}>Ouvrir cette session ↗</a></div>}</section>
+    <div className="church-session-carousel" aria-label="Sessions et accès" aria-roledescription="carrousel">
+      <div className="church-session-carousel-track" ref={sessionCarousel} onScroll={event => { const track = event.currentTarget; setSessionCarouselIndex(Math.round(track.scrollLeft / track.clientWidth)); }}>
+        <section className="church-panel church-session-carousel-slide" aria-label="Sessions en direct"><div><h2>Sessions en direct</h2><p>Sessions actuellement ouvertes · actualisation automatique</p></div>{activeSessionsError ? <p className="church-feedback is-error" role="alert">{activeSessionsError}</p> : activeSessions.length ? <div className="church-active-session-list">{activeSessions.map(session => <article className="church-active-session" key={session.accessCode}><div><span className="church-live-indicator">EN DIRECT</span><strong>{session.name}</strong><small>Code public · {session.accessCode}{session.startedAt ? ` · démarrée à ${new Date(session.startedAt).toLocaleTimeString("fr-CA", { hour: "2-digit", minute: "2-digit" })}` : ""}</small></div><div className="church-active-session-links"><a href={`projection.html?code=${session.accessCode}`} target="_blank" rel="noreferrer">Lien public ↗</a><a href={`session-admin.html?code=${session.accessCode}`} target="_blank" rel="noreferrer">Lien admin ↗</a></div></article>)}</div> : activeSessionsLoaded ? <p className="church-empty">Aucune session n’est en direct pour le moment.</p> : <p className="church-empty">Chargement des sessions actives…</p>}</section>
+        <section className="church-panel church-session-carousel-slide" aria-label="Rejoindre une session"><div><h2>Rejoindre une session</h2><p>Entrez le code public à 8 chiffres ou scannez le QR code partagé par l’organisateur. Aucun compte n’est nécessaire.</p></div><form className="church-inline-form" onSubmit={event => { event.preventDefault(); act(async () => { setFound(null); setFound(await bridge().findOpenSession(joinCode)); }, "Session trouvée."); }}><input inputMode="numeric" autoComplete="one-time-code" maxLength="8" pattern="[0-9]{8}" aria-label="Code public à 8 chiffres" value={joinCode} onChange={event => setJoinCode(event.target.value.replace(/\D/g, "").slice(0, 8))} placeholder="Code à 8 chiffres" required /><button disabled={busy || joinCode.length !== 8}>Rechercher</button></form>{found && <div className="church-session-result"><strong>{found.name}</strong><span>{found.status === "live" ? "En direct" : found.status === "ended" ? "Terminée" : found.scheduledAt ? `Programmée · ${new Date(found.scheduledAt).toLocaleString("fr-CA", { dateStyle: "medium", timeStyle: "short" })}` : "En attente de l’administrateur"}</span><a className="church-projection-link" href={`projection.html?code=${found.accessCode}`}>Ouvrir cette session ↗</a></div>}</section>
+      </div>
+      <div className="church-session-carousel-controls" aria-label="Navigation du carrousel">
+        <button type="button" aria-label="Afficher la carte précédente" disabled={sessionCarouselIndex === 0} onClick={() => sessionCarousel.current?.scrollTo({ left: 0, behavior: "smooth" })}>←</button>
+        <div className="church-session-carousel-dots">{["Sessions en direct", "Rejoindre une session"].map((label, index) => <button type="button" key={label} aria-label={`Afficher : ${label}`} aria-current={sessionCarouselIndex === index ? "true" : undefined} onClick={() => sessionCarousel.current?.scrollTo({ left: index * (sessionCarousel.current?.clientWidth || 0), behavior: "smooth" })} />)}</div>
+        <button type="button" aria-label="Afficher la carte suivante" disabled={sessionCarouselIndex === 1} onClick={() => sessionCarousel.current?.scrollTo({ left: sessionCarousel.current?.clientWidth || 0, behavior: "smooth" })}>→</button>
+      </div>
+    </div>
 
     <section className="church-panel"><div><h2>Espace administrateur</h2><p>Ouvrez le pupitre pour lire le cours, partager un passage ou lancer les jeux au bon moment.</p></div><form className="church-form" onSubmit={event => { event.preventDefault(); act(async () => { setAdminSession(await bridge().startOpenSession(adminCode, adminPassword)); setShowAdminPassword(false); }, "Session démarrée."); }}><label className="church-label">Code de la session<input inputMode="numeric" maxLength="8" pattern="[0-9]{8}" value={adminCode} onChange={event => setAdminCode(event.target.value.replace(/\D/g, "").slice(0, 8))} required /></label><label className="church-label">Mot de passe administrateur<input type={showAdminPassword ? "text" : "password"} autoComplete="current-password" value={adminPassword} onChange={event => setAdminPassword(event.target.value)} required /><button type="button" className="is-quiet" onClick={() => setShowAdminPassword(value => !value)}>{showAdminPassword ? "Masquer" : "Afficher"}</button></label><button disabled={busy || adminCode.length !== 8}>Démarrer la session</button></form>{adminSession && <div className="church-session-result"><strong>{adminSession.name}</strong><span>{adminSession.status === "live" ? "La session est en direct." : "La session est terminée."}</span>{adminSession.status === "live" && <><a className="church-projection-link" href={`session-admin.html?code=${adminSession.accessCode}`} target="_blank" rel="noreferrer">Ouvrir le pupitre de lecture ↗</a><a className="church-projection-link" href={`projection.html?code=${adminSession.accessCode}`} target="_blank" rel="noreferrer">Ouvrir les écrans de projection ↗</a><button type="button" className="is-quiet" disabled={busy} onClick={() => act(async () => { setAdminSession(await bridge().endOpenSession(adminCode, adminPassword)); setAdminPassword(""); }, "Session terminée.")}>Terminer la session</button></>}</div>}</section>
   </div>;
@@ -347,7 +409,7 @@ export function ChurchSpace() {
   const canTeach = ["manager", "teacher"].includes(activeMembership?.role);
 
   return <div className="church-space">
-    <header className="church-hero"><span className="church-eyebrow">ÉTUDE · PARTAGE · RENCONTRE</span><h1>Sessions</h1><p>Créez une session, partagez son code ou programmez-la pour plus tard.</p></header>
+    <header className="church-page-header"><h1>Sessions</h1><p>Créez une session, partagez son code ou programmez-la pour plus tard.</p></header>
     <OpenSessions />
     {!user ? null : <>
       {error && <p className="church-feedback is-error" role="alert">{error}</p>}
@@ -395,6 +457,7 @@ export function SessionAdmin() {
   const [session, setSession] = useState(null);
   const [draft, setDraft] = useState([]);
   const [selectedText, setSelectedText] = useState("");
+  const [playedActivityIndices, setPlayedActivityIndices] = useState(() => new Set());
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
@@ -406,7 +469,12 @@ export function SessionAdmin() {
     finally { setBusy(false); }
   }
 
-  const pages = session?.courseContent?.sourceText ? splitCourseText(session.courseContent.sourceText) : draft;
+  const pages = session?.courseContent?.sourceText ? coursePassages(session.courseContent.sourceText, session.courseContent.passages) : draft;
+  const activities = session?.courseContent?.activities || [];
+  const currentPage = Math.max(0, Number(session?.projectionIndex) || 0);
+  const nextActivityIndex = activities.findIndex((item, index) =>
+    Math.max(0, Number(item.afterPage) || 0) === currentPage && !playedActivityIndices.has(index)
+  );
   function captureSelection() {
     const value = window.getSelection?.()?.toString().trim() || "";
     if (value && value.length <= 1200) setSelectedText(value);
@@ -432,7 +500,32 @@ export function SessionAdmin() {
     }, "Le jeu est lancé sur les écrans.");
   }
   async function resumeReading() {
-    await run(async () => setSession(await bridge().startOpenSessionActivity(code, password, null)), "Retour à la lecture du cours.");
+    const completedIndex = Number.isInteger(session?.projectionActivity?.index) ? session.projectionActivity.index : null;
+    await run(async () => {
+      setSession(await bridge().startOpenSessionActivity(code, password, null));
+      if (completedIndex !== null) setPlayedActivityIndices(current => new Set(current).add(completedIndex));
+    }, "Retour à la lecture du cours.");
+  }
+  async function finishActivityAndContinue() {
+    const completedIndex = Number.isInteger(session?.projectionActivity?.index) ? session.projectionActivity.index : null;
+    await run(async () => {
+      let updated = await bridge().startOpenSessionActivity(code, password, null);
+      if (completedIndex !== null) setPlayedActivityIndices(current => new Set(current).add(completedIndex));
+      const followingActivity = activities.findIndex((item, index) =>
+        index !== completedIndex && !playedActivityIndices.has(index) && Math.max(0, Number(item.afterPage) || 0) === currentPage
+      );
+      if (followingActivity >= 0) {
+        updated = await bridge().startOpenSessionActivity(code, password, followingActivity);
+      } else if (currentPage < pages.length - 1) {
+        updated = await bridge().controlOpenSession(code, password, pages, currentPage + 1);
+      }
+      setSession(updated);
+      setSelectedText("");
+    }, "Étape suivante affichée.");
+  }
+  async function continueCourseFlow() {
+    if (nextActivityIndex >= 0) return launchActivity(nextActivityIndex);
+    if (currentPage < pages.length - 1) return publish(currentPage + 1);
   }
 
   return <main className="projection-admin-page">
@@ -444,8 +537,8 @@ export function SessionAdmin() {
         : session.status !== "live" ? <section className="church-panel"><h2>Session terminée</h2><p>Cette session ne peut plus être redémarrée.</p></section>
         : <>
           <section className="church-panel"><span className="church-live-indicator">SESSION EN DIRECT</span><h2>{session.name}</h2><p>Code public · {session.accessCode}</p><a className="church-projection-link" href={`projection.html?code=${code}`} target="_blank" rel="noreferrer">Ouvrir l’écran public ↗</a></section>
-          {session.projectionActivity && <section className="church-panel church-current-projection"><strong>{session.projectionActivity.kind === "highlight" ? session.projectionActivity.mode === "word" ? "Mot surligné à l’écran" : "Passage partagé à l’écran" : "Jeu en cours"}</strong><p>{session.projectionActivity.text || session.projectionActivity.prompt}</p><button type="button" className="is-quiet" disabled={busy} onClick={resumeReading}>Reprendre la lecture</button></section>}
-          <section className="church-panel church-course-reader"><div><span className="church-eyebrow">COURS ORIGINAL · {session.sourceDocumentName || "DOCUMENT IMPORTÉ"}</span><h2>Lecture du cours</h2><p>Sélectionne un mot ou un passage pour le partager sur tous les écrans. Tu peux aussi afficher chaque passage complet.</p></div>
+          {session.projectionActivity && <section className="church-panel church-current-projection"><strong>{session.projectionActivity.kind === "highlight" ? session.projectionActivity.mode === "word" ? "Mot surligné à l’écran" : "Passage partagé à l’écran" : "Jeu en cours"}</strong><p>{session.projectionActivity.text || session.projectionActivity.prompt}</p><button type="button" className="is-quiet" disabled={busy} onClick={session.projectionActivity.kind === "highlight" ? resumeReading : finishActivityAndContinue}>{session.projectionActivity.kind === "highlight" ? "Reprendre la lecture" : currentPage < pages.length - 1 ? "Terminer le jeu et continuer" : "Terminer le jeu"}</button></section>}
+          <section className="church-panel church-course-reader"><div><span className="church-eyebrow">COURS ORIGINAL · {session.sourceDocumentName || "DOCUMENT IMPORTÉ"}</span><h2>Lecture du cours</h2><p>Le parcours alterne lecture et jeux proposés par l’IA. Après chaque passage, « Continuer » lance le jeu prévu avant de passer au texte suivant. Tu peux aussi sélectionner un mot ou un passage à partager.</p></div>
             {selectedText && <div className="church-reader-selection"><strong>Ta sélection</strong><p>{selectedText}</p><button type="button" disabled={busy} onClick={() => shareSelection("passage")}>Afficher ce passage</button>{/^\S+$/.test(selectedText) && <button type="button" className="is-quiet" disabled={busy} onClick={() => shareSelection("word")}>Surligner ce mot</button>}</div>}
             <div className="church-course-book">{pages.map((page, index) => <article className="church-course-book-page" key={index}>
               <div className="church-reader-page-heading"><small>Passage {index + 1} sur {pages.length}</small></div>
@@ -455,9 +548,8 @@ export function SessionAdmin() {
                 return <aside className="church-reader-activity" key={`${actualIndex}-${activityIndex}`}><span>JEU APRÈS CE PASSAGE</span><strong>{item.prompt}</strong><button type="button" disabled={busy} onClick={() => launchActivity(actualIndex)}>Lancer le jeu</button></aside>;
               })}
             </article>)}</div>
-            {session.courseContent?.activities?.length > 0 && <details><summary>Voir toutes les activités ({session.courseContent.activities.length})</summary>{session.courseContent.activities.map((item, index) => <article className="church-course-activity" key={index}><strong>{item.prompt}</strong><p>Après le passage {(Number(item.afterPage) || 0) + 1} · {item.kind}</p><p>Réponse attendue : {item.options?.[item.correctIndex]}</p><p>{item.explanation}</p><button type="button" disabled={busy} onClick={() => launchActivity(index)}>Lancer ce jeu</button></article>)}</details>}
           </section>
-          <section className="church-panel church-session-controller"><h2>Navigation</h2><p>Le public suit le passage actuellement choisi.</p><div className="church-admin-slide-actions"><button type="button" disabled={busy || session.projectionIndex <= 0} onClick={() => publish(Math.max(0, session.projectionIndex - 1))}>Passage précédent</button><span>{pages.length ? session.projectionIndex + 1 : 0} / {pages.length}</span><button type="button" disabled={busy || session.projectionIndex >= pages.length - 1} onClick={() => publish(Math.min(pages.length - 1, session.projectionIndex + 1))}>Passage suivant</button></div><button type="button" className="church-end-live" disabled={busy} onClick={() => run(async () => { setSession(await bridge().endOpenSession(code, password)); setPassword(""); }, "La session est terminée.")}>Terminer la session</button></section>
+          <section className="church-panel church-session-controller"><h2>Parcours de lecture</h2><p>Les jeux associés à ce passage s’intercalent avant le suivant.</p><div className="church-admin-slide-actions"><button type="button" disabled={busy || currentPage <= 0} onClick={() => publish(Math.max(0, currentPage - 1))}>Passage précédent</button><span>{pages.length ? currentPage + 1 : 0} / {pages.length}</span><button type="button" disabled={busy || Boolean(session.projectionActivity) || (nextActivityIndex < 0 && currentPage >= pages.length - 1)} onClick={continueCourseFlow}>{session.projectionActivity ? "Jeu en cours" : nextActivityIndex >= 0 ? "Lancer le jeu" : currentPage < pages.length - 1 ? "Continuer" : "Fin du parcours"}</button></div><button type="button" className="church-end-live" disabled={busy} onClick={() => run(async () => { setSession(await bridge().endOpenSession(code, password)); setPassword(""); }, "La session est terminée.")}>Terminer la session</button></section>
         </>}
     </div>
   </main>;

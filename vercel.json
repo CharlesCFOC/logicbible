@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build:updates",
+  "buildCommand": "npm run vercel-build",
   "builds": [
     {
       "src": "api/[...path].mjs",

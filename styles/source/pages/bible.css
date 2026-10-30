@@ -1875,3 +1875,26 @@ dialog.study-chat-dialog .study-chat-compose-row textarea { background: transpar
 }
 
 .bible-study-result .study-insight-card--manuscripts :is(.study-source-heading, .study-source-link strong) { color: #ffb6dc !important; }
+
+/* Chapter selection: direct navigation with a midnight-blue surface. */
+#bible .bible-chapter-picker-trigger { display: flex; align-items: center; justify-content: center; align-self: center; min-height: 40px; height: 40px; padding: 0 12px; color: #f0f4ff; font-size: clamp(11px, calc(8.8px + 0.6875cqw), 11.88px); font-weight: 800; line-height: 1; text-align: center; font-variant-numeric: tabular-nums; }
+.bible-chapter-picker { width: min(420px, calc(100vw - 32px)); max-height: min(78dvh, 680px); margin: auto; padding: 0; overflow: auto; overscroll-behavior: contain; color: #f3f8ff; background: linear-gradient(145deg, #193e66 0%, #112b4d 52%, #0b1933 100%); border: 1px solid #668bb866; border-radius: 28px; box-shadow: 0 28px 80px #020b2470, inset 0 1px 0 #ffffff14; }
+.bible-chapter-picker::backdrop { background: #06142a66; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.bible-chapter-picker[open], .bible-chapter-picker[open]::backdrop { animation: bibleChapterPickerFadeIn 220ms ease-out both; }
+@keyframes bibleChapterPickerFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .bible-chapter-picker[open], .bible-chapter-picker[open]::backdrop { animation: none; }
+}
+.bible-chapter-picker-content { padding: 24px; }
+.bible-chapter-picker header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.bible-chapter-picker-eyebrow { color: #99c9ef; font-size: 10px; font-weight: 800; letter-spacing: .15em; }
+.bible-chapter-picker h2 { margin: 7px 0 0; color: #f3f8ff; font-size: 28px; line-height: 1.15; }
+.bible-chapter-picker p { margin: 12px 0 22px; color: #b8cce2; font-size: 13px; }
+.bible-chapter-picker-close { min-height: 44px; width: 44px; flex-shrink: 0; border: 1px solid #92b8e02e; border-radius: 50%; color: #e8f4ff; background: #ffffff0a; font-size: 26px; }
+.bible-chapter-picker-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 9px; }
+.bible-chapter-picker-grid button { min-height: 48px; padding: 0; border: 1px solid #8fb5df33; border-radius: 14px; color: #e1edff; background: #ffffff08; font-size: 16px; font-weight: 700; transition: background .15s, border-color .15s; }
+.bible-chapter-picker-grid button:hover { background: #5687bd33; border-color: #a1ceff99; }
+.bible-chapter-picker-grid button[aria-current="true"] { color: #102946; background: linear-gradient(145deg, #b8e5ff, #7eb8ee); border-color: #c1e9ff; box-shadow: 0 4px 16px #061a3b44; }
+.bible-chapter-picker button:focus-visible { outline: 2px solid #b8e5ff; outline-offset: 3px; }
+.bible-chapter-picker footer { margin-top: 20px; padding-top: 16px; border-top: 1px solid #8fb5df26; color: #a3bdd8; font-size: 11px; text-align: center; }
+#bible [data-reader-chapter] { scroll-margin-top: 24px; }

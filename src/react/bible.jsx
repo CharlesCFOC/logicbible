@@ -49,6 +49,34 @@ function useBibleReaderState() {
 
 export function BibleReaderControls() {
   const [state, bridge] = useBibleReaderState();
+  const chapterDialog = useRef(null);
+  const pendingChapterPicker = useRef(null);
+  const bookName = state.books.find(book => book.id === state.bookId)?.name || "Bible";
+
+  const openChapters = () => {
+    chapterDialog.current.showModal();
+    const selected = chapterDialog.current.querySelector('[aria-current="true"]');
+    selected?.focus({ preventScroll: true });
+    selected?.scrollIntoView({ block: "nearest" });
+  };
+
+  useEffect(() => {
+    // Wait for the chosen book's chapter grid to render before opening it.
+    if (pendingChapterPicker.current !== state.bookId) return;
+    pendingChapterPicker.current = null;
+    openChapters();
+  }, [state.bookId]);
+
+  const chooseBook = (bookId) => {
+    pendingChapterPicker.current = bookId;
+    bridge.setBook(bookId);
+  };
+
+  const chooseChapter = (chapter) => {
+    chapterDialog.current.close();
+    bridge.setChapter(chapter);
+    document.querySelector('[data-reader-chapter]')?.scrollIntoView({ block: "start", behavior: "instant" });
+  };
 
   return (
     <>
@@ -60,15 +88,23 @@ export function BibleReaderControls() {
         </select>
       </label>
       <label className="reader-select-label bible-glass-select" aria-label="Book">
-        <select className="bible-glass-select-input" value={state.bookId} onChange={(event) => bridge.setBook(event.target.value)}>
+        <select className="bible-glass-select-input" value={state.bookId} onChange={(event) => chooseBook(event.target.value)}>
           {state.books.map((book) => <option key={book.id} value={book.id}>{book.name}</option>)}
         </select>
       </label>
-      <label className="reader-select-label compact bible-glass-select" aria-label="Chapter">
-        <select className="bible-glass-select-input" value={String(state.chapter)} onChange={(event) => bridge.setChapter(Number(event.target.value))}>
-          {state.chapters.map((chapter) => <option key={chapter} value={chapter}>{chapter}</option>)}
-        </select>
-      </label>
+      <button className="reader-select-label compact bible-glass-select bible-chapter-picker-trigger" type="button" aria-label={`Choose chapter, current chapter ${state.chapter}`} aria-haspopup="dialog" onClick={openChapters}>
+        <span>{state.chapter}</span>
+      </button>
+      <dialog className="bible-chapter-picker" ref={chapterDialog} aria-labelledby="bible-chapter-picker-title" onClick={event => { if (event.target === event.currentTarget) event.currentTarget.close(); }}>
+        <div className="bible-chapter-picker-content">
+          <header><div><span className="bible-chapter-picker-eyebrow">CHOOSE A CHAPTER</span><h2 id="bible-chapter-picker-title">{bookName}</h2></div><button type="button" className="bible-chapter-picker-close" aria-label="Close chapter selection" onClick={() => chapterDialog.current.close()}>×</button></header>
+          <p>Select a number to start reading.</p>
+          <div className="bible-chapter-picker-grid">
+            {state.chapters.map(chapter => <button key={chapter} type="button" aria-label={`${bookName} ${chapter}`} aria-current={chapter === state.chapter ? "true" : undefined} onClick={() => chooseChapter(chapter)}>{chapter}</button>)}
+          </div>
+          <footer>{state.chapters.length} chapters · Chapter {state.chapter} selected</footer>
+        </div>
+      </dialog>
       <button className="icon-button bible-glass-control bible-glass-search" type="button" data-bible-menu-toggle aria-label="Open Bible menu" aria-controls="bible-menu-drawer" aria-expanded="false">
         <span className="bible-glass-control-content"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="10.8" cy="10.8" r="6.8" /><path d="m16 16 5 5" /></svg></span>
       </button>

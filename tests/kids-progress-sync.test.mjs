@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import { readFileSync } from 'node:fs';
 
-const source = readFileSync(new URL('../script.js', import.meta.url), 'utf8');
+const source = readFileSync(new URL('../scripts/core/account.js', import.meta.url), 'utf8');
 function harness() {
   const local = new Map(), remote = new Map();
   const hooks = { fail: false, beforeWrite: null };

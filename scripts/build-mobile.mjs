@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
+import { isPublicFile } from "../lib/public-files.js";
 import { kidsAdventures } from "../src/react/kids-adventures-data.js";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -9,7 +10,7 @@ const outputDir = path.join(projectRoot, "dist");
 
 const requiredFiles = ["index.html", "projection.html", "session-admin.html", "session-admin-bridge.js", "styles.css", "script.js", "bible-data.js", "privacy.html", "terms.html", "community-guidelines.html"];
 const requiredDirectories = ["scripts", "assets"];
-const adventureImages = kidsAdventures.map(adventure => adventure.image);
+const adventureImages = [...new Set(kidsAdventures.flatMap(adventure => [adventure.image, adventure.thumbnail].filter(Boolean)))];
 
 fs.rmSync(outputDir, { recursive: true, force: true });
 fs.mkdirSync(outputDir, { recursive: true });
@@ -31,11 +32,18 @@ for (const directory of requiredDirectories) {
     recursive: true,
     filter: filename => {
       const relative = path.relative(projectRoot, filename).split(path.sep).join("/");
+      if (fs.statSync(filename).isFile() && !isPublicFile(relative)) return false;
       if (!relative.startsWith("assets/kids-bible/")) return true;
       // Ship the current adventures' illustrations, without the old book-reader assets.
       return adventureImages.some(image => image === relative || image.startsWith(`${relative}/`));
     },
   });
+}
+
+for (const image of adventureImages) {
+  if (!fs.existsSync(path.join(outputDir, image))) {
+    throw new Error(`Missing packaged Kids Bible artwork: ${image}`);
+  }
 }
 
 const hash = createHash("sha256");

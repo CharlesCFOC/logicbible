@@ -1,3 +1,4 @@
+import { PrayerIcon } from "./prayer-icon.jsx";
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { IntercessionPanel } from "./intercession.jsx";
@@ -35,22 +36,6 @@ function formatSpotlightCountdown(timestamp = Date.now()) {
   const seconds = Math.ceil((SPOTLIGHT_INTERVAL_MS - (timestamp % SPOTLIGHT_INTERVAL_MS)) / 1000);
   const minutes = Math.floor(seconds / 60);
   return `${String(minutes).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
-}
-
-const icons = {
-  send: ["m22 2-7 20-4-9-9-4Z", "M22 2 11 13"],
-  share: ["M14 5h5v5", "M19 5l-9 9", "M18 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h5"],
-  heart: ["M20.8 8.8c0 5.4-8.8 10.2-8.8 10.2S3.2 14.2 3.2 8.8A4.7 4.7 0 0 1 12 6.1a4.7 4.7 0 0 1 8.8 2.7Z"],
-  handHeart: ["M20.8 8.8c0 5.4-8.8 10.2-8.8 10.2S3.2 14.2 3.2 8.8A4.7 4.7 0 0 1 12 6.1a4.7 4.7 0 0 1 8.8 2.7Z", "M7 15h4l2-3 2 2h3"],
-  chevron: ["m6 9 6 6 6-6"],
-};
-
-function PrayerIcon({ name }) {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      {icons[name].map((path) => <path key={path} d={path} />)}
-    </svg>
-  );
 }
 
 function usePrayerState() {
@@ -267,20 +252,6 @@ const prayerStatusLabels = {
   archived: "Archived",
   answered: "Answered",
 };
-
-export function PrayerReadOnlyCard({ request, bridge, index }) {
-  const image = bridge.getBackgroundOptions()[request.backgroundIndex]?.src || "assets/prayer-backgrounds/prayer-1.webp";
-  return <article className={`prayer-card prayer-card--${index % 4} prayer-card--readonly`} style={{ "--prayer-card-image": `url('${image}')` }}>
-    <div className="prayer-card-toggle"><span>
-      <small className="prayer-card-category">{request.category || "General"}</small>
-      <strong className="prayer-card-title">{request.title?.trim() || "Prayer request"}</strong>
-      <p className="prayer-card-preview">{request.preview || request.text}</p>
-    </span></div>
-    <div className="prayer-card-meta"><span className={`prayer-action profile-prayer-count${request.hasPrayed ? " is-prayed" : ""}`} aria-label={`${request.prayerCount || 0} prayers`}>
-      <span>{request.prayerCount || 0}</span><PrayerIcon name="heart" />
-    </span></div>
-  </article>;
-}
 
 function PrayerCard({ request, bridge, index, currentUserId }) {
   const [isOpen, setIsOpen] = useState(false);

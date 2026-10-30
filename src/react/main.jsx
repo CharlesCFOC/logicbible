@@ -1,3 +1,4 @@
+import { mountDeferredScreen } from "./deferred-screen.jsx";
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { Capacitor, registerPlugin } from "@capacitor/core";
@@ -7,13 +8,6 @@ import { SavedNoteCard } from "./saved-note-card.jsx";
 import { ProfileCloudAccount, ProfileHero, ProfileInformation, ProfilePreferences, ProfilePrayers, ProfileTabs } from "./profile.jsx";
 import { BibleChapterContent, BibleParallelControls, BibleReaderControls, BibleSelectedVerse, BibleVerseActions } from "./bible.jsx";
 import { NoteEditorContent, NoteEditorHeader, NoteEditorVerseChips, NoteToolbar } from "./notes.jsx";
-import { PrayerPage } from "./prayer.jsx";
-import { AiPage } from "./ai.jsx";
-import { KidsBiblePage } from "./kids-bible.jsx";
-import { ApologeticsDebatePage, ThinkRoomResume } from "./apologetics-debate.jsx";
-import { ApologeticsCoachPage, ApologeticsXpCard } from "./apologetics-coach.jsx";
-import { AdminPage } from "./admin.jsx";
-import { ChurchSpace, ProjectionScreen, SessionAdmin } from "./church.jsx";
 import { PageTopSpacer } from "./page-top-spacer.jsx";
 import { startMobileUpdates } from "./mobile-updates.js";
 
@@ -23,11 +17,11 @@ if (pageTopSpacerNode) {
 }
 
 const churchSpaceNode = document.querySelector("[data-react-church-root]");
-if (churchSpaceNode) createRoot(churchSpaceNode).render(<ChurchSpace />);
+if (churchSpaceNode) mountDeferredScreen(churchSpaceNode, () => import("./church.jsx"), "ChurchSpace");
 const projectionNode = document.querySelector("[data-projection-root]");
-if (projectionNode) createRoot(projectionNode).render(<ProjectionScreen />);
+if (projectionNode) mountDeferredScreen(projectionNode, () => import("./church.jsx"), "ProjectionScreen");
 const sessionAdminNode = document.querySelector("[data-session-admin-root]");
-if (sessionAdminNode) createRoot(sessionAdminNode).render(<SessionAdmin />);
+if (sessionAdminNode) mountDeferredScreen(sessionAdminNode, () => import("./church.jsx"), "SessionAdmin");
 
 if (Capacitor.isNativePlatform()) {
   const gentleHaptics = registerPlugin("GentleHaptics");
@@ -277,40 +271,40 @@ if (noteChipsNode && window.noteEditorBridge) {
 
 const prayerNode = document.querySelector("[data-react-prayer-root]");
 if (prayerNode && window.prayerBridge) {
-  createRoot(prayerNode).render(<PrayerPage />);
+  mountDeferredScreen(prayerNode, () => import("./prayer.jsx"), "PrayerPage");
 }
 
 const aiNode = document.querySelector("[data-react-ai-root]");
 if (aiNode && window.aiBridge) {
-  createRoot(aiNode).render(<AiPage />);
+  mountDeferredScreen(aiNode, () => import("./ai.jsx"), "AiPage");
 }
 
 const kidsBibleNode = document.querySelector("[data-react-kids-bible-root]");
 if (kidsBibleNode) {
-  createRoot(kidsBibleNode).render(<KidsBiblePage />);
+  mountDeferredScreen(kidsBibleNode, () => import("./kids-bible.jsx"), "KidsBiblePage");
 }
 
 const thinkRoomResumeNode = document.querySelector("[data-react-think-room-resume-root]");
-if (thinkRoomResumeNode) createRoot(thinkRoomResumeNode).render(<ThinkRoomResume />);
+if (thinkRoomResumeNode) mountDeferredScreen(thinkRoomResumeNode, () => import("./apologetics-debate.jsx"), "ThinkRoomResume");
 
 const apologeticsDebateNode = document.querySelector("[data-react-apologetics-debate-root]");
 if (apologeticsDebateNode) {
-  createRoot(apologeticsDebateNode).render(<ApologeticsDebatePage />);
+  mountDeferredScreen(apologeticsDebateNode, () => import("./apologetics-debate.jsx"), "ApologeticsDebatePage");
 }
 
 const apologeticsCoachNode = document.querySelector("[data-react-apologetics-coach-root]");
 if (apologeticsCoachNode) {
-  createRoot(apologeticsCoachNode).render(<ApologeticsCoachPage />);
+  mountDeferredScreen(apologeticsCoachNode, () => import("./apologetics-coach.jsx"), "ApologeticsCoachPage");
 }
 
 const apologeticsXpNode = document.querySelector("[data-react-apologetics-xp-root]");
 if (apologeticsXpNode && window.aiBridge) {
-  createRoot(apologeticsXpNode).render(<ApologeticsXpCard />);
+  mountDeferredScreen(apologeticsXpNode, () => import("./apologetics-coach.jsx"), "ApologeticsXpCard");
 }
 
 const adminNode = document.querySelector("[data-react-admin-root]");
 if (adminNode && window.moderationBridge) {
-  createRoot(adminNode).render(<AdminPage />);
+  mountDeferredScreen(adminNode, () => import("./admin.jsx"), "AdminPage");
 }
 
 requestAnimationFrame(() => requestAnimationFrame(() => void startMobileUpdates()));

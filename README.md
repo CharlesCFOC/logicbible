@@ -110,3 +110,86 @@ enseignants et gestionnaires peuvent lancer une session; les visiteurs reçoiven
 un lien limité à la session active et n’obtiennent aucun accès aux archives.
 Le lien de projection expire avec la session. L’URL de participation visiteur est
 accessible depuis le panneau de session active.
+
+## Security and quality checks
+
+Use Node.js 24 and install the locked dependencies with `npm ci`.
+`npm run check` checks JavaScript syntax and runs the complete test suite,
+including PostgreSQL migration tests in an isolated PGlite database (no live
+credentials needed). `npm run verify` additionally builds the web/mobile release
+and checks dependency advisories. GitHub Actions runs this on pushes and pull
+requests; Vercel builds also require the syntax checks and tests to pass.
+Repository branch protection must be configured separately to require the
+`verify` job before merging.
+
+The Node server and mobile packaging use the public-file allowlist in
+`lib/public-files.js`. Environment files, Git metadata, server sources, build
+scripts and tests are not public files. Add new browser assets to that allowlist
+when needed. Never serve the repository root with an unrestricted static server.
+
+### Deploying AI usage protection and vote aggregation
+
+**Apply `supabase/migrations/20261030175438_ai_usage_and_vote_summary.sql` to the
+application's Supabase project before deploying this code.** It is additive:
+existing session-admin passwords and session access are unchanged. The migration
+creates service-role-only usage counters and RPCs; browser roles cannot call them.
+Applied on 2026-10-30 to the Logic Bible project (`onbczidvuhezoouzdrae`) through
+the authenticated Supabase dashboard. Verified on that database: quota acceptance
+and rejection, vote aggregation, RLS, and denied direct RPC access for browser
+roles. Verification writes were rolled back. The migration remains necessary
+when provisioning another environment; do not rerun it on this existing project.
+
+Chat, verse discussions, quizzes, Bible Study and church study AI require a valid
+Supabase user session. Existing mobile bundles that do not send the access token
+must receive the new web bundle before using these protected endpoints.
+Session preparation and activities retain their existing access flow; their AI
+calls also consume the global quota and an anonymous caller quota. No raw IP is
+stored in the counters.
+
+Each actual provider attempt atomically reserves one call, including retries and
+calls from session tools. Cache hits do not spend calls. Defaults are 60 calls per
+hour and 200 per UTC day per caller, and 2,000 per UTC day across the application.
+Configure `AI_USER_HOURLY_LIMIT`, `AI_USER_DAILY_LIMIT`, and
+`AI_GLOBAL_DAILY_LIMIT` on the server. These cap requests, not a precise dollar
+amount; configure the provider's spending controls as well. Quota denial returns
+429 with `Retry-After`. If the quota database is unavailable or the migration is
+missing, new provider calls fail closed with 503. Counters older than two days
+are cleaned on the first accepted call of a new UTC day.
+
+Votes are now aggregated inside PostgreSQL instead of loading every user's vote
+into Node for every request. The new summary RPC is accessible only to the server.
+
+If the old Node server was reachable by untrusted users, rotate keys previously
+stored in `.env.local`; blocking future file reads does not revoke copied keys.
+
+## Code organization
+
+`server.mjs` only loads configuration and starts HTTP. The request handler in
+`lib/http/request-handler.js` retains routing, CORS and the common AI auth gate.
+Route implementations live in `lib/routes/` (Bible, studies, quizzes, AI, prayers,
+accounts, churches and sessions). Provider calls, reference-library retrieval,
+JSON parsing and static serving have separate modules under `lib/ai/`,
+`lib/bible/` and `lib/http/`. Keep request-specific identities in the existing
+AsyncLocalStorage context; never put them in a module-level variable.
+
+Browser code is organized into `scripts/core/` for account sync, API transport and
+formatting, `scripts/features/` for screen behavior, and `scripts/bridges/` for the
+adapters used by React. `script.js` retains shared state and bootstrap wiring.
+This is an incremental migration: these legacy files still share a classic-script
+scope. Bridge initializers execute at their original bootstrap points, preserving
+initialization order. Do not add top-level side effects to the declaration files.
+
+`scripts/legacy-manifest.json` specifies source order. `npm run build:legacy`
+combines those sources into `assets/legacy.js`, so organizing the code does not
+add dozens of network requests. Edit source files, never the generated bundle.
+Run `npm run build` after changes before using `npm start` (or use `npm run dev`).
+ESLint checks the combined scope for missing identifiers and duplicate keys as
+well as checking the extracted server modules.
+
+The React build uses ES modules. Kids Bible, Prayer, AI, Debate, church/session
+screens and moderation load on first visit through `mountDeferredScreen` and
+stay mounted afterward to preserve their state. The small shared prayer card is
+separate so Profile does not eagerly pull in the prayer globe. HTML entry points
+must keep `type="module"` on the React bundle. Build packaging includes the
+chunk files for offline Android use. `scripts/check-bundle.mjs` fails the build
+if a heavy screen becomes part of the initial static module graph again.

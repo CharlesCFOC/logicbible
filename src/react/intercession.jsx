@@ -540,7 +540,10 @@ export function IntercessionPanel() {
   }, [reminderSchedule]);
   const { phase } = getIntercessionPhase(state.session, now);
   const topicIndex = schedule.familyTopicIndex;
-  const themeId = voting?.sessionStart === sessionStart ? voting.currentTheme : 'families';
+  // If nobody has voted for this session, rotate the focus so the room does not
+  // default to families every time. A recorded community vote always takes priority.
+  const fallbackTheme = voteThemes[Math.floor(sessionStart / (10 * 60_000)) % voteThemes.length];
+  const themeId = voting?.sessionStart === sessionStart ? voting.currentTheme : fallbackTheme.id;
   const theme = voteThemes.find(item => item.id === themeId) || voteThemes[0];
   const topics = getPrayerTopics(themeId);
   const topic = topics[topicIndex];

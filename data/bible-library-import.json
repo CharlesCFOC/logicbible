@@ -1,0 +1,67 @@
+{
+  "project": "onbczidvuhezoouzdrae",
+  "sources": [
+    {
+      "id": "kjv",
+      "name": "King James Version",
+      "language": "en",
+      "source_url": "https://ebible.org/Scriptures/eng-kjv_vpl.zip",
+      "license_url": "https://ebible.org/eng-kjv/copyright.htm",
+      "license": "Public domain; KJV UK printing rights reserved",
+      "source_sha256": "9430dc05586c949bd2e28a27a6a1751effc50a6ab0dfda9b6750738abcba0f02",
+      "imported_at": "2026-10-30T21:42:47.327036+00:00",
+      "book_count": 66,
+      "chapter_count": 1189,
+      "verse_count": 31102
+    },
+    {
+      "id": "lsg1910",
+      "name": "Louis Segond 1910",
+      "language": "fr",
+      "source_url": "https://ebible.org/Scriptures/fraLSG_vpl.zip",
+      "license_url": "https://ebible.org/fraLSG/copyright.htm",
+      "license": "Public domain",
+      "source_sha256": "fcdeac5aa1ebf857835a41bfa11f8fe5685c31ea602418a2998d4c870488f54b",
+      "imported_at": "2026-10-30T21:42:47.529116+00:00",
+      "book_count": 66,
+      "chapter_count": 1189,
+      "verse_count": 31170
+    }
+  ],
+  "verification": [
+    {
+      "version": "kjv",
+      "source_sha256": "9430dc05586c949bd2e28a27a6a1751effc50a6ab0dfda9b6750738abcba0f02",
+      "verified_at": "2026-10-30T21:43:35.909Z",
+      "books": {
+        "count": 66,
+        "sha256": "f6a2850bf01e96f739ff07ee48cf89118220dacb165ad2d3234dd3b379bd7377"
+      },
+      "chapters": {
+        "count": 1189,
+        "sha256": "e44e0d95909e27baf768ff11ad55e6eac7a67db72e97322a0ddd46173e0d5197"
+      },
+      "verses": {
+        "count": 31102,
+        "sha256": "d63e2748017caca9e9f4c76ce7c7a251b36acc0e4c1c6368c4c0d2ef882aae68"
+      }
+    },
+    {
+      "version": "lsg1910",
+      "source_sha256": "fcdeac5aa1ebf857835a41bfa11f8fe5685c31ea602418a2998d4c870488f54b",
+      "verified_at": "2026-10-30T21:43:57.908Z",
+      "books": {
+        "count": 66,
+        "sha256": "ed657db3535cfc7a989f90b30aa567ab8b71971ecdeec3f8744e4532638f1b0b"
+      },
+      "chapters": {
+        "count": 1189,
+        "sha256": "6dd16afa7aa52c103ec16478c388d2fc87a6643585db654bbbba472eab5cb7ad"
+      },
+      "verses": {
+        "count": 31170,
+        "sha256": "cc92b4707729d6cb4e1a23523abe84e1785a81981afaa330c32f7b56e74f258d"
+      }
+    }
+  ]
+}

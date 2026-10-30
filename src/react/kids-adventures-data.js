@@ -1,12 +1,102 @@
 import { genesisAdventures } from "./kids-genesis-data.js";
+import { exodusAdventures } from "./kids-exodus-data.js";
+import { leviticusAdventures } from "./kids-leviticus-data.js";
+import { numbersAdventures } from "./kids-numbers-data.js";
+import { deuteronomyAdventures } from "./kids-deuteronomy-data.js";
+import { joshuaAdventures, judgesAdventures, ruthAdventures } from "./kids-joshua-judges-ruth-data.js";
+import { firstSamuelAdventures, secondSamuelAdventures } from "./kids-samuel-data.js";
+import { firstKingsAdventures, secondKingsAdventures } from "./kids-kings-data.js";
+import { firstChroniclesAdventures, secondChroniclesAdventures } from "./kids-chronicles-data.js";
+import { ezraAdventures, nehemiahAdventures, estherAdventures } from "./kids-ezra-nehemiah-esther-data.js";
+import { jobAdventures, psalmsAdventures } from "./kids-job-psalms-data.js";
+import { proverbsAdventures, ecclesiastesAdventures, songAdventures } from "./kids-wisdom-books-data.js";
+import { isaiahAdventures, jeremiahAdventures, lamentationsAdventures } from "./kids-major-prophets-data.js";
+import { ezekielAdventures, danielAdventures } from "./kids-ezekiel-daniel-data.js";
+import { hoseaAdventures, joelAdventures, amosAdventures, obadiahAdventures, jonahAdventures, micahAdventures, nahumAdventures, habakkukAdventures, zephaniahAdventures, haggaiAdventures, zechariahAdventures, malachiAdventures } from "./kids-minor-prophets-data.js";
 
 export const kidsBooks = [
   { id: "genesis", title: "Genesis", icon: "🌍", subtitle: "Beginnings, promises, and growing families." },
+  { id: "exodus", title: "Exodus", icon: "🏜️", subtitle: "Moses, freedom, and a journey through the wilderness." },
+  { id: "leviticus", title: "Leviticus", icon: "🕯️", subtitle: "Worship, fairness, and caring for the community." },
+  { id: "numbers", title: "Numbers", icon: "🧭", subtitle: "A long wilderness journey toward a new home." },
+  { id: "deuteronomy", title: "Deuteronomy", icon: "📜", subtitle: "Moses remembers the journey and prepares Israel for a new home." },
+  { id: "joshua", title: "Joshua", icon: "🧭", subtitle: "A new leader and the people’s arrival in Canaan." },
+  { id: "judges", title: "Judges", icon: "⚖️", subtitle: "Stories of leaders, hard choices, and a people seeking help." },
+  { id: "ruth", title: "Ruth", icon: "🌾", subtitle: "A story of loyalty, generosity, and a new family." },
+  { id: "1-samuel", title: "1 Samuel", icon: "🎵", subtitle: "Samuel, Saul, David, and the beginning of Israel’s kings." },
+  { id: "2-samuel", title: "2 Samuel", icon: "👑", subtitle: "David’s reign, family struggles, and a promise for the future." },
+  { id: "1-kings", title: "1 Kings", icon: "🏛️", subtitle: "Solomon, a divided kingdom, and the prophet Elijah." },
+  { id: "2-kings", title: "2 Kings", icon: "🕊️", subtitle: "Elisha, the kings of Israel and Judah, and the exile." },
+  { id: "1-chronicles", title: "1 Chronicles", icon: "📜", subtitle: "Families, David’s reign, and preparations for the temple." },
+  { id: "2-chronicles", title: "2 Chronicles", icon: "🏛️", subtitle: "Solomon’s temple, Judah’s kings, and a hope of return." },
+  { id: "ezra", title: "Ezra", icon: "📚", subtitle: "A return from exile and the rebuilding of the temple." },
+  { id: "nehemiah", title: "Nehemiah", icon: "🧱", subtitle: "A city wall rebuilt through courage and teamwork." },
+  { id: "esther", title: "Esther", icon: "👑", subtitle: "A queen’s courage helps protect her people." },
+  { id: "job", title: "Job", icon: "🌧️", subtitle: "Hard questions, grief, friendship, and hope." },
+  { id: "psalms", title: "Psalms", icon: "🎶", subtitle: "Songs and prayers for every kind of feeling." },
+  { id: "proverbs", title: "Proverbs", icon: "💡", subtitle: "Practical wisdom for choices, words, work, and friendship." },
+  { id: "ecclesiastes", title: "Ecclesiastes", icon: "⏳", subtitle: "Reflections on time, work, change, and what matters." },
+  { id: "song-of-songs", title: "Song of Songs", icon: "🌹", subtitle: "Poems celebrating affection, patience, and love." },
+  { id: "isaiah", title: "Isaiah", icon: "🕊️", subtitle: "Justice, comfort, peace, and hope for a renewed world." },
+  { id: "jeremiah", title: "Jeremiah", icon: "📣", subtitle: "A prophet’s warnings, grief, and promises of a new beginning." },
+  { id: "lamentations", title: "Lamentations", icon: "🌧️", subtitle: "Honest poems of grief that hold on to hope." },
+  { id: "ezekiel", title: "Ezekiel", icon: "🌊", subtitle: "Visions of return, renewed hearts, and life after exile." },
+  { id: "daniel", title: "Daniel", icon: "🦁", subtitle: "Courage, wise choices, and hope while far from home." },
+  { id: "hosea", title: "Hosea", icon: "💛", subtitle: "A difficult story about broken trust, love, and returning." },
+  { id: "joel", title: "Joel", icon: "🌾", subtitle: "A community faces loss and hopes for renewal." },
+  { id: "amos", title: "Amos", icon: "⚖️", subtitle: "A shepherd calls leaders to practice justice." },
+  { id: "obadiah", title: "Obadiah", icon: "🏔️", subtitle: "A warning against pride and celebrating a neighbor’s trouble." },
+  { id: "jonah", title: "Jonah", icon: "🐟", subtitle: "A reluctant prophet learns about compassion." },
+  { id: "micah", title: "Micah", icon: "🤲", subtitle: "Justice, kindness, humility, and a promise of peace." },
+  { id: "nahum", title: "Nahum", icon: "🌊", subtitle: "A message that violent power will not last forever." },
+  { id: "habakkuk", title: "Habakkuk", icon: "❓", subtitle: "Honest questions and hope while waiting." },
+  { id: "zephaniah", title: "Zephaniah", icon: "🌤️", subtitle: "A warning that ends with a promise of joy." },
+  { id: "haggai", title: "Haggai", icon: "🔨", subtitle: "Encouragement to rebuild the temple together." },
+  { id: "zechariah", title: "Zechariah", icon: "🌙", subtitle: "Strange visions, peaceful leadership, and renewal." },
+  { id: "malachi", title: "Malachi", icon: "📣", subtitle: "Questions about fairness and a promise of a new day." },
   { id: "mark", title: "Mark", icon: "⛵", subtitle: "Meet Jesus and his friends." },
 ];
 
 export const kidsAdventures = [
   ...genesisAdventures,
+  ...exodusAdventures,
+  ...leviticusAdventures,
+  ...numbersAdventures,
+  ...deuteronomyAdventures,
+  ...joshuaAdventures,
+  ...judgesAdventures,
+  ...ruthAdventures,
+  ...firstSamuelAdventures,
+  ...secondSamuelAdventures,
+  ...firstKingsAdventures,
+  ...secondKingsAdventures,
+  ...firstChroniclesAdventures,
+  ...secondChroniclesAdventures,
+  ...ezraAdventures,
+  ...nehemiahAdventures,
+  ...estherAdventures,
+  ...jobAdventures,
+  ...psalmsAdventures,
+  ...proverbsAdventures,
+  ...ecclesiastesAdventures,
+  ...songAdventures,
+  ...isaiahAdventures,
+  ...jeremiahAdventures,
+  ...lamentationsAdventures,
+  ...ezekielAdventures,
+  ...danielAdventures,
+  ...hoseaAdventures,
+  ...joelAdventures,
+  ...amosAdventures,
+  ...obadiahAdventures,
+  ...jonahAdventures,
+  ...micahAdventures,
+  ...nahumAdventures,
+  ...habakkukAdventures,
+  ...zephaniahAdventures,
+  ...haggaiAdventures,
+  ...zechariahAdventures,
+  ...malachiAdventures,
   {
     id: "storm", bookId: "mark", title: "Jesus Calms the Storm", subtitle: "A boat trip, big waves... and an amazing discovery.",
     theme: "Courage & trust", icon: "⛵", badge: "Brave Captain", reference: "Mark 4:35–41", minutes: 4,

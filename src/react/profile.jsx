@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { PrayerReadOnlyCard } from "./prayer.jsx";
+import { PrayerReadOnlyCard } from "./prayer-read-only-card.jsx";
 
 const profileTabs = [
   ["preferences", "Preferences", ["M4 5h16", "M7 5v8", "M17 5v14", "M4 13h16", "M4 21h16"]],

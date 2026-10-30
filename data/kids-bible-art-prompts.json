@@ -1,0 +1,403 @@
+{
+  "version": 1,
+  "tool": "built-in image_gen",
+  "purpose": "One cover per Genesis adventure plus the approved Exodus burning-bush pilot. Covers are reused during reading scenes.",
+  "illustrations": [
+    {
+      "id": "exodus-04",
+      "promptSummary": "Approved pilot: barefoot Moses with dark beard, cream tunic and ochre cloak, sandals and staff aside, facing a living bush glowing with golden flames on a desert hillside. Warm gouache storybook style. No text or human depiction of God.",
+      "image": "assets/kids-bible/illustrated/exodus-04.webp",
+      "thumbnail": "assets/kids-bible/illustrated/exodus-04-thumb.webp"
+    },
+    {
+      "id": "genesis-abraham",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Abram Sets Out (Genesis 12:1–9). Scene: Abram, older Middle Eastern man with salt-and-pepper beard, ochre robe and rust cloak, and Sarai in a muted teal robe and cream veil, leading a small family caravan from their old home toward sunlit Canaan hills.",
+      "image": "assets/kids-bible/illustrated/genesis-abraham.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-abraham-thumb.webp"
+    },
+    {
+      "id": "genesis-abraham-prays",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Abraham Prays for Others (Genesis 18:16–33). Scene: Elderly Abraham with silver beard, ochre robe and rust cloak, standing on a quiet hill in prayer, distant city in a valley, gentle evening light. No disaster and no deity shown.",
+      "image": "assets/kids-bible/illustrated/genesis-abraham-prays.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-abraham-prays-thumb.webp"
+    },
+    {
+      "id": "genesis-abram-lot",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Room for Peace (Genesis 13). Scene: Abram, salt-and-pepper beard ochre robe rust cloak, and his younger bearded nephew Lot on a hill, calmly pointing toward two different pasturelands as their sheep graze. Warm peaceful agreement.",
+      "image": "assets/kids-bible/illustrated/genesis-abram-lot.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-abram-lot-thumb.webp"
+    },
+    {
+      "id": "genesis-ark-animals",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Into the Ark (Genesis 7). Scene: Pairs of giraffes, zebras, sheep and lions calmly boarding a tall wooden ark ramp; Noah, gray beard rust robe cream headcloth, welcoming them. Gentle clouds gathering, no distress.",
+      "image": "assets/kids-bible/illustrated/genesis-ark-animals.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-ark-animals-thumb.webp"
+    },
+    {
+      "id": "genesis-babel",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: The Tower of Babel (Genesis 11:1–9). Scene: A massive unfinished stepped brick tower in an ancient Mesopotamian city; groups of modestly clothed workers gesturing in mutual confusion around clay bricks and baskets. No letters or writing.",
+      "image": "assets/kids-bible/illustrated/genesis-babel.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-babel-thumb.webp"
+    },
+    {
+      "id": "genesis-benjamin-departs",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: A Promise to Protect Benjamin (Genesis 43:1–14). Scene: Judah, adult dark-bearded man in a burgundy outer robe, reassuring elderly Jacob with gray beard while younger adult Benjamin in a cream robe prepares to leave with a travel bundle. Tender responsibility near family tents.",
+      "image": "assets/kids-bible/illustrated/genesis-benjamin-departs.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-benjamin-departs-thumb.webp"
+    },
+    {
+      "id": "genesis-benjamin-rachel",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Joy and Sadness on the Journey (Genesis 35:16–29). Scene: Jacob with graying dark beard holding newborn Benjamin wrapped securely in a blanket, older children gathered close offering comfort on a quiet journey near trees. Tender mixed joy and sadness. No childbirth, dying person or body.",
+      "image": "assets/kids-bible/illustrated/genesis-benjamin-rachel.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-benjamin-rachel-thumb.webp"
+    },
+    {
+      "id": "genesis-brothers-egypt",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: The Brothers Come for Grain (Genesis 42). Scene: Joseph, adult dark curls cream linen robe blue sash gold collar, overseeing grain distribution while his ten adult brothers in simple earth-tone travel robes approach with sacks in an Egyptian courtyard.",
+      "image": "assets/kids-bible/illustrated/genesis-brothers-egypt.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-brothers-egypt-thumb.webp"
+    },
+    {
+      "id": "genesis-brothers-reunited",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Esau’s Unexpected Welcome (Genesis 33). Scene: Adult brothers Jacob, dark short beard cream robe blue sash, and Esau, reddish hair beard and brown robe, warmly embracing on an open path as their families approach in the distance.",
+      "image": "assets/kids-bible/illustrated/genesis-brothers-reunited.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-brothers-reunited-thumb.webp"
+    },
+    {
+      "id": "genesis-cain-abel",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Cain and Abel (Genesis 4:1–16). Scene: Before the conflict, two adult brothers near their separate offerings: Cain with a basket of grain and fruit, Abel standing with a peaceful lamb. Serious thoughtful mood, hillside farm. No violence or dead animals.",
+      "image": "assets/kids-bible/illustrated/genesis-cain-abel.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-cain-abel-thumb.webp"
+    },
+    {
+      "id": "genesis-creation",
+      "promptSummary": "Approved pilot: newly created world, river and sea, plants, birds, fish and peaceful land animals. Warm hand-painted gouache storybook style. No people, text or human depiction of God.",
+      "image": "assets/kids-bible/illustrated/genesis-creation.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-creation-thumb.webp"
+    },
+    {
+      "id": "genesis-dove",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: The Dove and the Olive Leaf (Genesis 8). Scene: Noah, gray beard rust robe cream headcloth, at the window of the wooden ark, holding out his hand to a white dove carrying a fresh olive leaf. Quiet blue floodwaters and distant newly visible hilltops.",
+      "image": "assets/kids-bible/illustrated/genesis-dove.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-dove-thumb.webp"
+    },
+    {
+      "id": "genesis-father-reunion",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Jacob Sees Joseph Again (Genesis 46:1–30). Scene: Elderly gray-bearded Jacob and adult son Joseph in cream linen robe blue sash gold collar embracing tenderly beside a stopped Egyptian chariot in green Goshen, reunited family nearby.",
+      "image": "assets/kids-bible/illustrated/genesis-father-reunion.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-father-reunion-thumb.webp"
+    },
+    {
+      "id": "genesis-garden",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: A Garden to Care For (Genesis 2:4–17). Scene: Adam, adult dark-haired man in a full cream robe, gently tending a young plant beside a flowing river in lush Eden. Fruit trees, soft sunlight. No Eve in this scene.",
+      "image": "assets/kids-bible/illustrated/genesis-garden.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-garden-thumb.webp"
+    },
+    {
+      "id": "genesis-garden-choice",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: A Choice in the Garden (Genesis 3). Scene: Adam and Eve in fully covering opaque robes beside a fruit tree, looking hesitant at a small ordinary serpent coiled on a branch and fruit in Eve's hand. Thoughtful, not frightening. No nudity or threatening snake.",
+      "image": "assets/kids-bible/illustrated/genesis-garden-choice.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-garden-choice-thumb.webp"
+    },
+    {
+      "id": "genesis-goshen",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: A New Home in Goshen (Genesis 46:31–47:12). Scene: Jacob's large family settling peacefully in Goshen: green pastures, sheep, simple tents and children playing safely, Joseph in cream and blue welcoming his elderly father and brothers.",
+      "image": "assets/kids-bible/illustrated/genesis-goshen.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-goshen-thumb.webp"
+    },
+    {
+      "id": "genesis-growing-family",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: A Growing, Complicated Family (Genesis 29:31–30:24). Scene: Jacob's growing household: adults Leah in violet and Rachel in coral with other modestly dressed women caring for fully clothed children among tents, sheep and cooking baskets. Complex busy family, no rivalry caricature.",
+      "image": "assets/kids-bible/illustrated/genesis-growing-family.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-growing-family-thumb.webp"
+    },
+    {
+      "id": "genesis-hagar-desert",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: A Well in the Wilderness (Genesis 21:8–21). Scene: Hagar, terracotta robe cream headscarf, offering fresh water from a newly found desert well to her tired young son Ishmael, fully clothed and safe in shade. Hopeful scene, no distress or harm.",
+      "image": "assets/kids-bible/illustrated/genesis-hagar-desert.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-hagar-desert-thumb.webp"
+    },
+    {
+      "id": "genesis-hagar-seen",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: God Sees Hagar (Genesis 16). Scene: Hagar, adult brown-skinned woman in a muted terracotta robe and cream headscarf, resting beside a fresh spring in the desert and looking up with renewed hope. No supernatural human figure needed.",
+      "image": "assets/kids-bible/illustrated/genesis-hagar-seen.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-hagar-seen-thumb.webp"
+    },
+    {
+      "id": "genesis-humanity",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Made in God’s Image (Genesis 1:26–31). Scene: Adam and Eve, both adults in simple fully covering cream and ochre robes, caring for the newly created garden and its peaceful creatures beside a river. Equal dignity, gentle faces. God not shown.",
+      "image": "assets/kids-bible/illustrated/genesis-humanity.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-humanity-thumb.webp"
+    },
+    {
+      "id": "genesis-isaac-born",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Isaac, the Long-Awaited Child (Genesis 21:1–7). Scene: Elderly Sarah in teal robe cream veil tenderly holding newborn Isaac wrapped in a cream blanket, elderly silver-bearded Abraham beside them smiling, warmly lit tent interior.",
+      "image": "assets/kids-bible/illustrated/genesis-isaac-born.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-isaac-born-thumb.webp"
+    },
+    {
+      "id": "genesis-isaac-fear",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Isaac Faces His Fear (Genesis 26:1–11). Scene: Adult Isaac with brown beard sage robe standing beside Rebekah in plum robe cream veil, speaking honestly to King Abimelech in an open courtyard. Thoughtful expressions, gentle daylight.",
+      "image": "assets/kids-bible/illustrated/genesis-isaac-fear.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-isaac-fear-thumb.webp"
+    },
+    {
+      "id": "genesis-isaac-wells",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Wells Without Fighting (Genesis 26:12–33). Scene: Isaac, brown beard sage robe, and his workers joyfully drawing fresh water from a newly dug well with broad open pasture around them, sheep nearby. Peaceful space without conflict.",
+      "image": "assets/kids-bible/illustrated/genesis-isaac-wells.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-isaac-wells-thumb.webp"
+    },
+    {
+      "id": "genesis-israel",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: A Night and a New Name (Genesis 32:22–32). Scene: At dawn beside the Jabbok river, weary Jacob with short dark beard cream robe blue sash leaning on a staff after the mysterious night encounter, a robed stranger receding into soft morning light. Gentle aftermath, no violent wrestling.",
+      "image": "assets/kids-bible/illustrated/genesis-israel.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-israel-thumb.webp"
+    },
+    {
+      "id": "genesis-jacob-blessings",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Words for the Next Generation (Genesis 48–49). Scene: Elderly Jacob with silver beard seated comfortably in a tent, gently placing his crossed hands in blessing on two fully clothed young grandsons, Joseph in cream linen and blue watching respectfully. Warm multi-generation family scene.",
+      "image": "assets/kids-bible/illustrated/genesis-jacob-blessings.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-jacob-blessings-thumb.webp"
+    },
+    {
+      "id": "genesis-jacob-good-news",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Good News for Jacob (Genesis 45:16–28). Scene: Elderly Jacob, gray beard cream robe blue sash, looking astonished and hopeful as his adult sons point toward Egyptian wagons loaded with gifts arriving near their tents.",
+      "image": "assets/kids-bible/illustrated/genesis-jacob-good-news.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-jacob-good-news-thumb.webp"
+    },
+    {
+      "id": "genesis-jacob-laban-peace",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: A Boundary for Peace (Genesis 31:17–55). Scene: Jacob in cream robe blue sash and older gray-bearded Laban in brown robe setting a pile of stones as a peaceful boundary on open hills, families and tents safely behind them.",
+      "image": "assets/kids-bible/illustrated/genesis-jacob-laban-peace.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-jacob-laban-peace-thumb.webp"
+    },
+    {
+      "id": "genesis-jacob-leaves",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Jacob Leaves Home (Genesis 27:41–28:9). Scene: Adult Jacob with dark curly hair cream robe blue sash carrying a travel bundle and staff, departing his family's tents at dawn while Rebekah in plum robe watches with concern.",
+      "image": "assets/kids-bible/illustrated/genesis-jacob-leaves.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-jacob-leaves-thumb.webp"
+    },
+    {
+      "id": "genesis-jacob-prepares",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Before Meeting Esau (Genesis 32:1–21). Scene: Jacob, short dark beard cream robe blue sash, thoughtfully organizing gifts of goats and sheep with his servants near a river before meeting his brother, family waiting in the distance. No battle.",
+      "image": "assets/kids-bible/illustrated/genesis-jacob-prepares.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-jacob-prepares-thumb.webp"
+    },
+    {
+      "id": "genesis-jacob-work",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Jacob’s Years of Work (Genesis 30:25–43; 31:1–16). Scene: Older adult Jacob with dark curly hair and short beard, cream robe blue sash, carefully tending spotted and speckled sheep and goats near a wooden watering trough in green pasture.",
+      "image": "assets/kids-bible/illustrated/genesis-jacob-work.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-jacob-work-thumb.webp"
+    },
+    {
+      "id": "genesis-joseph",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Joseph Stores the Grain (Genesis 41:37–57). Scene: Adult Joseph with dark curls clean-shaven cream linen robe broad blue sash and modest gold collar directing workers storing grain in tall Egyptian granaries, full baskets of golden wheat and orderly abundance.",
+      "image": "assets/kids-bible/illustrated/genesis-joseph.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-joseph-thumb.webp"
+    },
+    {
+      "id": "genesis-joseph-coat",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Joseph’s Special Robe (Genesis 37:1–11). Scene: Young Joseph, adolescent boy with dark curls in a beautiful modest long multicolored striped robe, standing beside elderly father Jacob with gray beard cream robe blue sash near tents; older brothers watch at a distance.",
+      "image": "assets/kids-bible/illustrated/genesis-joseph-coat.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-joseph-coat-thumb.webp"
+    },
+    {
+      "id": "genesis-joseph-meal",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: A Meal Full of Feelings (Genesis 43:15–34). Scene: Joseph, dark curls cream linen robe blue sash gold collar, hosting his brothers including younger adult Benjamin at a generous ancient Egyptian meal with bread, fruit and clay cups; subtle mixed emotions.",
+      "image": "assets/kids-bible/illustrated/genesis-joseph-meal.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-joseph-meal-thumb.webp"
+    },
+    {
+      "id": "genesis-joseph-prison",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Joseph Notices Two Sad Faces (Genesis 39:20–40:23). Scene: Young adult Joseph, dark curls simple cream tunic, listening kindly to two worried adult prisoners in a stone room lit by a high window. Everyone fully clothed and unharmed, no chains or guards threatening them.",
+      "image": "assets/kids-bible/illustrated/genesis-joseph-prison.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-joseph-prison-thumb.webp"
+    },
+    {
+      "id": "genesis-joseph-reassures",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Joseph Chooses Care (Genesis 50). Scene: Mature Joseph, dark curls with touches of gray, cream linen robe blue sash gold collar, reassuring his adult brothers with open hands, smiling children and grain provisions nearby, warm peaceful forgiveness.",
+      "image": "assets/kids-bible/illustrated/genesis-joseph-reassures.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-joseph-reassures-thumb.webp"
+    },
+    {
+      "id": "genesis-joseph-refuses",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Joseph Says No (Genesis 39:7–20). Scene: Young adult Joseph, dark curls cream modest linen tunic, resolutely walking out through an open Egyptian household doorway toward daylight. Focus on his choice to leave and integrity; no seduction, grabbing, nudity or threatening encounter.",
+      "image": "assets/kids-bible/illustrated/genesis-joseph-refuses.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-joseph-refuses-thumb.webp"
+    },
+    {
+      "id": "genesis-joseph-revealed",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: “I Am Joseph!” (Genesis 45:1–15). Scene: Joseph, dark curls cream linen robe blue sash gold collar, tearfully embracing his younger adult brother Benjamin as the other adult brothers look amazed and relieved in a warm Egyptian room.",
+      "image": "assets/kids-bible/illustrated/genesis-joseph-revealed.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-joseph-revealed-thumb.webp"
+    },
+    {
+      "id": "genesis-joseph-sold",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Joseph Is Taken to Egypt (Genesis 37:12–36). Scene: Young Joseph, adolescent with dark curls now in a simple cream tunic, traveling with a merchant camel caravan toward distant Egypt, looking thoughtful and homesick. No shackles, violence, pit or threatening people.",
+      "image": "assets/kids-bible/illustrated/genesis-joseph-sold.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-joseph-sold-thumb.webp"
+    },
+    {
+      "id": "genesis-judah-offer",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Judah Stands Beside Benjamin (Genesis 44:18–34). Scene: Judah, adult dark-bearded man in burgundy robe, standing protectively beside younger adult Benjamin in cream, speaking earnestly with open hands to Joseph in cream linen robe blue sash gold collar in an Egyptian hall.",
+      "image": "assets/kids-bible/illustrated/genesis-judah-offer.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-judah-offer-thumb.webp"
+    },
+    {
+      "id": "genesis-laban-deception",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Laban Breaks His Word (Genesis 29:15–30). Scene: Morning outside a family tent: adult Jacob, dark curly hair cream robe blue sash, questioning older gray-bearded Laban in a brown robe, who gestures evasively. Adult Leah in a muted violet robe stands respectfully nearby. No wedding-bed scene.",
+      "image": "assets/kids-bible/illustrated/genesis-laban-deception.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-laban-deception-thumb.webp"
+    },
+    {
+      "id": "genesis-ladder",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Jacob’s Dream (Genesis 28:10–22). Scene: Jacob, dark curly hair cream robe blue sash, sleeping fully clothed with his head near a smooth stone under a starry sky, dreaming of a luminous stairway rising heavenward with small gentle robed angels. No depiction of God.",
+      "image": "assets/kids-bible/illustrated/genesis-ladder.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-ladder-thumb.webp"
+    },
+    {
+      "id": "genesis-leah",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Leah Is Not Forgotten (Genesis 29:31–35). Scene: Leah, adult woman in a muted violet robe and cream veil, gently cradling her swaddled newborn son in a quiet tent, soft hopeful morning light, emphasizing her dignity and care.",
+      "image": "assets/kids-bible/illustrated/genesis-leah.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-leah-thumb.webp"
+    },
+    {
+      "id": "genesis-lentil-stew",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: A Bowl of Stew (Genesis 25:29–34). Scene: Adult Jacob with dark curly hair cream robe blue sash offering a clay bowl of red lentil stew to tired adult Esau with reddish hair and brown robe outside a tent.",
+      "image": "assets/kids-bible/illustrated/genesis-lentil-stew.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-lentil-stew-thumb.webp"
+    },
+    {
+      "id": "genesis-lot-leaves",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Leaving a Dangerous City (Genesis 19:1–29). Scene: Lot and his family in modest robes leaving an ancient stone city toward safe sunlit hills with two helpful robed travelers. Focus on the path to safety; no destruction, violence or bodies.",
+      "image": "assets/kids-bible/illustrated/genesis-lot-leaves.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-lot-leaves-thumb.webp"
+    },
+    {
+      "id": "genesis-melchizedek",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: A Blessing After the Rescue (Genesis 14:17–24). Scene: King-priest Melchizedek in simple dignified ancient robes offering bread and a clay cup to Abram, ochre robe rust cloak, outside a modest ancient city gate. Respectful blessing, no modern religious costume.",
+      "image": "assets/kids-bible/illustrated/genesis-melchizedek.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-melchizedek-thumb.webp"
+    },
+    {
+      "id": "genesis-mountain",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: On the Mountain with Isaac (Genesis 22:1–19). Scene: After danger has passed, Abraham embracing his unharmed fully clothed son Isaac on a mountain path, a living ram visible in nearby bushes. No knife, restraints, altar violence, sacrifice or flames.",
+      "image": "assets/kids-bible/illustrated/genesis-mountain.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-mountain-thumb.webp"
+    },
+    {
+      "id": "genesis-new-names",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: New Names, Lasting Promises (Genesis 17). Scene: Elderly Abraham with silver beard ochre robe rust cloak and elderly Sarah in teal robe cream veil outside their tent, looking together toward a bright new dawn with hope. No written names or text.",
+      "image": "assets/kids-bible/illustrated/genesis-new-names.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-new-names-thumb.webp"
+    },
+    {
+      "id": "genesis-noah",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Noah Builds the Ark (Genesis 6:9–22). Scene: Noah, elderly man with gray beard and rust robe and cream headcloth, working with his adult sons on the unfinished large wooden ark on dry ground. Timber beams, wooden tools, half-built hull. No rainbow, no water or modern tools.",
+      "image": "assets/kids-bible/illustrated/genesis-noah.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-noah-thumb.webp"
+    },
+    {
+      "id": "genesis-peace-well",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: An Agreement at the Well (Genesis 21:22–34). Scene: Elderly silver-bearded Abraham and Abimelech agreeing peacefully beside a stone well, seven healthy lambs nearby, pastoral dry hills. Open hands, no text.",
+      "image": "assets/kids-bible/illustrated/genesis-peace-well.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-peace-well-thumb.webp"
+    },
+    {
+      "id": "genesis-pharaoh-dreams",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Pharaoh’s Puzzling Dreams (Genesis 41:1–36). Scene: Adult Joseph, dark curls clean-shaven cream linen robe blue sash, respectfully explaining a dream to seated Pharaoh in a modest ancient Egyptian throne room. Carved grain and cattle motifs, no writing or floating dream collage.",
+      "image": "assets/kids-bible/illustrated/genesis-pharaoh-dreams.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-pharaoh-dreams-thumb.webp"
+    },
+    {
+      "id": "genesis-potiphar",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Joseph in a New Household (Genesis 39:1–6). Scene: Young adult Joseph, dark curls clean-shaven in a simple cream linen tunic with blue sash, diligently organizing jars and baskets in the courtyard of a prosperous ancient Egyptian household. Respectful servants working together.",
+      "image": "assets/kids-bible/illustrated/genesis-potiphar.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-potiphar-thumb.webp"
+    },
+    {
+      "id": "genesis-rachel-well",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Jacob Meets Rachel (Genesis 29:1–14). Scene: Adult Jacob, dark curly hair cream robe blue sash, moving a large round stone beside a well while adult Rachel, dark hair muted coral robe cream veil, waits with her flock of sheep. Warm first meeting.",
+      "image": "assets/kids-bible/illustrated/genesis-rachel-well.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-rachel-well-thumb.webp"
+    },
+    {
+      "id": "genesis-rainbow",
+      "promptSummary": "Approved pilot: Noah with gray beard and rust robe, ark after the flood, animals leaving onto green land, a dove and rainbow. Warm gouache storybook style. No distress or text.",
+      "image": "assets/kids-bible/illustrated/genesis-rainbow.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-rainbow-thumb.webp"
+    },
+    {
+      "id": "genesis-rebekah-journey",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Rebekah’s New Journey (Genesis 24:28–67). Scene: Young adult Rebekah, plum robe cream veil, traveling on a camel toward a sunlit field where adult Isaac, brown beard sage robe, waits in the distance. A hopeful new beginning.",
+      "image": "assets/kids-bible/illustrated/genesis-rebekah-journey.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-rebekah-journey-thumb.webp"
+    },
+    {
+      "id": "genesis-rebekah-well",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Rebekah at the Well (Genesis 24:1–27). Scene: Young adult Rebekah in a modest plum robe and cream veil pouring water from a clay jar into a trough for camels beside a stone well, Abraham's elderly servant smiling gratefully.",
+      "image": "assets/kids-bible/illustrated/genesis-rebekah-well.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-rebekah-well-thumb.webp"
+    },
+    {
+      "id": "genesis-rescue-lot",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Abram Helps Lot (Genesis 14:1–16). Scene: After the rescue, Abram in ochre robe and rust cloak offering a helping hand to tired but unharmed Lot on a rocky path, families and rescued belongings behind them. No weapons or battle.",
+      "image": "assets/kids-bible/illustrated/genesis-rescue-lot.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-rescue-lot-thumb.webp"
+    },
+    {
+      "id": "genesis-rest",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: A Day to Rest (Genesis 2:1–3). Scene: Peaceful seventh-day landscape at golden sunset, quiet river, resting deer and sleeping lion, serene flourishing world, no people. Emphasize stillness and rest.",
+      "image": "assets/kids-bible/illustrated/genesis-rest.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-rest-thumb.webp"
+    },
+    {
+      "id": "genesis-return-bethel",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Back to Bethel (Genesis 35:1–15). Scene: Jacob, older man in cream robe blue sash, with his family gathered peacefully beside a simple stone memorial under an oak at Bethel. Reflective return and gratitude, no sacrifice.",
+      "image": "assets/kids-bible/illustrated/genesis-return-bethel.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-return-bethel-thumb.webp"
+    },
+    {
+      "id": "genesis-sarah-goodbye",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Remembering Sarah (Genesis 23). Scene: Elderly Abraham with silver beard and rust cloak remembering Sarah quietly near a peaceful cave entrance shaded by olive trees, family offering support. No body, bones or frightening imagery.",
+      "image": "assets/kids-bible/illustrated/genesis-sarah-goodbye.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-sarah-goodbye-thumb.webp"
+    },
+    {
+      "id": "genesis-silver-cup",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: The Cup in Benjamin’s Sack (Genesis 44:1–17). Scene: A steward revealing a silver cup inside a grain sack beside adult Benjamin in a cream travel robe; Judah in burgundy and the other adult brothers look surprised. Outdoor caravan stop, no weapons or violence.",
+      "image": "assets/kids-bible/illustrated/genesis-silver-cup.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-silver-cup-thumb.webp"
+    },
+    {
+      "id": "genesis-stars",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: As Many as the Stars (Genesis 15). Scene: Abram, salt-and-pepper beard ochre robe rust cloak, standing beside his desert tent and gazing in wonder at a vast star-filled indigo sky. No human depiction of God.",
+      "image": "assets/kids-bible/illustrated/genesis-stars.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-stars-thumb.webp"
+    },
+    {
+      "id": "genesis-stolen-blessing",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: The Disguised Brother (Genesis 27:1–40). Scene: Elderly Isaac with gray beard seated in a softly lit tent reaching a hand toward adult Jacob, dark curly hair wearing Esau's rustic brown outer robe and soft goat-skin wrist coverings, who kneels with a food bowl. Serious and thoughtful; no text.",
+      "image": "assets/kids-bible/illustrated/genesis-stolen-blessing.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-stolen-blessing-thumb.webp"
+    },
+    {
+      "id": "genesis-three-visitors",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Visitors Under the Trees (Genesis 18:1–15). Scene: Elderly Abraham with silver beard welcoming three adult travelers under a broad oak, simple bread and clay bowls on a low table; elderly Sarah in teal and cream near the tent doorway. Hospitality and dappled shade.",
+      "image": "assets/kids-bible/illustrated/genesis-three-visitors.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-three-visitors-thumb.webp"
+    },
+    {
+      "id": "genesis-together",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Not Alone in the Garden (Genesis 2:18–25). Scene: Adam and Eve, adult Middle Eastern man and woman in modest full cream and ochre robes, smiling and working together in Eden beside gentle animals. Emphasize friendship and companionship.",
+      "image": "assets/kids-bible/illustrated/genesis-together.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-together-thumb.webp"
+    },
+    {
+      "id": "genesis-two-brothers",
+      "prompt": "Create one standalone landscape 3:2 illustration-story cover for Kids Bible ages 5–10. Consistent hand-painted gouache picture-book art, rich soft textures, warm golden light, turquoise skies, sage foliage and ochre earth, expressive gentle Middle Eastern characters. Beautiful crafted natural detail like a traditional illustrated children's Bible, no cartoon outlines, no photorealism. No text, letters, logos, frames or watermarks. Single scene, not a collage. Essential subject centered so portrait cards can crop it. All people wear modest full opaque ancient robes, including Adam and Eve. No nudity, gore, violence, weapons threatening people, or human depiction of God. Biblical accuracy and welcoming, gentle mood. Story: Two Very Different Brothers (Genesis 25:19–28). Scene: Adult brothers Esau, reddish hair short beard rustic brown robe, and Jacob, dark curly hair clean-shaven cream robe blue sash, beside family tents: Esau returning from fields, Jacob tending a cooking pot. No weapons.",
+      "image": "assets/kids-bible/illustrated/genesis-two-brothers.webp",
+      "thumbnail": "assets/kids-bible/illustrated/genesis-two-brothers-thumb.webp"
+    }
+  ]
+}

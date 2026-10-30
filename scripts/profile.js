@@ -34,45 +34,7 @@ function initPreferences() {
 
 function initProfile() {
   applyProfile();
-  let profileCoverDraft = savedProfile.coverImage || defaultProfile.coverImage;
-
-  profileStyleToggle?.addEventListener("click", () => {
-    const willOpen = profileStyleEditor?.hidden !== false;
-    if (profileStyleEditor) profileStyleEditor.hidden = !willOpen;
-    profileStyleToggle.setAttribute("aria-expanded", String(willOpen));
-    if (!willOpen) {
-      profileCoverDraft = savedProfile.coverImage || defaultProfile.coverImage;
-      if (profileCover) profileCover.src = profileCoverDraft;
-      if (profileCoverInput) profileCoverInput.value = "";
-    }
-  });
-
-  profileCoverInput?.addEventListener("change", async () => {
-    const file = profileCoverInput.files?.[0];
-    if (!file) return;
-    try {
-      profileCoverDraft = await compressProfileCover(file);
-      if (profileCover) profileCover.src = profileCoverDraft;
-      setProfileStyleFeedback("Cover preview ready. Save to apply it.");
-    } catch (error) {
-      setProfileStyleFeedback(error.message, true);
-    }
-  });
-
-  profileCoverReset?.addEventListener("click", () => {
-    profileCoverDraft = defaultProfile.coverImage;
-    if (profileCover) profileCover.src = profileCoverDraft;
-    if (profileCoverInput) profileCoverInput.value = "";
-    setProfileStyleFeedback("Default cover restored. Save to apply it.");
-  });
-
-  profileStyleEditor?.addEventListener("submit", (event) => {
-    event.preventDefault();
-    savedProfile.coverImage = profileCoverDraft;
-    saveProfile();
-    applyProfile();
-    setProfileStyleFeedback(supabaseUser ? "Style saved and synced." : "Style saved on this device.");
-  });
+  // Profile styling is owned by React; the removed legacy form no longer exists.
 
   if (!profileForm) return;
   profileForm.addEventListener("submit", (event) => {

@@ -1,0 +1,61 @@
+import { createKidsBookAdventures } from './kids-book-story-factory.js';
+const note = 'These short prophetic books speak about fairness, the consequences of harmful choices, and hope. Their strong images are retold gently for children.';
+const hosea = [
+['Hosea’s Difficult Sign','🪧','Hosea’s family life becomes a sign about Israel’s broken promises and God’s continuing care.','The prophet describes how painful it is when trust is broken. He also says the people can return and begin again.','The story uses family images to speak about loyalty, hurt, and repair.','Broken trust needs honesty and patient repair.','Keep a promise or make a sincere apology.'],
+['A Call to Come Home','🌱','Hosea says the people have looked for help in the wrong places and forgotten what is good.','He compares them to a plant that needs rain and care to grow again.','The message invites the people to return and promises healing.','People can turn toward better choices.','Choose one way to repair a mistake.'],
+['A Parent’s Tender Love','💛','Hosea pictures God as a parent who taught a child to walk and carried the child with care.','The parent is heartbroken when the child turns away, yet still calls the child home.','The image emphasizes patient love even after painful choices.','Care can continue even when someone makes a mistake.','Offer a kind welcome to someone who is trying again.'],
+];
+const joel = [
+['A Community Faces Loss','🌾','Joel describes a terrible locust invasion that eats crops and leaves the land bare.','He asks families, leaders, and priests to gather, grieve, and pray together.','The people are invited to return to God with honest hearts.','A community can face a crisis together.','Ask how you can help when a group has a problem.'],
+['A Promise of Renewal','🌧️','Joel promises that rain and crops will return after the land has been damaged.','He says that God’s spirit will be shared with sons and daughters, young and old.','The message looks toward renewal and a future where many people can speak and dream.','Hope can include everyone’s voice.','Listen carefully to a younger or older person’s idea.'],
+];
+const amos = [
+['Amos Speaks for Justice','⚖️','Amos is a shepherd and farmer when he is called to speak to Israel.','He warns that wealthy people are taking advantage of poor neighbors while pretending everything is fine.','Amos says worship songs cannot replace justice and fairness.','Fairness matters in daily life and in worship.','Share fairly and notice who has less.'],
+['A Plumb Line for the Kingdom','📏','Amos sees a plumb line, a tool that checks whether a wall is straight.','The vision shows that Israel’s leaders and choices are not straight or fair. Amos also sees baskets of ripe fruit, a sign that change is near.','The prophet warns that ignoring poor people and selling dishonest goods will bring consequences.','Check whether your choices are fair to others.','Make sure a game or group rule treats everyone fairly.'],
+['Hope Beyond the Warning','🌅','Amos gives several warnings through visions and argues with a priest who wants him to stop speaking.','He tells the people that injustice will bring a time of hunger and loss.','The book ends with a promise that the people can rebuild their homes and gardens.','A warning can leave room for change and repair.','Fix one small thing you have damaged or neglected.'],
+];
+const obadiah = [
+['A Warning Against Pride','🏔️','Obadiah speaks against Edom, whose people feel safe in their mountain homes.','Edom has celebrated when Jerusalem was attacked and has not helped its neighbors.','The prophet says proud violence will not last, and a day of justice will come.','Do not celebrate when someone else is hurt.','Offer help when another person has a difficult day.'],
+];
+const jonah = [
+['Jonah Runs Away','⛵','God asks Jonah to go to Nineveh and warn the city. Jonah boards a ship going the other way.','A storm frightens the sailors, and Jonah tells them he is running away from his task.','Jonah is thrown into the sea, and a great fish swallows him. The sailors are safe.','Running away does not make a hard responsibility disappear.','Face one task you have been avoiding with help.'],
+['Nineveh Changes Course','🐟','Jonah prays inside the fish and is returned to dry land. He then goes to Nineveh and shares the warning.','The people listen, from the king to the ordinary families, and change their harmful behavior.','Jonah is upset that God shows mercy. God asks him to think about compassion for a whole city.','Compassion can include people we do not expect to like.','Try to understand someone before judging them.'],
+];
+const micah = [
+['A Ruler from Bethlehem','⭐','Micah warns leaders who take homes and land from people who have little power.','He says that a ruler will come from Bethlehem and care for the people like a shepherd.','The hope is for safety and peace after a time of trouble.','Good leaders protect people who are vulnerable.','Help protect someone who is being left out.'],
+['What Is Good?','🤲','Micah asks what God wants from the people. He imagines offerings, then gives a simple answer.','The prophet says to do justice, love kindness, and walk humbly with God.','He also promises that the people can be gathered and restored.','Justice, kindness, and humility belong together.','Do one fair and kind thing without showing off.'],
+];
+const nahum = [
+['A City’s Power Ends','🏙️','Nahum speaks about Nineveh, a powerful city that has hurt many other peoples.','The prophet uses storm and flood images to say that violence and cruelty will not last forever.','The book recognizes the relief people feel when an oppressor can no longer harm them.','People who use power to hurt others should be held accountable.','Ask an adult for help if someone uses power to frighten you.'],
+];
+const habakkuk = [
+['Habakkuk Asks Why','❓','Habakkuk sees violence and unfairness and asks God why nothing is being done.','He waits for an answer and is told to keep watching and to write the vision clearly.','The prophet learns that justice may take time, but people should live faithfully while they wait.','It is okay to ask hard questions and keep listening.','Write down a question you want to ask a trusted adult.'],
+['A Song While Waiting','🎶','Habakkuk imagines a frightening time when crops fail and animals disappear.','Even so, he decides to rejoice and trust, though he cannot see how things will improve.','The book ends with a picture of finding strength to keep going.','Hope can help us continue when we do not know what comes next.','Name one thing that gives you strength during a hard week.'],
+];
+const zephaniah = [
+['A Warning and a Promise','🌤️','Zephaniah warns that selfishness, violence, and dishonest worship will bring a day of trouble.','He asks the people to seek justice and humility before it is too late.','The book ends with a promise that God will gather the people and rejoice over them.','Changing direction is possible before trouble grows.','Choose humility and fairness in one situation today.'],
+];
+const haggai = [
+['The Temple Work Resumes','🔨','Haggai notices that people are building their own houses while the temple remains in ruins.','He encourages Zerubbabel and Jeshua to restart the work, and the people listen.','The builders begin again, trusting that their efforts matter.','Encouragement can help a community start again.','Help restart a job your group has left unfinished.'],
+];
+const zechariah = [
+['Night Visions of Hope','🌙','Zechariah sees visions of horses, a measuring line, and a lampstand. The pictures are strange, but they carry messages of hope.','The prophet tells the people not to rely only on strength, but to keep rebuilding with courage.','The visions encourage a small community working on a big task.','Small groups can do meaningful work with steady courage.','Help your team take one small step toward a shared goal.'],
+['A King Comes Peacefully','🐴','Zechariah imagines a humble king arriving on a donkey instead of a warhorse.','The king brings peace to many nations and speaks hope to people who feel trapped.','The image contrasts gentle leadership with the violence of war.','Peaceful leadership can be stronger than force.','Lead a group activity by listening and sharing turns.'],
+['A Day of Renewal','🌊','Zechariah promises that Jerusalem will be restored and that the people can celebrate again.','The final visions describe cleansing, a shepherd, and water flowing from the city to bring life.','The book ends with a picture of holiness spreading into ordinary homes and daily work.','Renewal can reach every part of life.','Bring care into an ordinary chore today.'],
+];
+const malachi = [
+['Questions About Fairness','🗣️','Malachi’s book is written as a conversation: the prophet asks questions and the people answer.','He challenges leaders who bring careless offerings and people who treat one another unfairly.','The message asks the community to be honest in worship and faithful in relationships.','Respect shows in the care we bring to shared responsibilities.','Do a shared task carefully, even if it feels ordinary.'],
+['A Messenger and a Promise','🌅','Malachi promises a messenger who will prepare the way for change.','He asks people to return to God and care for those who are vulnerable.','The book ends with hope for a new day and a reminder to remember wise teaching.','Remembering good guidance can prepare us for what comes next.','Choose one helpful lesson you want to remember.'],
+];
+export const hoseaAdventures = createKidsBookAdventures({ bookId: 'hosea', bookTitle: 'Hosea', image: 'assets/kids-bible/old-testament/history.svg', entries: hosea, readingNote: note, references: ['Hosea 1–3','Hosea 4–14','Hosea 11'] });
+export const joelAdventures = createKidsBookAdventures({ bookId: 'joel', bookTitle: 'Joel', image: 'assets/kids-bible/old-testament/history.svg', entries: joel, readingNote: note, references: ['Joel 1','Joel 2–3'] });
+export const amosAdventures = createKidsBookAdventures({ bookId: 'amos', bookTitle: 'Amos', image: 'assets/kids-bible/old-testament/history.svg', entries: amos, readingNote: note, references: ['Amos 1–3','Amos 4–6','Amos 7–9'] });
+export const obadiahAdventures = createKidsBookAdventures({ bookId: 'obadiah', bookTitle: 'Obadiah', image: 'assets/kids-bible/old-testament/history.svg', entries: obadiah, readingNote: note, references: ['Obadiah 1'] });
+export const jonahAdventures = createKidsBookAdventures({ bookId: 'jonah', bookTitle: 'Jonah', image: 'assets/kids-bible/old-testament/history.svg', entries: jonah, readingNote: note, references: ['Jonah 1–2','Jonah 3–4'] });
+export const micahAdventures = createKidsBookAdventures({ bookId: 'micah', bookTitle: 'Micah', image: 'assets/kids-bible/old-testament/history.svg', entries: micah, readingNote: note, references: ['Micah 1–5','Micah 6–7'] });
+export const nahumAdventures = createKidsBookAdventures({ bookId: 'nahum', bookTitle: 'Nahum', image: 'assets/kids-bible/old-testament/history.svg', entries: nahum, readingNote: note, references: ['Nahum 1–3'] });
+export const habakkukAdventures = createKidsBookAdventures({ bookId: 'habakkuk', bookTitle: 'Habakkuk', image: 'assets/kids-bible/old-testament/history.svg', entries: habakkuk, readingNote: note, references: ['Habakkuk 1–2','Habakkuk 3'] });
+export const zephaniahAdventures = createKidsBookAdventures({ bookId: 'zephaniah', bookTitle: 'Zephaniah', image: 'assets/kids-bible/old-testament/history.svg', entries: zephaniah, readingNote: note, references: ['Zephaniah 1–3'] });
+export const haggaiAdventures = createKidsBookAdventures({ bookId: 'haggai', bookTitle: 'Haggai', image: 'assets/kids-bible/old-testament/history.svg', entries: haggai, readingNote: note, references: ['Haggai 1–2'] });
+export const zechariahAdventures = createKidsBookAdventures({ bookId: 'zechariah', bookTitle: 'Zechariah', image: 'assets/kids-bible/old-testament/history.svg', entries: zechariah, readingNote: note, references: ['Zechariah 1–6','Zechariah 7–8','Zechariah 9–14'] });
+export const malachiAdventures = createKidsBookAdventures({ bookId: 'malachi', bookTitle: 'Malachi', image: 'assets/kids-bible/old-testament/history.svg', entries: malachi, readingNote: note, references: ['Malachi 1–2','Malachi 3–4'] });

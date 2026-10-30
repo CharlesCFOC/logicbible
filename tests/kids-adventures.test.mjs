@@ -97,3 +97,25 @@ test("expanded legacy episodes retain completion but reset answers from the old 
   assert.equal(readAdventureProgress("genesis-noah", storage).stage, 2);
   assert.deepEqual(readAdventureProgress("genesis-noah", storage).answers, {0: 1});
 });
+
+test("each Genesis story has distinct optimized artwork and a smaller shipped thumbnail", async () => {
+  const { isPublicFile } = await import('../lib/public-files.js');
+  const { createHash } = await import('node:crypto');
+  const stories = kidsAdventures.filter(a => a.bookId === 'genesis');
+  const hashes = new Set();
+  for (const story of stories) {
+    const full = fs.readFileSync(new URL(`../${story.image}`, import.meta.url));
+    const thumb = fs.readFileSync(new URL(`../${story.thumbnail}`, import.meta.url));
+    for (const [path, bytes] of [[story.image, full], [story.thumbnail, thumb]]) {
+      assert.ok(isPublicFile(path), `${story.id}: artwork must ship in web and mobile builds`);
+      assert.equal(bytes.toString('ascii', 0, 4), 'RIFF');
+      assert.equal(bytes.toString('ascii', 8, 12), 'WEBP');
+    }
+    assert.ok(thumb.length < full.length, `${story.id}: thumbnail must save bandwidth`);
+    hashes.add(createHash('sha256').update(full).digest('hex'));
+  }
+  assert.equal(hashes.size, stories.length, 'Every story must have its own illustration');
+  const moses = kidsAdventures.find(a => a.id === 'exodus-04');
+  assert.match(moses.image, /illustrated\/exodus-04\.webp$/);
+  assert.ok(fs.existsSync(new URL(`../${moses.image}`, import.meta.url)));
+});

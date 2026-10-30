@@ -10,3 +10,9 @@ test-results/
 *.apk
 supabase/.temp/
 android/.idea/
+
+assets/legacy.js
+
+# Full-resolution image-generation working files (optimized art is in assets).
+output/imagegen/
+output/bible-import/

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import { readFileSync } from 'node:fs';
-const source = readFileSync(new URL('../script.js', import.meta.url), 'utf8');
+const source = readFileSync(new URL('../scripts/core/account.js', import.meta.url), 'utf8') + '\n' + readFileSync(new URL('../scripts/bridges/profile.js', import.meta.url), 'utf8');
 const storage = () => Object.defineProperties({}, {
   getItem: { value(key) { return this[key] ?? null; } },
   setItem: { value(key, value) { this[key] = String(value); } },

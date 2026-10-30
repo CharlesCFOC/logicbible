@@ -8,12 +8,12 @@ export default defineConfig({
     "process.env.NODE_ENV": JSON.stringify("production"),
   },
   build: {
-    emptyOutDir: false,
+    manifest: true,
+    emptyOutDir: true,
     outDir: "assets/react",
     lib: {
       entry: "src/react/main.jsx",
-      formats: ["iife"],
-      name: "BrotherBibleReact",
+      formats: ["es"],
       fileName: () => "navigation.js",
     },
   },

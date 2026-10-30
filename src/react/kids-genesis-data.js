@@ -1,5 +1,5 @@
 // Original English retellings of Genesis, with passage references for family reading.
-// Scene artwork is a symbolic collection illustration, not a picture of every event.
+// Each adventure has its own illustrated cover, reused during its reading scenes.
 export const genesisCollections = [
   { id: 'beginnings', title: 'The Beginnings', subtitle: 'Creation, Noah, and Babel', image: 'creation', color: 'garden' },
   { id: 'abraham', title: 'Abraham & Sarah', subtitle: 'Journeys and promises', image: 'abraham', color: 'sunrise' },
@@ -14,7 +14,9 @@ function episode(collection, data) {
   const group = genesisCollections.find(item => item.id === collection);
   return {
     ...data, contentRevision: 2, bookId: 'genesis', collection,
-    image: `assets/kids-bible/genesis/${data.art || group.image}.svg`,
+    image: `assets/kids-bible/illustrated/${data.id}.webp`,
+    thumbnail: `assets/kids-bible/illustrated/${data.id}-thumb.webp`,
+    thumbnailPosition: ({ 'genesis-creation': '20% 50%', 'genesis-humanity': '25% 50%', 'genesis-garden-choice': '40% 50%', 'genesis-together': '40% 50%', 'genesis-rest': '30% 50%', 'genesis-noah': '35% 50%', 'genesis-dove': '40% 50%', 'genesis-rainbow': '60% 50%' })[data.id] || '50% 50%',
     color: group.color, coverPosition: '50%', minutes: data.scenes.length === 4 ? 5 : 4,
     intro: data.subtitle,
     scenes: data.scenes.map(([title, text]) => ({ title, text, position: '50%' })),
