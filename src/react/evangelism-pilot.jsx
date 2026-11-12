@@ -65,7 +65,7 @@ function MountainIllustration({ state, detailed = false, seed, revealLast = fals
   const id = useId().replace(/:/g, "");
   const trail = pilotTrail(state);
   const refuges = pilotRefuges(state);
-  const branches = detailed ? pilotMountainBranches(state, seed, engine) : { nodes: [], edges: [] };
+  const branches = detailed ? engine.shared ? engine.mountainBranches : pilotMountainBranches(state, seed, engine) : { nodes: [], edges: [] };
   const ridgePath = pilotRidge.slice(1).map((to, index) => trailCurve(pilotRidge[index], to).replace(/^M[^C]+/, index ? "" : `M${pilotRidge[0]} `)).join(" ");
   return (
     <svg className={`pilot-map-svg pilot-map-svg--landscape${ detailed ? " pilot-map-svg--detailed" : ""}`} viewBox="0 0 1000 520" role="img" aria-label={`Panoramic mountain${detailed ? ", with connected paths to the summit" : ""}. ${trail.belowRidge ? "The path is below the ridge." : "The path follows the ridge."}`}>
@@ -285,7 +285,7 @@ function Speaker({ who, ours = false, children, reaction = false, question = fal
   </article>;
 }
 
-function DiscussionThread({ state, onSelect, readOnly, visible = true }) {
+function DiscussionThread({ state, onSelect, readOnly, visible = true, choiceExtras, choiceFeedback, choicesDisabled = false }) {
   const { scenario, pilotTranscript, pilotNode } = usePilot();
   const node = pilotNode(state);
   const messages = groupPilotConversation(pilotTranscript(state));
@@ -323,9 +323,10 @@ function DiscussionThread({ state, onSelect, readOnly, visible = true }) {
     {state.phase === 'decision' && !incoming && <div className="pilot-chat-responses" key={state.nodeId}>
       <div className="pilot-choice-heading"><h2>How do we respond to {scenario.character.name}?</h2><span>Choose one reply.</span></div>
       <div className="pilot-choices" aria-label="Available responses to our character">{node.choices.map(option => <div key={option.id} className="pilot-choice-card">
-        <button type="button" disabled={readOnly} className={`pilot-choice${state.selected === option.id ? ' is-selected' : ''}`} aria-pressed={state.selected === option.id} onClick={() => onSelect?.(option.id)}><b>{option.id}</b><span>{option.text}</span><i aria-hidden="true">{state.selected === option.id ? '✓' : ''}</i></button>
+        <button type="button" disabled={readOnly || choicesDisabled} className={`pilot-choice${state.selected === option.id ? ' is-selected' : ''}`} aria-pressed={state.selected === option.id} onClick={() => onSelect?.(option.id)}><b>{option.id}</b><span>{option.text}{choiceExtras?.(option)}</span><i aria-hidden="true">{state.selected === option.id ? '✓' : ''}</i></button>
         <ReadAloudButton text={`${option.id}. ${option.text}`} label={`Response ${option.id}`} />
       </div>)}</div>
+      {choiceFeedback}
     </div>}
   </>;
 }
@@ -392,7 +393,7 @@ function MobileDiscussionTabs({ id, active, onChange }) {
   </nav>;
 }
 
-export function EvangelismPilotStage({ state, onSelect, onSideSlide, onMapExpand, readOnly = false, presenterControls = null, mainQuestion = null }) {
+export function EvangelismPilotStage({ state, onSelect, onSideSlide, onMapExpand, readOnly = false, viewReadOnly = readOnly, presenterControls = null, mainQuestion = null, choiceExtras, choiceFeedback, choicesDisabled = false }) {
   const { scenario, pilotNode, pilotRefuges, pilotEmotionalState } = usePilot();
   const mobile = useMobileDiscussion(readOnly);
   const [mobileTab, setMobileTab] = useState('discussion');
@@ -409,12 +410,33 @@ export function EvangelismPilotStage({ state, onSelect, onSideSlide, onMapExpand
           : complete ? <div className="pilot-completion"><span className="pilot-eyebrow">SHELTER 4 REACHED · A CONVERSATION TO CONTINUE</span><div className="pilot-completion-mark" aria-hidden="true">⚑</div><h1>{scenario.summit.name}.</h1><CharacterReaction state={state} fallback={scenario.summit.line} /><p>{scenario.summit.detail}</p><div className="pilot-completion-stats"><span><strong>{state.history.length}</strong> replies chosen</span><span><strong>{state.history.filter(item => scenario.nodes[item.nodeId].repair).length}</strong> opportunities to try again</span></div><RefugeSummary /></div>
             : <><div className="pilot-scene-heading"><span className="pilot-eyebrow">{`SHELTER ${node.stage} · EXCHANGE ${String(state.history.length + (state.phase === "reaction" ? 0 : 1)).padStart(2, "0")}`} · {node.title.toUpperCase()}</span></div>
               <p className="pilot-scene-context">{node.cue}</p>
-              <DiscussionThread state={state} onSelect={onSelect} readOnly={readOnly} visible={!mobile || mobileTab === 'discussion'} />
+              <DiscussionThread state={state} onSelect={onSelect} readOnly={readOnly} visible={!mobile || mobileTab === 'discussion'} choiceExtras={choiceExtras} choiceFeedback={choiceFeedback} choicesDisabled={choicesDisabled} />
             </>}
-    </div></div>{!mobile && mainQuestion}</div><ScenarioSideCarousel state={state} onSlide={onSideSlide} onMapExpand={onMapExpand} readOnly={readOnly} controls={mobile ? null : presenterControls} mobile={mobile} hidden={mobile && mobileTab !== 'journey'} panelId={`${id}-journey-panel`} labelledBy={mobile ? `${id}-journey-tab` : undefined} /></div>
+    </div></div>{!mobile && mainQuestion}</div><ScenarioSideCarousel state={state} onSlide={onSideSlide} onMapExpand={onMapExpand} readOnly={viewReadOnly} controls={mobile ? null : presenterControls} mobile={mobile} hidden={mobile && mobileTab !== 'journey'} panelId={`${id}-journey-panel`} labelledBy={mobile ? `${id}-journey-tab` : undefined} /></div>
     <footer className="pilot-stage-footer"><span>{scenario.title} · Scenario 01</span><span className="pilot-refuge-count">{refuges.completed.length} / 4 shelters reached</span><span>GUIDED DISCUSSION</span></footer>
     {mobile && <div className="pilot-mobile-dock">{presenterControls}<MobileDiscussionTabs id={id} active={mobileTab} onChange={setMobileTab} /></div>}
   </section>;
+}
+
+export function SharedPilotStage({ room, onSelect, onSideSlide, onMapExpand, onDismissJourney, presenterControls, choiceExtras, choiceFeedback, choicesDisabled, host }) {
+  const view = room.discussion;
+  const historyKey = JSON.stringify(view.history);
+  const history = useMemo(() => JSON.parse(historyKey), [historyKey]);
+  const scenario = { ...room.scenario, title: room.title, question: room.question, context: room.context, goal: room.goal, character: room.character, nodes: view.pastScenes };
+  const refuges = { active: { id: view.refuges.active }, completed: Array.from({ length: view.refuges.completed }, (_, i) => i + 1), finished: view.refuges.finished };
+  const state = { scenarioId: view.scenarioId, nodeId: view.nodeId, phase: view.phase, returnPhase: view.returnPhase, selected: view.selected, history, sideSlide: room.sideSlide, mountainExpanded: view.mountainExpanded, journeyReveal: view.journeyReveal };
+  const context = { shared: true, scenario, mountainBranches: view.mountainBranches,
+    pilotNode: () => view.scene, pilotTranscript: () => view.transcript, pilotEmotionalState: () => view.mood,
+    pilotJourneyState: () => view.journey, pilotReactionParts: () => view.reaction || {},
+    pilotTrail: snapshot => snapshot.history.length < history.length ? view.beforeTrail : view.trail,
+    pilotRefuges: snapshot => snapshot.history.length < history.length ? view.beforeRefuges : refuges,
+    pilotReducer: snapshot => ({ ...snapshot, history: snapshot.history.slice(0, -1), phase: 'decision' }),
+  };
+  const mainQuestion = <details className="pilot-main-question pilot-question-card"><summary><span className="pilot-question-label-desktop">Main question</span><span className="pilot-question-label-mobile">Question &amp; mission</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></summary><div className="pilot-main-question-content"><p className="pilot-main-question-title">{scenario.title}</p><h2 className="pilot-discussion-topic">{scenario.question}</h2><ReadAloudButton text={scenario.question} label="Main question" /><section className="pilot-mobile-mission"><h3>Your mission</h3><p>{scenario.goal}</p></section></div></details>;
+  return <PilotContext.Provider value={context}>
+    <EvangelismPilotStage state={state} onSelect={onSelect} onSideSlide={onSideSlide} onMapExpand={onMapExpand} viewReadOnly={!host} presenterControls={presenterControls} mainQuestion={mainQuestion} choiceExtras={choiceExtras} choiceFeedback={choiceFeedback} choicesDisabled={choicesDisabled} />
+    <JourneyReveal state={state} readOnly={!host} onDismiss={onDismissJourney} />
+  </PilotContext.Provider>;
 }
 
 export function EvangelismPilotPage({ scenario = evangelismPilot, onSettings }) {

@@ -1,5 +1,7 @@
 import React, { useEffect, useId, useRef, useState } from 'react';
 import { competitionLink, competitionOrganizerPath, competitionRequest, createSharedCompetition, forgetCompetitionAccess, readCompetitionAccess, readCreatedCompetition, saveCompetitionAccess, saveCreatedCompetition } from './church-competition-client.js';
+import { subscribeCompetition } from './church-competition-sync.js';
+import { ChurchConversation } from './church-conversation.jsx';
 
 function RoomIcon({ name }) {
   const paths = { link: 'M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-2 2M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l2-2', users: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M16 3a4 4 0 0 1 0 8M22 21v-2a4 4 0 0 0-3-3.87M13 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0', check: 'm5 12 4 4L19 6', arrow: 'M5 12h14m-6-6 6 6-6 6', trophy: 'M8 3h8v6a4 4 0 0 1-8 0ZM8 5H4v2a4 4 0 0 0 4 4M16 5h4v2a4 4 0 0 1-4 4M12 13v6M8 21h8M10 19h4', lock: 'M7 10V7a5 5 0 0 1 10 0v3M5 10h14v11H5ZM12 14v3' };
@@ -39,8 +41,8 @@ export function CompetitionSetup({ scenario, onRoomChange }) {
     } catch (err) { setError(err.message); } finally { setBusy(false); }
   }
   return <section className="competition-setup" aria-labelledby="competition-setup-title">
-    <span className="church-section-label">03 · PLAY IN TWO TEAMS</span><h2 id="competition-setup-title">One mountain. Two teams.</h2>
-    <p>Invite guests on their phones. Each enters a name, joins a randomly assigned, balanced team and votes for its reply. Follow both routes and discover the winner.</p>
+    <span className="church-section-label">03 · PLAY IN TWO TEAMS</span><h2 id="competition-setup-title">One conversation. Two teams.</h2>
+    <p>Invite guests on their phones. Everyone follows one conversation. Guests vote as the blue or orange team; you select and confirm the common reply.</p>
     <div className="competition-setup-facts"><span><i className="competition-dot competition-dot--blue" />Blue team</span><span><i className="competition-dot competition-dot--orange" />Orange team</span><span>Up to 8 rounds · link valid for 24 hours</span></div>
     {created ? <><CompetitionShareLinks id={created.id} /><button type="button" className="church-secondary competition-new-session" onClick={() => { setCreated(null); saveCreatedCompetition(scenario.id, null); onRoomChange?.(null); }}>Create another team session</button></> : <form onSubmit={create}>
       <label htmlFor={passwordId}>Organizer password</label><input id={passwordId} type="password" autoComplete="new-password" minLength={6} maxLength={128} required value={password} onChange={e => setPassword(e.target.value)} placeholder="At least 6 characters" disabled={busy} />
@@ -77,39 +79,6 @@ function CompetitionMountain({ teams, round }) {
 function TeamRoster({ teams }) {
   return <div className="competition-rosters">{teams.map(t => <section key={t.id} style={{ '--team-color': t.color }}><h3><i />{t.name}<span>{t.members.length}</span></h3><ul>{t.members.map(p => <li key={p.id}><span>{p.name}</span>{p.voted && <RoomIcon name="check" />}</li>)}</ul>{!t.members.length && <p>Waiting for guests…</p>}</section>)}</div>;
 }
-function TeamRound({ team, room, busy, onAction }) {
-  const host = room.viewer.role === 'host';
-  const yours = room.viewer.teamId === team.id;
-  const organizerChoice = host && team.expected === 0;
-  const canVote = room.status === 'playing' && !team.locked && !team.done && (organizerChoice || (yours && team.eligible));
-  const [draft, setDraft] = useState(null);
-  const [draftRound, setDraftRound] = useState(room.roundId);
-  const currentDraft = draftRound === room.roundId ? draft || team.ownVote : team.ownVote;
-  const panelId = useId();
-  return <section className={`competition-team-round${yours ? ' is-your-team' : ''}`} style={{ '--team-color': team.color }} aria-labelledby={panelId}>
-    <header><div><span className="competition-team-label"><i />{team.name}{yours && <b>Your team</b>}</span><h2 id={panelId}>{team.done ? 'Summit reached' : team.scene?.title || 'Ready to climb'}</h2></div><strong>{team.score.points}<small>pts</small></strong></header>
-    {team.done ? <p>Your team has reached all four shelters. Follow the other team’s journey.</p> : <>
-      <p className="competition-scene-line">{team.scene?.line}</p>
-      <div className="competition-vote-status" role="status"><span>{team.locked ? 'Team choice confirmed' : `${team.voted} / ${team.expected} votes`}</span>{team.locked && <RoomIcon name="lock" />}</div>
-      {(host || yours) && <div className="competition-vote-choices">{team.scene?.choices.map(choice => <button type="button" key={choice.id} disabled={!canVote || busy} className={`competition-vote-choice${currentDraft === choice.id ? ' is-selected' : ''}`} aria-pressed={currentDraft === choice.id} onClick={() => { setDraft(choice.id); setDraftRound(room.roundId); }}><b>{choice.id}</b><span>{choice.text}</span>{(host || yours) && <small>{choice.votes}</small>}</button>)}</div>}
-      {organizerChoice && !team.locked && <p className="competition-hint">No guests are voting for this team. Choose and confirm its reply to continue.</p>}
-      {canVote && <button type="button" className="church-primary competition-vote-submit" disabled={busy || !currentDraft || currentDraft === team.ownVote} onClick={() => onAction(organizerChoice ? 'choose' : 'vote', { choice: currentDraft, ...(organizerChoice ? { teamId: team.id } : {}) })}><RoomIcon name="check" />{organizerChoice ? 'Confirm team reply' : team.ownVote ? 'Update my vote' : 'Confirm my vote'}</button>}
-      {yours && !team.eligible && !team.locked && <p className="competition-hint">You joined during this round. Your vote opens next round.</p>}
-      {team.locked && !room.ready && <p className="competition-hint">Waiting for the other team. Results appear together.</p>}
-      {host && !organizerChoice && !team.locked && <button type="button" className="church-secondary" disabled={busy || !team.voted} onClick={() => onAction('close', { teamId: team.id })}>Close this team’s vote</button>}
-    </>}
-    {team.result && <div className={`competition-result competition-result--${team.result.quality}`}><span className="church-section-label">CONFIRMED · RESPONSE {team.result.choice}{team.result.tied ? ' · RANDOM TIE-BREAK' : ''}</span><blockquote>{team.result.text}</blockquote><p><strong>{room.character.name}:</strong> {team.result.reaction}</p><p>{team.result.review}</p><small>{team.result.reference}</small></div>}
-  </section>;
-}
-function CompetitionFinal({ room }) {
-  const tied = room.winners.length > 1;
-  const winners = room.teams.filter(t => room.winners.includes(t.id));
-  return <section className="competition-final">
-    <RoomIcon name="trophy" /><span className="church-section-label">THE FINAL RESULT</span><h1>{tied ? 'A shared victory!' : `${winners[0]?.name} wins!`}</h1><p>100 points per shelter, plus up to 100 points for reply quality: strong = 3, partial = 1, problematic = 0, averaged across your replies.</p>
-    <div className="competition-final-scores">{[...room.teams].sort((a,b) => b.score.points - a.score.points).map(team => <div key={team.id} style={{ '--team-color': team.color }}><span>{team.name}</span><strong>{team.score.points}<small> pts</small></strong><p>{team.score.shelters} / 4 shelters · {team.score.quality}% reply quality</p></div>)}</div>
-    {room.review.map(team => <details key={team.teamId}><summary>{room.teams.find(t => t.id === team.teamId).name} · review the journey</summary><ol>{team.entries.map((entry, i) => <li key={i}><strong>{entry.title} · {entry.choice}</strong><blockquote>{entry.text}</blockquote><p>{entry.review}</p><small>{entry.reference}</small></li>)}</ol></details>)}
-  </section>;
-}
 export function ChurchCompetitionPage({ roomId, adminMode }) {
   const role = adminMode ? 'host' : 'guest';
   const [token, setToken] = useState(() => readCompetitionAccess(roomId, role));
@@ -126,22 +95,14 @@ export function ChurchCompetitionPage({ roomId, adminMode }) {
   const applyRoom = next => setRoom(old => !old || next.revision === undefined || old.revision === undefined || next.revision >= old.revision ? next : old);
   useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
   useEffect(() => {
-    let cancelled = false, timer;
-    const controller = new AbortController();
-    const refresh = async () => {
-      try {
-        const next = await competitionRequest({ room: roomId, token, signal: controller.signal });
-        if (!cancelled) { applyRoom(next); setSyncError(''); }
-      } catch (err) {
-        if (!cancelled) {
-          setSyncError(err.message);
-          if (err.status === 401) { forgetCompetitionAccess(roomId, role); setToken(''); setRoom(null); }
-          if ([404, 410].includes(err.status)) { setExpired(true); cancelled = true; }
-        }
-      } finally { if (!cancelled) timer = setTimeout(refresh, document.hidden ? 6000 : 1600); }
-    };
-    refresh();
-    return () => { cancelled = true; clearTimeout(timer); controller.abort(); };
+    return subscribeCompetition({ room: roomId, token,
+      onRoom: next => { applyRoom(next); setSyncError(''); },
+      onError: err => {
+        setSyncError(err.name === 'TimeoutError' ? 'Reconnecting to the live session…' : err.message);
+        if (err.status === 401) { forgetCompetitionAccess(roomId, role); setToken(''); setRoom(null); }
+        if ([404, 410].includes(err.status)) setExpired(true);
+      },
+    });
   }, [roomId, token, role]);
   async function action(command, extra = {}) {
     if (actionInFlight.current) return;
@@ -159,8 +120,8 @@ export function ChurchCompetitionPage({ roomId, adminMode }) {
   }
   const host = room?.viewer?.role === 'host';
   const ownTeam = room?.teams?.find(t => t.id === room.viewer?.teamId);
-  return <main className="competition-page">
-    <nav className="competition-topbar"><a href="evangelism-pilot.html">← Church room</a><span>{host ? 'ORGANIZER' : 'TEAM SESSION'}</span>{room?.viewer?.name && <b style={{ color: ownTeam?.color }}>{room.viewer.name}</b>}</nav>
+  return <main className={room?.viewer && room.status !== 'lobby' ? 'pilot-page shared-session-page' : 'competition-page'}>
+    <nav className={room?.viewer && room.status !== 'lobby' ? 'pilot-topbar' : 'competition-topbar'}><a href="evangelism-pilot.html">← Church room</a><span>{host ? 'ORGANIZER' : 'TEAM SESSION'}</span>{room?.viewer?.name && <b style={{ color: ownTeam?.color }}>{room.viewer.name}</b>}</nav>
     {error && <div className="competition-error" role="alert">{error}</div>}
     {syncError && <div className="competition-error" role="alert">{syncError}</div>}
     {storageNotice && <p className="competition-hint" role="status">{storageNotice}</p>}
@@ -170,12 +131,8 @@ export function ChurchCompetitionPage({ roomId, adminMode }) {
       {!adminMode && <a className="competition-admin-link" href={competitionLink(roomId, true)}>Organizer access</a>}
     </section>}
     {room?.viewer && !expired && <>
-      <header className="competition-game-header"><div><span className="church-section-label">{room.status === 'lobby' ? 'GATHER YOUR TEAMS' : room.status === 'finished' ? 'JOURNEY COMPLETE' : `ROUND ${room.round} / ${room.roundLimit}`}</span><h1>{room.title}</h1><p>{room.question}</p></div>{ownTeam && <span className="competition-your-team" style={{ '--team-color': ownTeam.color }}><i />{ownTeam.name}</span>}</header>
-      {room.status === 'lobby' ? <div className="competition-lobby"><section><h2>{host ? 'Invite your group' : `Welcome to the ${ownTeam?.name.toLowerCase()}`}</h2><p>{host ? 'Share the guest link, or start now — even with no guests.' : 'Waiting for the organizer to start the competition. The questions and reply buttons will appear here automatically.'}</p><p className="competition-hint" role="status">{host ? 'You can choose replies for any team with no guests voting.' : 'The organizer can start at any time.'}</p>{host ? <CompetitionShareLinks id={room.id} showOrganizer={false} /> : <a className="competition-admin-link" href={competitionOrganizerPath(room.id)}>Are you the organizer? Open the organizer screen</a>}<TeamRoster teams={room.teams} />{host && <button type="button" className="church-primary competition-start" disabled={busy} onClick={() => action('start')}>Start team competition<RoomIcon name="arrow" /></button>}</section><aside><CompetitionMountain teams={room.teams} round={room.round} /><details><summary>The mission & rules</summary><p>{room.context}</p><p>{room.goal}</p><p>One vote per guest. The most popular reply is confirmed when all team members have voted; the organizer can close voting early. Ties are drawn at random. New guests vote from the next round.</p><p>Up to 8 rounds. 100 points per shelter, plus up to 100 points for reply quality. Equal final scores share the victory.</p></details></aside></div> : <>
-        {room.status === 'finished' && <CompetitionFinal room={room} />}
-        <div className="competition-playing"><div>{room.status !== 'finished' && (host ? room.teams : room.teams.filter(t => t.id === room.viewer.teamId)).map(team => <TeamRound key={team.id} team={team} room={room} busy={busy} onAction={action} />)}</div><aside><CompetitionMountain teams={room.teams} round={room.round} />{room.status !== 'finished' && <TeamRoster teams={room.teams} />}{host && <details className="competition-invite-during-game"><summary>Invite guests / organizer link</summary><CompetitionShareLinks id={room.id} showOrganizer={false} /></details>}</aside></div>
-        {room.status === 'playing' && <div className="competition-round-controls">{host ? <><span>{room.ready ? 'Both teams’ choices are confirmed.' : 'Teams are voting on their replies.'}</span><button type="button" className="church-primary" disabled={busy || !room.ready} onClick={() => action('next')}>{room.round >= room.roundLimit || room.teams.every(t => t.done) ? 'Show final result' : 'Continue to the next round'}<RoomIcon name="arrow" /></button></> : <p role="status">{room.ready ? 'Both choices are confirmed. The organizer will continue the journey.' : 'Vote with your team. The other team follows its own route.'}</p>}</div>}
-      </>}
+      {room.status === 'lobby' && <header className="competition-game-header"><div><span className="church-section-label">{room.status === 'lobby' ? 'GATHER YOUR TEAMS' : room.status === 'finished' ? 'JOURNEY COMPLETE' : `ROUND ${room.round} / ${room.roundLimit}`}</span><h1>{room.title}</h1><p>{room.question}</p></div>{ownTeam && <span className="competition-your-team" style={{ '--team-color': ownTeam.color }}><i />{ownTeam.name}</span>}</header>}
+      {room.status === 'lobby' ? <div className="competition-lobby"><section><h2>{host ? 'Invite your group' : `Welcome to the ${ownTeam?.name.toLowerCase()}`}</h2><p>{host ? 'Share the guest link, or start now — even with no guests.' : 'Waiting for the organizer to start the competition. The questions and reply buttons will appear here automatically.'}</p><p className="competition-hint" role="status">{host ? 'You select and confirm the common reply, even with no guests.' : 'The organizer can start at any time.'}</p>{host ? <CompetitionShareLinks id={room.id} showOrganizer={false} /> : <a className="competition-admin-link" href={competitionOrganizerPath(room.id)}>Are you the organizer? Open the organizer screen</a>}<TeamRoster teams={room.teams} />{host && <button type="button" className="church-primary competition-start" disabled={busy} onClick={() => action('start')}>Start team competition<RoomIcon name="arrow" /></button>}</section><aside><CompetitionMountain teams={room.teams} round={room.round} /><details><summary>The mission & rules</summary><p>{room.context}</p><p>{room.goal}</p><p>One vote per guest, sent as soon as a reply is clicked. Blue and orange counters appear on the same four reply cards. The organizer selects and confirms the common reply, continues the conversation and can go back. New guests can vote as soon as they join an open question.</p><p>Up to 8 exchanges, with one shared journey. The conversation, votes and organizer’s actions update automatically on every device.</p></details></aside></div> : <ChurchConversation room={room} busy={busy} onAction={action} connected={!syncError} />}
     </>}
   </main>;
 }

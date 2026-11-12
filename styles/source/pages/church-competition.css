@@ -99,3 +99,12 @@
   .competition-mountain h2 { font-size: 20px; }.competition-final-scores { gap: 10px; }.competition-final-scores > div { padding: 16px 12px; }
 }
 @media (prefers-reduced-motion: reduce) { .competition-page *, .competition-setup * { scroll-behavior: auto; } }
+
+/* Shared voting adds counters to the original conversation cards. */
+.shared-vote-badges { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 10px; }
+.shared-vote-badge { display: inline-flex; align-items: center; gap: 6px; min-width: 36px; padding: 3px 8px; border: 1px solid color-mix(in srgb, var(--team-color), transparent 60%); border-radius: 18px; color: var(--team-color); background: #07182d55; font-size: 12px; font-weight: 800; line-height: 1.3; }
+.shared-vote-badge > i { width: 8px; height: 8px; border-radius: 50%; background: var(--team-color); }
+.shared-own-vote { color: #d9eaff; font-size: 11px; font-weight: 600; }
+.shared-vote-feedback { min-height: 18px; margin: 12px 0 0; color: #b9cce9; font-size: 12px; line-height: 1.5; }
+.shared-vote-feedback:empty { display: none; }
+.shared-guest-status { color: #b9cce9; font-size: 12px; line-height: 1.5; }

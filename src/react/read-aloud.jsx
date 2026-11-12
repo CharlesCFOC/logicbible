@@ -15,7 +15,7 @@ export const stopReadAloud = () => reader.stop();
 
 export function ReadAloudButton({ text, label, language = 'en', disabled = false }) {
   const id = useId();
-  const state = useSyncExternalStore(reader.subscribe, reader.getState);
+  const state = useSyncExternalStore(reader.subscribe, reader.getState, reader.getState);
   const speaking = state.id === id && (state.speaking || state.loading);
   const loading = state.id === id && state.loading;
   const error = state.id === id ? state.error : '';

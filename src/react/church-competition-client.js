@@ -37,10 +37,10 @@ export function saveCompetitionAccess(room, role, token) {
 export function forgetCompetitionAccess(room, role) {
   try { localStorage.removeItem(`${prefix}${room}.${role}`); } catch { /* An inaccessible store has no reusable credential. */ }
 }
-export async function competitionRequest({ room, action, token, signal, ...body }, fetcher = fetch) {
+export async function competitionRequest({ room, action, token, signal, timeoutMs = 10000, ...body }, fetcher = fetch) {
   const url = `${apiBase()}/api/church/competition${action ? '' : `?room=${encodeURIComponent(room)}`}`;
   const response = await fetcher(url, {
-    method: action ? 'POST' : 'GET', signal, cache: 'no-store',
+    method: action ? 'POST' : 'GET', signal: signal ? AbortSignal.any([signal, AbortSignal.timeout(timeoutMs)]) : AbortSignal.timeout(timeoutMs), cache: 'no-store',
     headers: { ...(action ? { 'Content-Type': 'application/json' } : {}), ...(token ? { Authorization: `Bearer ${token}` } : {}) },
     ...(action ? { body: JSON.stringify({ ...body, action, room }) } : {}),
   });

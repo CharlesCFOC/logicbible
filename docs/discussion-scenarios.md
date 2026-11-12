@@ -93,44 +93,45 @@ Vérifier aussi les textes et les choix sur la projection 16:9. Le test
 `tests/discussion-refuges.test.mjs` emploie un second jeu de données minimal
 pour vérifier l’indépendance du moteur ; ce n’est pas un autre sujet publié.
 
-## Sessions partagées et compétition
+## Conversation partagée et votes par équipe
 
-Depuis les réglages, une fois le scénario créé, « Create & share team session »
-ouvre une session multijoueur persistée dans `bible_sessions` avec le type
-`church-team-competition-v1`. Aucune migration supplémentaire n’est nécessaire.
-Le scénario solo et les autres sessions restent indépendants.
+Depuis les réglages, « Create & share team session » crée une session dans
+`bible_sessions` avec le type `church-team-competition-v1`. Aucune migration SQL
+supplémentaire n’est nécessaire. Le bouton principal ouvre l’animateur de cette
+session sur le même site, pour conserver son accès local. Les liens à partager
+utilisent `https://logicbible.vercel.app` et ne contiennent aucun secret.
 
-Les liens invités et organisateur utilisent `https://logicbible.vercel.app`,
-même lorsqu’ils sont créés depuis la version locale ou l’application mobile.
-Le lien public contient uniquement l’identifiant de session. Chaque invité
-choisit un nom unique et reçoit un accès personnel ainsi qu’une équipe bleue
-ou orange : tirage au sort lorsque les effectifs sont égaux, sinon affectation
-à la plus petite équipe. L’organisateur choisit un mot de passe ; son appareil
-est autorisé automatiquement. Le lien organisateur avec ce mot de passe permet
-la gestion depuis un second appareil. Les accès sont conservés localement ;
-seuls leurs condensats sont enregistrés côté serveur. La session expire après
-24 heures et accueille au maximum 100 invités.
+Tous les appareils affichent la conversation d’origine : bulles, narration,
+portrait, montagne et quatre cartes A/B/C/D communes. Chaque carte ajoute deux
+pastilles avec les nombres de votes de l’équipe bleue et de l’équipe orange.
+Un clic invité enregistre immédiatement son vote ; cliquer une autre carte
+le modifie. Un invité qui rejoint une question ouverte peut voter tout de suite.
+Les équipes sont attribuées aléatoirement à effectifs égaux, sinon à la plus petite.
 
-Chaque équipe suit son propre scénario. Un invité a une voix modifiable jusqu’à
-la clôture du vote. La majorité relative choisit A/B/C/D dès que tous les invités
-éligibles ont voté ; l’organisateur peut clôturer avec les voix déjà reçues.
-Une égalité est tranchée au hasard. Les invités arrivant pendant un échange
-votent à partir du suivant. Les deux résultats sont révélés ensemble, puis
-l’organisateur passe au tour suivant. Les mises à jour utilisent une révision
-conditionnelle en base pour ne pas perdre les votes simultanés.
+Les votes ne déclenchent aucune réponse automatiquement. L’animateur sélectionne
+la réponse commune, puis la confirme manuellement, même si elle n’a aucun vote.
+Le compte à rebours et la réaction gardent le rythme de la conversation locale.
+« Continue » publie les paroles suivantes du personnage et la question suivante.
+« Back » restaure la question précédente, ses votes et le parcours ; les requêtes
+en retard ne peuvent pas entrer dans cette question restaurée. Le panneau latéral,
+la carte agrandie et le débrief suivent aussi l’animateur sur les appareils invités.
+Le démarrage est autorisé avec zéro invité. La session dure au plus huit échanges,
+expire après 24 heures et accueille au maximum 100 invités.
 
-Deux chemins colorés suivent les choix respectifs. La partie s’achève après
-huit tours au plus, ou lorsque les deux équipes ont atteint le sommet. Le score
-est de 100 points par refuge atteint, plus une note de qualité sur 100 :
-`100 × (3 × réponses solides + réponses partielles) / (3 × réponses données)`.
-Les réponses problématiques valent zéro. Le score le plus élevé gagne ; une
-égalité finale donne une victoire partagée. Le bilan conserve les réponses,
-leurs explications et leurs références bibliques pour chaque équipe.
+L’API `/api/church/competition` réserve la création aux comptes connectés et les
+commandes d’animation à l’organisateur. Le mot de passe choisi permet de gérer
+la session depuis un autre appareil. Les accès restent locaux et seuls leurs
+condensats sont stockés côté serveur. Le navigateur invité reçoit uniquement
+la scène actuelle, les paroles publiées et les explications déjà révélées.
 
-L’API `/api/church/competition` réserve la création aux comptes connectés,
-contrôle les accès invités/organisateur et ne transmet ni les clés de réponse
-avant leur révélation, ni les scènes futures, ni les identifiants secrets.
-La synchronisation interappareils utilise un rafraîchissement périodique ; une
-connexion Internet est nécessaire. Les tests couvrent les votes concurrents,
-les liens invités, les permissions, les égalités, les arrivées tardives, les
-changements de tour et les résultats finaux.
+Le rafraîchissement automatique s’effectue environ chaque seconde au premier
+plan. Les requêtes expirent après dix secondes et reprennent après une coupure,
+un retour sur la page ou une reconnexion. Les révisions conditionnelles en base
+préservent les votes concurrents. Une connexion Internet est nécessaire.
+Les anciennes invitations gardent leurs participants et leur historique ; leur
+parcours bleu devient la conversation commune et les anciens parcours restent
+conservés côté serveur.
+
+Les tests couvrent le rendu commun, les compteurs, les votes simultanés, les
+permissions, les arrivées tardives, le démarrage sans invité, la confirmation
+manuelle, le retour en arrière, le débrief et la reprise de synchronisation.

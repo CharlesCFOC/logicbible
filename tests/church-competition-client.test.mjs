@@ -57,10 +57,19 @@ test('guest votes carry their credential and round id; failures remain actionabl
   const restore=browser();try{
     const abort=new AbortController();
     await competitionRequest({room:'room',action:'vote',token:'guest',choice:'B',roundId:'round1',signal:abort.signal},async(url,options)=>{
-      assert.equal(url,'/api/church/competition');assert.equal(options.signal,abort.signal);assert.equal(options.headers.Authorization,'Bearer guest');
+      assert.equal(url,'/api/church/competition');assert.equal(options.signal.aborted,false);assert.equal(options.headers.Authorization,'Bearer guest');
       assert.deepEqual(JSON.parse(options.body),{room:'room',action:'vote',choice:'B',roundId:'round1'});return Response.json({ready:false});
     });
     await assert.rejects(competitionRequest({room:'room'},async()=>Response.json({error:'The round has changed.'},{status:409})),{status:409,message:'The round has changed.'});
     await assert.rejects(competitionRequest({room:'room'},async()=>new Response('Unavailable',{status:503})),/connection/);
   }finally{restore();}
+});
+test('a stalled request times out and caller cancellation still aborts an active request',async()=>{
+  const restore=browser();const keepAlive=setTimeout(()=>{},200);
+  const stalled=(_url,{signal})=>new Promise((_,reject)=>signal.addEventListener('abort',()=>reject(signal.reason),{once:true}));
+  try {
+    await assert.rejects(competitionRequest({room:'room',timeoutMs:5},stalled),{name:'TimeoutError'});
+    const controller=new AbortController();const pending=competitionRequest({room:'room',signal:controller.signal},stalled);
+    controller.abort();await assert.rejects(pending,{name:'AbortError'});
+  }finally{clearTimeout(keepAlive);restore();}
 });
