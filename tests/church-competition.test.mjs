@@ -56,6 +56,57 @@ test('team assignment is random on ties, balanced, and preserves names without m
   assert.throws(()=>addCompetitionGuest(room,{id:'x',name:'guest one'}),{status:409});
 });
 
+test('zero-guest games can start and finish with organizer replies for both teams', async () => {
+  const {admin,call}=setup();
+  const created=await call('create',{scenario:scenario(),password:'secret123'},'account');
+  const room=created.body.id,host=created.body.token;
+  let current=await call('start',{room},host);
+  assert.equal(current.status,200);assert.equal(current.body.status,'playing');
+  assert.ok(current.body.teams.every(t=>t.expected===0));
+  for(let round=1;round<=4;round++){
+    const roundId=current.body.roundId;
+    assert.equal((await call('next',{room,roundId},host)).status,409);
+    for(const team of admin.rows.get(room).course_content.teams){
+      const content=admin.rows.get(room).course_content;
+      const choice=content.scenario.nodes[team.state.nodeId].choices.find(c=>c.quality==='solid').id;
+      assert.equal((await call('choose',{room,roundId,teamId:team.id,choice})).status,401);
+      const selected=await call('choose',{room,roundId,teamId:team.id,choice},host);
+      assert.equal(selected.status,200);
+      const view=selected.body.teams.find(t=>t.id===team.id);
+      assert.equal(view.locked,true);assert.equal(view.voted,0);assert.equal(view.expected,0);
+      assert.equal((await call('choose',{room,roundId,teamId:team.id,choice},host)).status,409);
+    }
+    const ready=await call(null,{room},host);assert.equal(ready.body.ready,true);
+    assert.ok(ready.body.teams.every(t=>t.result));
+    current=await call('next',{room,roundId},host);assert.equal(current.status,200);
+    assert.equal((await call('choose',{room,roundId,teamId:'blue',choice:'A'},host)).status,409);
+  }
+  assert.equal(current.body.status,'finished');
+  assert.ok(current.body.teams.every(t=>t.score.points===500));
+  assert.equal(admin.rows.get(room).course_content.participants.length,0);
+});
+
+test('one guest can play while the organizer controls the empty team, and late guests vote next round', async () => {
+  const {call}=setup();
+  const created=await call('create',{scenario:scenario(),password:'secret123'},'account');
+  const room=created.body.id,host=created.body.token;
+  const guest=await call('join',{room,name:'Solo guest'});
+  const started=await call('start',{room},host);assert.equal(started.status,200);
+  const roundId=started.body.roundId,teamId=guest.body.viewer.teamId;
+  const emptyTeam=started.body.teams.find(t=>t.id!==teamId).id;
+  assert.equal((await call('choose',{room,roundId,teamId,choice:'B'},host)).status,409);
+  assert.equal((await call('choose',{room,roundId,teamId:emptyTeam,choice:'B'},guest.body.token)).status,403);
+  assert.equal((await call('choose',{room,roundId,teamId:emptyTeam,choice:'Z'},host)).status,400);
+  assert.equal((await call('choose',{room,roundId,teamId:'missing',choice:'B'},host)).status,409);
+  const late=await call('join',{room,name:'Late guest'});
+  assert.equal((await call('vote',{room,roundId,choice:'B'},late.body.token)).status,409);
+  assert.equal((await call('choose',{room,roundId,teamId:emptyTeam,choice:'B'},host)).status,200);
+  assert.equal((await call('vote',{room,roundId,choice:'B'},guest.body.token)).status,200);
+  const next=await call('next',{room,roundId},host);assert.equal(next.status,200);
+  assert.equal((await call('choose',{room,roundId:next.body.roundId,teamId:emptyTeam,choice:'B'},host)).status,409);
+  assert.equal((await call('vote',{room,roundId:next.body.roundId,choice:'B'},late.body.token)).status,200);
+});
+
 test('majorities automatically confirm, ties draw fairly, and results stay hidden until both teams finish', () => {
   const room = createCompetition(scenario());
   for(const id of ['one','two','three','four']) add(room,id);

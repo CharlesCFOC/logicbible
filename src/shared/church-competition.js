@@ -47,10 +47,23 @@ function openRound(room, roundId) {
 }
 export function startCompetition(room, roundId) {
   if (room.status !== 'lobby') throw competitionError('The game has already started.');
-  if (competitionTeams.some(t => !room.participants.some(p => p.teamId === t.id))) throw competitionError('Wait for at least one guest in each team.');
   const engine = createPilotEngine(room.scenario);
   room.teams.forEach(t => { t.state = engine.pilotReducer(t.state, { type: 'start' }); });
   room.status = 'playing'; openRound(room, roundId);
+}
+function confirmCompetitionChoice(room, team, choice, tied = false) {
+  team.ballot.choice = choice; team.ballot.tied = tied;
+  const engine = createPilotEngine(room.scenario);
+  team.previous = team.state;
+  team.state = engine.pilotReducer(engine.pilotReducer(team.state, { type: 'select', id: choice }), { type: 'confirm' });
+}
+export function chooseCompetitionReply(room, teamId, choice, roundId) {
+  if (room.status !== 'playing' || room.roundId !== roundId) throw competitionError('The round has changed. Refresh before choosing.');
+  if (!/^[A-D]$/.test(choice || '')) throw competitionError('Choose A, B, C or D.', 400);
+  const team = room.teams.find(t => t.id === teamId);
+  if (!team?.ballot || team.ballot.choice) throw competitionError('This team’s choice is not open.');
+  if (team.ballot.eligible.length) throw competitionError('This team has guests voting. Wait for their replies.');
+  confirmCompetitionChoice(room, team, choice);
 }
 export function closeCompetitionBallot(room, teamId, random = Math.random) {
   const team = room.teams.find(t => t.id === teamId);
@@ -61,10 +74,7 @@ export function closeCompetitionBallot(room, teamId, random = Math.random) {
   if (!high) throw competitionError('At least one team member must vote before closing.');
   const tied = Object.keys(counts).filter(id => counts[id] === high);
   const choice = tied[Math.min(tied.length - 1, Math.floor(random() * tied.length))];
-  team.ballot.choice = choice; team.ballot.tied = tied.length > 1;
-  const engine = createPilotEngine(room.scenario);
-  team.previous = team.state;
-  team.state = engine.pilotReducer(engine.pilotReducer(team.state, { type: 'select', id: choice }), { type: 'confirm' });
+  confirmCompetitionChoice(room, team, choice, tied.length > 1);
 }
 export function castCompetitionVote(room, participantId, choice, roundId, random = Math.random) {
   if (room.status !== 'playing' || room.roundId !== roundId) throw competitionError('The round has changed. Refresh before voting.');
