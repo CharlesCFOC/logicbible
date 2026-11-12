@@ -148,6 +148,8 @@ test('API syncs votes, organizer selection, confirmation, next and undo to every
   assert.equal((await call('vote',{room,roundId,choice:'A'},guests[0].token)).status,409);
   const presented=await call('present',{room,sideSlide:'conversation'},host);assert.equal(presented.status,200);
   assert.equal((await call(null,{room},guests[1].token)).body.sideSlide,'conversation');
+  assert.equal((await call('present',{room,sideSlide:'guests'},host)).status,200);
+  assert.equal((await call(null,{room},guests[1].token)).body.sideSlide,'guests');
   assert.equal((await call('debrief',{room,roundId},host)).status,200);
   assert.equal((await call(null,{room},guests[0].token)).body.discussion.phase,'debrief');
   assert.equal((await call('conversation',{room,roundId},host)).body.discussion.phase,'reaction');

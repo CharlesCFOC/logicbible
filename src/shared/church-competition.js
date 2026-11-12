@@ -135,7 +135,7 @@ export function undoCompetition(room, roundId, nextRoundId) {
 }
 export function presentCompetition(room, sideSlide, mountainExpanded) {
   normalizeCompetition(room);
-  if (sideSlide !== undefined && !['mountain', 'conversation'].includes(sideSlide)) throw competitionError('Choose the journey or conversation view.', 400);
+  if (sideSlide !== undefined && !['mountain', 'conversation', 'guests'].includes(sideSlide)) throw competitionError('Choose the journey, conversation or guests view.', 400);
   if (mountainExpanded !== undefined && typeof mountainExpanded !== 'boolean') throw competitionError('Invalid map view.', 400);
   if (sideSlide !== undefined) room.sideSlide = sideSlide;
   if (mountainExpanded !== undefined) room.mountainExpanded = mountainExpanded;

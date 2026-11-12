@@ -119,3 +119,9 @@
 .shared-guest-table td { padding: 10px 18px; border-top: 1px solid #a8c7fa1a; overflow-wrap: anywhere; vertical-align: top; }
 .shared-guest-table :is(th, td) + :is(th, td) { border-left: 1px solid #a8c7fa26; }
 @media (max-width: 600px) { .shared-guest-table :is(th, td) { padding: 10px 12px; } }
+
+.pilot-phone:has([data-slide="guests"]) .pilot-side-tabs { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.5fr) minmax(0, .7fr); }
+.pilot-phone:has([data-slide="guests"]) .pilot-side-tabs > button { min-width: 0; padding-inline: 6px; font-size: clamp(10px, .8cqw, 14px); }
+.pilot-phone .pilot-side-slide--guests { min-height: 0; padding: 0 12px; overflow-y: auto; scrollbar-width: thin; }
+.pilot-phone .shared-guest-table-wrap { flex: 0 0 auto; margin: 16px 0; }
+.pilot-phone .shared-guest-table :is(th, td) { padding: 10px; }

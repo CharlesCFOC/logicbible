@@ -233,18 +233,28 @@ function ConversationPanel({ state }) {
   </section>;
 }
 
-function ScenarioSideCarousel({ state, onSlide, onMapExpand, readOnly, controls, mobile = false, hidden = false, panelId, labelledBy }) {
+function ScenarioSideCarousel({ state, onSlide, onMapExpand, readOnly, controls, mobile = false, hidden = false, panelId, labelledBy, sideTab }) {
   const { scenario } = usePilot();
-  const active = !mobile && state.sideSlide === "conversation" ? "conversation" : "mountain";
-  const index = active === "mountain" ? 0 : 1;
+  const tabs = [["mountain", "The journey"], ["conversation", `${scenario.character.name} · Conversation`], ...(sideTab ? [[sideTab.id, sideTab.label]] : [])];
+  const stamp = `${state.nodeId}:${state.phase}:${state.sideSlide}`;
+  const [localView, setLocalView] = useState(null);
+  const published = tabs.some(([slide]) => slide === state.sideSlide) ? state.sideSlide : 'mountain';
+  // Guests may inspect the roster locally. A presenter change resumes following.
+  const active = mobile ? 'mountain' : readOnly && localView?.stamp === stamp ? localView.slide : published;
+  const index = tabs.findIndex(([slide]) => slide === active);
   const id = useId().replace(/:/g, "");
   const touch = useRef(null);
-  const navigate = slide => { if (!readOnly && !mobile) onSlide?.(slide); };
-  const next = () => navigate(index ? "mountain" : "conversation");
+  const canNavigate = !mobile && (!readOnly || !!sideTab);
+  const navigate = slide => {
+    if (!canNavigate) return;
+    if (readOnly) setLocalView({ stamp, slide });
+    else onSlide?.(slide);
+  };
+  const next = (direction = 1) => navigate(tabs[(index + direction + tabs.length) % tabs.length][0]);
   const tabKey = event => {
-    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key) || readOnly) return;
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key) || !canNavigate) return;
     event.preventDefault(); event.stopPropagation();
-    const target = event.key === "Home" ? "mountain" : event.key === "End" ? "conversation" : index ? "mountain" : "conversation";
+    const target = event.key === 'Home' ? tabs[0][0] : event.key === 'End' ? tabs.at(-1)[0] : tabs[(index + (event.key === 'ArrowLeft' ? -1 : 1) + tabs.length) % tabs.length][0];
     navigate(target);
     event.currentTarget.parentElement.querySelector(`[data-slide="${target}"]`)?.focus();
   };
@@ -252,11 +262,12 @@ function ScenarioSideCarousel({ state, onSlide, onMapExpand, readOnly, controls,
     if (!touch.current) return;
     const [x, y] = touch.current; touch.current = null;
     const end = event.changedTouches[0];
-    if (Math.abs(end.clientX - x) > 50 && Math.abs(end.clientX - x) > Math.abs(end.clientY - y)) next();
+    if (Math.abs(end.clientX - x) > 50 && Math.abs(end.clientX - x) > Math.abs(end.clientY - y)) next(end.clientX < x ? 1 : -1);
   }}>
-    {!mobile && <div className="pilot-side-tabs" role="tablist" aria-label="Right panel view">{[["mountain", "The journey"], ["conversation", `${scenario.character.name} · Conversation`]].map(([slide, label]) => <button key={slide} id={`${id}-${slide}-tab`} data-slide={slide} type="button" role="tab" aria-selected={active === slide} aria-controls={`${id}-${slide}`} tabIndex={active === slide ? 0 : -1} disabled={readOnly} onKeyDown={tabKey} onClick={() => navigate(slide)}>{label}</button>)}</div>}
+    {!mobile && <div className="pilot-side-tabs" role="tablist" aria-label="Right panel view">{tabs.map(([slide, label]) => <button key={slide} id={`${id}-${slide}-tab`} data-slide={slide} type="button" role="tab" aria-selected={active === slide} aria-controls={`${id}-${slide}`} tabIndex={active === slide ? 0 : -1} disabled={!canNavigate} onKeyDown={tabKey} onClick={() => navigate(slide)}>{label}</button>)}</div>}
     <div className="pilot-side-slide" id={`${id}-mountain`} role={mobile ? undefined : 'tabpanel'} aria-labelledby={mobile ? undefined : `${id}-mountain-tab`} hidden={active !== "mountain"}><MountainMap state={state} onExpand={onMapExpand} readOnly={readOnly} /></div>
     {!mobile && <div className="pilot-side-slide" id={`${id}-conversation`} role="tabpanel" aria-labelledby={`${id}-conversation-tab`} hidden={active !== "conversation"}><ConversationPanel state={state} /></div>}
+    {!mobile && sideTab && <div className="pilot-side-slide pilot-side-slide--guests" id={`${id}-${sideTab.id}`} role="tabpanel" aria-labelledby={`${id}-${sideTab.id}-tab`} hidden={active !== sideTab.id}>{sideTab.content}</div>}
     {controls && <footer className="pilot-phone-controls" aria-label="Game controls">{controls}</footer>}
   </aside>;
 }
@@ -393,7 +404,7 @@ function MobileDiscussionTabs({ id, active, onChange }) {
   </nav>;
 }
 
-export function EvangelismPilotStage({ state, onSelect, onSideSlide, onMapExpand, readOnly = false, viewReadOnly = readOnly, presenterControls = null, mainQuestion = null, choiceExtras, choiceFeedback, choicesDisabled = false, discussionFooter }) {
+export function EvangelismPilotStage({ state, onSelect, onSideSlide, onMapExpand, readOnly = false, viewReadOnly = readOnly, presenterControls = null, mainQuestion = null, choiceExtras, choiceFeedback, choicesDisabled = false, discussionFooter, sideTab }) {
   const { scenario, pilotNode, pilotRefuges, pilotEmotionalState } = usePilot();
   const mobile = useMobileDiscussion(readOnly);
   const [mobileTab, setMobileTab] = useState('discussion');
@@ -412,13 +423,13 @@ export function EvangelismPilotStage({ state, onSelect, onSideSlide, onMapExpand
               <p className="pilot-scene-context">{node.cue}</p>
               <DiscussionThread state={state} onSelect={onSelect} readOnly={readOnly} visible={!mobile || mobileTab === 'discussion'} choiceExtras={choiceExtras} choiceFeedback={choiceFeedback} choicesDisabled={choicesDisabled} />
             </>}
-    {discussionFooter}</div></div>{!mobile && mainQuestion}</div><ScenarioSideCarousel state={state} onSlide={onSideSlide} onMapExpand={onMapExpand} readOnly={viewReadOnly} controls={mobile ? null : presenterControls} mobile={mobile} hidden={mobile && mobileTab !== 'journey'} panelId={`${id}-journey-panel`} labelledBy={mobile ? `${id}-journey-tab` : undefined} /></div>
+    {(!sideTab || mobile) && discussionFooter}</div></div>{!mobile && mainQuestion}</div><ScenarioSideCarousel state={state} onSlide={onSideSlide} onMapExpand={onMapExpand} readOnly={viewReadOnly} controls={mobile ? null : presenterControls} mobile={mobile} hidden={mobile && mobileTab !== 'journey'} panelId={`${id}-journey-panel`} labelledBy={mobile ? `${id}-journey-tab` : undefined} sideTab={sideTab} /></div>
     <footer className="pilot-stage-footer"><span>{scenario.title} · Scenario 01</span><span className="pilot-refuge-count">{refuges.completed.length} / 4 shelters reached</span><span>GUIDED DISCUSSION</span></footer>
     {mobile && <div className="pilot-mobile-dock">{presenterControls}<MobileDiscussionTabs id={id} active={mobileTab} onChange={setMobileTab} /></div>}
   </section>;
 }
 
-export function SharedPilotStage({ room, onSelect, onSideSlide, onMapExpand, onDismissJourney, presenterControls, choiceExtras, choiceFeedback, choicesDisabled, discussionFooter, host }) {
+export function SharedPilotStage({ room, onSelect, onSideSlide, onMapExpand, onDismissJourney, presenterControls, choiceExtras, choiceFeedback, choicesDisabled, discussionFooter, sideTab, host }) {
   const view = room.discussion;
   const historyKey = JSON.stringify(view.history);
   const history = useMemo(() => JSON.parse(historyKey), [historyKey]);
@@ -434,7 +445,7 @@ export function SharedPilotStage({ room, onSelect, onSideSlide, onMapExpand, onD
   };
   const mainQuestion = <details className="pilot-main-question pilot-question-card"><summary><span className="pilot-question-label-desktop">Main question</span><span className="pilot-question-label-mobile">Question &amp; mission</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></summary><div className="pilot-main-question-content"><p className="pilot-main-question-title">{scenario.title}</p><h2 className="pilot-discussion-topic">{scenario.question}</h2><ReadAloudButton text={scenario.question} label="Main question" /><section className="pilot-mobile-mission"><h3>Your mission</h3><p>{scenario.goal}</p></section></div></details>;
   return <PilotContext.Provider value={context}>
-    <EvangelismPilotStage state={state} onSelect={onSelect} onSideSlide={onSideSlide} onMapExpand={onMapExpand} viewReadOnly={!host} presenterControls={presenterControls} mainQuestion={mainQuestion} choiceExtras={choiceExtras} choiceFeedback={choiceFeedback} choicesDisabled={choicesDisabled} discussionFooter={discussionFooter} />
+    <EvangelismPilotStage state={state} onSelect={onSelect} onSideSlide={onSideSlide} onMapExpand={onMapExpand} viewReadOnly={!host} presenterControls={presenterControls} mainQuestion={mainQuestion} choiceExtras={choiceExtras} choiceFeedback={choiceFeedback} choicesDisabled={choicesDisabled} discussionFooter={discussionFooter} sideTab={sideTab} />
     <JourneyReveal state={state} readOnly={!host} onDismiss={onDismissJourney} />
   </PilotContext.Provider>;
 }

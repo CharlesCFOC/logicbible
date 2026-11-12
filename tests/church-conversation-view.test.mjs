@@ -29,8 +29,16 @@ test('host and guest reuse the original discussion layout with exactly four repl
       assert.equal((html.match(/class="shared-guest-table"/g)||[]).length,1);
       assert.equal((html.match(/scope="col"/g)||[]).length,2);
       assert.match(html,/<td>Blue guest<\/td>/);assert.match(html,/<td>Orange guest<\/td>/);
+      assert.match(html,/data-slide="guests"/);
+      assert.match(html,/class="pilot-side-slide pilot-side-slide--guests"/);
+      assert.ok(html.indexOf('class="shared-guest-table"')>html.indexOf('class="pilot-side-slide pilot-side-slide--guests"'));
     }
     assert.match(host,/Choose A, B, C or D/);assert.ok(!guest.includes('aria-label="Choose A, B, C or D"'));
     assert.match(guest,/Vote recorded: B/);assert.match(guest,/Your vote/);
+    globalThis.window.matchMedia=()=>({matches:true});
+    const mobile=renderToStaticMarkup(React.createElement(ChurchConversation,{room:competitionView('room',room,{role:'guest',id:'guest',name:'Guest',teamId:'blue'}),busy:false,onAction:()=>{}}));
+    assert.match(mobile,/pilot-stage--mobile/);assert.ok(!mobile.includes('data-slide="guests"'));
+    assert.equal((mobile.match(/class="shared-guest-table"/g)||[]).length,1);
+    assert.ok(mobile.indexOf('class="shared-guest-table"')<mobile.indexOf('class="pilot-side-panel'));
   } finally {await server.close();if(originalWindow===undefined)delete globalThis.window;else globalThis.window=originalWindow;}
 });
