@@ -1,0 +1,146 @@
+/* Church-mode preparation is a dedicated workspace before the projected game. */
+.church-setup { width: min(1180px, 100%); margin: 0 auto; padding: 28px 36px 64px; color: #edf5ff; font-family: var(--font-body); }
+.church-setup :is(h1, h2, h3, p) { margin: 0; }
+.church-setup a { color: #d3e8ff; }
+.church-setup-nav { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 46px; font-size: 12px; }
+.church-setup-nav a { text-decoration: none; }
+.church-setup-nav > span, .church-section-label { color: #a9d9ef; font-size: 10px; font-weight: 800; letter-spacing: .13em; }
+.church-setup-header { max-width: 740px; margin-bottom: 36px; }
+.church-setup-header h1 { margin: 12px 0 16px; font-family: var(--font-body); font-size: clamp(32px, 4.5vw, 52px); font-weight: 800; line-height: 1.12; letter-spacing: -.04em; }
+.church-setup-header h1 em { color: #a9e7d6; font-style: normal; }
+.church-setup-header > p { max-width: 620px; color: #c5d9ef; font-size: 15px; line-height: 1.8; }
+.church-setup-layout { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); align-items: start; gap: 28px; }
+.church-setup-form { min-width: 0; padding: 28px; border: 1px solid #afd4fa2b; border-radius: 22px; background: #0b2343a6; }
+.church-setup fieldset { display: grid; min-width: 0; margin: 0; padding: 0; border: 0; }
+.church-setup legend { margin-bottom: 24px; color: #f2f8ff; font-size: 17px; font-weight: 800; }
+.church-setup label { display: block; color: #e0ecf9; font-size: 12px; font-weight: 700; line-height: 1.5; }
+.church-setup fieldset > label { margin: 20px 0 8px; }
+.church-setup fieldset > label:first-of-type { margin-top: 0; }
+.church-optional { margin-left: 6px; color: #9cb5d2; font-size: 11px; font-weight: 400; }
+.church-setup :is(textarea, select) { display: block; box-sizing: border-box; width: 100%; min-width: 0; min-height: 46px; margin: 0; padding: 12px; border: 1px solid #8baed55c; border-radius: 10px; color: #f2f8ff; background: #071a33b3; font-family: inherit; font-size: 13px; line-height: 1.6; }
+.church-setup textarea { resize: vertical; scrollbar-width: none; }
+.church-setup textarea::-webkit-scrollbar { display: none; width: 0; height: 0; }
+.church-setup textarea::placeholder { color: #91aac7; }
+.church-setup option, .church-setup optgroup { color: #eef5ff; background: #112a48; }
+.church-setup fieldset > small { margin-top: 6px; color: #9eb7d3; font-size: 11px; line-height: 1.5; }
+.church-dictation { min-width: 0; margin-top: 0; }
+.church-dictation-input { position: relative; min-width: 0; }
+.church-setup .church-dictation-input textarea { min-height: 112px; padding-right: 58px; padding-bottom: 48px; }
+.church-dictation.is-listening textarea { border-color: #c084fc; box-shadow: 0 0 0 2px #a855f71f; }
+.church-dictation-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.church-dictation-button { position: absolute; right: 8px; bottom: 8px; display: grid; place-items: center; width: 40px; height: 40px; min-height: 40px; padding: 10px; border: 1px solid #b985ff66; border-radius: 50%; color: #e2b9ff; background: #6829ad40; }
+.church-dictation-button svg { flex: 0 0 auto; width: 18px; height: 18px; }
+.church-voice-meter { position: absolute; bottom: 11px; left: 12px; display: flex; align-items: center; height: 34px; width: min(144px, calc(100% - 78px)); padding: 3px 10px; border: 1px solid #b985ff40; border-radius: 10px; background: #6829ad26; pointer-events: none; }
+.church-voice-meter[hidden] { display: none; }
+.church-voice-meter canvas { display: block; width: 100%; height: 28px; }
+.church-dictation-button[aria-pressed="true"] { border-color: #c4b5fd; color: #ede9fe; background: #7c3aed33; }
+.church-dictation-indicator { display: inline-flex; align-items: center; gap: 6px; color: #ddd6fe; font-size: 10px; }
+.church-dictation-indicator i { width: 7px; height: 7px; border-radius: 50%; background: #c4b5fd; animation: church-dictation-pulse 1.2s ease-in-out infinite alternate; }
+.church-setup .church-dictation-status { margin-top: 7px; color: #a7bfd8; font-size: 11px; line-height: 1.6; }
+.church-dictation-status.is-error { color: #ddd6fe; }
+@keyframes church-dictation-pulse { from { opacity: .45; } to { opacity: 1; } }
+.church-question-toggle { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 44px; margin-top: 14px; padding: 10px 12px; border: 1px solid #9bd9cf4d; border-radius: 10px; color: #b8ebdb; background: #8ad9bc0a; font-size: 12px; font-weight: 700; text-align: left; }
+.church-question-toggle > span { font-size: 18px; line-height: 1; }
+.church-question-picker { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); align-items: end; gap: 12px; margin-top: 14px; }
+.church-question-picker[hidden] { display: none; }
+.church-question-picker label { min-width: 0; }
+.church-question-picker select { margin-top: 8px; text-overflow: ellipsis; }
+.church-question-picker select:disabled { color: #91aac7; opacity: .7; }
+.church-field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 14px; margin-top: 22px; }
+.church-field-grid label select { margin-top: 8px; }
+.church-setup .church-values { margin-top: 30px; padding-top: 24px; border-top: 1px solid #9bbfe92e; }
+.church-values legend { float: left; width: 100%; margin-bottom: 10px; font-size: 15px; }
+.church-values > p { clear: both; margin-bottom: 16px; color: #aebfd7; font-size: 12px; line-height: 1.7; }
+.church-values > div { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.church-values label { display: flex; align-items: center; gap: 9px; min-height: 44px; padding: 9px; border: 1px solid #a1d8c92e; border-radius: 10px; background: #70bba10a; font-size: 11px; font-weight: 500; cursor: pointer; }
+.church-values input { width: 17px; height: 17px; flex: 0 0 auto; margin: 0; accent-color: #9de4ce; }
+.church-generate-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+.church-setup .church-primary, .church-setup .church-secondary { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 13px 20px; border: 1px solid transparent; border-radius: 12px; font-size: 13px; font-weight: 800; line-height: 1.5; cursor: pointer; }
+.church-setup .church-primary { color: #082e38; background: #a7ead7; box-shadow: 0 4px 18px #08203330; }
+.church-setup .church-secondary { color: #d9e9fc; background: transparent; border-color: #a1bde14d; }
+.church-setup .church-primary:hover:not(:disabled) { background: #c3f6e7; }
+.church-setup button:disabled { cursor: default; opacity: .5; }
+.church-setup .church-generation-hint { margin-top: 12px; color: #a6c0d9; font-size: 11px; line-height: 1.7; }
+.church-generation-progress { height: 8px; margin-top: 18px; overflow: hidden; border: 1px solid #a7ead733; border-radius: 20px; background: #a7ead714; }
+.church-generation-progress > span { display: block; width: 36%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #6bc8f0, #a7ead7); animation: church-generation-loading 1.6s ease-in-out infinite; }
+@keyframes church-generation-loading { from { transform: translateX(-100%); } to { transform: translateX(280%); } }
+.church-setup-error { margin-top: 18px; padding: 14px; border: 1px solid #a78bfa66; border-radius: 10px; color: #ede9fe; background: #4c1d952e; font-size: 13px; line-height: 1.7; }
+.church-setup-side { display: grid; gap: 24px; min-width: 0; }
+.church-how-it-works { padding: 26px; border: 1px solid #b6d8ff22; border-radius: 20px; background: #aacaff08; }
+.church-how-it-works ol { display: grid; gap: 25px; margin: 26px 0 0; padding: 0; list-style: none; }
+.church-how-it-works li { display: flex; gap: 14px; }
+.church-how-it-works li > b { display: grid; flex: 0 0 auto; place-items: center; width: 30px; height: 30px; border: 1px solid #9bd9cf5c; border-radius: 50%; color: #b8ebdb; font-size: 12px; }
+.church-how-it-works strong { color: #f2f8ff; font-size: 13px; }
+.church-how-it-works li p { margin-top: 7px; color: #b5cbe4; font-size: 12px; line-height: 1.8; }
+.church-values-note { padding: 24px; border-left: 2px solid #a7dfc4; background: linear-gradient(135deg, #8ad9bc14, transparent); }
+.church-values-note > span { color: #c7efdc; font-size: 25px; }
+.church-values-note h2 { margin: 14px 0 12px; color: #e7f7ef; font-size: 18px; line-height: 1.5; }
+.church-values-note p { color: #b7d0d1; font-size: 12px; line-height: 1.9; }
+.church-demo-link { padding: 8px 0; font-size: 12px; line-height: 1.6; text-underline-offset: 4px; }
+.church-scenario-preview { margin-top: 36px; padding: 30px; border: 1px solid #a3dfc65c; border-radius: 22px; background: #0c2d40a6; }
+.church-scenario-preview h2 { margin-top: 14px; color: #f0fff8; font-size: 28px; line-height: 1.25; }
+.church-scenario-preview > p { margin-top: 14px; color: #c7deea; font-size: 14px; line-height: 1.8; }
+.church-scenario-preview .church-preview-question { color: #b6ead6; font-size: 17px; }
+.church-preview-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin: 26px 0; padding: 22px 0; border-block: 1px solid #acccdc2b; }
+.church-preview-facts dt { margin-bottom: 8px; color: #91b8ca; font-size: 11px; font-weight: 700; }
+.church-preview-facts dd { margin: 0; color: #e1f3f4; font-size: 12px; line-height: 1.8; }
+.church-preview-stages { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin: 0; padding: 0; list-style: none; }
+.church-preview-stages li { display: flex; gap: 12px; }
+.church-preview-stages li > span { display: grid; flex: 0 0 auto; place-items: center; width: 28px; height: 28px; border: 1px solid #a7e8d44d; border-radius: 50%; color: #b6ead6; font-size: 12px; }
+.church-preview-stages strong { font-size: 13px; }
+.church-preview-stages p { margin-top: 6px; color: #b1cdd8; font-size: 12px; line-height: 1.7; }
+.church-value-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+.church-value-tags span { padding: 6px 10px; border: 1px solid #a3dfc633; border-radius: 30px; color: #b9e5d5; font-size: 10px; }
+.church-preview-review { margin-top: 24px; border-top: 1px solid #9bc6d333; }
+.church-preview-review > summary { padding: 18px 0 0; color: #cfebed; font-size: 12px; line-height: 1.6; cursor: pointer; }
+.church-preview-review article { margin-top: 22px; padding-top: 20px; border-top: 1px solid #9bc6d32b; }
+.church-preview-review h3 { margin-bottom: 10px; font-size: 15px; }
+.church-preview-review article :is(p, strong) { font-size: 12px; line-height: 1.8; }
+.church-preview-review ul { display: grid; gap: 16px; padding-left: 18px; }
+.church-preview-review .church-review-note { color: #b5d9c9; }
+.church-preview-review small { color: #cce0bb; font-size: 11px; }
+.church-start-bar { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 24px; padding: 24px 0; border-top: 1px solid #abc6e333; }
+.church-start-bar p { color: #b8d1e5; font-size: 12px; line-height: 1.7; }
+.church-start-bar.is-awaiting { opacity: .8; }
+.church-setup :is(a, button, input, textarea, select, summary):focus-visible { outline: 3px solid #afeed9; outline-offset: 4px; }
+.church-screen-waiting { padding-top: 25vh; text-align: center; }
+.church-screen-waiting p { margin: 20px 0; line-height: 1.8; }
+.read-aloud-control { display: block; margin-top: 8px; }
+:is(.church-setup, .pilot-page) .read-aloud-button { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; min-height: 40px; padding: 10px; border: 1px solid #b985ff66; border-radius: 50%; color: #e2b9ff; background: #6829ad26; cursor: pointer; }
+:is(.church-setup, .pilot-page) .read-aloud-button:not(:disabled):hover { background: #a855f733; }
+:is(.church-setup, .pilot-page) .read-aloud-button[aria-pressed="true"] { border-color: #d8b4fe; color: #faf5ff; background: linear-gradient(110deg, #7e22ce, #a21caf); }
+.read-aloud-button svg { width: 17px; height: 17px; flex: 0 0 auto; }
+/* Anchor hidden announcements so long threads cannot extend the outer page. */
+.read-aloud-status { position: absolute; top: 0; left: 0; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.read-aloud-button.is-loading svg { animation: read-aloud-spin .8s linear infinite; }
+@keyframes read-aloud-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .read-aloud-button.is-loading svg { animation: none; } }
+.read-aloud-error { display: block; margin-top: 5px; color: #e9d5ff; font-size: 12px; line-height: 1.5; }
+.pilot-page--screen .read-aloud-control { display: none; }
+.church-setup :is(h1, h1 em, h2, h3, legend, .church-section-label),
+.church-setup fieldset > label,
+.church-setup .church-field-grid label,
+.church-setup .church-question-picker label,
+.church-setup .church-how-it-works strong,
+.church-setup .church-preview-facts dt,
+.church-setup .church-preview-stages strong,
+.church-setup .church-preview-review > summary { color: #d8b4fe; }
+@media (max-width: 760px) {
+  .church-setup { padding: 24px 18px 40px; }
+  .church-setup-nav { margin-bottom: 32px; }
+  .church-setup-layout { grid-template-columns: minmax(0, 1fr); }
+  .church-setup-form { padding: 22px 18px; }
+  .church-setup-side { gap: 20px; }
+  .church-how-it-works { padding: 22px 18px; }
+  .church-preview-facts, .church-preview-stages { grid-template-columns: minmax(0, 1fr); }
+  .church-scenario-preview { padding: 24px 18px; }
+  .church-start-bar { align-items: stretch; flex-direction: column; }
+}
+@media (max-width: 370px) {
+  .church-field-grid, .church-values > div { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.pilot-document { animation: none; }
+  .church-generation-progress > span { width: 100%; animation: none; opacity: .7; }
+  .church-dictation-indicator i { animation: none; }
+}

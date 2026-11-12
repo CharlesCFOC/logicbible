@@ -2,7 +2,7 @@
   "scripts": {
     "import:step": "node scripts/import-step-data.mjs",
     "build:css": "node scripts/build-styles.mjs",
-    "build:react": "vite build --config vite.bridge.config.js && node scripts/check-bundle.mjs",
+    "build:react": "vite build --config vite.bridge.config.js && node scripts/check-bundle.mjs && node scripts/prune-react-chunks.mjs",
     "build": "npm run build:css && npm run build:legacy && npm run build:react",
     "build:mobile": "npm run build && node scripts/build-mobile.mjs",
     "android:add": "npm run build:mobile && cap add android",

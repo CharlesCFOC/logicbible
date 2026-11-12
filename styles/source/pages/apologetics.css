@@ -613,6 +613,40 @@
 #apologetics .apologetics-room-button:hover,
 #apologetics .apologetics-room-button:focus-visible { filter: brightness(1.12); outline: 0; transform: translateY(-3px); }
 
+#apologetics .think-room-church-card {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: 44px minmax(0, 1fr) 32px;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  padding: 20px 18px;
+  border: 1px solid rgba(167, 220, 190, 0.4);
+  border-radius: 20px;
+  background: linear-gradient(135deg, #265b56, #183f4e);
+  color: #f2fff8;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(0, 10, 22, 0.18);
+}
+
+#apologetics .think-room-church-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: rgba(164, 239, 203, 0.12);
+  color: #b6f3d3;
+}
+
+#apologetics .think-room-church-icon svg { width: 30px; height: 30px; }
+#apologetics .think-room-church-copy { display: grid; gap: 6px; min-width: 0; }
+#apologetics .think-room-church-copy strong { color: #f2fff8; font-size: 20px; line-height: 1.2; }
+#apologetics .think-room-church-copy small { color: #d0e8df; font-size: 12px; line-height: 1.5; }
+#apologetics .think-room-church-arrow { color: #b6f3d3; font-size: 28px; line-height: 1; }
+#apologetics .think-room-church-card:hover { background: linear-gradient(135deg, #306c64, #204c5e); }
+#apologetics .think-room-church-card:focus-visible { outline: 3px solid #b6f3d3; outline-offset: 4px; }
+
 @media (max-width: 370px) {
   #apologetics .apologetics-room-list { gap: 8px; }
   #apologetics .apologetics-room-button,
@@ -3418,7 +3452,7 @@
 .apologetics-debate-content {
   position: relative;
   z-index: 1;
-  gap: 28px;
+  gap: 20px;
 }
 
 .apologetics-debate-content::before {
@@ -3632,7 +3666,7 @@
   backdrop-filter: none;
 }
 
-/* A dense, blurred top veil lets the sticky progress read as its own section. */
+/* Keep the sticky backdrop inside the progress bar so earlier content stays visible. */
 .apologetics-debate-setup-progress {
   isolation: isolate;
 }
@@ -3640,7 +3674,8 @@
 .apologetics-debate-setup-progress::before {
   position: absolute;
   z-index: 0;
-  inset: -118px -22px -38px;
+  inset: 0;
+  border-radius: 14px;
   background: linear-gradient(
     145deg,
     rgba(8, 37, 55, 0.96) 0%,
@@ -4078,9 +4113,9 @@
   display: flex;
   flex-wrap: nowrap;
   gap: 10px;
-  max-width: calc(100% + 18px);
-  margin-right: -18px;
-  padding: 6px 18px 9px 0;
+  max-width: calc(100% + 16px);
+  margin-right: -16px;
+  padding: 6px 16px 9px 0;
   overflow-x: auto;
   overflow-y: hidden;
   scroll-snap-type: x mandatory;

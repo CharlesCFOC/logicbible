@@ -6,6 +6,7 @@ import { highlightBibleCitations } from "../../lib/ai/bible-citations.js";
 import { AiComposer, AiIcon, AiMessage } from "./ai.jsx";
 import { debateDifficultyDescriptions, debateScoringRubrics, getDebateDifficulty } from "../../lib/ai/debate-difficulty.js";
 import { debateThemes } from "../../lib/ai/debate-topics.js";
+import { DebateTrainingControls } from "./debate-training.jsx";
 export { debateThemes, debateDifficultyDescriptions, debateScoringRubrics };
 
 export const generalQuestion = "What is the strongest reason to believe the Christian message is true?";
@@ -402,6 +403,8 @@ function DebateRoomView({ theme, question, difficulty, opponentPersonality = "se
         </div>
       </header>
 
+      <DebateTrainingControls key={question} question={question || generalQuestion} theme={theme?.label || "General"} opponent={selectedPersonality.label} messages={messages} verseSupportText={verseSupportText} />
+
       <div className="apologetics-debate-room-settings">
         <div className="apologetics-debate-room-info">
           <button className="apologetics-debate-room-info-toggle" type="button" onMouseDown={(event) => event.preventDefault()} onClick={toggleRoomInfo} aria-expanded={roomInfoOpen} aria-controls="debate-room-information">
@@ -611,6 +614,8 @@ export function ApologeticsDebatePage() {
           </nav>
         </div>
       </header>
+
+      <a className="pilot-debate-entry" href="evangelism-pilot.html"><span>DISCUSSION EN GROUPE</span><strong>Mode église</strong><small>Ouvrir le scénario pilote et les commandes de projection ↗</small></a>
 
       <nav className="apologetics-debate-setup-progress" aria-label="Debate setup progress">
         <span className={theme ? "is-complete" : ""}><b>1</b><small>Beliefs</small></span>

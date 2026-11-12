@@ -1970,12 +1970,8 @@ body .app-shell[data-app-background="black"] #prayer .prayer-spotlight::after {
 
 /* Extend Prayer's blue-violet ambient background to every app screen. */
 body .app-shell[data-app-background="black"] .phone-frame {
-  background:
-    radial-gradient(ellipse 85% 34% at 4% 8%, rgba(111, 177, 255, .52), transparent 74%),
-    radial-gradient(ellipse 72% 42% at 100% 40%, rgba(119, 108, 255, .5), transparent 72%),
-    radial-gradient(ellipse 82% 35% at 12% 100%, rgba(111, 137, 255, .48), transparent 72%),
-    linear-gradient(145deg, #122b56 0%, #0a1d40 48%, #101c4b 100%) !important;
-  background-size: 150% 150%, 140% 140%, 150% 150%, 100% 100% !important;
+  background: var(--app-ambient-background) !important;
+  background-size: var(--app-ambient-background-size) !important;
   animation: prayerGlassAtmosphere 22s ease-in-out infinite alternate !important;
 }
 

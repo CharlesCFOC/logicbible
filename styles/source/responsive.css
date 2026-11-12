@@ -945,6 +945,16 @@ html body .app-shell .phone-frame :is(
   padding-bottom: 16px;
 }
 
+/* Debate setup uses a compact path above its banner and sticky progress bar. */
+html body .app-shell .phone-frame #apologetics-debate .apologetics-debate-content > .apologetics-debate-header {
+  z-index: 1;
+  min-height: 52px;
+  margin-top: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  align-items: center;
+}
+
 /* Align Kids Bible's single-line title with the top of the shared headers. */
 html body .app-shell .phone-frame #kids-bible .kids-bible-header {
   align-items: flex-start;

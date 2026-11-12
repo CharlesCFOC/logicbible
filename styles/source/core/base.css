@@ -13,6 +13,12 @@
   --chat-text-size: 17px;
   --font-body: "Manrope", -apple-system, BlinkMacSystemFont, "SF Pro Text", Segoe UI, sans-serif;
   --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --app-ambient-background:
+    radial-gradient(ellipse 85% 34% at 4% 8%, rgba(111, 177, 255, .52), transparent 74%),
+    radial-gradient(ellipse 72% 42% at 100% 40%, rgba(119, 108, 255, .5), transparent 72%),
+    radial-gradient(ellipse 82% 35% at 12% 100%, rgba(111, 137, 255, .48), transparent 72%),
+    linear-gradient(145deg, #122b56 0%, #0a1d40 48%, #101c4b 100%);
+  --app-ambient-background-size: 150% 150%, 140% 140%, 150% 150%, 100% 100%;
   --bg: #fffdf8;
   --bg-soft: #f6f1e9;
   --ink: #201c17;

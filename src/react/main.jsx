@@ -20,6 +20,10 @@ const churchSpaceNode = document.querySelector("[data-react-church-root]");
 if (churchSpaceNode) mountDeferredScreen(churchSpaceNode, () => import("./church.jsx"), "ChurchSpace");
 const projectionNode = document.querySelector("[data-projection-root]");
 if (projectionNode) mountDeferredScreen(projectionNode, () => import("./church.jsx"), "ProjectionScreen");
+const debateProjectionNode = document.querySelector("[data-debate-projection-root]");
+if (debateProjectionNode) mountDeferredScreen(debateProjectionNode, () => import("./debate-projection.jsx"), "DebateProjectionScreen");
+const evangelismPilotNode = document.querySelector("[data-evangelism-pilot-root]");
+if (evangelismPilotNode) mountDeferredScreen(evangelismPilotNode, () => import("./church-mode.jsx"), "ChurchModePage");
 const sessionAdminNode = document.querySelector("[data-session-admin-root]");
 if (sessionAdminNode) mountDeferredScreen(sessionAdminNode, () => import("./church.jsx"), "SessionAdmin");
 

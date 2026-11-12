@@ -9,7 +9,9 @@ export default defineConfig({
   },
   build: {
     manifest: true,
-    emptyOutDir: true,
+    // Open tabs may request an earlier build's lazy modules for several hours.
+    // Expired chunks are removed separately after the new bundle is verified.
+    emptyOutDir: false,
     outDir: "assets/react",
     lib: {
       entry: "src/react/main.jsx",

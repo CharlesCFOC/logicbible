@@ -1,6 +1,27 @@
 // Adapter used by React; installed at the original bootstrap point.
 function installAiBridge() {
 window.aiBridge = {
+  async createDebateProjection(state) {
+    let response;
+    try {
+      response = await aiFetch(apiUrl("/api/debate/projection"), {
+        method: "POST", headers: { "content-type": "application/json" },
+        body: JSON.stringify({ action: "create", state }),
+      });
+    } catch (error) {
+      if (error.message === "Sign in to use AI features.") {
+        throw Object.assign(new Error("Connectez-vous à votre compte pour créer le lien de projection."), { status: 401 });
+      }
+      throw new Error("La connexion au service de projection a échoué. Réessayez.");
+    }
+    const payload = await response.json().catch(() => null);
+    if (response.status === 401) throw Object.assign(new Error("Votre connexion a expiré. Reconnectez-vous pour créer le lien."), { status: 401 });
+    if (response.status === 404) throw new Error("La projection n’est pas encore disponible sur cette version du site. Ouvrez la version locale à jour.");
+    if (!response.ok || !payload?.token || !payload?.controlToken || !Number.isFinite(payload.expiresAt)) {
+      throw new Error(payload?.error || "Le lien n’a pas pu être créé. Réessayez dans un instant.");
+    }
+    return payload;
+  },
   async openBibleReference(reference) {
     const match = String(reference).match(/^(.+?)\.?\s+(\d{1,3}):(\d{1,3})/);
     if (!match) return;

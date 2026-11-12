@@ -8,7 +8,7 @@ import { kidsAdventures } from "../src/react/kids-adventures-data.js";
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const outputDir = path.join(projectRoot, "dist");
 
-const requiredFiles = ["index.html", "projection.html", "session-admin.html", "session-admin-bridge.js", "styles.css", "script.js", "bible-data.js", "privacy.html", "terms.html", "community-guidelines.html"];
+const requiredFiles = ["index.html", "projection.html", "debate-projection.html", "evangelism-pilot.html", "session-admin.html", "session-admin-bridge.js", "styles.css", "script.js", "bible-data.js", "privacy.html", "terms.html", "community-guidelines.html"];
 const requiredDirectories = ["scripts", "assets"];
 const adventureImages = [...new Set(kidsAdventures.flatMap(adventure => [adventure.image, adventure.thumbnail].filter(Boolean)))];
 

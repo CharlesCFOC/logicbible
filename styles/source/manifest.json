@@ -15,5 +15,9 @@
   "pages/kids-bible.css",
   "pages/apologetics.css",
   "themes/black.css",
-  "responsive.css"
+  "responsive.css",
+  "pages/debate-projection.css",
+  "pages/evangelism-pilot.css",
+  "pages/church-mode.css",
+  "pages/church-competition.css"
 ]
