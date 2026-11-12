@@ -1,12 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { competitionLink, competitionRequest, createSharedCompetition, readCompetitionAccess, saveCompetitionAccess } from '../src/react/church-competition-client.js';
+import { competitionLink, competitionOrganizerPath, competitionRequest, createSharedCompetition, readCompetitionAccess, readCreatedCompetition, saveCompetitionAccess, saveCreatedCompetition } from '../src/react/church-competition-client.js';
 
 function browser() {
   const originals = Object.fromEntries(['window','location','localStorage'].map(key=>[key,globalThis[key]]));
   const values=new Map();
   globalThis.window={};globalThis.location={origin:'https://example.test',hostname:'example.test',port:''};
-  globalThis.localStorage={getItem:k=>values.get(k)||null,setItem:(k,v)=>values.set(k,v)};
+  globalThis.localStorage={getItem:k=>values.get(k)||null,setItem:(k,v)=>values.set(k,v),removeItem:k=>values.delete(k)};
   return ()=>{for(const [key,value]of Object.entries(originals))if(value===undefined)delete globalThis[key];else globalThis[key]=value;};
 }
 test('guest and organizer links always use the public Vercel origin, without credentials',()=>{
@@ -20,6 +20,26 @@ test('guest and organizer links always use the public Vercel origin, without cre
     assert.equal(readCompetitionAccess('room','host'),'secret');
     globalThis.window.Capacitor={isNativePlatform:()=>true};
     assert.equal(new URL(competitionLink('room')).origin,'https://logicbible.vercel.app');
+  }finally{restore();}
+});
+test('resuming a shared game keeps organizer credentials on the creating origin and expires saved sessions',()=>{
+  const restore=browser();try{
+    globalThis.location={origin:'http://localhost:4000',hostname:'localhost',port:'4000'};
+    saveCompetitionAccess('shared-room','host','organizer-token');
+    saveCreatedCompetition('scenario',{id:'shared-room',expiresAt:2000,token:'must-not-be-persisted'});
+    const saved=readCreatedCompetition('scenario',1000);
+    assert.deepEqual(saved,{id:'shared-room',expiresAt:2000});
+    const destination=new URL(competitionOrganizerPath(saved.id),location.origin);
+    assert.equal(destination.origin,location.origin);
+    assert.equal(destination.searchParams.get('room'),'shared-room');
+    assert.equal(destination.searchParams.get('admin'),'1');
+    assert.equal(readCompetitionAccess(destination.searchParams.get('room'),'host'),'organizer-token');
+    assert.equal(destination.searchParams.has('session'),false);
+    assert.equal(destination.searchParams.has('play'),false);
+    assert.equal(readCreatedCompetition('scenario',2000),null);
+    assert.equal(readCreatedCompetition('another-scenario',1000),null);
+    saveCreatedCompetition('scenario',null);assert.equal(readCreatedCompetition('scenario',1000),null);
+    localStorage.setItem('brother.churchTeams.created.scenario','invalid');assert.equal(readCreatedCompetition('scenario',1000),null);
   }finally{restore();}
 });
 test('creation uses the signed-in account and stores only local organizer access',async()=>{

@@ -114,6 +114,13 @@ test('API separates organizer and guest access, persists concurrent joins/votes 
   assert.notEqual(second.body.token,host);assert.equal((await call(null,{room},host)).body.viewer.role,'host');
   const started=await call('start',{room},second.body.token);assert.equal(started.status,200);
   const roundId=started.body.roundId;
+  for(const guest of guests){
+    const refreshed=await call(null,{room},guest.token);
+    assert.equal(refreshed.body.status,'playing');assert.equal(refreshed.body.roundId,roundId);
+    const team=refreshed.body.teams.find(t=>t.id===guest.viewer.teamId);
+    assert.equal(team.eligible,true);assert.equal(team.locked,false);
+    assert.deepEqual(team.scene.choices.map(c=>c.id),['A','B','C','D']);
+  }
   const voteResults=await Promise.all(guests.map(g=>call('vote',{room,roundId,choice:g.viewer.teamId==='blue'?'B':'A'},g.token)));
   assert.ok(voteResults.every(r=>r.status===200));
   const current=await call(null,{room},host);assert.equal(current.body.ready,true);
@@ -122,6 +129,15 @@ test('API separates organizer and guest access, persists concurrent joins/votes 
   assert.ok(!JSON.stringify(current.body).includes('admin_password'));assert.ok(!JSON.stringify(current.body).includes(host));
   assert.equal((await call(null,{room},'a'.repeat(64))).status,401);
   const next=await call('next',{room,roundId},host);assert.equal(next.status,200);assert.notEqual(next.body.roundId,roundId);
+  for(const guest of guests){
+    const refreshed=await call(null,{room},guest.token);
+    assert.equal(refreshed.body.status,'playing');assert.equal(refreshed.body.round,2);
+    assert.equal(refreshed.body.roundId,next.body.roundId);
+    assert.ok(refreshed.body.revision>started.body.revision);
+    const team=refreshed.body.teams.find(t=>t.id===guest.viewer.teamId);
+    assert.equal(team.locked,false);assert.equal(team.ownVote,null);assert.equal(team.eligible,true);
+    assert.notEqual(team.scene.line,started.body.teams.find(t=>t.id===guest.viewer.teamId).scene.line);
+  }
   assert.equal((await call('vote',{room,roundId,choice:'B'},guests[0].token)).status,409);
   admin.rows.get(room).course_content.expiresAt=0;
   assert.equal((await call(null,{room})).status,410);

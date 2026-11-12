@@ -1,11 +1,11 @@
 import React, { useEffect, useId, useRef, useState } from 'react';
-import { competitionLink, competitionRequest, createSharedCompetition, forgetCompetitionAccess, readCompetitionAccess, saveCompetitionAccess } from './church-competition-client.js';
+import { competitionLink, competitionOrganizerPath, competitionRequest, createSharedCompetition, forgetCompetitionAccess, readCompetitionAccess, readCreatedCompetition, saveCompetitionAccess, saveCreatedCompetition } from './church-competition-client.js';
 
 function RoomIcon({ name }) {
   const paths = { link: 'M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-2 2M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l2-2', users: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M16 3a4 4 0 0 1 0 8M22 21v-2a4 4 0 0 0-3-3.87M13 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0', check: 'm5 12 4 4L19 6', arrow: 'M5 12h14m-6-6 6 6-6 6', trophy: 'M8 3h8v6a4 4 0 0 1-8 0ZM8 5H4v2a4 4 0 0 0 4 4M16 5h4v2a4 4 0 0 1-4 4M12 13v6M8 21h8M10 19h4', lock: 'M7 10V7a5 5 0 0 1 10 0v3M5 10h14v11H5ZM12 14v3' };
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={paths[name]} /></svg>;
 }
-export function CompetitionShareLinks({ id }) {
+export function CompetitionShareLinks({ id, showOrganizer = true }) {
   const [notice, setNotice] = useState('');
   const guestLink = competitionLink(id);
   async function share() {
@@ -16,18 +16,17 @@ export function CompetitionShareLinks({ id }) {
   }
   return <div className="competition-share-links">
     <label>Guest invitation link<input readOnly value={guestLink} onFocus={e => e.target.select()} /></label>
-    <div className="competition-action-row"><button type="button" className="church-primary" onClick={share}><RoomIcon name="link" />Share guest link</button><a className="church-secondary" href={competitionLink(id, true)}>Open organizer</a></div>
+    <div className="competition-action-row">{showOrganizer && <a className="church-primary" href={competitionOrganizerPath(id)}>Open organizer & start game<RoomIcon name="arrow" /></a>}<button type="button" className={showOrganizer ? 'church-secondary' : 'church-primary'} onClick={share}><RoomIcon name="link" />Share guest link</button></div>
+    <p>{showOrganizer ? 'The guest link opens the waiting room. Start the competition from the organizer screen to open the questions on everyone’s phone.' : 'The guest link opens the waiting room. Start team competition opens the questions on everyone’s phone.'}</p>
     <details><summary>Manage from another device</summary><p>Open this organizer link and enter the password you chose. Keep this password for the organizer.</p><input aria-label="Organizer link" readOnly value={competitionLink(id, true)} onFocus={e => e.target.select()} /></details>
     {notice && <p role="status">{notice}</p>}
   </div>;
 }
-export function CompetitionSetup({ scenario }) {
+export function CompetitionSetup({ scenario, onRoomChange }) {
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
-  const [created, setCreated] = useState(() => {
-    try { const saved = JSON.parse(localStorage.getItem(`brother.churchTeams.created.${scenario.id}`) || 'null'); return saved?.expiresAt > Date.now() ? saved : null; } catch { return null; }
-  });
+  const [created, setCreated] = useState(() => readCreatedCompetition(scenario.id));
   const passwordId = useId();
   async function create(e) {
     e.preventDefault(); if (busy) return;
@@ -35,14 +34,15 @@ export function CompetitionSetup({ scenario }) {
     try {
       const room = await createSharedCompetition(scenario, password);
       setCreated({ id: room.id, expiresAt: room.expiresAt }); setPassword('');
-      try { localStorage.setItem(`brother.churchTeams.created.${scenario.id}`, JSON.stringify({ id: room.id, expiresAt: room.expiresAt })); } catch { /* Password access remains available on another device. */ }
+      saveCreatedCompetition(scenario.id, room);
+      onRoomChange?.({ id: room.id, expiresAt: room.expiresAt });
     } catch (err) { setError(err.message); } finally { setBusy(false); }
   }
   return <section className="competition-setup" aria-labelledby="competition-setup-title">
     <span className="church-section-label">03 · PLAY IN TWO TEAMS</span><h2 id="competition-setup-title">One mountain. Two teams.</h2>
     <p>Invite guests on their phones. Each enters a name, joins a randomly assigned, balanced team and votes for its reply. Follow both routes and discover the winner.</p>
     <div className="competition-setup-facts"><span><i className="competition-dot competition-dot--blue" />Blue team</span><span><i className="competition-dot competition-dot--orange" />Orange team</span><span>Up to 8 rounds · link valid for 24 hours</span></div>
-    {created ? <><CompetitionShareLinks id={created.id} /><button type="button" className="church-secondary competition-new-session" onClick={() => setCreated(null)}>Create another team session</button></> : <form onSubmit={create}>
+    {created ? <><CompetitionShareLinks id={created.id} /><button type="button" className="church-secondary competition-new-session" onClick={() => { setCreated(null); saveCreatedCompetition(scenario.id, null); onRoomChange?.(null); }}>Create another team session</button></> : <form onSubmit={create}>
       <label htmlFor={passwordId}>Organizer password</label><input id={passwordId} type="password" autoComplete="new-password" minLength={6} maxLength={128} required value={password} onChange={e => setPassword(e.target.value)} placeholder="At least 6 characters" disabled={busy} />
       <small>Your device gets organizer access automatically. Use this password to manage from another device.</small>
       <button type="submit" className="church-primary" disabled={busy}>{busy ? 'Creating shared session…' : 'Create & share team session'}<RoomIcon name="arrow" /></button>
@@ -157,6 +157,7 @@ export function ChurchCompetitionPage({ roomId, adminMode }) {
   }
   const host = room?.viewer?.role === 'host';
   const ownTeam = room?.teams?.find(t => t.id === room.viewer?.teamId);
+  const waitingTeams = room?.teams?.filter(t => !t.members.length) || [];
   return <main className="competition-page">
     <nav className="competition-topbar"><a href="evangelism-pilot.html">← Church room</a><span>{host ? 'ORGANIZER' : 'TEAM SESSION'}</span>{room?.viewer?.name && <b style={{ color: ownTeam?.color }}>{room.viewer.name}</b>}</nav>
     {error && <div className="competition-error" role="alert">{error}</div>}
@@ -169,9 +170,9 @@ export function ChurchCompetitionPage({ roomId, adminMode }) {
     </section>}
     {room?.viewer && !expired && <>
       <header className="competition-game-header"><div><span className="church-section-label">{room.status === 'lobby' ? 'GATHER YOUR TEAMS' : room.status === 'finished' ? 'JOURNEY COMPLETE' : `ROUND ${room.round} / ${room.roundLimit}`}</span><h1>{room.title}</h1><p>{room.question}</p></div>{ownTeam && <span className="competition-your-team" style={{ '--team-color': ownTeam.color }}><i />{ownTeam.name}</span>}</header>
-      {room.status === 'lobby' ? <div className="competition-lobby"><section><h2>{host ? 'Invite your group' : `Welcome to the ${ownTeam?.name.toLowerCase()}`}</h2><p>{host ? 'Share the guest link. Start when at least one guest has joined each team.' : 'Your team is assigned. The organizer will start the first round when everyone is ready.'}</p>{host && <CompetitionShareLinks id={room.id} />}<TeamRoster teams={room.teams} />{host && <button type="button" className="church-primary competition-start" disabled={busy || room.teams.some(t => !t.members.length)} onClick={() => action('start')}>Start team competition<RoomIcon name="arrow" /></button>}</section><aside><CompetitionMountain teams={room.teams} round={room.round} /><details><summary>The mission & rules</summary><p>{room.context}</p><p>{room.goal}</p><p>One vote per guest. The most popular reply is confirmed when all team members have voted; the organizer can close voting early. Ties are drawn at random. New guests vote from the next round.</p><p>Up to 8 rounds. 100 points per shelter, plus up to 100 points for reply quality. Equal final scores share the victory.</p></details></aside></div> : <>
+      {room.status === 'lobby' ? <div className="competition-lobby"><section><h2>{host ? 'Invite your group' : `Welcome to the ${ownTeam?.name.toLowerCase()}`}</h2><p>{host ? 'Share the guest link. Start when at least one guest has joined each team.' : 'Waiting for the organizer to start the competition. The questions and reply buttons will appear here automatically.'}</p><p className="competition-hint" role="status">{waitingTeams.length ? `Waiting for at least one guest in: ${waitingTeams.map(t => t.name).join(', ')}.` : 'Both teams are ready. The organizer can start the first round.'}</p>{host ? <CompetitionShareLinks id={room.id} showOrganizer={false} /> : <a className="competition-admin-link" href={competitionOrganizerPath(room.id)}>Are you the organizer? Open the organizer screen</a>}<TeamRoster teams={room.teams} />{host && <button type="button" className="church-primary competition-start" disabled={busy || waitingTeams.length > 0} onClick={() => action('start')}>Start team competition<RoomIcon name="arrow" /></button>}</section><aside><CompetitionMountain teams={room.teams} round={room.round} /><details><summary>The mission & rules</summary><p>{room.context}</p><p>{room.goal}</p><p>One vote per guest. The most popular reply is confirmed when all team members have voted; the organizer can close voting early. Ties are drawn at random. New guests vote from the next round.</p><p>Up to 8 rounds. 100 points per shelter, plus up to 100 points for reply quality. Equal final scores share the victory.</p></details></aside></div> : <>
         {room.status === 'finished' && <CompetitionFinal room={room} />}
-        <div className="competition-playing"><div>{room.status !== 'finished' && (host ? room.teams : room.teams.filter(t => t.id === room.viewer.teamId)).map(team => <TeamRound key={team.id} team={team} room={room} busy={busy} onAction={action} />)}</div><aside><CompetitionMountain teams={room.teams} round={room.round} />{room.status !== 'finished' && <TeamRoster teams={room.teams} />}{host && <details className="competition-invite-during-game"><summary>Invite guests / organizer link</summary><CompetitionShareLinks id={room.id} /></details>}</aside></div>
+        <div className="competition-playing"><div>{room.status !== 'finished' && (host ? room.teams : room.teams.filter(t => t.id === room.viewer.teamId)).map(team => <TeamRound key={team.id} team={team} room={room} busy={busy} onAction={action} />)}</div><aside><CompetitionMountain teams={room.teams} round={room.round} />{room.status !== 'finished' && <TeamRoster teams={room.teams} />}{host && <details className="competition-invite-during-game"><summary>Invite guests / organizer link</summary><CompetitionShareLinks id={room.id} showOrganizer={false} /></details>}</aside></div>
         {room.status === 'playing' && <div className="competition-round-controls">{host ? <><span>{room.ready ? 'Both teams’ choices are confirmed.' : 'Teams are voting on their replies.'}</span><button type="button" className="church-primary" disabled={busy || !room.ready} onClick={() => action('next')}>{room.round >= room.roundLimit || room.teams.every(t => t.done) ? 'Show final result' : 'Continue to the next round'}<RoomIcon name="arrow" /></button></> : <p role="status">{room.ready ? 'Both choices are confirmed. The organizer will continue the journey.' : 'Vote with your team. The other team follows its own route.'}</p>}</div>}
       </>}
     </>}

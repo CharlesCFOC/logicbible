@@ -11,6 +11,23 @@ export function competitionLink(room, admin = false) {
   if (admin) url.searchParams.set('admin', '1');
   return url.toString();
 }
+export function competitionOrganizerPath(room) {
+  // Stay on the creator's origin so their saved organizer access is retained.
+  return `/evangelism-pilot.html?${new URLSearchParams({ room, admin: '1' })}`;
+}
+export function readCreatedCompetition(scenarioId, now = Date.now()) {
+  try {
+    const room = JSON.parse(localStorage.getItem(`brother.churchTeams.created.${scenarioId}`) || 'null');
+    return typeof room?.id === 'string' && room.id && room.expiresAt > now ? room : null;
+  } catch { return null; }
+}
+export function saveCreatedCompetition(scenarioId, room) {
+  try {
+    const key = `brother.churchTeams.created.${scenarioId}`;
+    if (room) localStorage.setItem(key, JSON.stringify({ id: room.id, expiresAt: room.expiresAt }));
+    else localStorage.removeItem(key);
+  } catch { /* The open page still retains organizer access. */ }
+}
 export function readCompetitionAccess(room, role) {
   try { return JSON.parse(localStorage.getItem(`${prefix}${room}.${role}`) || 'null')?.token || ''; } catch { return ''; }
 }

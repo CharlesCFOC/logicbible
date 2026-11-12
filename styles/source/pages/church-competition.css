@@ -3,7 +3,11 @@
 .competition-page { max-width: 1440px; margin: 0 auto; padding: 24px clamp(16px, 4vw, 60px) 40px; }
 .competition-page svg, .competition-setup svg { display: inline-block; flex: 0 0 auto; width: 20px; height: 20px; }
 .competition-page :is(button, input, a):focus-visible, .competition-setup :is(button, input, a):focus-visible { outline: 3px solid #d6b4ff; outline-offset: 4px; }
-.competition-page :is(button, a.church-secondary), .competition-setup :is(button, a.church-secondary) { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 46px; border-radius: 13px; text-decoration: none; cursor: pointer; }
+.competition-page :is(button, a.church-primary, a.church-secondary), .competition-setup :is(button, a.church-primary, a.church-secondary) { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 46px; border-radius: 13px; text-decoration: none; cursor: pointer; }
+.competition-local-notice { max-width: 1100px; margin: 20px auto; padding: 20px; border: 1px solid #bb83ff4d; border-radius: 16px; color: #e6efff; background: #15213e; font: 14px/1.6 var(--font-body); }
+.competition-local-notice p { margin: 8px 0 14px; }
+.competition-local-notice a { display: inline-block; padding: 12px 18px; border-radius: 12px; color: #fff; background: #8934cc; text-decoration: none; }
+.competition-local-notice a:focus-visible { outline: 3px solid #d6b4ff; outline-offset: 4px; }
 .competition-page button:disabled, .competition-setup button:disabled { cursor: default; opacity: .48; }
 .competition-page .church-primary, .competition-setup .church-primary { padding: 12px 20px; border: 1px solid #c58cf5; color: #fff; background: linear-gradient(115deg, #8a2ae8, #b628d8); font: 700 14px/1.4 var(--font-body); }
 .competition-page .church-secondary, .competition-setup .church-secondary { padding: 10px 16px; border: 1px solid #b6c9e240; color: #e6efff; background: #a0baff0b; font: 600 13px/1.5 var(--font-body); }

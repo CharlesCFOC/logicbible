@@ -7,6 +7,7 @@ import { useDictation } from './use-dictation.js';
 import { DictationControls } from './dictation-controls.jsx';
 import { ReadAloudButton } from './read-aloud.jsx';
 import { ChurchCompetitionPage, CompetitionSetup } from './church-competition.jsx';
+import { competitionOrganizerPath, readCreatedCompetition } from './church-competition-client.js';
 
 const draftKey = 'brother.churchSetup.v1';
 const lifetime = 8 * 60 * 60 * 1000;
@@ -72,6 +73,7 @@ function ChurchPreparation() {
   const [religionId, setReligionId] = useState(() => debateThemes.find(theme => theme.questions.includes(draft.settings.topic))?.id || '');
   const [scenario, setScenario] = useState(draft.scenario);
   const [playing, setPlaying] = useState(() => new URLSearchParams(location.search).get('play') === '1' ? readSession() : null);
+  const [sharedRoom, setSharedRoom] = useState(() => draft.scenario ? readCreatedCompetition(draft.scenario.id) : null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [moduleReloadNeeded, setModuleReloadNeeded] = useState(false);
@@ -85,7 +87,7 @@ function ChurchPreparation() {
     try { localStorage.setItem(draftKey, JSON.stringify({ version: 1, settings, scenario })); setStorageNotice(''); }
     catch { setStorageNotice('Your browser cannot save this setup. Keep this page open.'); }
   }, [settings, scenario]);
-  function update(key, value) { setSettings(current => ({ ...current, [key]: value })); setScenario(null); setError(''); }
+  function update(key, value) { setSettings(current => ({ ...current, [key]: value })); setScenario(null); setSharedRoom(null); setError(''); }
   const dictation = useDictation({ values: { topic: settings.topic, context: settings.context, objective: settings.objective }, onChange: update });
   async function generate(event) {
     event.preventDefault();
@@ -93,7 +95,7 @@ function ChurchPreparation() {
     let input;
     try { input = normalizeChurchSettings(settings); } catch (err) { setError(err.message); return; }
     const request = new AbortController(); controller.current = request;
-    setBusy(true); setError(''); setModuleReloadNeeded(false); setScenario(null);
+    setBusy(true); setError(''); setModuleReloadNeeded(false); setScenario(null); setSharedRoom(null);
     const timeout = window.setTimeout(() => request.abort(), 100000);
     try {
       const { requestChurchScenario } = await import('./pilot-ai.js');
@@ -110,6 +112,8 @@ function ChurchPreparation() {
   }
   function start() {
     if (!scenario || busy || dictation.active) return;
+    const shared = readCreatedCompetition(scenario.id) || (sharedRoom?.expiresAt > Date.now() ? sharedRoom : null);
+    if (shared) { location.assign(competitionOrganizerPath(shared.id)); return; }
     const session = crypto.randomUUID();
     const next = new URLSearchParams({ session, play: '1' });
     const engine = createPilotEngine(scenario);
@@ -122,7 +126,10 @@ function ChurchPreparation() {
     window.scrollTo({ top: 0 });
   }
   function settingsRoom() { history.replaceState(null, '', location.pathname); setPlaying(null); }
-  if (playing) return <EvangelismPilotPage scenario={playing} onSettings={settingsRoom} />;
+  if (playing) {
+    const shared = readCreatedCompetition(playing.id);
+    return <>{shared && <aside className="competition-local-notice" role="status"><strong>Your guests are in the shared team session.</strong><p>This local discussion does not advance their questions. Open the organizer screen to start and lead the session on their phones. Your local discussion stays saved.</p><a className="church-primary" href={competitionOrganizerPath(shared.id)}>Continue with my guests →</a></aside>}<EvangelismPilotPage scenario={playing} onSettings={settingsRoom} /></>;
+  }
   return <main className="church-setup">
     <nav className="church-setup-nav" aria-label="Navigation"><a href="index.html">← Think room</a><span>CHURCH MODE</span></nav>
     <header className="church-setup-header"><span className="church-section-label">THE PREPARATION ROOM</span><h1>One topic. One conversation.<br /><em>Values to put into practice.</em></h1><p>Prepare a game for your group. AI creates the characters, choices and consequences around your chosen topic.</p></header>
@@ -144,7 +151,7 @@ function ChurchPreparation() {
       {busy && <div className="church-generation-progress" role="progressbar" aria-label="Creating the scenario" aria-describedby="church-generation-status"><span /></div>}
       <p id="church-generation-status" className="church-generation-hint" role="status">{busy ? 'AI is preparing the stages, replies and consequences. This may take a minute.' : 'Review the generated scenario, then start when your group is ready.'}</p>
     </form><aside className="church-setup-side"><section className="church-how-it-works"><span className="church-section-label">A GAME IN THREE STEPS</span><ol><li><b>1</b><div><strong>Choose your topic</strong><p>Choose your question and the difficulty for your group.</p></div></li><li><b>2</b><div><strong>AI prepares the scenario</strong><p>Practical situations, four replies per scene and Christian teaching.</p></div></li><li><b>3</b><div><strong>Start together</strong><p>Discuss the choices and see how they affect the journey.</p></div></li></ol></section><section className="church-values-note"><span aria-hidden="true">✝</span><h2>Faith expressed through choices</h2><p>Listen with humility, speak the truth in love, forgive and respect others’ freedom. The scenario puts these values into practice in real situations.</p></section><a className="church-demo-link" href="evangelism-pilot.html?legacy=1">Try the existing scenario about suffering →</a></aside></div>
-    <div ref={preview}>{scenario && <><ScenarioPreview scenario={scenario} disabled={busy || dictation.active} /><CompetitionSetup key={scenario.id} scenario={scenario} /><div className="church-start-bar"><p>Or lead a discussion together on this device.</p><button type="button" className="church-primary" onClick={start} disabled={busy || dictation.active}>Start game →</button></div></>}</div>
+    <div ref={preview}>{scenario && <><ScenarioPreview scenario={scenario} disabled={busy || dictation.active} /><CompetitionSetup key={scenario.id} scenario={scenario} onRoomChange={setSharedRoom} /><div className="church-start-bar"><p>{sharedRoom ? 'Lead the shared session and open the questions on your guests’ phones.' : 'To let guests answer on their phones, create a shared team session above. You can also lead a local discussion on this device.'}</p><button type="button" className="church-primary" onClick={start} disabled={busy || dictation.active}>{sharedRoom ? 'Open organizer & start game →' : 'Start local discussion →'}</button></div></>}</div>
     {!scenario && <div className="church-start-bar is-awaiting"><p>Create your scenario to get ready to play.</p><button type="button" className="church-primary" disabled>Start game</button></div>}
     {storageNotice && <p className="church-setup-error" role="status">{storageNotice}</p>}
   </main>;
