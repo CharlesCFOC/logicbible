@@ -108,3 +108,14 @@
 .shared-vote-feedback { min-height: 18px; margin: 12px 0 0; color: #b9cce9; font-size: 12px; line-height: 1.5; }
 .shared-vote-feedback:empty { display: none; }
 .shared-guest-status { color: #b9cce9; font-size: 12px; line-height: 1.5; }
+
+.shared-guest-table-wrap { width: 100%; margin: 24px 0 12px; overflow: hidden; border: 1px solid #a8c7fa33; border-radius: 16px; background: #10244066; }
+.shared-guest-table { width: 100%; table-layout: fixed; border-collapse: collapse; color: #e6efff; font: 14px/1.5 var(--font-body); }
+.shared-guest-table caption { padding: 16px 18px; text-align: left; color: #fff; font-weight: 700; }
+.shared-guest-table caption > span { margin-left: 8px; color: #b9cce9; font-size: 12px; }
+.shared-guest-table th { width: 50%; padding: 12px 18px; border-top: 1px solid #a8c7fa26; text-align: left; color: var(--team-color); background: #a8c7fa08; font-size: 13px; }
+.shared-guest-table th > i { display: inline-block; width: 8px; height: 8px; margin-right: 8px; border-radius: 50%; background: var(--team-color); }
+.shared-guest-table th > span { margin-left: 10px; color: #bdd0e9; font-size: 12px; }
+.shared-guest-table td { padding: 10px 18px; border-top: 1px solid #a8c7fa1a; overflow-wrap: anywhere; vertical-align: top; }
+.shared-guest-table :is(th, td) + :is(th, td) { border-left: 1px solid #a8c7fa26; }
+@media (max-width: 600px) { .shared-guest-table :is(th, td) { padding: 10px 12px; } }

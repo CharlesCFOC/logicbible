@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 import { SharedPilotStage } from './evangelism-pilot.jsx';
 
+export function GuestTeamTable({ teams }) {
+  const rows = Math.max(1, ...teams.map(team => team.members.length));
+  return <div className="shared-guest-table-wrap"><table className="shared-guest-table">
+    <caption>Guests <span>{teams.reduce((total, team) => total + team.members.length, 0)}</span></caption>
+    <thead><tr>{teams.map(team => <th scope="col" key={team.id} style={{ '--team-color': team.color }}><i aria-hidden="true" />{team.name}<span>{team.members.length}</span></th>)}</tr></thead>
+    <tbody>{Array.from({ length: rows }, (_, index) => <tr key={index}>{teams.map(team => <td key={team.id}>{team.members[index]?.name || (team.members.length ? '—' : 'No guests yet')}</td>)}</tr>)}</tbody>
+  </table></div>;
+}
+
 export function ChurchConversation({ room, busy, onAction, connected = true }) {
   const { discussion } = room;
   const host = room.viewer.role === 'host';
@@ -20,5 +29,5 @@ export function ChurchConversation({ room, busy, onAction, connected = true }) {
     {room.ready && <button type="button" className="pilot-primary" disabled={busy} onClick={() => onAction('next')} aria-label="Continue the conversation">→ Continue</button>}
     {discussion.phase === 'debrief' && room.status === 'playing' ? <button type="button" className="pilot-primary" disabled={busy} onClick={() => onAction('conversation')}>Conversation</button> : discussion.history.length > 0 && <button type="button" disabled={busy} onClick={() => onAction('debrief')} aria-label="Open the debrief">Debrief</button>}
   </> : <span className="shared-guest-status" role="status">{room.ready ? 'Reply confirmed · waiting for the organizer' : room.status === 'finished' ? 'Conversation complete' : ownTeam?.ownVote ? `Your vote: ${ownTeam.ownVote} · waiting for confirmation` : 'Choose A, B, C or D to vote'}</span>}</div></div>;
-  return <SharedPilotStage room={room} host={host} onSelect={choose} onSideSlide={sideSlide=>onAction('present',{sideSlide})} onMapExpand={mountainExpanded=>onAction('present',{mountainExpanded})} onDismissJourney={()=>onAction('dismiss')} presenterControls={controls} choiceExtras={extras} choiceFeedback={feedback} choicesDisabled={busy || !!pendingVote || (!host && !ownTeam?.eligible)} />;
+  return <SharedPilotStage room={room} host={host} onSelect={choose} onSideSlide={sideSlide=>onAction('present',{sideSlide})} onMapExpand={mountainExpanded=>onAction('present',{mountainExpanded})} onDismissJourney={()=>onAction('dismiss')} presenterControls={controls} choiceExtras={extras} choiceFeedback={feedback} choicesDisabled={busy || !!pendingVote || (!host && !ownTeam?.eligible)} discussionFooter={<GuestTeamTable teams={room.teams} />} />;
 }

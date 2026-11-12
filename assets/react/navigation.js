@@ -10012,7 +10012,7 @@ $e && g($e, () => import("./church-BuWvZahY.js"), "ProjectionScreen");
 var et = document.querySelector("[data-debate-projection-root]");
 et && g(et, () => import("./debate-projection-BXKW8O_n.js").then((e) => e.n), "DebateProjectionScreen");
 var tt = document.querySelector("[data-evangelism-pilot-root]");
-tt && g(tt, () => import("./church-mode-BuK_IDVj.js").then((e) => e.t), "ChurchModePage");
+tt && g(tt, () => import("./church-mode-tkoyTBln.js").then((e) => e.t), "ChurchModePage");
 var nt = document.querySelector("[data-session-admin-root]");
 if (nt && g(nt, () => import("./church-BuWvZahY.js"), "SessionAdmin"), o.isNativePlatform()) {
 	let e = a("GentleHaptics");

@@ -393,7 +393,7 @@ function MobileDiscussionTabs({ id, active, onChange }) {
   </nav>;
 }
 
-export function EvangelismPilotStage({ state, onSelect, onSideSlide, onMapExpand, readOnly = false, viewReadOnly = readOnly, presenterControls = null, mainQuestion = null, choiceExtras, choiceFeedback, choicesDisabled = false }) {
+export function EvangelismPilotStage({ state, onSelect, onSideSlide, onMapExpand, readOnly = false, viewReadOnly = readOnly, presenterControls = null, mainQuestion = null, choiceExtras, choiceFeedback, choicesDisabled = false, discussionFooter }) {
   const { scenario, pilotNode, pilotRefuges, pilotEmotionalState } = usePilot();
   const mobile = useMobileDiscussion(readOnly);
   const [mobileTab, setMobileTab] = useState('discussion');
@@ -412,13 +412,13 @@ export function EvangelismPilotStage({ state, onSelect, onSideSlide, onMapExpand
               <p className="pilot-scene-context">{node.cue}</p>
               <DiscussionThread state={state} onSelect={onSelect} readOnly={readOnly} visible={!mobile || mobileTab === 'discussion'} choiceExtras={choiceExtras} choiceFeedback={choiceFeedback} choicesDisabled={choicesDisabled} />
             </>}
-    </div></div>{!mobile && mainQuestion}</div><ScenarioSideCarousel state={state} onSlide={onSideSlide} onMapExpand={onMapExpand} readOnly={viewReadOnly} controls={mobile ? null : presenterControls} mobile={mobile} hidden={mobile && mobileTab !== 'journey'} panelId={`${id}-journey-panel`} labelledBy={mobile ? `${id}-journey-tab` : undefined} /></div>
+    {discussionFooter}</div></div>{!mobile && mainQuestion}</div><ScenarioSideCarousel state={state} onSlide={onSideSlide} onMapExpand={onMapExpand} readOnly={viewReadOnly} controls={mobile ? null : presenterControls} mobile={mobile} hidden={mobile && mobileTab !== 'journey'} panelId={`${id}-journey-panel`} labelledBy={mobile ? `${id}-journey-tab` : undefined} /></div>
     <footer className="pilot-stage-footer"><span>{scenario.title} · Scenario 01</span><span className="pilot-refuge-count">{refuges.completed.length} / 4 shelters reached</span><span>GUIDED DISCUSSION</span></footer>
     {mobile && <div className="pilot-mobile-dock">{presenterControls}<MobileDiscussionTabs id={id} active={mobileTab} onChange={setMobileTab} /></div>}
   </section>;
 }
 
-export function SharedPilotStage({ room, onSelect, onSideSlide, onMapExpand, onDismissJourney, presenterControls, choiceExtras, choiceFeedback, choicesDisabled, host }) {
+export function SharedPilotStage({ room, onSelect, onSideSlide, onMapExpand, onDismissJourney, presenterControls, choiceExtras, choiceFeedback, choicesDisabled, discussionFooter, host }) {
   const view = room.discussion;
   const historyKey = JSON.stringify(view.history);
   const history = useMemo(() => JSON.parse(historyKey), [historyKey]);
@@ -434,7 +434,7 @@ export function SharedPilotStage({ room, onSelect, onSideSlide, onMapExpand, onD
   };
   const mainQuestion = <details className="pilot-main-question pilot-question-card"><summary><span className="pilot-question-label-desktop">Main question</span><span className="pilot-question-label-mobile">Question &amp; mission</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></summary><div className="pilot-main-question-content"><p className="pilot-main-question-title">{scenario.title}</p><h2 className="pilot-discussion-topic">{scenario.question}</h2><ReadAloudButton text={scenario.question} label="Main question" /><section className="pilot-mobile-mission"><h3>Your mission</h3><p>{scenario.goal}</p></section></div></details>;
   return <PilotContext.Provider value={context}>
-    <EvangelismPilotStage state={state} onSelect={onSelect} onSideSlide={onSideSlide} onMapExpand={onMapExpand} viewReadOnly={!host} presenterControls={presenterControls} mainQuestion={mainQuestion} choiceExtras={choiceExtras} choiceFeedback={choiceFeedback} choicesDisabled={choicesDisabled} />
+    <EvangelismPilotStage state={state} onSelect={onSelect} onSideSlide={onSideSlide} onMapExpand={onMapExpand} viewReadOnly={!host} presenterControls={presenterControls} mainQuestion={mainQuestion} choiceExtras={choiceExtras} choiceFeedback={choiceFeedback} choicesDisabled={choicesDisabled} discussionFooter={discussionFooter} />
     <JourneyReveal state={state} readOnly={!host} onDismiss={onDismissJourney} />
   </PilotContext.Provider>;
 }

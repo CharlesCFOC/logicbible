@@ -14,7 +14,9 @@ test('host and guest reuse the original discussion layout with exactly four repl
   try {
     const {ChurchConversation}=await server.ssrLoadModule('/src/react/church-conversation.jsx');
     const room=createCompetition(compileChurchScenario(makeChurchScenario(),{...churchDefaultSettings,topic:'Forgiveness'},'view-test'));
-    addCompetitionGuest(room,{id:'guest',name:'Guest'},()=>0);startCompetition(room,'round');castCompetitionVote(room,'guest','B','round');
+    addCompetitionGuest(room,{id:'guest',name:'Blue guest'},()=>0);
+    addCompetitionGuest(room,{id:'orange-guest',name:'Orange guest'},()=>0);
+    startCompetition(room,'round');castCompetitionVote(room,'guest','B','round');
     const host=renderToStaticMarkup(React.createElement(ChurchConversation,{room:competitionView('room',room,{role:'host'}),busy:false,onAction:()=>{}}));
     const guest=renderToStaticMarkup(React.createElement(ChurchConversation,{room:competitionView('room',room,{role:'guest',id:'guest',name:'Guest',teamId:'blue'}),busy:false,onAction:()=>{}}));
     for(const html of [host,guest]){
@@ -24,6 +26,9 @@ test('host and guest reuse the original discussion layout with exactly four repl
       assert.match(html,/aria-label="Discussion messages"/);assert.match(html,/Map of the journey to the summit/);
       assert.match(html,/Blue team: 1 votes/);assert.match(html,/Orange team: 0 votes/);
       assert.ok(!html.includes('competition-team-round'));
+      assert.equal((html.match(/class="shared-guest-table"/g)||[]).length,1);
+      assert.equal((html.match(/scope="col"/g)||[]).length,2);
+      assert.match(html,/<td>Blue guest<\/td>/);assert.match(html,/<td>Orange guest<\/td>/);
     }
     assert.match(host,/Choose A, B, C or D/);assert.ok(!guest.includes('aria-label="Choose A, B, C or D"'));
     assert.match(guest,/Vote recorded: B/);assert.match(guest,/Your vote/);
