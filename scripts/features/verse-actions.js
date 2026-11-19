@@ -16,6 +16,8 @@ function getVerseDataFromElement(verse) {
 
 function showHighlightPicker(selectedFolderId = null) {
   const currentHighlight = savedState.highlights[selectedVerseData.highlightKey];
+  const items = multiSelectedVerseData.length ? multiSelectedVerseData : [selectedVerseData];
+  const hasHighlights = items.some((item) => savedState.highlights[item.highlightKey]);
   const current = currentHighlight?.color || "gold";
   const currentFolderId = selectedFolderId ?? currentHighlight?.folderId ?? "";
   const folderOptions = [
@@ -46,7 +48,7 @@ function showHighlightPicker(selectedFolderId = null) {
           <button aria-label="Create highlight folder"><i data-lucide="plus"></i></button>
         </form>
       </div>
-      <button class="secondary-button${currentHighlight ? " is-highlight-active" : ""}" data-remove-highlight${currentHighlight ? "" : " disabled"}>Remove Highlight</button>
+      <button class="secondary-button${hasHighlights ? " is-highlight-active" : ""}" data-remove-highlight${hasHighlights ? "" : " disabled"}>Remove Highlight</button>
     </div>
   `;
 
@@ -73,12 +75,13 @@ function showHighlightPicker(selectedFolderId = null) {
 }
 
 function applyHighlight(colorId) {
+  if (!selectedVerseData) return;
   const color = highlightColors.find((item) => item.id === colorId) || highlightColors[0];
   const items = multiSelectedVerseData.length ? multiSelectedVerseData : [selectedVerseData];
   items.forEach((item) => {
     const lines = document.querySelectorAll(`[data-highlight-key="${CSS.escape(item.highlightKey)}"]`);
     const existingHighlight = savedState.highlights[item.highlightKey];
-    const folderId = verseDetail.querySelector("[data-highlight-folder-select]")?.value || existingHighlight?.folderId || "";
+    const folderId = verseDetail.querySelector("[data-highlight-folder-select]")?.value ?? existingHighlight?.folderId ?? "";
     savedState.highlights[item.highlightKey] = {
       ...item,
       key: item.highlightKey,
@@ -96,11 +99,16 @@ function applyHighlight(colorId) {
     button.classList.toggle("is-selected", button.dataset.highlightColor === color.id);
   });
   writeJson("brother.highlights", savedState.highlights);
+  const removeButton = verseDetail.querySelector("[data-remove-highlight]");
+  if (removeButton) {
+    removeButton.disabled = false;
+    removeButton.classList.add("is-highlight-active");
+  }
+  emitBibleChapterChange();
   setFeedback(`${color.label} highlight applied to ${items.length} verse${items.length === 1 ? "" : "s"}.`);
   syncVerseActionStates();
   refreshProfilePanel();
   refreshHomeLibraryPanel();
-  if (multiSelectedVerseData.length) exitMultiSelectMode();
 }
 
 function updateSelectedHighlightFolder(folderId, options = {}) {
@@ -108,18 +116,22 @@ function updateSelectedHighlightFolder(folderId, options = {}) {
     return;
   }
 
-  const existingHighlight = savedState.highlights[selectedVerseData.highlightKey];
-  if (!existingHighlight) {
+  const items = multiSelectedVerseData.length ? multiSelectedVerseData : [selectedVerseData];
+  const highlights = items.map((item) => savedState.highlights[item.highlightKey]).filter(Boolean);
+  if (!highlights.length) {
     if (!options.silent) {
       setFeedback("Folder selected. Choose a color to save the highlight.");
     }
     return;
   }
 
-  existingHighlight.folderId = folderId || "";
-  existingHighlight.updatedAt = new Date().toISOString();
+  highlights.forEach((highlight) => {
+    highlight.folderId = folderId || "";
+    highlight.updatedAt = new Date().toISOString();
+  });
   writeJson("brother.highlights", savedState.highlights);
   refreshProfilePanel();
+  refreshHomeLibraryPanel();
 
   if (!options.silent) {
     setFeedback(`Folder set to ${getFolderName("highlights", folderId)}.`);
@@ -127,22 +139,33 @@ function updateSelectedHighlightFolder(folderId, options = {}) {
 }
 
 function removeHighlight() {
-  if (!selectedVerseData || !savedState.highlights[selectedVerseData.highlightKey]) {
+  if (!selectedVerseData) {
     return;
   }
-  const lines = document.querySelectorAll(`[data-highlight-key="${CSS.escape(selectedVerseData.highlightKey)}"]`);
-  delete savedState.highlights[selectedVerseData.highlightKey];
-  lines.forEach((line) => {
-    line.classList.remove("is-highlighted");
-    line.style.removeProperty("--highlight-color");
+  const items = multiSelectedVerseData.length ? multiSelectedVerseData : [selectedVerseData];
+  const highlightedItems = items.filter((item) => savedState.highlights[item.highlightKey]);
+  if (!highlightedItems.length) return;
+  highlightedItems.forEach((item) => {
+    delete savedState.highlights[item.highlightKey];
+    document.querySelectorAll(`[data-highlight-key="${CSS.escape(item.highlightKey)}"]`).forEach((line) => {
+      line.classList.remove("is-highlighted");
+      line.style.removeProperty("--highlight-color");
+    });
   });
   verseDetail.querySelectorAll("[data-highlight-color]").forEach((button) => {
     button.classList.remove("is-selected");
   });
   writeJson("brother.highlights", savedState.highlights);
-  setFeedback("Highlight removed.");
+  const removeButton = verseDetail.querySelector("[data-remove-highlight]");
+  if (removeButton) {
+    removeButton.disabled = true;
+    removeButton.classList.remove("is-highlight-active");
+  }
+  emitBibleChapterChange();
+  setFeedback(`Highlight removed from ${highlightedItems.length} verse${highlightedItems.length === 1 ? "" : "s"}.`);
   syncVerseActionStates();
   refreshProfilePanel();
+  refreshHomeLibraryPanel();
 
   if (readerState.showHighlightsOnly && currentChapterData) {
     closeModal();

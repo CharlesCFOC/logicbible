@@ -122,7 +122,7 @@ window.bibleReaderBridge = {
         parallel: readerState.parallelEnabled,
       },
       selectedKey: selectedVerseData?.key || "",
-      selectedKeys: multiSelectedVerseData.map((item) => item.key),
+      selectedKeys: multiSelectMode ? multiSelectedVerseData.map((item) => item.key) : [],
       multiSelectMode,
     };
   },

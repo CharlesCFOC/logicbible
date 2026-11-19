@@ -1173,7 +1173,7 @@ multiSelectMenuToggle?.addEventListener("click", () => {
   }
   selectedVerseData = multiSelectedVerseData[0];
   selectedVerse.textContent = `${multiSelectedVerseData.length} verses selected`;
-  sheetFeedback.textContent = "Choose an action to apply to the selected verses.";
+  sheetFeedback.textContent = "";
   hideVerseDetail();
   syncVerseActionStates();
   showModal(verseSheet);

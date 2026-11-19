@@ -1,6 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { highlightBibleCitations } from "../../lib/ai/bible-citations.js";
+import { useDictation } from "./use-dictation.js";
+import { DictationControls } from "./dictation-controls.jsx";
 
 const aiIcons = {
   plus: ["M12 5v14", "M5 12h14"],
@@ -25,8 +27,9 @@ export function AiIcon({ name }) {
   );
 }
 
-export function AiComposer({ value, onChange, onSubmit, placeholder, ariaLabel, disabled = false, className = "", textareaClassName = "", submitLabel = "Send message" }) {
+export function AiComposer({ value, onChange, onSubmit, placeholder, ariaLabel, disabled = false, className = "", textareaClassName = "", submitLabel = "Send message", dictation = null }) {
   const textareaRef = useRef(null);
+  const fieldId = useId();
 
   const resize = (textarea) => {
     textarea.style.height = "auto";
@@ -45,19 +48,32 @@ export function AiComposer({ value, onChange, onSubmit, placeholder, ariaLabel, 
     resize(textareaRef.current);
   }, [value]);
 
+  const input = (
+    <textarea
+      id={fieldId}
+      ref={textareaRef}
+      className={textareaClassName}
+      value={value}
+      onChange={(event) => {
+        if (dictation) dictation.edit("message", event.target.value);
+        else onChange(event.target.value);
+        resize(event.currentTarget);
+      }}
+      rows="1"
+      placeholder={placeholder}
+      aria-label={ariaLabel}
+      aria-describedby={dictation ? `${fieldId}-dictation-status` : undefined}
+      disabled={disabled}
+    />
+  );
+
   return (
-    <form className={`composer reusable-ai-composer${className ? ` ${className}` : ""}`} onSubmit={onSubmit}>
-      <textarea
-        ref={textareaRef}
-        className={textareaClassName}
-        value={value}
-        onChange={(event) => { onChange(event.target.value); resize(event.currentTarget); }}
-        rows="1"
-        placeholder={placeholder}
-        aria-label={ariaLabel}
-        disabled={disabled}
-      />
-      <button type="submit" aria-label={submitLabel} disabled={disabled}>
+    <form className={`composer reusable-ai-composer${className ? ` ${className}` : ""}`} onSubmit={(event) => {
+      if (dictation?.active) { event.preventDefault(); return; }
+      onSubmit(event);
+    }}>
+      {dictation ? <DictationControls field="message" fieldId={fieldId} label={ariaLabel} dictation={dictation} disabled={disabled} showReadAloud={false}>{input}</DictationControls> : input}
+      <button type="submit" aria-label={submitLabel} disabled={disabled || Boolean(dictation?.active)}>
         <AiIcon name="send" />
       </button>
     </form>
@@ -100,6 +116,7 @@ export function AiPage() {
   const [messages, setMessages] = useState(initial.messages);
   const [histories, setHistories] = useState(initial.histories);
   const [prompt, setPrompt] = useState("");
+  const dictation = useDictation({ values: { message: prompt }, onChange: (_field, value) => setPrompt(value), language: "en", maxLength: Infinity });
   const [isAiScreenActive, setIsAiScreenActive] = useState(() => document.querySelector("#ai")?.classList.contains("is-active") || false);
   useEffect(() => {
     const handleScreenChange = (event) => setIsAiScreenActive(event.detail?.id === "ai");
@@ -149,9 +166,9 @@ export function AiPage() {
   const send = async (event) => {
     event.preventDefault();
     const text = prompt.trim();
-    if (!text || pending) return;
+    if (!text || pending || dictation.active) return;
     const history = messages.filter((message) => !message.pending).slice(-24);
-    setPrompt("");
+    dictation.edit("message", "");
     setTab("chat");
     setMessages((current) => [...current, { role: "user", text }, { role: "assistant", text: "", pending: true }]);
     setPending(true);
@@ -174,9 +191,9 @@ export function AiPage() {
   };
 
   const newChat = () => {
+    dictation.edit("message", "");
     bridge.newConversation();
     setMessages([{ role: "assistant", text: "Ask me about a verse, doctrine, original language, cross references, or biblical context." }]);
-    setPrompt("");
     setTab("chat");
   };
 
@@ -188,7 +205,7 @@ export function AiPage() {
       </header>
       <nav className="ai-tabs" aria-label="AI sections">
         <button className={tab === "chat" ? "is-active" : ""} type="button" onClick={() => setTab("chat")}><span>Chat</span></button>
-        <button className={tab === "history" ? "is-active" : ""} type="button" onClick={() => setTab("history")}><span>History</span></button>
+        <button className={tab === "history" ? "is-active" : ""} type="button" onClick={() => { dictation.stop(); setTab("history"); }}><span>History</span></button>
       </nav>
       <div className="chat-thread" ref={threadRef} hidden={tab === "history"}>
         {messages.map((message, index) => <AiMessage key={`${message.role}-${index}-${message.text}`} message={message} bridge={bridge} formatText={(text) => highlightBibleCitations(bridge.format(text), { clickable: true })} showAvatar />)}
@@ -202,7 +219,7 @@ export function AiPage() {
         <p className="ai-history-retention">Conversations are saved for 24 hours after your last message.</p>
       </section>
       {isAiScreenActive && tab === "chat" && createPortal(
-        <AiComposer value={prompt} onChange={setPrompt} onSubmit={send} placeholder={aiComposerPrompts[promptIndex]} ariaLabel="Message Brother AI" disabled={pending} className="brother-ai-composer" textareaClassName={promptFading ? "is-placeholder-fading" : ""} />,
+        <AiComposer value={prompt} onChange={setPrompt} onSubmit={send} placeholder={aiComposerPrompts[promptIndex]} ariaLabel="Message Brother AI" disabled={pending} className="brother-ai-composer" textareaClassName={promptFading ? "is-placeholder-fading" : ""} dictation={dictation} />,
         document.querySelector(".phone-frame"),
       )}
     </>

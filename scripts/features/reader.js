@@ -438,7 +438,7 @@ function syncVerseActionStates() {
 }
 
 async function loadChapter() {
-  if (multiSelectMode) {
+  if (multiSelectedVerseData.length) {
     exitMultiSelectMode();
   }
   const requestId = ++chapterRequestId;

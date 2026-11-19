@@ -883,6 +883,59 @@
   display: none;
 }
 
+/* Use the shared dictation control beside the Brother AI message and Send button. */
+.brother-ai-composer .church-dictation {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.brother-ai-composer .church-dictation-input {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.brother-ai-composer .church-dictation-input textarea {
+  flex: 1 1 0;
+  min-width: 0;
+  width: 100%;
+}
+
+.brother-ai-composer .church-dictation-input .church-dictation-button {
+  position: relative;
+  inset: auto;
+  flex: 0 0 42px;
+  padding: 10px;
+}
+
+.brother-ai-composer .church-dictation-button[aria-pressed="true"] {
+  background: #9c3157 !important;
+}
+
+.brother-ai-composer .church-voice-meter {
+  z-index: 4;
+}
+
+.brother-ai-composer .church-dictation-button:focus-visible {
+  outline: 2px solid #8bdcff;
+  outline-offset: 2px;
+}
+
+.app-shell .phone-frame .brother-ai-composer .church-dictation.is-listening textarea {
+  padding-bottom: 48px !important;
+}
+
+.brother-ai-composer .church-dictation-status {
+  margin: 6px 0;
+  color: #d4eaff;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.brother-ai-composer .church-dictation-status.is-error {
+  color: #ffd0df;
+}
+
 /* Prevent the global input theme from painting a rectangle inside the composer. */
 .app-shell[data-app-background] .phone-frame .reusable-ai-composer textarea,
 .app-shell[data-app-background] .phone-frame .reusable-ai-composer textarea:focus {

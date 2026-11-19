@@ -35,21 +35,21 @@ function VoiceMeter({ active }) {
   return <div className="church-voice-meter" hidden={unavailable} aria-hidden="true"><canvas ref={canvasRef} width="216" height="56" /></div>;
 }
 
-export function DictationControls({ field, fieldId, label, dictation, disabled = false, children }) {
+export function DictationControls({ field, fieldId, label, dictation, disabled = false, showReadAloud = true, inputClassName = '', children }) {
   const selected = dictation.field === field;
   const listening = selected && ['starting', 'listening'].includes(dictation.phase);
   const finishing = selected && dictation.phase === 'finishing';
   const statusId = `${fieldId}-dictation-status`;
   const actionLabel = `${listening ? 'Stop dictation' : finishing ? 'Finishing transcription' : 'Dictate'}: ${label}`;
   return <div className={`church-dictation${listening ? ' is-listening' : ''}`}>
-    <div className="church-dictation-input">
+    <div className={`church-dictation-input${inputClassName ? ` ${inputClassName}` : ''}`}>
       {children}
       {listening && <VoiceMeter active={dictation.phase === 'listening'} />}
       <button type="button" className="church-dictation-button" disabled={disabled || finishing || (dictation.active && !selected)} onClick={() => listening ? dictation.stop() : dictation.start(field)} aria-label={actionLabel} title={actionLabel} aria-pressed={listening} aria-controls={fieldId} aria-describedby={statusId}>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{listening ? <rect x="6" y="6" width="12" height="12" rx="2" /> : <><rect x="9" y="2" width="6" height="12" rx="3" /><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" /></>}</svg>
       </button>
     </div>
-    <ReadAloudButton text={children.props.value} label={label} disabled={disabled || dictation.active} />
+    {showReadAloud && <ReadAloudButton text={children.props.value} label={label} disabled={disabled || dictation.active} />}
     {listening && <div className="church-dictation-toolbar"><span className="church-dictation-indicator" aria-hidden="true"><i />Microphone on</span></div>}
     <p id={statusId} className={`church-dictation-status${selected && dictation.error ? ' is-error' : ''}`} role="status" hidden={!selected || !dictation.message}>{selected ? dictation.message : ''}</p>
   </div>;

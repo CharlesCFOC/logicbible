@@ -2,6 +2,8 @@ import { PrayerIcon } from "./prayer-icon.jsx";
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { IntercessionPanel } from "./intercession.jsx";
+import { useDictation } from "./use-dictation.js";
+import { DictationControls } from "./dictation-controls.jsx";
 
 const categories = [
   ["general", "General"],
@@ -71,6 +73,7 @@ function PrayerRequestForm({ state, bridge }) {
   const backgrounds = bridge.getSelectableBackgroundOptions();
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
+  const dictation = useDictation({ values: { request: text }, onChange: (_field, value) => setText(value), language: "en", maxLength: 2200 });
   const [category, setCategory] = useState(state.requestCategory || "general");
   const [background, setBackground] = useState(() => backgrounds.some((option) => option.index === state.backgroundIndex) ? state.backgroundIndex : backgrounds[0].index);
   const [sending, setSending] = useState(false);
@@ -79,6 +82,7 @@ function PrayerRequestForm({ state, bridge }) {
 
   const submit = async (event) => {
     event.preventDefault();
+    if (sending || dictation.active) return;
     setSending(true);
     const success = await bridge.submit(title, text, category, background, acceptedTerms);
     setSending(false);
@@ -101,10 +105,12 @@ function PrayerRequestForm({ state, bridge }) {
         <div className="prayer-request-title-field">
           <input value={title} onChange={(event) => setTitle(event.target.value)} type="text" maxLength="120" placeholder="Prayer title" aria-label="Prayer title" required />
         </div>
-        <div className="prayer-request-textarea">
-          <textarea value={text} onChange={(event) => setText(event.target.value)} rows="5" maxLength="2200" placeholder="What would you like us to pray for?" required />
+        <DictationControls field="request" fieldId="prayer-request-text" label="Prayer request" dictation={dictation} disabled={sending} showReadAloud={false} inputClassName="prayer-request-textarea">
+          <textarea id="prayer-request-text" aria-label="Prayer request" aria-describedby="prayer-request-text-dictation-status" value={text} onChange={(event) => dictation.edit("request", event.target.value)} rows="5" maxLength="2200" placeholder="What would you like us to pray for?" required disabled={sending} />
+        </DictationControls>
+        <div className="prayer-writing-tools">
+          <small className={`prayer-word-count${words > 300 ? " is-over-limit" : ""}`}>{words} / 300 words</small>
         </div>
-        <small className={`prayer-word-count${words > 300 ? " is-over-limit" : ""}`}>{words} / 300 words</small>
         <div className="prayer-compose-options">
           <PrayerCategories active={category} onChange={setCategory} />
         </div>
@@ -124,7 +130,7 @@ function PrayerRequestForm({ state, bridge }) {
           <span>I agree to the community rules</span>
         </label>
         <div className="prayer-compose-footer">
-          <button type="submit" disabled={sending}><PrayerIcon name="send" /><span>{sending ? "Sending..." : state.sent ? "Sent" : "Send prayer request"}</span></button>
+          <button type="submit" disabled={sending || dictation.active}><PrayerIcon name="send" /><span>{sending ? "Sending..." : state.sent ? "Sent" : "Send prayer request"}</span></button>
         </div>
         <p className="prayer-form-feedback" aria-live="polite">{state.feedback}</p>
       </form>

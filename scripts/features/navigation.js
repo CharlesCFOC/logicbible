@@ -15,7 +15,7 @@ function setScreen(id) {
     closeModal();
   }
   const activeNavId = id === "admin" ? "profile" : (id.startsWith("apologetics") ? "apologetics" : id);
-  if (id !== "bible" && multiSelectMode) {
+  if (id !== "bible" && multiSelectedVerseData.length) {
     exitMultiSelectMode();
   }
   appShell.dataset.activeScreen = id;
@@ -124,4 +124,7 @@ function closeModal(options = {}) {
   readerScreen?.classList.remove("is-verse-focused");
   document.querySelectorAll(".scripture-line.is-selected, .parallel-scripture-line.is-selected").forEach((line) => line.classList.remove("is-selected"));
   hideVerseDetail();
+  if (!multiSelectMode && multiSelectedVerseData.length && !options.preserveNoteAddMode) {
+    exitMultiSelectMode();
+  }
 }

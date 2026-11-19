@@ -532,18 +532,50 @@
 .multi-select-menu-toggle {
   position: absolute;
   right: 50%;
-  bottom: calc(var(--bottom-nav-height) + 8px);
+  bottom: calc(var(--bottom-nav-offset) + 12px);
   z-index: 12;
-  display: grid;
-  place-items: center;
-  width: 42px;
-  min-height: 34px;
-  border: 1px solid rgba(181, 159, 131, 0.24);
-  border-radius: 14px;
-  color: var(--ink);
-  background: rgba(255, 255, 255, 0.96);
-  box-shadow: 0 5px 14px rgba(47, 60, 74, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  max-width: calc(100% - 32px);
+  min-height: 46px;
+  padding: 0;
+  border: 1px solid rgba(187, 225, 255, 0.5);
+  border-radius: 999px;
+  color: #ffffff;
+  background: linear-gradient(110deg, #4fc3ff 0%, #8bdcff 24%, #ff9d00 50%, #ffb6dc 76%, #4fc3ff 100%);
+  background-size: 280% 100%;
+  background-position: 0% 50%;
+  animation: homeHeroTitleGradient 7s ease-in-out infinite;
+  box-shadow: 0 6px 20px rgba(6, 22, 43, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.12);
   transform: translateX(50%);
+}
+
+.multi-select-menu-toggle > svg {
+  color: #ffffff;
+  filter: drop-shadow(0 1px 2px rgba(9, 36, 65, 0.5));
+}
+
+.multi-select-menu-toggle:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 3px;
+}
+
+@media (hover: hover) {
+  .multi-select-menu-toggle:hover {
+    filter: brightness(1.08);
+  }
+}
+
+.multi-select-menu-toggle:active {
+  transform: translateX(50%) scale(0.97);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .multi-select-menu-toggle {
+    animation: none;
+  }
 }
 
 .note-add-save-button {

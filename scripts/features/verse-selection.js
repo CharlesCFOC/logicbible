@@ -8,6 +8,7 @@ function updateMultiSelectionUi() {
   });
   if (multiSelectMenuToggle) {
     multiSelectMenuToggle.hidden = !multiSelectMode || !multiSelectedVerseData.length;
+    multiSelectMenuToggle.setAttribute("aria-label", `Open actions for ${multiSelectedVerseData.length} selected verse${multiSelectedVerseData.length === 1 ? "" : "s"}`);
   }
   if (noteAddSaveButton) {
     noteAddSaveButton.hidden = !noteEditorAddingVerses || !multiSelectedVerseData.length;
@@ -54,6 +55,7 @@ function exitMultiSelectMode() {
   document.querySelectorAll(".scripture-line.is-multi-selected, .parallel-scripture-line.is-multi-selected").forEach((line) => line.classList.remove("is-multi-selected"));
   if (multiSelectMenuToggle) multiSelectMenuToggle.hidden = true;
   if (noteAddSaveButton) noteAddSaveButton.hidden = true;
+  emitBibleVerseUiChange();
 }
 
 function closeNoteTooltips() {
@@ -89,6 +91,7 @@ function clearMultiSelectionVisuals() {
   multiSelectMode = false;
   document.querySelectorAll(".scripture-line.is-multi-selected, .parallel-scripture-line.is-multi-selected").forEach((line) => line.classList.remove("is-multi-selected"));
   if (multiSelectMenuToggle) multiSelectMenuToggle.hidden = true;
+  emitBibleVerseUiChange();
 }
 
 function centerSelectedVerse() {
@@ -109,6 +112,8 @@ function centerSelectedVerse() {
 }
 
 function updateFocusedVerseFromScroll() {
+  // Keep the action target stable while editing a group or an open detail panel.
+  if (multiSelectedVerseData.length || !verseDetail.hidden) return;
   if (appShell?.dataset.modal !== "verse" || !verseSheet?.classList.contains("is-visible")) {
     return;
   }

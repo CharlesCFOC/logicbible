@@ -2025,10 +2025,10 @@ body .app-shell[data-app-background="black"] #ai .ai-tabs button.is-active:hover
   box-shadow: 0 6px 14px rgba(255, 156, 76, .3) !important;
 }
 
-/* Final Prayer request field pass: match the cyan/blue glass palette used across the app. */
+/* Prayer request fields stay transparent inside their cyan borders. */
 html body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-request-textarea textarea,
 html body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-request-title-field input {
-  background: linear-gradient(145deg, rgba(42, 76, 94, .96), rgba(24, 48, 62, .98)) !important;
+  background: transparent !important;
   border-color: rgba(139, 220, 255, .48) !important;
   color: #f4fbff !important;
 }
@@ -2072,8 +2072,8 @@ html body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-r
   position: relative;
   z-index: 1;
   border: 0 !important;
-  background: linear-gradient(145deg, #244f78, #153555) !important;
-  box-shadow: inset 0 1px 0 rgba(190, 229, 255, .12) !important;
+  background: transparent !important;
+  box-shadow: none !important;
   color: #f4fbff !important;
 }
 

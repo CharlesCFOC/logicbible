@@ -189,15 +189,19 @@ function useBibleChapterState() {
   return { state, verseState, bridge };
 }
 
-function BibleVerseLine({ verse, selection, bridge }) {
+function useVerseSelection(verse, bridge) {
   const longPressTimer = useRef(null);
   const longPressTriggered = useRef(false);
+  const pointerStart = useRef(null);
   const clearLongPress = () => {
     if (longPressTimer.current) window.clearTimeout(longPressTimer.current);
     longPressTimer.current = null;
   };
-  const startLongPress = () => {
+  useEffect(() => clearLongPress, []);
+  const startLongPress = (event) => {
+    if (event.button !== 0 || event.isPrimary === false) return;
     clearLongPress();
+    pointerStart.current = { x: event.clientX, y: event.clientY };
     longPressTriggered.current = false;
     longPressTimer.current = window.setTimeout(() => {
       longPressTriggered.current = true;
@@ -211,6 +215,21 @@ function BibleVerseLine({ verse, selection, bridge }) {
     }
     bridge.selectVerse(verse);
   };
+  return {
+    onClick: handleClick,
+    onPointerDown: startLongPress,
+    onPointerUp: clearLongPress,
+    onPointerCancel: clearLongPress,
+    onPointerLeave: clearLongPress,
+    onPointerMove(event) {
+      const start = pointerStart.current;
+      if (start && Math.hypot(event.clientX - start.x, event.clientY - start.y) > 10) clearLongPress();
+    },
+  };
+}
+
+function BibleVerseLine({ verse, selection, bridge }) {
+  const selectionHandlers = useVerseSelection(verse, bridge);
   const className = [
     "scripture-line",
     verse.highlighted ? "is-highlighted" : "",
@@ -230,11 +249,7 @@ function BibleVerseLine({ verse, selection, bridge }) {
       data-verse-number={verse.number || ""}
       data-verse-version={verse.version}
       data-verse-text={verse.text}
-      onClick={handleClick}
-      onPointerDown={startLongPress}
-      onPointerUp={clearLongPress}
-      onPointerCancel={clearLongPress}
-      onPointerLeave={clearLongPress}
+      {...selectionHandlers}
     >
       {verse.number ? <sup>{verse.number}</sup> : null}{verse.text}
     </p>
@@ -271,7 +286,14 @@ function BibleParallelContent({ state, selection, bridge }) {
           </select>
         </label>
       </div>
-      {state.parallel.rows.map((verse) => (
+      {state.parallel.rows.map((verse) => <BibleParallelVerse key={verse.key} verse={verse} state={state} selection={selection} bridge={bridge} />)}
+    </div>
+  );
+}
+
+function BibleParallelVerse({ verse, state, selection, bridge }) {
+  const selectionHandlers = useVerseSelection(verse, bridge);
+  return (
         <article
           className={`parallel-scripture-line${verse.highlighted ? " is-highlighted" : ""}${verse.bookmarked ? " is-bookmarked" : ""}${verse.noted ? " is-noted" : ""}${selection.selectedKey === verse.key ? " is-selected" : ""}${selection.selectedKeys.includes(verse.key) ? " is-multi-selected" : ""}`}
           style={verse.highlightColor ? { "--highlight-color": verse.highlightColor } : undefined}
@@ -281,14 +303,11 @@ function BibleParallelContent({ state, selection, bridge }) {
           data-verse-number={verse.number || ""}
           data-verse-version={verse.version}
           data-verse-text={verse.text}
-          onClick={() => bridge.selectVerse(verse)}
-          key={verse.key}
+          {...selectionHandlers}
         >
           <p className="parallel-scripture-column" data-parallel-role="primary" aria-label={state.parallel.primary.label}>{verse.number ? <sup>{verse.number}</sup> : null}{verse.text}</p>
           <p className="parallel-scripture-column" data-parallel-role="compare" aria-label={state.parallel.compare.label}>{verse.number ? <sup>{verse.number}</sup> : null}{verse.comparisonText}</p>
         </article>
-      ))}
-    </div>
   );
 }
 

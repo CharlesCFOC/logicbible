@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { createDictationSession } from '../shared/speech-dictation.js';
 import { stopReadAloud } from './read-aloud.jsx';
 
-export function useDictation({ values, onChange }) {
+export function useDictation({ values, onChange, language = 'en', maxLength = 1200 }) {
   const [state, setState] = useState({ field: null, phase: 'idle', message: '', interim: '', error: false });
   const session = useRef(null);
   const valuesRef = useRef(values);
@@ -11,9 +11,12 @@ export function useDictation({ values, onChange }) {
   changeRef.current = onChange;
   useEffect(() => {
     const stopIfHidden = () => { if (document.hidden) session.current?.stop(); };
+    const stopOnNavigation = () => session.current?.stop();
     document.addEventListener('visibilitychange', stopIfHidden);
+    window.addEventListener('app:screen-change', stopOnNavigation);
     return () => {
       document.removeEventListener('visibilitychange', stopIfHidden);
+      window.removeEventListener('app:screen-change', stopOnNavigation);
       session.current?.dispose();
       session.current = null;
     };
@@ -32,8 +35,9 @@ export function useDictation({ values, onChange }) {
         changeRef.current(key, text);
       },
       onState: setState,
+      maxLength,
     });
-    session.current.start(field, 'en');
+    session.current.start(field, language);
   }
   function edit(field, text) {
     session.current?.stopForEdit(field);

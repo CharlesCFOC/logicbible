@@ -9427,16 +9427,33 @@ function Me() {
 		bridge: e
 	};
 }
-function Ne({ verse: e, selection: t, bridge: n }) {
-	let r = (0, p.useRef)(null), i = (0, p.useRef)(!1), a = () => {
-		r.current && window.clearTimeout(r.current), r.current = null;
-	}, o = () => {
-		a(), i.current = !1, r.current = window.setTimeout(() => {
-			i.current = !0, n.startMultiSelect(e);
-		}, 550);
-	}, s = () => {
-		i.current ? i.current = !1 : n.selectVerse(e);
-	}, c = [
+function Ne(e, t) {
+	let n = (0, p.useRef)(null), r = (0, p.useRef)(!1), i = (0, p.useRef)(null), a = () => {
+		n.current && window.clearTimeout(n.current), n.current = null;
+	};
+	return (0, p.useEffect)(() => a, []), {
+		onClick: () => {
+			r.current ? r.current = !1 : t.selectVerse(e);
+		},
+		onPointerDown: (o) => {
+			o.button === 0 && o.isPrimary !== !1 && (a(), i.current = {
+				x: o.clientX,
+				y: o.clientY
+			}, r.current = !1, n.current = window.setTimeout(() => {
+				r.current = !0, t.startMultiSelect(e);
+			}, 550));
+		},
+		onPointerUp: a,
+		onPointerCancel: a,
+		onPointerLeave: a,
+		onPointerMove(e) {
+			let t = i.current;
+			t && Math.hypot(e.clientX - t.x, e.clientY - t.y) > 10 && a();
+		}
+	};
+}
+function Pe({ verse: e, selection: t, bridge: n }) {
+	let r = Ne(e, n), i = [
 		"scripture-line",
 		e.highlighted ? "is-highlighted" : "",
 		e.bookmarked ? "is-bookmarked" : "",
@@ -9445,7 +9462,7 @@ function Ne({ verse: e, selection: t, bridge: n }) {
 		t.selectedKeys.includes(e.key) ? "is-multi-selected" : ""
 	].filter(Boolean).join(" ");
 	return /* @__PURE__ */ (0, h.jsxs)("p", {
-		className: c,
+		className: i,
 		style: e.highlightColor ? { "--highlight-color": e.highlightColor } : void 0,
 		"data-verse": e.reference,
 		"data-highlight-key": e.highlightKey,
@@ -9453,15 +9470,11 @@ function Ne({ verse: e, selection: t, bridge: n }) {
 		"data-verse-number": e.number || "",
 		"data-verse-version": e.version,
 		"data-verse-text": e.text,
-		onClick: s,
-		onPointerDown: o,
-		onPointerUp: a,
-		onPointerCancel: a,
-		onPointerLeave: a,
+		...r,
 		children: [e.number ? /* @__PURE__ */ (0, h.jsx)("sup", { children: e.number }) : null, e.text]
 	});
 }
-function Pe({ state: e }) {
+function Fe({ state: e }) {
 	return e.status === "loading" ? /* @__PURE__ */ (0, h.jsx)("p", {
 		className: "reader-empty",
 		children: "Loading chapter..."
@@ -9476,7 +9489,7 @@ function Pe({ state: e }) {
 		children: [/* @__PURE__ */ (0, h.jsx)("strong", { children: e.title }), /* @__PURE__ */ (0, h.jsx)("span", { children: e.copyright })]
 	});
 }
-function Fe({ state: e, selection: t, bridge: n }) {
+function Ie({ state: e, selection: t, bridge: n }) {
 	let [r, i] = Ee();
 	return /* @__PURE__ */ (0, h.jsxs)("div", {
 		className: "parallel-scripture-grid",
@@ -9520,31 +9533,40 @@ function Fe({ state: e, selection: t, bridge: n }) {
 					})
 				]
 			})]
-		}), e.parallel.rows.map((r) => /* @__PURE__ */ (0, h.jsxs)("article", {
-			className: `parallel-scripture-line${r.highlighted ? " is-highlighted" : ""}${r.bookmarked ? " is-bookmarked" : ""}${r.noted ? " is-noted" : ""}${t.selectedKey === r.key ? " is-selected" : ""}${t.selectedKeys.includes(r.key) ? " is-multi-selected" : ""}`,
-			style: r.highlightColor ? { "--highlight-color": r.highlightColor } : void 0,
-			"data-verse": r.reference,
-			"data-highlight-key": r.highlightKey,
-			"data-verse-key": r.key,
-			"data-verse-number": r.number || "",
-			"data-verse-version": r.version,
-			"data-verse-text": r.text,
-			onClick: () => n.selectVerse(r),
-			children: [/* @__PURE__ */ (0, h.jsxs)("p", {
-				className: "parallel-scripture-column",
-				"data-parallel-role": "primary",
-				"aria-label": e.parallel.primary.label,
-				children: [r.number ? /* @__PURE__ */ (0, h.jsx)("sup", { children: r.number }) : null, r.text]
-			}), /* @__PURE__ */ (0, h.jsxs)("p", {
-				className: "parallel-scripture-column",
-				"data-parallel-role": "compare",
-				"aria-label": e.parallel.compare.label,
-				children: [r.number ? /* @__PURE__ */ (0, h.jsx)("sup", { children: r.number }) : null, r.comparisonText]
-			})]
+		}), e.parallel.rows.map((r) => /* @__PURE__ */ (0, h.jsx)(Le, {
+			verse: r,
+			state: e,
+			selection: t,
+			bridge: n
 		}, r.key))]
 	});
 }
-function Ie({ state: e, bridge: t }) {
+function Le({ verse: e, state: t, selection: n, bridge: r }) {
+	let i = Ne(e, r);
+	return /* @__PURE__ */ (0, h.jsxs)("article", {
+		className: `parallel-scripture-line${e.highlighted ? " is-highlighted" : ""}${e.bookmarked ? " is-bookmarked" : ""}${e.noted ? " is-noted" : ""}${n.selectedKey === e.key ? " is-selected" : ""}${n.selectedKeys.includes(e.key) ? " is-multi-selected" : ""}`,
+		style: e.highlightColor ? { "--highlight-color": e.highlightColor } : void 0,
+		"data-verse": e.reference,
+		"data-highlight-key": e.highlightKey,
+		"data-verse-key": e.key,
+		"data-verse-number": e.number || "",
+		"data-verse-version": e.version,
+		"data-verse-text": e.text,
+		...i,
+		children: [/* @__PURE__ */ (0, h.jsxs)("p", {
+			className: "parallel-scripture-column",
+			"data-parallel-role": "primary",
+			"aria-label": t.parallel.primary.label,
+			children: [e.number ? /* @__PURE__ */ (0, h.jsx)("sup", { children: e.number }) : null, e.text]
+		}), /* @__PURE__ */ (0, h.jsxs)("p", {
+			className: "parallel-scripture-column",
+			"data-parallel-role": "compare",
+			"aria-label": t.parallel.compare.label,
+			children: [e.number ? /* @__PURE__ */ (0, h.jsx)("sup", { children: e.number }) : null, e.comparisonText]
+		})]
+	});
+}
+function Re({ state: e, bridge: t }) {
 	let [n, r] = (0, p.useState)(!1), [i, a] = (0, p.useState)(!1), o = (0, p.useRef)(null);
 	(0, p.useEffect)(() => {
 		n && o.current?.scrollIntoView({
@@ -9615,25 +9637,25 @@ function Ie({ state: e, bridge: t }) {
 		})
 	})] });
 }
-function Le() {
+function ze() {
 	let { state: e, verseState: t, bridge: n } = Me();
-	if (e.status !== "ready" || !e.verses.length) return /* @__PURE__ */ (0, h.jsx)(Pe, { state: e });
-	let r = e.parallelEnabled && e.parallel ? /* @__PURE__ */ (0, h.jsx)(Fe, {
+	if (e.status !== "ready" || !e.verses.length) return /* @__PURE__ */ (0, h.jsx)(Fe, { state: e });
+	let r = e.parallelEnabled && e.parallel ? /* @__PURE__ */ (0, h.jsx)(Ie, {
 		state: e,
 		selection: t,
 		bridge: n
-	}) : e.verses.map((e) => /* @__PURE__ */ (0, h.jsx)(Ne, {
+	}) : e.verses.map((e) => /* @__PURE__ */ (0, h.jsx)(Pe, {
 		verse: e,
 		selection: t,
 		bridge: n
 	}, e.key));
-	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [r, /* @__PURE__ */ (0, h.jsx)(Ie, {
+	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [r, /* @__PURE__ */ (0, h.jsx)(Re, {
 		state: e,
 		bridge: n
 	}, `${e.versionId}:${e.bookId}:${e.chapter}`)] });
 }
 // src/react/notes.jsx
-var Re = {
+var Be = {
 	text: [
 		"M4 5h16",
 		"M12 5v14",
@@ -9641,7 +9663,7 @@ var Re = {
 	],
 	highlight: ["M4 16 14 6l4 4L8 20H4z", "m14 6 2-2 4 4-2 2"]
 };
-function ze({ name: e }) {
+function Ve({ name: e }) {
 	return /* @__PURE__ */ (0, h.jsx)("svg", {
 		viewBox: "0 0 24 24",
 		"aria-hidden": "true",
@@ -9650,10 +9672,10 @@ function ze({ name: e }) {
 		strokeWidth: "1.8",
 		strokeLinecap: "round",
 		strokeLinejoin: "round",
-		children: Re[e].map((e) => /* @__PURE__ */ (0, h.jsx)("path", { d: e }, e))
+		children: Be[e].map((e) => /* @__PURE__ */ (0, h.jsx)("path", { d: e }, e))
 	});
 }
-function Be() {
+function He() {
 	let e = window.noteEditorBridge, [t, n] = (0, p.useState)(() => e.getSnapshot());
 	(0, p.useEffect)(() => {
 		let t = () => n(e.getSnapshot());
@@ -9709,7 +9731,7 @@ function Be() {
 			className: "note-format-select",
 			"aria-label": "Text color",
 			children: [
-				/* @__PURE__ */ (0, h.jsx)(ze, { name: "text" }),
+				/* @__PURE__ */ (0, h.jsx)(Ve, { name: "text" }),
 				/* @__PURE__ */ (0, h.jsx)("span", {
 					className: "note-color-swatch",
 					style: { background: t.textColor }
@@ -9725,7 +9747,7 @@ function Be() {
 			className: "note-format-select",
 			"aria-label": "Highlight color",
 			children: [
-				/* @__PURE__ */ (0, h.jsx)(ze, { name: "highlight" }),
+				/* @__PURE__ */ (0, h.jsx)(Ve, { name: "highlight" }),
 				/* @__PURE__ */ (0, h.jsx)("span", {
 					className: "note-color-swatch",
 					style: { background: t.highlightColor }
@@ -9775,7 +9797,7 @@ function Be() {
 		})
 	] });
 }
-var Ve = {
+var Ue = {
 	undo: ["M9 14 4 9l5-5", "M4 9h10a6 6 0 0 1 0 12h-2"],
 	trash: [
 		"M4 7h16",
@@ -9792,7 +9814,7 @@ var Ve = {
 	close: ["M6 6l12 12", "M18 6 6 18"],
 	chevron: ["m6 9 6 6 6-6"]
 };
-function He({ name: e }) {
+function We({ name: e }) {
 	return /* @__PURE__ */ (0, h.jsx)("svg", {
 		viewBox: "0 0 24 24",
 		"aria-hidden": "true",
@@ -9801,18 +9823,18 @@ function He({ name: e }) {
 		strokeWidth: "1.8",
 		strokeLinecap: "round",
 		strokeLinejoin: "round",
-		children: Ve[e].map((e) => /* @__PURE__ */ (0, h.jsx)("path", { d: e }, e))
+		children: Ue[e].map((e) => /* @__PURE__ */ (0, h.jsx)("path", { d: e }, e))
 	});
 }
-function Ue() {
+function Ge() {
 	let e = window.noteEditorBridge, [t, n] = (0, p.useState)(() => e.getEditorSnapshot());
 	return (0, p.useEffect)(() => {
 		let t = () => n(e.getEditorSnapshot());
 		return document.addEventListener("note:editor-change", t), () => document.removeEventListener("note:editor-change", t);
 	}, [e]), [t, e];
 }
-function We() {
-	let [e, t] = Ue();
+function Ke() {
+	let [e, t] = Ge();
 	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [/* @__PURE__ */ (0, h.jsxs)("div", { children: [/* @__PURE__ */ (0, h.jsx)("span", { children: "Notes" }), /* @__PURE__ */ (0, h.jsx)("input", {
 		className: "note-editor-title note-editor-heading-title",
 		value: e.title,
@@ -9830,7 +9852,7 @@ function We() {
 				onClick: () => t.command("undo"),
 				"aria-label": "Undo",
 				title: "Undo",
-				children: /* @__PURE__ */ (0, h.jsx)(He, { name: "undo" })
+				children: /* @__PURE__ */ (0, h.jsx)(We, { name: "undo" })
 			}),
 			/* @__PURE__ */ (0, h.jsx)("button", {
 				type: "button",
@@ -9838,7 +9860,7 @@ function We() {
 				onClick: t.delete,
 				"aria-label": "Delete note",
 				title: "Delete note",
-				children: /* @__PURE__ */ (0, h.jsx)(He, { name: "trash" })
+				children: /* @__PURE__ */ (0, h.jsx)(We, { name: "trash" })
 			}),
 			/* @__PURE__ */ (0, h.jsx)("button", {
 				type: "button",
@@ -9847,7 +9869,7 @@ function We() {
 				onClick: t.save,
 				"aria-label": "Save note",
 				title: "Save note",
-				children: /* @__PURE__ */ (0, h.jsx)(He, { name: "save" })
+				children: /* @__PURE__ */ (0, h.jsx)(We, { name: "save" })
 			}),
 			/* @__PURE__ */ (0, h.jsx)("button", {
 				type: "button",
@@ -9855,13 +9877,13 @@ function We() {
 				onClick: t.close,
 				"aria-label": "Close note editor",
 				title: "Close",
-				children: /* @__PURE__ */ (0, h.jsx)(He, { name: "close" })
+				children: /* @__PURE__ */ (0, h.jsx)(We, { name: "close" })
 			})
 		]
 	})] });
 }
-function Ge() {
-	let [e, t] = Ue(), [n, r] = (0, p.useState)(!1);
+function qe() {
+	let [e, t] = Ge(), [n, r] = (0, p.useState)(!1);
 	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [/* @__PURE__ */ (0, h.jsxs)("button", {
 		type: "button",
 		className: "note-editor-verse-summary",
@@ -9870,7 +9892,7 @@ function Ge() {
 		children: [/* @__PURE__ */ (0, h.jsx)("span", {
 			className: "note-editor-verse-summary-copy",
 			children: /* @__PURE__ */ (0, h.jsx)("strong", { children: "View verses" })
-		}), /* @__PURE__ */ (0, h.jsx)(He, { name: "chevron" })]
+		}), /* @__PURE__ */ (0, h.jsx)(We, { name: "chevron" })]
 	}), n && /* @__PURE__ */ (0, h.jsxs)("div", {
 		className: "note-editor-verse-menu",
 		children: [/* @__PURE__ */ (0, h.jsxs)("button", {
@@ -9898,7 +9920,7 @@ function Ge() {
 		})]
 	})] });
 }
-function Ke() {
+function Je() {
 	let e = window.noteEditorBridge, t = (0, p.useRef)(null);
 	return (0, p.useEffect)(() => {
 		e.attachContent(t.current);
@@ -9921,22 +9943,22 @@ function Ke() {
 	});
 }
 // src/react/page-top-spacer.jsx
-function qe() {
+function Ye() {
 	return /* @__PURE__ */ (0, h.jsx)("div", {
 		className: "page-top-spacer",
 		"aria-hidden": "true"
 	});
 }
 // node_modules/@capawesome/capacitor-live-update/dist/esm/index.js
-var Je = a("LiveUpdate", { web: () => import("./web-DKGBeYoZ.js").then((e) => new e.LiveUpdateWeb()) }), Ye = {
+var Xe = a("LiveUpdate", { web: () => import("./web-DKGBeYoZ.js").then((e) => new e.LiveUpdateWeb()) }), Ze = {
 	origin: "https://logicbible.vercel.app",
 	nativeVersion: "1.1"
 };
 // src/react/mobile-updates.js
-async function Xe() {
+async function Qe() {
 	if (o.getPlatform() !== "android") return;
 	try {
-		await Je.ready();
+		await Xe.ready();
 	} catch (e) {
 		console.warn("Mobile update initialization failed", e);
 		return;
@@ -9949,7 +9971,7 @@ async function Xe() {
 			e.type = "button", e.textContent = "Apply", e.addEventListener("click", async () => {
 				e.disabled = !0;
 				try {
-					await Je.reload();
+					await Xe.reload();
 				} catch {
 					e.disabled = !1, n.textContent = "Close the app completely, then reopen it to apply the update.";
 				}
@@ -9960,24 +9982,24 @@ async function Xe() {
 		if (!(e || Date.now() - t < n)) {
 			e = !0, t = Date.now();
 			try {
-				let e = await fetch(`${Ye.origin}/mobile-updates/latest.json?t=${Date.now()}`, {
+				let e = await fetch(`${Ze.origin}/mobile-updates/latest.json?t=${Date.now()}`, {
 					cache: "no-store",
 					signal: AbortSignal.timeout(15e3)
 				});
 				if (!e.ok) throw Error(`Update manifest HTTP ${e.status}`);
-				let t = await e.json(), { versionName: r } = await Je.getVersionName();
+				let t = await e.json(), { versionName: r } = await Xe.getVersionName();
 				if (t.nativeVersion !== r || !/^[a-f0-9]{64}$/.test(t.bundleId) || !/^[a-f0-9]{64}$/.test(t.checksum)) return;
-				let a = new URL(t.url, Ye.origin);
-				if (a.origin !== Ye.origin || a.pathname !== `/mobile-updates/${t.bundleId}.zip`) return;
-				let { bundleId: o } = await Je.getCurrentBundle(), s = await fetch("mobile-version.json").then((e) => e.json());
-				if (t.bundleId === (o || s.bundleId) || s.builtAt && (!Number.isFinite(Date.parse(t.builtAt)) || Date.parse(t.builtAt) <= Date.parse(s.builtAt)) || (await Je.getBlockedBundles()).bundleIds.includes(t.bundleId)) return;
-				if (!(await Je.getDownloadedBundles()).bundleIds.includes(t.bundleId)) {
+				let a = new URL(t.url, Ze.origin);
+				if (a.origin !== Ze.origin || a.pathname !== `/mobile-updates/${t.bundleId}.zip`) return;
+				let { bundleId: o } = await Xe.getCurrentBundle(), s = await fetch("mobile-version.json").then((e) => e.json());
+				if (t.bundleId === (o || s.bundleId) || s.builtAt && (!Number.isFinite(Date.parse(t.builtAt)) || Date.parse(t.builtAt) <= Date.parse(s.builtAt)) || (await Xe.getBlockedBundles()).bundleIds.includes(t.bundleId)) return;
+				if (!(await Xe.getDownloadedBundles()).bundleIds.includes(t.bundleId)) {
 					i("Downloading the update… Keep the app open.");
-					let e = await Je.addListener("downloadBundleProgress", (e) => {
+					let e = await Xe.addListener("downloadBundleProgress", (e) => {
 						e.bundleId === t.bundleId && Number.isFinite(e.progress) && i(`Update: ${Math.max(0, Math.min(99, Math.round(e.progress * 100)))} % · downloading`);
 					});
 					try {
-						await Je.downloadBundle({
+						await Xe.downloadBundle({
 							bundleId: t.bundleId,
 							url: a.href,
 							checksum: t.checksum
@@ -9986,7 +10008,7 @@ async function Xe() {
 						await e.remove();
 					}
 				}
-				await Je.setNextBundle({ bundleId: t.bundleId }), n = 6e5, i("Update ready. Apply will restart the app.", !0);
+				await Xe.setNextBundle({ bundleId: t.bundleId }), n = 6e5, i("Update ready. Apply will restart the app.", !0);
 			} catch (e) {
 				console.warn("Mobile update unavailable; keeping the installed version", e), n = 6e4, r?.isConnected && i("Download interrupted. Retrying in one minute.");
 			} finally {
@@ -10003,18 +10025,18 @@ async function Xe() {
 	}, 6e4);
 }
 // src/react/main.jsx
-var Ze = document.querySelector("[data-react-page-top-spacer-root]");
-Ze && (0, m.createRoot)(Ze).render(/* @__PURE__ */ (0, h.jsx)(qe, {}));
-var Qe = document.querySelector("[data-react-church-root]");
-Qe && g(Qe, () => import("./church-BuWvZahY.js"), "ChurchSpace");
-var $e = document.querySelector("[data-projection-root]");
-$e && g($e, () => import("./church-BuWvZahY.js"), "ProjectionScreen");
-var et = document.querySelector("[data-debate-projection-root]");
-et && g(et, () => import("./debate-projection-BXKW8O_n.js").then((e) => e.n), "DebateProjectionScreen");
-var tt = document.querySelector("[data-evangelism-pilot-root]");
-tt && g(tt, () => import("./church-mode-CVPnxBY7.js").then((e) => e.t), "ChurchModePage");
-var nt = document.querySelector("[data-session-admin-root]");
-if (nt && g(nt, () => import("./church-BuWvZahY.js"), "SessionAdmin"), o.isNativePlatform()) {
+var $e = document.querySelector("[data-react-page-top-spacer-root]");
+$e && (0, m.createRoot)($e).render(/* @__PURE__ */ (0, h.jsx)(Ye, {}));
+var et = document.querySelector("[data-react-church-root]");
+et && g(et, () => import("./church-BuWvZahY.js"), "ChurchSpace");
+var tt = document.querySelector("[data-projection-root]");
+tt && g(tt, () => import("./church-BuWvZahY.js"), "ProjectionScreen");
+var nt = document.querySelector("[data-debate-projection-root]");
+nt && g(nt, () => import("./debate-projection-BXKW8O_n.js").then((e) => e.n), "DebateProjectionScreen");
+var rt = document.querySelector("[data-evangelism-pilot-root]");
+rt && g(rt, () => import("./church-mode-C2skfLfC.js"), "ChurchModePage");
+var it = document.querySelector("[data-session-admin-root]");
+if (it && g(it, () => import("./church-BuWvZahY.js"), "SessionAdmin"), o.isNativePlatform()) {
 	let e = a("GentleHaptics");
 	window.appButtonHaptic = () => {
 		let t = localStorage.getItem("brother.hapticsStrength") || "1", n = {
@@ -10027,19 +10049,19 @@ if (nt && g(nt, () => import("./church-BuWvZahY.js"), "SessionAdmin"), o.isNativ
 		o.getPlatform() === "android" ? e.tap({ level: r }).catch(() => {}) : _.impact({ style: s.Light }).catch(() => {});
 	};
 }
-var rt = /* @__PURE__ */ new WeakMap();
+var at = /* @__PURE__ */ new WeakMap();
 window.renderProfileSavedNoteCards = (e, t, n) => {
 	if (!e) return;
-	let r = rt.get(e);
-	r || (r = (0, m.createRoot)(e), rt.set(e, r)), r.render(t.map((e) => /* @__PURE__ */ (0, h.jsx)(x, {
+	let r = at.get(e);
+	r || (r = (0, m.createRoot)(e), at.set(e, r)), r.render(t.map((e) => /* @__PURE__ */ (0, h.jsx)(x, {
 		row: e,
 		onOpen: n
 	}, e.id)));
 }, window.unmountProfileSavedNoteCards = (e) => {
-	let t = e && rt.get(e);
-	t && (t.unmount(), rt.delete(e));
+	let t = e && at.get(e);
+	t && (t.unmount(), at.delete(e));
 };
-var it = [
+var ot = [
 	[
 		"profile",
 		"Profile",
@@ -10075,7 +10097,7 @@ var it = [
 		"Prayer",
 		"heart"
 	]
-], at = {
+], st = {
 	home: [
 		"M3 10.5 12 3l9 7.5",
 		"M5 9.5V21h14V9.5",
@@ -10096,7 +10118,7 @@ var it = [
 	shield: ["M12 3 20 6v5c0 5.2-3.4 8.8-8 10-4.6-1.2-8-4.8-8-10V6z", "m8.5 12 2.2 2.2 4.8-5"],
 	user: ["M20 21a8 8 0 0 0-16 0", "M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8"]
 };
-function ot({ name: e, hasActiveGradient: t = !1 }) {
+function ct({ name: e, hasActiveGradient: t = !1 }) {
 	let n = `active-nav-gradient-${e}`;
 	return /* @__PURE__ */ (0, h.jsxs)("svg", {
 		viewBox: "0 0 24 24",
@@ -10119,13 +10141,13 @@ function ot({ name: e, hasActiveGradient: t = !1 }) {
 				offset: "100%",
 				stopColor: "#ff9d00"
 			})]
-		}) }), at[e].map((e) => /* @__PURE__ */ (0, h.jsx)("path", {
+		}) }), st[e].map((e) => /* @__PURE__ */ (0, h.jsx)("path", {
 			d: e,
 			stroke: t ? `url(#${n})` : void 0
 		}, e))]
 	});
 }
-function st() {
+function lt() {
 	let [e, t] = (0, p.useState)(0);
 	return (0, p.useEffect)(() => {
 		let e = document.querySelector("#bible");
@@ -10150,7 +10172,7 @@ function st() {
 		children: /* @__PURE__ */ (0, h.jsx)("span", { style: { width: `${e}%` } })
 	});
 }
-function ct() {
+function ut() {
 	let e = document.querySelector(".app-shell")?.dataset.activeScreen || "home", [t, n] = (0, p.useState)(e);
 	(0, p.useEffect)(() => {
 		let e = (e) => n(e.detail?.activeNavId || e.detail?.id || "home");
@@ -10161,69 +10183,69 @@ function ct() {
 	}, i = (e) => {
 		e.pointerType === "touch" && (window.appButtonHaptic || navigator.vibrate?.(8));
 	};
-	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [it.map(([e, n, a]) => /* @__PURE__ */ (0, h.jsxs)("button", {
+	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [ot.map(([e, n, a]) => /* @__PURE__ */ (0, h.jsxs)("button", {
 		className: t === e ? "is-active" : "",
 		"data-nav": e,
 		type: "button",
 		onPointerDown: i,
 		onClick: () => r(e),
-		children: [/* @__PURE__ */ (0, h.jsx)(ot, {
+		children: [/* @__PURE__ */ (0, h.jsx)(ct, {
 			name: a,
 			hasActiveGradient: t === e && e !== "home"
 		}), /* @__PURE__ */ (0, h.jsx)("span", { children: n })]
-	}, e)), t === "bible" && /* @__PURE__ */ (0, h.jsx)(st, {})] });
+	}, e)), t === "bible" && /* @__PURE__ */ (0, h.jsx)(lt, {})] });
 }
-var lt = document.querySelector("[data-react-navigation-root]");
-lt && (0, m.createRoot)(lt).render(/* @__PURE__ */ (0, h.jsx)(ct, {}));
-var ut = document.querySelector("[data-react-home-hero-root]");
-ut && (0, m.createRoot)(ut).render(/* @__PURE__ */ (0, h.jsx)(w, {}));
-var dt = document.querySelector("[data-react-home-prayer-root]");
-dt && (0, m.createRoot)(dt).render(/* @__PURE__ */ (0, h.jsx)(ae, {}));
-var ft = document.querySelector("[data-react-home-library-tabs-root]");
-ft && (0, m.createRoot)(ft).render(/* @__PURE__ */ (0, h.jsx)(oe, {}));
-var pt = document.querySelector("[data-react-home-library-panel-root]");
-pt && window.homeLibraryBridge && (window.reactHomeLibraryPanelMounted = !0, (0, m.createRoot)(pt).render(/* @__PURE__ */ (0, h.jsx)(T, {})));
-var mt = document.querySelector("[data-react-profile-tabs-root]"), ht = document.querySelector("[data-react-profile-prayers-root]");
-ht && (0, m.createRoot)(ht).render(/* @__PURE__ */ (0, h.jsx)(fe, {})), mt && (0, m.createRoot)(mt).render(/* @__PURE__ */ (0, h.jsx)(me, {}));
-var k = document.querySelector("[data-react-profile-hero-root]");
-k && window.profileBridge && (0, m.createRoot)(k).render(/* @__PURE__ */ (0, h.jsx)(D, {}));
-var gt = document.querySelector("[data-react-profile-preferences-root]");
-gt && window.profileBridge && (0, m.createRoot)(gt).render(/* @__PURE__ */ (0, h.jsx)(ge, {}));
-var _t = document.querySelector("[data-react-profile-information-root]");
-_t && window.profileBridge && (0, m.createRoot)(_t).render(/* @__PURE__ */ (0, h.jsx)(_e, {}));
-var vt = document.querySelector("[data-react-profile-cloud-root]");
-vt && window.profileBridge && (0, m.createRoot)(vt).render(/* @__PURE__ */ (0, h.jsx)(ve, {}));
-var yt = document.querySelector("[data-react-bible-controls-root]");
-yt && window.bibleReaderBridge && (0, m.createRoot)(yt).render(/* @__PURE__ */ (0, h.jsx)(De, {}));
-var bt = document.querySelector("[data-react-bible-parallel-root]");
-bt && window.bibleReaderBridge && (0, m.createRoot)(bt).render(/* @__PURE__ */ (0, h.jsx)(Oe, {}));
-var xt = document.querySelector("[data-react-bible-chapter-root]");
-xt && window.bibleReaderBridge && (window.reactBibleChapterMounted = !0, (0, m.createRoot)(xt).render(/* @__PURE__ */ (0, h.jsx)(Le, {})));
-var St = document.querySelector("[data-react-selected-verse-root]");
-St && window.bibleReaderBridge && (0, m.createRoot)(St).render(/* @__PURE__ */ (0, h.jsx)(Ae, {}));
-var Ct = document.querySelector("[data-react-verse-actions-root]");
-Ct && window.bibleReaderBridge && (0, m.createRoot)(Ct).render(/* @__PURE__ */ (0, h.jsx)(je, {}));
-var wt = document.querySelector("[data-react-note-toolbar-root]");
-wt && window.noteEditorBridge && (0, m.createRoot)(wt).render(/* @__PURE__ */ (0, h.jsx)(Be, {}));
-var Tt = document.querySelector("[data-react-note-content-root]");
-Tt && window.noteEditorBridge && (0, m.createRoot)(Tt).render(/* @__PURE__ */ (0, h.jsx)(Ke, {}));
-var Et = document.querySelector("[data-react-note-header-root]");
-Et && window.noteEditorBridge && (0, m.createRoot)(Et).render(/* @__PURE__ */ (0, h.jsx)(We, {}));
-var Dt = document.querySelector("[data-react-note-chips-root]");
-Dt && window.noteEditorBridge && (0, m.createRoot)(Dt).render(/* @__PURE__ */ (0, h.jsx)(Ge, {}));
-var A = document.querySelector("[data-react-prayer-root]");
-A && window.prayerBridge && g(A, () => import("./prayer-BhgDq9Tz.js"), "PrayerPage");
-var Ot = document.querySelector("[data-react-ai-root]");
-Ot && window.aiBridge && g(Ot, () => import("./ai-tZjnJyIu.js"), "AiPage");
-var kt = document.querySelector("[data-react-kids-bible-root]");
-kt && g(kt, () => import("./kids-bible-CYfIACHA.js"), "KidsBiblePage");
-var At = document.querySelector("[data-react-think-room-resume-root]");
-At && g(At, () => import("./apologetics-debate-BkzWvV_5.js"), "ThinkRoomResume");
-var jt = document.querySelector("[data-react-apologetics-debate-root]");
-jt && g(jt, () => import("./apologetics-debate-BkzWvV_5.js"), "ApologeticsDebatePage");
-var Mt = document.querySelector("[data-react-apologetics-coach-root]");
-Mt && g(Mt, () => import("./apologetics-coach-DOO1KRaK.js"), "ApologeticsCoachPage");
-var Nt = document.querySelector("[data-react-apologetics-xp-root]");
-Nt && window.aiBridge && g(Nt, () => import("./apologetics-coach-DOO1KRaK.js"), "ApologeticsXpCard");
-var Pt = document.querySelector("[data-react-admin-root]");
-Pt && window.moderationBridge && g(Pt, () => import("./admin-D9fuLROe.js"), "AdminPage"), requestAnimationFrame(() => requestAnimationFrame(() => void Xe()));
+var dt = document.querySelector("[data-react-navigation-root]");
+dt && (0, m.createRoot)(dt).render(/* @__PURE__ */ (0, h.jsx)(ut, {}));
+var ft = document.querySelector("[data-react-home-hero-root]");
+ft && (0, m.createRoot)(ft).render(/* @__PURE__ */ (0, h.jsx)(w, {}));
+var pt = document.querySelector("[data-react-home-prayer-root]");
+pt && (0, m.createRoot)(pt).render(/* @__PURE__ */ (0, h.jsx)(ae, {}));
+var mt = document.querySelector("[data-react-home-library-tabs-root]");
+mt && (0, m.createRoot)(mt).render(/* @__PURE__ */ (0, h.jsx)(oe, {}));
+var ht = document.querySelector("[data-react-home-library-panel-root]");
+ht && window.homeLibraryBridge && (window.reactHomeLibraryPanelMounted = !0, (0, m.createRoot)(ht).render(/* @__PURE__ */ (0, h.jsx)(T, {})));
+var k = document.querySelector("[data-react-profile-tabs-root]"), gt = document.querySelector("[data-react-profile-prayers-root]");
+gt && (0, m.createRoot)(gt).render(/* @__PURE__ */ (0, h.jsx)(fe, {})), k && (0, m.createRoot)(k).render(/* @__PURE__ */ (0, h.jsx)(me, {}));
+var _t = document.querySelector("[data-react-profile-hero-root]");
+_t && window.profileBridge && (0, m.createRoot)(_t).render(/* @__PURE__ */ (0, h.jsx)(D, {}));
+var vt = document.querySelector("[data-react-profile-preferences-root]");
+vt && window.profileBridge && (0, m.createRoot)(vt).render(/* @__PURE__ */ (0, h.jsx)(ge, {}));
+var yt = document.querySelector("[data-react-profile-information-root]");
+yt && window.profileBridge && (0, m.createRoot)(yt).render(/* @__PURE__ */ (0, h.jsx)(_e, {}));
+var bt = document.querySelector("[data-react-profile-cloud-root]");
+bt && window.profileBridge && (0, m.createRoot)(bt).render(/* @__PURE__ */ (0, h.jsx)(ve, {}));
+var xt = document.querySelector("[data-react-bible-controls-root]");
+xt && window.bibleReaderBridge && (0, m.createRoot)(xt).render(/* @__PURE__ */ (0, h.jsx)(De, {}));
+var St = document.querySelector("[data-react-bible-parallel-root]");
+St && window.bibleReaderBridge && (0, m.createRoot)(St).render(/* @__PURE__ */ (0, h.jsx)(Oe, {}));
+var Ct = document.querySelector("[data-react-bible-chapter-root]");
+Ct && window.bibleReaderBridge && (window.reactBibleChapterMounted = !0, (0, m.createRoot)(Ct).render(/* @__PURE__ */ (0, h.jsx)(ze, {})));
+var wt = document.querySelector("[data-react-selected-verse-root]");
+wt && window.bibleReaderBridge && (0, m.createRoot)(wt).render(/* @__PURE__ */ (0, h.jsx)(Ae, {}));
+var Tt = document.querySelector("[data-react-verse-actions-root]");
+Tt && window.bibleReaderBridge && (0, m.createRoot)(Tt).render(/* @__PURE__ */ (0, h.jsx)(je, {}));
+var Et = document.querySelector("[data-react-note-toolbar-root]");
+Et && window.noteEditorBridge && (0, m.createRoot)(Et).render(/* @__PURE__ */ (0, h.jsx)(He, {}));
+var Dt = document.querySelector("[data-react-note-content-root]");
+Dt && window.noteEditorBridge && (0, m.createRoot)(Dt).render(/* @__PURE__ */ (0, h.jsx)(Je, {}));
+var A = document.querySelector("[data-react-note-header-root]");
+A && window.noteEditorBridge && (0, m.createRoot)(A).render(/* @__PURE__ */ (0, h.jsx)(Ke, {}));
+var Ot = document.querySelector("[data-react-note-chips-root]");
+Ot && window.noteEditorBridge && (0, m.createRoot)(Ot).render(/* @__PURE__ */ (0, h.jsx)(qe, {}));
+var kt = document.querySelector("[data-react-prayer-root]");
+kt && window.prayerBridge && g(kt, () => import("./prayer-CSGGhb7Y.js"), "PrayerPage");
+var At = document.querySelector("[data-react-ai-root]");
+At && window.aiBridge && g(At, () => import("./ai-BZDSwQdC.js"), "AiPage");
+var jt = document.querySelector("[data-react-kids-bible-root]");
+jt && g(jt, () => import("./kids-bible-CYfIACHA.js"), "KidsBiblePage");
+var Mt = document.querySelector("[data-react-think-room-resume-root]");
+Mt && g(Mt, () => import("./apologetics-debate-NgPqvwEw.js"), "ThinkRoomResume");
+var Nt = document.querySelector("[data-react-apologetics-debate-root]");
+Nt && g(Nt, () => import("./apologetics-debate-NgPqvwEw.js"), "ApologeticsDebatePage");
+var Pt = document.querySelector("[data-react-apologetics-coach-root]");
+Pt && g(Pt, () => import("./apologetics-coach-Dw0l5FDe.js"), "ApologeticsCoachPage");
+var Ft = document.querySelector("[data-react-apologetics-xp-root]");
+Ft && window.aiBridge && g(Ft, () => import("./apologetics-coach-Dw0l5FDe.js"), "ApologeticsXpCard");
+var It = document.querySelector("[data-react-admin-root]");
+It && window.moderationBridge && g(It, () => import("./admin-D9fuLROe.js"), "AdminPage"), requestAnimationFrame(() => requestAnimationFrame(() => void Qe()));
