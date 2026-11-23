@@ -11,6 +11,32 @@ window.bibleReaderBridge = {
     const chapter = await loadChapter();
     if (!chapter) throw new Error(bibleChapterError || "Could not load this chapter. Please try again.");
   },
+  async navigateToReference(bookId, chapterNumber, verseNumber) {
+    const book = BOOKS.find(item => item.id === bookId);
+    if (!book) throw new Error("Book not found.");
+    const chapter = Number(chapterNumber);
+    const verse = Number(verseNumber);
+    if (!Number.isInteger(chapter) || chapter < 1 || chapter > book.chapters || !Number.isInteger(verse) || verse < 1) {
+      throw new Error("Invalid Bible reference.");
+    }
+    readerState.bookId = book.id;
+    readerState.chapter = chapter;
+    const wasShowingHighlightsOnly = readerState.showHighlightsOnly;
+    readerState.showHighlightsOnly = false;
+    if (wasShowingHighlightsOnly) renderParallelOptions();
+    renderBookOptions();
+    renderChapterOptions();
+    const loaded = await loadChapter();
+    if (!loaded) throw new Error(bibleChapterError || "Could not load this chapter. Please try again.");
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    const target = [...document.querySelectorAll("#bible [data-verse-number]")]
+      .find(line => Number(line.dataset.verseNumber) === verse);
+    if (!target) throw new Error("Verse not found.");
+    document.querySelector("#bible")?.scrollTo({ top: 0, behavior: "instant" });
+    target.scrollIntoView({ behavior: "smooth", block: "center" });
+    target.classList.add("is-voice-target");
+    window.setTimeout(() => target.classList.remove("is-voice-target"), 2600);
+  },
   openStudy() {
     setScreen("bible");
     if (appShell.dataset.activeScreen === "bible") {

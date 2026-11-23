@@ -7,7 +7,7 @@
     "build:mobile": "npm run build && node scripts/build-mobile.mjs",
     "android:add": "npm run build:mobile && cap add android",
     "android:sync": "npm run build:mobile && cap sync android",
-    "dev": "npm run build && node server.mjs",
+    "dev": "npm run build && node --watch server.mjs",
     "start": "node server.mjs",
     "build:updates": "npm run build:mobile && node scripts/build-mobile-updates.mjs",
     "vercel-build": "npm run check && npm run build:updates",

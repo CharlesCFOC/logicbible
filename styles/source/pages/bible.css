@@ -1898,3 +1898,55 @@ dialog.study-chat-dialog .study-chat-compose-row textarea { background: transpar
 .bible-chapter-picker button:focus-visible { outline: 2px solid #b8e5ff; outline-offset: 3px; }
 .bible-chapter-picker footer { margin-top: 20px; padding-top: 16px; border-top: 1px solid #8fb5df26; color: #a3bdd8; font-size: 11px; text-align: center; }
 #bible [data-reader-chapter] { scroll-margin-top: 24px; }
+
+.bible-voice-button {
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  min-height: 40px;
+  padding: 0;
+  border: 0;
+}
+
+.bible-voice-overlay {
+  position: fixed;
+  z-index: 10000;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(16, 31, 48, .28);
+  -webkit-backdrop-filter: blur(11px) saturate(115%);
+  backdrop-filter: blur(11px) saturate(115%);
+  animation: bible-voice-fade-in .22s ease both;
+}
+
+.bible-voice-dismiss { position: absolute; inset: 0; width: 100%; height: 100%; min-height: 0; padding: 0; border: 0; border-radius: 0; box-shadow: none; background: transparent; }
+.bible-voice-listening {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 360px);
+  color: white;
+  text-align: center;
+  pointer-events: none;
+}
+.bible-voice-prompt { position: absolute; bottom: calc(100% + 24px); left: 0; right: 0; margin: 0; color: white; font-size: clamp(18px, 4vw, 24px); font-weight: 600; line-height: 1.35; text-shadow: 0 2px 12px rgba(0, 0, 0, .45); }
+.bible-voice-wave { height: 80px; margin: 0 auto; display: flex; justify-content: center; align-items: center; gap: 6px; }
+.bible-voice-wave i { display: block; width: 5px; height: var(--voice-level); max-height: 80px; min-height: 6px; border-radius: 9px; background: linear-gradient(180deg, #e0f8ff, #67d4ff); box-shadow: 0 0 14px rgba(103, 212, 255, .35); opacity: .7; transition: height 90ms ease, opacity 150ms ease; }
+.bible-voice-wave.is-listening i { opacity: 1; }
+.bible-voice-wave.is-processing i { animation: bible-voice-processing 1s ease-in-out var(--voice-delay) infinite alternate; }
+.bible-voice-feedback { position: absolute; top: calc(100% + 24px); left: 0; right: 0; pointer-events: auto; text-shadow: 0 1px 8px rgba(0, 0, 0, .6); }
+.bible-voice-transcript { margin: 0 0 12px; color: white; font-size: 17px; font-weight: 700; line-height: 1.45; overflow-wrap: anywhere; }
+.bible-voice-status { margin: 0; color: white; font-size: 14px; line-height: 1.55; }
+.bible-voice-retry { min-height: 42px; margin-top: 12px; padding: 0 20px; border-radius: 999px; color: white; background: #234b70; font-size: 13px; font-weight: 700; }
+@keyframes bible-voice-processing { from { opacity: .35; } to { opacity: 1; } }
+.scripture-line.is-voice-target,
+.parallel-scripture-line.is-voice-target { position: relative; z-index: 2; border-radius: 12px; animation: bible-voice-target 2.4s ease both; }
+
+@keyframes bible-voice-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes bible-voice-target { 0%, 100% { background-color: transparent; box-shadow: none; } 18%, 70% { background-color: rgba(128, 184, 221, .28); box-shadow: 0 0 0 2px rgba(68, 127, 171, .34); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .bible-voice-overlay, .scripture-line.is-voice-target, .parallel-scripture-line.is-voice-target { animation-duration: .01ms; }
+  .bible-voice-wave i { transition-duration: .01ms; animation: none !important; }
+}

@@ -1,5 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { ChapterQuiz } from "./chapter-quiz.jsx";
+import { startBibleVoiceRecorder } from "../shared/bible-voice-recorder.js";
+import { parseBibleReference } from "../shared/bible-reference.js";
+import { requestBibleVoiceTranscript } from "./bible-voice-client.js";
 
 const columnsIcon = (
   <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -80,6 +84,7 @@ export function BibleReaderControls() {
 
   return (
     <>
+      <BibleVoiceSearch />
       <label className="reader-select-label bible-glass-select" aria-label="Bible version">
         <select className="bible-glass-select-input" value={state.versionId} onChange={(event) => bridge.setVersion(event.target.value)}>
           {state.versionOptions.map((option) => option.separator
@@ -110,6 +115,141 @@ export function BibleReaderControls() {
       </button>
     </>
   );
+}
+
+export function BibleVoiceSearch() {
+  const [state, bridge] = useBibleReaderState();
+  const [open, setOpen] = useState(false);
+  const [phase, setPhase] = useState("idle");
+  const [message, setMessage] = useState("");
+  const [transcript, setTranscript] = useState("");
+  const [levels, setLevels] = useState(Array(18).fill(.12));
+  const recording = useRef(null);
+  const requestController = useRef(null);
+
+  const close = () => {
+    recording.current?.cancel();
+    recording.current = null;
+    requestController.current?.abort();
+    requestController.current = null;
+    setOpen(false);
+    setPhase("idle");
+  };
+  useEffect(() => () => {
+    recording.current?.cancel();
+    requestController.current?.abort();
+  }, []);
+  useEffect(() => {
+    const onScreenChange = () => {
+      if (document.querySelector(".app-shell")?.dataset.activeScreen !== "bible") close();
+    };
+    window.addEventListener("app:screen-change", onScreenChange);
+    return () => window.removeEventListener("app:screen-change", onScreenChange);
+  }, []);
+  useEffect(() => {
+    if (!open) return undefined;
+    const onKeyDown = event => { if (event.key === "Escape") close(); };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open]);
+
+  const openReference = reference => {
+    setPhase("opening");
+    setMessage(`${reference.bookName} ${reference.chapter}:${reference.verse}`);
+    void (async () => {
+      try {
+        await bridge.navigateToReference(reference.bookId, reference.chapter, reference.verse);
+        close();
+      } catch {
+        setPhase("error");
+        setMessage(`Je n’ai pas pu ouvrir ${reference.bookName} ${reference.chapter}:${reference.verse}. Vérifiez la référence et réessayez.`);
+      }
+    })();
+  };
+
+  const start = () => {
+    setOpen(true);
+    setTranscript("");
+    setMessage("");
+    setPhase("starting");
+    if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
+      setPhase("error");
+      setMessage("L’enregistrement audio n’est pas disponible dans ce navigateur.");
+      return;
+    }
+    const mimeType = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg"]
+      .find(type => window.MediaRecorder.isTypeSupported?.(type));
+    let session;
+    try {
+      session = startBibleVoiceRecorder({
+        getStream: () => navigator.mediaDevices.getUserMedia({ audio: true }),
+        createRecorder: stream => mimeType ? new window.MediaRecorder(stream, { mimeType }) : new window.MediaRecorder(stream),
+        createAudioContext: () => new (window.AudioContext || window.webkitAudioContext)(),
+        requestFrame: callback => window.requestAnimationFrame(callback),
+        cancelFrame: frame => window.cancelAnimationFrame(frame),
+        onLevels: nextLevels => setLevels(nextLevels.map(level => Number.isFinite(level) ? level : 0)),
+        onReady: () => { setPhase("listening"); setMessage("Je vous écoute… une pause de 2 secondes lancera la recherche."); },
+        onSilence: () => { setPhase("transcribing"); setMessage("Pause détectée. Transcription IA en cours…"); },
+        silenceMs: 2000,
+        maxDurationMs: 30_000,
+      });
+      recording.current = session;
+    } catch {
+      setPhase("error");
+      setMessage("Le microphone n’a pas pu démarrer.");
+      return;
+    }
+    void (async () => {
+      try {
+        const blob = await session.done;
+        if (recording.current !== session) return;
+        recording.current = null;
+        if (!blob?.size) throw new Error("Aucune parole n’a été détectée. Réessayez.");
+        setPhase("transcribing");
+        setMessage("Transcription par IA en cours…");
+        const controller = new AbortController();
+        requestController.current = controller;
+        const text = await requestBibleVoiceTranscript(blob, { signal: controller.signal });
+        if (requestController.current !== controller) return;
+        requestController.current = null;
+        setTranscript(text);
+        const reference = parseBibleReference(text, state.books);
+        if (reference) openReference(reference);
+        else {
+          setPhase("error");
+          setMessage("Je n’ai pas trouvé le livre, le chapitre et le verset dans la transcription. Réessayez.");
+        }
+      } catch (error) {
+        if (error.name === "AbortError") return;
+        if (recording.current === session) recording.current = null;
+        requestController.current = null;
+        setPhase("error");
+        setMessage(error.message || "La transcription IA a échoué. Réessayez.");
+      }
+    })();
+  };
+
+  return <>
+    <button type="button" className="icon-button bible-glass-control bible-glass-search bible-voice-button" aria-label="Chercher un verset par la voix" title="Chercher un verset par la voix" onClick={start}>
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="2" width="6" height="12" rx="3" /><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" /></svg>
+    </button>
+    {open && createPortal(<div className="bible-voice-overlay" role="dialog" aria-modal="true" aria-label="Recherche vocale de verset">
+      <button type="button" className="bible-voice-dismiss" aria-label="Fermer" onClick={close} />
+      <section className="bible-voice-listening">
+        <p className="bible-voice-prompt">Ask me to search a scripture</p>
+        <div className={`bible-voice-wave${phase === "listening" ? " is-listening" : phase !== "error" ? " is-processing" : ""}`} aria-hidden="true">
+          {levels.map((level, index) => <i key={index} style={{ "--voice-level": `${Math.max(.12, level) * 100}%`, "--voice-delay": `${index * 24}ms` }} />)}
+        </div>
+        <div className="bible-voice-feedback">
+          {transcript && <p className="bible-voice-transcript" aria-live="polite">{transcript}</p>}
+          {phase === "error" && <>
+            <p className="bible-voice-status" role="alert">{message}</p>
+            <button className="bible-voice-retry" type="button" onClick={start}>Réessayer</button>
+          </>}
+        </div>
+      </section>
+    </div>, document.body)}
+  </>;
 }
 
 export function BibleParallelControls() {

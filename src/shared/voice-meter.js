@@ -30,20 +30,21 @@ export function startVoiceMeter({ getStream, createContext, requestFrame, cancel
       if (disposed) return;
       const frequencies = new Uint8Array(analyser.frequencyBinCount);
       const levels = new Float32Array(barCount);
-      const binHz = context.sampleRate / analyser.fftSize;
-      const maxHz = Math.min(8000, context.sampleRate / 2);
+      const sampleRate = Number(context.sampleRate) || 44100;
+      const binHz = sampleRate / analyser.fftSize;
+      const maxHz = Math.min(8000, sampleRate / 2);
       function draw() {
         if (disposed) return;
         analyser.getByteFrequencyData(frequencies);
         // Logarithmic bands show both low voices and higher speech frequencies.
         for (let bar = 0; bar < barCount; bar++) {
-          const first = Math.floor(100 * (maxHz / 100) ** (bar / barCount) / binHz);
+          const first = Math.min(frequencies.length - 1, Math.floor(100 * (maxHz / 100) ** (bar / barCount) / binHz));
           const last = Math.min(frequencies.length, Math.max(first + 1, Math.ceil(100 * (maxHz / 100) ** ((bar + 1) / barCount) / binHz)));
           let energy = 0;
           for (let bin = first; bin < last; bin++) energy += frequencies[bin] ** 2;
-          levels[bar] = Math.sqrt(energy / (last - first)) / 255;
+          levels[bar] = Math.sqrt(energy / Math.max(1, last - first)) / 255;
         }
-        onLevels(levels);
+        onLevels(Array.from(levels, level => Number.isFinite(level) ? level : 0));
         frame = requestFrame(draw);
       }
       draw();
