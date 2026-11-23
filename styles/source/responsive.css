@@ -1201,3 +1201,6 @@ html body .app-shell[data-app-background] .phone-frame #my-church.church-screen 
 html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup.is-review { background: rgba(25, 59, 83, .48) !important; border: 0 !important; box-shadow: 0 12px 30px rgba(5, 24, 42, .18) !important; color: #e4f1fa !important; }
 html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup.is-review :is(h2, h3, .church-draft-carousel-controls > span) { color: #e4f1fa !important; }
 html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-feedback { background: rgba(19, 48, 70, .85) !important; color: #e4f1fa !important; border: 0 !important; box-shadow: none !important; font-size: 13px; padding: 10px 14px; }
+/* Keep review text scrollable without a visible scrollbar. */
+.church-session-setup.is-review .church-review-paragraphs { scrollbar-width: none; }
+.church-session-setup.is-review .church-review-paragraphs::-webkit-scrollbar { display: none; width: 0; }
