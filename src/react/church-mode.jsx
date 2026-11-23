@@ -66,7 +66,7 @@ export function ChurchModePage() {
   return <ChurchPreparation />;
 }
 
-function ChurchPreparation() {
+export function ChurchPreparation() {
   const [draft] = useState(readDraft);
   const [settings, setSettings] = useState(draft.settings);
   const [questionPickerOpen, setQuestionPickerOpen] = useState(false);

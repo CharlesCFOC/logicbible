@@ -10488,13 +10488,13 @@ async function ct() {
 var lt = document.querySelector("[data-react-page-top-spacer-root]");
 lt && (0, m.createRoot)(lt).render(/* @__PURE__ */ (0, h.jsx)(at, {}));
 var ut = document.querySelector("[data-react-church-root]");
-ut && g(ut, () => import("./church-CzULZ-DI.js"), "ChurchSpace");
+ut && g(ut, () => import("./church-tool-Ddo-1ijp.js"), "ChurchToolPage");
 var dt = document.querySelector("[data-projection-root]");
 dt && g(dt, () => import("./church-CzULZ-DI.js"), "ProjectionScreen");
 var ft = document.querySelector("[data-debate-projection-root]");
 ft && g(ft, () => import("./debate-projection-BXKW8O_n.js").then((e) => e.n), "DebateProjectionScreen");
 var pt = document.querySelector("[data-evangelism-pilot-root]");
-pt && g(pt, () => import("./church-mode-BBY77Cyu.js"), "ChurchModePage");
+pt && g(pt, () => import("./church-mode-BXEPNcEq.js"), "ChurchModePage");
 var mt = document.querySelector("[data-session-admin-root]");
 if (mt && g(mt, () => import("./church-CzULZ-DI.js"), "SessionAdmin"), o.isNativePlatform()) {
 	let e = a("GentleHaptics");
@@ -10523,9 +10523,9 @@ window.renderProfileSavedNoteCards = (e, t, n) => {
 };
 var gt = [
 	[
-		"profile",
-		"Profile",
-		"user"
+		"my-church",
+		"Church Tool",
+		"church"
 	],
 	[
 		"ai",
@@ -10576,7 +10576,14 @@ var gt = [
 		"m19 3-.5 1.5L17 5l1.5.5L19 7l.5-1.5L21 5l-1.5-.5z"
 	],
 	shield: ["M12 3 20 6v5c0 5.2-3.4 8.8-8 10-4.6-1.2-8-4.8-8-10V6z", "m8.5 12 2.2 2.2 4.8-5"],
-	user: ["M20 21a8 8 0 0 0-16 0", "M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8"]
+	user: ["M20 21a8 8 0 0 0-16 0", "M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8"],
+	church: [
+		"M3 21h18",
+		"M5 21V10l7-5 7 5v11",
+		"M9 21v-6h6v6",
+		"M12 2v3",
+		"M10 4h4"
+	]
 };
 function vt({ name: e, hasActiveGradient: t = !1 }) {
 	let n = `active-nav-gradient-${e}`;

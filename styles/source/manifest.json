@@ -11,6 +11,7 @@
   "pages/profile.css",
   "pages/admin.css",
   "pages/church.css",
+    "pages/church-tool.css",
   "pages/ai.css",
   "pages/kids-bible.css",
   "pages/apologetics.css",

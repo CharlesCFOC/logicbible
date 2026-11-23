@@ -17,7 +17,7 @@ if (pageTopSpacerNode) {
 }
 
 const churchSpaceNode = document.querySelector("[data-react-church-root]");
-if (churchSpaceNode) mountDeferredScreen(churchSpaceNode, () => import("./church.jsx"), "ChurchSpace");
+if (churchSpaceNode) mountDeferredScreen(churchSpaceNode, () => import("./church-tool.jsx"), "ChurchToolPage");
 const projectionNode = document.querySelector("[data-projection-root]");
 if (projectionNode) mountDeferredScreen(projectionNode, () => import("./church.jsx"), "ProjectionScreen");
 const debateProjectionNode = document.querySelector("[data-debate-projection-root]");
@@ -60,7 +60,7 @@ window.unmountProfileSavedNoteCards = (container) => {
 };
 
 const navigationItems = [
-  ["profile", "Profile", "user"],
+  ["my-church", "Church Tool", "church"],
   ["ai", "Brother AI", "sparkles"],
   ["apologetics", "Debate", "shield"],
   ["home", "Home", "home"],
@@ -77,6 +77,7 @@ const iconPaths = {
   sparkles: ["m12 3-1.3 5.7L5 10l5.7 1.3L12 17l1.3-5.7L19 10l-5.7-1.3z", "m5 17-.6 2.4L2 20l2.4.6L5 23l.6-2.4L8 20l-2.4-.6z", "m19 3-.5 1.5L17 5l1.5.5L19 7l.5-1.5L21 5l-1.5-.5z"],
   shield: ["M12 3 20 6v5c0 5.2-3.4 8.8-8 10-4.6-1.2-8-4.8-8-10V6z", "m8.5 12 2.2 2.2 4.8-5"],
   user: ["M20 21a8 8 0 0 0-16 0", "M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8"],
+  church: ["M3 21h18", "M5 21V10l7-5 7 5v11", "M9 21v-6h6v6", "M12 2v3", "M10 4h4"],
 };
 
 function NavigationIcon({ name, hasActiveGradient = false }) {
