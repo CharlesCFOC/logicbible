@@ -34,10 +34,10 @@ export function createDictationSession({ createRecognition, getText, writeText, 
     session.stopping = true;
     emit(session, 'finishing', 'Microphone off. Finishing your transcription…');
     if (session.restartTimer !== null) {
-      finish(session, session.received ? 'Dictation added. You can edit the text.' : 'Dictation stopped.');
+      finish(session, session.received ? '' : 'Dictation stopped.');
       return;
     }
-    session.stopTimer = setTimeout(() => finish(session, session.received ? 'Dictation added. You can edit the text.' : 'No text received. You can try again.', false, true), 5000);
+    session.stopTimer = setTimeout(() => finish(session, session.received ? '' : 'No text received. You can try again.', false, true), 5000);
     try { session.recognition.stop(); }
     catch { finish(session, 'Dictation stopped. You can try again.', false, true); }
   }
@@ -94,7 +94,7 @@ export function createDictationSession({ createRecognition, getText, writeText, 
     recognition.onend = () => {
       if (active !== session) return;
       if (session.stopping) {
-        finish(session, session.limited ? `The ${maxLength}-character limit has been reached. You can edit the text.` : session.received ? 'Dictation added. You can edit the text.' : 'Dictation stopped.');
+        finish(session, session.limited ? `The ${maxLength}-character limit has been reached. You can edit the text.` : session.received ? '' : 'Dictation stopped.');
         return;
       }
       if (session.restartTimer !== null) return;
