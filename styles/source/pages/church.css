@@ -414,32 +414,32 @@ body .app-shell[data-app-background="black"] #my-church.church-screen .church-se
 }
 
 /* The create-session card reuses Prayer's deep-blue category surface. */
-#my-church.church-screen .church-session-hub > .church-panel:first-child {
+#my-church.church-screen .church-session-hub > .church-session-setup {
   border: 0 !important;
   color: #d2e1ec !important;
   background: rgba(29, 59, 82, .72) !important;
   box-shadow: none !important;
 }
-#my-church.church-screen .church-session-hub > .church-panel:first-child :is(h2, h3, p, label, strong, span) {
+#my-church.church-screen .church-session-hub > .church-session-setup :is(h2, h3, p, label, strong, span) {
   color: #d2e1ec !important;
 }
-#my-church.church-screen .church-session-hub > .church-panel:first-child > div:first-child p {
+#my-church.church-screen .church-session-hub > .church-session-setup > div:first-child p {
   color: #b3c9da !important;
 }
-body .app-shell[data-app-background="black"] #my-church.church-screen .church-session-hub > .church-panel:first-child {
+body .app-shell[data-app-background="black"] #my-church.church-screen .church-session-hub > .church-session-setup {
   color: #d2e1ec !important;
   background: rgba(29, 59, 82, .72) !important;
 }
-body .app-shell[data-app-background="black"] #my-church.church-screen .church-session-hub > .church-panel:first-child :is(h2, h3, p, label, strong, span) {
+body .app-shell[data-app-background="black"] #my-church.church-screen .church-session-hub > .church-session-setup :is(h2, h3, p, label, strong, span) {
   color: #d2e1ec !important;
 }
-body .app-shell[data-app-background="black"] #my-church.church-screen .church-session-hub > .church-panel:first-child > div:first-child p {
+body .app-shell[data-app-background="black"] #my-church.church-screen .church-session-hub > .church-session-setup > div:first-child p {
   color: #b3c9da !important;
 }
-#my-church.church-screen .church-session-hub > .church-panel:first-child .church-form { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-#my-church.church-screen .church-session-hub > .church-panel:first-child .church-form > .church-label:first-child,
-#my-church.church-screen .church-session-hub > .church-panel:first-child .church-form > .church-session-document,
-#my-church.church-screen .church-session-hub > .church-panel:first-child .church-form > button[type="submit"] { grid-column: 1 / -1; }
+#my-church.church-screen .church-session-hub > .church-session-setup .church-form { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+#my-church.church-screen .church-session-hub > .church-session-setup .church-form > .church-label:first-child,
+#my-church.church-screen .church-session-hub > .church-session-setup .church-form > .church-session-document,
+#my-church.church-screen .church-session-hub > .church-session-setup .church-form > button[type="submit"] { grid-column: 1 / -1; }
 .church-session-hub .church-session-password { min-width: 0; }
 .church-session-date-picker { position: relative; align-content: start; }
 .church-session-date-button {
@@ -459,7 +459,7 @@ body .app-shell[data-app-background="black"] #my-church.church-screen .church-se
 .church-session-date-button svg { flex: 0 0 20px; width: 20px; height: 20px; }
 .church-session-date-value { color: #b3c9da !important; font-size: 11px; font-weight: 600; }
 .church-session-date-native { position: absolute; z-index: -1; width: 1px !important; height: 1px !important; min-height: 1px !important; padding: 0 !important; border: 0 !important; opacity: 0; pointer-events: none; }
-#my-church.church-screen .church-session-hub > .church-panel:first-child .church-form :is(input:not([type="file"]):not(.church-session-date-native), input[type="file"]) {
+#my-church.church-screen .church-session-hub > .church-session-setup .church-form :is(input:not([type="file"]):not(.church-session-date-native), input[type="file"]) {
   min-height: 44px;
   padding: 9px 0;
   border: 0 !important;
@@ -469,14 +469,14 @@ body .app-shell[data-app-background="black"] #my-church.church-screen .church-se
   background: transparent !important;
   box-shadow: none !important;
 }
-#my-church.church-screen .church-session-hub > .church-panel:first-child .church-form input::placeholder { color: #b3c9da !important; opacity: 1; }
-#my-church.church-screen .church-session-hub > .church-panel:first-child .church-form input:focus-visible {
+#my-church.church-screen .church-session-hub > .church-session-setup .church-form input::placeholder { color: #b3c9da !important; opacity: 1; }
+#my-church.church-screen .church-session-hub > .church-session-setup .church-form input:focus-visible {
   border-bottom-color: #8bdcff !important;
   outline: 0;
   box-shadow: 0 1px 0 #8bdcff !important;
 }
-#my-church.church-screen .church-session-hub > .church-panel:first-child .church-form input[type="file"] { width: 100%; min-width: 0; color: #d2e1ec !important; }
-#my-church.church-screen .church-session-hub > .church-panel:first-child .church-form input[type="file"]::file-selector-button {
+#my-church.church-screen .church-session-hub > .church-session-setup .church-form input[type="file"] { width: 100%; min-width: 0; color: #d2e1ec !important; }
+#my-church.church-screen .church-session-hub > .church-session-setup .church-form input[type="file"]::file-selector-button {
   margin-right: 10px;
   padding: 7px 0;
   border: 0;
@@ -492,21 +492,21 @@ body .app-shell[data-app-background="black"] #my-church.church-screen .church-se
 #my-church.church-screen .church-session-file-trigger:focus-visible { color: #fff !important; background: rgba(83, 199, 228, .16) !important; }
 #my-church.church-screen .church-session-file-trigger svg { width: 21px; height: 21px; }
 #my-church.church-screen .church-session-file-name { min-width: 0; overflow: hidden; color: #8bdcff !important; font-size: 11px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
-#my-church.church-screen .church-session-hub > .church-panel:first-child .church-session-password > button.is-quiet { justify-self: start; min-height: 30px; padding: 0; color: #c4d9e5; background: transparent; text-decoration: underline; text-underline-offset: 3px; }
-body .app-shell[data-app-background="black"] #my-church.church-screen .church-session-hub > .church-panel:first-child .church-form :is(input:not([type="file"]):not(.church-session-date-native), input[type="file"]) {
+#my-church.church-screen .church-session-hub > .church-session-setup .church-session-password > button.is-quiet { justify-self: start; min-height: 30px; padding: 0; color: #c4d9e5; background: transparent; text-decoration: underline; text-underline-offset: 3px; }
+body .app-shell[data-app-background="black"] #my-church.church-screen .church-session-hub > .church-session-setup .church-form :is(input:not([type="file"]):not(.church-session-date-native), input[type="file"]) {
   border: 0 !important;
   border-bottom: 1px solid rgba(148, 205, 238, .32) !important;
   color: #f1f7fa !important;
   background: transparent !important;
   box-shadow: none !important;
 }
-body .app-shell[data-app-background="black"] #my-church.church-screen .church-session-hub > .church-panel:first-child .church-session-password > button.is-quiet {
+body .app-shell[data-app-background="black"] #my-church.church-screen .church-session-hub > .church-session-setup .church-session-password > button.is-quiet {
   color: #c4d9e5 !important;
   background: transparent !important;
 }
 @media (max-width: 360px) {
-  #my-church.church-screen .church-session-hub > .church-panel:first-child .church-form { grid-template-columns: 1fr; }
-  #my-church.church-screen .church-session-hub > .church-panel:first-child .church-form > .church-label { grid-column: 1 / -1; }
+  #my-church.church-screen .church-session-hub > .church-session-setup .church-form { grid-template-columns: 1fr; }
+  #my-church.church-screen .church-session-hub > .church-session-setup .church-form > .church-label { grid-column: 1 / -1; }
 }
 
 /* Swipeable carousel for live sessions and joining a session. */

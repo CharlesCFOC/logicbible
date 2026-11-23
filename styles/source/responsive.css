@@ -1105,8 +1105,8 @@ html body .app-shell[data-app-background].is-debate-room .phone-frame .reusable-
   backdrop-filter: blur(18px) !important;
 }
 /* Session creation uses the blue card as its surface; keep its controls transparent. */
-html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-panel:first-child .church-form input:not([type="file"]):not(.church-session-date-native),
-html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-panel:first-child .church-form input[type="file"]:not(.church-session-file-input) {
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup .church-form input:not([type="file"]):not(.church-session-date-native),
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup .church-form input[type="file"]:not(.church-session-file-input) {
   border: 0 !important;
   border-radius: 10px !important;
   color: #f1f7fa !important;
@@ -1117,13 +1117,13 @@ html body .app-shell[data-app-background] .phone-frame #my-church.church-screen 
   -webkit-appearance: none;
   appearance: none;
 }
-html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-panel:first-child .church-form input[type="file"]:not(.church-session-file-input)::file-selector-button {
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup .church-form input[type="file"]:not(.church-session-file-input)::file-selector-button {
   border: 0 !important;
   color: #e7f2f8 !important;
   background: transparent !important;
 }
-html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-panel:first-child .church-form > .church-session-document,
-html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-panel:first-child .church-form > button[type="submit"] {
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup .church-form > .church-session-document,
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup .church-form > button[type="submit"] {
   grid-column: 1 / -1 !important;
   width: 100%;
 }
@@ -1167,13 +1167,13 @@ html body .app-shell #kids-bible .kids-adventure-resume:hover .kids-adventure-re
 }
 
 /* Explicit document colours keep the blue session card readable in every theme. */
-html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-panel:first-child .church-form .church-session-files { grid-column: 1 / -1; display: grid; gap: 10px; width: 100%; min-width: 0; margin: 0; padding: 0; list-style: none; }
-html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-panel:first-child .church-form .church-session-files li { display: flex; align-items: center; gap: 12px; min-width: 0; padding: 12px; border: 1px solid #52758e; border-radius: 12px; background: #193b53; color: #f3f8fc !important; text-align: left; }
-html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-panel:first-child .church-form .church-session-document-name { flex: 1; min-width: 0; color: #f3f8fc !important; font-size: 14px; line-height: 1.45; overflow-wrap: anywhere; text-align: left; word-spacing: normal; }
-html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-panel:first-child .church-form .church-session-file-name { color: #dcf2ff !important; font-size: 13px; }
-html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-panel:first-child .church-form .church-session-remove-file { flex: 0 0 auto; min-height: 44px; padding: 8px 12px; border: 1px solid #d9efff !important; background: #d9efff !important; color: #17364d !important; font-weight: 700; }
-html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-panel:first-child .church-form .church-session-remove-file:hover { background: #fff !important; }
-html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-panel:first-child .church-form :is(.church-session-remove-file, .church-session-file-trigger):focus-visible { outline: 3px solid #8bdcff !important; outline-offset: 3px; }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup .church-form .church-session-files { grid-column: 1 / -1; display: grid; gap: 10px; width: 100%; min-width: 0; margin: 0; padding: 0; list-style: none; }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup .church-form .church-session-files li { display: flex; align-items: center; gap: 12px; min-width: 0; padding: 12px; border: 1px solid #52758e; border-radius: 12px; background: #193b53; color: #f3f8fc !important; text-align: left; }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup .church-form .church-session-document-name { flex: 1; min-width: 0; color: #f3f8fc !important; font-size: 14px; line-height: 1.45; overflow-wrap: anywhere; text-align: left; word-spacing: normal; }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup .church-form .church-session-file-name { color: #dcf2ff !important; font-size: 13px; }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup .church-form .church-session-remove-file { flex: 0 0 auto; min-height: 44px; padding: 8px 12px; border: 1px solid #d9efff !important; background: #d9efff !important; color: #17364d !important; font-weight: 700; }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup .church-form .church-session-remove-file:hover { background: #fff !important; }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup .church-form :is(.church-session-remove-file, .church-session-file-trigger):focus-visible { outline: 3px solid #8bdcff !important; outline-offset: 3px; }
 
 /* Compact review, on the existing blue session surface. */
 html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup.is-review { padding: 14px !important; }
@@ -1196,3 +1196,8 @@ html body .app-shell[data-app-background] .phone-frame #my-church.church-screen 
 html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup.is-review [hidden] { display: none !important; }
 html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup.is-review .church-draft-game-empty { min-height: 140px; gap: 8px; }
 html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup.is-review .church-review-document-summary { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* Status messages must not change the review surface or its contrast. */
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup.is-review { background: transparent !important; border: 0 !important; box-shadow: none !important; color: #e4f1fa !important; }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup.is-review :is(h2, h3, .church-draft-carousel-controls > span) { color: #e4f1fa !important; }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-feedback { background: rgba(19, 48, 70, .85) !important; color: #e4f1fa !important; border: 0 !important; box-shadow: none !important; font-size: 13px; padding: 10px 14px; }
