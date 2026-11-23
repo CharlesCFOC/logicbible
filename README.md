@@ -105,7 +105,8 @@ Pour voir la disposition sans créer de session :
 
 ## Android automatic web updates
 
-Install the APK with native version `1.1` once to enable automatic web updates.
+Install the APK with native version `1.2` to enable automatic web updates and microphone access.
+Version 1.2 declares Android audio permissions; older APKs must be upgraded for voice search.
 It checks `https://logicbible.vercel.app/mobile-updates/latest.json` on startup
 and when returning to the foreground (at most once every ten minutes).
 Updates download in the background and apply on the next cold start; the app

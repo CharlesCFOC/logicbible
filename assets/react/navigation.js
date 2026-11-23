@@ -9695,7 +9695,7 @@ function Ie() {
 				o ? _(o) : (a("error"), s("Je n’ai pas trouvé le livre, le chapitre et le verset dans la transcription. Réessayez."));
 			} catch (e) {
 				if (e.name === "AbortError") return;
-				f.current === n && (f.current = null), m.current = null, a("error"), s(e.message || "La transcription IA a échoué. Réessayez.");
+				f.current === n && (f.current = null), m.current = null, a("error"), s(e.name === "NotAllowedError" ? "Autorisez le microphone dans les paramètres de l’application. Sur Android, installez la version 1.2 ou ultérieure." : e.message || "La transcription IA a échoué. Réessayez.");
 			}
 		})();
 	};
@@ -10377,7 +10377,7 @@ function it() {
 // node_modules/@capawesome/capacitor-live-update/dist/esm/index.js
 var at = a("LiveUpdate", { web: () => import("./web-DKGBeYoZ.js").then((e) => new e.LiveUpdateWeb()) }), ot = {
 	origin: "https://logicbible.vercel.app",
-	nativeVersion: "1.1"
+	nativeVersion: "1.2"
 };
 // src/react/mobile-updates.js
 async function st() {

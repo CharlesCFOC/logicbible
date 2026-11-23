@@ -224,7 +224,9 @@ export function BibleVoiceSearch() {
         if (recording.current === session) recording.current = null;
         requestController.current = null;
         setPhase("error");
-        setMessage(error.message || "La transcription IA a échoué. Réessayez.");
+        setMessage(error.name === "NotAllowedError"
+          ? "Autorisez le microphone dans les paramètres de l’application. Sur Android, installez la version 1.2 ou ultérieure."
+          : error.message || "La transcription IA a échoué. Réessayez.");
       }
     })();
   };
