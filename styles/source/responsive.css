@@ -1165,3 +1165,12 @@ html body .app-shell #kids-bible .kids-adventure-resume-arrow {
 html body .app-shell #kids-bible .kids-adventure-resume:hover .kids-adventure-resume-arrow {
   background: rgba(18, 47, 75, .52);
 }
+
+/* Explicit document colours keep the blue session card readable in every theme. */
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-panel:first-child .church-form .church-session-files { grid-column: 1 / -1; display: grid; gap: 10px; width: 100%; min-width: 0; margin: 0; padding: 0; list-style: none; }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-panel:first-child .church-form .church-session-files li { display: flex; align-items: center; gap: 12px; min-width: 0; padding: 12px; border: 1px solid #52758e; border-radius: 12px; background: #193b53; color: #f3f8fc !important; text-align: left; }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-panel:first-child .church-form .church-session-document-name { flex: 1; min-width: 0; color: #f3f8fc !important; font-size: 14px; line-height: 1.45; overflow-wrap: anywhere; text-align: left; word-spacing: normal; }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-panel:first-child .church-form .church-session-file-name { color: #dcf2ff !important; font-size: 13px; }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-panel:first-child .church-form .church-session-remove-file { flex: 0 0 auto; min-height: 44px; padding: 8px 12px; border: 1px solid #d9efff !important; background: #d9efff !important; color: #17364d !important; font-weight: 700; }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-panel:first-child .church-form .church-session-remove-file:hover { background: #fff !important; }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-panel:first-child .church-form :is(.church-session-remove-file, .church-session-file-trigger):focus-visible { outline: 3px solid #8bdcff !important; outline-offset: 3px; }
