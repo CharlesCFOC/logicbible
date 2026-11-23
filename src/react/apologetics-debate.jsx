@@ -4,6 +4,7 @@ import { confidenceScoringRows, getConfidenceScoringInstruction, normalizeConfid
 import { opponentPersonalities } from "../../lib/ai/debate-personality.js";
 import { highlightBibleCitations } from "../../lib/ai/bible-citations.js";
 import { AiComposer, AiIcon, AiMessage } from "./ai.jsx";
+import { useDictation } from "./use-dictation.js";
 import { debateDifficultyDescriptions, debateScoringRubrics, getDebateDifficulty } from "../../lib/ai/debate-difficulty.js";
 import { debateThemes } from "../../lib/ai/debate-topics.js";
 import { DebateTrainingControls } from "./debate-training.jsx";
@@ -211,6 +212,7 @@ function DebateRoomView({ theme, question, difficulty, opponentPersonality = "se
   ];
   const [messages, setMessages] = useState(() => normalizeDebateOpening(savedMessages?.length ? savedMessages : readDebateConversation(theme, question), question) || initialMessages);
   const [draft, setDraft] = useState("");
+  const dictation = useDictation({ values: { message: draft }, onChange: (_, text) => setDraft(text), language: "en", maxLength: 4000 });
   const [pending, setPending] = useState(false);
   const [verseSupportOpen, setVerseSupportOpen] = useState(false);
   const [verseSupportLoading, setVerseSupportLoading] = useState(false);
@@ -502,7 +504,7 @@ function DebateRoomView({ theme, question, difficulty, opponentPersonality = "se
     </div>
     {isDebateScreenActive && createPortal(
       <>
-        <AiComposer value={draft} onChange={setDraft} onSubmit={sendMessage} placeholder="Type your response..." ariaLabel="Type your response" disabled={pending} className="apologetics-debate-composer" submitLabel="Send response" />
+        <AiComposer value={draft} onChange={setDraft} onSubmit={sendMessage} placeholder="Type your response..." ariaLabel="Type your response" disabled={pending} className="apologetics-debate-composer" submitLabel="Send response" dictation={dictation} />
         {verseSupportOpen && (
           <div className="apologetics-debate-verse-overlay" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setVerseSupportOpen(false); }}>
             <section className="apologetics-debate-verse-modal" role="dialog" aria-modal="true" aria-labelledby="verse-support-title">

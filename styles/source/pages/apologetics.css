@@ -4424,3 +4424,17 @@
 #apologetics .think-room-resume-arrow { color: #afe7ff; font-size: 22px; font-size: clamp(22px, calc(17.6px + 1.375cqw), 23.76px); }
 #apologetics .think-room-resume:focus-visible { outline: 3px solid #afe7ff; outline-offset: 3px; }
 @media (max-width: 360px) { #apologetics .think-room-resume { gap: 10px; padding: 14px; } #apologetics .think-room-resume-copy strong { font-size: 13px; font-size: clamp(13px, calc(10.4px + 0.8125cqw), 14.04px); } }
+
+/* The debate reply composer shares the app dictation control and voice meter. */
+.app-shell.is-debate-room .apologetics-debate-composer .church-dictation { flex: 1 1 auto; min-width: 0; }
+.app-shell.is-debate-room .apologetics-debate-composer .church-dictation-input { position: relative; min-width: 0; }
+.app-shell.is-debate-room .apologetics-debate-composer .church-dictation-input textarea { min-height: 96px; max-height: 220px; padding: 10px 58px 48px 10px; overflow-y: auto; }
+.app-shell.is-debate-room .apologetics-debate-composer .church-voice-meter { position: absolute; bottom: 9px; left: 8px; display: flex; align-items: center; width: min(168px, calc(100% - 66px)); height: 32px; padding: 2px 8px; border-radius: 10px; background: rgba(67, 155, 197, .2); pointer-events: none; }
+.app-shell.is-debate-room .apologetics-debate-composer .church-voice-meter[hidden] { display: none; }
+.app-shell.is-debate-room .apologetics-debate-composer .church-voice-meter canvas { display: block; width: 100%; height: 28px; }
+.app-shell.is-debate-room .apologetics-debate-composer .church-dictation-button { position: absolute; right: 7px; bottom: 7px; z-index: 2; display: grid; place-items: center; width: 38px; height: 38px; min-height: 38px; padding: 9px; border: 0; border-radius: 50%; color: #fff; background: linear-gradient(135deg, #34d5ed, #2774eb); }
+.app-shell.is-debate-room .apologetics-debate-composer .church-dictation-button[aria-pressed="true"] { background: #b64560; }
+.app-shell.is-debate-room .apologetics-debate-composer .church-dictation-toolbar { position: absolute; left: 12px; bottom: 42px; }
+.app-shell.is-debate-room .apologetics-debate-composer .church-dictation-indicator { color: #cceeff; font-size: 10px; }
+.app-shell.is-debate-room .apologetics-debate-composer .church-dictation-indicator i { background: #8bdcff; }
+.app-shell.is-debate-room .apologetics-debate-composer .church-dictation-status { position: absolute; bottom: calc(100% + 4px); left: 10px; margin: 0; color: #d8efff; font-size: 11px; }
