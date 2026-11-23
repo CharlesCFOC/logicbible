@@ -1,3 +1,4 @@
+import { replaceCoursePassage } from "../shared/course-passage-edit.js";
 import { courseReadingLines } from "../shared/course-reading-lines.js";
 import React, { useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
@@ -11,6 +12,36 @@ function churchErrorMessage(failure) {
     return "La bibliothèque d’études de l’église n’est pas encore configurée. La création et l’accès aux sessions restent disponibles.";
   }
   return message || "Une erreur est survenue.";
+}
+
+function EditableCoursePassage({ text, editable, onCommit }) {
+  const element = useRef(null);
+  const beforeEdit = useRef("");
+  useEffect(() => {
+    const node = element.current;
+    if (!node || document.activeElement === node) return;
+    const paragraphs = courseReadingLines(text).map(parts => {
+      const p = document.createElement("p");
+      for (const part of parts) {
+        if (part.date || part.parenthetical) {
+          const span = document.createElement("span");
+          span.className = part.date ? "church-reading-date" : "church-reading-parenthetical";
+          span.textContent = part.text;
+          p.append(span);
+        } else p.append(document.createTextNode(part.text));
+      }
+      return p;
+    });
+    node.replaceChildren(...paragraphs);
+  }, [text, editable]);
+  return <div ref={element} className="church-review-paragraphs" contentEditable={editable ? "plaintext-only" : false}
+    role={editable ? "textbox" : undefined} aria-multiline={editable ? "true" : undefined}
+    aria-label={editable ? "Modifier le texte de cette partie" : undefined} tabIndex={editable ? 0 : undefined}
+    onFocus={event => { beforeEdit.current = event.currentTarget.innerText; }}
+    onBlur={event => {
+      const value = event.currentTarget.innerText;
+      if (value !== beforeEdit.current) onCommit(value.replace(/\r\n?/g, "\n").replace(/\n+/g, "\n\n"));
+    }} />;
 }
 
 function OpenSessions() {
@@ -102,7 +133,7 @@ function OpenSessions() {
     });
   }
 
-  const passagesAreCurrent = Boolean(courseContent?.sourceText && Array.isArray(courseContent.passages) && courseContent.passages.length && courseContent.passages.join("") === courseContent.sourceText);
+  const passagesAreCurrent = Boolean(Array.isArray(courseContent?.passages) && courseContent.passages.length && courseContent.passages.join("") === courseContent.sourceText);
   const reviewPages = passagesAreCurrent ? courseContent.passages : [];
   const flowItems = reviewPages.flatMap((page, pageIndex) => {
     const activities = courseContent?.activities || [];
@@ -145,7 +176,7 @@ function OpenSessions() {
         {busy && <div className="church-ai-progress" role="status"><span /><progress aria-label="Analyse du cours" />Analyse du cours en cours…</div>}
         <button type="submit" disabled={busy || !courseFiles.length}>Continuer : vérifier et créer</button>
       </form> : <div className="church-course-review">
-        <div className="church-review-actions"><button type="button" className="is-quiet" disabled={busy} onClick={() => { setCourseContent(null); setCreated(null); setReviewTab("read"); }}>Retour au formulaire</button><button type="button" disabled={busy || Boolean(created) || !passagesAreCurrent || !name.trim() || !courseContent.sourceText?.trim()} onClick={() => act(async () => {
+        <div className="church-review-actions"><button type="button" className="is-quiet" disabled={busy} onClick={() => { setCourseContent(null); setCreated(null); setReviewTab("read"); }}>Retour au formulaire</button><button type="button" disabled={busy || Boolean(created) || courseContent.sourceText.length > 60000 || reviewPages.some(page => !page.trim() || page.length > 8000) || !passagesAreCurrent || !name.trim() || !courseContent.sourceText?.trim()} onClick={() => act(async () => {
           const session = await bridge().createOpenSession(name, createPassword, scheduledAt ? new Date(scheduledAt).toISOString() : null, courseContent, sourceDocumentName, courseFiles);
           setCreated(session); setAdminCode(session.accessCode);
         }, "Session validée. Votre code et votre QR sont prêts.")}>{created ? "Session créée" : busy ? "En cours…" : "Créer la session"}</button></div>
@@ -154,9 +185,9 @@ function OpenSessions() {
           <button type="button" aria-pressed={reviewTab === "edit"} onClick={() => setReviewTab("edit")}>Éditer le texte</button>
         </div>
         <p className="church-review-document-summary">{sourceDocumentName}</p>
-        <div className="church-course-source-editor" hidden={reviewTab !== "edit"}><label className="church-label">Texte original extrait · modifiable<textarea rows="7" maxLength="60000" value={courseContent.sourceText || ""} onChange={event => setCourseContent(current => ({ ...current, sourceText: event.target.value, passages: [], activities: distributeCourseActivities(current.activities, splitCourseText(event.target.value).length) }))} /></label><button type="button" className="is-quiet" disabled={busy || !courseContent.sourceText?.trim()} onClick={() => act(async () => { const passages = await bridge().segmentOpenSession(courseContent.sourceText); setCourseContent(current => ({ ...current, passages, activities: distributeCourseActivities(current.activities, passages.length) })); }, "Le texte a été réorganisé en cartes de lecture.")}>Enregistrer et réorganiser les cartes</button></div>
-        {!passagesAreCurrent && <p className="church-feedback" role="status">Le texte a changé. Réorganise les cartes avec l’IA avant de continuer.</p>}
-        <div className="church-draft-carousel" hidden={reviewTab !== "read"} aria-label="Cartes du cours" aria-roledescription="carrousel">
+        {reviewTab === "edit" && <p className="church-review-edit-hint">Cliquez dans le texte pour le modifier. Les changements sont conservés dans ce brouillon lorsque vous quittez la zone.</p>}
+        {(!courseContent.sourceText?.trim() || courseContent.sourceText.length > 60000 || reviewPages.some(page => !page.trim() || page.length > 8000)) && <p className="church-feedback" role="alert">Chaque partie doit contenir du texte et rester sous 8 000 caractères, avec 60 000 caractères maximum pour le cours.</p>}
+        <div className="church-draft-carousel" aria-label="Cartes du cours" aria-roledescription="carrousel">
           <div className="church-draft-carousel-controls">
             <button type="button" aria-label="Carte précédente" disabled={draftCardIndex <= 0} onClick={() => goToDraftCard(draftCardIndex - 1)}>←</button>
             <span aria-live="polite">{flowItems[draftCardIndex]?.type === "activity" ? `Jeu après la partie ${flowItems[draftCardIndex].pageIndex + 1}` : flowItems[draftCardIndex]?.type === "generate" ? `Jeu à générer · partie ${flowItems[draftCardIndex].pageIndex + 1}` : `Lecture · partie ${(flowItems[draftCardIndex]?.pageIndex || 0) + 1}`} · {draftCardIndex + 1} / {flowItems.length}</span>
@@ -164,7 +195,7 @@ function OpenSessions() {
           </div>
           <div className="church-draft-carousel-track" ref={draftCarousel} onScroll={event => { const track = event.currentTarget; setDraftCardIndex(Math.round(track.scrollLeft / Math.max(1, track.clientWidth))); }}>
             {flowItems.map((item, cardIndex) => item.type === "text" ? <article className="church-course-book-page church-draft-slide" key={`passage-${item.pageIndex}`} aria-label={`Texte, partie ${item.pageIndex + 1}`}>
-              <div className="church-course-flow-part-heading"><small>LECTURE · PARTIE {item.pageIndex + 1} / {reviewPages.length}</small><span>Texte original</span></div><div className="church-review-paragraphs">{courseReadingLines(item.page).map((parts, index) => <p key={index}>{parts.map((part, partIndex) => part.date || part.parenthetical ? <span className={part.date ? "church-reading-date" : "church-reading-parenthetical"} key={partIndex}>{part.text}</span> : part.text)}</p>)}</div>
+              <div className="church-course-flow-part-heading"><small>LECTURE · PARTIE {item.pageIndex + 1} / {reviewPages.length}</small><span>Texte original</span></div><EditableCoursePassage text={item.page} editable={reviewTab === "edit" && !busy && !created} onCommit={text => setCourseContent(current => replaceCoursePassage(current, item.pageIndex, text))} />
             </article> : item.type === "generate" ? <article className="church-draft-slide church-draft-game-empty" key={`generate-${item.pageIndex}`} aria-label={`Jeu à générer après la partie ${item.pageIndex + 1}`}><span>ACTIVITÉ · APRÈS LA PARTIE {item.pageIndex + 1}</span><p>Un jeu peut être créé à partir du passage que vous venez de lire.</p><button type="button" disabled={busy || (courseContent.activities || []).length >= Math.min(8, reviewPages.length)} onClick={() => generateActivity(item.pageIndex)}>{busy ? "Génération en cours…" : "Générer un jeu"}</button></article> : <article className="church-course-activity church-course-flow-activity church-draft-slide" key={`activity-${item.activityIndex}`} aria-label={`Jeu ${item.activityIndex + 1}, après la partie ${item.pageIndex + 1}`}>
               <div className="church-course-flow-activity-heading"><span>JEU {item.activityIndex + 1} · APRÈS LA PARTIE {item.pageIndex + 1}</span><div className="church-course-flow-move"><button type="button" className="is-quiet" aria-label="Déplacer le jeu vers une partie précédente" title="Déplacer vers une partie précédente" disabled={!reviewPages.slice(0, item.pageIndex).some((_, index) => !courseContent.activities.some((other, otherIndex) => otherIndex !== item.activityIndex && Number(other.afterPage) === index))} onClick={() => moveActivity(item.activityIndex, -1)}>↑</button><button type="button" className="is-quiet" aria-label="Déplacer le jeu vers une partie suivante" title="Déplacer vers une partie suivante" disabled={!reviewPages.slice(item.pageIndex + 1).some((_, offset) => !courseContent.activities.some((other, otherIndex) => otherIndex !== item.activityIndex && Number(other.afterPage) === item.pageIndex + 1 + offset))} onClick={() => moveActivity(item.activityIndex, 1)}>↓</button><button type="button" className="is-quiet" onClick={() => setCourseContent(current => ({ ...current, activities: current.activities.filter((_, index) => index !== item.activityIndex) }))}>Retirer</button></div></div>
               <div className="church-course-flow-fields">

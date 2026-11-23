@@ -1209,3 +1209,9 @@ html body .app-shell[data-app-background] .phone-frame #my-church.church-screen 
 
 html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup.is-review .church-review-paragraphs p { text-align: justify; text-align-last: start; white-space: normal; }
 html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup.is-review .church-review-paragraphs p .church-reading-date { color: #ffd58a !important; font-size: inherit !important; font-weight: 700; }
+
+.church-session-setup.is-review .church-review-paragraphs[contenteditable="plaintext-only"] { cursor: text; min-height: 120px; caret-color: #8bdcff; border-radius: 6px; }
+.church-session-setup.is-review .church-review-paragraphs[contenteditable="plaintext-only"]:focus { outline: 1px solid #8bdcff; outline-offset: 4px; }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup.is-review .church-review-edit-hint { font-size: 12px !important; margin: 0; color: #c8deed !important; }
+
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup.is-review .church-review-paragraphs[contenteditable="plaintext-only"] { font-size: 14px !important; line-height: 1.8; text-align: justify; text-align-last: start; white-space: pre-wrap; color: #e4f1fa !important; }
