@@ -10488,15 +10488,15 @@ async function ct() {
 var lt = document.querySelector("[data-react-page-top-spacer-root]");
 lt && (0, m.createRoot)(lt).render(/* @__PURE__ */ (0, h.jsx)(at, {}));
 var ut = document.querySelector("[data-react-church-root]");
-ut && g(ut, () => import("./church-DaWrtZwY.js"), "ChurchSpace");
+ut && g(ut, () => import("./church-CzULZ-DI.js"), "ChurchSpace");
 var dt = document.querySelector("[data-projection-root]");
-dt && g(dt, () => import("./church-DaWrtZwY.js"), "ProjectionScreen");
+dt && g(dt, () => import("./church-CzULZ-DI.js"), "ProjectionScreen");
 var ft = document.querySelector("[data-debate-projection-root]");
 ft && g(ft, () => import("./debate-projection-BXKW8O_n.js").then((e) => e.n), "DebateProjectionScreen");
 var pt = document.querySelector("[data-evangelism-pilot-root]");
 pt && g(pt, () => import("./church-mode-BBY77Cyu.js"), "ChurchModePage");
 var mt = document.querySelector("[data-session-admin-root]");
-if (mt && g(mt, () => import("./church-DaWrtZwY.js"), "SessionAdmin"), o.isNativePlatform()) {
+if (mt && g(mt, () => import("./church-CzULZ-DI.js"), "SessionAdmin"), o.isNativePlatform()) {
 	let e = a("GentleHaptics");
 	window.appButtonHaptic = () => {
 		let t = localStorage.getItem("brother.hapticsStrength") || "1", n = {

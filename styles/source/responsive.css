@@ -1217,3 +1217,14 @@ html body .app-shell[data-app-background] .phone-frame #my-church.church-screen 
 html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup.is-review .church-review-paragraphs[contenteditable="plaintext-only"] { font-size: 14px !important; line-height: 1.8; text-align: justify; text-align-last: start; white-space: pre-wrap; color: #e4f1fa !important; }
 html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup.is-review .church-review-paragraphs[contenteditable="plaintext-only"] { border: 1px solid rgba(139, 220, 255, .6); padding: 10px; box-sizing: border-box; }
 html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup.is-review .church-review-paragraphs[contenteditable="plaintext-only"]:focus { border-color: #8bdcff; outline: none; }
+
+/* Session game editor: distinguish placement, choices and answer review without white cards. */
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub .church-course-flow-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 14px; }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub .church-activity-question,
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub .church-activity-group { grid-column: 1 / -1; }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub .church-activity-group { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 14px; border: 0; border-radius: 14px; background: rgba(139, 220, 255, .09); }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub .church-activity-group h4 { grid-column: 1 / -1; margin: 0; padding-bottom: 8px; border-bottom: 1px solid rgba(139, 220, 255, .22); color: #bfeaff; font-size: 13px; font-weight: 800; }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub .church-activity-group .church-label { min-width: 0; color: #e4f1fa; }
+@media (max-width: 560px) {
+  html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub .church-activity-group { grid-template-columns: 1fr; }
+}
