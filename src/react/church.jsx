@@ -184,8 +184,6 @@ function OpenSessions() {
           <button type="button" aria-pressed={reviewTab === "read"} onClick={() => setReviewTab("read")}>Lecture et activités</button>
           <button type="button" aria-pressed={reviewTab === "edit"} onClick={() => setReviewTab("edit")}>Éditer le texte</button>
         </div>
-        <p className="church-review-document-summary">{sourceDocumentName}</p>
-        {reviewTab === "edit" && <p className="church-review-edit-hint">Cliquez dans le texte pour le modifier. Les changements sont conservés dans ce brouillon lorsque vous quittez la zone.</p>}
         {(!courseContent.sourceText?.trim() || courseContent.sourceText.length > 60000 || reviewPages.some(page => !page.trim() || page.length > 8000)) && <p className="church-feedback" role="alert">Chaque partie doit contenir du texte et rester sous 8 000 caractères, avec 60 000 caractères maximum pour le cours.</p>}
         <div className="church-draft-carousel" aria-label="Cartes du cours" aria-roledescription="carrousel">
           <div className="church-draft-carousel-controls">
