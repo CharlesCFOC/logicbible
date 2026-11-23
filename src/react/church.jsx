@@ -20,6 +20,7 @@ function OpenSessions() {
   const [createPassword, setCreatePassword] = useState("");
   const [courseFiles, setCourseFiles] = useState([]);
   const [courseContent, setCourseContent] = useState(null);
+  const [reviewTab, setReviewTab] = useState("read");
   const [sourceDocumentName, setSourceDocumentName] = useState("");
   const [showCreatePassword, setShowCreatePassword] = useState(false);
   const [created, setCreated] = useState(null);
@@ -128,12 +129,12 @@ function OpenSessions() {
   return <div className="church-session-hub">
     {error && <p className="church-feedback is-error" role="alert">{error}</p>}
     {message && <p className="church-feedback" role="status">{message}</p>}
-    <section className="church-panel">
+    <section className={`church-panel church-session-setup${courseContent ? " is-review" : ""}`}>
       <div><h2>{courseContent ? "Relire le cours et placer les activités" : "Créer une session"}</h2></div>
       {!courseContent ? <form className="church-form" onSubmit={event => { event.preventDefault(); if (!courseFiles.length) { setError("Choisissez le document du cours."); return; } act(async () => {
         const result = await bridge().prepareOpenSession(courseFiles);
         const pages = coursePassages(result.courseContent?.sourceText || "", result.courseContent?.passages).length;
-        setCourseContent({ ...result.courseContent, activities: distributeCourseActivities(result.courseContent?.activities, pages) }); setSourceDocumentName(result.sourceDocumentName);
+        setCourseContent({ ...result.courseContent, activities: distributeCourseActivities(result.courseContent?.activities, pages) }); setSourceDocumentName(result.sourceDocumentName); setReviewTab("read");
       }, "Les documents sont extraits. Vérifiez le texte avant de continuer."); }}>
         <label className="church-label">Nom de la session<input className="church-session-minimal-input" required minLength="2" maxLength="120" value={name} onChange={event => setName(event.target.value)} placeholder="Ex. Étude biblique de vendredi" /></label>
         <label className="church-label church-session-password">Mot de passe administrateur<input className="church-session-minimal-input" type={showCreatePassword ? "text" : "password"} required minLength="2" maxLength="128" autoComplete="new-password" value={createPassword} onChange={event => setCreatePassword(event.target.value)} /><button type="button" className="is-quiet" onClick={() => setShowCreatePassword(value => !value)}>{showCreatePassword ? "Masquer" : "Afficher"}</button></label>
@@ -141,12 +142,20 @@ function OpenSessions() {
         <div className="church-label church-session-document"><span>Documents du cours · PDF, Word, PowerPoint, texte ou images · 10 fichiers, 2,5 Mo au total</span><div className="church-session-upload-control"><input ref={courseFileInput} className="church-session-minimal-input church-session-file-input" type="file" multiple disabled={busy} accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.md,.rtf,.odt,.jpg,.jpeg,.png,.webp" aria-hidden="true" tabIndex={-1} onChange={event => { const files = Array.from(event.target.files || []); setCourseFiles(current => [...current, ...files]); event.target.value = ""; }} /><button type="button" className="church-session-file-trigger" aria-label="Choisir un document du cours" title="Choisir un document" onClick={() => courseFileInput.current?.click()}><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><path d="M12 16V3m0 0L7 8m5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg></button><small className="church-session-file-name" aria-live="polite">{courseFiles.length ? `${courseFiles.length} document(s)` : "Aucun fichier choisi"}</small></div></div>
         {courseFiles.length > 0 && <ul className="church-session-files">{courseFiles.map((file, index) => <li key={`${file.name}-${index}`}><span className="church-session-document-name">{file.name}</span> <button type="button" className="is-quiet church-session-remove-file" disabled={busy} aria-label={`Retirer ${file.name}`} onClick={() => setCourseFiles(files => files.filter((_, i) => i !== index))}>Retirer</button></li>)}</ul>}
         {busy && <div className="church-ai-progress" role="status"><span /><progress aria-label="Analyse du cours" />Analyse du cours en cours…</div>}
-        <button type="submit" disabled={busy || !courseFiles.length}>Analyser les documents</button>
+        <button type="submit" disabled={busy || !courseFiles.length}>Continuer : vérifier et créer</button>
       </form> : <div className="church-course-review">
-        <p className="church-feedback">Document analysé : <strong>{sourceDocumentName}</strong>.</p>
-        <details className="church-course-source-editor"><summary>Modifier la transcription complète</summary><label className="church-label">Texte original extrait · modifiable<textarea rows="12" maxLength="60000" value={courseContent.sourceText || ""} onChange={event => setCourseContent(current => ({ ...current, sourceText: event.target.value, passages: [], activities: distributeCourseActivities(current.activities, splitCourseText(event.target.value).length) }))} /></label><button type="button" className="is-quiet" disabled={busy || !courseContent.sourceText?.trim()} onClick={() => act(async () => { const passages = await bridge().segmentOpenSession(courseContent.sourceText); setCourseContent(current => ({ ...current, passages, activities: distributeCourseActivities(current.activities, passages.length) })); }, "Le texte a été réorganisé en cartes de lecture.")}>Réorganiser les cartes avec l’IA</button></details>
+        <div className="church-review-actions"><button type="button" className="is-quiet" disabled={busy} onClick={() => { setCourseContent(null); setCreated(null); setReviewTab("read"); }}>Retour au formulaire</button><button type="button" disabled={busy || Boolean(created) || !passagesAreCurrent || !name.trim() || !courseContent.sourceText?.trim()} onClick={() => act(async () => {
+          const session = await bridge().createOpenSession(name, createPassword, scheduledAt ? new Date(scheduledAt).toISOString() : null, courseContent, sourceDocumentName, courseFiles);
+          setCreated(session); setAdminCode(session.accessCode);
+        }, "Session validée. Votre code et votre QR sont prêts.")}>{created ? "Session créée" : busy ? "En cours…" : "Créer la session"}</button></div>
+        <div className="church-review-tabs" role="group" aria-label="Affichage du cours">
+          <button type="button" aria-pressed={reviewTab === "read"} onClick={() => setReviewTab("read")}>Lecture et activités</button>
+          <button type="button" aria-pressed={reviewTab === "edit"} onClick={() => setReviewTab("edit")}>Éditer le texte</button>
+        </div>
+        <p className="church-review-document-summary">{sourceDocumentName}</p>
+        <div className="church-course-source-editor" hidden={reviewTab !== "edit"}><label className="church-label">Texte original extrait · modifiable<textarea rows="7" maxLength="60000" value={courseContent.sourceText || ""} onChange={event => setCourseContent(current => ({ ...current, sourceText: event.target.value, passages: [], activities: distributeCourseActivities(current.activities, splitCourseText(event.target.value).length) }))} /></label><button type="button" className="is-quiet" disabled={busy || !courseContent.sourceText?.trim()} onClick={() => act(async () => { const passages = await bridge().segmentOpenSession(courseContent.sourceText); setCourseContent(current => ({ ...current, passages, activities: distributeCourseActivities(current.activities, passages.length) })); }, "Le texte a été réorganisé en cartes de lecture.")}>Enregistrer et réorganiser les cartes</button></div>
         {!passagesAreCurrent && <p className="church-feedback" role="status">Le texte a changé. Réorganise les cartes avec l’IA avant de continuer.</p>}
-        <div className="church-draft-carousel" aria-label="Cartes du cours" aria-roledescription="carrousel">
+        <div className="church-draft-carousel" hidden={reviewTab !== "read"} aria-label="Cartes du cours" aria-roledescription="carrousel">
           <div className="church-draft-carousel-controls">
             <button type="button" aria-label="Carte précédente" disabled={draftCardIndex <= 0} onClick={() => goToDraftCard(draftCardIndex - 1)}>←</button>
             <span aria-live="polite">{flowItems[draftCardIndex]?.type === "activity" ? `Jeu après la partie ${flowItems[draftCardIndex].pageIndex + 1}` : flowItems[draftCardIndex]?.type === "generate" ? `Jeu à générer · partie ${flowItems[draftCardIndex].pageIndex + 1}` : `Lecture · partie ${(flowItems[draftCardIndex]?.pageIndex || 0) + 1}`} · {draftCardIndex + 1} / {flowItems.length}</span>
@@ -154,7 +163,7 @@ function OpenSessions() {
           </div>
           <div className="church-draft-carousel-track" ref={draftCarousel} onScroll={event => { const track = event.currentTarget; setDraftCardIndex(Math.round(track.scrollLeft / Math.max(1, track.clientWidth))); }}>
             {flowItems.map((item, cardIndex) => item.type === "text" ? <article className="church-course-book-page church-draft-slide" key={`passage-${item.pageIndex}`} aria-label={`Texte, partie ${item.pageIndex + 1}`}>
-              <div className="church-course-flow-part-heading"><small>LECTURE · PARTIE {item.pageIndex + 1} / {reviewPages.length}</small><span>Texte original</span></div><p>{item.page}</p>
+              <div className="church-course-flow-part-heading"><small>LECTURE · PARTIE {item.pageIndex + 1} / {reviewPages.length}</small><span>Texte original</span></div><div className="church-review-paragraphs">{item.page.split(/\r?\n[ \t]*\r?\n/).map((paragraph, index) => <p key={index}>{paragraph}</p>)}</div>
             </article> : item.type === "generate" ? <article className="church-draft-slide church-draft-game-empty" key={`generate-${item.pageIndex}`} aria-label={`Jeu à générer après la partie ${item.pageIndex + 1}`}><span>ACTIVITÉ · APRÈS LA PARTIE {item.pageIndex + 1}</span><p>Un jeu peut être créé à partir du passage que vous venez de lire.</p><button type="button" disabled={busy || (courseContent.activities || []).length >= Math.min(8, reviewPages.length)} onClick={() => generateActivity(item.pageIndex)}>{busy ? "Génération en cours…" : "Générer un jeu"}</button></article> : <article className="church-course-activity church-course-flow-activity church-draft-slide" key={`activity-${item.activityIndex}`} aria-label={`Jeu ${item.activityIndex + 1}, après la partie ${item.pageIndex + 1}`}>
               <div className="church-course-flow-activity-heading"><span>JEU {item.activityIndex + 1} · APRÈS LA PARTIE {item.pageIndex + 1}</span><div className="church-course-flow-move"><button type="button" className="is-quiet" aria-label="Déplacer le jeu vers une partie précédente" title="Déplacer vers une partie précédente" disabled={!reviewPages.slice(0, item.pageIndex).some((_, index) => !courseContent.activities.some((other, otherIndex) => otherIndex !== item.activityIndex && Number(other.afterPage) === index))} onClick={() => moveActivity(item.activityIndex, -1)}>↑</button><button type="button" className="is-quiet" aria-label="Déplacer le jeu vers une partie suivante" title="Déplacer vers une partie suivante" disabled={!reviewPages.slice(item.pageIndex + 1).some((_, offset) => !courseContent.activities.some((other, otherIndex) => otherIndex !== item.activityIndex && Number(other.afterPage) === item.pageIndex + 1 + offset))} onClick={() => moveActivity(item.activityIndex, 1)}>↓</button><button type="button" className="is-quiet" onClick={() => setCourseContent(current => ({ ...current, activities: current.activities.filter((_, index) => index !== item.activityIndex) }))}>Retirer</button></div></div>
               <div className="church-course-flow-fields">
@@ -170,10 +179,7 @@ function OpenSessions() {
           </div>
         </div>
         {busy && <div className="church-ai-progress" role="status"><span /><progress aria-label="Publication de la session" />Publication de la session…</div>}
-        <div className="church-review-actions"><button type="button" className="is-quiet" disabled={busy} onClick={() => setCourseContent(null)}>Retour au formulaire</button><button type="button" disabled={busy || !passagesAreCurrent || !name.trim() || !courseContent.sourceText?.trim()} onClick={() => act(async () => {
-          const session = await bridge().createOpenSession(name, createPassword, scheduledAt ? new Date(scheduledAt).toISOString() : null, courseContent, sourceDocumentName, courseFiles);
-          setCreated(session); setAdminCode(session.accessCode);
-        }, "Session validée. Votre code et votre QR sont prêts.")}>Valider et créer le QR code</button></div>
+
       </div>}
       {created && <div className="church-session-created" role="status"><div><span className="church-live-indicator">SESSION PRÊTE</span><h3>{created.name}</h3><p>Code public</p><strong className="church-session-code">{created.accessCode}</strong>{created.scheduledAt && <p>Programmée le {new Date(created.scheduledAt).toLocaleString("fr-CA", { dateStyle: "long", timeStyle: "short" })}</p>}<a className="church-projection-link" href={`projection.html?code=${created.accessCode}`} target="_blank" rel="noreferrer">Ouvrir la page de la session ↗</a><a className="church-projection-link" href={`session-admin.html?code=${created.accessCode}`} target="_blank" rel="noreferrer">Ouvrir le pupitre administrateur ↗</a></div>{qr && <img className="church-session-qr" src={qr} alt={`QR code pour rejoindre ${created.name}`} />}</div>}
     </section>
