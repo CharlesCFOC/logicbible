@@ -1206,3 +1206,6 @@ html body .app-shell[data-app-background] .phone-frame #my-church.church-screen 
 .church-session-setup.is-review .church-review-paragraphs::-webkit-scrollbar { display: none; width: 0; }
 
 html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup.is-review .church-review-paragraphs p .church-reading-parenthetical { color: #8bdcff !important; font-size: inherit !important; }
+
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup.is-review .church-review-paragraphs p { text-align: justify; text-align-last: start; white-space: normal; }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup.is-review .church-review-paragraphs p .church-reading-date { color: #ffd58a !important; font-size: inherit !important; font-weight: 700; }
