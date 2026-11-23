@@ -4438,3 +4438,10 @@
 .app-shell.is-debate-room .apologetics-debate-composer .church-dictation-indicator { color: #cceeff; font-size: 10px; }
 .app-shell.is-debate-room .apologetics-debate-composer .church-dictation-indicator i { background: #8bdcff; }
 .app-shell.is-debate-room .apologetics-debate-composer .church-dictation-status { position: absolute; bottom: calc(100% + 4px); left: 10px; margin: 0; color: #d8efff; font-size: 11px; }
+
+/* Place the live voice meter in its own row above the debate reply field. */
+.app-shell.is-debate-room .apologetics-debate-composer .church-dictation-input { display: grid; grid-template-columns: minmax(0, 1fr) 42px; grid-template-areas: "meter mic" "text text"; align-items: center; gap: 8px; }
+.app-shell.is-debate-room .apologetics-debate-composer .church-dictation-input textarea { grid-area: text; width: 100%; min-height: 88px; padding: 10px 8px; }
+.app-shell.is-debate-room .apologetics-debate-composer .church-voice-meter { position: static; grid-area: meter; width: 100%; max-width: 176px; height: 32px; margin-left: 6px; }
+.app-shell.is-debate-room .apologetics-debate-composer .church-dictation-button { position: static; grid-area: mic; justify-self: end; }
+.app-shell.is-debate-room .apologetics-debate-composer .church-dictation-toolbar { display: none; }
