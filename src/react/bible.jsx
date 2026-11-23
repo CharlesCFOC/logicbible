@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { ChapterQuiz } from "./chapter-quiz.jsx";
 import { startBibleVoiceRecorder } from "../shared/bible-voice-recorder.js";
 import { parseBibleReference } from "../shared/bible-reference.js";
-import { requestBibleVoiceTranscript } from "./bible-voice-client.js";
+import { requestBibleVoiceTranscript, requestBibleVoiceSearch } from "./bible-voice-client.js";
 
 const columnsIcon = (
   <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -123,6 +123,7 @@ export function BibleVoiceSearch() {
   const [phase, setPhase] = useState("idle");
   const [message, setMessage] = useState("");
   const [transcript, setTranscript] = useState("");
+  const [matches, setMatches] = useState([]);
   const [levels, setLevels] = useState(Array(18).fill(.12));
   const recording = useRef(null);
   const requestController = useRef(null);
@@ -170,6 +171,7 @@ export function BibleVoiceSearch() {
   const start = () => {
     setOpen(true);
     setTranscript("");
+    setMatches([]);
     setMessage("");
     setPhase("starting");
     if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
@@ -211,13 +213,23 @@ export function BibleVoiceSearch() {
         requestController.current = controller;
         const text = await requestBibleVoiceTranscript(blob, { signal: controller.signal });
         if (requestController.current !== controller) return;
-        requestController.current = null;
         setTranscript(text);
         const reference = parseBibleReference(text, state.books);
-        if (reference) openReference(reference);
-        else {
-          setPhase("error");
-          setMessage("Je n’ai pas trouvé le livre, le chapitre et le verset dans la transcription. Réessayez.");
+        if (reference) {
+          requestController.current = null;
+          openReference(reference);
+        } else {
+          setPhase("searching");
+          const result = await requestBibleVoiceSearch(text, {signal:controller.signal});
+          if (requestController.current !== controller) return;
+          requestController.current = null;
+          const candidates = (result.matches || []).filter(item => state.books.some(book => book.id === item.bookId && item.chapter <= book.chapters));
+          if (result.certain && candidates.length === 1) openReference(candidates[0]);
+          else if (candidates.length) { setMatches(candidates); setPhase("choosing"); }
+          else {
+            setPhase("error");
+            setMessage("Je n’ai pas trouvé de verset précis. Ajoutez quelques mots ou le contexte du passage.");
+          }
         }
       } catch (error) {
         if (error.name === "AbortError") return;
@@ -239,11 +251,12 @@ export function BibleVoiceSearch() {
       <button type="button" className="bible-voice-dismiss" aria-label="Fermer" onClick={close} />
       <section className="bible-voice-listening">
         <p className="bible-voice-prompt">Ask me to search a scripture</p>
-        <div className={`bible-voice-wave${phase === "listening" ? " is-listening" : phase !== "error" ? " is-processing" : ""}`} aria-hidden="true">
+        <div className={`bible-voice-wave${phase === "listening" ? " is-listening" : !["error", "choosing"].includes(phase) ? " is-processing" : ""}`} aria-hidden="true">
           {levels.map((level, index) => <i key={index} style={{ "--voice-level": `${Math.max(.12, level) * 100}%`, "--voice-delay": `${index * 24}ms` }} />)}
         </div>
         <div className="bible-voice-feedback">
           {transcript && <p className="bible-voice-transcript" aria-live="polite">{transcript}</p>}
+          {phase === "choosing" && <div className="bible-voice-matches"><p>Quel passage cherchez-vous ?</p>{matches.map(item => <button className="bible-voice-retry" type="button" key={`${item.bookId}.${item.chapter}.${item.verse}`} onClick={() => { setMatches([]); openReference(item); }}>{item.bookName} {item.chapter}:{item.verse}</button>)}</div>}
           {phase === "error" && <>
             <p className="bible-voice-status" role="alert">{message}</p>
             <button className="bible-voice-retry" type="button" onClick={start}>Réessayer</button>

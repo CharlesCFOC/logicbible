@@ -5,7 +5,7 @@ function apiBase() {
   return native ? "https://logicbible.vercel.app" : "";
 }
 
-export async function requestBibleVoiceTranscript(blob, { signal } = {}) {
+async function voiceRequest(path, body, signal) {
   const base = apiBase();
   const configResponse = await fetch(`${base}/api/supabase/config`, { signal });
   const config = await configResponse.json().catch(() => null);
@@ -16,18 +16,26 @@ export async function requestBibleVoiceTranscript(blob, { signal } = {}) {
   const token = data?.session?.access_token;
   if (error || !token) throw new Error("Connectez-vous pour utiliser la reconnaissance vocale par IA.");
 
+  const response = await fetch(`${base}${path}`, {
+    method: "POST",
+    signal,
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify(body),
+  });
+  const payload = await response.json().catch(() => null);
+  if (!response.ok || !payload) throw new Error(payload?.error || "La transcription IA a échoué. Réessayez.");
+  return payload;
+}
+
+export async function requestBibleVoiceTranscript(blob, { signal } = {}) {
   const bytes = new Uint8Array(await blob.arrayBuffer());
   let binary = "";
   for (let offset = 0; offset < bytes.length; offset += 0x8000) {
     binary += String.fromCharCode(...bytes.subarray(offset, offset + 0x8000));
   }
-  const response = await fetch(`${base}/api/ai/bible-voice-transcribe`, {
-    method: "POST",
-    signal,
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-    body: JSON.stringify({ audioBase64: btoa(binary), mimeType: blob.type || "audio/webm" }),
-  });
-  const payload = await response.json().catch(() => null);
-  if (!response.ok || !payload?.text) throw new Error(payload?.error || "La transcription IA a échoué. Réessayez.");
-  return String(payload.text).trim();
+  const payload = await voiceRequest("/api/ai/bible-voice-transcribe", {audioBase64:btoa(binary),mimeType:blob.type || "audio/webm"}, signal);
+  return String(payload.text || "").trim();
+}
+export function requestBibleVoiceSearch(query, { signal } = {}) {
+  return voiceRequest("/api/ai/bible-voice-search", {query}, signal);
 }
