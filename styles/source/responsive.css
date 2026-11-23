@@ -1215,3 +1215,5 @@ html body .app-shell[data-app-background] .phone-frame #my-church.church-screen 
 html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup.is-review .church-review-edit-hint { font-size: 12px !important; margin: 0; color: #c8deed !important; }
 
 html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup.is-review .church-review-paragraphs[contenteditable="plaintext-only"] { font-size: 14px !important; line-height: 1.8; text-align: justify; text-align-last: start; white-space: pre-wrap; color: #e4f1fa !important; }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup.is-review .church-review-paragraphs[contenteditable="plaintext-only"] { border: 1px solid rgba(139, 220, 255, .6); padding: 10px; box-sizing: border-box; }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub > .church-session-setup.is-review .church-review-paragraphs[contenteditable="plaintext-only"]:focus { border-color: #8bdcff; outline: none; }
