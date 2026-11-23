@@ -9,18 +9,24 @@ window.churchBridge = {
     if (!response.ok) throw new Error(result.error || "La demande de session a échoué.");
     return result;
   },
-  async prepareOpenSession(file) {
-    if (!file || file.size > 2_500_000) throw new Error("Choisissez un PDF ou une image de 2,5 Mo maximum.");
-    if (!/^(application\/pdf|image\/(jpeg|png|webp))$/.test(file.type)) throw new Error("Formats acceptés : PDF, JPEG, PNG ou WebP.");
-    const bytes = new Uint8Array(await file.arrayBuffer());
-    let binary = "";
-    for (let i = 0; i < bytes.length; i += 0x8000) binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+  async encodeSessionDocuments(selection) {
+    const files = Array.isArray(selection) ? selection : [selection];
+    if (!files.length || files.length > 10 || files.some(file => !file || !file.size)) throw new Error("Choisissez de 1 à 10 documents non vides.");
+    if (files.reduce((sum, file) => sum + file.size, 0) > 2_500_000) throw new Error("Les documents doivent totaliser au maximum 2,5 Mo.");
+    return Promise.all(files.map(async file => {
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      let binary = "";
+      for (let i = 0; i < bytes.length; i += 0x8000) binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+      return { fileName: file.name, mimeType: file.type, data: btoa(binary) };
+    }));
+  },
+  async prepareOpenSession(files) {
+    const documents = await this.encodeSessionDocuments(files);
     const response = await fetch(apiUrl("/api/sessions/prepare"), {
-      method: "POST", headers: { "content-type": "application/json" },
-      body: JSON.stringify({ fileName: file.name, mimeType: file.type, data: btoa(binary) }),
+      method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ documents }),
     });
     const result = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(result.error || "L’analyse du document a échoué.");
+    if (!response.ok) throw new Error(result.error || "L’analyse des documents a échoué.");
     return result;
   },
   async generateOpenSessionActivity(text, signal) {
@@ -39,12 +45,9 @@ window.churchBridge = {
     if (!response.ok) throw new Error(result.error || "Le découpage du cours a échoué.");
     return result.passages || [];
   },
-  async createOpenSession(name, adminPassword, scheduledAt, courseContent, sourceDocumentName, file) {
-    if (!file || file.size > 2_500_000) throw new Error("Réimportez le document du cours (2,5 Mo maximum).");
-    const bytes = new Uint8Array(await file.arrayBuffer());
-    let binary = "";
-    for (let i = 0; i < bytes.length; i += 0x8000) binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
-    return this.sessionRequest("create", { name, adminPassword, scheduledAt, courseContent, sourceDocumentName, sourceDocumentMimeType: file.type, sourceDocumentData: btoa(binary) });
+  async createOpenSession(name, adminPassword, scheduledAt, courseContent, sourceDocumentName, files) {
+    const documents = await this.encodeSessionDocuments(files);
+    return this.sessionRequest("create", { name, adminPassword, scheduledAt, courseContent, sourceDocumentName, documents });
   },
   async findOpenSession(accessCode) { return this.sessionRequest("lookup", { accessCode }); },
   async getActiveOpenSessions() {
