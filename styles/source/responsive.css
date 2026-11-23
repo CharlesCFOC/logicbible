@@ -1228,3 +1228,10 @@ html body .app-shell[data-app-background] .phone-frame #my-church.church-screen 
 @media (max-width: 560px) {
   html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub .church-activity-group { grid-template-columns: 1fr; }
 }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub .church-draft-slide.church-course-flow-activity .church-activity-group h4 { color: #d9f3ff !important; }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub .church-draft-slide.church-course-flow-activity .church-activity-group { background: rgba(111, 183, 222, .12) !important; }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub .church-draft-slide.church-course-flow-activity .church-label { color: #e8f5ff !important; }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub .church-draft-slide.church-course-flow-activity input,
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub .church-draft-slide.church-course-flow-activity select { border: 1px solid rgba(174, 220, 249, .42) !important; color: #f2f8fc !important; background: #173b56 !important; color-scheme: dark; }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub .church-draft-slide.church-course-flow-activity .church-course-flow-move button { border: 1px solid rgba(174, 220, 249, .35) !important; color: #eaf6ff !important; background: #244f6e !important; }
+html body .app-shell[data-app-background] .phone-frame #my-church.church-screen .church-session-hub .church-draft-slide.church-course-flow-activity .church-course-flow-move button:disabled { color: #b8d3e5 !important; background: #29475c !important; }
