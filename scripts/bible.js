@@ -27,7 +27,7 @@ function initReader() {
   parallelToggle?.addEventListener("click", () => {
     readerState.parallelEnabled = !readerState.parallelEnabled;
     renderParallelOptions();
-    loadChapter();
+    loadChapter({ preservePosition: true });
   });
 
   readerTargetToggle?.addEventListener("click", () => {

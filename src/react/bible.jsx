@@ -124,6 +124,7 @@ export function BibleVoiceSearch({ assistant = false }) {
   const [transcript, setTranscript] = useState("");
   const [matches, setMatches] = useState([]);
   const [kidsMatches, setKidsMatches] = useState([]);
+  const [savedMatches, setSavedMatches] = useState([]);
   const [levels, setLevels] = useState(Array(18).fill(.12));
   const recording = useRef(null);
   const requestController = useRef(null);
@@ -184,11 +185,22 @@ export function BibleVoiceSearch({ assistant = false }) {
     close();
   };
 
+  const openSavedVoiceItem = async item => {
+    try {
+      await window.homeLibraryBridge.openVoiceItem(item);
+      close();
+    } catch (error) {
+      setPhase('error');
+      setMessage(error.message || 'Cet élément ne peut pas être ouvert.');
+    }
+  };
+
   const start = () => {
     setOpen(true);
     setTranscript("");
     setMatches([]);
     setKidsMatches([]);
+    setSavedMatches([]);
     setMessage("");
     setPhase("starting");
     if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
@@ -254,6 +266,23 @@ export function BibleVoiceSearch({ assistant = false }) {
             close();
             return;
           }
+          if (intent.type === "note_draft") {
+            if (!window.noteEditorBridge?.openVoiceDraft) throw new Error("L’outil Notes n’est pas disponible.");
+            window.noteEditorBridge.openVoiceDraft(intent);
+            requestController.current = null;
+            close();
+            return;
+          }
+          if (intent.type === "saved_search") {
+            if (!window.homeLibraryBridge?.searchVoiceItems) throw new Error("La bibliothèque n’est pas disponible.");
+            const reference = parseBibleReference(intent.query, state.books) || parseBibleReference(text, state.books);
+            const results = window.homeLibraryBridge.searchVoiceItems(intent.kind, intent.query, reference);
+            requestController.current = null;
+            if (results.length === 1) await openSavedVoiceItem(results[0]);
+            else if (results.length) { setSavedMatches(results); setPhase('choosing'); }
+            else throw new Error(intent.kind === 'notes' ? 'Je n’ai pas trouvé cette note. Essaie de préciser son titre ou son contenu.' : 'Je n’ai pas trouvé ce favori. Essaie de préciser le verset ou son contenu.');
+            return;
+          }
           if (intent.type === "kids_story") {
             setPhase("searching");
             const result = await requestKidsVoiceStory(text, { signal: controller.signal });
@@ -274,7 +303,7 @@ export function BibleVoiceSearch({ assistant = false }) {
             close();
             return;
           }
-          if (intent.type !== "reference") throw new Error("Je peux ouvrir une page, un verset ou une histoire Kids Bible, préparer une prière ou transmettre une question à Brother AI.");
+          if (intent.type !== "reference") throw new Error("Je peux ouvrir une page, un verset, une note ou un favori, préparer une prière ou une note, ou répondre à une question.");
         }
         const reference = parseBibleReference(text, state.books);
         if (reference) {
@@ -326,7 +355,7 @@ export function BibleVoiceSearch({ assistant = false }) {
         </div>
         <div className="bible-voice-feedback">
           {transcript && <p className="bible-voice-transcript" aria-live="polite">{transcript}</p>}
-          {phase === "choosing" && <div className="bible-voice-matches"><p>{kidsMatches.length ? "Quelle histoire cherchez-vous ?" : "Quel passage cherchez-vous ?"}</p>{kidsMatches.map(item => <button className="bible-voice-retry" type="button" key={item.id} onClick={() => { setKidsMatches([]); openKidsStory(item); }}>{item.title} · {item.reference}</button>)}{matches.map(item => <button className="bible-voice-retry" type="button" key={`${item.bookId}.${item.chapter}.${item.verse}`} onClick={() => { setMatches([]); openReference(item); }}>{item.bookName} {item.chapter}:{item.verse}</button>)}</div>}
+          {phase === "choosing" && <div className="bible-voice-matches"><p>{savedMatches.length ? "Quel élément cherchez-vous ?" : kidsMatches.length ? "Quelle histoire cherchez-vous ?" : "Quel passage cherchez-vous ?"}</p>{savedMatches.map(item => <button className="bible-voice-retry" type="button" key={`${item.kind}-${item.key}`} onClick={() => { setSavedMatches([]); void openSavedVoiceItem(item); }}>{item.label}</button>)}{kidsMatches.map(item => <button className="bible-voice-retry" type="button" key={item.id} onClick={() => { setKidsMatches([]); openKidsStory(item); }}>{item.title} · {item.reference}</button>)}{matches.map(item => <button className="bible-voice-retry" type="button" key={`${item.bookId}.${item.chapter}.${item.verse}`} onClick={() => { setMatches([]); openReference(item); }}>{item.bookName} {item.chapter}:{item.verse}</button>)}</div>}
           {phase === "error" && <>
             <p className="bible-voice-status" role="alert">{message}</p>
             <button className="bible-voice-retry" type="button" onClick={start}>Réessayer</button>

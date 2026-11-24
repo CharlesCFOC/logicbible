@@ -17,6 +17,36 @@ const filterCategories = [["all", "All"], ...categories];
 
 const SPOTLIGHT_INTERVAL_MS = 15 * 60 * 1000;
 
+function AnimatedPrayerSearchHint() {
+  const text = 'Search prayers';
+  const [visible, setVisible] = useState(0);
+  const [fading, setFading] = useState(false);
+  const [cycle, setCycle] = useState(0);
+  useEffect(() => {
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) { setVisible(text.length); return undefined; }
+    let timer;
+    let index = 0;
+    const reveal = () => {
+      index += 1;
+      setVisible(index);
+      if (index < text.length) timer = window.setTimeout(reveal, 90);
+      else timer = window.setTimeout(() => {
+        setFading(true);
+        timer = window.setTimeout(() => {
+          setVisible(0);
+          setCycle(current => current + 1);
+          setFading(false);
+          index = 0;
+          timer = window.setTimeout(reveal, 250);
+        }, 800);
+      }, 1400);
+    };
+    timer = window.setTimeout(reveal, 150);
+    return () => window.clearTimeout(timer);
+  }, []);
+  return <span className={`prayer-search-hint${fading ? ' is-fading' : ''}`} aria-hidden="true">{Array.from(text, (letter, index) => <span key={`${cycle}-${index}`} className={index < visible ? 'is-visible' : ''}>{letter === ' ' ? '\u00a0' : letter}</span>)}</span>;
+}
+
 function getSpotlightBucket(timestamp = Date.now()) {
   return Math.floor(timestamp / SPOTLIGHT_INTERVAL_MS);
 }
@@ -564,7 +594,10 @@ export function PrayerPage() {
               <label className="prayer-wall-search">
                 <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
                 <span className="sr-only">Search prayers</span>
-                <input value={query} onChange={(event) => setQuery(event.target.value)} type="search" placeholder="Search prayers" />
+                <span className="prayer-search-input">
+                  <input value={query} onChange={(event) => setQuery(event.target.value)} type="search" />
+                  {!query && <AnimatedPrayerSearchHint />}
+                </span>
               </label>
               <PrayerCategories active={state.filter} onChange={bridge.setFilter} filter />
             </div>

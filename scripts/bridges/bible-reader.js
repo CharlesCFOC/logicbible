@@ -130,7 +130,7 @@ window.bibleReaderBridge = {
   toggleParallel() {
     readerState.parallelEnabled = !readerState.parallelEnabled;
     renderParallelOptions();
-    loadChapter();
+    loadChapter({ preservePosition: true });
   },
   toggleTarget() {
     readerState.showHighlightsOnly = !readerState.showHighlightsOnly;

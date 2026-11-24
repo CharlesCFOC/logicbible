@@ -70,5 +70,5 @@ export function useDictation({ values, onChange, language = 'en', maxLength = 12
     valuesRef.current = { ...valuesRef.current, [field]: text };
     changeRef.current(field, text);
   }
-  return { ...state, start, edit, stop: () => session.current?.stop(), setAudioMonitoring: enabled => session.current?.setAudioMonitoring?.(enabled), audioLevel: level => session.current?.audioLevel?.(level), recorded, levels, active: state.phase !== 'idle' };
+  return { ...state, start, edit, stop: () => session.current?.stop(), cancel: field => session.current?.stopForEdit(field), setAudioMonitoring: enabled => session.current?.setAudioMonitoring?.(enabled), audioLevel: level => session.current?.audioLevel?.(level), recorded, levels, active: state.phase !== 'idle' };
 }

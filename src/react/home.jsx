@@ -356,6 +356,18 @@ export function HomeLibraryPanel() {
   const [snapshot, setSnapshot] = useState(() => bridge.getSnapshot(initialTab));
   const [search, setSearch] = useState("");
   const [expandedTabs, setExpandedTabs] = useState({});
+  useEffect(() => {
+    const openVoiceBookmark = event => {
+      const id = event.detail?.id;
+      if (!id) return;
+      setExpandedTabs(current => ({ ...current, bookmarks: true }));
+      window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
+        document.querySelector(`[data-ai-bookmark-id="${CSS.escape(id)}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }));
+    };
+    document.addEventListener('home:voice-ai-bookmark', openVoiceBookmark);
+    return () => document.removeEventListener('home:voice-ai-bookmark', openVoiceBookmark);
+  }, []);
 
   useEffect(() => {
     const refresh = (event) => {
@@ -385,7 +397,7 @@ export function HomeLibraryPanel() {
       ? visibleRows.map((row) => <SavedNoteCard key={row.id} row={row} onOpen={bridge.openSavedNote} />)
       : visibleRows.map((row) => <HomeSavedVerseRow key={row.storageKey} row={row} tab={activeTab} onOpen={bridge.openSavedVerse} />)),
     ...snapshot.aiRows.map((row) => (
-      <article className="saved-ai-row" key={`ai-${row.id}`}>
+      <article className="saved-ai-row" key={`ai-${row.id}`} data-ai-bookmark-id={row.id}>
         <div className="saved-ai-row-heading">{sparkleIcon}<strong>AI response</strong></div>
         <p>{row.text || ""}</p>
         <button className="saved-folder-trigger" type="button" data-saved-folder-trigger data-saved-folder-type="ai-bookmarks" data-saved-folder-key={row.id} data-saved-folder-current={row.folderId || ""} aria-label="Choose folder" title="Choose folder">

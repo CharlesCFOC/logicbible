@@ -615,36 +615,38 @@
             <div class="note-editor-header-actions">
               <button type="button" class="note-undo-button" data-note-command="undo" aria-label="Undo" title="Undo"><i data-lucide="undo-2"></i></button>
               <button type="button" class="note-delete-button" data-delete-rich-note aria-label="Delete note" title="Delete note"><i data-lucide="trash-2"></i></button>
-              <button type="button" class="primary-button note-save-button" data-save-rich-note aria-label="Save note" title="Save note"><i data-lucide="save"></i></button>
               <button type="button" class="note-close-button" data-close-modal aria-label="Close note editor" title="Close"><i data-lucide="x"></i></button>
             </div>
           </header>
           <div class="note-editor-verse-chips" data-note-editor-verse-chips data-react-note-chips-root aria-label="Verses attached to this note"></div>
           <div class="note-editor-toolbar" data-react-note-toolbar-root role="toolbar" aria-label="Note formatting">
+            <div class="note-toolbar-group" role="group" aria-label="Text style">
             <button type="button" data-note-command="bold" aria-label="Bold"><b>B</b></button>
             <button type="button" data-note-command="italic" aria-label="Italic"><i>I</i></button>
             <button type="button" data-note-command="underline" aria-label="Underline"><u>U</u></button>
-            <button type="button" data-note-command="formatBlock" data-note-value="h2" aria-label="Title">H</button>
-            <span class="note-toolbar-divider" aria-hidden="true"></span>
+            <button type="button" data-note-command="uppercase" aria-label="Uppercase selected text" title="Uppercase selected text">AA</button>
+            </div>
+            <div class="note-toolbar-group" role="group" aria-label="Lists">
             <button type="button" data-note-command="insertUnorderedList" aria-label="Bulleted list">•</button>
             <button type="button" data-note-command="insertOrderedList" aria-label="Numbered list">1.</button>
-            <span class="note-toolbar-divider" aria-hidden="true"></span>
+            </div>
+            <div class="note-toolbar-group" role="group" aria-label="Text color and size">
             <label class="note-format-select" aria-label="Text color">
-              <i data-lucide="palette"></i>
-              <span class="note-color-swatch" data-note-color-swatch></span>
+              <span class="note-color-letter" data-note-color-swatch aria-hidden="true">T</span>
               <input type="color" data-note-color value="#201c17" />
             </label>
             <label class="note-format-select" aria-label="Highlight color">
-              <i data-lucide="paint-bucket"></i>
-              <span class="note-color-swatch" data-note-highlight-swatch></span>
+              <span class="note-highlight-letter" data-note-highlight-swatch aria-hidden="true"><span>T</span></span>
               <input type="color" data-note-highlight value="#facc15" />
             </label>
             <button type="button" data-note-size-decrease aria-label="Make text smaller" title="Make text smaller">A−</button>
             <button type="button" data-note-size-increase aria-label="Make text larger" title="Make text larger">A+</button>
-            <span class="note-toolbar-divider" aria-hidden="true"></span>
+            </div>
+            <div class="note-toolbar-group" role="group" aria-label="Alignment">
             <button type="button" data-note-command="justifyLeft" aria-label="Align left">≡</button>
             <button type="button" data-note-command="justifyCenter" aria-label="Center">≡</button>
             <button type="button" data-note-command="justifyFull" aria-label="Justify">☰</button>
+            </div>
           </div>
           <div class="note-editor-content-shell" data-react-note-content-root></div>
         </section>

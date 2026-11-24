@@ -385,6 +385,7 @@ async function openSavedNote(row) {
   if (!firstVerse) {
     return;
   }
+  if (firstVerse.standalone) { openStandaloneNote(firstVerse); return; }
   await openSavedVerse(firstVerse);
   window.setTimeout(() => {
     const line = document.querySelector(`[data-verse-key="${CSS.escape(firstVerse.key)}"]`)

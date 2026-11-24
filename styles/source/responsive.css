@@ -807,6 +807,12 @@ html body .app-shell .phone-frame #bible .reader-empty {
   color: #f0f4ff !important;
 }
 
+html body .app-shell .phone-frame #bible .reader-empty.reader-empty-highlight {
+  background: transparent !important;
+  border: 0;
+  box-shadow: none;
+}
+
 html body .app-shell .phone-frame #bible .reader-empty :is(strong, span) {
   color: #f0f4ff !important;
 }
@@ -975,10 +981,10 @@ html body .app-shell #apologetics-coach.screen.is-active {
   will-change: auto;
 }
 
-/* Let the header glass sample the same backdrop as the Home menu. */
+/* Keep the Prayer page transition consistent with the other pages. */
 html body .app-shell #prayer.screen.is-active {
   will-change: auto;
-  animation: none;
+  animation: screenIn 280ms ease-out;
 }
 
 /* Mobile page headings share Brother AI's top position inside the viewport. */

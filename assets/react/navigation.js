@@ -4,9 +4,9 @@ import { t as i } from "./react-dom-j38DbyF1.js";
 import { r as a, t as o } from "./dist-CJLN62Mq.js";
 import { t as s } from "./definitions-DfeWly7j.js";
 import { t as c } from "./prayer-icon-b6gZ8Mjy.js";
-import { a as l, i as u, n as d, r as f, t as p } from "./bible-voice-client-Bvf1HeQi.js";
+import { c as l, l as u, n as d, o as f, r as p, s as m, u as h } from "./dictation-controls-zR4f1HJr.js";
 // node_modules/scheduler/cjs/scheduler.production.js
-var m = /* @__PURE__ */ t(((e) => {
+var g = /* @__PURE__ */ t(((e) => {
 	function t(e, t) {
 		var n = e.length;
 		e.push(t);
@@ -59,29 +59,29 @@ var m = /* @__PURE__ */ t(((e) => {
 	}
 	function x(e) {
 		if (h = !1, b(e), !m) {
-			if (n(c) !== null) m = !0, ee || (ee = !0, T());
+			if (n(c) !== null) m = !0, S || (S = !0, T());
 			else {
 				var t = n(l);
-				t !== null && ie(x, t.startTime - e);
+				t !== null && D(x, t.startTime - e);
 			}
 		}
 	}
-	var ee = !1, S = -1, te = 5, C = -1;
-	function w() {
-		return g ? !0 : !(e.unstable_now() - C < te);
-	}
+	var S = !1, C = -1, ee = 5, te = -1;
 	function ne() {
-		if (g = !1, ee) {
+		return g ? !0 : !(e.unstable_now() - te < ee);
+	}
+	function w() {
+		if (g = !1, S) {
 			var t = e.unstable_now();
-			C = t;
+			te = t;
 			var i = !0;
 			try {
 				a: {
-					m = !1, h && (h = !1, v(S), S = -1), p = !0;
+					m = !1, h && (h = !1, v(C), C = -1), p = !0;
 					var a = f;
 					try {
 						b: {
-							for (b(t), d = n(c); d !== null && !(d.expirationTime > t && w());) {
+							for (b(t), d = n(c); d !== null && !(d.expirationTime > t && ne());) {
 								var o = d.callback;
 								if (typeof o == "function") {
 									d.callback = null, f = d.priorityLevel;
@@ -97,7 +97,7 @@ var m = /* @__PURE__ */ t(((e) => {
 							if (d !== null) i = !0;
 							else {
 								var u = n(l);
-								u !== null && ie(x, u.startTime - t), i = !1;
+								u !== null && D(x, u.startTime - t), i = !1;
 							}
 						}
 						break a;
@@ -107,31 +107,31 @@ var m = /* @__PURE__ */ t(((e) => {
 					i = void 0;
 				}
 			} finally {
-				i ? T() : ee = !1;
+				i ? T() : S = !1;
 			}
 		}
 	}
 	var T;
 	if (typeof y == "function") T = function() {
-		y(ne);
+		y(w);
 	};
 	else if (typeof MessageChannel < "u") {
 		var E = new MessageChannel(), re = E.port2;
-		E.port1.onmessage = ne, T = function() {
+		E.port1.onmessage = w, T = function() {
 			re.postMessage(null);
 		};
 	} else T = function() {
-		_(ne, 0);
+		_(w, 0);
 	};
-	function ie(t, n) {
-		S = _(function() {
+	function D(t, n) {
+		C = _(function() {
 			t(e.unstable_now());
 		}, n);
 	}
 	e.unstable_IdlePriority = 5, e.unstable_ImmediatePriority = 1, e.unstable_LowPriority = 4, e.unstable_NormalPriority = 3, e.unstable_Profiling = null, e.unstable_UserBlockingPriority = 2, e.unstable_cancelCallback = function(e) {
 		e.callback = null;
 	}, e.unstable_forceFrameRate = function(e) {
-		0 > e || 125 < e ? console.error("forceFrameRate takes a positive int between 0 and 125, forcing frame rates higher than 125 fps is not supported") : te = 0 < e ? Math.floor(1e3 / e) : 5;
+		0 > e || 125 < e ? console.error("forceFrameRate takes a positive int between 0 and 125, forcing frame rates higher than 125 fps is not supported") : ee = 0 < e ? Math.floor(1e3 / e) : 5;
 	}, e.unstable_getCurrentPriorityLevel = function() {
 		return f;
 	}, e.unstable_next = function(e) {
@@ -192,8 +192,8 @@ var m = /* @__PURE__ */ t(((e) => {
 			startTime: a,
 			expirationTime: s,
 			sortIndex: -1
-		}, a > o ? (r.sortIndex = a, t(l, r), n(c) === null && r === n(l) && (h ? (v(S), S = -1) : h = !0, ie(x, a - o))) : (r.sortIndex = s, t(c, r), m || p || (m = !0, ee || (ee = !0, T()))), r;
-	}, e.unstable_shouldYield = w, e.unstable_wrapCallback = function(e) {
+		}, a > o ? (r.sortIndex = a, t(l, r), n(c) === null && r === n(l) && (h ? (v(C), C = -1) : h = !0, D(x, a - o))) : (r.sortIndex = s, t(c, r), m || p || (m = !0, S || (S = !0, T()))), r;
+	}, e.unstable_shouldYield = ne, e.unstable_wrapCallback = function(e) {
 		var t = f;
 		return function() {
 			var n = f;
@@ -205,10 +205,10 @@ var m = /* @__PURE__ */ t(((e) => {
 			}
 		};
 	};
-})), h = /* @__PURE__ */ t(((e, t) => {
-	t.exports = m();
-})), g = /* @__PURE__ */ t(((e) => {
-	var t = h(), r = n(), a = i();
+})), _ = /* @__PURE__ */ t(((e, t) => {
+	t.exports = g();
+})), v = /* @__PURE__ */ t(((e) => {
+	var t = _(), r = n(), a = i();
 	function o(e) {
 		var t = "https://react.dev/errors/" + e;
 		if (1 < arguments.length) {
@@ -315,55 +315,55 @@ var m = /* @__PURE__ */ t(((e) => {
 		}
 		return null;
 	}
-	var m = Object.assign, g = Symbol.for("react.element"), _ = Symbol.for("react.transitional.element"), v = Symbol.for("react.portal"), y = Symbol.for("react.fragment"), b = Symbol.for("react.strict_mode"), x = Symbol.for("react.profiler"), ee = Symbol.for("react.consumer"), S = Symbol.for("react.context"), te = Symbol.for("react.forward_ref"), C = Symbol.for("react.suspense"), w = Symbol.for("react.suspense_list"), ne = Symbol.for("react.memo"), T = Symbol.for("react.lazy"), E = Symbol.for("react.activity"), re = Symbol.for("react.memo_cache_sentinel"), ie = Symbol.iterator;
-	function ae(e) {
-		return typeof e != "object" || !e ? null : (e = ie && e[ie] || e["@@iterator"], typeof e == "function" ? e : null);
+	var m = Object.assign, h = Symbol.for("react.element"), g = Symbol.for("react.transitional.element"), v = Symbol.for("react.portal"), y = Symbol.for("react.fragment"), b = Symbol.for("react.strict_mode"), x = Symbol.for("react.profiler"), S = Symbol.for("react.consumer"), C = Symbol.for("react.context"), ee = Symbol.for("react.forward_ref"), te = Symbol.for("react.suspense"), ne = Symbol.for("react.suspense_list"), w = Symbol.for("react.memo"), T = Symbol.for("react.lazy"), E = Symbol.for("react.activity"), re = Symbol.for("react.memo_cache_sentinel"), D = Symbol.iterator;
+	function ie(e) {
+		return typeof e != "object" || !e ? null : (e = D && e[D] || e["@@iterator"], typeof e == "function" ? e : null);
 	}
-	var oe = Symbol.for("react.client.reference");
-	function se(e) {
+	var ae = Symbol.for("react.client.reference");
+	function oe(e) {
 		if (e == null) return null;
-		if (typeof e == "function") return e.$$typeof === oe ? null : e.displayName || e.name || null;
+		if (typeof e == "function") return e.$$typeof === ae ? null : e.displayName || e.name || null;
 		if (typeof e == "string") return e;
 		switch (e) {
 			case y: return "Fragment";
 			case x: return "Profiler";
 			case b: return "StrictMode";
-			case C: return "Suspense";
-			case w: return "SuspenseList";
+			case te: return "Suspense";
+			case ne: return "SuspenseList";
 			case E: return "Activity";
 		}
 		if (typeof e == "object") switch (e.$$typeof) {
 			case v: return "Portal";
-			case S: return e.displayName || "Context";
-			case ee: return (e._context.displayName || "Context") + ".Consumer";
-			case te:
+			case C: return e.displayName || "Context";
+			case S: return (e._context.displayName || "Context") + ".Consumer";
+			case ee:
 				var t = e.render;
 				return e = e.displayName, e ||= (e = t.displayName || t.name || "", e === "" ? "ForwardRef" : "ForwardRef(" + e + ")"), e;
-			case ne: return t = e.displayName || null, t === null ? se(e.type) || "Memo" : t;
+			case w: return t = e.displayName || null, t === null ? oe(e.type) || "Memo" : t;
 			case T:
 				t = e._payload, e = e._init;
 				try {
-					return se(e(t));
+					return oe(e(t));
 				} catch {}
 		}
 		return null;
 	}
-	var ce = Array.isArray, D = r.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, O = a.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, le = {
+	var se = Array.isArray, O = r.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, k = a.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ce = {
 		pending: !1,
 		data: null,
 		method: null,
 		action: null
-	}, ue = [], de = -1;
-	function fe(e) {
+	}, le = [], ue = -1;
+	function de(e) {
 		return { current: e };
 	}
-	function k(e) {
-		0 > de || (e.current = ue[de], ue[de] = null, de--);
+	function fe(e) {
+		0 > ue || (e.current = le[ue], le[ue] = null, ue--);
 	}
 	function A(e, t) {
-		de++, ue[de] = e.current, e.current = t;
+		ue++, le[ue] = e.current, e.current = t;
 	}
-	var pe = fe(null), me = fe(null), he = fe(null), ge = fe(null);
+	var pe = de(null), me = de(null), he = de(null), ge = de(null);
 	function _e(e, t) {
 		switch (A(he, t), A(me, e), A(pe, null), t.nodeType) {
 			case 9:
@@ -381,10 +381,10 @@ var m = /* @__PURE__ */ t(((e) => {
 				default: e = 0;
 			}
 		}
-		k(pe), A(pe, e);
+		fe(pe), A(pe, e);
 	}
 	function ve() {
-		k(pe), k(me), k(he);
+		fe(pe), fe(me), fe(he);
 	}
 	function ye(e) {
 		e.memoizedState !== null && A(ge, e);
@@ -392,7 +392,7 @@ var m = /* @__PURE__ */ t(((e) => {
 		t !== n && (A(me, e), A(pe, n));
 	}
 	function be(e) {
-		me.current === e && (k(pe), k(me)), ge.current === e && (k(ge), Qf._currentValue = le);
+		me.current === e && (fe(pe), fe(me)), ge.current === e && (fe(ge), Qf._currentValue = ce);
 	}
 	var xe, Se;
 	function Ce(e) {
@@ -679,15 +679,15 @@ var m = /* @__PURE__ */ t(((e) => {
 		return e &= -e, 2 < e ? 8 < e ? e & 134217727 ? 32 : 268435456 : 8 : 2;
 	}
 	function dt() {
-		var e = O.p;
+		var e = k.p;
 		return e === 0 ? (e = window.event, e === void 0 ? 32 : mp(e.type)) : e;
 	}
 	function ft(e, t) {
-		var n = O.p;
+		var n = k.p;
 		try {
-			return O.p = e, t();
+			return k.p = e, t();
 		} finally {
-			O.p = n;
+			k.p = n;
 		}
 	}
 	var pt = Math.random().toString(36).slice(2), mt = "__reactFiber$" + pt, ht = "__reactProps$" + pt, gt = "__reactContainer$" + pt, _t = "__reactEvents$" + pt, vt = "__reactListeners$" + pt, yt = "__reactHandles$" + pt, bt = "__reactResources$" + pt, xt = "__reactMarker$" + pt;
@@ -897,7 +897,7 @@ var m = /* @__PURE__ */ t(((e) => {
 		if (t == null) {
 			if (r != null) {
 				if (n != null) throw Error(o(92));
-				if (ce(r)) {
+				if (se(r)) {
 					if (1 < r.length) throw Error(o(93));
 					r = r[0];
 				}
@@ -1616,20 +1616,20 @@ var m = /* @__PURE__ */ t(((e) => {
 				s = 8, i |= 24;
 				break;
 			case x: return e = hi(12, n, t, i | 2), e.elementType = x, e.lanes = a, e;
-			case C: return e = hi(13, n, t, i), e.elementType = C, e.lanes = a, e;
-			case w: return e = hi(19, n, t, i), e.elementType = w, e.lanes = a, e;
+			case te: return e = hi(13, n, t, i), e.elementType = te, e.lanes = a, e;
+			case ne: return e = hi(19, n, t, i), e.elementType = ne, e.lanes = a, e;
 			default:
 				if (typeof e == "object" && e) switch (e.$$typeof) {
-					case S:
+					case C:
 						s = 10;
 						break a;
-					case ee:
+					case S:
 						s = 9;
 						break a;
-					case te:
+					case ee:
 						s = 11;
 						break a;
-					case ne:
+					case w:
 						s = 14;
 						break a;
 					case T:
@@ -1776,12 +1776,12 @@ var m = /* @__PURE__ */ t(((e) => {
 	function Xi(e) {
 		Vi === null ? Vi = [e] : Vi.push(e);
 	}
-	var Zi = fe(null), Qi = null, $i = null;
+	var Zi = de(null), Qi = null, $i = null;
 	function ea(e, t, n) {
 		A(Zi, t._currentValue), t._currentValue = n;
 	}
 	function ta(e) {
-		e._currentValue = Zi.current, k(Zi);
+		e._currentValue = Zi.current, fe(Zi);
 	}
 	function na(e, t, n) {
 		for (; e !== null;) {
@@ -1891,7 +1891,7 @@ var m = /* @__PURE__ */ t(((e) => {
 			});
 		};
 	}, da = t.unstable_scheduleCallback, fa = t.unstable_NormalPriority, P = {
-		$$typeof: S,
+		$$typeof: C,
 		Consumer: null,
 		Provider: null,
 		_currentValue: null,
@@ -1948,11 +1948,11 @@ var m = /* @__PURE__ */ t(((e) => {
 			for (r.status = "rejected", r.reason = e, e = 0; e < n.length; e++) (0, n[e])(void 0);
 		}), r;
 	}
-	var Sa = D.S;
-	D.S = function(e, t) {
+	var Sa = O.S;
+	O.S = function(e, t) {
 		eu = Ne(), typeof t == "object" && t && typeof t.then == "function" && ya(e, t), Sa !== null && Sa(e, t);
 	};
-	var Ca = fe(null);
+	var Ca = de(null);
 	function wa() {
 		var e = Ca.current;
 		return e === null ? K.pooledCache : e;
@@ -2024,7 +2024,7 @@ var m = /* @__PURE__ */ t(((e) => {
 		t = t.props.ref, e.ref = t === void 0 ? null : t;
 	}
 	function Va(e, t) {
-		throw t.$$typeof === g ? Error(o(525)) : (e = Object.prototype.toString.call(t), Error(o(31, e === "[object Object]" ? "object with keys {" + Object.keys(t).join(", ") + "}" : e)));
+		throw t.$$typeof === h ? Error(o(525)) : (e = Object.prototype.toString.call(t), Error(o(31, e === "[object Object]" ? "object with keys {" + Object.keys(t).join(", ") + "}" : e)));
 	}
 	function Ha(e) {
 		function t(t, n) {
@@ -2068,13 +2068,13 @@ var m = /* @__PURE__ */ t(((e) => {
 			if (typeof t == "string" && t !== "" || typeof t == "number" || typeof t == "bigint") return t = xi("" + t, e.mode, n), t.return = e, t;
 			if (typeof t == "object" && t) {
 				switch (t.$$typeof) {
-					case _: return n = yi(t.type, t.key, t.props, null, e.mode, n), Ba(n, t), n.return = e, n;
+					case g: return n = yi(t.type, t.key, t.props, null, e.mode, n), Ba(n, t), n.return = e, n;
 					case v: return t = Ci(t, e.mode, n), t.return = e, t;
 					case T: return t = Na(t), f(e, t, n);
 				}
-				if (ce(t) || ae(t)) return t = bi(t, e.mode, n, null), t.return = e, t;
+				if (se(t) || ie(t)) return t = bi(t, e.mode, n, null), t.return = e, t;
 				if (typeof t.then == "function") return f(e, za(t), n);
-				if (t.$$typeof === S) return f(e, ca(e, t), n);
+				if (t.$$typeof === C) return f(e, ca(e, t), n);
 				Va(e, t);
 			}
 			return null;
@@ -2084,13 +2084,13 @@ var m = /* @__PURE__ */ t(((e) => {
 			if (typeof n == "string" && n !== "" || typeof n == "number" || typeof n == "bigint") return i === null ? c(e, t, "" + n, r) : null;
 			if (typeof n == "object" && n) {
 				switch (n.$$typeof) {
-					case _: return n.key === i ? l(e, t, n, r) : null;
+					case g: return n.key === i ? l(e, t, n, r) : null;
 					case v: return n.key === i ? u(e, t, n, r) : null;
 					case T: return n = Na(n), p(e, t, n, r);
 				}
-				if (ce(n) || ae(n)) return i === null ? d(e, t, n, r, null) : null;
+				if (se(n) || ie(n)) return i === null ? d(e, t, n, r, null) : null;
 				if (typeof n.then == "function") return p(e, t, za(n), r);
-				if (n.$$typeof === S) return p(e, t, ca(e, n), r);
+				if (n.$$typeof === C) return p(e, t, ca(e, n), r);
 				Va(e, n);
 			}
 			return null;
@@ -2099,13 +2099,13 @@ var m = /* @__PURE__ */ t(((e) => {
 			if (typeof r == "string" && r !== "" || typeof r == "number" || typeof r == "bigint") return e = e.get(n) || null, c(t, e, "" + r, i);
 			if (typeof r == "object" && r) {
 				switch (r.$$typeof) {
-					case _: return e = e.get(r.key === null ? n : r.key) || null, l(t, e, r, i);
+					case g: return e = e.get(r.key === null ? n : r.key) || null, l(t, e, r, i);
 					case v: return e = e.get(r.key === null ? n : r.key) || null, u(t, e, r, i);
 					case T: return r = Na(r), m(e, t, n, r, i);
 				}
-				if (ce(r) || ae(r)) return e = e.get(n) || null, d(t, e, r, i, null);
+				if (se(r) || ie(r)) return e = e.get(n) || null, d(t, e, r, i, null);
 				if (typeof r.then == "function") return m(e, t, n, za(r), i);
-				if (r.$$typeof === S) return m(e, t, n, ca(t, r), i);
+				if (r.$$typeof === C) return m(e, t, n, ca(t, r), i);
 				Va(t, r);
 			}
 			return null;
@@ -2130,7 +2130,7 @@ var m = /* @__PURE__ */ t(((e) => {
 				return t(i, e);
 			}), N && Fi(i, h), l;
 		}
-		function g(i, s, c, l) {
+		function _(i, s, c, l) {
 			if (c == null) throw Error(o(151));
 			for (var u = null, d = null, h = s, g = s = 0, _ = null, v = c.next(); h !== null && !v.done; g++, v = c.next()) {
 				h.index > g ? (_ = h, h = null) : _ = h.sibling;
@@ -2154,7 +2154,7 @@ var m = /* @__PURE__ */ t(((e) => {
 		function b(e, r, a, c) {
 			if (typeof a == "object" && a && a.type === y && a.key === null && (a = a.props.children), typeof a == "object" && a) {
 				switch (a.$$typeof) {
-					case _:
+					case g:
 						a: {
 							for (var l = a.key; r !== null;) {
 								if (r.key === l) {
@@ -2193,13 +2193,13 @@ var m = /* @__PURE__ */ t(((e) => {
 						return s(e);
 					case T: return a = Na(a), b(e, r, a, c);
 				}
-				if (ce(a)) return h(e, r, a, c);
-				if (ae(a)) {
-					if (l = ae(a), typeof l != "function") throw Error(o(150));
-					return a = l.call(a), g(e, r, a, c);
+				if (se(a)) return h(e, r, a, c);
+				if (ie(a)) {
+					if (l = ie(a), typeof l != "function") throw Error(o(150));
+					return a = l.call(a), _(e, r, a, c);
 				}
 				if (typeof a.then == "function") return b(e, r, za(a), c);
-				if (a.$$typeof === S) return b(e, r, ca(e, a), c);
+				if (a.$$typeof === C) return b(e, r, ca(e, a), c);
 				Va(e, a);
 			}
 			return typeof a == "string" && a !== "" || typeof a == "number" || typeof a == "bigint" ? (a = "" + a, r !== null && r.tag === 6 ? (n(e, r.sibling), c = i(r, a), c.return = e, e = c) : (n(e, r), c = xi(a, e.mode, c), c.return = e, e = c), s(e)) : n(e, r);
@@ -2365,7 +2365,7 @@ var m = /* @__PURE__ */ t(((e) => {
 		var n = e.callbacks;
 		if (n !== null) for (e.callbacks = null, e = 0; e < n.length; e++) to(n[e], t);
 	}
-	var ro = fe(null), io = fe(0);
+	var ro = de(null), io = de(0);
 	function ao(e, t) {
 		e = Wl, A(io, e), A(ro, t), Wl = e | t.baseLanes;
 	}
@@ -2373,9 +2373,9 @@ var m = /* @__PURE__ */ t(((e) => {
 		A(io, Wl), A(ro, ro.current);
 	}
 	function so() {
-		Wl = io.current, k(ro), k(io);
+		Wl = io.current, fe(ro), fe(io);
 	}
-	var co = fe(null), lo = null;
+	var co = de(null), lo = null;
 	function uo(e) {
 		var t = e.alternate;
 		A(F, F.current & 1), A(co, e), lo === null && (t === null || ro.current !== null || t.memoizedState !== null) && (lo = e);
@@ -2390,9 +2390,9 @@ var m = /* @__PURE__ */ t(((e) => {
 		A(F, F.current), A(co, co.current);
 	}
 	function ho(e) {
-		k(co), lo === e && (lo = null), k(F);
+		fe(co), lo === e && (lo = null), fe(F);
 	}
-	var F = fe(0);
+	var F = de(0);
 	function go(e) {
 		for (var t = e; t !== null;) {
 			if (t.tag === 13) {
@@ -2423,10 +2423,10 @@ var m = /* @__PURE__ */ t(((e) => {
 		return !0;
 	}
 	function Eo(e, t, n, r, i, a) {
-		return _o = a, I = t, t.memoizedState = null, t.updateQueue = null, t.lanes = 0, D.H = e === null || e.memoizedState === null ? Hs : Us, bo = !1, a = n(r, i), bo = !1, yo && (a = Oo(t, n, r, i)), Do(e), a;
+		return _o = a, I = t, t.memoizedState = null, t.updateQueue = null, t.lanes = 0, O.H = e === null || e.memoizedState === null ? Hs : Us, bo = !1, a = n(r, i), bo = !1, yo && (a = Oo(t, n, r, i)), Do(e), a;
 	}
 	function Do(e) {
-		D.H = Vs;
+		O.H = Vs;
 		var t = L !== null && L.next !== null;
 		if (_o = 0, R = L = I = null, vo = !1, So = 0, Co = null, t) throw Error(o(300));
 		e === null || V || (e = e.dependencies, e !== null && aa(e) && (V = !0));
@@ -2440,12 +2440,12 @@ var m = /* @__PURE__ */ t(((e) => {
 				var a = e.updateQueue;
 				a.lastEffect = null, a.events = null, a.stores = null, a.memoCache != null && (a.memoCache.index = 0);
 			}
-			D.H = Ws, a = t(n, r);
+			O.H = Ws, a = t(n, r);
 		} while (yo);
 		return a;
 	}
 	function ko() {
-		var e = D.H, t = e.useState()[0];
+		var e = O.H, t = e.useState()[0];
 		return t = typeof t.then == "function" ? Fo(t) : t, e = e.useState()[0], (L === null ? null : L.memoizedState) !== e && (I.flags |= 1024), t;
 	}
 	function Ao() {
@@ -2504,12 +2504,12 @@ var m = /* @__PURE__ */ t(((e) => {
 	}
 	function Fo(e) {
 		var t = So;
-		return So += 1, Co === null && (Co = []), e = Ma(Co, e, t), t = I, (R === null ? t.memoizedState : R.next) === null && (t = t.alternate, D.H = t === null || t.memoizedState === null ? Hs : Us), e;
+		return So += 1, Co === null && (Co = []), e = Ma(Co, e, t), t = I, (R === null ? t.memoizedState : R.next) === null && (t = t.alternate, O.H = t === null || t.memoizedState === null ? Hs : Us), e;
 	}
 	function Io(e) {
 		if (typeof e == "object" && e) {
 			if (typeof e.then == "function") return Fo(e);
-			if (e.$$typeof === S) return sa(e);
+			if (e.$$typeof === C) return sa(e);
 		}
 		throw Error(o(438, String(e)));
 	}
@@ -2690,21 +2690,21 @@ var m = /* @__PURE__ */ t(((e) => {
 					a.listeners.push(e);
 				}
 			};
-			D.T === null ? a.isTransition = !1 : n(!0), r(a), n = t.pending, n === null ? (a.next = t.pending = a, Zo(t, a)) : (a.next = n.next, t.pending = n.next = a);
+			O.T === null ? a.isTransition = !1 : n(!0), r(a), n = t.pending, n === null ? (a.next = t.pending = a, Zo(t, a)) : (a.next = n.next, t.pending = n.next = a);
 		}
 	}
 	function Zo(e, t) {
 		var n = t.action, r = t.payload, i = e.state;
 		if (t.isTransition) {
-			var a = D.T, o = {};
-			D.T = o;
+			var a = O.T, o = {};
+			O.T = o;
 			try {
-				var s = n(i, r), c = D.S;
+				var s = n(i, r), c = O.S;
 				c !== null && c(o, s), Qo(e, t, s);
 			} catch (n) {
 				es(e, t, n);
 			} finally {
-				a !== null && o.types !== null && (a.types = o.types), D.T = a;
+				a !== null && o.types !== null && (a.types = o.types), O.T = a;
 			}
 		} else try {
 			a = n(i, r), Qo(e, t, a);
@@ -2912,12 +2912,12 @@ var m = /* @__PURE__ */ t(((e) => {
 		return kr(n, t) ? n : ro.current === null ? !(_o & 42) || _o & 1073741824 && !(J & 261930) ? (V = !0, e.memoizedState = n) : (e = mu(), I.lanes |= e, Gl |= e, t) : (e = Cs(e, n, r), kr(e, t) || (V = !0), e);
 	}
 	function Ts(e, t, n, r, i) {
-		var a = O.p;
-		O.p = a !== 0 && 8 > a ? a : 8;
-		var o = D.T, s = {};
-		D.T = s, Ls(e, !1, t, n);
+		var a = k.p;
+		k.p = a !== 0 && 8 > a ? a : 8;
+		var o = O.T, s = {};
+		O.T = s, Ls(e, !1, t, n);
 		try {
-			var c = i(), l = D.S;
+			var c = i(), l = O.S;
 			l !== null && l(s, c), typeof c == "object" && c && typeof c.then == "function" ? Is(e, t, xa(c, r), pu(e)) : Is(e, t, r, pu(e));
 		} catch (n) {
 			Is(e, t, {
@@ -2926,14 +2926,14 @@ var m = /* @__PURE__ */ t(((e) => {
 				reason: n
 			}, pu());
 		} finally {
-			O.p = a, o !== null && s.types !== null && (o.types = s.types), D.T = o;
+			k.p = a, o !== null && s.types !== null && (o.types = s.types), O.T = o;
 		}
 	}
 	function Es() {}
 	function Ds(e, t, n, r) {
 		if (e.tag !== 5) throw Error(o(476));
 		var i = Os(e).queue;
-		Ts(e, i, t, le, n === null ? Es : function() {
+		Ts(e, i, t, ce, n === null ? Es : function() {
 			return ks(e), n(r);
 		});
 	}
@@ -2941,15 +2941,15 @@ var m = /* @__PURE__ */ t(((e) => {
 		var t = e.memoizedState;
 		if (t !== null) return t;
 		t = {
-			memoizedState: le,
-			baseState: le,
+			memoizedState: ce,
+			baseState: ce,
 			baseQueue: null,
 			queue: {
 				pending: null,
 				lanes: 0,
 				dispatch: null,
 				lastRenderedReducer: Ro,
-				lastRenderedState: le
+				lastRenderedState: ce
 			},
 			next: null
 		};
@@ -3759,16 +3759,16 @@ var m = /* @__PURE__ */ t(((e) => {
 					else {
 						if (e != null) {
 							var i = e.$$typeof;
-							if (i === te) {
+							if (i === ee) {
 								t.tag = 11, t = sc(null, t, e, r, n);
 								break a;
 							}
-							if (i === ne) {
+							if (i === w) {
 								t.tag = 14, t = cc(null, t, e, r, n);
 								break a;
 							}
 						}
-						throw t = se(e) || e, Error(o(306, t, ""));
+						throw t = oe(e) || e, Error(o(306, t, ""));
 					}
 				}
 				return t;
@@ -4014,7 +4014,7 @@ var m = /* @__PURE__ */ t(((e) => {
 			case 4: return ve(), e === null && Sd(t.stateNode.containerInfo), H(t), null;
 			case 10: return ta(t.type), H(t), null;
 			case 19:
-				if (k(F), r = t.memoizedState, r === null) return H(t), null;
+				if (fe(F), r = t.memoizedState, r === null) return H(t), null;
 				if (i = !!(t.flags & 128), a = r.rendering, a === null) {
 					if (i) zc(r, !1);
 					else {
@@ -4037,7 +4037,7 @@ var m = /* @__PURE__ */ t(((e) => {
 				}
 				return r.tail === null ? (H(t), null) : (e = r.tail, r.rendering = e, r.tail = e.sibling, r.renderingStartTime = Ne(), e.sibling = null, n = F.current, A(F, i ? n & 1 | 2 : n & 1), N && Fi(t, r.treeForkCount), e);
 			case 22:
-			case 23: return ho(t), so(), r = t.memoizedState !== null, e === null ? r && (t.flags |= 8192) : e.memoizedState !== null !== r && (t.flags |= 8192), r ? n & 536870912 && !(t.flags & 128) && (H(t), t.subtreeFlags & 6 && (t.flags |= 8192)) : H(t), n = t.updateQueue, n !== null && Rc(t, n.retryQueue), n = null, e !== null && e.memoizedState !== null && e.memoizedState.cachePool !== null && (n = e.memoizedState.cachePool.pool), r = null, t.memoizedState !== null && t.memoizedState.cachePool !== null && (r = t.memoizedState.cachePool.pool), r !== n && (t.flags |= 2048), e !== null && k(Ca), null;
+			case 23: return ho(t), so(), r = t.memoizedState !== null, e === null ? r && (t.flags |= 8192) : e.memoizedState !== null !== r && (t.flags |= 8192), r ? n & 536870912 && !(t.flags & 128) && (H(t), t.subtreeFlags & 6 && (t.flags |= 8192)) : H(t), n = t.updateQueue, n !== null && Rc(t, n.retryQueue), n = null, e !== null && e.memoizedState !== null && e.memoizedState.cachePool !== null && (n = e.memoizedState.cachePool.pool), r = null, t.memoizedState !== null && t.memoizedState.cachePool !== null && (r = t.memoizedState.cachePool.pool), r !== n && (t.flags |= 2048), e !== null && fe(Ca), null;
 			case 24: return n = null, e !== null && (n = e.memoizedState.cache), t.memoizedState.cache !== n && (t.flags |= 2048), ta(P), H(t), null;
 			case 25: return null;
 			case 30: return null;
@@ -4063,11 +4063,11 @@ var m = /* @__PURE__ */ t(((e) => {
 					Ji();
 				}
 				return e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
-			case 19: return k(F), null;
+			case 19: return fe(F), null;
 			case 4: return ve(), null;
 			case 10: return ta(t.type), null;
 			case 22:
-			case 23: return ho(t), so(), e !== null && k(Ca), e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
+			case 23: return ho(t), so(), e !== null && fe(Ca), e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
 			case 24: return ta(P), null;
 			case 25: return null;
 			default: return null;
@@ -4093,14 +4093,14 @@ var m = /* @__PURE__ */ t(((e) => {
 				ho(t);
 				break;
 			case 19:
-				k(F);
+				fe(F);
 				break;
 			case 10:
 				ta(t.type);
 				break;
 			case 22:
 			case 23:
-				ho(t), so(), e !== null && k(Ca);
+				ho(t), so(), e !== null && fe(Ca);
 				break;
 			case 24: ta(P);
 		}
@@ -5052,7 +5052,7 @@ var m = /* @__PURE__ */ t(((e) => {
 		}
 	}, zl = typeof WeakMap == "function" ? WeakMap : Map, G = 0, K = null, q = null, J = 0, Y = 0, Bl = null, Vl = !1, Hl = !1, Ul = !1, Wl = 0, X = 0, Gl = 0, Kl = 0, ql = 0, Jl = 0, Yl = 0, Xl = null, Zl = null, Ql = !1, $l = 0, eu = 0, tu = Infinity, nu = null, ru = null, iu = 0, au = null, ou = null, su = 0, cu = 0, lu = null, uu = null, du = 0, fu = null;
 	function pu() {
-		return G & 2 && J !== 0 ? J & -J : D.T === null ? dt() : dd();
+		return G & 2 && J !== 0 ? J & -J : O.T === null ? dt() : dd();
 	}
 	function mu() {
 		if (Jl === 0) {
@@ -5202,19 +5202,19 @@ var m = /* @__PURE__ */ t(((e) => {
 		return Wl = t, si(), n;
 	}
 	function Cu(e, t) {
-		I = null, D.H = Vs, t === Da || t === ka ? (t = Fa(), Y = 3) : t === Oa ? (t = Fa(), Y = 4) : Y = t === ac ? 8 : typeof t == "object" && t && typeof t.then == "function" ? 6 : 1, Bl = t, q === null && (X = 1, $s(e, Ti(t, e.current)));
+		I = null, O.H = Vs, t === Da || t === ka ? (t = Fa(), Y = 3) : t === Oa ? (t = Fa(), Y = 4) : Y = t === ac ? 8 : typeof t == "object" && t && typeof t.then == "function" ? 6 : 1, Bl = t, q === null && (X = 1, $s(e, Ti(t, e.current)));
 	}
 	function wu() {
 		var e = co.current;
 		return e === null ? !0 : (J & 4194048) === J ? lo === null : (J & 62914560) === J || J & 536870912 ? e === lo : !1;
 	}
 	function Tu() {
-		var e = D.H;
-		return D.H = Vs, e === null ? Vs : e;
+		var e = O.H;
+		return O.H = Vs, e === null ? Vs : e;
 	}
 	function Eu() {
-		var e = D.A;
-		return D.A = Rl, e;
+		var e = O.A;
+		return O.A = Rl, e;
 	}
 	function Du() {
 		X = 4, Vl || (J & 4194048) !== J && co.current !== null || (Hl = !0), !(Gl & 134217727) && !(Kl & 134217727) || K === null || yu(K, J, Jl, !1);
@@ -5253,7 +5253,7 @@ var m = /* @__PURE__ */ t(((e) => {
 				Cu(e, t);
 			}
 		while (1);
-		return t && e.shellSuspendCounter++, $i = Qi = null, G = r, D.H = i, D.A = a, q === null && (K = null, J = 0, si()), o;
+		return t && e.shellSuspendCounter++, $i = Qi = null, G = r, O.H = i, O.A = a, q === null && (K = null, J = 0, si()), o;
 	}
 	function ku() {
 		for (; q !== null;) Mu(q);
@@ -5326,7 +5326,7 @@ var m = /* @__PURE__ */ t(((e) => {
 				Cu(e, t);
 			}
 		while (1);
-		return $i = Qi = null, D.H = r, D.A = i, G = n, q === null ? (K = null, J = 0, si(), X) : 0;
+		return $i = Qi = null, O.H = r, O.A = i, G = n, q === null ? (K = null, J = 0, si(), X) : 0;
 	}
 	function ju() {
 		for (; q !== null && !je();) Mu(q);
@@ -5412,11 +5412,11 @@ var m = /* @__PURE__ */ t(((e) => {
 			if (a = t.lanes | t.childLanes, a |= oi, at(e, n, a, s, c, l), e === K && (q = K = null, J = 0), ou = t, au = e, su = n, cu = a, lu = i, uu = r, t.subtreeFlags & 10256 || t.flags & 10256 ? (e.callbackNode = null, e.callbackPriority = 0, Xu(Le, function() {
 				return Uu(), null;
 			})) : (e.callbackNode = null, e.callbackPriority = 0), r = !!(t.flags & 13878), t.subtreeFlags & 13878 || r) {
-				r = D.T, D.T = null, i = O.p, O.p = 2, s = G, G |= 4;
+				r = O.T, O.T = null, i = k.p, k.p = 2, s = G, G |= 4;
 				try {
 					ol(e, t, n);
 				} finally {
-					G = s, O.p = i, D.T = r;
+					G = s, k.p = i, O.T = r;
 				}
 			}
 			iu = 1, Ru(), zu(), Bu();
@@ -5427,9 +5427,9 @@ var m = /* @__PURE__ */ t(((e) => {
 			iu = 0;
 			var e = au, t = ou, n = !!(t.flags & 13878);
 			if (t.subtreeFlags & 13878 || n) {
-				n = D.T, D.T = null;
-				var r = O.p;
-				O.p = 2;
+				n = O.T, O.T = null;
+				var r = k.p;
+				k.p = 2;
 				var i = G;
 				G |= 4;
 				try {
@@ -5464,7 +5464,7 @@ var m = /* @__PURE__ */ t(((e) => {
 					}
 					sp = !!Rd, zd = Rd = null;
 				} finally {
-					G = i, O.p = r, D.T = n;
+					G = i, k.p = r, O.T = n;
 				}
 			}
 			e.current = t, iu = 2;
@@ -5475,15 +5475,15 @@ var m = /* @__PURE__ */ t(((e) => {
 			iu = 0;
 			var e = au, t = ou, n = !!(t.flags & 8772);
 			if (t.subtreeFlags & 8772 || n) {
-				n = D.T, D.T = null;
-				var r = O.p;
-				O.p = 2;
+				n = O.T, O.T = null;
+				var r = k.p;
+				k.p = 2;
 				var i = G;
 				G |= 4;
 				try {
 					sl(e, t.alternate, t);
 				} finally {
-					G = i, O.p = r, D.T = n;
+					G = i, k.p = r, O.T = n;
 				}
 			}
 			iu = 3;
@@ -5499,14 +5499,14 @@ var m = /* @__PURE__ */ t(((e) => {
 				Ue.onCommitFiberRoot(He, t, void 0, (t.current.flags & 128) == 128);
 			} catch {}
 			if (r !== null) {
-				t = D.T, i = O.p, O.p = 2, D.T = null;
+				t = O.T, i = k.p, k.p = 2, O.T = null;
 				try {
 					for (var a = e.onRecoverableError, o = 0; o < r.length; o++) {
 						var s = r[o];
 						a(s.value, { componentStack: s.stack });
 					}
 				} finally {
-					D.T = t, O.p = i;
+					O.T = t, k.p = i;
 				}
 			}
 			su & 3 && Hu(), rd(e), i = e.pendingLanes, n & 261930 && i & 42 ? e === fu ? du++ : (du = 0, fu = e) : du = 0, id(0, !1);
@@ -5522,9 +5522,9 @@ var m = /* @__PURE__ */ t(((e) => {
 		if (iu !== 5) return !1;
 		var e = au, t = cu;
 		cu = 0;
-		var n = ut(su), r = D.T, i = O.p;
+		var n = ut(su), r = O.T, i = k.p;
 		try {
-			O.p = 32 > n ? 32 : n, D.T = null, n = lu, lu = null;
+			k.p = 32 > n ? 32 : n, O.T = null, n = lu, lu = null;
 			var a = au, s = su;
 			if (iu = 0, ou = au = null, su = 0, G & 6) throw Error(o(331));
 			var c = G;
@@ -5533,7 +5533,7 @@ var m = /* @__PURE__ */ t(((e) => {
 			} catch {}
 			return !0;
 		} finally {
-			O.p = i, D.T = r, Vu(e, t);
+			k.p = i, O.T = r, Vu(e, t);
 		}
 	}
 	function Wu(e, t, n) {
@@ -6777,8 +6777,8 @@ var m = /* @__PURE__ */ t(((e) => {
 	function gf(e) {
 		return typeof e.getRootNode == "function" ? e.getRootNode() : e.nodeType === 9 ? e : e.ownerDocument;
 	}
-	var _f = O.d;
-	O.d = {
+	var _f = k.d;
+	k.d = {
 		f: vf,
 		r: yf,
 		D: Sf,
@@ -7167,11 +7167,11 @@ var m = /* @__PURE__ */ t(((e) => {
 		}
 	}
 	var Qf = {
-		$$typeof: S,
+		$$typeof: C,
 		Provider: null,
 		Consumer: null,
-		_currentValue: le,
-		_currentValue2: le,
+		_currentValue: ce,
+		_currentValue2: ce,
 		_threadCount: 0
 	};
 	function $f(e, t, n, r, i, a, o, s, c) {
@@ -7215,23 +7215,23 @@ var m = /* @__PURE__ */ t(((e) => {
 	}
 	var sp = !0;
 	function cp(e, t, n, r) {
-		var i = D.T;
-		D.T = null;
-		var a = O.p;
+		var i = O.T;
+		O.T = null;
+		var a = k.p;
 		try {
-			O.p = 2, up(e, t, n, r);
+			k.p = 2, up(e, t, n, r);
 		} finally {
-			O.p = a, D.T = i;
+			k.p = a, O.T = i;
 		}
 	}
 	function lp(e, t, n, r) {
-		var i = D.T;
-		D.T = null;
-		var a = O.p;
+		var i = O.T;
+		O.T = null;
+		var a = k.p;
 		try {
-			O.p = 8, up(e, t, n, r);
+			k.p = 8, up(e, t, n, r);
 		} finally {
-			O.p = a, D.T = i;
+			k.p = a, O.T = i;
 		}
 	}
 	function up(e, t, n, r) {
@@ -7575,7 +7575,7 @@ var m = /* @__PURE__ */ t(((e) => {
 	};
 	var Lp = r.version;
 	if (Lp !== "19.2.8") throw Error(o(527, Lp, "19.2.8"));
-	O.findDOMNode = function(e) {
+	k.findDOMNode = function(e) {
 		var t = e._reactInternals;
 		if (t === void 0) throw typeof e.render == "function" ? Error(o(188)) : (e = Object.keys(e).join(","), Error(o(268, e)));
 		return e = f(t), e = e === null ? null : p(e), e = e === null ? null : e.stateNode, e;
@@ -7584,7 +7584,7 @@ var m = /* @__PURE__ */ t(((e) => {
 		bundleType: 0,
 		version: "19.2.8",
 		rendererPackageName: "react-dom",
-		currentDispatcherRef: D,
+		currentDispatcherRef: O,
 		reconcilerVersion: "19.2.8"
 	};
 	if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u") {
@@ -7598,7 +7598,7 @@ var m = /* @__PURE__ */ t(((e) => {
 		var n = !1, r = "", i = Xs, a = Zs, c = Qs;
 		return t != null && (!0 === t.unstable_strictMode && (n = !0), t.identifierPrefix !== void 0 && (r = t.identifierPrefix), t.onUncaughtError !== void 0 && (i = t.onUncaughtError), t.onCaughtError !== void 0 && (a = t.onCaughtError), t.onRecoverableError !== void 0 && (c = t.onRecoverableError)), t = ep(e, 1, !1, null, null, n, r, null, i, a, c, Pp), e[gt] = t.current, Sd(e), new Fp(t);
 	};
-})), _ = /* @__PURE__ */ t(((e, t) => {
+})), y = /* @__PURE__ */ t(((e, t) => {
 	function n() {
 		if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE == "function") try {
 			__REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE(n);
@@ -7606,24 +7606,24 @@ var m = /* @__PURE__ */ t(((e) => {
 			console.error(e);
 		}
 	}
-	n(), t.exports = g();
-})), v = /* @__PURE__ */ e(n(), 1), y = _(), b = r();
-function x(e, t, n) {
+	n(), t.exports = v();
+})), b = /* @__PURE__ */ e(n(), 1), x = y(), S = r();
+function C(e, t, n) {
 	if (!e) return;
 	let r = e.closest("[data-screen]"), i = !1, a = () => {
 		if (i || r && !r.classList.contains("is-active")) return;
 		i = !0, window.removeEventListener("app:screen-change", a);
-		let o = (0, y.createRoot)(e);
-		o.render(/* @__PURE__ */ (0, b.jsx)("p", {
+		let o = (0, x.createRoot)(e);
+		o.render(/* @__PURE__ */ (0, S.jsx)("p", {
 			role: "status",
 			children: "Loading…"
 		})), t().then((e) => {
 			let t = e[n];
-			o.render(/* @__PURE__ */ (0, b.jsx)(t, {}));
+			o.render(/* @__PURE__ */ (0, S.jsx)(t, {}));
 		}).catch(() => {
-			o.render(/* @__PURE__ */ (0, b.jsxs)("div", {
+			o.render(/* @__PURE__ */ (0, S.jsxs)("div", {
 				role: "alert",
-				children: [/* @__PURE__ */ (0, b.jsx)("p", { children: "This page could not load. Check your connection and try again." }), /* @__PURE__ */ (0, b.jsx)("button", {
+				children: [/* @__PURE__ */ (0, S.jsx)("p", { children: "This page could not load. Check your connection and try again." }), /* @__PURE__ */ (0, S.jsx)("button", {
 					type: "button",
 					onClick: () => window.location.reload(),
 					children: "Reload page"
@@ -7634,14 +7634,14 @@ function x(e, t, n) {
 	window.addEventListener("app:screen-change", a), a();
 }
 // node_modules/@capacitor/haptics/dist/esm/index.js
-var ee = a("Haptics", { web: () => import("./web-BQIuAsSL.js").then((e) => new e.HapticsWeb()) }), S = i(), te = [
+var ee = a("Haptics", { web: () => import("./web-BQIuAsSL.js").then((e) => new e.HapticsWeb()) }), te = i(), ne = [
 	"M5 3h14v18H5z",
 	"M8 7h8",
 	"M8 11h8",
 	"M8 15h5"
 ];
-function C() {
-	return /* @__PURE__ */ (0, b.jsx)("svg", {
+function w() {
+	return /* @__PURE__ */ (0, S.jsx)("svg", {
 		viewBox: "0 0 24 24",
 		"aria-hidden": "true",
 		fill: "none",
@@ -7649,42 +7649,38 @@ function C() {
 		strokeWidth: "1.8",
 		strokeLinecap: "round",
 		strokeLinejoin: "round",
-		children: te.map((e) => /* @__PURE__ */ (0, b.jsx)("path", { d: e }, e))
+		children: ne.map((e) => /* @__PURE__ */ (0, S.jsx)("path", { d: e }, e))
 	});
 }
-function w({ row: e, onOpen: t }) {
-	let n = e.items || [], r = n.map((e) => e.reference || "").filter(Boolean), i = `${e.title || "Untitled note"} ${r.join(" ")} ${e.note || ""}`.toLowerCase();
-	return /* @__PURE__ */ (0, b.jsx)("article", {
+function T({ row: e, onOpen: t }) {
+	let n = (e.items || []).filter((e) => !e.standalone), r = n.map((e) => e.reference || "").filter(Boolean), i = `${e.title || "Untitled note"} ${r.join(" ")} ${e.note || ""}`.toLowerCase();
+	return /* @__PURE__ */ (0, S.jsx)("article", {
 		className: "saved-note-card",
 		"data-note-searchable": i,
-		children: /* @__PURE__ */ (0, b.jsxs)("button", {
+		children: /* @__PURE__ */ (0, S.jsxs)("button", {
 			className: "saved-note-open",
 			type: "button",
 			onClick: () => t(e),
 			children: [
-				/* @__PURE__ */ (0, b.jsx)("strong", {
+				/* @__PURE__ */ (0, S.jsx)("strong", {
 					className: "saved-note-card-title",
 					children: e.title || "Untitled note"
 				}),
-				/* @__PURE__ */ (0, b.jsxs)("span", {
+				/* @__PURE__ */ (0, S.jsxs)("span", {
 					className: "saved-note-card-heading",
-					children: [/* @__PURE__ */ (0, b.jsx)(C, {}), /* @__PURE__ */ (0, b.jsxs)("strong", { children: [
-						n.length,
-						" verse",
-						n.length === 1 ? "" : "s"
-					] })]
+					children: [/* @__PURE__ */ (0, S.jsx)(w, {}), /* @__PURE__ */ (0, S.jsx)("strong", { children: n.length ? `${n.length} verse${n.length === 1 ? "" : "s"}` : "Note" })]
 				}),
-				/* @__PURE__ */ (0, b.jsx)("span", {
+				/* @__PURE__ */ (0, S.jsx)("span", {
 					className: "saved-note-references",
 					children: r.join(" · ")
 				}),
-				/* @__PURE__ */ (0, b.jsx)("p", { children: e.note || "No preview available" })
+				/* @__PURE__ */ (0, S.jsx)("p", { children: e.note || "No preview available" })
 			]
 		})
 	});
 }
 // src/react/home.jsx
-var ne = /* @__PURE__ */ (0, b.jsxs)("svg", {
+var E = /* @__PURE__ */ (0, S.jsxs)("svg", {
 	viewBox: "0 0 24 24",
 	"aria-hidden": "true",
 	fill: "none",
@@ -7692,16 +7688,16 @@ var ne = /* @__PURE__ */ (0, b.jsxs)("svg", {
 	strokeWidth: "1.8",
 	strokeLinecap: "round",
 	strokeLinejoin: "round",
-	children: [/* @__PURE__ */ (0, b.jsx)("path", { d: "M5 19 19 5" }), /* @__PURE__ */ (0, b.jsx)("path", { d: "M9 5h10v10" })]
+	children: [/* @__PURE__ */ (0, S.jsx)("path", { d: "M5 19 19 5" }), /* @__PURE__ */ (0, S.jsx)("path", { d: "M9 5h10v10" })]
 });
-function T() {
+function re() {
 	return {
 		streak: document.querySelector("[data-home-streak]")?.textContent?.trim() || "1 day",
 		continueReading: document.querySelector("[data-home-continue-reading]")?.textContent?.trim() || "John 15",
 		prayerCount: document.querySelector("[data-home-prayer-count]")?.textContent?.trim() || "0"
 	};
 }
-function E() {
+function D() {
 	let e = window.bibleReaderBridge?.getChapterSnapshot?.(), t = e?.verses?.[0];
 	return t?.text ? {
 		text: `“${t.text}”`,
@@ -7711,7 +7707,7 @@ function E() {
 		reference: "Your next verse"
 	};
 }
-var re = /* @__PURE__ */ (0, b.jsxs)("svg", {
+var ie = /* @__PURE__ */ (0, S.jsxs)("svg", {
 	viewBox: "0 0 24 24",
 	"aria-hidden": "true",
 	fill: "none",
@@ -7719,8 +7715,8 @@ var re = /* @__PURE__ */ (0, b.jsxs)("svg", {
 	strokeWidth: "1.8",
 	strokeLinecap: "round",
 	strokeLinejoin: "round",
-	children: [/* @__PURE__ */ (0, b.jsx)("path", { d: "M20.8 8.8c0 5.4-8.8 10.2-8.8 10.2S3.2 14.2 3.2 8.8A4.7 4.7 0 0 1 12 6.1a4.7 4.7 0 0 1 8.8 2.7Z" }), /* @__PURE__ */ (0, b.jsx)("path", { d: "M7 15h4l2-3 2 2h3" })]
-}), ie = {
+	children: [/* @__PURE__ */ (0, S.jsx)("path", { d: "M20.8 8.8c0 5.4-8.8 10.2-8.8 10.2S3.2 14.2 3.2 8.8A4.7 4.7 0 0 1 12 6.1a4.7 4.7 0 0 1 8.8 2.7Z" }), /* @__PURE__ */ (0, S.jsx)("path", { d: "M7 15h4l2-3 2 2h3" })]
+}), ae = {
 	highlights: [
 		"M4 20 15.5 8.5",
 		"m14 5 5 5",
@@ -7734,8 +7730,8 @@ var re = /* @__PURE__ */ (0, b.jsxs)("svg", {
 		"M8 15h5"
 	]
 };
-function ae({ name: e }) {
-	return /* @__PURE__ */ (0, b.jsx)("svg", {
+function oe({ name: e }) {
+	return /* @__PURE__ */ (0, S.jsx)("svg", {
 		viewBox: "0 0 24 24",
 		"aria-hidden": "true",
 		fill: "none",
@@ -7743,11 +7739,11 @@ function ae({ name: e }) {
 		strokeWidth: "1.8",
 		strokeLinecap: "round",
 		strokeLinejoin: "round",
-		children: ie[e].map((e) => /* @__PURE__ */ (0, b.jsx)("path", { d: e }, e))
+		children: ae[e].map((e) => /* @__PURE__ */ (0, S.jsx)("path", { d: e }, e))
 	});
 }
-function oe() {
-	let e = (0, v.useRef)(null), [t, n] = (0, v.useState)(null), [r, i] = (0, v.useState)(!1), [a, o] = (0, v.useState)(""), s = t?.books.find((e) => e.id === t.bookId);
+function se() {
+	let e = (0, b.useRef)(null), [t, n] = (0, b.useState)(null), [r, i] = (0, b.useState)(!1), [a, o] = (0, b.useState)(""), s = t?.books.find((e) => e.id === t.bookId);
 	function c() {
 		let t = window.bibleReaderBridge?.getSnapshot();
 		t && (n(t), o(""), e.current.showModal());
@@ -7764,47 +7760,47 @@ function oe() {
 			}
 		}
 	}
-	return /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [/* @__PURE__ */ (0, b.jsxs)("button", {
+	return /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [/* @__PURE__ */ (0, S.jsxs)("button", {
 		type: "button",
 		className: "home-study-launch",
 		onClick: c,
 		"aria-haspopup": "dialog",
-		children: [/* @__PURE__ */ (0, b.jsxs)("svg", {
+		children: [/* @__PURE__ */ (0, S.jsxs)("svg", {
 			viewBox: "0 0 24 24",
 			fill: "none",
 			stroke: "currentColor",
 			strokeWidth: "1.8",
 			"aria-hidden": "true",
-			children: [/* @__PURE__ */ (0, b.jsx)("circle", {
+			children: [/* @__PURE__ */ (0, S.jsx)("circle", {
 				cx: "10.8",
 				cy: "10.8",
 				r: "6.8"
-			}), /* @__PURE__ */ (0, b.jsx)("path", { d: "m16 16 5 5" })]
+			}), /* @__PURE__ */ (0, S.jsx)("path", { d: "m16 16 5 5" })]
 		}), "Bible Study"]
-	}), (0, S.createPortal)(/* @__PURE__ */ (0, b.jsx)("dialog", {
+	}), (0, te.createPortal)(/* @__PURE__ */ (0, S.jsx)("dialog", {
 		ref: e,
 		className: "home-study-dialog",
 		"aria-labelledby": "home-study-heading",
 		onCancel: (e) => {
 			r && e.preventDefault();
 		},
-		children: /* @__PURE__ */ (0, b.jsxs)("form", {
+		children: /* @__PURE__ */ (0, S.jsxs)("form", {
 			onSubmit: l,
 			children: [
-				/* @__PURE__ */ (0, b.jsxs)("header", { children: [/* @__PURE__ */ (0, b.jsx)("h2", {
+				/* @__PURE__ */ (0, S.jsxs)("header", { children: [/* @__PURE__ */ (0, S.jsx)("h2", {
 					id: "home-study-heading",
 					children: "Bible Study"
-				}), /* @__PURE__ */ (0, b.jsx)("button", {
+				}), /* @__PURE__ */ (0, S.jsx)("button", {
 					type: "button",
 					"aria-label": "Close Bible Study selection",
 					disabled: r,
 					onClick: () => e.current.close(),
 					children: "×"
 				})] }),
-				/* @__PURE__ */ (0, b.jsx)("p", { children: "Choose a chapter to explore." }),
-				/* @__PURE__ */ (0, b.jsxs)("div", {
+				/* @__PURE__ */ (0, S.jsx)("p", { children: "Choose a chapter to explore." }),
+				/* @__PURE__ */ (0, S.jsxs)("div", {
 					className: "home-study-selectors",
-					children: [/* @__PURE__ */ (0, b.jsxs)("label", { children: ["Book", /* @__PURE__ */ (0, b.jsx)("select", {
+					children: [/* @__PURE__ */ (0, S.jsxs)("label", { children: ["Book", /* @__PURE__ */ (0, S.jsx)("select", {
 						value: t?.bookId || "",
 						disabled: r,
 						onChange: (e) => n((t) => ({
@@ -7812,30 +7808,30 @@ function oe() {
 							bookId: e.target.value,
 							chapter: 1
 						})),
-						children: t?.books.map((e) => /* @__PURE__ */ (0, b.jsx)("option", {
+						children: t?.books.map((e) => /* @__PURE__ */ (0, S.jsx)("option", {
 							value: e.id,
 							children: e.name
 						}, e.id))
-					})] }), /* @__PURE__ */ (0, b.jsxs)("label", { children: ["Chapter", /* @__PURE__ */ (0, b.jsx)("select", {
+					})] }), /* @__PURE__ */ (0, S.jsxs)("label", { children: ["Chapter", /* @__PURE__ */ (0, S.jsx)("select", {
 						value: t?.chapter || 1,
 						disabled: r,
 						onChange: (e) => n((t) => ({
 							...t,
 							chapter: Number(e.target.value)
 						})),
-						children: Array.from({ length: s?.chapters || 1 }, (e, t) => /* @__PURE__ */ (0, b.jsx)("option", {
+						children: Array.from({ length: s?.chapters || 1 }, (e, t) => /* @__PURE__ */ (0, S.jsx)("option", {
 							value: t + 1,
 							children: t + 1
 						}, t + 1))
 					})] })]
 				}),
-				/* @__PURE__ */ (0, b.jsx)("p", {
+				/* @__PURE__ */ (0, S.jsx)("p", {
 					className: "home-study-error",
 					role: "status",
 					"aria-live": "polite",
 					children: a
 				}),
-				/* @__PURE__ */ (0, b.jsx)("button", {
+				/* @__PURE__ */ (0, S.jsx)("button", {
 					className: "home-study-start",
 					type: "submit",
 					disabled: r,
@@ -7845,80 +7841,80 @@ function oe() {
 		})
 	}), document.body)] });
 }
-function se() {
-	let [e, t] = (0, v.useState)(() => window.profileBridge?.getHero?.().coverImage || "assets/home-hero-mountain-sunrise.webp"), [n, r] = (0, v.useState)(E);
-	return (0, v.useEffect)(() => {
+function O() {
+	let [e, t] = (0, b.useState)(() => window.profileBridge?.getHero?.().coverImage || "assets/home-hero-mountain-sunrise.webp"), [n, r] = (0, b.useState)(D);
+	return (0, b.useEffect)(() => {
 		let e = () => {
 			let e = window.profileBridge?.getHero?.().coverImage;
 			e && t(e);
 		};
 		return document.addEventListener("profile:hero-change", e), () => document.removeEventListener("profile:hero-change", e);
-	}, []), (0, v.useEffect)(() => {
-		let e = () => r(E());
+	}, []), (0, b.useEffect)(() => {
+		let e = () => r(D());
 		return document.addEventListener("bible:reader-change", e), document.addEventListener("bible:chapter-change", e), e(), () => {
 			document.removeEventListener("bible:reader-change", e), document.removeEventListener("bible:chapter-change", e);
 		};
-	}, []), /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [
-		/* @__PURE__ */ (0, b.jsx)("img", {
+	}, []), /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [
+		/* @__PURE__ */ (0, S.jsx)("img", {
 			src: e,
 			alt: "Selected hero image"
 		}),
-		/* @__PURE__ */ (0, b.jsxs)("h1", {
+		/* @__PURE__ */ (0, S.jsxs)("h1", {
 			className: "home-hero-app-title",
 			"aria-label": "Think Bible!",
-			children: [/* @__PURE__ */ (0, b.jsx)("span", {
+			children: [/* @__PURE__ */ (0, S.jsx)("span", {
 				className: "home-hero-app-title-think",
 				children: "Think"
-			}), /* @__PURE__ */ (0, b.jsx)("span", {
+			}), /* @__PURE__ */ (0, S.jsx)("span", {
 				className: "home-hero-app-title-bible",
 				children: "Bible!"
 			})]
 		}),
-		/* @__PURE__ */ (0, b.jsxs)("div", {
+		/* @__PURE__ */ (0, S.jsxs)("div", {
 			className: "home-hero-image-copy",
-			children: [/* @__PURE__ */ (0, b.jsxs)("div", {
+			children: [/* @__PURE__ */ (0, S.jsxs)("div", {
 				className: "home-hero-verse",
-				children: [/* @__PURE__ */ (0, b.jsxs)("div", {
+				children: [/* @__PURE__ */ (0, S.jsxs)("div", {
 					className: "home-hero-verse-heading",
 					children: [
-						/* @__PURE__ */ (0, b.jsx)("span", { children: "Verse of the day" }),
-						/* @__PURE__ */ (0, b.jsx)("span", {
+						/* @__PURE__ */ (0, S.jsx)("span", { children: "Verse of the day" }),
+						/* @__PURE__ */ (0, S.jsx)("span", {
 							"aria-hidden": "true",
 							children: "-"
 						}),
-						/* @__PURE__ */ (0, b.jsx)("small", { children: n.reference })
+						/* @__PURE__ */ (0, S.jsx)("small", { children: n.reference })
 					]
-				}), /* @__PURE__ */ (0, b.jsx)("strong", { children: n.text })]
-			}), /* @__PURE__ */ (0, b.jsxs)("div", {
+				}), /* @__PURE__ */ (0, S.jsx)("strong", { children: n.text })]
+			}), /* @__PURE__ */ (0, S.jsxs)("div", {
 				className: "home-hero-actions",
-				children: [/* @__PURE__ */ (0, b.jsxs)("button", {
+				children: [/* @__PURE__ */ (0, S.jsxs)("button", {
 					type: "button",
 					"data-nav": "bible",
-					children: ["Start reading ", ne]
-				}), /* @__PURE__ */ (0, b.jsx)(oe, {})]
+					children: ["Start reading ", E]
+				}), /* @__PURE__ */ (0, S.jsx)(se, {})]
 			})]
 		})
 	] });
 }
-function ce() {
-	let [e, t] = (0, v.useState)(() => T().prayerCount);
-	return (0, v.useEffect)(() => {
+function k() {
+	let [e, t] = (0, b.useState)(() => re().prayerCount);
+	return (0, b.useEffect)(() => {
 		let e = (e) => {
 			e.detail?.prayerCount !== void 0 && t(e.detail.prayerCount);
 		};
 		return window.addEventListener("home:stats-change", e), () => window.removeEventListener("home:stats-change", e);
-	}, []), /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [
-		/* @__PURE__ */ (0, b.jsx)("span", {
+	}, []), /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [
+		/* @__PURE__ */ (0, S.jsx)("span", {
 			className: "home-prayer-card-icon",
-			children: re
+			children: ie
 		}),
-		/* @__PURE__ */ (0, b.jsxs)("span", { children: [/* @__PURE__ */ (0, b.jsx)("small", { children: "Pray for someone" }), /* @__PURE__ */ (0, b.jsxs)("strong", { children: [/* @__PURE__ */ (0, b.jsx)("span", { children: e }), " people are waiting for prayer"] })] }),
-		ne
+		/* @__PURE__ */ (0, S.jsxs)("span", { children: [/* @__PURE__ */ (0, S.jsx)("small", { children: "Pray for someone" }), /* @__PURE__ */ (0, S.jsxs)("strong", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: e }), " people are waiting for prayer"] })] }),
+		E
 	] });
 }
-function D() {
-	let [e, t] = (0, v.useState)(() => document.querySelector("[data-home-library-tab].is-active")?.dataset.homeLibraryTab || "highlights");
-	(0, v.useEffect)(() => {
+function ce() {
+	let [e, t] = (0, b.useState)(() => document.querySelector("[data-home-library-tab].is-active")?.dataset.homeLibraryTab || "highlights");
+	(0, b.useEffect)(() => {
 		let e = (e) => {
 			e.detail?.tab && t(e.detail.tab);
 		};
@@ -7931,15 +7927,15 @@ function D() {
 		["highlights", "Highlights"],
 		["bookmarks", "Bookmarks"],
 		["notes", "Notes"]
-	].map(([t, r]) => /* @__PURE__ */ (0, b.jsxs)("button", {
+	].map(([t, r]) => /* @__PURE__ */ (0, S.jsxs)("button", {
 		className: e === t ? "is-active" : "",
 		type: "button",
 		"data-home-library-tab": t,
 		onClick: (e) => n(t, e),
-		children: [/* @__PURE__ */ (0, b.jsx)(ae, { name: t }), /* @__PURE__ */ (0, b.jsx)("span", { children: r })]
+		children: [/* @__PURE__ */ (0, S.jsx)(oe, { name: t }), /* @__PURE__ */ (0, S.jsx)("span", { children: r })]
 	}, t));
 }
-var O = /* @__PURE__ */ (0, b.jsx)("svg", {
+var le = /* @__PURE__ */ (0, S.jsx)("svg", {
 	viewBox: "0 0 24 24",
 	"aria-hidden": "true",
 	fill: "none",
@@ -7947,8 +7943,8 @@ var O = /* @__PURE__ */ (0, b.jsx)("svg", {
 	strokeWidth: "1.8",
 	strokeLinecap: "round",
 	strokeLinejoin: "round",
-	children: /* @__PURE__ */ (0, b.jsx)("path", { d: "M3 6.5A2.5 2.5 0 0 1 5.5 4H10l2 2h6.5A2.5 2.5 0 0 1 21 8.5v8A2.5 2.5 0 0 1 18.5 19h-13A2.5 2.5 0 0 1 3 16.5z" })
-}), le = /* @__PURE__ */ (0, b.jsxs)("svg", {
+	children: /* @__PURE__ */ (0, S.jsx)("path", { d: "M3 6.5A2.5 2.5 0 0 1 5.5 4H10l2 2h6.5A2.5 2.5 0 0 1 21 8.5v8A2.5 2.5 0 0 1 18.5 19h-13A2.5 2.5 0 0 1 3 16.5z" })
+}), ue = /* @__PURE__ */ (0, S.jsxs)("svg", {
 	viewBox: "0 0 24 24",
 	"aria-hidden": "true",
 	fill: "none",
@@ -7956,10 +7952,10 @@ var O = /* @__PURE__ */ (0, b.jsx)("svg", {
 	strokeWidth: "1.8",
 	strokeLinecap: "round",
 	strokeLinejoin: "round",
-	children: [/* @__PURE__ */ (0, b.jsx)("path", { d: "m12 3-1.3 5.7L5 10l5.7 1.3L12 17l1.3-5.7L19 10l-5.7-1.3z" }), /* @__PURE__ */ (0, b.jsx)("path", { d: "m5 17-.6 2.4L2 20l2.4.6L5 23l.6-2.4L8 20l-2.4-.6z" })]
+	children: [/* @__PURE__ */ (0, S.jsx)("path", { d: "m12 3-1.3 5.7L5 10l5.7 1.3L12 17l1.3-5.7L19 10l-5.7-1.3z" }), /* @__PURE__ */ (0, S.jsx)("path", { d: "m5 17-.6 2.4L2 20l2.4.6L5 23l.6-2.4L8 20l-2.4-.6z" })]
 });
-function ue({ snapshot: e, tab: t, onChange: n }) {
-	let [r, i] = (0, v.useState)(""), [a, o] = (0, v.useState)(!1), [s, c] = (0, v.useState)(null);
+function de({ snapshot: e, tab: t, onChange: n }) {
+	let [r, i] = (0, b.useState)(""), [a, o] = (0, b.useState)(!1), [s, c] = (0, b.useState)(null);
 	if (t === "notes") return null;
 	let l = (e) => {
 		e.preventDefault();
@@ -7980,10 +7976,10 @@ function ue({ snapshot: e, tab: t, onChange: n }) {
 		let i = e.activeFolder === r.id ? "" : e.activeFolder;
 		c(null), n(i);
 	};
-	return /* @__PURE__ */ (0, b.jsxs)("div", {
+	return /* @__PURE__ */ (0, S.jsxs)("div", {
 		className: "saved-folder-tools",
 		children: [
-			/* @__PURE__ */ (0, b.jsx)("button", {
+			/* @__PURE__ */ (0, S.jsx)("button", {
 				className: "saved-folder-create-trigger",
 				type: "button",
 				onClick: u,
@@ -7991,23 +7987,23 @@ function ue({ snapshot: e, tab: t, onChange: n }) {
 				title: "New folder",
 				children: "+"
 			}),
-			/* @__PURE__ */ (0, b.jsxs)("div", {
+			/* @__PURE__ */ (0, S.jsxs)("div", {
 				className: "saved-folder-chips",
 				"aria-label": `${t} folders`,
 				children: [
-					/* @__PURE__ */ (0, b.jsx)("button", {
+					/* @__PURE__ */ (0, S.jsx)("button", {
 						className: e.activeFolder === "" ? "is-active" : "",
 						type: "button",
 						onClick: () => n(""),
 						children: "All"
 					}),
-					/* @__PURE__ */ (0, b.jsx)("button", {
+					/* @__PURE__ */ (0, S.jsx)("button", {
 						className: e.activeFolder === "unfiled" ? "is-active" : "",
 						type: "button",
 						onClick: () => n("unfiled"),
 						children: "No folder"
 					}),
-					e.folders.map((t) => /* @__PURE__ */ (0, b.jsx)("button", {
+					e.folders.map((t) => /* @__PURE__ */ (0, S.jsx)("button", {
 						className: e.activeFolder === t.id ? "is-active" : "",
 						type: "button",
 						onClick: () => n(t.id),
@@ -8015,23 +8011,23 @@ function ue({ snapshot: e, tab: t, onChange: n }) {
 					}, t.id))
 				]
 			}),
-			a && (0, S.createPortal)(/* @__PURE__ */ (0, b.jsx)("div", {
+			a && (0, te.createPortal)(/* @__PURE__ */ (0, S.jsx)("div", {
 				className: "saved-folder-modal",
 				role: "presentation",
 				onMouseDown: (e) => e.target === e.currentTarget && o(!1),
-				children: /* @__PURE__ */ (0, b.jsxs)("form", {
+				children: /* @__PURE__ */ (0, S.jsxs)("form", {
 					className: "saved-folder-popover saved-folder-create-popover",
 					onSubmit: s ? f : l,
 					role: "dialog",
 					"aria-modal": "true",
 					"aria-labelledby": "new-folder-title",
 					children: [
-						/* @__PURE__ */ (0, b.jsxs)("div", {
+						/* @__PURE__ */ (0, S.jsxs)("div", {
 							className: "saved-folder-create-heading",
-							children: [/* @__PURE__ */ (0, b.jsxs)("div", { children: [/* @__PURE__ */ (0, b.jsx)("span", { children: "Organize your library" }), /* @__PURE__ */ (0, b.jsx)("h3", {
+							children: [/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Organize your library" }), /* @__PURE__ */ (0, S.jsx)("h3", {
 								id: "new-folder-title",
 								children: s ? "Rename folder" : "New folder"
-							})] }), /* @__PURE__ */ (0, b.jsx)("button", {
+							})] }), /* @__PURE__ */ (0, S.jsx)("button", {
 								type: "button",
 								className: "saved-folder-create-close",
 								onClick: () => o(!1),
@@ -8039,8 +8035,8 @@ function ue({ snapshot: e, tab: t, onChange: n }) {
 								children: "×"
 							})]
 						}),
-						s && /* @__PURE__ */ (0, b.jsx)("p", { children: "Update the name of this folder." }),
-						/* @__PURE__ */ (0, b.jsx)("input", {
+						s && /* @__PURE__ */ (0, S.jsx)("p", { children: "Update the name of this folder." }),
+						/* @__PURE__ */ (0, S.jsx)("input", {
 							autoFocus: !0,
 							value: r,
 							onChange: (e) => i(e.target.value),
@@ -8050,25 +8046,25 @@ function ue({ snapshot: e, tab: t, onChange: n }) {
 							"aria-label": "Folder name",
 							maxLength: "40"
 						}),
-						/* @__PURE__ */ (0, b.jsx)("div", {
+						/* @__PURE__ */ (0, S.jsx)("div", {
 							className: "saved-folder-create-actions",
-							children: /* @__PURE__ */ (0, b.jsx)("button", {
+							children: /* @__PURE__ */ (0, S.jsx)("button", {
 								type: "submit",
 								children: s ? "Save changes" : "Create folder"
 							})
 						}),
-						!s && e.folders.length > 0 && /* @__PURE__ */ (0, b.jsxs)("div", {
+						!s && e.folders.length > 0 && /* @__PURE__ */ (0, S.jsxs)("div", {
 							className: "saved-folder-management-list",
-							children: [/* @__PURE__ */ (0, b.jsx)("span", { children: "Existing folders" }), e.folders.map((e) => /* @__PURE__ */ (0, b.jsxs)("div", {
+							children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Existing folders" }), e.folders.map((e) => /* @__PURE__ */ (0, S.jsxs)("div", {
 								className: "saved-folder-management-row",
 								children: [
-									/* @__PURE__ */ (0, b.jsx)("strong", { children: e.name }),
-									/* @__PURE__ */ (0, b.jsx)("button", {
+									/* @__PURE__ */ (0, S.jsx)("strong", { children: e.name }),
+									/* @__PURE__ */ (0, S.jsx)("button", {
 										type: "button",
 										onClick: () => d(e),
 										children: "Rename"
 									}),
-									/* @__PURE__ */ (0, b.jsx)("button", {
+									/* @__PURE__ */ (0, S.jsx)("button", {
 										type: "button",
 										className: "saved-folder-delete",
 										onClick: () => p(e),
@@ -8083,23 +8079,23 @@ function ue({ snapshot: e, tab: t, onChange: n }) {
 		]
 	});
 }
-function de({ row: e, tab: t, onOpen: n }) {
-	return /* @__PURE__ */ (0, b.jsxs)("article", {
+function fe({ row: e, tab: t, onOpen: n }) {
+	return /* @__PURE__ */ (0, S.jsxs)("article", {
 		className: "saved-verse-row",
-		children: [/* @__PURE__ */ (0, b.jsxs)("button", {
+		children: [/* @__PURE__ */ (0, S.jsxs)("button", {
 			className: "saved-verse-open",
 			type: "button",
 			onClick: () => n(e),
-			children: [t === "highlights" ? /* @__PURE__ */ (0, b.jsx)("span", {
+			children: [t === "highlights" ? /* @__PURE__ */ (0, S.jsx)("span", {
 				className: "saved-color-dot",
 				style: { "--saved-color": e.colorValue || "var(--beige)" },
 				"aria-hidden": "true"
-			}) : /* @__PURE__ */ (0, b.jsx)(ae, { name: "bookmarks" }), /* @__PURE__ */ (0, b.jsxs)("span", { children: [
-				/* @__PURE__ */ (0, b.jsx)("strong", { children: e.reference || `${e.bookId} ${e.chapter}:${e.number}` }),
-				/* @__PURE__ */ (0, b.jsx)("small", { children: e.version || "" }),
-				/* @__PURE__ */ (0, b.jsx)("p", { children: e.text || "" })
+			}) : /* @__PURE__ */ (0, S.jsx)(oe, { name: "bookmarks" }), /* @__PURE__ */ (0, S.jsxs)("span", { children: [
+				/* @__PURE__ */ (0, S.jsx)("strong", { children: e.reference || `${e.bookId} ${e.chapter}:${e.number}` }),
+				/* @__PURE__ */ (0, S.jsx)("small", { children: e.version || "" }),
+				/* @__PURE__ */ (0, S.jsx)("p", { children: e.text || "" })
 			] })]
-		}), /* @__PURE__ */ (0, b.jsx)("button", {
+		}), /* @__PURE__ */ (0, S.jsx)("button", {
 			className: "saved-folder-trigger",
 			type: "button",
 			"data-saved-folder-trigger": !0,
@@ -8108,13 +8104,27 @@ function de({ row: e, tab: t, onOpen: n }) {
 			"data-saved-folder-current": e.folderId || "",
 			"aria-label": "Choose folder",
 			title: "Choose folder",
-			children: O
+			children: le
 		})]
 	});
 }
-function fe() {
-	let e = window.homeLibraryBridge, t = document.querySelector("[data-home-library-panel]")?.dataset.homeLibraryView || "highlights", [n, r] = (0, v.useState)(t), [i, a] = (0, v.useState)(() => e.getSnapshot(t)), [o, s] = (0, v.useState)(""), [c, l] = (0, v.useState)({});
-	(0, v.useEffect)(() => {
+function A() {
+	let e = window.homeLibraryBridge, t = document.querySelector("[data-home-library-panel]")?.dataset.homeLibraryView || "highlights", [n, r] = (0, b.useState)(t), [i, a] = (0, b.useState)(() => e.getSnapshot(t)), [o, s] = (0, b.useState)(""), [c, l] = (0, b.useState)({});
+	(0, b.useEffect)(() => {
+		let e = (e) => {
+			let t = e.detail?.id;
+			t && (l((e) => ({
+				...e,
+				bookmarks: !0
+			})), window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
+				document.querySelector(`[data-ai-bookmark-id="${CSS.escape(t)}"]`)?.scrollIntoView({
+					behavior: "smooth",
+					block: "center"
+				});
+			})));
+		};
+		return document.addEventListener("home:voice-ai-bookmark", e), () => document.removeEventListener("home:voice-ai-bookmark", e);
+	}, []), (0, b.useEffect)(() => {
 		let t = (t) => {
 			let i = t.detail?.tab || n;
 			r(i), a(e.getSnapshot(i)), i !== "notes" && s("");
@@ -8125,22 +8135,23 @@ function fe() {
 	}, [n, e]);
 	let u = (t) => {
 		e.setFolder(n, t);
-	}, d = n === "notes" && o.trim() ? i.rows.filter((e) => `${e.title || "Untitled note"} ${e.items.map((e) => e.reference || "").join(" ")} ${e.note || ""}`.toLowerCase().includes(o.trim().toLowerCase())) : i.rows, f = i.totalRows > 0 || i.folders.length > 0 || !!i.activeFolder, p = [...n === "notes" ? d.map((t) => /* @__PURE__ */ (0, b.jsx)(w, {
+	}, d = n === "notes" && o.trim() ? i.rows.filter((e) => `${e.title || "Untitled note"} ${e.items.map((e) => e.reference || "").join(" ")} ${e.note || ""}`.toLowerCase().includes(o.trim().toLowerCase())) : i.rows, f = i.totalRows > 0 || i.folders.length > 0 || !!i.activeFolder, p = [...n === "notes" ? d.map((t) => /* @__PURE__ */ (0, S.jsx)(T, {
 		row: t,
 		onOpen: e.openSavedNote
-	}, t.id)) : d.map((t) => /* @__PURE__ */ (0, b.jsx)(de, {
+	}, t.id)) : d.map((t) => /* @__PURE__ */ (0, S.jsx)(fe, {
 		row: t,
 		tab: n,
 		onOpen: e.openSavedVerse
-	}, t.storageKey)), ...i.aiRows.map((e) => /* @__PURE__ */ (0, b.jsxs)("article", {
+	}, t.storageKey)), ...i.aiRows.map((e) => /* @__PURE__ */ (0, S.jsxs)("article", {
 		className: "saved-ai-row",
+		"data-ai-bookmark-id": e.id,
 		children: [
-			/* @__PURE__ */ (0, b.jsxs)("div", {
+			/* @__PURE__ */ (0, S.jsxs)("div", {
 				className: "saved-ai-row-heading",
-				children: [le, /* @__PURE__ */ (0, b.jsx)("strong", { children: "AI response" })]
+				children: [ue, /* @__PURE__ */ (0, S.jsx)("strong", { children: "AI response" })]
 			}),
-			/* @__PURE__ */ (0, b.jsx)("p", { children: e.text || "" }),
-			/* @__PURE__ */ (0, b.jsx)("button", {
+			/* @__PURE__ */ (0, S.jsx)("p", { children: e.text || "" }),
+			/* @__PURE__ */ (0, S.jsx)("button", {
 				className: "saved-folder-trigger",
 				type: "button",
 				"data-saved-folder-trigger": !0,
@@ -8149,7 +8160,7 @@ function fe() {
 				"data-saved-folder-current": e.folderId || "",
 				"aria-label": "Choose folder",
 				title: "Choose folder",
-				children: O
+				children: le
 			})
 		]
 	}, `ai-${e.id}`))], m = !!c[n], h = p.length > 5, g = () => l((e) => ({
@@ -8158,32 +8169,32 @@ function fe() {
 	}));
 	if (!f) {
 		let e = i.isConnected;
-		return /* @__PURE__ */ (0, b.jsxs)("div", {
+		return /* @__PURE__ */ (0, S.jsxs)("div", {
 			className: "home-library-empty-state",
 			children: [
-				/* @__PURE__ */ (0, b.jsx)(ae, { name: "notes" }),
-				/* @__PURE__ */ (0, b.jsx)("strong", { children: e ? "Your library is empty" : "Sign in to see more" }),
-				/* @__PURE__ */ (0, b.jsx)("p", { children: e ? "Save highlights, bookmarks and notes from the Bible tab to find them here." : "Sign in to sync your notes, bookmarks and highlights across your devices." }),
-				/* @__PURE__ */ (0, b.jsxs)("button", {
+				/* @__PURE__ */ (0, S.jsx)(oe, { name: "notes" }),
+				/* @__PURE__ */ (0, S.jsx)("strong", { children: e ? "Your library is empty" : "Sign in to see more" }),
+				/* @__PURE__ */ (0, S.jsx)("p", { children: e ? "Save highlights, bookmarks and notes from the Bible tab to find them here." : "Sign in to sync your notes, bookmarks and highlights across your devices." }),
+				/* @__PURE__ */ (0, S.jsxs)("button", {
 					type: "button",
 					"data-nav": e ? "bible" : "profile",
 					children: [
 						e ? "Start reading" : "Sign in or create an account",
 						" ",
-						ne
+						E
 					]
 				})
 			]
 		});
 	}
-	return /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [
-		/* @__PURE__ */ (0, b.jsxs)("div", {
+	return /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [
+		/* @__PURE__ */ (0, S.jsxs)("div", {
 			className: "saved-panel-title",
-			children: [/* @__PURE__ */ (0, b.jsx)("h3", { children: n === "notes" ? "Notes" : n === "highlights" ? "Highlights" : "Bookmarks" }), /* @__PURE__ */ (0, b.jsx)("span", { children: i.totalRows })]
+			children: [/* @__PURE__ */ (0, S.jsx)("h3", { children: n === "notes" ? "Notes" : n === "highlights" ? "Highlights" : "Bookmarks" }), /* @__PURE__ */ (0, S.jsx)("span", { children: i.totalRows })]
 		}),
-		n === "notes" && /* @__PURE__ */ (0, b.jsxs)("label", {
+		n === "notes" && /* @__PURE__ */ (0, S.jsxs)("label", {
 			className: "saved-notes-search",
-			children: [/* @__PURE__ */ (0, b.jsx)(ae, { name: "notes" }), /* @__PURE__ */ (0, b.jsx)("input", {
+			children: [/* @__PURE__ */ (0, S.jsx)(oe, { name: "notes" }), /* @__PURE__ */ (0, S.jsx)("input", {
 				value: o,
 				onChange: (e) => s(e.target.value),
 				type: "search",
@@ -8191,69 +8202,69 @@ function fe() {
 				"aria-label": "Search notes"
 			})]
 		}),
-		/* @__PURE__ */ (0, b.jsx)(ue, {
+		/* @__PURE__ */ (0, S.jsx)(de, {
 			snapshot: i,
 			tab: n,
 			onChange: u
 		}),
-		d.length || i.aiRows.length ? /* @__PURE__ */ (0, b.jsxs)("div", {
+		d.length || i.aiRows.length ? /* @__PURE__ */ (0, S.jsxs)("div", {
 			className: `home-library-cards${m ? " is-expanded" : ""}`,
-			children: [m ? p : p.slice(0, 5), h && /* @__PURE__ */ (0, b.jsx)("button", {
+			children: [m ? p : p.slice(0, 5), h && /* @__PURE__ */ (0, S.jsx)("button", {
 				className: "home-library-expand",
 				type: "button",
 				onClick: g,
 				"aria-label": m ? `Show fewer ${n}` : `Show all ${n}`,
 				"aria-expanded": m,
-				children: /* @__PURE__ */ (0, b.jsx)("svg", {
+				children: /* @__PURE__ */ (0, S.jsx)("svg", {
 					viewBox: "0 0 24 24",
 					"aria-hidden": "true",
 					fill: "none",
 					stroke: "currentColor",
 					strokeWidth: "2",
 					strokeLinecap: "round",
-					children: m ? /* @__PURE__ */ (0, b.jsx)("path", { d: "M5 12h14" }) : /* @__PURE__ */ (0, b.jsx)("path", { d: "M12 5v14M5 12h14" })
+					children: m ? /* @__PURE__ */ (0, S.jsx)("path", { d: "M5 12h14" }) : /* @__PURE__ */ (0, S.jsx)("path", { d: "M12 5v14M5 12h14" })
 				})
 			})]
-		}) : /* @__PURE__ */ (0, b.jsx)("p", {
+		}) : /* @__PURE__ */ (0, S.jsx)("p", {
 			className: "saved-empty",
 			children: i.activeFolder ? `No saved verses in ${i.folders.find((e) => e.id === i.activeFolder)?.name || "this folder"} yet.` : n === "notes" ? "No notes match your search." : `No ${n} yet.`
 		})
 	] });
 }
 // src/react/prayer-read-only-card.jsx
-function k({ request: e, bridge: t, index: n }) {
+function pe({ request: e, bridge: t, index: n }) {
 	let r = t.getBackgroundOptions()[e.backgroundIndex]?.src || "assets/prayer-backgrounds/prayer-1.webp";
-	return /* @__PURE__ */ (0, b.jsxs)("article", {
+	return /* @__PURE__ */ (0, S.jsxs)("article", {
 		className: `prayer-card prayer-card--${n % 4} prayer-card--readonly`,
 		style: { "--prayer-card-image": `url('${r}')` },
-		children: [/* @__PURE__ */ (0, b.jsx)("div", {
+		children: [/* @__PURE__ */ (0, S.jsx)("div", {
 			className: "prayer-card-toggle",
-			children: /* @__PURE__ */ (0, b.jsxs)("span", { children: [
-				/* @__PURE__ */ (0, b.jsx)("small", {
+			children: /* @__PURE__ */ (0, S.jsxs)("span", { children: [
+				/* @__PURE__ */ (0, S.jsx)("small", {
 					className: "prayer-card-category",
 					children: e.category || "General"
 				}),
-				/* @__PURE__ */ (0, b.jsx)("strong", {
+				/* @__PURE__ */ (0, S.jsx)("strong", {
 					className: "prayer-card-title",
 					children: e.title?.trim() || "Prayer request"
 				}),
-				/* @__PURE__ */ (0, b.jsx)("p", {
+				/* @__PURE__ */ (0, S.jsx)("p", {
 					className: "prayer-card-preview",
 					children: e.preview || e.text
 				})
 			] })
-		}), /* @__PURE__ */ (0, b.jsx)("div", {
+		}), /* @__PURE__ */ (0, S.jsx)("div", {
 			className: "prayer-card-meta",
-			children: /* @__PURE__ */ (0, b.jsxs)("span", {
+			children: /* @__PURE__ */ (0, S.jsxs)("span", {
 				className: `prayer-action profile-prayer-count${e.hasPrayed ? " is-prayed" : ""}`,
 				"aria-label": `${e.prayerCount || 0} prayers`,
-				children: [/* @__PURE__ */ (0, b.jsx)("span", { children: e.prayerCount || 0 }), /* @__PURE__ */ (0, b.jsx)(c, { name: "heart" })]
+				children: [/* @__PURE__ */ (0, S.jsx)("span", { children: e.prayerCount || 0 }), /* @__PURE__ */ (0, S.jsx)(c, { name: "heart" })]
 			})
 		})]
 	});
 }
 // src/react/profile.jsx
-var A = [
+var me = [
 	[
 		"preferences",
 		"Preferences",
@@ -8286,25 +8297,25 @@ var A = [
 		["M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"]
 	]
 ];
-function pe() {
-	let e = window.prayerBridge, [t, n] = (0, v.useState)(() => e.getSnapshot().ownRequests);
-	return (0, v.useEffect)(() => {
+function he() {
+	let e = window.prayerBridge, [t, n] = (0, b.useState)(() => e.getSnapshot().ownRequests);
+	return (0, b.useEffect)(() => {
 		let t = () => n(e.getSnapshot().ownRequests);
 		return document.addEventListener("prayer:state-change", t), () => document.removeEventListener("prayer:state-change", t);
-	}, [e]), /* @__PURE__ */ (0, b.jsx)("div", {
+	}, [e]), /* @__PURE__ */ (0, S.jsx)("div", {
 		className: "prayer-list profile-prayer-list",
-		children: t.length ? t.map((t, n) => /* @__PURE__ */ (0, b.jsx)(k, {
+		children: t.length ? t.map((t, n) => /* @__PURE__ */ (0, S.jsx)(pe, {
 			request: t,
 			index: n,
 			bridge: e
-		}, t.id)) : /* @__PURE__ */ (0, b.jsx)("p", {
+		}, t.id)) : /* @__PURE__ */ (0, S.jsx)("p", {
 			className: "saved-empty",
 			children: "No prayers yet."
 		})
 	});
 }
-function me({ paths: e }) {
-	return /* @__PURE__ */ (0, b.jsx)("svg", {
+function ge({ paths: e }) {
+	return /* @__PURE__ */ (0, S.jsx)("svg", {
 		viewBox: "0 0 24 24",
 		"aria-hidden": "true",
 		fill: "none",
@@ -8312,12 +8323,12 @@ function me({ paths: e }) {
 		strokeWidth: "1.8",
 		strokeLinecap: "round",
 		strokeLinejoin: "round",
-		children: e.map((e) => /* @__PURE__ */ (0, b.jsx)("path", { d: e }, e))
+		children: e.map((e) => /* @__PURE__ */ (0, S.jsx)("path", { d: e }, e))
 	});
 }
-function he() {
-	let [e, t] = (0, v.useState)(() => document.querySelector("[data-profile-tab].is-active")?.dataset.profileTab || "preferences");
-	(0, v.useEffect)(() => {
+function _e() {
+	let [e, t] = (0, b.useState)(() => document.querySelector("[data-profile-tab].is-active")?.dataset.profileTab || "preferences");
+	(0, b.useEffect)(() => {
 		let e = (e) => {
 			e.detail?.tab && t(e.detail.tab);
 		};
@@ -8326,38 +8337,38 @@ function he() {
 	let n = (e, n) => {
 		n?.nativeEvent?.__primaryTabHandled || (t(e), typeof window.profileBridge?.selectTab == "function" ? window.profileBridge.selectTab(e) : document.dispatchEvent(new CustomEvent("profile:tab-change", { detail: { tab: e } })));
 	};
-	return A.map(([t, r, i]) => /* @__PURE__ */ (0, b.jsxs)("button", {
+	return me.map(([t, r, i]) => /* @__PURE__ */ (0, S.jsxs)("button", {
 		className: e === t ? "is-active" : "",
 		type: "button",
 		"data-profile-tab": t,
 		onClick: (e) => n(t, e),
-		children: [/* @__PURE__ */ (0, b.jsx)(me, { paths: i }), /* @__PURE__ */ (0, b.jsx)("span", { children: r })]
+		children: [/* @__PURE__ */ (0, S.jsx)(ge, { paths: i }), /* @__PURE__ */ (0, S.jsx)("span", { children: r })]
 	}, t));
 }
-function ge() {
-	let e = window.profileBridge, [t, n] = (0, v.useState)(() => e.getHero());
-	return (0, v.useEffect)(() => {
+function ve() {
+	let e = window.profileBridge, [t, n] = (0, b.useState)(() => e.getHero());
+	return (0, b.useEffect)(() => {
 		let t = () => {
 			n(e.getHero());
 		};
 		return document.addEventListener("profile:hero-change", t), document.addEventListener("profile:auth-change", t), () => {
 			document.removeEventListener("profile:hero-change", t), document.removeEventListener("profile:auth-change", t);
 		};
-	}, [e]), /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [/* @__PURE__ */ (0, b.jsx)("img", {
+	}, [e]), /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [/* @__PURE__ */ (0, S.jsx)("img", {
 		src: t.coverImage,
 		alt: "Profile background",
 		"data-profile-cover": !0,
 		loading: "lazy",
 		decoding: "async"
-	}), /* @__PURE__ */ (0, b.jsx)("div", {
+	}), /* @__PURE__ */ (0, S.jsx)("div", {
 		className: "profile-hero-caption",
-		children: /* @__PURE__ */ (0, b.jsx)("div", { children: /* @__PURE__ */ (0, b.jsx)("h1", {
+		children: /* @__PURE__ */ (0, S.jsx)("div", { children: /* @__PURE__ */ (0, S.jsx)("h1", {
 			"data-profile-name": !0,
 			children: t.welcome
 		}) })
 	})] });
 }
-var _e = {
+var ye = {
 	image: [
 		"M4 4h16v16H4z",
 		"m4 16 4-4 3 3 3-4 6 6",
@@ -8377,8 +8388,8 @@ var _e = {
 		"M23 8v8"
 	]
 };
-function ve({ name: e }) {
-	return /* @__PURE__ */ (0, b.jsx)("svg", {
+function be({ name: e }) {
+	return /* @__PURE__ */ (0, S.jsx)("svg", {
 		viewBox: "0 0 24 24",
 		"aria-hidden": "true",
 		fill: "none",
@@ -8386,15 +8397,15 @@ function ve({ name: e }) {
 		strokeWidth: "1.8",
 		strokeLinecap: "round",
 		strokeLinejoin: "round",
-		children: _e[e].map((e) => /* @__PURE__ */ (0, b.jsx)("path", { d: e }, e))
+		children: ye[e].map((e) => /* @__PURE__ */ (0, S.jsx)("path", { d: e }, e))
 	});
 }
-function ye() {
-	let e = window.profileBridge, [t, n] = (0, v.useState)(() => e.getPreferences()), [r, i] = (0, v.useState)(() => e.getHero()), a = (0, v.useRef)(null);
-	(0, v.useEffect)(() => {
+function xe() {
+	let e = window.profileBridge, [t, n] = (0, b.useState)(() => e.getPreferences()), [r, i] = (0, b.useState)(() => e.getHero()), a = (0, b.useRef)(null);
+	(0, b.useEffect)(() => {
 		let t = () => n(e.getPreferences());
 		return document.addEventListener("profile:preferences-change", t), () => document.removeEventListener("profile:preferences-change", t);
-	}, [e]), (0, v.useEffect)(() => {
+	}, [e]), (0, b.useEffect)(() => {
 		let t = () => i(e.getHero());
 		return document.addEventListener("profile:hero-change", t), () => document.removeEventListener("profile:hero-change", t);
 	}, [e]);
@@ -8404,52 +8415,52 @@ function ye() {
 			behavior: "smooth"
 		});
 	};
-	return /* @__PURE__ */ (0, b.jsx)(b.Fragment, { children: /* @__PURE__ */ (0, b.jsxs)("div", {
+	return /* @__PURE__ */ (0, S.jsx)(S.Fragment, { children: /* @__PURE__ */ (0, S.jsxs)("div", {
 		className: "preference-card profile-preference-sections",
 		children: [
-			/* @__PURE__ */ (0, b.jsxs)("section", {
+			/* @__PURE__ */ (0, S.jsxs)("section", {
 				className: "profile-preference-section preference-cover-picker",
 				"aria-labelledby": "profile-hero-setting-title",
-				children: [/* @__PURE__ */ (0, b.jsxs)("div", {
+				children: [/* @__PURE__ */ (0, S.jsxs)("div", {
 					className: "preference-copy",
-					children: [/* @__PURE__ */ (0, b.jsx)(ve, { name: "image" }), /* @__PURE__ */ (0, b.jsxs)("div", { children: [/* @__PURE__ */ (0, b.jsx)("h3", {
+					children: [/* @__PURE__ */ (0, S.jsx)(be, { name: "image" }), /* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("h3", {
 						id: "profile-hero-setting-title",
 						children: "Hero image"
-					}), /* @__PURE__ */ (0, b.jsx)("p", { children: "Choose the image shown at the top of your profile." })] })]
-				}), /* @__PURE__ */ (0, b.jsxs)("div", {
+					}), /* @__PURE__ */ (0, S.jsx)("p", { children: "Choose the image shown at the top of your profile." })] })]
+				}), /* @__PURE__ */ (0, S.jsxs)("div", {
 					className: "profile-cover-carousel",
 					role: "region",
 					"aria-label": "Hero image carousel",
 					children: [
-						/* @__PURE__ */ (0, b.jsx)("button", {
+						/* @__PURE__ */ (0, S.jsx)("button", {
 							className: "profile-cover-arrow",
 							type: "button",
 							onClick: () => o(-1),
 							"aria-label": "Previous hero images",
 							children: "‹"
 						}),
-						/* @__PURE__ */ (0, b.jsx)("div", {
+						/* @__PURE__ */ (0, S.jsx)("div", {
 							className: "profile-cover-viewport",
 							ref: a,
-							children: /* @__PURE__ */ (0, b.jsx)("div", {
+							children: /* @__PURE__ */ (0, S.jsx)("div", {
 								className: "profile-cover-grid",
 								"aria-label": "Hero image choices",
-								children: (r.coverOptions || []).map((t) => /* @__PURE__ */ (0, b.jsxs)("button", {
+								children: (r.coverOptions || []).map((t) => /* @__PURE__ */ (0, S.jsxs)("button", {
 									className: r.coverImage === t.src ? "is-active" : "",
 									type: "button",
 									onClick: () => e.saveCover(t.src),
 									"aria-label": `Use ${t.label} hero image`,
 									"aria-pressed": r.coverImage === t.src,
-									children: [/* @__PURE__ */ (0, b.jsx)("img", {
+									children: [/* @__PURE__ */ (0, S.jsx)("img", {
 										src: t.src,
 										alt: "",
 										loading: "lazy",
 										decoding: "async"
-									}), /* @__PURE__ */ (0, b.jsx)("span", { children: t.label })]
+									}), /* @__PURE__ */ (0, S.jsx)("span", { children: t.label })]
 								}, t.id))
 							})
 						}),
-						/* @__PURE__ */ (0, b.jsx)("button", {
+						/* @__PURE__ */ (0, S.jsx)("button", {
 							className: "profile-cover-arrow",
 							type: "button",
 							onClick: () => o(1),
@@ -8459,18 +8470,18 @@ function ye() {
 					]
 				})]
 			}),
-			/* @__PURE__ */ (0, b.jsxs)("section", {
+			/* @__PURE__ */ (0, S.jsxs)("section", {
 				className: "profile-preference-section",
 				"aria-labelledby": "profile-text-setting-title",
 				children: [
-					/* @__PURE__ */ (0, b.jsxs)("div", {
+					/* @__PURE__ */ (0, S.jsxs)("div", {
 						className: "preference-copy",
-						children: [/* @__PURE__ */ (0, b.jsx)(ve, { name: "type" }), /* @__PURE__ */ (0, b.jsxs)("div", { children: [/* @__PURE__ */ (0, b.jsx)("h3", {
+						children: [/* @__PURE__ */ (0, S.jsx)(be, { name: "type" }), /* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("h3", {
 							id: "profile-text-setting-title",
 							children: "Text size"
-						}), /* @__PURE__ */ (0, b.jsx)("p", { children: "Adjust the Scripture reading size." })] })]
+						}), /* @__PURE__ */ (0, S.jsx)("p", { children: "Adjust the Scripture reading size." })] })]
 					}),
-					/* @__PURE__ */ (0, b.jsx)("div", {
+					/* @__PURE__ */ (0, S.jsx)("div", {
 						className: "segmented-control",
 						"data-text-size-options": !0,
 						children: [
@@ -8499,7 +8510,7 @@ function ye() {
 								"A+",
 								"Extra large text"
 							]
-						].map(([n, r, i]) => /* @__PURE__ */ (0, b.jsx)("button", {
+						].map(([n, r, i]) => /* @__PURE__ */ (0, S.jsx)("button", {
 							className: t.textSize === n ? "is-active" : "",
 							type: "button",
 							onClick: () => e.setPreference("textSize", n),
@@ -8507,22 +8518,22 @@ function ye() {
 							children: r
 						}, n))
 					}),
-					/* @__PURE__ */ (0, b.jsxs)("div", {
+					/* @__PURE__ */ (0, S.jsxs)("div", {
 						className: "text-size-preview",
-						children: [/* @__PURE__ */ (0, b.jsx)("span", { children: "Preview" }), /* @__PURE__ */ (0, b.jsxs)("p", { children: [/* @__PURE__ */ (0, b.jsx)("sup", { children: "1" }), " In the beginning was the Word."] })]
+						children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Preview" }), /* @__PURE__ */ (0, S.jsxs)("p", { children: [/* @__PURE__ */ (0, S.jsx)("sup", { children: "1" }), " In the beginning was the Word."] })]
 					})
 				]
 			}),
-			/* @__PURE__ */ (0, b.jsxs)("section", {
+			/* @__PURE__ */ (0, S.jsxs)("section", {
 				className: "profile-preference-section",
 				"aria-labelledby": "profile-vibration-setting-title",
-				children: [/* @__PURE__ */ (0, b.jsxs)("div", {
+				children: [/* @__PURE__ */ (0, S.jsxs)("div", {
 					className: "preference-copy",
-					children: [/* @__PURE__ */ (0, b.jsx)(ve, { name: "vibration" }), /* @__PURE__ */ (0, b.jsxs)("div", { children: [/* @__PURE__ */ (0, b.jsx)("h3", {
+					children: [/* @__PURE__ */ (0, S.jsx)(be, { name: "vibration" }), /* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("h3", {
 						id: "profile-vibration-setting-title",
 						children: "Button vibration"
-					}), /* @__PURE__ */ (0, b.jsx)("p", { children: "Off, or choose a strength." })] })]
-				}), /* @__PURE__ */ (0, b.jsx)("div", {
+					}), /* @__PURE__ */ (0, S.jsx)("p", { children: "Off, or choose a strength." })] })]
+				}), /* @__PURE__ */ (0, S.jsx)("div", {
 					className: "segmented-control haptics-strength-control",
 					role: "group",
 					"aria-label": "Button vibration strength",
@@ -8557,7 +8568,7 @@ function ye() {
 							"5",
 							"Level 5 of 5, very strong"
 						]
-					].map(([n, r, i]) => /* @__PURE__ */ (0, b.jsx)("button", {
+					].map(([n, r, i]) => /* @__PURE__ */ (0, S.jsx)("button", {
 						className: t.hapticsStrength === n ? "is-active" : "",
 						type: "button",
 						onClick: () => e.setPreference("hapticsStrength", n),
@@ -8570,9 +8581,9 @@ function ye() {
 		]
 	}) });
 }
-function be() {
-	let e = window.profileBridge, [t, n] = (0, v.useState)(() => e.getInfo());
-	(0, v.useEffect)(() => {
+function Se() {
+	let e = window.profileBridge, [t, n] = (0, b.useState)(() => e.getInfo());
+	(0, b.useEffect)(() => {
 		let t = () => n(e.getInfo());
 		return document.addEventListener("profile:info-change", t), () => document.removeEventListener("profile:info-change", t);
 	}, [e]);
@@ -8580,17 +8591,17 @@ function be() {
 		...n,
 		[e]: t
 	}));
-	return /* @__PURE__ */ (0, b.jsx)(b.Fragment, { children: /* @__PURE__ */ (0, b.jsx)("div", {
+	return /* @__PURE__ */ (0, S.jsx)(S.Fragment, { children: /* @__PURE__ */ (0, S.jsx)("div", {
 		className: "profile-info-card",
-		children: /* @__PURE__ */ (0, b.jsxs)("form", {
+		children: /* @__PURE__ */ (0, S.jsxs)("form", {
 			className: "profile-info-form",
 			onSubmit: (n) => {
 				n.preventDefault(), e.saveInfo(t);
 			},
 			children: [
-				/* @__PURE__ */ (0, b.jsxs)("label", {
+				/* @__PURE__ */ (0, S.jsxs)("label", {
 					className: "profile-field",
-					children: [/* @__PURE__ */ (0, b.jsx)("span", { children: "Name" }), /* @__PURE__ */ (0, b.jsx)("input", {
+					children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Name" }), /* @__PURE__ */ (0, S.jsx)("input", {
 						type: "text",
 						value: t.displayName,
 						onChange: (e) => r("displayName", e.target.value),
@@ -8598,9 +8609,9 @@ function be() {
 						placeholder: "Your name"
 					})]
 				}),
-				/* @__PURE__ */ (0, b.jsxs)("label", {
+				/* @__PURE__ */ (0, S.jsxs)("label", {
 					className: "profile-field",
-					children: [/* @__PURE__ */ (0, b.jsx)("span", { children: "Country" }), /* @__PURE__ */ (0, b.jsx)("input", {
+					children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Country" }), /* @__PURE__ */ (0, S.jsx)("input", {
 						type: "text",
 						value: t.country,
 						onChange: (e) => r("country", e.target.value),
@@ -8608,17 +8619,17 @@ function be() {
 						placeholder: "Canada"
 					})]
 				}),
-				/* @__PURE__ */ (0, b.jsxs)("label", {
+				/* @__PURE__ */ (0, S.jsxs)("label", {
 					className: "profile-field",
-					children: [/* @__PURE__ */ (0, b.jsx)("span", { children: "Date of birth" }), /* @__PURE__ */ (0, b.jsx)("input", {
+					children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Date of birth" }), /* @__PURE__ */ (0, S.jsx)("input", {
 						type: "date",
 						value: t.dateOfBirth,
 						onChange: (e) => r("dateOfBirth", e.target.value)
 					})]
 				}),
-				/* @__PURE__ */ (0, b.jsx)("div", {
+				/* @__PURE__ */ (0, S.jsx)("div", {
 					className: "profile-info-actions",
-					children: /* @__PURE__ */ (0, b.jsx)("button", {
+					children: /* @__PURE__ */ (0, S.jsx)("button", {
 						type: "submit",
 						className: "profile-save-button",
 						children: "Save information"
@@ -8628,67 +8639,67 @@ function be() {
 		})
 	}) });
 }
-function xe() {
-	let e = window.profileBridge, [t, n] = (0, v.useState)(() => e.getAuth()), [r, i] = (0, v.useState)("sign-in"), [a, o] = (0, v.useState)(""), [s, c] = (0, v.useState)(""), [l, u] = (0, v.useState)(""), [d, f] = (0, v.useState)(!1), [p, m] = (0, v.useState)(!1), [h, g] = (0, v.useState)(!1), [_, y] = (0, v.useState)(""), [x, ee] = (0, v.useState)(!1), [te, C] = (0, v.useState)(""), [w, ne] = (0, v.useState)(""), [T, E] = (0, v.useState)(!1), [re, ie] = (0, v.useState)(""), [ae, oe] = (0, v.useState)(!1);
-	return (0, v.useEffect)(() => {
-		t.connected || (ee(!1), C(""), ne(""), ie(""));
-	}, [t.connected]), (0, v.useEffect)(() => {
+function Ce() {
+	let e = window.profileBridge, [t, n] = (0, b.useState)(() => e.getAuth()), [r, i] = (0, b.useState)("sign-in"), [a, o] = (0, b.useState)(""), [s, c] = (0, b.useState)(""), [l, u] = (0, b.useState)(""), [d, f] = (0, b.useState)(!1), [p, m] = (0, b.useState)(!1), [h, g] = (0, b.useState)(!1), [_, v] = (0, b.useState)(""), [y, x] = (0, b.useState)(!1), [C, ee] = (0, b.useState)(""), [ne, w] = (0, b.useState)(""), [T, E] = (0, b.useState)(!1), [re, D] = (0, b.useState)(""), [ie, ae] = (0, b.useState)(!1);
+	return (0, b.useEffect)(() => {
+		t.connected || (x(!1), ee(""), w(""), D(""));
+	}, [t.connected]), (0, b.useEffect)(() => {
 		let t = () => n(e.getAuth());
 		return document.addEventListener("profile:auth-change", t), () => document.removeEventListener("profile:auth-change", t);
-	}, [e]), (0, v.useEffect)(() => {
+	}, [e]), (0, b.useEffect)(() => {
 		if (!p) return;
 		let e = (e) => {
 			e.key === "Escape" && !h && m(!1);
 		};
 		return document.addEventListener("keydown", e), () => document.removeEventListener("keydown", e);
-	}, [p, h]), t.connected ? /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [
-		/* @__PURE__ */ (0, b.jsxs)("div", {
+	}, [p, h]), t.connected ? /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [
+		/* @__PURE__ */ (0, S.jsxs)("div", {
 			className: "preference-heading",
-			children: [/* @__PURE__ */ (0, b.jsx)("h2", {
+			children: [/* @__PURE__ */ (0, S.jsx)("h2", {
 				id: "profile-auth-title",
 				children: "Cloud account"
-			}), /* @__PURE__ */ (0, b.jsx)("span", { children: "Connected" })]
+			}), /* @__PURE__ */ (0, S.jsx)("span", { children: "Connected" })]
 		}),
-		/* @__PURE__ */ (0, b.jsxs)("div", {
+		/* @__PURE__ */ (0, S.jsxs)("div", {
 			className: "profile-auth-form",
 			children: [
-				/* @__PURE__ */ (0, b.jsxs)("div", {
+				/* @__PURE__ */ (0, S.jsxs)("div", {
 					className: "auth-connected-email",
-					children: [/* @__PURE__ */ (0, b.jsx)("span", { children: "Connected with" }), /* @__PURE__ */ (0, b.jsx)("strong", { children: t.email })]
+					children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Connected with" }), /* @__PURE__ */ (0, S.jsx)("strong", { children: t.email })]
 				}),
-				/* @__PURE__ */ (0, b.jsxs)("div", {
+				/* @__PURE__ */ (0, S.jsxs)("div", {
 					className: "profile-auth-actions",
-					children: [/* @__PURE__ */ (0, b.jsx)("button", {
+					children: [/* @__PURE__ */ (0, S.jsx)("button", {
 						type: "button",
 						"data-auth-action": "sign-out",
 						onClick: e.signOut,
 						children: "Sign out"
-					}), /* @__PURE__ */ (0, b.jsx)("button", {
+					}), /* @__PURE__ */ (0, S.jsx)("button", {
 						type: "button",
 						className: "profile-delete-trigger",
 						onClick: () => {
-							y(""), m(!0);
+							v(""), m(!0);
 						},
 						"aria-haspopup": "dialog",
 						"aria-expanded": p,
 						children: "Delete my account"
 					})]
 				}),
-				/* @__PURE__ */ (0, b.jsxs)("section", {
+				/* @__PURE__ */ (0, S.jsxs)("section", {
 					className: "profile-password-section",
 					"aria-label": "Password",
 					children: [
-						/* @__PURE__ */ (0, b.jsx)("div", {
+						/* @__PURE__ */ (0, S.jsx)("div", {
 							className: "profile-auth-actions profile-password-trigger",
-							children: /* @__PURE__ */ (0, b.jsxs)("button", {
+							children: /* @__PURE__ */ (0, S.jsxs)("button", {
 								type: "button",
-								"aria-expanded": x,
+								"aria-expanded": y,
 								"aria-controls": "profile-password-form",
 								disabled: T,
 								onClick: () => {
-									ee((e) => !e), ie(""), C(""), ne("");
+									x((e) => !e), D(""), ee(""), w("");
 								},
-								children: [/* @__PURE__ */ (0, b.jsx)("span", { children: "Change password" }), /* @__PURE__ */ (0, b.jsx)("svg", {
+								children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Change password" }), /* @__PURE__ */ (0, S.jsx)("svg", {
 									className: "profile-password-chevron",
 									viewBox: "0 0 24 24",
 									width: "18",
@@ -8699,122 +8710,122 @@ function xe() {
 									strokeLinecap: "round",
 									strokeLinejoin: "round",
 									"aria-hidden": "true",
-									children: /* @__PURE__ */ (0, b.jsx)("path", { d: "m6 9 6 6 6-6" })
+									children: /* @__PURE__ */ (0, S.jsx)("path", { d: "m6 9 6 6 6-6" })
 								})]
 							})
 						}),
-						x && /* @__PURE__ */ (0, b.jsxs)("form", {
+						y && /* @__PURE__ */ (0, S.jsxs)("form", {
 							id: "profile-password-form",
 							className: "profile-auth-form profile-password-form",
 							onSubmit: async (t) => {
 								if (t.preventDefault(), !T) {
-									E(!0), ie("");
+									E(!0), D("");
 									try {
-										let t = await e.changePassword(te, w);
-										oe(!!t.error), ie(t.error || "Your password has been changed."), t.error || (C(""), ne(""), ee(!1));
+										let t = await e.changePassword(C, ne);
+										ae(!!t.error), D(t.error || "Your password has been changed."), t.error || (ee(""), w(""), x(!1));
 									} catch {
-										oe(!0), ie("Could not change your password. Please try again.");
+										ae(!0), D("Could not change your password. Please try again.");
 									} finally {
 										E(!1);
 									}
 								}
 							},
 							children: [
-								/* @__PURE__ */ (0, b.jsxs)("label", { children: [/* @__PURE__ */ (0, b.jsx)("span", { children: "New password" }), /* @__PURE__ */ (0, b.jsx)("input", {
+								/* @__PURE__ */ (0, S.jsxs)("label", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "New password" }), /* @__PURE__ */ (0, S.jsx)("input", {
 									autoFocus: !0,
 									type: "password",
 									autoComplete: "new-password",
 									"aria-label": "New password",
-									value: te,
-									onChange: (e) => C(e.target.value),
+									value: C,
+									onChange: (e) => ee(e.target.value),
 									minLength: 6,
 									required: !0,
 									disabled: T
 								})] }),
-								/* @__PURE__ */ (0, b.jsxs)("label", { children: [/* @__PURE__ */ (0, b.jsx)("span", { children: "Confirm new password" }), /* @__PURE__ */ (0, b.jsx)("input", {
+								/* @__PURE__ */ (0, S.jsxs)("label", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Confirm new password" }), /* @__PURE__ */ (0, S.jsx)("input", {
 									type: "password",
 									autoComplete: "new-password",
 									"aria-label": "Confirm new password",
-									value: w,
-									onChange: (e) => ne(e.target.value),
+									value: ne,
+									onChange: (e) => w(e.target.value),
 									minLength: 6,
 									required: !0,
 									disabled: T
 								})] }),
-								/* @__PURE__ */ (0, b.jsxs)("div", {
+								/* @__PURE__ */ (0, S.jsxs)("div", {
 									className: "profile-auth-actions",
-									children: [/* @__PURE__ */ (0, b.jsx)("button", {
+									children: [/* @__PURE__ */ (0, S.jsx)("button", {
 										type: "submit",
 										disabled: T,
 										children: T ? "Saving…" : "Save password"
-									}), /* @__PURE__ */ (0, b.jsx)("button", {
+									}), /* @__PURE__ */ (0, S.jsx)("button", {
 										type: "button",
 										disabled: T,
 										onClick: () => {
-											ee(!1), C(""), ne(""), ie("");
+											x(!1), ee(""), w(""), D("");
 										},
 										children: "Cancel"
 									})]
 								})
 							]
 						}),
-						re && /* @__PURE__ */ (0, b.jsx)("p", {
+						re && /* @__PURE__ */ (0, S.jsx)("p", {
 							className: "profile-password-feedback",
-							role: ae ? "alert" : "status",
-							"data-state": ae ? "error" : "success",
+							role: ie ? "alert" : "status",
+							"data-state": ie ? "error" : "success",
 							children: re
 						})
 					]
 				})
 			]
 		}),
-		p && (0, S.createPortal)(/* @__PURE__ */ (0, b.jsx)("div", {
+		p && (0, te.createPortal)(/* @__PURE__ */ (0, S.jsx)("div", {
 			className: "profile-delete-dialog-backdrop",
 			role: "presentation",
 			onMouseDown: (e) => {
 				e.target === e.currentTarget && !h && m(!1);
 			},
-			children: /* @__PURE__ */ (0, b.jsxs)("section", {
+			children: /* @__PURE__ */ (0, S.jsxs)("section", {
 				className: "profile-delete-dialog",
 				role: "alertdialog",
 				"aria-modal": "true",
 				"aria-labelledby": "profile-delete-title",
 				"aria-describedby": "profile-delete-description",
 				children: [
-					/* @__PURE__ */ (0, b.jsx)("div", {
+					/* @__PURE__ */ (0, S.jsx)("div", {
 						className: "profile-delete-dialog-icon",
 						"aria-hidden": "true",
 						children: "!"
 					}),
-					/* @__PURE__ */ (0, b.jsx)("span", {
+					/* @__PURE__ */ (0, S.jsx)("span", {
 						className: "profile-delete-dialog-eyebrow",
 						children: "ACCOUNT SECURITY"
 					}),
-					/* @__PURE__ */ (0, b.jsx)("h3", {
+					/* @__PURE__ */ (0, S.jsx)("h3", {
 						id: "profile-delete-title",
 						children: "Delete your account?"
 					}),
-					/* @__PURE__ */ (0, b.jsx)("p", {
+					/* @__PURE__ */ (0, S.jsx)("p", {
 						id: "profile-delete-description",
 						children: "Your profile, preferences, prayer requests, saved items, and conversations will be permanently deleted. This cannot be undone."
 					}),
-					_ && /* @__PURE__ */ (0, b.jsx)("p", {
+					_ && /* @__PURE__ */ (0, S.jsx)("p", {
 						className: "profile-delete-error",
 						role: "alert",
 						children: _
 					}),
-					/* @__PURE__ */ (0, b.jsxs)("div", {
+					/* @__PURE__ */ (0, S.jsxs)("div", {
 						className: "profile-delete-dialog-actions",
-						children: [/* @__PURE__ */ (0, b.jsx)("button", {
+						children: [/* @__PURE__ */ (0, S.jsx)("button", {
 							type: "button",
 							onClick: () => m(!1),
 							disabled: h,
 							children: "Cancel"
-						}), /* @__PURE__ */ (0, b.jsx)("button", {
+						}), /* @__PURE__ */ (0, S.jsx)("button", {
 							type: "button",
 							className: "profile-delete-confirm",
 							onClick: async () => {
-								g(!0), y(""), await e.deleteAccount() ? m(!1) : (y(e.getAuth().feedback), g(!1));
+								g(!0), v(""), await e.deleteAccount() ? m(!1) : (v(e.getAuth().feedback), g(!1));
 							},
 							disabled: h,
 							children: h ? "Deleting…" : "Delete permanently"
@@ -8823,19 +8834,19 @@ function xe() {
 				]
 			})
 		}), document.querySelector(".phone-frame") || document.body)
-	] }) : /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [/* @__PURE__ */ (0, b.jsxs)("div", {
+	] }) : /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [/* @__PURE__ */ (0, S.jsxs)("div", {
 		className: "preference-heading",
-		children: [/* @__PURE__ */ (0, b.jsx)("h2", {
+		children: [/* @__PURE__ */ (0, S.jsx)("h2", {
 			id: "profile-auth-title",
 			children: "Cloud account"
-		}), /* @__PURE__ */ (0, b.jsx)("span", { children: "Not connected" })]
-	}), /* @__PURE__ */ (0, b.jsxs)("form", {
+		}), /* @__PURE__ */ (0, S.jsx)("span", { children: "Not connected" })]
+	}), /* @__PURE__ */ (0, S.jsxs)("form", {
 		className: "profile-auth-form",
 		onSubmit: async (t) => {
 			t.preventDefault(), await e.submitAuth(r, a.trim(), s, l);
 		},
 		children: [
-			/* @__PURE__ */ (0, b.jsx)("input", {
+			/* @__PURE__ */ (0, S.jsx)("input", {
 				type: "email",
 				value: a,
 				onChange: (e) => o(e.target.value),
@@ -8843,9 +8854,9 @@ function xe() {
 				autoComplete: "email",
 				required: !0
 			}),
-			/* @__PURE__ */ (0, b.jsxs)("div", {
+			/* @__PURE__ */ (0, S.jsxs)("div", {
 				className: "auth-password-field",
-				children: [/* @__PURE__ */ (0, b.jsx)("input", {
+				children: [/* @__PURE__ */ (0, S.jsx)("input", {
 					type: d ? "text" : "password",
 					value: s,
 					onChange: (e) => c(e.target.value),
@@ -8853,7 +8864,7 @@ function xe() {
 					autoComplete: r === "sign-up" ? "new-password" : "current-password",
 					minLength: "6",
 					required: !0
-				}), /* @__PURE__ */ (0, b.jsx)("button", {
+				}), /* @__PURE__ */ (0, S.jsx)("button", {
 					type: "button",
 					className: "auth-password-toggle",
 					onClick: () => f((e) => !e),
@@ -8861,9 +8872,9 @@ function xe() {
 					children: "◉"
 				})]
 			}),
-			r === "sign-up" && /* @__PURE__ */ (0, b.jsx)("div", {
+			r === "sign-up" && /* @__PURE__ */ (0, S.jsx)("div", {
 				className: "auth-password-field",
-				children: /* @__PURE__ */ (0, b.jsx)("input", {
+				children: /* @__PURE__ */ (0, S.jsx)("input", {
 					type: d ? "text" : "password",
 					value: l,
 					onChange: (e) => u(e.target.value),
@@ -8873,27 +8884,27 @@ function xe() {
 					required: !0
 				})
 			}),
-			/* @__PURE__ */ (0, b.jsxs)("div", {
+			/* @__PURE__ */ (0, S.jsxs)("div", {
 				className: "profile-auth-actions",
-				children: [/* @__PURE__ */ (0, b.jsx)("button", {
+				children: [/* @__PURE__ */ (0, S.jsx)("button", {
 					type: r === "sign-in" ? "submit" : "button",
 					className: r === "sign-up" ? "is-secondary" : "is-primary",
 					onClick: () => r === "sign-up" && i("sign-in"),
 					children: "Sign in"
-				}), /* @__PURE__ */ (0, b.jsx)("button", {
+				}), /* @__PURE__ */ (0, S.jsx)("button", {
 					type: r === "sign-up" ? "submit" : "button",
 					className: r === "sign-up" ? "is-primary" : "is-secondary",
 					onClick: () => r === "sign-in" && i("sign-up"),
 					children: "Create account"
 				})]
 			}),
-			/* @__PURE__ */ (0, b.jsx)("button", {
+			/* @__PURE__ */ (0, S.jsx)("button", {
 				type: "button",
 				className: "auth-forgot-button",
 				onClick: () => e.forgotPassword(a.trim()),
 				children: "Forgot password?"
 			}),
-			/* @__PURE__ */ (0, b.jsx)("p", {
+			/* @__PURE__ */ (0, S.jsx)("p", {
 				"data-state": t.feedback.includes("not configured") ? "error" : "",
 				children: t.feedback
 			})
@@ -8901,13 +8912,13 @@ function xe() {
 	})] });
 }
 // lib/bible/chapter-quiz.js
-var Se = (e) => String(e || "").normalize("NFKC").replace(/\s+/g, " ").trim();
-function Ce(e, t) {
+var we = (e) => String(e || "").normalize("NFKC").replace(/\s+/g, " ").trim();
+function Te(e, t) {
 	if (!Array.isArray(e?.questions) || e.questions.length !== 10) throw Error("The quiz must contain exactly 10 questions.");
 	let n = /* @__PURE__ */ new Set();
 	return e.questions.map((e) => {
-		let r = Se(e.question), i = Array.isArray(e.options) ? e.options.map(Se) : [], a = Se(e.explanation), o = Se(e.quote), s = t.verses.find((t) => t.number === e.verse);
-		if (!r || r.length > 350 || n.has(r.toLowerCase()) || i.length !== 4 || i.some((e) => !e || e.length > 200) || new Set(i.map((e) => e.toLowerCase())).size !== 4 || !Number.isInteger(e.correctAnswer) || e.correctAnswer < 0 || e.correctAnswer > 3 || !a || a.length > 800 || !s || o.length < 3 || !Se(s.text).toLowerCase().includes(o.toLowerCase())) throw Error("A question or its explanation does not match the chapter.");
+		let r = we(e.question), i = Array.isArray(e.options) ? e.options.map(we) : [], a = we(e.explanation), o = we(e.quote), s = t.verses.find((t) => t.number === e.verse);
+		if (!r || r.length > 350 || n.has(r.toLowerCase()) || i.length !== 4 || i.some((e) => !e || e.length > 200) || new Set(i.map((e) => e.toLowerCase())).size !== 4 || !Number.isInteger(e.correctAnswer) || e.correctAnswer < 0 || e.correctAnswer > 3 || !a || a.length > 800 || !s || o.length < 3 || !we(s.text).toLowerCase().includes(o.toLowerCase())) throw Error("A question or its explanation does not match the chapter.");
 		return n.add(r.toLowerCase()), {
 			question: r,
 			options: i,
@@ -8919,60 +8930,60 @@ function Ce(e, t) {
 	});
 }
 // src/react/chapter-quiz.jsx
-function we({ source: e, bridge: t }) {
-	let [n, r] = (0, v.useState)("loading"), [i, a] = (0, v.useState)(0), [o, s] = (0, v.useState)([]), [c, l] = (0, v.useState)(""), [u, d] = (0, v.useState)(0), [f, p] = (0, v.useState)(0), [m, h] = (0, v.useState)({}), [g, _] = (0, v.useState)({}), [y, x] = (0, v.useState)(!1), ee = (0, v.useRef)(null), S = (0, v.useRef)(null), te = JSON.stringify(e), C = (0, v.useCallback)(() => {
-		S.current?.scrollIntoView({
+function Ee({ source: e, bridge: t }) {
+	let [n, r] = (0, b.useState)("loading"), [i, a] = (0, b.useState)(0), [o, s] = (0, b.useState)([]), [c, l] = (0, b.useState)(""), [u, d] = (0, b.useState)(0), [f, p] = (0, b.useState)(0), [m, h] = (0, b.useState)({}), [g, _] = (0, b.useState)({}), [v, y] = (0, b.useState)(!1), x = (0, b.useRef)(null), C = (0, b.useRef)(null), ee = JSON.stringify(e), te = (0, b.useCallback)(() => {
+		C.current?.scrollIntoView({
 			behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
 			block: "start"
-		}), ee.current?.focus({ preventScroll: !0 });
+		}), x.current?.focus({ preventScroll: !0 });
 	}, []);
-	(0, v.useEffect)(() => {
-		n === "ready" && C();
-	}, [n, C]), (0, v.useEffect)(() => {
+	(0, b.useEffect)(() => {
+		n === "ready" && te();
+	}, [n, te]), (0, b.useEffect)(() => {
 		let e = new AbortController(), n = performance.now(), i;
 		r("loading"), l(""), a(0);
 		let o = window.setInterval(() => {
 			let e = performance.now() - n;
 			a(Math.min(95, Math.round(95 * (1 - Math.exp(-e / 18e3)))));
 		}, 400);
-		return t.createChapterQuiz(JSON.parse(te), e.signal).then((t) => {
-			e.signal.aborted || (s(Ce(t, JSON.parse(te))), window.clearInterval(o), a(100), r("finishing"), i = window.setTimeout(() => r("ready"), 250));
+		return t.createChapterQuiz(JSON.parse(ee), e.signal).then((t) => {
+			e.signal.aborted || (s(Te(t, JSON.parse(ee))), window.clearInterval(o), a(100), r("finishing"), i = window.setTimeout(() => r("ready"), 250));
 		}).catch((t) => {
 			window.clearInterval(o), e.signal.aborted || (l(t.message), r("error"));
 		}), () => {
 			e.abort(), window.clearInterval(o), window.clearTimeout(i);
 		};
 	}, [
-		te,
+		ee,
 		t,
 		u
 	]);
-	let w = (e) => {
-		p(e), x(!1), requestAnimationFrame(C);
-	}, ne = o.reduce((e, t, n) => e + Number(m[n] === t.correctAnswer), 0), T = Object.hasOwn(m, f), E = o[f], re = T ? m[f] : g[f];
-	return /* @__PURE__ */ (0, b.jsxs)("section", {
-		ref: S,
+	let ne = (e) => {
+		p(e), y(!1), requestAnimationFrame(te);
+	}, w = o.reduce((e, t, n) => e + Number(m[n] === t.correctAnswer), 0), T = Object.hasOwn(m, f), E = o[f], re = T ? m[f] : g[f];
+	return /* @__PURE__ */ (0, S.jsxs)("section", {
+		ref: C,
 		className: "chapter-quiz",
 		"aria-label": `Quiz — ${e.reference}`,
 		"aria-busy": n === "loading" || n === "finishing",
 		children: [
-			/* @__PURE__ */ (0, b.jsxs)("header", {
+			/* @__PURE__ */ (0, S.jsxs)("header", {
 				className: "chapter-quiz-header",
-				children: [/* @__PURE__ */ (0, b.jsxs)("div", { children: [/* @__PURE__ */ (0, b.jsx)("span", { children: "Chapter quiz" }), /* @__PURE__ */ (0, b.jsx)("h2", { children: e.reference })] }), n === "ready" && /* @__PURE__ */ (0, b.jsxs)("span", { children: [Object.keys(m).length, " / 10 checked"] })]
+				children: [/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Chapter quiz" }), /* @__PURE__ */ (0, S.jsx)("h2", { children: e.reference })] }), n === "ready" && /* @__PURE__ */ (0, S.jsxs)("span", { children: [Object.keys(m).length, " / 10 checked"] })]
 			}),
-			(n === "loading" || n === "finishing") && /* @__PURE__ */ (0, b.jsxs)("div", {
+			(n === "loading" || n === "finishing") && /* @__PURE__ */ (0, S.jsxs)("div", {
 				className: `chapter-quiz-loading${n === "finishing" ? " is-complete" : ""}`,
 				children: [
-					/* @__PURE__ */ (0, b.jsxs)("div", {
+					/* @__PURE__ */ (0, S.jsxs)("div", {
 						className: "chapter-quiz-loading-ring",
 						"aria-hidden": "true",
-						children: [/* @__PURE__ */ (0, b.jsx)("span", { className: "chapter-quiz-spinner" }), /* @__PURE__ */ (0, b.jsxs)("strong", { children: [i, /* @__PURE__ */ (0, b.jsx)("small", { children: "%" })] })]
+						children: [/* @__PURE__ */ (0, S.jsx)("span", { className: "chapter-quiz-spinner" }), /* @__PURE__ */ (0, S.jsxs)("strong", { children: [i, /* @__PURE__ */ (0, S.jsx)("small", { children: "%" })] })]
 					}),
-					/* @__PURE__ */ (0, b.jsx)("p", {
+					/* @__PURE__ */ (0, S.jsx)("p", {
 						role: "status",
 						children: n === "finishing" ? "Your questions are ready!" : "Creating 10 questions…"
 					}),
-					/* @__PURE__ */ (0, b.jsx)("div", {
+					/* @__PURE__ */ (0, S.jsx)("div", {
 						className: "chapter-quiz-loading-bar",
 						role: "progressbar",
 						"aria-label": "Preparing questions, estimated progress",
@@ -8980,51 +8991,51 @@ function we({ source: e, bridge: t }) {
 						"aria-valuemax": 100,
 						"aria-valuenow": i,
 						"aria-valuetext": `${i} %${i < 100 ? ", estimated" : ""}`,
-						children: /* @__PURE__ */ (0, b.jsx)("span", { style: { transform: `scaleX(${i / 100})` } })
+						children: /* @__PURE__ */ (0, S.jsx)("span", { style: { transform: `scaleX(${i / 100})` } })
 					}),
-					/* @__PURE__ */ (0, b.jsx)("span", {
+					/* @__PURE__ */ (0, S.jsx)("span", {
 						className: "chapter-quiz-loading-note",
 						children: n === "finishing" ? "Let’s go!" : "Estimated progress"
 					})
 				]
 			}),
-			n === "error" && /* @__PURE__ */ (0, b.jsxs)("div", {
+			n === "error" && /* @__PURE__ */ (0, S.jsxs)("div", {
 				role: "alert",
-				children: [/* @__PURE__ */ (0, b.jsx)("p", { children: c }), /* @__PURE__ */ (0, b.jsx)("button", {
+				children: [/* @__PURE__ */ (0, S.jsx)("p", { children: c }), /* @__PURE__ */ (0, S.jsx)("button", {
 					type: "button",
 					onClick: () => d((e) => e + 1),
 					children: "Try again"
 				})]
 			}),
-			n === "ready" && (y ? /* @__PURE__ */ (0, b.jsxs)("div", {
+			n === "ready" && (v ? /* @__PURE__ */ (0, S.jsxs)("div", {
 				className: "chapter-quiz-result",
 				"aria-live": "polite",
 				children: [
-					/* @__PURE__ */ (0, b.jsx)("h3", {
-						ref: ee,
+					/* @__PURE__ */ (0, S.jsx)("h3", {
+						ref: x,
 						tabIndex: -1,
 						children: "Quiz complete!"
 					}),
-					/* @__PURE__ */ (0, b.jsxs)("p", {
+					/* @__PURE__ */ (0, S.jsxs)("p", {
 						className: "chapter-quiz-score",
-						children: [ne, " / 10"]
+						children: [w, " / 10"]
 					}),
-					/* @__PURE__ */ (0, b.jsx)("p", { children: "You can review your answers or start again." }),
-					/* @__PURE__ */ (0, b.jsx)("button", {
+					/* @__PURE__ */ (0, S.jsx)("p", { children: "You can review your answers or start again." }),
+					/* @__PURE__ */ (0, S.jsx)("button", {
 						type: "button",
-						onClick: () => w(0),
+						onClick: () => ne(0),
 						children: "Review my answers"
 					}),
-					/* @__PURE__ */ (0, b.jsx)("button", {
+					/* @__PURE__ */ (0, S.jsx)("button", {
 						type: "button",
 						onClick: () => {
-							h({}), _({}), w(0);
+							h({}), _({}), ne(0);
 						},
 						children: "Start again"
 					})
 				]
-			}) : /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [
-				/* @__PURE__ */ (0, b.jsxs)("p", {
+			}) : /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [
+				/* @__PURE__ */ (0, S.jsxs)("p", {
 					className: "chapter-quiz-progress",
 					children: [
 						"Question ",
@@ -9032,21 +9043,21 @@ function we({ source: e, bridge: t }) {
 						" / 10"
 					]
 				}),
-				/* @__PURE__ */ (0, b.jsx)("h3", {
-					ref: ee,
+				/* @__PURE__ */ (0, S.jsx)("h3", {
+					ref: x,
 					tabIndex: -1,
 					children: E.question
 				}),
-				/* @__PURE__ */ (0, b.jsxs)("fieldset", {
+				/* @__PURE__ */ (0, S.jsxs)("fieldset", {
 					className: "chapter-quiz-options",
 					disabled: T,
-					children: [/* @__PURE__ */ (0, b.jsx)("legend", {
+					children: [/* @__PURE__ */ (0, S.jsx)("legend", {
 						className: "sr-only",
 						children: "Choose an answer"
-					}), E.options.map((e, t) => /* @__PURE__ */ (0, b.jsxs)("label", {
+					}), E.options.map((e, t) => /* @__PURE__ */ (0, S.jsxs)("label", {
 						className: `chapter-quiz-option${re === t ? " is-selected" : ""}${T && t === E.correctAnswer ? " is-correct" : ""}${T && re === t && t !== E.correctAnswer ? " is-incorrect" : ""}`,
 						children: [
-							/* @__PURE__ */ (0, b.jsx)("input", {
+							/* @__PURE__ */ (0, S.jsx)("input", {
 								type: "radio",
 								name: "chapter-quiz-answer",
 								value: t,
@@ -9056,40 +9067,40 @@ function we({ source: e, bridge: t }) {
 									[f]: t
 								}))
 							}),
-							/* @__PURE__ */ (0, b.jsx)("span", {
+							/* @__PURE__ */ (0, S.jsx)("span", {
 								className: "chapter-quiz-letter",
 								children: "ABCD"[t]
 							}),
-							/* @__PURE__ */ (0, b.jsx)("span", { children: e }),
-							T && t === E.correctAnswer && /* @__PURE__ */ (0, b.jsx)("span", {
+							/* @__PURE__ */ (0, S.jsx)("span", { children: e }),
+							T && t === E.correctAnswer && /* @__PURE__ */ (0, S.jsx)("span", {
 								className: "chapter-quiz-answer-label",
 								children: "Correct answer"
 							}),
-							T && re === t && t !== E.correctAnswer && /* @__PURE__ */ (0, b.jsx)("span", {
+							T && re === t && t !== E.correctAnswer && /* @__PURE__ */ (0, S.jsx)("span", {
 								className: "chapter-quiz-answer-label",
 								children: "Your answer"
 							})
 						]
 					}, t))]
 				}),
-				T ? /* @__PURE__ */ (0, b.jsxs)("div", {
+				T ? /* @__PURE__ */ (0, S.jsxs)("div", {
 					className: "chapter-quiz-feedback",
 					role: "status",
 					children: [
-						/* @__PURE__ */ (0, b.jsx)("strong", { children: re === E.correctAnswer ? "Correct answer!" : "That’s not the right answer." }),
-						/* @__PURE__ */ (0, b.jsx)("p", { children: E.explanation }),
-						/* @__PURE__ */ (0, b.jsxs)("blockquote", { children: [
+						/* @__PURE__ */ (0, S.jsx)("strong", { children: re === E.correctAnswer ? "Correct answer!" : "That’s not the right answer." }),
+						/* @__PURE__ */ (0, S.jsx)("p", { children: E.explanation }),
+						/* @__PURE__ */ (0, S.jsxs)("blockquote", { children: [
 							"« ",
 							E.quote,
 							" »"
 						] }),
-						/* @__PURE__ */ (0, b.jsxs)("small", { children: [
+						/* @__PURE__ */ (0, S.jsxs)("small", { children: [
 							e.reference,
 							":",
 							E.verse
 						] })
 					]
-				}) : /* @__PURE__ */ (0, b.jsx)("button", {
+				}) : /* @__PURE__ */ (0, S.jsx)("button", {
 					className: "chapter-quiz-validate",
 					type: "button",
 					disabled: re === void 0,
@@ -9099,23 +9110,23 @@ function we({ source: e, bridge: t }) {
 					})),
 					children: "Check my answer"
 				}),
-				/* @__PURE__ */ (0, b.jsxs)("nav", {
+				/* @__PURE__ */ (0, S.jsxs)("nav", {
 					className: "chapter-quiz-navigation",
 					"aria-label": "Quiz navigation",
 					children: [
-						/* @__PURE__ */ (0, b.jsx)("button", {
+						/* @__PURE__ */ (0, S.jsx)("button", {
 							type: "button",
-							onClick: () => w(f - 1),
+							onClick: () => ne(f - 1),
 							disabled: f === 0,
 							"aria-label": "Previous question",
 							children: "←"
 						}),
-						/* @__PURE__ */ (0, b.jsxs)("span", { children: [f + 1, " / 10"] }),
-						/* @__PURE__ */ (0, b.jsx)("button", {
+						/* @__PURE__ */ (0, S.jsxs)("span", { children: [f + 1, " / 10"] }),
+						/* @__PURE__ */ (0, S.jsx)("button", {
 							type: "button",
 							disabled: !T,
 							onClick: () => {
-								f < 9 ? w(f + 1) : (x(!0), requestAnimationFrame(C));
+								f < 9 ? ne(f + 1) : (y(!0), requestAnimationFrame(te));
 							},
 							"aria-label": f === 9 ? "See my result" : "Next question",
 							children: f === 9 ? "Finish" : "→"
@@ -9127,7 +9138,7 @@ function we({ source: e, bridge: t }) {
 	});
 }
 // src/shared/bible-reference.js
-var Te = {
+var De = {
 	genese: "GEN",
 	exode: "EXO",
 	levitique: "LEV",
@@ -9199,7 +9210,7 @@ var Te = {
 	jude: "JUD",
 	apocalypse: "REV",
 	revelation: "REV"
-}, Ee = {
+}, Oe = {
 	zero: 0,
 	un: 1,
 	une: 1,
@@ -9248,16 +9259,16 @@ var Te = {
 	seventy: 70,
 	eighty: 80,
 	ninety: 90
-}, De = RegExp(`\\b\\d+\\b|\\b(?:${Object.keys(Ee).sort((e, t) => t.length - e.length).join("|")}|et|and)\\b`, "g");
-function Oe(e) {
+}, ke = RegExp(`\\b\\d+\\b|\\b(?:${Object.keys(Oe).sort((e, t) => t.length - e.length).join("|")}|et|and)\\b`, "g");
+function Ae(e) {
 	return String(e).toLocaleLowerCase("fr-CA").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[’']/g, " ").replace(/[^a-z0-9]+/g, " ").trim();
 }
-function ke(e) {
-	let t = Oe(e);
+function je(e) {
+	let t = Ae(e);
 	if (/^\d+$/.test(t)) return Number(t);
 	let n = t.split(" ").filter(Boolean);
 	if (!n.length) return NaN;
-	if (n[0] === "quatre" && n[1] === "vingt") return 80 + n.filter((e) => e !== "et" && e !== "and").slice(2).map((e) => Ee[e]).reduce((e, t) => e + (t || 0), 0);
+	if (n[0] === "quatre" && n[1] === "vingt") return 80 + n.filter((e) => e !== "et" && e !== "and").slice(2).map((e) => Oe[e]).reduce((e, t) => e + (t || 0), 0);
 	let r = 0;
 	for (let e of n) {
 		if (e === "cent" || e === "hundred") {
@@ -9265,18 +9276,18 @@ function ke(e) {
 			continue;
 		}
 		if (e === "et" || e === "and") continue;
-		let t = Ee[e];
+		let t = Oe[e];
 		if (t === void 0) return NaN;
 		r += t;
 	}
 	return r;
 }
-function Ae(e, t) {
-	let n = Oe(e), r = [...Object.entries(Te), ...t.map((e) => [Oe(e.name), e.id])].sort((e, t) => t[0].length - e[0].length).find(([e]) => e && RegExp(`(?:^| )${e.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?: |$)`).test(n));
+function Me(e, t) {
+	let n = Ae(e), r = [...Object.entries(De), ...t.map((e) => [Ae(e.name), e.id])].sort((e, t) => t[0].length - e[0].length).find(([e]) => e && RegExp(`(?:^| )${e.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?: |$)`).test(n));
 	if (!r) return null;
 	let i = n.replace(RegExp(`(?:^| )${r[0].replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?: |$)`), " ").trim(), a = /\b(?:chapter|chapitre)\b/.exec(i), o = /\b(?:verse|verset)\b/.exec(i), s = t.find((e) => e.id === r[1]);
 	if (a && o && o.index > a.index) {
-		let e = i.slice(a.index + a[0].length, o.index).match(De) || [], t = i.slice(o.index + o[0].length).match(De) || [], n = ke(e.join(" ")), r = ke(t.join(" "));
+		let e = i.slice(a.index + a[0].length, o.index).match(ke) || [], t = i.slice(o.index + o[0].length).match(ke) || [], n = je(e.join(" ")), r = je(t.join(" "));
 		if (s && Number.isInteger(n) && n > 0 && Number.isInteger(r) && r > 0) return {
 			bookId: s.id,
 			chapter: n,
@@ -9284,10 +9295,10 @@ function Ae(e, t) {
 			bookName: s.name
 		};
 	}
-	let c = i.match(De) || [], l = [];
+	let c = i.match(ke) || [], l = [];
 	for (let e = 0; e < c.length && l.length < 2; e++) {
 		let t = c[e];
-		t === "quatre" && c[e + 1] === "vingt" ? (t += ` ${c[++e]}`, c[e + 1] === "et" && c[e + 2] ? t += ` et ${c[e += 2]}` : /^(dix|onze|douze|treize|quatorze|quinze|seize|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf)$/.test(c[e + 1] || "") && (t += ` ${c[++e]}`)) : /^(vingt|trente|quarante|cinquante|soixante|twenty|thirty|forty|fifty|sixty)$/.test(t) && c[e + 1] === "et" && c[e + 2] ? t += ` et ${c[e += 2]}` : /^(vingt|trente|quarante|cinquante|soixante|twenty|thirty|forty|fifty|sixty)$/.test(t) && c[e + 1] && /^(un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|treize|quatorze|quinze|seize|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen)$/.test(c[e + 1]) && (t += ` ${c[++e]}`), l.push(ke(t));
+		t === "quatre" && c[e + 1] === "vingt" ? (t += ` ${c[++e]}`, c[e + 1] === "et" && c[e + 2] ? t += ` et ${c[e += 2]}` : /^(dix|onze|douze|treize|quatorze|quinze|seize|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf)$/.test(c[e + 1] || "") && (t += ` ${c[++e]}`)) : /^(vingt|trente|quarante|cinquante|soixante|twenty|thirty|forty|fifty|sixty)$/.test(t) && c[e + 1] === "et" && c[e + 2] ? t += ` et ${c[e += 2]}` : /^(vingt|trente|quarante|cinquante|soixante|twenty|thirty|forty|fifty|sixty)$/.test(t) && c[e + 1] && /^(un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|treize|quatorze|quinze|seize|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen)$/.test(c[e + 1]) && (t += ` ${c[++e]}`), l.push(je(t));
 	}
 	return l.length < 2 || l.some((e) => !Number.isInteger(e) || e < 1) ? null : s ? {
 		bookId: s.id,
@@ -9297,7 +9308,7 @@ function Ae(e, t) {
 	} : null;
 }
 // src/react/bible.jsx
-var je = /* @__PURE__ */ (0, b.jsxs)("svg", {
+var Ne = /* @__PURE__ */ (0, S.jsxs)("svg", {
 	viewBox: "0 0 24 24",
 	"aria-hidden": "true",
 	fill: "none",
@@ -9305,20 +9316,20 @@ var je = /* @__PURE__ */ (0, b.jsxs)("svg", {
 	strokeWidth: "1.8",
 	strokeLinecap: "round",
 	strokeLinejoin: "round",
-	children: [/* @__PURE__ */ (0, b.jsx)("rect", {
+	children: [/* @__PURE__ */ (0, S.jsx)("rect", {
 		x: "4",
 		y: "4",
 		width: "6",
 		height: "16",
 		rx: "1"
-	}), /* @__PURE__ */ (0, b.jsx)("rect", {
+	}), /* @__PURE__ */ (0, S.jsx)("rect", {
 		x: "14",
 		y: "4",
 		width: "6",
 		height: "16",
 		rx: "1"
 	})]
-}), Me = /* @__PURE__ */ (0, b.jsxs)("svg", {
+}), Pe = /* @__PURE__ */ (0, S.jsxs)("svg", {
 	viewBox: "0 0 24 24",
 	"aria-hidden": "true",
 	fill: "none",
@@ -9327,19 +9338,19 @@ var je = /* @__PURE__ */ (0, b.jsxs)("svg", {
 	strokeLinecap: "round",
 	strokeLinejoin: "round",
 	children: [
-		/* @__PURE__ */ (0, b.jsx)("circle", {
+		/* @__PURE__ */ (0, S.jsx)("circle", {
 			cx: "12",
 			cy: "12",
 			r: "7"
 		}),
-		/* @__PURE__ */ (0, b.jsx)("circle", {
+		/* @__PURE__ */ (0, S.jsx)("circle", {
 			cx: "12",
 			cy: "12",
 			r: "2"
 		}),
-		/* @__PURE__ */ (0, b.jsx)("path", { d: "M12 2v3M12 19v3M2 12h3M19 12h3" })
+		/* @__PURE__ */ (0, S.jsx)("path", { d: "M12 2v3M12 19v3M2 12h3M19 12h3" })
 	]
-}), Ne = {
+}), Fe = {
 	highlight: [
 		"m4 20 11.5-11.5",
 		"m14 5 5 5",
@@ -9368,8 +9379,8 @@ var je = /* @__PURE__ */ (0, b.jsxs)("svg", {
 		"M16 5v14"
 	]
 };
-function Pe({ name: e }) {
-	return /* @__PURE__ */ (0, b.jsx)("svg", {
+function Ie({ name: e }) {
+	return /* @__PURE__ */ (0, S.jsx)("svg", {
 		viewBox: "0 0 24 24",
 		"aria-hidden": "true",
 		fill: "none",
@@ -9377,23 +9388,23 @@ function Pe({ name: e }) {
 		strokeWidth: "1.8",
 		strokeLinecap: "round",
 		strokeLinejoin: "round",
-		children: Ne[e].map((e) => /* @__PURE__ */ (0, b.jsx)("path", { d: e }, e))
+		children: Fe[e].map((e) => /* @__PURE__ */ (0, S.jsx)("path", { d: e }, e))
 	});
 }
-function Fe() {
-	let e = window.bibleReaderBridge, [t, n] = (0, v.useState)(() => e.getSnapshot());
-	return (0, v.useEffect)(() => {
+function Le() {
+	let e = window.bibleReaderBridge, [t, n] = (0, b.useState)(() => e.getSnapshot());
+	return (0, b.useEffect)(() => {
 		let t = () => n(e.getSnapshot());
 		return document.addEventListener("bible:reader-change", t), () => document.removeEventListener("bible:reader-change", t);
 	}, [e]), [t, e];
 }
-function Ie() {
-	let [e, t] = Fe(), n = (0, v.useRef)(null), r = (0, v.useRef)(null), i = e.books.find((t) => t.id === e.bookId)?.name || "Bible", a = () => {
+function Re() {
+	let [e, t] = Le(), n = (0, b.useRef)(null), r = (0, b.useRef)(null), i = e.books.find((t) => t.id === e.bookId)?.name || "Bible", a = () => {
 		n.current.showModal();
 		let e = n.current.querySelector("[aria-current=\"true\"]");
 		e?.focus({ preventScroll: !0 }), e?.scrollIntoView({ block: "nearest" });
 	};
-	(0, v.useEffect)(() => {
+	(0, b.useEffect)(() => {
 		r.current === e.bookId && (r.current = null, a());
 	}, [e.bookId]);
 	let o = (e) => {
@@ -9404,72 +9415,72 @@ function Ie() {
 			behavior: "instant"
 		});
 	};
-	return /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [
-		/* @__PURE__ */ (0, b.jsx)("label", {
+	return /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [
+		/* @__PURE__ */ (0, S.jsx)("label", {
 			className: "reader-select-label bible-glass-select",
 			"aria-label": "Bible version",
-			children: /* @__PURE__ */ (0, b.jsx)("select", {
+			children: /* @__PURE__ */ (0, S.jsx)("select", {
 				className: "bible-glass-select-input",
 				value: e.versionId,
 				onChange: (e) => t.setVersion(e.target.value),
-				children: e.versionOptions.map((e) => e.separator ? /* @__PURE__ */ (0, b.jsx)("option", {
+				children: e.versionOptions.map((e) => e.separator ? /* @__PURE__ */ (0, S.jsx)("option", {
 					disabled: !0,
 					value: "",
 					children: "────────────"
-				}, "separator") : /* @__PURE__ */ (0, b.jsx)("option", {
+				}, "separator") : /* @__PURE__ */ (0, S.jsx)("option", {
 					value: e.id,
 					children: e.label
 				}, e.id))
 			})
 		}),
-		/* @__PURE__ */ (0, b.jsx)("label", {
+		/* @__PURE__ */ (0, S.jsx)("label", {
 			className: "reader-select-label bible-glass-select",
 			"aria-label": "Book",
-			children: /* @__PURE__ */ (0, b.jsx)("select", {
+			children: /* @__PURE__ */ (0, S.jsx)("select", {
 				className: "bible-glass-select-input",
 				value: e.bookId,
 				onChange: (e) => o(e.target.value),
-				children: e.books.map((e) => /* @__PURE__ */ (0, b.jsx)("option", {
+				children: e.books.map((e) => /* @__PURE__ */ (0, S.jsx)("option", {
 					value: e.id,
 					children: e.name
 				}, e.id))
 			})
 		}),
-		/* @__PURE__ */ (0, b.jsx)("button", {
+		/* @__PURE__ */ (0, S.jsx)("button", {
 			className: "reader-select-label compact bible-glass-select bible-chapter-picker-trigger",
 			type: "button",
 			"aria-label": `Choose chapter, current chapter ${e.chapter}`,
 			"aria-haspopup": "dialog",
 			onClick: a,
-			children: /* @__PURE__ */ (0, b.jsx)("span", { children: e.chapter })
+			children: /* @__PURE__ */ (0, S.jsx)("span", { children: e.chapter })
 		}),
-		/* @__PURE__ */ (0, b.jsx)("dialog", {
+		/* @__PURE__ */ (0, S.jsx)("dialog", {
 			className: "bible-chapter-picker",
 			ref: n,
 			"aria-labelledby": "bible-chapter-picker-title",
 			onClick: (e) => {
 				e.target === e.currentTarget && e.currentTarget.close();
 			},
-			children: /* @__PURE__ */ (0, b.jsxs)("div", {
+			children: /* @__PURE__ */ (0, S.jsxs)("div", {
 				className: "bible-chapter-picker-content",
 				children: [
-					/* @__PURE__ */ (0, b.jsxs)("header", { children: [/* @__PURE__ */ (0, b.jsxs)("div", { children: [/* @__PURE__ */ (0, b.jsx)("span", {
+					/* @__PURE__ */ (0, S.jsxs)("header", { children: [/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("span", {
 						className: "bible-chapter-picker-eyebrow",
 						children: "CHOOSE A CHAPTER"
-					}), /* @__PURE__ */ (0, b.jsx)("h2", {
+					}), /* @__PURE__ */ (0, S.jsx)("h2", {
 						id: "bible-chapter-picker-title",
 						children: i
-					})] }), /* @__PURE__ */ (0, b.jsx)("button", {
+					})] }), /* @__PURE__ */ (0, S.jsx)("button", {
 						type: "button",
 						className: "bible-chapter-picker-close",
 						"aria-label": "Close chapter selection",
 						onClick: () => n.current.close(),
 						children: "×"
 					})] }),
-					/* @__PURE__ */ (0, b.jsx)("p", { children: "Select a number to start reading." }),
-					/* @__PURE__ */ (0, b.jsx)("div", {
+					/* @__PURE__ */ (0, S.jsx)("p", { children: "Select a number to start reading." }),
+					/* @__PURE__ */ (0, S.jsx)("div", {
 						className: "bible-chapter-picker-grid",
-						children: e.chapters.map((t) => /* @__PURE__ */ (0, b.jsx)("button", {
+						children: e.chapters.map((t) => /* @__PURE__ */ (0, S.jsx)("button", {
 							type: "button",
 							"aria-label": `${i} ${t}`,
 							"aria-current": t === e.chapter ? "true" : void 0,
@@ -9477,7 +9488,7 @@ function Ie() {
 							children: t
 						}, t))
 					}),
-					/* @__PURE__ */ (0, b.jsxs)("footer", { children: [
+					/* @__PURE__ */ (0, S.jsxs)("footer", { children: [
 						e.chapters.length,
 						" chapters · Chapter ",
 						e.chapter,
@@ -9486,16 +9497,16 @@ function Ie() {
 				]
 			})
 		}),
-		/* @__PURE__ */ (0, b.jsx)("button", {
+		/* @__PURE__ */ (0, S.jsx)("button", {
 			className: "icon-button bible-glass-control bible-glass-search",
 			type: "button",
 			"data-bible-menu-toggle": !0,
 			"aria-label": "Open Bible menu",
 			"aria-controls": "bible-menu-drawer",
 			"aria-expanded": "false",
-			children: /* @__PURE__ */ (0, b.jsx)("span", {
+			children: /* @__PURE__ */ (0, S.jsx)("span", {
 				className: "bible-glass-control-content",
-				children: /* @__PURE__ */ (0, b.jsxs)("svg", {
+				children: /* @__PURE__ */ (0, S.jsxs)("svg", {
 					viewBox: "0 0 24 24",
 					"aria-hidden": "true",
 					fill: "none",
@@ -9503,49 +9514,55 @@ function Ie() {
 					strokeWidth: "1.8",
 					strokeLinecap: "round",
 					strokeLinejoin: "round",
-					children: [/* @__PURE__ */ (0, b.jsx)("circle", {
+					children: [/* @__PURE__ */ (0, S.jsx)("circle", {
 						cx: "10.8",
 						cy: "10.8",
 						r: "6.8"
-					}), /* @__PURE__ */ (0, b.jsx)("path", { d: "m16 16 5 5" })]
+					}), /* @__PURE__ */ (0, S.jsx)("path", { d: "m16 16 5 5" })]
 				})
 			})
 		})
 	] });
 }
-function Le({ assistant: e = !1 }) {
-	let [t, n] = Fe(), [r, i] = (0, v.useState)(!1), [a, o] = (0, v.useState)("idle"), [s, c] = (0, v.useState)(""), [m, h] = (0, v.useState)(""), [g, _] = (0, v.useState)([]), [y, x] = (0, v.useState)([]), [ee, te] = (0, v.useState)(Array(18).fill(.12)), C = (0, v.useRef)(null), w = (0, v.useRef)(null), ne = (0, v.useRef)(!1), T = (0, v.useRef)(null), E = () => {
-		C.current?.cancel(), C.current = null, w.current?.abort(), w.current = null, i(!1), o("idle");
+function ze({ assistant: e = !1 }) {
+	let [t, n] = Le(), [r, i] = (0, b.useState)(!1), [a, o] = (0, b.useState)("idle"), [s, c] = (0, b.useState)(""), [d, p] = (0, b.useState)(""), [g, _] = (0, b.useState)([]), [v, y] = (0, b.useState)([]), [x, C] = (0, b.useState)([]), [ee, ne] = (0, b.useState)(Array(18).fill(.12)), w = (0, b.useRef)(null), T = (0, b.useRef)(null), E = (0, b.useRef)(!1), re = (0, b.useRef)(null), D = () => {
+		w.current?.cancel(), w.current = null, T.current?.abort(), T.current = null, i(!1), o("idle");
 	};
-	(0, v.useEffect)(() => () => {
-		C.current?.cancel(), w.current?.abort();
-	}, []), (0, v.useEffect)(() => {
+	(0, b.useEffect)(() => () => {
+		w.current?.cancel(), T.current?.abort();
+	}, []), (0, b.useEffect)(() => {
 		let t = () => {
-			!ne.current && document.querySelector(".app-shell")?.dataset.activeScreen !== (e ? "home" : "bible") && E();
+			!E.current && document.querySelector(".app-shell")?.dataset.activeScreen !== (e ? "home" : "bible") && D();
 		};
 		return window.addEventListener("app:screen-change", t), () => window.removeEventListener("app:screen-change", t);
-	}, [e]), (0, v.useEffect)(() => {
+	}, [e]), (0, b.useEffect)(() => {
 		if (!r) return;
 		let e = (e) => {
-			e.key === "Escape" && E();
+			e.key === "Escape" && D();
 		};
 		return window.addEventListener("keydown", e), () => window.removeEventListener("keydown", e);
 	}, [r]);
-	let re = (t) => {
+	let ie = (t) => {
 		o("opening"), c(`${t.bookName} ${t.chapter}:${t.verse}`), (async () => {
 			try {
-				if (ne.current = !0, e && !window.aiBridge.navigateVoiceScreen("bible")) throw Error("Navigation cancelled.");
-				await n.navigateToReference(t.bookId, t.chapter, t.verse), E();
+				if (E.current = !0, e && !window.aiBridge.navigateVoiceScreen("bible")) throw Error("Navigation cancelled.");
+				await n.navigateToReference(t.bookId, t.chapter, t.verse), D();
 			} catch {
 				o("error"), c(`Je n’ai pas pu ouvrir ${t.bookName} ${t.chapter}:${t.verse}. Vérifiez la référence et réessayez.`);
 			} finally {
-				ne.current = !1;
+				E.current = !1;
 			}
 		})();
-	}, ie = (e) => {
-		window.voiceKidsStoryId = e.id, window.aiBridge.navigateVoiceScreen("kids-bible") ? (document.dispatchEvent(new Event("kids:voice-story")), E()) : (delete window.voiceKidsStoryId, o("error"), c("Je n’ai pas pu ouvrir Kids Bible."));
-	}, ae = () => {
-		if (i(!0), h(""), _([]), x([]), c(""), o("starting"), !navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
+	}, ae = (e) => {
+		window.voiceKidsStoryId = e.id, window.aiBridge.navigateVoiceScreen("kids-bible") ? (document.dispatchEvent(new Event("kids:voice-story")), D()) : (delete window.voiceKidsStoryId, o("error"), c("Je n’ai pas pu ouvrir Kids Bible."));
+	}, oe = async (e) => {
+		try {
+			await window.homeLibraryBridge.openVoiceItem(e), D();
+		} catch (e) {
+			o("error"), c(e.message || "Cet élément ne peut pas être ouvert.");
+		}
+	}, se = () => {
+		if (i(!0), p(""), _([]), y([]), C([]), c(""), o("starting"), !navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
 			o("error"), c("L’enregistrement audio n’est pas disponible dans ce navigateur.");
 			return;
 		}
@@ -9556,13 +9573,13 @@ function Le({ assistant: e = !1 }) {
 			"audio/ogg"
 		].find((e) => window.MediaRecorder.isTypeSupported?.(e)), r;
 		try {
-			r = l({
+			r = h({
 				getStream: () => navigator.mediaDevices.getUserMedia({ audio: !0 }),
 				createRecorder: (e) => n ? new window.MediaRecorder(e, { mimeType: n }) : new window.MediaRecorder(e),
 				createAudioContext: () => new (window.AudioContext || window.webkitAudioContext)(),
 				requestFrame: (e) => window.requestAnimationFrame(e),
 				cancelFrame: (e) => window.cancelAnimationFrame(e),
-				onLevels: (e) => te(e.map((e) => Number.isFinite(e) ? e : 0)),
+				onLevels: (e) => ne(e.map((e) => Number.isFinite(e) ? e : 0)),
 				onReady: () => {
 					o("listening"), c("Je vous écoute… une pause de 2 secondes lancera la recherche.");
 				},
@@ -9571,7 +9588,7 @@ function Le({ assistant: e = !1 }) {
 				},
 				silenceMs: 2e3,
 				maxDurationMs: 3e4
-			}), C.current = r;
+			}), w.current = r;
 		} catch {
 			o("error"), c("Le microphone n’a pas pu démarrer.");
 			return;
@@ -9579,20 +9596,20 @@ function Le({ assistant: e = !1 }) {
 		(async () => {
 			try {
 				let n = await r.done;
-				if (C.current !== r) return;
-				if (C.current = null, !n?.size) throw Error("Aucune parole n’a été détectée. Réessayez.");
+				if (w.current !== r) return;
+				if (w.current = null, !n?.size) throw Error("Aucune parole n’a été détectée. Réessayez.");
 				o("transcribing"), c("Transcription par IA en cours…");
 				let i = new AbortController();
-				w.current = i;
-				let a = await d(n, { signal: i.signal });
-				if (w.current !== i) return;
-				if (h(a), e) {
+				T.current = i;
+				let a = await m(n, { signal: i.signal });
+				if (T.current !== i) return;
+				if (p(a), e) {
 					c("Je prépare votre demande…");
 					let e = await u(a, { signal: i.signal });
-					if (w.current !== i) return;
+					if (T.current !== i) return;
 					if (e.type === "navigate") {
-						if (w.current = null, !window.aiBridge.navigateVoiceScreen(e.screen)) throw Error("Je n’ai pas pu ouvrir cette page.");
-						E();
+						if (T.current = null, !window.aiBridge.navigateVoiceScreen(e.screen)) throw Error("Je n’ai pas pu ouvrir cette page.");
+						D();
 						return;
 					}
 					if (e.type === "prayer") {
@@ -9601,56 +9618,69 @@ function Le({ assistant: e = !1 }) {
 							title: e.title,
 							text: e.text,
 							category: e.category
-						}, w.current = null, !window.aiBridge.navigateVoiceScreen("prayer")) throw delete window.voicePrayerDraft, Error("Je n’ai pas pu ouvrir la page de prière.");
-						document.dispatchEvent(new Event("prayer:voice-draft")), E();
+						}, T.current = null, !window.aiBridge.navigateVoiceScreen("prayer")) throw delete window.voicePrayerDraft, Error("Je n’ai pas pu ouvrir la page de prière.");
+						document.dispatchEvent(new Event("prayer:voice-draft")), D();
+						return;
+					}
+					if (e.type === "note_draft") {
+						if (!window.noteEditorBridge?.openVoiceDraft) throw Error("L’outil Notes n’est pas disponible.");
+						window.noteEditorBridge.openVoiceDraft(e), T.current = null, D();
+						return;
+					}
+					if (e.type === "saved_search") {
+						if (!window.homeLibraryBridge?.searchVoiceItems) throw Error("La bibliothèque n’est pas disponible.");
+						let n = Me(e.query, t.books) || Me(a, t.books), r = window.homeLibraryBridge.searchVoiceItems(e.kind, e.query, n);
+						if (T.current = null, r.length === 1) await oe(r[0]);
+						else if (r.length) C(r), o("choosing");
+						else throw Error(e.kind === "notes" ? "Je n’ai pas trouvé cette note. Essaie de préciser son titre ou son contenu." : "Je n’ai pas trouvé ce favori. Essaie de préciser le verset ou son contenu.");
 						return;
 					}
 					if (e.type === "kids_story") {
 						o("searching");
-						let e = await f(a, { signal: i.signal });
-						if (w.current !== i) return;
-						if (w.current = null, e.certain && e.matches?.length === 1) ie(e.matches[0]);
-						else if (e.matches?.length) x(e.matches), o("choosing");
+						let e = await l(a, { signal: i.signal });
+						if (T.current !== i) return;
+						if (T.current = null, e.certain && e.matches?.length === 1) ae(e.matches[0]);
+						else if (e.matches?.length) y(e.matches), o("choosing");
 						else throw Error("Je n’ai pas trouvé cette histoire dans Kids Bible. Essayez de préciser l’histoire.");
 						return;
 					}
 					if (e.type === "question") {
 						c("Brother AI prépare sa réponse…");
 						let e = window.aiBridge.getSnapshot().messages.filter((e) => !e.pending).slice(-24);
-						if (await window.aiBridge.send(a, e), w.current !== i) return;
-						if (w.current = null, !window.aiBridge.navigateVoiceScreen("ai")) throw Error("La réponse est enregistrée dans Brother AI, mais la page n’a pas pu s’ouvrir.");
-						E();
+						if (await window.aiBridge.send(a, e), T.current !== i) return;
+						if (T.current = null, !window.aiBridge.navigateVoiceScreen("ai")) throw Error("La réponse est enregistrée dans Brother AI, mais la page n’a pas pu s’ouvrir.");
+						D();
 						return;
 					}
-					if (e.type !== "reference") throw Error("Je peux ouvrir une page, un verset ou une histoire Kids Bible, préparer une prière ou transmettre une question à Brother AI.");
+					if (e.type !== "reference") throw Error("Je peux ouvrir une page, un verset, une note ou un favori, préparer une prière ou une note, ou répondre à une question.");
 				}
-				let s = Ae(a, t.books);
-				if (s) w.current = null, re(s);
+				let s = Me(a, t.books);
+				if (s) T.current = null, ie(s);
 				else {
 					o("searching");
-					let e = await p(a, { signal: i.signal });
-					if (w.current !== i) return;
-					w.current = null;
+					let e = await f(a, { signal: i.signal });
+					if (T.current !== i) return;
+					T.current = null;
 					let n = (e.matches || []).filter((e) => t.books.some((t) => t.id === e.bookId && e.chapter <= t.chapters));
-					e.certain && n.length === 1 ? re(n[0]) : n.length ? (_(n), o("choosing")) : (o("error"), c("Je n’ai pas trouvé de verset précis. Ajoutez quelques mots ou le contexte du passage."));
+					e.certain && n.length === 1 ? ie(n[0]) : n.length ? (_(n), o("choosing")) : (o("error"), c("Je n’ai pas trouvé de verset précis. Ajoutez quelques mots ou le contexte du passage."));
 				}
 			} catch (e) {
 				if (e.name === "AbortError") return;
-				C.current === r && (C.current = null), w.current = null, o("error"), c(e.name === "NotAllowedError" ? "Autorisez le microphone dans les paramètres de l’application. Sur Android, installez la version 1.2 ou ultérieure." : e.message || "La transcription IA a échoué. Réessayez.");
+				w.current === r && (w.current = null), T.current = null, o("error"), c(e.name === "NotAllowedError" ? "Autorisez le microphone dans les paramètres de l’application. Sur Android, installez la version 1.2 ou ultérieure." : e.message || "La transcription IA a échoué. Réessayez.");
 			}
 		})();
 	};
-	return T.current = ae, (0, v.useEffect)(() => {
+	return re.current = se, (0, b.useEffect)(() => {
 		if (!e) return;
-		let t = () => T.current?.();
+		let t = () => re.current?.();
 		return window.addEventListener("app:voice-assistant", t), () => window.removeEventListener("app:voice-assistant", t);
-	}, [e]), /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [!e && /* @__PURE__ */ (0, b.jsx)("button", {
+	}, [e]), /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [!e && /* @__PURE__ */ (0, S.jsx)("button", {
 		type: "button",
 		className: "icon-button bible-glass-control bible-glass-search bible-voice-button",
 		"aria-label": "Chercher un verset par la voix",
 		title: "Chercher un verset par la voix",
-		onClick: ae,
-		children: /* @__PURE__ */ (0, b.jsxs)("svg", {
+		onClick: se,
+		children: /* @__PURE__ */ (0, S.jsxs)("svg", {
 			viewBox: "0 0 24 24",
 			"aria-hidden": "true",
 			fill: "none",
@@ -9658,56 +9688,64 @@ function Le({ assistant: e = !1 }) {
 			strokeWidth: "1.8",
 			strokeLinecap: "round",
 			strokeLinejoin: "round",
-			children: [/* @__PURE__ */ (0, b.jsx)("rect", {
+			children: [/* @__PURE__ */ (0, S.jsx)("rect", {
 				x: "9",
 				y: "2",
 				width: "6",
 				height: "12",
 				rx: "3"
-			}), /* @__PURE__ */ (0, b.jsx)("path", { d: "M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" })]
+			}), /* @__PURE__ */ (0, S.jsx)("path", { d: "M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" })]
 		})
-	}), r && (0, S.createPortal)(/* @__PURE__ */ (0, b.jsxs)("div", {
+	}), r && (0, te.createPortal)(/* @__PURE__ */ (0, S.jsxs)("div", {
 		className: "bible-voice-overlay",
 		role: "dialog",
 		"aria-modal": "true",
 		"aria-label": e ? "Assistant vocal" : "Recherche vocale de verset",
-		children: [/* @__PURE__ */ (0, b.jsx)("button", {
+		children: [/* @__PURE__ */ (0, S.jsx)("button", {
 			type: "button",
 			className: "bible-voice-dismiss",
 			"aria-label": "Fermer",
-			onClick: E
-		}), /* @__PURE__ */ (0, b.jsxs)("section", {
+			onClick: D
+		}), /* @__PURE__ */ (0, S.jsxs)("section", {
 			className: "bible-voice-listening",
 			children: [
-				/* @__PURE__ */ (0, b.jsx)("p", {
+				/* @__PURE__ */ (0, S.jsx)("p", {
 					className: "bible-voice-prompt",
 					children: e ? "Ask a question or open a page" : "Ask me to search a scripture"
 				}),
-				/* @__PURE__ */ (0, b.jsx)("div", {
+				/* @__PURE__ */ (0, S.jsx)("div", {
 					className: `bible-voice-wave${a === "listening" ? " is-listening" : ["error", "choosing"].includes(a) ? "" : " is-processing"}`,
 					"aria-hidden": "true",
-					children: ee.map((e, t) => /* @__PURE__ */ (0, b.jsx)("i", { style: {
+					children: ee.map((e, t) => /* @__PURE__ */ (0, S.jsx)("i", { style: {
 						"--voice-level": `${Math.max(.12, e) * 100}%`,
 						"--voice-delay": `${t * 24}ms`
 					} }, t))
 				}),
-				/* @__PURE__ */ (0, b.jsxs)("div", {
+				/* @__PURE__ */ (0, S.jsxs)("div", {
 					className: "bible-voice-feedback",
 					children: [
-						m && /* @__PURE__ */ (0, b.jsx)("p", {
+						d && /* @__PURE__ */ (0, S.jsx)("p", {
 							className: "bible-voice-transcript",
 							"aria-live": "polite",
-							children: m
+							children: d
 						}),
-						a === "choosing" && /* @__PURE__ */ (0, b.jsxs)("div", {
+						a === "choosing" && /* @__PURE__ */ (0, S.jsxs)("div", {
 							className: "bible-voice-matches",
 							children: [
-								/* @__PURE__ */ (0, b.jsx)("p", { children: y.length ? "Quelle histoire cherchez-vous ?" : "Quel passage cherchez-vous ?" }),
-								y.map((e) => /* @__PURE__ */ (0, b.jsxs)("button", {
+								/* @__PURE__ */ (0, S.jsx)("p", { children: x.length ? "Quel élément cherchez-vous ?" : v.length ? "Quelle histoire cherchez-vous ?" : "Quel passage cherchez-vous ?" }),
+								x.map((e) => /* @__PURE__ */ (0, S.jsx)("button", {
 									className: "bible-voice-retry",
 									type: "button",
 									onClick: () => {
-										x([]), ie(e);
+										C([]), oe(e);
+									},
+									children: e.label
+								}, `${e.kind}-${e.key}`)),
+								v.map((e) => /* @__PURE__ */ (0, S.jsxs)("button", {
+									className: "bible-voice-retry",
+									type: "button",
+									onClick: () => {
+										y([]), ae(e);
 									},
 									children: [
 										e.title,
@@ -9715,11 +9753,11 @@ function Le({ assistant: e = !1 }) {
 										e.reference
 									]
 								}, e.id)),
-								g.map((e) => /* @__PURE__ */ (0, b.jsxs)("button", {
+								g.map((e) => /* @__PURE__ */ (0, S.jsxs)("button", {
 									className: "bible-voice-retry",
 									type: "button",
 									onClick: () => {
-										_([]), re(e);
+										_([]), ie(e);
 									},
 									children: [
 										e.bookName,
@@ -9731,14 +9769,14 @@ function Le({ assistant: e = !1 }) {
 								}, `${e.bookId}.${e.chapter}.${e.verse}`))
 							]
 						}),
-						a === "error" && /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [/* @__PURE__ */ (0, b.jsx)("p", {
+						a === "error" && /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [/* @__PURE__ */ (0, S.jsx)("p", {
 							className: "bible-voice-status",
 							role: "alert",
 							children: s
-						}), /* @__PURE__ */ (0, b.jsx)("button", {
+						}), /* @__PURE__ */ (0, S.jsx)("button", {
 							className: "bible-voice-retry",
 							type: "button",
-							onClick: ae,
+							onClick: se,
 							children: "Réessayer"
 						})] })
 					]
@@ -9747,39 +9785,39 @@ function Le({ assistant: e = !1 }) {
 		})]
 	}), document.body)] });
 }
-function Re() {
-	let [e, t] = Fe();
-	return /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [/* @__PURE__ */ (0, b.jsx)("button", {
+function Be() {
+	let [e, t] = Le();
+	return /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [/* @__PURE__ */ (0, S.jsx)("button", {
 		className: `parallel-toggle bible-glass-control bible-glass-parallel${e.parallelEnabled ? " is-active" : ""}`,
 		type: "button",
 		onClick: t.toggleParallel,
-		children: /* @__PURE__ */ (0, b.jsxs)("span", {
+		children: /* @__PURE__ */ (0, S.jsxs)("span", {
 			className: "bible-glass-control-content",
-			children: [je, /* @__PURE__ */ (0, b.jsx)("span", { children: "Parallel" })]
+			children: [Ne, /* @__PURE__ */ (0, S.jsx)("span", { children: "Parallel" })]
 		})
-	}), /* @__PURE__ */ (0, b.jsx)("button", {
+	}), /* @__PURE__ */ (0, S.jsx)("button", {
 		className: `parallel-toggle reader-target-toggle bible-glass-control bible-glass-target${e.showHighlightsOnly ? " is-active" : ""}`,
 		type: "button",
 		onClick: t.toggleTarget,
-		children: /* @__PURE__ */ (0, b.jsxs)("span", {
+		children: /* @__PURE__ */ (0, S.jsxs)("span", {
 			className: "bible-glass-control-content",
-			children: [Me, /* @__PURE__ */ (0, b.jsx)("span", { children: "Highlights" })]
+			children: [Pe, /* @__PURE__ */ (0, S.jsx)("span", { children: "Highlights" })]
 		})
 	})] });
 }
-function ze() {
-	let e = window.bibleReaderBridge, [t, n] = (0, v.useState)(() => e.getVerseSnapshot());
-	return (0, v.useEffect)(() => {
+function Ve() {
+	let e = window.bibleReaderBridge, [t, n] = (0, b.useState)(() => e.getVerseSnapshot());
+	return (0, b.useEffect)(() => {
 		let t = () => n(e.getVerseSnapshot());
 		return document.addEventListener("bible:verse-ui-change", t), () => document.removeEventListener("bible:verse-ui-change", t);
 	}, [e]), [t, e];
 }
-function Be() {
-	let [e] = ze();
-	return /* @__PURE__ */ (0, b.jsx)(b.Fragment, { children: e.reference });
+function He() {
+	let [e] = Ve();
+	return /* @__PURE__ */ (0, S.jsx)(S.Fragment, { children: e.reference });
 }
-function Ve() {
-	let [e, t] = ze();
+function Ue() {
+	let [e, t] = Ve();
 	return [
 		[
 			"highlight",
@@ -9811,17 +9849,17 @@ function Ve() {
 			"Bookmark",
 			"action-secondary"
 		]
-	].map(([n, r, i]) => /* @__PURE__ */ (0, b.jsxs)("button", {
+	].map(([n, r, i]) => /* @__PURE__ */ (0, S.jsxs)("button", {
 		className: `${i}${e.active[n] ? " is-active" : ""}`,
 		type: "button",
 		"data-verse-action": n,
 		onClick: () => t.runAction(n),
-		children: [/* @__PURE__ */ (0, b.jsx)(Pe, { name: n }), /* @__PURE__ */ (0, b.jsx)("span", { children: r })]
+		children: [/* @__PURE__ */ (0, S.jsx)(Ie, { name: n }), /* @__PURE__ */ (0, S.jsx)("span", { children: r })]
 	}, n));
 }
-function He() {
-	let e = window.bibleReaderBridge, [t, n] = (0, v.useState)(() => e.getChapterSnapshot()), [r, i] = (0, v.useState)(() => e.getVerseSnapshot());
-	return (0, v.useEffect)(() => {
+function We() {
+	let e = window.bibleReaderBridge, [t, n] = (0, b.useState)(() => e.getChapterSnapshot()), [r, i] = (0, b.useState)(() => e.getVerseSnapshot());
+	return (0, b.useEffect)(() => {
 		let t = () => n(e.getChapterSnapshot()), r = () => i(e.getVerseSnapshot());
 		return document.addEventListener("bible:chapter-change", t), document.addEventListener("bible:verse-ui-change", r), () => {
 			document.removeEventListener("bible:chapter-change", t), document.removeEventListener("bible:verse-ui-change", r);
@@ -9832,11 +9870,11 @@ function He() {
 		bridge: e
 	};
 }
-function Ue(e, t) {
-	let n = (0, v.useRef)(null), r = (0, v.useRef)(!1), i = (0, v.useRef)(null), a = () => {
+function Ge(e, t) {
+	let n = (0, b.useRef)(null), r = (0, b.useRef)(!1), i = (0, b.useRef)(null), a = () => {
 		n.current && window.clearTimeout(n.current), n.current = null;
 	};
-	return (0, v.useEffect)(() => a, []), {
+	return (0, b.useEffect)(() => a, []), {
 		onClick: () => {
 			r.current ? r.current = !1 : t.selectVerse(e);
 		},
@@ -9857,8 +9895,8 @@ function Ue(e, t) {
 		}
 	};
 }
-function We({ verse: e, selection: t, bridge: n }) {
-	let r = Ue(e, n), i = [
+function Ke({ verse: e, selection: t, bridge: n }) {
+	let r = Ge(e, n), i = [
 		"scripture-line",
 		e.highlighted ? "is-highlighted" : "",
 		e.bookmarked ? "is-bookmarked" : "",
@@ -9866,7 +9904,7 @@ function We({ verse: e, selection: t, bridge: n }) {
 		t.selectedKey === e.key ? "is-selected" : "",
 		t.selectedKeys.includes(e.key) ? "is-multi-selected" : ""
 	].filter(Boolean).join(" ");
-	return /* @__PURE__ */ (0, b.jsxs)("p", {
+	return /* @__PURE__ */ (0, S.jsxs)("p", {
 		className: i,
 		style: e.highlightColor ? { "--highlight-color": e.highlightColor } : void 0,
 		"data-verse": e.reference,
@@ -9876,69 +9914,69 @@ function We({ verse: e, selection: t, bridge: n }) {
 		"data-verse-version": e.version,
 		"data-verse-text": e.text,
 		...r,
-		children: [e.number ? /* @__PURE__ */ (0, b.jsx)("sup", { children: e.number }) : null, e.text]
+		children: [e.number ? /* @__PURE__ */ (0, S.jsx)("sup", { children: e.number }) : null, e.text]
 	});
 }
-function Ge({ state: e }) {
-	return e.status === "loading" ? /* @__PURE__ */ (0, b.jsx)("p", {
+function qe({ state: e }) {
+	return e.status === "loading" ? /* @__PURE__ */ (0, S.jsx)("p", {
 		className: "reader-empty",
 		children: "Loading chapter..."
-	}) : e.status === "error" ? /* @__PURE__ */ (0, b.jsxs)("div", {
+	}) : e.status === "error" ? /* @__PURE__ */ (0, S.jsxs)("div", {
 		className: "reader-empty",
-		children: [/* @__PURE__ */ (0, b.jsx)("strong", { children: "Could not load this version." }), /* @__PURE__ */ (0, b.jsx)("span", { children: e.error })]
-	}) : e.verses.length || e.showHighlightsOnly ? /* @__PURE__ */ (0, b.jsx)("p", {
+		children: [/* @__PURE__ */ (0, S.jsx)("strong", { children: "Could not load this version." }), /* @__PURE__ */ (0, S.jsx)("span", { children: e.error })]
+	}) : e.verses.length || e.showHighlightsOnly ? /* @__PURE__ */ (0, S.jsx)("p", {
 		className: "reader-empty reader-empty-highlight",
 		children: "No highlighted verses."
-	}) : /* @__PURE__ */ (0, b.jsxs)("div", {
+	}) : /* @__PURE__ */ (0, S.jsxs)("div", {
 		className: "reader-empty",
-		children: [/* @__PURE__ */ (0, b.jsx)("strong", { children: e.title }), /* @__PURE__ */ (0, b.jsx)("span", { children: e.copyright })]
+		children: [/* @__PURE__ */ (0, S.jsx)("strong", { children: e.title }), /* @__PURE__ */ (0, S.jsx)("span", { children: e.copyright })]
 	});
 }
-function Ke({ state: e, selection: t, bridge: n }) {
-	let [r, i] = Fe();
-	return /* @__PURE__ */ (0, b.jsxs)("div", {
+function Je({ state: e, selection: t, bridge: n }) {
+	let [r, i] = Le();
+	return /* @__PURE__ */ (0, S.jsxs)("div", {
 		className: "parallel-scripture-grid",
-		children: [/* @__PURE__ */ (0, b.jsxs)("div", {
+		children: [/* @__PURE__ */ (0, S.jsxs)("div", {
 			className: "parallel-version-headers",
 			"aria-label": "Bible versions",
-			children: [/* @__PURE__ */ (0, b.jsxs)("label", {
+			children: [/* @__PURE__ */ (0, S.jsxs)("label", {
 				className: "parallel-version-header is-primary",
 				children: [
-					/* @__PURE__ */ (0, b.jsx)("span", { children: "Current version" }),
-					/* @__PURE__ */ (0, b.jsx)("strong", { children: e.parallel.primary.label }),
-					/* @__PURE__ */ (0, b.jsx)("small", { children: e.parallel.primary.name }),
-					/* @__PURE__ */ (0, b.jsx)("select", {
+					/* @__PURE__ */ (0, S.jsx)("span", { children: "Current version" }),
+					/* @__PURE__ */ (0, S.jsx)("strong", { children: e.parallel.primary.label }),
+					/* @__PURE__ */ (0, S.jsx)("small", { children: e.parallel.primary.name }),
+					/* @__PURE__ */ (0, S.jsx)("select", {
 						"aria-label": "Choose current Bible version",
 						value: r.versionId,
 						onChange: (e) => i.setVersion(e.target.value),
-						children: r.versionOptions.map((e) => e.separator ? /* @__PURE__ */ (0, b.jsx)("option", {
+						children: r.versionOptions.map((e) => e.separator ? /* @__PURE__ */ (0, S.jsx)("option", {
 							disabled: !0,
 							value: "",
 							children: "────────────"
-						}, "separator") : /* @__PURE__ */ (0, b.jsx)("option", {
+						}, "separator") : /* @__PURE__ */ (0, S.jsx)("option", {
 							value: e.id,
 							children: e.label
 						}, e.id))
 					})
 				]
-			}), /* @__PURE__ */ (0, b.jsxs)("label", {
+			}), /* @__PURE__ */ (0, S.jsxs)("label", {
 				className: "parallel-version-header is-compare",
 				children: [
-					/* @__PURE__ */ (0, b.jsx)("span", { children: "Compared version" }),
-					/* @__PURE__ */ (0, b.jsx)("strong", { children: e.parallel.compare.label }),
-					/* @__PURE__ */ (0, b.jsx)("small", { children: e.parallel.compare.name }),
-					/* @__PURE__ */ (0, b.jsx)("select", {
+					/* @__PURE__ */ (0, S.jsx)("span", { children: "Compared version" }),
+					/* @__PURE__ */ (0, S.jsx)("strong", { children: e.parallel.compare.label }),
+					/* @__PURE__ */ (0, S.jsx)("small", { children: e.parallel.compare.name }),
+					/* @__PURE__ */ (0, S.jsx)("select", {
 						"aria-label": "Choose compared Bible version",
 						value: r.parallelVersionId,
 						onChange: (e) => i.setParallelVersion(e.target.value),
-						children: r.parallelOptions.map((e) => /* @__PURE__ */ (0, b.jsx)("option", {
+						children: r.parallelOptions.map((e) => /* @__PURE__ */ (0, S.jsx)("option", {
 							value: e.id,
 							children: e.label
 						}, e.id))
 					})
 				]
 			})]
-		}), e.parallel.rows.map((r) => /* @__PURE__ */ (0, b.jsx)(qe, {
+		}), e.parallel.rows.map((r) => /* @__PURE__ */ (0, S.jsx)(Ye, {
 			verse: r,
 			state: e,
 			selection: t,
@@ -9946,9 +9984,9 @@ function Ke({ state: e, selection: t, bridge: n }) {
 		}, r.key))]
 	});
 }
-function qe({ verse: e, state: t, selection: n, bridge: r }) {
-	let i = Ue(e, r);
-	return /* @__PURE__ */ (0, b.jsxs)("article", {
+function Ye({ verse: e, state: t, selection: n, bridge: r }) {
+	let i = Ge(e, r);
+	return /* @__PURE__ */ (0, S.jsxs)("article", {
 		className: `parallel-scripture-line${e.highlighted ? " is-highlighted" : ""}${e.bookmarked ? " is-bookmarked" : ""}${e.noted ? " is-noted" : ""}${n.selectedKey === e.key ? " is-selected" : ""}${n.selectedKeys.includes(e.key) ? " is-multi-selected" : ""}`,
 		style: e.highlightColor ? { "--highlight-color": e.highlightColor } : void 0,
 		"data-verse": e.reference,
@@ -9958,22 +9996,22 @@ function qe({ verse: e, state: t, selection: n, bridge: r }) {
 		"data-verse-version": e.version,
 		"data-verse-text": e.text,
 		...i,
-		children: [/* @__PURE__ */ (0, b.jsxs)("p", {
+		children: [/* @__PURE__ */ (0, S.jsxs)("p", {
 			className: "parallel-scripture-column",
 			"data-parallel-role": "primary",
 			"aria-label": t.parallel.primary.label,
-			children: [e.number ? /* @__PURE__ */ (0, b.jsx)("sup", { children: e.number }) : null, e.text]
-		}), /* @__PURE__ */ (0, b.jsxs)("p", {
+			children: [e.number ? /* @__PURE__ */ (0, S.jsx)("sup", { children: e.number }) : null, e.text]
+		}), /* @__PURE__ */ (0, S.jsxs)("p", {
 			className: "parallel-scripture-column",
 			"data-parallel-role": "compare",
 			"aria-label": t.parallel.compare.label,
-			children: [e.number ? /* @__PURE__ */ (0, b.jsx)("sup", { children: e.number }) : null, e.comparisonText]
+			children: [e.number ? /* @__PURE__ */ (0, S.jsx)("sup", { children: e.number }) : null, e.comparisonText]
 		})]
 	});
 }
-function Je({ state: e, bridge: t }) {
-	let [n, r] = (0, v.useState)(!1), [i, a] = (0, v.useState)(!1), o = (0, v.useRef)(null);
-	(0, v.useEffect)(() => {
+function Xe({ state: e, bridge: t }) {
+	let [n, r] = (0, b.useState)(!1), [i, a] = (0, b.useState)(!1), o = (0, b.useRef)(null);
+	(0, b.useEffect)(() => {
 		n && o.current?.scrollIntoView({
 			behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
 			block: "start"
@@ -9985,16 +10023,16 @@ function Je({ state: e, bridge: t }) {
 			behavior: "smooth"
 		});
 	};
-	return /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [/* @__PURE__ */ (0, b.jsxs)("nav", {
+	return /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [/* @__PURE__ */ (0, S.jsxs)("nav", {
 		className: "bible-chapter-navigation",
 		"aria-label": "Chapter navigation",
 		children: [
-			/* @__PURE__ */ (0, b.jsx)("button", {
+			/* @__PURE__ */ (0, S.jsx)("button", {
 				type: "button",
 				onClick: () => u(-1),
 				disabled: c,
 				"aria-label": "Previous chapter",
-				children: /* @__PURE__ */ (0, b.jsx)("svg", {
+				children: /* @__PURE__ */ (0, S.jsx)("svg", {
 					viewBox: "0 0 24 24",
 					"aria-hidden": "true",
 					fill: "none",
@@ -10002,10 +10040,10 @@ function Je({ state: e, bridge: t }) {
 					strokeWidth: "2",
 					strokeLinecap: "round",
 					strokeLinejoin: "round",
-					children: /* @__PURE__ */ (0, b.jsx)("path", { d: "m15 18-6-6 6-6" })
+					children: /* @__PURE__ */ (0, S.jsx)("path", { d: "m15 18-6-6 6-6" })
 				})
 			}),
-			/* @__PURE__ */ (0, b.jsx)("button", {
+			/* @__PURE__ */ (0, S.jsx)("button", {
 				className: "bible-chapter-quiz-toggle",
 				type: "button",
 				onClick: () => {
@@ -10013,14 +10051,14 @@ function Je({ state: e, bridge: t }) {
 				},
 				"aria-expanded": n,
 				"aria-controls": "bible-chapter-quiz",
-				children: /* @__PURE__ */ (0, b.jsx)("span", { children: "Quiz" })
+				children: /* @__PURE__ */ (0, S.jsx)("span", { children: "Quiz" })
 			}),
-			/* @__PURE__ */ (0, b.jsx)("button", {
+			/* @__PURE__ */ (0, S.jsx)("button", {
 				type: "button",
 				onClick: () => u(1),
 				disabled: l,
 				"aria-label": "Next chapter",
-				children: /* @__PURE__ */ (0, b.jsx)("svg", {
+				children: /* @__PURE__ */ (0, S.jsx)("svg", {
 					viewBox: "0 0 24 24",
 					"aria-hidden": "true",
 					fill: "none",
@@ -10028,181 +10066,430 @@ function Je({ state: e, bridge: t }) {
 					strokeWidth: "2",
 					strokeLinecap: "round",
 					strokeLinejoin: "round",
-					children: /* @__PURE__ */ (0, b.jsx)("path", { d: "m9 18 6-6-6-6" })
+					children: /* @__PURE__ */ (0, S.jsx)("path", { d: "m9 18 6-6-6-6" })
 				})
 			})
 		]
-	}), /* @__PURE__ */ (0, b.jsx)("div", {
+	}), /* @__PURE__ */ (0, S.jsx)("div", {
 		id: "bible-chapter-quiz",
 		ref: o,
 		hidden: !n,
-		children: i && /* @__PURE__ */ (0, b.jsx)(we, {
+		children: i && /* @__PURE__ */ (0, S.jsx)(Ee, {
 			source: e.quizSource,
 			bridge: t
 		})
 	})] });
 }
-function Ye() {
-	let { state: e, verseState: t, bridge: n } = He();
-	if (e.status !== "ready" || !e.verses.length) return /* @__PURE__ */ (0, b.jsx)(Ge, { state: e });
-	let r = e.parallelEnabled && e.parallel ? /* @__PURE__ */ (0, b.jsx)(Ke, {
+function Ze() {
+	let { state: e, verseState: t, bridge: n } = We();
+	if (e.status !== "ready" || !e.verses.length) return /* @__PURE__ */ (0, S.jsx)(qe, { state: e });
+	let r = e.parallelEnabled && e.parallel ? /* @__PURE__ */ (0, S.jsx)(Je, {
 		state: e,
 		selection: t,
 		bridge: n
-	}) : e.verses.map((e) => /* @__PURE__ */ (0, b.jsx)(We, {
+	}) : e.verses.map((e) => /* @__PURE__ */ (0, S.jsx)(Ke, {
 		verse: e,
 		selection: t,
 		bridge: n
 	}, e.key));
-	return /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [r, /* @__PURE__ */ (0, b.jsx)(Je, {
+	return /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [r, /* @__PURE__ */ (0, S.jsx)(Xe, {
 		state: e,
 		bridge: n
 	}, `${e.versionId}:${e.bookId}:${e.chapter}`)] });
 }
 // src/react/notes.jsx
-var Xe = {
-	text: [
-		"M4 5h16",
-		"M12 5v14",
-		"M8 19h8"
-	],
-	highlight: ["M4 16 14 6l4 4L8 20H4z", "m14 6 2-2 4 4-2 2"]
-};
-function Ze({ name: e }) {
-	return /* @__PURE__ */ (0, b.jsx)("svg", {
-		viewBox: "0 0 24 24",
-		"aria-hidden": "true",
-		fill: "none",
-		stroke: "currentColor",
-		strokeWidth: "1.8",
-		strokeLinecap: "round",
-		strokeLinejoin: "round",
-		children: Xe[e].map((e) => /* @__PURE__ */ (0, b.jsx)("path", { d: e }, e))
-	});
-}
 function Qe() {
-	let e = window.noteEditorBridge, [t, n] = (0, v.useState)(() => e.getSnapshot());
-	(0, v.useEffect)(() => {
+	let e = window.noteEditorBridge, [t, n] = (0, b.useState)(() => e.getSnapshot()), [r, i] = (0, b.useState)(null);
+	(0, b.useEffect)(() => {
 		let t = () => n(e.getSnapshot());
 		return document.addEventListener("note:toolbar-change", t), () => document.removeEventListener("note:toolbar-change", t);
-	}, [e]);
-	let r = (t, n) => e.command(t, n);
-	return /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [
-		/* @__PURE__ */ (0, b.jsx)("button", {
-			type: "button",
-			onClick: () => r("bold"),
-			"aria-label": "Bold",
-			children: /* @__PURE__ */ (0, b.jsx)("b", { children: "B" })
+	}, [e]), (0, b.useEffect)(() => {
+		document.dispatchEvent(new Event("note:voice-slot-ready"));
+	}, []);
+	let a = (t, n) => e.command(t, n);
+	return /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [
+		/* @__PURE__ */ (0, S.jsx)("div", {
+			className: "note-toolbar-group note-voice-group",
+			role: "group",
+			"aria-label": "Voice dictation",
+			"data-note-voice-slot": !0
 		}),
-		/* @__PURE__ */ (0, b.jsx)("button", {
-			type: "button",
-			onClick: () => r("italic"),
-			"aria-label": "Italic",
-			children: /* @__PURE__ */ (0, b.jsx)("i", { children: "I" })
+		/* @__PURE__ */ (0, S.jsxs)("div", {
+			className: "note-toolbar-group note-ai-group",
+			role: "group",
+			"aria-label": "AI tools",
+			children: [/* @__PURE__ */ (0, S.jsx)("button", {
+				type: "button",
+				title: "Correct spelling",
+				"aria-label": "Correct spelling with AI",
+				onClick: () => i("correct"),
+				children: /* @__PURE__ */ (0, S.jsx)("svg", {
+					viewBox: "0 0 24 24",
+					fill: "none",
+					stroke: "currentColor",
+					strokeWidth: "1.7",
+					strokeLinecap: "round",
+					strokeLinejoin: "round",
+					"aria-hidden": "true",
+					children: /* @__PURE__ */ (0, S.jsx)("path", { d: "M4 5h10M4 9h8M4 13h6M4 17h5m3-1 2.5 2.5L20 13" })
+				})
+			}), /* @__PURE__ */ (0, S.jsx)("button", {
+				type: "button",
+				title: "Suggest verses",
+				"aria-label": "Suggest verses with AI",
+				onClick: () => i("verses"),
+				children: /* @__PURE__ */ (0, S.jsxs)("svg", {
+					viewBox: "0 0 24 24",
+					fill: "none",
+					stroke: "currentColor",
+					strokeWidth: "1.7",
+					strokeLinecap: "round",
+					strokeLinejoin: "round",
+					"aria-hidden": "true",
+					children: [/* @__PURE__ */ (0, S.jsx)("circle", {
+						cx: "10.5",
+						cy: "10.5",
+						r: "6.5"
+					}), /* @__PURE__ */ (0, S.jsx)("path", { d: "m15.3 15.3 4.7 4.7" })]
+				})
+			})]
 		}),
-		/* @__PURE__ */ (0, b.jsx)("button", {
-			type: "button",
-			onClick: () => r("underline"),
-			"aria-label": "Underline",
-			children: /* @__PURE__ */ (0, b.jsx)("u", { children: "U" })
-		}),
-		/* @__PURE__ */ (0, b.jsx)("button", {
-			type: "button",
-			onClick: () => r("formatBlock", "h2"),
-			"aria-label": "Title",
-			children: "H"
-		}),
-		/* @__PURE__ */ (0, b.jsx)("span", {
-			className: "note-toolbar-divider",
-			"aria-hidden": "true"
-		}),
-		/* @__PURE__ */ (0, b.jsx)("button", {
-			type: "button",
-			onClick: () => r("insertUnorderedList"),
-			"aria-label": "Bulleted list",
-			children: "•"
-		}),
-		/* @__PURE__ */ (0, b.jsx)("button", {
-			type: "button",
-			onClick: () => r("insertOrderedList"),
-			"aria-label": "Numbered list",
-			children: "1."
-		}),
-		/* @__PURE__ */ (0, b.jsx)("span", {
-			className: "note-toolbar-divider",
-			"aria-hidden": "true"
-		}),
-		/* @__PURE__ */ (0, b.jsxs)("label", {
-			className: "note-format-select",
-			"aria-label": "Text color",
+		/* @__PURE__ */ (0, S.jsxs)("div", {
+			className: "note-toolbar-group",
+			role: "group",
+			"aria-label": "Text style",
 			children: [
-				/* @__PURE__ */ (0, b.jsx)(Ze, { name: "text" }),
-				/* @__PURE__ */ (0, b.jsx)("span", {
-					className: "note-color-swatch",
-					style: { background: t.textColor }
+				/* @__PURE__ */ (0, S.jsx)("button", {
+					type: "button",
+					onClick: () => a("bold"),
+					"aria-label": "Bold",
+					children: /* @__PURE__ */ (0, S.jsx)("b", { children: "B" })
 				}),
-				/* @__PURE__ */ (0, b.jsx)("input", {
-					type: "color",
-					value: t.textColor,
-					onChange: (t) => e.color("text", t.target.value)
+				/* @__PURE__ */ (0, S.jsx)("button", {
+					type: "button",
+					onClick: () => a("italic"),
+					"aria-label": "Italic",
+					children: /* @__PURE__ */ (0, S.jsx)("i", { children: "I" })
+				}),
+				/* @__PURE__ */ (0, S.jsx)("button", {
+					type: "button",
+					onClick: () => a("underline"),
+					"aria-label": "Underline",
+					children: /* @__PURE__ */ (0, S.jsx)("u", { children: "U" })
+				}),
+				/* @__PURE__ */ (0, S.jsx)("button", {
+					type: "button",
+					className: t.uppercaseActive ? "note-uppercase-active" : "",
+					onPointerDown: (t) => {
+						e.captureSelection(), t.preventDefault();
+					},
+					onClick: () => e.uppercaseSelection(),
+					"aria-pressed": t.uppercaseActive,
+					"aria-label": "Toggle selected text case",
+					title: "Toggle selected text case",
+					children: "AA"
 				})
 			]
 		}),
-		/* @__PURE__ */ (0, b.jsxs)("label", {
-			className: "note-format-select",
-			"aria-label": "Highlight color",
+		/* @__PURE__ */ (0, S.jsxs)("div", {
+			className: "note-toolbar-group",
+			role: "group",
+			"aria-label": "Lists",
+			children: [/* @__PURE__ */ (0, S.jsx)("button", {
+				type: "button",
+				onClick: () => a("insertUnorderedList"),
+				"aria-label": "Bulleted list",
+				children: "•"
+			}), /* @__PURE__ */ (0, S.jsx)("button", {
+				type: "button",
+				onClick: () => a("insertOrderedList"),
+				"aria-label": "Numbered list",
+				children: "1."
+			})]
+		}),
+		/* @__PURE__ */ (0, S.jsxs)("div", {
+			className: "note-toolbar-group",
+			role: "group",
+			"aria-label": "Text color and size",
 			children: [
-				/* @__PURE__ */ (0, b.jsx)(Ze, { name: "highlight" }),
-				/* @__PURE__ */ (0, b.jsx)("span", {
-					className: "note-color-swatch",
-					style: { background: t.highlightColor }
+				/* @__PURE__ */ (0, S.jsxs)("label", {
+					className: "note-format-select",
+					"aria-label": "Text color",
+					children: [/* @__PURE__ */ (0, S.jsx)("span", {
+						className: "note-color-letter",
+						style: { color: t.textColor },
+						"aria-hidden": "true",
+						children: "T"
+					}), /* @__PURE__ */ (0, S.jsx)("input", {
+						type: "color",
+						"data-note-color": !0,
+						value: t.textColor,
+						onChange: (t) => e.color("text", t.target.value)
+					})]
 				}),
-				/* @__PURE__ */ (0, b.jsx)("input", {
-					type: "color",
-					value: t.highlightColor,
-					onChange: (t) => e.color("highlight", t.target.value)
+				/* @__PURE__ */ (0, S.jsxs)("label", {
+					className: "note-format-select",
+					"aria-label": "Highlight color",
+					children: [/* @__PURE__ */ (0, S.jsx)("span", {
+						className: "note-highlight-letter",
+						style: { backgroundColor: t.highlightColor },
+						"aria-hidden": "true",
+						children: /* @__PURE__ */ (0, S.jsx)("span", { children: "T" })
+					}), /* @__PURE__ */ (0, S.jsx)("input", {
+						type: "color",
+						"data-note-highlight": !0,
+						value: t.highlightColor,
+						onChange: (t) => e.color("highlight", t.target.value)
+					})]
+				}),
+				/* @__PURE__ */ (0, S.jsx)("button", {
+					type: "button",
+					onClick: () => e.changeSize(-1),
+					"aria-label": "Make text smaller",
+					title: "Make text smaller",
+					children: "A−"
+				}),
+				/* @__PURE__ */ (0, S.jsx)("button", {
+					type: "button",
+					onClick: () => e.changeSize(1),
+					"aria-label": "Make text larger",
+					title: "Make text larger",
+					children: "A+"
 				})
 			]
 		}),
-		/* @__PURE__ */ (0, b.jsx)("button", {
-			type: "button",
-			onClick: () => e.changeSize(-1),
-			"aria-label": "Make text smaller",
-			title: "Make text smaller",
-			children: "A−"
+		/* @__PURE__ */ (0, S.jsxs)("div", {
+			className: "note-toolbar-group",
+			role: "group",
+			"aria-label": "Alignment",
+			children: [
+				/* @__PURE__ */ (0, S.jsx)("button", {
+					type: "button",
+					onClick: () => a("justifyLeft"),
+					"aria-label": "Align left",
+					children: "≡"
+				}),
+				/* @__PURE__ */ (0, S.jsx)("button", {
+					type: "button",
+					onClick: () => a("justifyCenter"),
+					"aria-label": "Center",
+					children: "≡"
+				}),
+				/* @__PURE__ */ (0, S.jsx)("button", {
+					type: "button",
+					onClick: () => a("justifyFull"),
+					"aria-label": "Justify",
+					children: "☰"
+				})
+			]
 		}),
-		/* @__PURE__ */ (0, b.jsx)("button", {
-			type: "button",
-			onClick: () => e.changeSize(1),
-			"aria-label": "Make text larger",
-			title: "Make text larger",
-			children: "A+"
+		/* @__PURE__ */ (0, S.jsx)("div", {
+			className: "note-toolbar-group",
+			role: "group",
+			"aria-label": "PDF",
+			children: /* @__PURE__ */ (0, S.jsx)("button", {
+				type: "button",
+				title: "Preview and export PDF",
+				"aria-label": "Preview and export PDF",
+				onClick: () => i("pdf"),
+				children: /* @__PURE__ */ (0, S.jsx)("span", {
+					className: "note-pdf-icon",
+					children: "PDF"
+				})
+			})
 		}),
-		/* @__PURE__ */ (0, b.jsx)("span", {
-			className: "note-toolbar-divider",
-			"aria-hidden": "true"
-		}),
-		/* @__PURE__ */ (0, b.jsx)("button", {
-			type: "button",
-			onClick: () => r("justifyLeft"),
-			"aria-label": "Align left",
-			children: "≡"
-		}),
-		/* @__PURE__ */ (0, b.jsx)("button", {
-			type: "button",
-			onClick: () => r("justifyCenter"),
-			"aria-label": "Center",
-			children: "≡"
-		}),
-		/* @__PURE__ */ (0, b.jsx)("button", {
-			type: "button",
-			onClick: () => r("justifyFull"),
-			"aria-label": "Justify",
-			children: "☰"
-		})
+		r && (0, te.createPortal)(/* @__PURE__ */ (0, S.jsx)(et, {
+			tool: r,
+			bridge: e,
+			onClose: () => i(null)
+		}, r), document.body)
 	] });
 }
-var $e = {
+function $e(e, t) {
+	let n = document.createElement("template");
+	n.innerHTML = e.safeHtml;
+	let r = document.createTreeWalker(n.content, NodeFilter.SHOW_TEXT), i = [];
+	for (; r.nextNode();) i.push(r.currentNode);
+	return i.length === t.length ? (i.forEach((e, n) => {
+		e.nodeValue = t[n];
+	}), n.innerHTML) : null;
+}
+function et({ tool: e, bridge: t, onClose: n }) {
+	let [r] = (0, b.useState)(() => t.getDocument()), [i, a] = (0, b.useState)(!1), [o, s] = (0, b.useState)(""), [c, l] = (0, b.useState)(null), [u, d] = (0, b.useState)([]), f = (0, b.useRef)(!0);
+	(0, b.useEffect)(() => () => {
+		f.current = !1;
+	}, []), (0, b.useEffect)(() => {
+		let e = (e) => {
+			e.key === "Escape" && n();
+		};
+		return document.addEventListener("keydown", e), () => document.removeEventListener("keydown", e);
+	}, [n]);
+	async function p() {
+		if (!r.segments.join("").trim()) s("Write something in the note first.");
+		else {
+			a(!0), s("");
+			try {
+				let n = await t.requestAi(e, r.segments), i = e === "verses" ? await t.resolveSuggestedVerses(n.verses) : n.segments;
+				f.current && (l(i), d([]));
+			} catch (e) {
+				f.current && s(e.message || "Please try again.");
+			} finally {
+				f.current && a(!1);
+			}
+		}
+	}
+	function m() {
+		try {
+			e === "correct" ? t.applyCorrection(r, c) : t.addSuggestedVerses(r, c.filter((e) => u.includes(e.key))), n();
+		} catch (e) {
+			s(e.message);
+		}
+	}
+	async function h(e) {
+		a(!0), s("");
+		try {
+			let { createNotePdf: t } = await import("./note-pdf-BhtTlQuT.js"), n = await t(r), i = `${(r.title || "note").replace(/[\\/:*?"<>|]/g, "-").slice(0, 80)}.pdf`, a = new File([n], i, { type: "application/pdf" });
+			if (window.Capacitor?.isNativePlatform?.()) {
+				if (!navigator.canShare?.({ files: [a] })) throw Error("PDF export is not supported by this app version. Open the web version to export or print.");
+				await navigator.share({
+					files: [a],
+					title: r.title || "Note"
+				});
+			} else if (e) {
+				let e = URL.createObjectURL(n), t = document.createElement("iframe");
+				t.style.cssText = "position:fixed;width:1px;height:1px;opacity:0;pointer-events:none", t.onload = () => {
+					try {
+						t.contentWindow.focus(), t.contentWindow.print();
+					} catch {
+						f.current && s("Printing is unavailable here. Download the PDF and print it from your device.");
+					}
+				}, t.src = e, document.body.append(t), setTimeout(() => {
+					t.remove(), URL.revokeObjectURL(e);
+				}, 12e4);
+			} else {
+				let e = URL.createObjectURL(n), t = document.createElement("a");
+				t.href = e, t.download = i, t.click(), setTimeout(() => URL.revokeObjectURL(e), 6e4);
+			}
+		} catch (e) {
+			f.current && e.name !== "AbortError" && s(e.message || "Could not create the PDF. Please try again.");
+		} finally {
+			f.current && a(!1);
+		}
+	}
+	let g = e === "correct" ? "Correct spelling" : e === "verses" ? "Suggest verses" : "PDF preview";
+	return /* @__PURE__ */ (0, S.jsx)("div", {
+		className: "note-tool-overlay",
+		role: "presentation",
+		onMouseDown: (e) => {
+			e.target === e.currentTarget && n();
+		},
+		children: /* @__PURE__ */ (0, S.jsxs)("section", {
+			className: "note-tool-dialog",
+			role: "dialog",
+			"aria-modal": "true",
+			"aria-label": g,
+			children: [
+				/* @__PURE__ */ (0, S.jsxs)("header", { children: [/* @__PURE__ */ (0, S.jsx)("h2", { children: g }), /* @__PURE__ */ (0, S.jsx)("button", {
+					type: "button",
+					onClick: n,
+					"aria-label": "Close",
+					children: "×"
+				})] }),
+				e === "pdf" ? /* @__PURE__ */ (0, S.jsxs)("div", {
+					className: "note-pdf-preview",
+					children: [
+						/* @__PURE__ */ (0, S.jsx)("h3", { children: r.title || "Note" }),
+						/* @__PURE__ */ (0, S.jsx)("div", {
+							className: "note-pdf-preview-body",
+							dangerouslySetInnerHTML: { __html: r.safeHtml }
+						}),
+						r.items.length > 0 && /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [/* @__PURE__ */ (0, S.jsx)("h4", { children: "Verses" }), r.items.map((e) => /* @__PURE__ */ (0, S.jsxs)("p", { children: [
+							/* @__PURE__ */ (0, S.jsx)("strong", { children: e.reference }),
+							/* @__PURE__ */ (0, S.jsx)("br", {}),
+							e.text
+						] }, e.key))] })
+					]
+				}) : /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [
+					/* @__PURE__ */ (0, S.jsx)("p", {
+						className: "note-tool-description",
+						children: e === "correct" ? "Review the suggested correction before applying it. Formatting is kept." : "Choose the verses you want to add to View verses."
+					}),
+					!c && /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [/* @__PURE__ */ (0, S.jsx)("p", {
+						className: "note-tool-description",
+						children: "The note text is sent to AI for this request."
+					}), /* @__PURE__ */ (0, S.jsx)("button", {
+						type: "button",
+						className: "note-tool-primary",
+						disabled: i,
+						onClick: p,
+						children: i ? "Working…" : e === "correct" ? "Check spelling" : "Find verses"
+					})] }),
+					c && e === "correct" && ($e(r, c) === null ? /* @__PURE__ */ (0, S.jsx)("div", {
+						className: "note-correction-preview",
+						children: c.join("")
+					}) : /* @__PURE__ */ (0, S.jsx)("div", {
+						className: "note-correction-preview",
+						dangerouslySetInnerHTML: { __html: $e(r, c) }
+					})),
+					c && e === "verses" && /* @__PURE__ */ (0, S.jsx)("div", {
+						className: "note-suggestion-list",
+						children: c.length ? c.map((e) => /* @__PURE__ */ (0, S.jsxs)("label", {
+							className: "note-suggestion",
+							children: [/* @__PURE__ */ (0, S.jsx)("input", {
+								type: "checkbox",
+								checked: u.includes(e.key),
+								onChange: (t) => d((n) => t.target.checked ? [...n, e.key] : n.filter((t) => t !== e.key))
+							}), /* @__PURE__ */ (0, S.jsxs)("span", { children: [
+								/* @__PURE__ */ (0, S.jsxs)("strong", { children: [
+									e.reference,
+									" · ",
+									e.version
+								] }),
+								/* @__PURE__ */ (0, S.jsx)("span", { children: e.text }),
+								/* @__PURE__ */ (0, S.jsx)("small", { children: e.reason })
+							] })]
+						}, e.key)) : /* @__PURE__ */ (0, S.jsx)("p", { children: "No verses could be verified in the current Bible version. Try again later." })
+					}),
+					c && /* @__PURE__ */ (0, S.jsxs)("div", {
+						className: "note-tool-actions",
+						children: [/* @__PURE__ */ (0, S.jsx)("button", {
+							type: "button",
+							onClick: n,
+							children: "Cancel"
+						}), /* @__PURE__ */ (0, S.jsx)("button", {
+							type: "button",
+							className: "note-tool-primary",
+							disabled: e === "verses" && !u.length,
+							onClick: m,
+							children: e === "correct" ? "Apply correction" : "Add selected verses"
+						})]
+					})
+				] }),
+				o && /* @__PURE__ */ (0, S.jsx)("p", {
+					className: "note-tool-error",
+					role: "alert",
+					children: o
+				}),
+				e === "pdf" && /* @__PURE__ */ (0, S.jsxs)("div", {
+					className: "note-tool-actions",
+					children: [/* @__PURE__ */ (0, S.jsx)("button", {
+						type: "button",
+						disabled: i,
+						onClick: () => h(!1),
+						children: i ? "Preparing…" : "Export PDF"
+					}), /* @__PURE__ */ (0, S.jsx)("button", {
+						type: "button",
+						className: "note-tool-primary",
+						disabled: i,
+						onClick: () => h(!0),
+						children: "Print PDF"
+					})]
+				})
+			]
+		})
+	});
+}
+var tt = {
 	undo: ["M9 14 4 9l5-5", "M4 9h10a6 6 0 0 1 0 12h-2"],
 	trash: [
 		"M4 7h16",
@@ -10211,16 +10498,11 @@ var $e = {
 		"M6 7l1 14h10l1-14",
 		"M9 7V4h6v3"
 	],
-	save: [
-		"M5 4h12l3 3v13H5z",
-		"M8 4v6h8V4",
-		"M8 20v-6h8v6"
-	],
 	close: ["M6 6l12 12", "M18 6 6 18"],
-	chevron: ["m6 9 6 6 6-6"]
+	chevron: ["m9 6 6 6-6 6"]
 };
-function et({ name: e }) {
-	return /* @__PURE__ */ (0, b.jsx)("svg", {
+function nt({ name: e }) {
+	return /* @__PURE__ */ (0, S.jsx)("svg", {
 		viewBox: "0 0 24 24",
 		"aria-hidden": "true",
 		fill: "none",
@@ -10228,19 +10510,19 @@ function et({ name: e }) {
 		strokeWidth: "1.8",
 		strokeLinecap: "round",
 		strokeLinejoin: "round",
-		children: $e[e].map((e) => /* @__PURE__ */ (0, b.jsx)("path", { d: e }, e))
+		children: tt[e].map((e) => /* @__PURE__ */ (0, S.jsx)("path", { d: e }, e))
 	});
 }
-function tt() {
-	let e = window.noteEditorBridge, [t, n] = (0, v.useState)(() => e.getEditorSnapshot());
-	return (0, v.useEffect)(() => {
+function rt() {
+	let e = window.noteEditorBridge, [t, n] = (0, b.useState)(() => e.getEditorSnapshot());
+	return (0, b.useEffect)(() => {
 		let t = () => n(e.getEditorSnapshot());
 		return document.addEventListener("note:editor-change", t), () => document.removeEventListener("note:editor-change", t);
 	}, [e]), [t, e];
 }
-function nt() {
-	let [e, t] = tt();
-	return /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [/* @__PURE__ */ (0, b.jsxs)("div", { children: [/* @__PURE__ */ (0, b.jsx)("span", { children: "Notes" }), /* @__PURE__ */ (0, b.jsx)("input", {
+function it() {
+	let [e, t] = rt();
+	return /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [/* @__PURE__ */ (0, S.jsxs)("div", { children: [/* @__PURE__ */ (0, S.jsx)("span", { children: "Notes" }), /* @__PURE__ */ (0, S.jsx)("input", {
 		className: "note-editor-title note-editor-heading-title",
 		value: e.title,
 		onChange: (e) => t.setTitle(e.target.value),
@@ -10248,86 +10530,96 @@ function nt() {
 		maxLength: "100",
 		placeholder: "Note title",
 		"aria-label": "Note title"
-	})] }), /* @__PURE__ */ (0, b.jsxs)("div", {
+	})] }), /* @__PURE__ */ (0, S.jsxs)("div", {
 		className: "note-editor-header-actions",
 		children: [
-			/* @__PURE__ */ (0, b.jsx)("button", {
+			/* @__PURE__ */ (0, S.jsx)("button", {
 				type: "button",
 				className: "note-undo-button",
 				onClick: () => t.command("undo"),
 				"aria-label": "Undo",
 				title: "Undo",
-				children: /* @__PURE__ */ (0, b.jsx)(et, { name: "undo" })
+				children: /* @__PURE__ */ (0, S.jsx)(nt, { name: "undo" })
 			}),
-			/* @__PURE__ */ (0, b.jsx)("button", {
+			/* @__PURE__ */ (0, S.jsx)("button", {
 				type: "button",
 				className: "note-delete-button",
 				onClick: t.delete,
 				"aria-label": "Delete note",
 				title: "Delete note",
-				children: /* @__PURE__ */ (0, b.jsx)(et, { name: "trash" })
+				children: /* @__PURE__ */ (0, S.jsx)(nt, { name: "trash" })
 			}),
-			/* @__PURE__ */ (0, b.jsx)("button", {
-				type: "button",
-				className: "primary-button note-save-button",
-				"data-save-rich-note": !0,
-				onClick: t.save,
-				"aria-label": "Save note",
-				title: "Save note",
-				children: /* @__PURE__ */ (0, b.jsx)(et, { name: "save" })
-			}),
-			/* @__PURE__ */ (0, b.jsx)("button", {
+			/* @__PURE__ */ (0, S.jsx)("button", {
 				type: "button",
 				className: "note-close-button",
 				onClick: t.close,
 				"aria-label": "Close note editor",
 				title: "Close",
-				children: /* @__PURE__ */ (0, b.jsx)(et, { name: "close" })
+				children: /* @__PURE__ */ (0, S.jsx)(nt, { name: "close" })
 			})
 		]
 	})] });
 }
-function rt() {
-	let [e, t] = tt(), [n, r] = (0, v.useState)(!1);
-	return /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [/* @__PURE__ */ (0, b.jsxs)("button", {
+function at() {
+	let [e, t] = rt(), [n, r] = (0, b.useState)(!1);
+	return /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [/* @__PURE__ */ (0, S.jsxs)("button", {
 		type: "button",
 		className: "note-editor-verse-summary",
 		"aria-expanded": n,
 		onClick: () => r((e) => !e),
-		children: [/* @__PURE__ */ (0, b.jsx)("span", {
+		children: [/* @__PURE__ */ (0, S.jsx)("span", {
 			className: "note-editor-verse-summary-copy",
-			children: /* @__PURE__ */ (0, b.jsx)("strong", { children: "View verses" })
-		}), /* @__PURE__ */ (0, b.jsx)(et, { name: "chevron" })]
-	}), n && /* @__PURE__ */ (0, b.jsxs)("div", {
+			children: /* @__PURE__ */ (0, S.jsx)("strong", { children: "View verses" })
+		}), /* @__PURE__ */ (0, S.jsx)(nt, { name: "chevron" })]
+	}), n && /* @__PURE__ */ (0, S.jsxs)("div", {
 		className: "note-editor-verse-menu",
-		children: [/* @__PURE__ */ (0, b.jsxs)("button", {
+		children: [/* @__PURE__ */ (0, S.jsxs)("button", {
 			type: "button",
 			className: "note-editor-add-verse",
 			onClick: t.startAdding,
-			children: [/* @__PURE__ */ (0, b.jsx)("span", {
+			children: [/* @__PURE__ */ (0, S.jsx)("span", {
 				"aria-hidden": "true",
 				children: "+"
 			}), " Add verse"]
-		}), e.items.length ? e.items.map((e) => /* @__PURE__ */ (0, b.jsxs)("article", {
+		}), e.items.length ? e.items.map((e) => /* @__PURE__ */ (0, S.jsxs)("article", {
 			className: "note-editor-verse-item",
-			children: [/* @__PURE__ */ (0, b.jsxs)("div", {
+			children: [/* @__PURE__ */ (0, S.jsxs)("div", {
 				className: "note-editor-verse-item-heading",
-				children: [/* @__PURE__ */ (0, b.jsx)("strong", { children: e.reference }), /* @__PURE__ */ (0, b.jsx)("button", {
+				children: [/* @__PURE__ */ (0, S.jsx)("strong", { children: e.reference }), /* @__PURE__ */ (0, S.jsx)("button", {
 					type: "button",
 					onClick: () => t.removeVerse(e.key),
 					"aria-label": `Remove ${e.reference} from note`,
 					children: "×"
 				})]
-			}), /* @__PURE__ */ (0, b.jsx)("p", { children: e.text || "Verse text unavailable." })]
-		}, e.key)) : /* @__PURE__ */ (0, b.jsx)("span", {
+			}), /* @__PURE__ */ (0, S.jsx)("p", { children: e.text || "Verse text unavailable." })]
+		}, e.key)) : /* @__PURE__ */ (0, S.jsx)("span", {
 			className: "note-editor-no-verses",
 			children: "No verses attached"
 		})]
 	})] });
 }
-function it() {
-	let e = window.noteEditorBridge, t = (0, v.useRef)(null);
-	return (0, v.useEffect)(() => {
+function ot() {
+	let e = window.noteEditorBridge, t = (0, b.useRef)(null), n = (0, b.useRef)(!1), [r, i] = (0, b.useState)(null), [a, o] = (0, b.useState)(""), s = p({
+		values: { note: "" },
+		onChange: (t, r) => {
+			n.current = !0;
+			try {
+				e.insertDictation(r) || o("The note changed before transcription finished. Please try again.");
+			} finally {
+				n.current = !1;
+			}
+		},
+		recorded: !0,
+		silenceTimeoutMs: 2500,
+		maxLength: 6e3
+	}), c = (0, b.useRef)(s);
+	c.current = s, (0, b.useEffect)(() => {
+		let e = () => c.current.cancel("note");
+		return document.addEventListener("note:closed", e), () => document.removeEventListener("note:closed", e);
+	}, []), (0, b.useEffect)(() => {
+		let e = () => i(document.querySelector("[data-note-voice-slot]"));
+		return e(), document.addEventListener("note:voice-slot-ready", e), () => document.removeEventListener("note:voice-slot-ready", e);
+	}, []), (0, b.useEffect)(() => {
 		e.attachContent(t.current);
 		let n = () => {
 			let n = t.current, r = e.getContentHtml();
@@ -10336,34 +10628,94 @@ function it() {
 		return document.addEventListener("note:editor-change", n), n(), () => {
 			document.removeEventListener("note:editor-change", n), e.attachContent(null);
 		};
-	}, [e]), /* @__PURE__ */ (0, b.jsx)("div", {
-		ref: t,
-		className: "note-editor-content",
-		"data-note-editor-content": !0,
-		contentEditable: !0,
-		suppressContentEditableWarning: !0,
-		role: "textbox",
-		"aria-label": "Write your note",
-		onInput: (t) => e.contentChanged(t.currentTarget.innerHTML)
-	});
+	}, [e]);
+	let l = ["starting", "listening"].includes(s.phase), u = s.phase === "finishing";
+	return /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [
+		/* @__PURE__ */ (0, S.jsx)("div", {
+			className: `note-dictation-row${l ? " is-visible" : ""}`,
+			children: l && /* @__PURE__ */ (0, S.jsx)(d, {
+				active: s.phase === "listening",
+				dictation: s,
+				bibleStyle: !0
+			})
+		}),
+		r && (0, te.createPortal)(/* @__PURE__ */ (0, S.jsx)("button", {
+			type: "button",
+			className: `note-dictation-button${l ? " is-listening" : ""}`,
+			"aria-label": l ? "Stop dictation" : "Dictate note",
+			title: l ? "Stop dictation" : "Dictate note",
+			"aria-pressed": l,
+			disabled: u,
+			onPointerDown: (t) => {
+				s.active || (e.captureDictationTarget(), t.preventDefault());
+			},
+			onClick: () => {
+				o(""), l ? s.stop() : s.active || e.captureDictationTarget() && s.start("note");
+			},
+			children: /* @__PURE__ */ (0, S.jsx)("svg", {
+				viewBox: "0 0 24 24",
+				fill: "none",
+				stroke: "currentColor",
+				strokeWidth: "1.8",
+				strokeLinecap: "round",
+				strokeLinejoin: "round",
+				"aria-hidden": "true",
+				children: l ? /* @__PURE__ */ (0, S.jsx)("rect", {
+					x: "6",
+					y: "6",
+					width: "12",
+					height: "12",
+					rx: "2"
+				}) : /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [/* @__PURE__ */ (0, S.jsx)("rect", {
+					x: "9",
+					y: "2",
+					width: "6",
+					height: "12",
+					rx: "3"
+				}), /* @__PURE__ */ (0, S.jsx)("path", { d: "M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" })] })
+			})
+		}), r),
+		/* @__PURE__ */ (0, S.jsx)("p", {
+			className: "note-dictation-status",
+			role: "status",
+			children: a || s.message
+		}),
+		/* @__PURE__ */ (0, S.jsx)("div", {
+			ref: t,
+			className: "note-editor-content",
+			"data-note-editor-content": !0,
+			contentEditable: !0,
+			suppressContentEditableWarning: !0,
+			role: "textbox",
+			"aria-label": "Write your note",
+			onInput: (t) => {
+				n.current || s.cancel("note"), e.contentChanged(t.currentTarget.innerHTML);
+			},
+			onMouseUp: () => e.captureSelection(),
+			onKeyUp: () => e.captureSelection(),
+			onKeyDown: (t) => {
+				(t.ctrlKey || t.metaKey) && !t.shiftKey && t.key.toLowerCase() === "z" && e.undoUppercase() && t.preventDefault();
+			}
+		})
+	] });
 }
 // src/react/page-top-spacer.jsx
-function at() {
-	return /* @__PURE__ */ (0, b.jsx)("div", {
+function st() {
+	return /* @__PURE__ */ (0, S.jsx)("div", {
 		className: "page-top-spacer",
 		"aria-hidden": "true"
 	});
 }
 // node_modules/@capawesome/capacitor-live-update/dist/esm/index.js
-var ot = a("LiveUpdate", { web: () => import("./web-DKGBeYoZ.js").then((e) => new e.LiveUpdateWeb()) }), st = {
+var ct = a("LiveUpdate", { web: () => import("./web-DKGBeYoZ.js").then((e) => new e.LiveUpdateWeb()) }), lt = {
 	origin: "https://logicbible.vercel.app",
 	nativeVersion: "1.2"
 };
 // src/react/mobile-updates.js
-async function ct() {
+async function ut() {
 	if (o.getPlatform() !== "android") return;
 	try {
-		await ot.ready();
+		await ct.ready();
 	} catch (e) {
 		console.warn("Mobile update initialization failed", e);
 		return;
@@ -10376,7 +10728,7 @@ async function ct() {
 			e.type = "button", e.textContent = "Apply", e.addEventListener("click", async () => {
 				e.disabled = !0;
 				try {
-					await ot.reload();
+					await ct.reload();
 				} catch {
 					e.disabled = !1, n.textContent = "Close the app completely, then reopen it to apply the update.";
 				}
@@ -10387,24 +10739,24 @@ async function ct() {
 		if (!(e || Date.now() - t < n)) {
 			e = !0, t = Date.now();
 			try {
-				let e = await fetch(`${st.origin}/mobile-updates/latest.json?t=${Date.now()}`, {
+				let e = await fetch(`${lt.origin}/mobile-updates/latest.json?t=${Date.now()}`, {
 					cache: "no-store",
 					signal: AbortSignal.timeout(15e3)
 				});
 				if (!e.ok) throw Error(`Update manifest HTTP ${e.status}`);
-				let t = await e.json(), { versionName: r } = await ot.getVersionName();
+				let t = await e.json(), { versionName: r } = await ct.getVersionName();
 				if (t.nativeVersion !== r || !/^[a-f0-9]{64}$/.test(t.bundleId) || !/^[a-f0-9]{64}$/.test(t.checksum)) return;
-				let a = new URL(t.url, st.origin);
-				if (a.origin !== st.origin || a.pathname !== `/mobile-updates/${t.bundleId}.zip`) return;
-				let { bundleId: o } = await ot.getCurrentBundle(), s = await fetch("mobile-version.json").then((e) => e.json());
-				if (t.bundleId === (o || s.bundleId) || s.builtAt && (!Number.isFinite(Date.parse(t.builtAt)) || Date.parse(t.builtAt) <= Date.parse(s.builtAt)) || (await ot.getBlockedBundles()).bundleIds.includes(t.bundleId)) return;
-				if (!(await ot.getDownloadedBundles()).bundleIds.includes(t.bundleId)) {
+				let a = new URL(t.url, lt.origin);
+				if (a.origin !== lt.origin || a.pathname !== `/mobile-updates/${t.bundleId}.zip`) return;
+				let { bundleId: o } = await ct.getCurrentBundle(), s = await fetch("mobile-version.json").then((e) => e.json());
+				if (t.bundleId === (o || s.bundleId) || s.builtAt && (!Number.isFinite(Date.parse(t.builtAt)) || Date.parse(t.builtAt) <= Date.parse(s.builtAt)) || (await ct.getBlockedBundles()).bundleIds.includes(t.bundleId)) return;
+				if (!(await ct.getDownloadedBundles()).bundleIds.includes(t.bundleId)) {
 					i("Downloading the update… Keep the app open.");
-					let e = await ot.addListener("downloadBundleProgress", (e) => {
+					let e = await ct.addListener("downloadBundleProgress", (e) => {
 						e.bundleId === t.bundleId && Number.isFinite(e.progress) && i(`Update: ${Math.max(0, Math.min(99, Math.round(e.progress * 100)))} % · downloading`);
 					});
 					try {
-						await ot.downloadBundle({
+						await ct.downloadBundle({
 							bundleId: t.bundleId,
 							url: a.href,
 							checksum: t.checksum
@@ -10413,7 +10765,7 @@ async function ct() {
 						await e.remove();
 					}
 				}
-				await ot.setNextBundle({ bundleId: t.bundleId }), n = 6e5, i("Update ready. Apply will restart the app.", !0);
+				await ct.setNextBundle({ bundleId: t.bundleId }), n = 6e5, i("Update ready. Apply will restart the app.", !0);
 			} catch (e) {
 				console.warn("Mobile update unavailable; keeping the installed version", e), n = 6e4, r?.isConnected && i("Download interrupted. Retrying in one minute.");
 			} finally {
@@ -10430,20 +10782,20 @@ async function ct() {
 	}, 6e4);
 }
 // src/react/main.jsx
-var lt = document.querySelector("[data-react-page-top-spacer-root]");
-lt && (0, y.createRoot)(lt).render(/* @__PURE__ */ (0, b.jsx)(at, {}));
-var ut = document.querySelector("[data-react-home-voice-root]");
-ut && window.bibleReaderBridge && window.aiBridge && (0, y.createRoot)(ut).render(/* @__PURE__ */ (0, b.jsx)(Le, { assistant: !0 }));
-var dt = document.querySelector("[data-react-church-root]");
-dt && x(dt, () => import("./church-tool-BCsHlRAw.js"), "ChurchToolPage");
-var ft = document.querySelector("[data-projection-root]");
-ft && x(ft, () => import("./church-CzULZ-DI.js"), "ProjectionScreen");
-var pt = document.querySelector("[data-debate-projection-root]");
-pt && x(pt, () => import("./debate-projection-BXKW8O_n.js").then((e) => e.n), "DebateProjectionScreen");
-var mt = document.querySelector("[data-evangelism-pilot-root]");
-mt && x(mt, () => import("./church-mode-DcwB6wJF.js"), "ChurchModePage");
-var ht = document.querySelector("[data-session-admin-root]");
-if (ht && x(ht, () => import("./church-CzULZ-DI.js"), "SessionAdmin"), o.isNativePlatform()) {
+var dt = document.querySelector("[data-react-page-top-spacer-root]");
+dt && (0, x.createRoot)(dt).render(/* @__PURE__ */ (0, S.jsx)(st, {}));
+var ft = document.querySelector("[data-react-home-voice-root]");
+ft && window.bibleReaderBridge && window.aiBridge && (0, x.createRoot)(ft).render(/* @__PURE__ */ (0, S.jsx)(ze, { assistant: !0 }));
+var pt = document.querySelector("[data-react-church-root]");
+pt && C(pt, () => import("./church-tool-D7mbpEtt.js"), "ChurchToolPage");
+var mt = document.querySelector("[data-projection-root]");
+mt && C(mt, () => import("./church-CzULZ-DI.js"), "ProjectionScreen");
+var ht = document.querySelector("[data-debate-projection-root]");
+ht && C(ht, () => import("./debate-projection-BXKW8O_n.js").then((e) => e.n), "DebateProjectionScreen");
+var gt = document.querySelector("[data-evangelism-pilot-root]");
+gt && C(gt, () => import("./church-mode-Btt7YbRD.js"), "ChurchModePage");
+var _t = document.querySelector("[data-session-admin-root]");
+if (_t && C(_t, () => import("./church-CzULZ-DI.js"), "SessionAdmin"), o.isNativePlatform()) {
 	let e = a("GentleHaptics");
 	window.appButtonHaptic = () => {
 		let t = localStorage.getItem("brother.hapticsStrength") || "1", n = {
@@ -10456,19 +10808,19 @@ if (ht && x(ht, () => import("./church-CzULZ-DI.js"), "SessionAdmin"), o.isNativ
 		o.getPlatform() === "android" ? e.tap({ level: r }).catch(() => {}) : ee.impact({ style: s.Light }).catch(() => {});
 	};
 }
-var gt = /* @__PURE__ */ new WeakMap();
+var vt = /* @__PURE__ */ new WeakMap();
 window.renderProfileSavedNoteCards = (e, t, n) => {
 	if (!e) return;
-	let r = gt.get(e);
-	r || (r = (0, y.createRoot)(e), gt.set(e, r)), r.render(t.map((e) => /* @__PURE__ */ (0, b.jsx)(w, {
+	let r = vt.get(e);
+	r || (r = (0, x.createRoot)(e), vt.set(e, r)), r.render(t.map((e) => /* @__PURE__ */ (0, S.jsx)(T, {
 		row: e,
 		onOpen: n
 	}, e.id)));
 }, window.unmountProfileSavedNoteCards = (e) => {
-	let t = e && gt.get(e);
-	t && (t.unmount(), gt.delete(e));
+	let t = e && vt.get(e);
+	t && (t.unmount(), vt.delete(e));
 };
-var _t = [
+var yt = [
 	[
 		"kids-bible",
 		"Kids Bible",
@@ -10499,7 +10851,7 @@ var _t = [
 		"Home",
 		"home"
 	]
-], vt = {
+], bt = {
 	home: [
 		"M3 10.5 12 3l9 7.5",
 		"M5 9.5V21h14V9.5",
@@ -10525,9 +10877,9 @@ var _t = [
 		"M12 19v3m-4 0h8"
 	]
 };
-function yt({ name: e, hasActiveGradient: t = !1 }) {
+function xt({ name: e, hasActiveGradient: t = !1 }) {
 	let n = `active-nav-gradient-${e}`;
-	return /* @__PURE__ */ (0, b.jsxs)("svg", {
+	return /* @__PURE__ */ (0, S.jsxs)("svg", {
 		viewBox: "0 0 24 24",
 		"aria-hidden": "true",
 		fill: "none",
@@ -10535,28 +10887,28 @@ function yt({ name: e, hasActiveGradient: t = !1 }) {
 		strokeWidth: "1.8",
 		strokeLinecap: "round",
 		strokeLinejoin: "round",
-		children: [t && /* @__PURE__ */ (0, b.jsx)("defs", { children: /* @__PURE__ */ (0, b.jsxs)("linearGradient", {
+		children: [t && /* @__PURE__ */ (0, S.jsx)("defs", { children: /* @__PURE__ */ (0, S.jsxs)("linearGradient", {
 			id: n,
 			x1: "0%",
 			y1: "0%",
 			x2: "100%",
 			y2: "100%",
-			children: [/* @__PURE__ */ (0, b.jsx)("stop", {
+			children: [/* @__PURE__ */ (0, S.jsx)("stop", {
 				offset: "0%",
 				stopColor: "#5edcff"
-			}), /* @__PURE__ */ (0, b.jsx)("stop", {
+			}), /* @__PURE__ */ (0, S.jsx)("stop", {
 				offset: "100%",
 				stopColor: "#ff9d00"
 			})]
-		}) }), vt[e].map((e) => /* @__PURE__ */ (0, b.jsx)("path", {
+		}) }), bt[e].map((e) => /* @__PURE__ */ (0, S.jsx)("path", {
 			d: e,
 			stroke: t ? `url(#${n})` : void 0
 		}, e))]
 	});
 }
-function bt() {
-	let [e, t] = (0, v.useState)(0);
-	return (0, v.useEffect)(() => {
+function St() {
+	let [e, t] = (0, b.useState)(0);
+	return (0, b.useEffect)(() => {
 		let e = document.querySelector("#bible");
 		if (!e) return;
 		let n = 0, r = () => {
@@ -10569,19 +10921,19 @@ function bt() {
 		return e.addEventListener("scroll", i, { passive: !0 }), document.addEventListener("bible:chapter-change", i), window.addEventListener("resize", i), i(), () => {
 			e.removeEventListener("scroll", i), document.removeEventListener("bible:chapter-change", i), window.removeEventListener("resize", i), n && window.cancelAnimationFrame(n);
 		};
-	}, []), /* @__PURE__ */ (0, b.jsx)("div", {
+	}, []), /* @__PURE__ */ (0, S.jsx)("div", {
 		className: "reader-reading-progress",
 		"aria-label": `Reading progress: ${Math.round(e)}%`,
 		role: "progressbar",
 		"aria-valuemin": "0",
 		"aria-valuemax": "100",
 		"aria-valuenow": Math.round(e),
-		children: /* @__PURE__ */ (0, b.jsx)("span", { style: { width: `${e}%` } })
+		children: /* @__PURE__ */ (0, S.jsx)("span", { style: { width: `${e}%` } })
 	});
 }
-function xt() {
-	let e = document.querySelector(".app-shell")?.dataset.activeScreen || "home", [t, n] = (0, v.useState)(e);
-	(0, v.useEffect)(() => {
+function Ct() {
+	let e = document.querySelector(".app-shell")?.dataset.activeScreen || "home", [t, n] = (0, b.useState)(e);
+	(0, b.useEffect)(() => {
 		let e = (e) => n(e.detail?.activeNavId || e.detail?.id || "home");
 		return window.addEventListener("app:screen-change", e), () => window.removeEventListener("app:screen-change", e);
 	}, []);
@@ -10590,81 +10942,81 @@ function xt() {
 	}, i = (e) => {
 		e.pointerType === "touch" && (window.appButtonHaptic || navigator.vibrate?.(8));
 	};
-	return /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [
-		_t.map(([e, n, a]) => /* @__PURE__ */ (0, b.jsxs)("button", {
+	return /* @__PURE__ */ (0, S.jsxs)(S.Fragment, { children: [
+		yt.map(([e, n, a]) => /* @__PURE__ */ (0, S.jsxs)("button", {
 			className: t === e ? "is-active" : "",
 			"data-nav": e,
 			type: "button",
 			"aria-label": e === "home" ? n : void 0,
 			onPointerDown: i,
 			onClick: () => r(e),
-			children: [/* @__PURE__ */ (0, b.jsx)(yt, {
+			children: [/* @__PURE__ */ (0, S.jsx)(xt, {
 				name: a,
 				hasActiveGradient: t === e && e !== "home"
-			}), /* @__PURE__ */ (0, b.jsx)("span", { children: n })]
+			}), /* @__PURE__ */ (0, S.jsx)("span", { children: n })]
 		}, e)),
-		/* @__PURE__ */ (0, b.jsxs)("button", {
+		/* @__PURE__ */ (0, S.jsxs)("button", {
 			type: "button",
 			className: "bottom-nav-voice",
 			"aria-label": "Open voice assistant",
 			onPointerDown: i,
 			onClick: () => window.dispatchEvent(new Event("app:voice-assistant")),
-			children: [/* @__PURE__ */ (0, b.jsx)(yt, { name: "mic" }), /* @__PURE__ */ (0, b.jsx)("span", { children: "Voice" })]
+			children: [/* @__PURE__ */ (0, S.jsx)(xt, { name: "mic" }), /* @__PURE__ */ (0, S.jsx)("span", { children: "Voice" })]
 		}),
-		t === "bible" && /* @__PURE__ */ (0, b.jsx)(bt, {})
+		t === "bible" && /* @__PURE__ */ (0, S.jsx)(St, {})
 	] });
 }
-var St = document.querySelector("[data-react-navigation-root]");
-St && (0, y.createRoot)(St).render(/* @__PURE__ */ (0, b.jsx)(xt, {}));
-var Ct = document.querySelector("[data-react-home-hero-root]");
-Ct && (0, y.createRoot)(Ct).render(/* @__PURE__ */ (0, b.jsx)(se, {}));
-var wt = document.querySelector("[data-react-home-prayer-root]");
-wt && (0, y.createRoot)(wt).render(/* @__PURE__ */ (0, b.jsx)(ce, {}));
-var Tt = document.querySelector("[data-react-home-library-tabs-root]");
-Tt && (0, y.createRoot)(Tt).render(/* @__PURE__ */ (0, b.jsx)(D, {}));
-var Et = document.querySelector("[data-react-home-library-panel-root]");
-Et && window.homeLibraryBridge && (window.reactHomeLibraryPanelMounted = !0, (0, y.createRoot)(Et).render(/* @__PURE__ */ (0, b.jsx)(fe, {})));
-var j = document.querySelector("[data-react-profile-tabs-root]"), Dt = document.querySelector("[data-react-profile-prayers-root]");
-Dt && (0, y.createRoot)(Dt).render(/* @__PURE__ */ (0, b.jsx)(pe, {})), j && (0, y.createRoot)(j).render(/* @__PURE__ */ (0, b.jsx)(he, {}));
-var Ot = document.querySelector("[data-react-profile-hero-root]");
-Ot && window.profileBridge && (0, y.createRoot)(Ot).render(/* @__PURE__ */ (0, b.jsx)(ge, {}));
-var kt = document.querySelector("[data-react-profile-preferences-root]");
-kt && window.profileBridge && (0, y.createRoot)(kt).render(/* @__PURE__ */ (0, b.jsx)(ye, {}));
-var At = document.querySelector("[data-react-profile-information-root]");
-At && window.profileBridge && (0, y.createRoot)(At).render(/* @__PURE__ */ (0, b.jsx)(be, {}));
-var jt = document.querySelector("[data-react-profile-cloud-root]");
-jt && window.profileBridge && (0, y.createRoot)(jt).render(/* @__PURE__ */ (0, b.jsx)(xe, {}));
-var Mt = document.querySelector("[data-react-bible-controls-root]");
-Mt && window.bibleReaderBridge && (0, y.createRoot)(Mt).render(/* @__PURE__ */ (0, b.jsx)(Ie, {}));
-var Nt = document.querySelector("[data-react-bible-parallel-root]");
-Nt && window.bibleReaderBridge && (0, y.createRoot)(Nt).render(/* @__PURE__ */ (0, b.jsx)(Re, {}));
-var Pt = document.querySelector("[data-react-bible-chapter-root]");
-Pt && window.bibleReaderBridge && (window.reactBibleChapterMounted = !0, (0, y.createRoot)(Pt).render(/* @__PURE__ */ (0, b.jsx)(Ye, {})));
-var Ft = document.querySelector("[data-react-selected-verse-root]");
-Ft && window.bibleReaderBridge && (0, y.createRoot)(Ft).render(/* @__PURE__ */ (0, b.jsx)(Be, {}));
-var It = document.querySelector("[data-react-verse-actions-root]");
-It && window.bibleReaderBridge && (0, y.createRoot)(It).render(/* @__PURE__ */ (0, b.jsx)(Ve, {}));
-var Lt = document.querySelector("[data-react-note-toolbar-root]");
-Lt && window.noteEditorBridge && (0, y.createRoot)(Lt).render(/* @__PURE__ */ (0, b.jsx)(Qe, {}));
-var Rt = document.querySelector("[data-react-note-content-root]");
-Rt && window.noteEditorBridge && (0, y.createRoot)(Rt).render(/* @__PURE__ */ (0, b.jsx)(it, {}));
-var zt = document.querySelector("[data-react-note-header-root]");
-zt && window.noteEditorBridge && (0, y.createRoot)(zt).render(/* @__PURE__ */ (0, b.jsx)(nt, {}));
-var Bt = document.querySelector("[data-react-note-chips-root]");
-Bt && window.noteEditorBridge && (0, y.createRoot)(Bt).render(/* @__PURE__ */ (0, b.jsx)(rt, {}));
-var Vt = document.querySelector("[data-react-prayer-root]");
-Vt && window.prayerBridge && x(Vt, () => import("./prayer-DGIdwdOX.js"), "PrayerPage");
-var Ht = document.querySelector("[data-react-ai-root]");
-Ht && window.aiBridge && x(Ht, () => import("./ai-DnZS9QiZ.js"), "AiPage");
-var Ut = document.querySelector("[data-react-kids-bible-root]");
-Ut && x(Ut, () => import("./kids-bible-VOXksY8g.js"), "KidsBiblePage");
-var Wt = document.querySelector("[data-react-think-room-resume-root]");
-Wt && x(Wt, () => import("./apologetics-debate-CZwBnFx4.js"), "ThinkRoomResume");
-var Gt = document.querySelector("[data-react-apologetics-debate-root]");
-Gt && x(Gt, () => import("./apologetics-debate-CZwBnFx4.js"), "ApologeticsDebatePage");
-var Kt = document.querySelector("[data-react-apologetics-coach-root]");
-Kt && x(Kt, () => import("./apologetics-coach-CYiyb0Jl.js"), "ApologeticsCoachPage");
-var qt = document.querySelector("[data-react-apologetics-xp-root]");
-qt && window.aiBridge && x(qt, () => import("./apologetics-coach-CYiyb0Jl.js"), "ApologeticsXpCard");
-var Jt = document.querySelector("[data-react-admin-root]");
-Jt && window.moderationBridge && x(Jt, () => import("./admin-D9fuLROe.js"), "AdminPage"), requestAnimationFrame(() => requestAnimationFrame(() => void ct()));
+var wt = document.querySelector("[data-react-navigation-root]");
+wt && (0, x.createRoot)(wt).render(/* @__PURE__ */ (0, S.jsx)(Ct, {}));
+var Tt = document.querySelector("[data-react-home-hero-root]");
+Tt && (0, x.createRoot)(Tt).render(/* @__PURE__ */ (0, S.jsx)(O, {}));
+var Et = document.querySelector("[data-react-home-prayer-root]");
+Et && (0, x.createRoot)(Et).render(/* @__PURE__ */ (0, S.jsx)(k, {}));
+var j = document.querySelector("[data-react-home-library-tabs-root]");
+j && (0, x.createRoot)(j).render(/* @__PURE__ */ (0, S.jsx)(ce, {}));
+var Dt = document.querySelector("[data-react-home-library-panel-root]");
+Dt && window.homeLibraryBridge && (window.reactHomeLibraryPanelMounted = !0, (0, x.createRoot)(Dt).render(/* @__PURE__ */ (0, S.jsx)(A, {})));
+var Ot = document.querySelector("[data-react-profile-tabs-root]"), kt = document.querySelector("[data-react-profile-prayers-root]");
+kt && (0, x.createRoot)(kt).render(/* @__PURE__ */ (0, S.jsx)(he, {})), Ot && (0, x.createRoot)(Ot).render(/* @__PURE__ */ (0, S.jsx)(_e, {}));
+var At = document.querySelector("[data-react-profile-hero-root]");
+At && window.profileBridge && (0, x.createRoot)(At).render(/* @__PURE__ */ (0, S.jsx)(ve, {}));
+var jt = document.querySelector("[data-react-profile-preferences-root]");
+jt && window.profileBridge && (0, x.createRoot)(jt).render(/* @__PURE__ */ (0, S.jsx)(xe, {}));
+var Mt = document.querySelector("[data-react-profile-information-root]");
+Mt && window.profileBridge && (0, x.createRoot)(Mt).render(/* @__PURE__ */ (0, S.jsx)(Se, {}));
+var Nt = document.querySelector("[data-react-profile-cloud-root]");
+Nt && window.profileBridge && (0, x.createRoot)(Nt).render(/* @__PURE__ */ (0, S.jsx)(Ce, {}));
+var Pt = document.querySelector("[data-react-bible-controls-root]");
+Pt && window.bibleReaderBridge && (0, x.createRoot)(Pt).render(/* @__PURE__ */ (0, S.jsx)(Re, {}));
+var Ft = document.querySelector("[data-react-bible-parallel-root]");
+Ft && window.bibleReaderBridge && (0, x.createRoot)(Ft).render(/* @__PURE__ */ (0, S.jsx)(Be, {}));
+var It = document.querySelector("[data-react-bible-chapter-root]");
+It && window.bibleReaderBridge && (window.reactBibleChapterMounted = !0, (0, x.createRoot)(It).render(/* @__PURE__ */ (0, S.jsx)(Ze, {})));
+var Lt = document.querySelector("[data-react-selected-verse-root]");
+Lt && window.bibleReaderBridge && (0, x.createRoot)(Lt).render(/* @__PURE__ */ (0, S.jsx)(He, {}));
+var Rt = document.querySelector("[data-react-verse-actions-root]");
+Rt && window.bibleReaderBridge && (0, x.createRoot)(Rt).render(/* @__PURE__ */ (0, S.jsx)(Ue, {}));
+var zt = document.querySelector("[data-react-note-toolbar-root]");
+zt && window.noteEditorBridge && (0, x.createRoot)(zt).render(/* @__PURE__ */ (0, S.jsx)(Qe, {}));
+var Bt = document.querySelector("[data-react-note-content-root]");
+Bt && window.noteEditorBridge && (0, x.createRoot)(Bt).render(/* @__PURE__ */ (0, S.jsx)(ot, {}));
+var Vt = document.querySelector("[data-react-note-header-root]");
+Vt && window.noteEditorBridge && (0, x.createRoot)(Vt).render(/* @__PURE__ */ (0, S.jsx)(it, {}));
+var Ht = document.querySelector("[data-react-note-chips-root]");
+Ht && window.noteEditorBridge && (window.reactNoteChipsMounted = !0, (0, x.createRoot)(Ht).render(/* @__PURE__ */ (0, S.jsx)(at, {})));
+var Ut = document.querySelector("[data-react-prayer-root]");
+Ut && window.prayerBridge && C(Ut, () => import("./prayer-CIF743EF.js"), "PrayerPage");
+var Wt = document.querySelector("[data-react-ai-root]");
+Wt && window.aiBridge && C(Wt, () => import("./ai-BzcjRBkp.js"), "AiPage");
+var Gt = document.querySelector("[data-react-kids-bible-root]");
+Gt && C(Gt, () => import("./kids-bible-VOXksY8g.js"), "KidsBiblePage");
+var Kt = document.querySelector("[data-react-think-room-resume-root]");
+Kt && C(Kt, () => import("./apologetics-debate-VLyZiEH9.js"), "ThinkRoomResume");
+var qt = document.querySelector("[data-react-apologetics-debate-root]");
+qt && C(qt, () => import("./apologetics-debate-VLyZiEH9.js"), "ApologeticsDebatePage");
+var Jt = document.querySelector("[data-react-apologetics-coach-root]");
+Jt && C(Jt, () => import("./apologetics-coach-CiswQoMr.js"), "ApologeticsCoachPage");
+var Yt = document.querySelector("[data-react-apologetics-xp-root]");
+Yt && window.aiBridge && C(Yt, () => import("./apologetics-coach-CiswQoMr.js"), "ApologeticsXpCard");
+var Xt = document.querySelector("[data-react-admin-root]");
+Xt && window.moderationBridge && C(Xt, () => import("./admin-D9fuLROe.js"), "AdminPage"), requestAnimationFrame(() => requestAnimationFrame(() => void ut()));

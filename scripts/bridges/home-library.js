@@ -1,6 +1,44 @@
 // Adapter used by React; installed at the original bootstrap point.
 function installHomeLibraryBridge() {
 window.homeLibraryBridge = {
+  searchVoiceItems(kind, query, reference) {
+    if (!['notes', 'bookmarks'].includes(kind)) return [];
+    const normalize = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    const terms = normalize(query).split(/[^a-z0-9]+/).filter(Boolean);
+    const candidates = kind === 'notes'
+      ? getSavedNoteRows().map(row => ({ kind: 'notes', key: row.id, label: row.title || row.items.map(item => item.reference).filter(Boolean).join(' · ') || 'Note', text: `${row.title || ''} ${row.note || ''} ${row.items.map(item => item.reference || '').join(' ')}`, verses: row.items }))
+      : [
+        ...getSavedRows('bookmarks', '').map(row => ({ kind: 'bookmarks', key: row.storageKey, label: row.reference || `${row.bookId} ${row.chapter}:${row.number}`, text: `${row.reference || ''} ${row.text || ''}`, verses: [row] })),
+        ...Object.values(savedState.aiBookmarks).map(row => ({ kind: 'ai-bookmark', key: row.id, label: `Brother AI · ${String(row.text || '').slice(0, 70)}`, text: row.text || '', verses: [] })),
+      ];
+    return candidates.filter(item => reference
+      ? item.verses.some(verse => verse.bookId === reference.bookId && Number(verse.chapter) === reference.chapter && Number(verse.number) === reference.verse)
+      : terms.every(term => normalize(item.text).includes(term)))
+      .slice(0, 5).map(({ kind: itemKind, key, label }) => ({ kind: itemKind, key, label }));
+  },
+  async openVoiceItem(item) {
+    if (item.kind === 'notes') {
+      const note = getSavedNoteRows().find(row => row.id === item.key);
+      if (!note) throw new Error('Cette note n’est plus disponible.');
+      await openSavedNote(note);
+      return;
+    }
+    if (item.kind === 'bookmarks') {
+      const bookmark = getSavedRows('bookmarks', '').find(row => row.storageKey === item.key);
+      if (!bookmark) throw new Error('Ce favori n’est plus disponible.');
+      await openSavedVerse(bookmark);
+      return;
+    }
+    if (item.kind === 'ai-bookmark' && savedState.aiBookmarks[item.key]) {
+      setScreen('home');
+      if (appShell.dataset.activeScreen !== 'home') throw new Error('La page des favoris n’a pas pu s’ouvrir.');
+      activeProfileFolders.bookmarks = '';
+      renderHomeLibraryTab('bookmarks');
+      document.dispatchEvent(new CustomEvent('home:voice-ai-bookmark', { detail: { id: item.key } }));
+      return;
+    }
+    throw new Error('Ce favori n’est plus disponible.');
+  },
   selectTab(tab) {
     if (!["highlights", "bookmarks", "notes"].includes(tab)) return;
     renderHomeLibraryTab(tab);

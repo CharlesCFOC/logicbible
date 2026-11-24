@@ -302,7 +302,7 @@ svg {
 
 .screen.is-active {
   display: block;
-  animation: screenIn 180ms ease;
+  animation: screenIn 280ms ease-out;
 }
 
 .sr-only {
@@ -320,11 +320,9 @@ svg {
 @keyframes screenIn {
   from {
     opacity: 0;
-    transform: translateY(6px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 

@@ -1,22 +1,18 @@
 // Legacy features/notes: loaded before script.js; declarations only.
 // Shared state remains in script.js during the incremental React migration.
 
-function getSaveRichNoteButton() {
-  return document.querySelector("[data-save-rich-note]") || saveRichNoteButton;
-}
-
 function markNoteEditorDirty() {
-  getSaveRichNoteButton()?.classList.add("is-dirty");
+  noteEditorDirty = true;
   window.clearTimeout(noteAutosaveTimer);
   noteAutosaveTimer = window.setTimeout(() => {
-    if (noteEditorPanel?.classList.contains("is-visible") && getSaveRichNoteButton()?.classList.contains("is-dirty")) {
+    if (noteEditorPanel?.classList.contains("is-visible") && noteEditorDirty) {
       saveRichNote();
     }
   }, 2000);
 }
 
 function resetNoteEditorDirty() {
-  getSaveRichNoteButton()?.classList.remove("is-dirty");
+  noteEditorDirty = false;
   window.clearTimeout(noteAutosaveTimer);
   noteAutosaveTimer = null;
 }
@@ -154,6 +150,7 @@ function removeNoteEditorVerse(key) {
 }
 
 function renderNoteEditorVerseChips() {
+  if (window.reactNoteChipsMounted) { emitNoteEditorChange(); return; }
   if (!noteEditorVerseChips) {
     return;
   }
@@ -201,6 +198,18 @@ function renderNoteEditorVerseChips() {
 }
 
 function startAddingNoteVerses() {
+  if (noteEditorStandaloneKey) {
+    saveRichNote();
+    noteEditorAddingVerses = true;
+    multiSelectMode = true;
+    multiSelectedVerseData = [];
+    selectedVerseData = null;
+    updateMultiSelectionUi();
+    closeModal({ preserveNoteAddMode: true });
+    setScreen("bible");
+    setFeedback("Select verses to add to this note, then open the note menu.");
+    return;
+  }
   if (!noteEditorVerseItems.length) {
     return;
   }
@@ -215,10 +224,22 @@ function startAddingNoteVerses() {
 
 function saveAddedNoteVerses() {
   if (!noteEditorAddingVerses || !multiSelectedVerseData.length) return;
+  const standaloneKey = noteEditorStandaloneKey;
+  const standalone = standaloneKey ? savedState.notes[standaloneKey] : null;
+  if (standalone && multiSelectedVerseData.some(item => savedState.notes[item.key]?.note || savedState.notes[item.key]?.noteHtml)) {
+    setFeedback('A selected verse already has a note. Choose another verse to keep both notes.');
+    return;
+  }
   noteEditorVerseItems = [...multiSelectedVerseData];
   noteEditorAddingVerses = false;
   updateMultiSelectionUi();
   openRichNoteEditor();
+  if (standalone) {
+    noteEditorNoteTitle = standalone.noteTitle || '';
+    noteEditorContent.innerHTML = sanitizeNoteHtml(standalone.noteHtml || `<p>${escapeHtml(standalone.note || '')}</p>`);
+    noteEditorRemovedVerseKeys.add(standaloneKey);
+    emitNoteEditorChange();
+  }
   saveRichNote();
   setFeedback("Verses added and note saved.");
 }
@@ -234,10 +255,12 @@ function openRichNoteEditor() {
     return;
   }
   const wasAddingVerses = noteEditorAddingVerses;
+  noteEditorStandaloneKey = null;
   noteEditorVerseItems = [...items];
   noteEditorAddingVerses = false;
   noteEditorRemovedVerseKeys = new Set();
   noteEditorSelectionRange = null;
+  noteUppercaseUndo = [];
   renderNoteEditorVerseChips();
   const existing = items.find((item) => savedState.notes[item.key]?.noteHtml || savedState.notes[item.key]?.note)?.key;
   const note = existing ? savedState.notes[existing] : null;
@@ -250,10 +273,6 @@ function openRichNoteEditor() {
   noteEditorContent.style.setProperty("--note-editor-font-size", `${noteEditorFontSize}px`);
   if (noteEditorReference) noteEditorReference.value = noteEditorNoteTitle;
   noteEditorContent.innerHTML = sanitizeNoteHtml(note?.noteHtml || (note?.note ? `<p>${escapeHtml(note.note)}</p>` : "<p><br></p>"));
-  if (getSaveRichNoteButton()) {
-    getSaveRichNoteButton().setAttribute("aria-label", "Save note");
-    getSaveRichNoteButton().title = "Save note";
-  }
   resetNoteEditorDirty();
   if (wasAddingVerses) {
     markNoteEditorDirty();
@@ -266,9 +285,42 @@ function openRichNoteEditor() {
   emitNoteEditorChange();
 }
 
+function openStandaloneNote(note = {}) {
+  if (!noteEditorPanel || !noteEditorContent) throw new Error('L’outil Notes n’est pas encore prêt. Réessayez.');
+  if (noteEditorPanel.classList.contains('is-visible')) closeModal();
+  noteEditorStandaloneKey = note.key || `standalone-note-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+  noteEditorVerseItems = [];
+  noteEditorRemovedVerseKeys = new Set();
+  noteEditorAddingVerses = false;
+  noteEditorSelectionRange = null;
+  noteUppercaseUndo = [];
+  noteEditorGroupId = note.noteGroupId || noteEditorStandaloneKey;
+  noteEditorFontSize = Number(note.noteFontSize || 17);
+  noteEditorNoteTitle = String(note.noteTitle || '').slice(0, 100);
+  const text = String(note.note || '');
+  noteEditorContent.innerHTML = sanitizeNoteHtml(note.noteHtml || (text ? text.split(/\n+/).map(line => `<p>${escapeHtml(line)}</p>`).join('') : '<p><br></p>'));
+  noteEditorContent.style.setProperty('--note-editor-font-size', `${noteEditorFontSize}px`);
+  resetNoteEditorDirty();
+  renderNoteEditorVerseChips();
+  showModal(noteEditorPanel);
+  noteEditorContent.focus();
+  emitNoteEditorChange();
+  if (!note.key && text) markNoteEditorDirty();
+}
+
 function saveRichNote() {
   const items = getNoteSelectionItems();
   if (!noteEditorContent) {
+    return;
+  }
+  if (noteEditorStandaloneKey) {
+    const key = noteEditorStandaloneKey;
+    const note = noteEditorContent.innerText.trim();
+    if (note) savedState.notes[key] = { key, standalone: true, note, noteHtml: sanitizeNoteHtml(noteEditorContent.innerHTML), noteTitle: noteEditorNoteTitle.trim(), noteFontSize: noteEditorFontSize, noteGroupId: key, updatedAt: new Date().toISOString() };
+    else delete savedState.notes[key];
+    writeJson('brother.notes', savedState.notes);
+    refreshProfilePanel();
+    resetNoteEditorDirty();
     return;
   }
   noteEditorRemovedVerseKeys.forEach((key) => {
@@ -303,23 +355,22 @@ function saveRichNote() {
   writeJson("brother.notes", savedState.notes);
   refreshProfilePanel();
   setFeedback(`Note saved to ${items.length} verse${items.length === 1 ? "" : "s"}.`);
-  if (getSaveRichNoteButton()) {
-    getSaveRichNoteButton().setAttribute("aria-label", "Saved");
-    getSaveRichNoteButton().title = "Saved";
-    getSaveRichNoteButton().classList.add("is-saved");
-    window.setTimeout(() => {
-      if (getSaveRichNoteButton()) {
-        getSaveRichNoteButton().setAttribute("aria-label", "Save note");
-        getSaveRichNoteButton().title = "Save note";
-        getSaveRichNoteButton().classList.remove("is-saved");
-      }
-    }, 1600);
-  }
   noteEditorRemovedVerseKeys = new Set();
   resetNoteEditorDirty();
 }
 
 function deleteRichNote() {
+  if (noteEditorStandaloneKey) {
+    if (!window.confirm('Delete this note?')) return;
+    delete savedState.notes[noteEditorStandaloneKey];
+    writeJson('brother.notes', savedState.notes);
+    noteEditorStandaloneKey = null;
+    noteEditorContent.innerHTML = '<p><br></p>';
+    resetNoteEditorDirty();
+    refreshProfilePanel();
+    closeModal();
+    return;
+  }
   const items = noteEditorVerseItems;
   if (!items.length || !window.confirm("Delete this note from all attached verses?")) {
     return;
@@ -338,7 +389,11 @@ function deleteRichNote() {
 function captureNoteSelection() {
   if (!noteEditorContent) return;
   const selection = window.getSelection();
-  if (!selection?.rangeCount || selection.isCollapsed) return;
+  if (!selection?.rangeCount) return;
+  if (selection.isCollapsed) {
+    if (noteEditorContent.contains(selection.anchorNode)) noteEditorSelectionRange = null;
+    return;
+  }
   const range = selection.getRangeAt(0);
   if (noteEditorContent.contains(range.commonAncestorContainer)) {
     noteEditorSelectionRange = range.cloneRange();
@@ -349,6 +404,88 @@ function captureNoteSelection() {
       if (noteFontSizeValue) noteFontSizeValue.textContent = `${selectedSize} px`;
     }
   }
+}
+
+function noteSelectionIsUppercase() {
+  const selection = window.getSelection();
+  if (!selection?.rangeCount || !noteEditorContent) return false;
+  const range = selection.getRangeAt(0);
+  let text = '';
+  if (!range.collapsed && noteEditorContent.contains(range.commonAncestorContainer)) text = range.toString();
+  else if (range.collapsed && noteEditorContent.contains(selection.anchorNode) && selection.anchorNode?.nodeType === Node.TEXT_NODE) {
+    const value = selection.anchorNode.data;
+    const offset = selection.anchorOffset;
+    const left = value.slice(0, offset).match(/[\p{L}\p{M}]+$/u)?.[0] || '';
+    const right = value.slice(offset).match(/^[\p{L}\p{M}]+/u)?.[0] || '';
+    text = left + right;
+  } else if (noteEditorSelectionRange && !noteEditorSelectionRange.collapsed) text = noteEditorSelectionRange.toString();
+  return /\p{L}/u.test(text) && text === text.toLocaleUpperCase() && text !== text.toLocaleLowerCase();
+}
+
+function uppercaseNoteSelection() {
+  if (!noteEditorContent) return false;
+  const selection = window.getSelection();
+  if (!selection) return false;
+  const currentRange = selection?.rangeCount ? selection.getRangeAt(0) : null;
+  const range = currentRange && noteEditorContent.contains(currentRange.commonAncestorContainer)
+    ? currentRange : noteEditorSelectionRange;
+  if (!range || range.collapsed || !noteEditorContent.contains(range.commonAncestorContainer)) return false;
+  const selectedText = range.toString();
+  const lowercase = /\p{L}/u.test(selectedText) && selectedText === selectedText.toLocaleUpperCase() && selectedText !== selectedText.toLocaleLowerCase();
+  const walker = document.createTreeWalker(noteEditorContent, NodeFilter.SHOW_TEXT);
+  const changes = [];
+  const selectedNodes = [];
+  let textNode;
+  let preceding = '';
+  let lastBlock = null;
+  while ((textNode = walker.nextNode())) {
+    const block = textNode.parentElement?.closest('p, li, blockquote, h1, h2, h3, h4, h5, h6, div');
+    if (block && block !== noteEditorContent && lastBlock && block !== lastBlock) preceding = '';
+    if (block && block !== noteEditorContent) lastBlock = block;
+    if (!range.intersectsNode(textNode)) { preceding += textNode.data; continue; }
+    const start = textNode === range.startContainer ? range.startOffset : 0;
+    const end = textNode === range.endContainer ? range.endOffset : textNode.length;
+    if (end <= start) { preceding += textNode.data; continue; }
+    const original = textNode.data.slice(start, end);
+    let transformed = '';
+    let context = preceding + textNode.data.slice(0, start);
+    for (const character of original) {
+      const isSentenceStart = /(?:^|[.!?…][\s\u00a0]*|\n[\s\u00a0]*)["'«“‘(\[]*[\s\u00a0]*$/u.test(context);
+      transformed += lowercase ? (isSentenceStart ? character.toLocaleUpperCase() : character.toLocaleLowerCase()) : character.toLocaleUpperCase();
+      context += character;
+    }
+    selectedNodes.push({ node: textNode, start, end: start + transformed.length });
+    if (transformed !== original) changes.push({ node: textNode, start, length: end - start, transformed });
+    preceding += textNode.data;
+  }
+  if (!changes.length) return false;
+  const before = noteEditorContent.innerHTML;
+  for (const change of changes.reverse()) change.node.replaceData(change.start, change.length, change.transformed);
+  noteUppercaseUndo.push({ before, after: noteEditorContent.innerHTML });
+  if (selectedNodes.length && typeof document.createRange === 'function') {
+    const restored = document.createRange();
+    restored.setStart(selectedNodes[0].node, selectedNodes[0].start);
+    const last = selectedNodes[selectedNodes.length - 1];
+    restored.setEnd(last.node, last.end);
+    selection.removeAllRanges();
+    selection.addRange(restored);
+    noteEditorSelectionRange = restored.cloneRange();
+  } else noteEditorSelectionRange = null;
+  markNoteEditorDirty();
+  updateNoteToolbarColors();
+  return true;
+}
+
+function undoNoteUppercase() {
+  const entry = noteUppercaseUndo.at(-1);
+  if (!entry || !noteEditorContent || noteEditorContent.innerHTML !== entry.after) return false;
+  noteUppercaseUndo.pop();
+  noteEditorContent.innerHTML = entry.before;
+  noteEditorSelectionRange = null;
+  noteEditorContent.focus();
+  markNoteEditorDirty();
+  updateNoteToolbarColors();
+  return true;
 }
 
 function restoreNoteSelection() {
@@ -400,7 +537,8 @@ function applySelectedNoteFontSize(size) {
 }
 
 function updateNoteColorSwatch(input, selector) {
-  input?.closest("label")?.querySelector(selector)?.style.setProperty("background", input.value);
+  const property = selector === "[data-note-color-swatch]" ? "color" : "background-color";
+  input?.closest("label")?.querySelector(selector)?.style.setProperty(property, input.value);
 }
 
 function getNoteCaretElement() {
@@ -433,8 +571,8 @@ function updateNoteToolbarColors() {
   const highlightLabel = noteHighlightInput?.closest("label");
   const textSwatch = textLabel?.querySelector("[data-note-color-swatch]");
   const highlightSwatch = highlightLabel?.querySelector("[data-note-highlight-swatch]");
-  textSwatch?.style.setProperty("background", textColor);
-  highlightSwatch?.style.setProperty("background", highlightColor);
+  textSwatch?.style.setProperty("color", textColor);
+  highlightSwatch?.style.setProperty("background-color", highlightColor);
   textLabel?.style.setProperty("color", textColor);
   highlightLabel?.style.setProperty("color", highlightColor === "transparent" ? "#d9f2ff" : highlightColor);
   emitNoteToolbarChange();

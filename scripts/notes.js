@@ -2,10 +2,13 @@
 
 document.querySelectorAll("[data-note-command]").forEach((button) => {
   button.addEventListener("click", () => {
+    if (button.dataset.noteCommand === "uppercase") { uppercaseNoteSelection(); return; }
+    if (button.dataset.noteCommand === "undo" && undoNoteUppercase()) return;
     noteEditorContent?.focus();
     document.execCommand(button.dataset.noteCommand, false, button.dataset.noteValue || null);
     markNoteEditorDirty();
   });
+  if (button.dataset.noteCommand === "uppercase") button.addEventListener("pointerdown", captureNoteSelection);
 });
 
 const noteColorInput = document.querySelector("[data-note-color]");
@@ -72,9 +75,5 @@ noteEditorContent?.addEventListener("keyup", updateNoteToolbarColors);
 document.addEventListener("selectionchange", updateNoteToolbarColors);
 noteFontSizeInput?.addEventListener("pointerdown", captureNoteSelection);
 
-saveRichNoteButton?.addEventListener("click", () => {
-  saveRichNote();
-  resetNoteEditorDirty();
-});
 noteAddSaveButton?.addEventListener("click", saveAddedNoteVerses);
 document.querySelector("[data-delete-rich-note]")?.addEventListener("click", deleteRichNote);

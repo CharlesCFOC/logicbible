@@ -276,6 +276,7 @@ if (noteHeaderNode && window.noteEditorBridge) {
 
 const noteChipsNode = document.querySelector("[data-react-note-chips-root]");
 if (noteChipsNode && window.noteEditorBridge) {
+  window.reactNoteChipsMounted = true;
   createRoot(noteChipsNode).render(<NoteEditorVerseChips />);
 }
 

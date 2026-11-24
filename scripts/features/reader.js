@@ -437,14 +437,33 @@ function syncVerseActionStates() {
   emitBibleVerseUiChange();
 }
 
-async function loadChapter() {
+function captureBibleReadingPosition() {
+  const screen = document.querySelector('#bible');
+  if (!screen) return null;
+  const viewport = screen.getBoundingClientRect();
+  const verse = [...screen.querySelectorAll('[data-verse-number]')].find(node => {
+    const bounds = node.getBoundingClientRect();
+    return node.dataset.verseNumber && bounds.bottom > viewport.top && bounds.top < viewport.bottom;
+  });
+  return verse ? { number: verse.dataset.verseNumber, offset: verse.getBoundingClientRect().top - viewport.top } : { scrollTop: screen.scrollTop };
+}
+
+function restoreBibleReadingPosition(position) {
+  const screen = document.querySelector('#bible');
+  if (!screen || !position) return;
+  const verse = position.number && [...screen.querySelectorAll('[data-verse-number]')].find(node => node.dataset.verseNumber === position.number);
+  if (verse) screen.scrollTop += verse.getBoundingClientRect().top - screen.getBoundingClientRect().top - position.offset;
+  else if (position.scrollTop != null) screen.scrollTop = position.scrollTop;
+}
+
+async function loadChapter({ preservePosition = false } = {}) {
   if (multiSelectedVerseData.length) {
     exitMultiSelectMode();
   }
   const requestId = ++chapterRequestId;
   bibleChapterLoading = true;
   bibleChapterError = "";
-  renderLoading();
+  if (!preservePosition || !currentChapterData) renderLoading();
   if (!pendingPreferredBibleVersion) setLocalValue("brother.version", readerState.versionId);
   setLocalValue("brother.book", readerState.bookId);
   setLocalValue("brother.chapter", String(readerState.chapter));
@@ -463,9 +482,13 @@ async function loadChapter() {
       return;
     }
     currentParallelChapterData = parallelChapters;
+    const readingPosition = preservePosition ? captureBibleReadingPosition() : null;
     renderChapter(chapter, parallelChapters);
     bibleChapterLoading = false;
     emitBibleChapterChange();
+    if (readingPosition) requestAnimationFrame(() => requestAnimationFrame(() => {
+      if (requestId === chapterRequestId) restoreBibleReadingPosition(readingPosition);
+    }));
     return chapter;
   } catch (error) {
     if (requestId !== chapterRequestId) {

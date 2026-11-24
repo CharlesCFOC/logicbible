@@ -32,6 +32,12 @@ test('voice assistant validates prayer drafts and never executes generated actio
   assert.equal((await interpretVoiceAssistant('Une prière', answer({ type: 'prayer', title: 'Prière', text: 'Texte', category: 'invalid' }))).category, 'general');
 });
 
+test('voice assistant validates note drafts and saved item search requests', async () => {
+  assert.deepEqual(await interpretVoiceAssistant('Écris une note', answer({ type: 'note_draft', title: ' Espérance ', text: ' Une réflexion. ' })), { type: 'note_draft', title: 'Espérance', text: 'Une réflexion.' });
+  assert.deepEqual(await interpretVoiceAssistant('Trouve ma note sur la foi', answer({ type: 'saved_search', kind: 'notes', query: 'foi' })), { type: 'saved_search', kind: 'notes', query: 'foi' });
+  assert.deepEqual(await interpretVoiceAssistant('Trouve mon favori', answer({ type: 'saved_search', kind: 'invalid', query: '' })), { type: 'unsupported' });
+});
+
 test('classification instructions identify remembered verses and prayer requests', async () => {
   await interpretVoiceAssistant('Quel verset dit Jésus pleura ?', async ({ instructions }) => {
     assert.match(instructions, /quel verset dit Jésus pleura/);

@@ -111,6 +111,7 @@ function showModal(panel) {
 }
 
 function closeModal(options = {}) {
+  const closingNote = noteEditorPanel?.classList.contains("is-visible");
   if (noteEditorPanel?.classList.contains("is-visible")) {
     saveRichNote();
   }
@@ -118,6 +119,7 @@ function closeModal(options = {}) {
     noteEditorAddingVerses = false;
   }
   [verseSheet, verseAiPanel, noteEditorPanel].forEach((item) => item?.classList.remove("is-visible"));
+  if (closingNote) document.dispatchEvent(new CustomEvent("note:closed"));
   verseSheet?.classList.remove("is-original-language");
   modalLayer.hidden = true;
   delete appShell.dataset.modal;

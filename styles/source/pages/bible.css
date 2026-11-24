@@ -1236,17 +1236,6 @@
   overflow: visible;
 }
 
-.parallel-scripture-line.is-bookmarked::after {
-  position: absolute;
-  top: 10px;
-  right: 2px;
-  width: 7px;
-  height: 22px;
-  border-radius: 0 0 4px 4px;
-  background: var(--cool);
-  content: "";
-}
-
 .parallel-scripture-column {
   margin: 0;
   min-width: 0;
@@ -1322,15 +1311,10 @@
   background: var(--highlight-color, var(--beige)) !important;
 }
 
-.scripture-line.is-bookmarked::after {
-  position: absolute;
-  top: 10px;
-  right: 4px;
-  width: 7px;
-  height: 22px;
-  border-radius: 0 0 4px 4px;
-  background: var(--cool);
-  content: "";
+#bible .scripture-line.is-bookmarked > sup,
+#bible .parallel-scripture-line.is-bookmarked .parallel-scripture-column > sup {
+  color: #ffad4d;
+  font-style: italic;
 }
 
 .reader-empty {

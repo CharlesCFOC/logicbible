@@ -11,7 +11,7 @@ function NoteIcon() {
 }
 
 export function SavedNoteCard({ row, onOpen }) {
-  const items = row.items || [];
+  const items = (row.items || []).filter(item => !item.standalone);
   const references = items.map((item) => item.reference || "").filter(Boolean);
   const searchable = `${row.title || "Untitled note"} ${references.join(" ")} ${row.note || ""}`.toLowerCase();
 
@@ -21,7 +21,7 @@ export function SavedNoteCard({ row, onOpen }) {
         <strong className="saved-note-card-title">{row.title || "Untitled note"}</strong>
         <span className="saved-note-card-heading">
           <NoteIcon />
-          <strong>{items.length} verse{items.length === 1 ? "" : "s"}</strong>
+          <strong>{items.length ? `${items.length} verse${items.length === 1 ? "" : "s"}` : "Note"}</strong>
         </span>
         <span className="saved-note-references">{references.join(" · ")}</span>
         <p>{row.note || "No preview available"}</p>

@@ -9,7 +9,7 @@
   padding: 10px 66px 10px 14px;
   border: 0;
   border-radius: 14px;
-  background: rgba(12, 39, 66, .88);
+  background: #17395a;
   box-shadow: 0 0 18px 3px rgba(143, 205, 235, .38);
   -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
@@ -19,12 +19,30 @@
 .message-composer-container .brother-ai-voice-wave { width: 100%; margin: 0 0 8px; }
 .message-composer-container .brother-ai-voice-wave[hidden] { display: none; }
 
+.app-shell .phone-frame #prayer .prayer-wall-search,
+body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-wall-search {
+  border: 0 !important;
+  background: #17395a !important;
+  box-shadow: 0 0 14px 1px rgba(143, 205, 235, .32) !important;
+}
+body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-board-content,
+body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-board-controls { overflow: visible; }
+#prayer .prayer-wall-search { margin: 8px 10px; }
+#prayer .prayer-wall-search input { font-weight: 400; }
+
+#prayer .prayer-search-input { position: relative; display: flex; flex: 1; min-width: 0; align-items: center; }
+#prayer .prayer-search-hint { position: absolute; left: 0; max-width: 100%; overflow: hidden; color: #e1eaff; font-size: 14px; font-size: clamp(14px, calc(11.2px + 0.875cqw), 15.12px); font-weight: 400; pointer-events: none; white-space: nowrap; opacity: 1; transition: opacity .8s ease; }
+#prayer .prayer-search-hint.is-fading { opacity: 0; }
+#prayer .prayer-search-hint > span { opacity: 0; transition: opacity .18s ease; }
+#prayer .prayer-search-hint > span.is-visible { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { #prayer .prayer-search-hint, #prayer .prayer-search-hint > span { transition: none; } }
+
 .app-shell .phone-frame #prayer .prayer-request-title-field,
 html body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-request-title-field {
   padding: 0;
   border: 0 !important;
   border-radius: 14px;
-  background: rgba(12, 39, 66, .88) !important;
+  background: #17395a !important;
   box-shadow: 0 0 18px 3px rgba(143, 205, 235, .38) !important;
 }
 html body .app-shell[data-app-background="black"] .phone-frame #prayer .prayer-request-title-field::before { display: none !important; }
