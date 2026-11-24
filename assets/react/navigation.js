@@ -4,8 +4,9 @@ import { t as i } from "./react-dom-j38DbyF1.js";
 import { r as a, t as o } from "./dist-CJLN62Mq.js";
 import { t as s } from "./definitions-DfeWly7j.js";
 import { t as c } from "./prayer-icon-b6gZ8Mjy.js";
+import { a as l, i as u, n as d, r as f, t as p } from "./bible-voice-client-Bvf1HeQi.js";
 // node_modules/scheduler/cjs/scheduler.production.js
-var l = /* @__PURE__ */ t(((e) => {
+var m = /* @__PURE__ */ t(((e) => {
 	function t(e, t) {
 		var n = e.length;
 		e.push(t);
@@ -58,29 +59,29 @@ var l = /* @__PURE__ */ t(((e) => {
 	}
 	function x(e) {
 		if (h = !1, b(e), !m) {
-			if (n(c) !== null) m = !0, S || (S = !0, D());
+			if (n(c) !== null) m = !0, ee || (ee = !0, T());
 			else {
 				var t = n(l);
-				t !== null && re(x, t.startTime - e);
+				t !== null && ie(x, t.startTime - e);
 			}
 		}
 	}
-	var S = !1, C = -1, w = 5, T = -1;
-	function ee() {
-		return g ? !0 : !(e.unstable_now() - T < w);
+	var ee = !1, S = -1, te = 5, C = -1;
+	function w() {
+		return g ? !0 : !(e.unstable_now() - C < te);
 	}
-	function E() {
-		if (g = !1, S) {
+	function ne() {
+		if (g = !1, ee) {
 			var t = e.unstable_now();
-			T = t;
+			C = t;
 			var i = !0;
 			try {
 				a: {
-					m = !1, h && (h = !1, v(C), C = -1), p = !0;
+					m = !1, h && (h = !1, v(S), S = -1), p = !0;
 					var a = f;
 					try {
 						b: {
-							for (b(t), d = n(c); d !== null && !(d.expirationTime > t && ee());) {
+							for (b(t), d = n(c); d !== null && !(d.expirationTime > t && w());) {
 								var o = d.callback;
 								if (typeof o == "function") {
 									d.callback = null, f = d.priorityLevel;
@@ -96,7 +97,7 @@ var l = /* @__PURE__ */ t(((e) => {
 							if (d !== null) i = !0;
 							else {
 								var u = n(l);
-								u !== null && re(x, u.startTime - t), i = !1;
+								u !== null && ie(x, u.startTime - t), i = !1;
 							}
 						}
 						break a;
@@ -106,31 +107,31 @@ var l = /* @__PURE__ */ t(((e) => {
 					i = void 0;
 				}
 			} finally {
-				i ? D() : S = !1;
+				i ? T() : ee = !1;
 			}
 		}
 	}
-	var D;
-	if (typeof y == "function") D = function() {
-		y(E);
+	var T;
+	if (typeof y == "function") T = function() {
+		y(ne);
 	};
 	else if (typeof MessageChannel < "u") {
-		var te = new MessageChannel(), ne = te.port2;
-		te.port1.onmessage = E, D = function() {
-			ne.postMessage(null);
+		var E = new MessageChannel(), re = E.port2;
+		E.port1.onmessage = ne, T = function() {
+			re.postMessage(null);
 		};
-	} else D = function() {
-		_(E, 0);
+	} else T = function() {
+		_(ne, 0);
 	};
-	function re(t, n) {
-		C = _(function() {
+	function ie(t, n) {
+		S = _(function() {
 			t(e.unstable_now());
 		}, n);
 	}
 	e.unstable_IdlePriority = 5, e.unstable_ImmediatePriority = 1, e.unstable_LowPriority = 4, e.unstable_NormalPriority = 3, e.unstable_Profiling = null, e.unstable_UserBlockingPriority = 2, e.unstable_cancelCallback = function(e) {
 		e.callback = null;
 	}, e.unstable_forceFrameRate = function(e) {
-		0 > e || 125 < e ? console.error("forceFrameRate takes a positive int between 0 and 125, forcing frame rates higher than 125 fps is not supported") : w = 0 < e ? Math.floor(1e3 / e) : 5;
+		0 > e || 125 < e ? console.error("forceFrameRate takes a positive int between 0 and 125, forcing frame rates higher than 125 fps is not supported") : te = 0 < e ? Math.floor(1e3 / e) : 5;
 	}, e.unstable_getCurrentPriorityLevel = function() {
 		return f;
 	}, e.unstable_next = function(e) {
@@ -191,8 +192,8 @@ var l = /* @__PURE__ */ t(((e) => {
 			startTime: a,
 			expirationTime: s,
 			sortIndex: -1
-		}, a > o ? (r.sortIndex = a, t(l, r), n(c) === null && r === n(l) && (h ? (v(C), C = -1) : h = !0, re(x, a - o))) : (r.sortIndex = s, t(c, r), m || p || (m = !0, S || (S = !0, D()))), r;
-	}, e.unstable_shouldYield = ee, e.unstable_wrapCallback = function(e) {
+		}, a > o ? (r.sortIndex = a, t(l, r), n(c) === null && r === n(l) && (h ? (v(S), S = -1) : h = !0, ie(x, a - o))) : (r.sortIndex = s, t(c, r), m || p || (m = !0, ee || (ee = !0, T()))), r;
+	}, e.unstable_shouldYield = w, e.unstable_wrapCallback = function(e) {
 		var t = f;
 		return function() {
 			var n = f;
@@ -204,10 +205,10 @@ var l = /* @__PURE__ */ t(((e) => {
 			}
 		};
 	};
-})), u = /* @__PURE__ */ t(((e, t) => {
-	t.exports = l();
-})), d = /* @__PURE__ */ t(((e) => {
-	var t = u(), r = n(), a = i();
+})), h = /* @__PURE__ */ t(((e, t) => {
+	t.exports = m();
+})), g = /* @__PURE__ */ t(((e) => {
+	var t = h(), r = n(), a = i();
 	function o(e) {
 		var t = "https://react.dev/errors/" + e;
 		if (1 < arguments.length) {
@@ -237,17 +238,17 @@ var l = /* @__PURE__ */ t(((e) => {
 		}
 		return null;
 	}
-	function d(e) {
+	function u(e) {
 		if (e.tag === 31) {
 			var t = e.memoizedState;
 			if (t === null && (e = e.alternate, e !== null && (t = e.memoizedState)), t !== null) return t.dehydrated;
 		}
 		return null;
 	}
-	function f(e) {
+	function d(e) {
 		if (c(e) !== e) throw Error(o(188));
 	}
-	function p(e) {
+	function f(e) {
 		var t = e.alternate;
 		if (!t) {
 			if (t = c(e), t === null) throw Error(o(188));
@@ -266,8 +267,8 @@ var l = /* @__PURE__ */ t(((e) => {
 			}
 			if (i.child === a.child) {
 				for (a = i.child; a;) {
-					if (a === n) return f(i), e;
-					if (a === r) return f(i), t;
+					if (a === n) return d(i), e;
+					if (a === r) return d(i), t;
 					a = a.sibling;
 				}
 				throw Error(o(188));
@@ -305,64 +306,64 @@ var l = /* @__PURE__ */ t(((e) => {
 		if (n.tag !== 3) throw Error(o(188));
 		return n.stateNode.current === n ? e : t;
 	}
-	function m(e) {
+	function p(e) {
 		var t = e.tag;
 		if (t === 5 || t === 26 || t === 27 || t === 6) return e;
 		for (e = e.child; e !== null;) {
-			if (t = m(e), t !== null) return t;
+			if (t = p(e), t !== null) return t;
 			e = e.sibling;
 		}
 		return null;
 	}
-	var h = Object.assign, g = Symbol.for("react.element"), _ = Symbol.for("react.transitional.element"), v = Symbol.for("react.portal"), y = Symbol.for("react.fragment"), b = Symbol.for("react.strict_mode"), x = Symbol.for("react.profiler"), S = Symbol.for("react.consumer"), C = Symbol.for("react.context"), w = Symbol.for("react.forward_ref"), T = Symbol.for("react.suspense"), ee = Symbol.for("react.suspense_list"), E = Symbol.for("react.memo"), D = Symbol.for("react.lazy"), te = Symbol.for("react.activity"), ne = Symbol.for("react.memo_cache_sentinel"), re = Symbol.iterator;
-	function ie(e) {
-		return typeof e != "object" || !e ? null : (e = re && e[re] || e["@@iterator"], typeof e == "function" ? e : null);
+	var m = Object.assign, g = Symbol.for("react.element"), _ = Symbol.for("react.transitional.element"), v = Symbol.for("react.portal"), y = Symbol.for("react.fragment"), b = Symbol.for("react.strict_mode"), x = Symbol.for("react.profiler"), ee = Symbol.for("react.consumer"), S = Symbol.for("react.context"), te = Symbol.for("react.forward_ref"), C = Symbol.for("react.suspense"), w = Symbol.for("react.suspense_list"), ne = Symbol.for("react.memo"), T = Symbol.for("react.lazy"), E = Symbol.for("react.activity"), re = Symbol.for("react.memo_cache_sentinel"), ie = Symbol.iterator;
+	function ae(e) {
+		return typeof e != "object" || !e ? null : (e = ie && e[ie] || e["@@iterator"], typeof e == "function" ? e : null);
 	}
-	var ae = Symbol.for("react.client.reference");
-	function oe(e) {
+	var oe = Symbol.for("react.client.reference");
+	function se(e) {
 		if (e == null) return null;
-		if (typeof e == "function") return e.$$typeof === ae ? null : e.displayName || e.name || null;
+		if (typeof e == "function") return e.$$typeof === oe ? null : e.displayName || e.name || null;
 		if (typeof e == "string") return e;
 		switch (e) {
 			case y: return "Fragment";
 			case x: return "Profiler";
 			case b: return "StrictMode";
-			case T: return "Suspense";
-			case ee: return "SuspenseList";
-			case te: return "Activity";
+			case C: return "Suspense";
+			case w: return "SuspenseList";
+			case E: return "Activity";
 		}
 		if (typeof e == "object") switch (e.$$typeof) {
 			case v: return "Portal";
-			case C: return e.displayName || "Context";
-			case S: return (e._context.displayName || "Context") + ".Consumer";
-			case w:
+			case S: return e.displayName || "Context";
+			case ee: return (e._context.displayName || "Context") + ".Consumer";
+			case te:
 				var t = e.render;
 				return e = e.displayName, e ||= (e = t.displayName || t.name || "", e === "" ? "ForwardRef" : "ForwardRef(" + e + ")"), e;
-			case E: return t = e.displayName || null, t === null ? oe(e.type) || "Memo" : t;
-			case D:
+			case ne: return t = e.displayName || null, t === null ? se(e.type) || "Memo" : t;
+			case T:
 				t = e._payload, e = e._init;
 				try {
-					return oe(e(t));
+					return se(e(t));
 				} catch {}
 		}
 		return null;
 	}
-	var se = Array.isArray, O = r.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, k = a.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ce = {
+	var ce = Array.isArray, D = r.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, O = a.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, le = {
 		pending: !1,
 		data: null,
 		method: null,
 		action: null
-	}, le = [], ue = -1;
-	function de(e) {
+	}, ue = [], de = -1;
+	function fe(e) {
 		return { current: e };
 	}
-	function fe(e) {
-		0 > ue || (e.current = le[ue], le[ue] = null, ue--);
+	function k(e) {
+		0 > de || (e.current = ue[de], ue[de] = null, de--);
 	}
 	function A(e, t) {
-		ue++, le[ue] = e.current, e.current = t;
+		de++, ue[de] = e.current, e.current = t;
 	}
-	var pe = de(null), me = de(null), he = de(null), ge = de(null);
+	var pe = fe(null), me = fe(null), he = fe(null), ge = fe(null);
 	function _e(e, t) {
 		switch (A(he, t), A(me, e), A(pe, null), t.nodeType) {
 			case 9:
@@ -380,10 +381,10 @@ var l = /* @__PURE__ */ t(((e) => {
 				default: e = 0;
 			}
 		}
-		fe(pe), A(pe, e);
+		k(pe), A(pe, e);
 	}
 	function ve() {
-		fe(pe), fe(me), fe(he);
+		k(pe), k(me), k(he);
 	}
 	function ye(e) {
 		e.memoizedState !== null && A(ge, e);
@@ -391,7 +392,7 @@ var l = /* @__PURE__ */ t(((e) => {
 		t !== n && (A(me, e), A(pe, n));
 	}
 	function be(e) {
-		me.current === e && (fe(pe), fe(me)), ge.current === e && (fe(ge), Qf._currentValue = ce);
+		me.current === e && (k(pe), k(me)), ge.current === e && (k(ge), Qf._currentValue = le);
 	}
 	var xe, Se;
 	function Ce(e) {
@@ -678,15 +679,15 @@ var l = /* @__PURE__ */ t(((e) => {
 		return e &= -e, 2 < e ? 8 < e ? e & 134217727 ? 32 : 268435456 : 8 : 2;
 	}
 	function dt() {
-		var e = k.p;
+		var e = O.p;
 		return e === 0 ? (e = window.event, e === void 0 ? 32 : mp(e.type)) : e;
 	}
 	function ft(e, t) {
-		var n = k.p;
+		var n = O.p;
 		try {
-			return k.p = e, t();
+			return O.p = e, t();
 		} finally {
-			k.p = n;
+			O.p = n;
 		}
 	}
 	var pt = Math.random().toString(36).slice(2), mt = "__reactFiber$" + pt, ht = "__reactProps$" + pt, gt = "__reactContainer$" + pt, _t = "__reactEvents$" + pt, vt = "__reactListeners$" + pt, yt = "__reactHandles$" + pt, bt = "__reactResources$" + pt, xt = "__reactMarker$" + pt;
@@ -896,7 +897,7 @@ var l = /* @__PURE__ */ t(((e) => {
 		if (t == null) {
 			if (r != null) {
 				if (n != null) throw Error(o(92));
-				if (se(r)) {
+				if (ce(r)) {
 					if (1 < r.length) throw Error(o(93));
 					r = r[0];
 				}
@@ -1126,7 +1127,7 @@ var l = /* @__PURE__ */ t(((e) => {
 			for (var o in this._reactName = t, this._targetInst = r, this.type = n, this.nativeEvent = i, this.target = a, this.currentTarget = null, e) e.hasOwnProperty(o) && (t = e[o], this[o] = t ? t(i) : i[o]);
 			return this.isDefaultPrevented = (i.defaultPrevented == null ? !1 === i.returnValue : i.defaultPrevented) ? wn : Tn, this.isPropagationStopped = Tn, this;
 		}
-		return h(t.prototype, {
+		return m(t.prototype, {
 			preventDefault: function() {
 				this.defaultPrevented = !0;
 				var e = this.nativeEvent;
@@ -1149,10 +1150,10 @@ var l = /* @__PURE__ */ t(((e) => {
 		},
 		defaultPrevented: 0,
 		isTrusted: 0
-	}, On = En(Dn), kn = h({}, Dn, {
+	}, On = En(Dn), kn = m({}, Dn, {
 		view: 0,
 		detail: 0
-	}), An = En(kn), jn, Mn, Nn, Pn = h({}, kn, {
+	}), An = En(kn), jn, Mn, Nn, Pn = m({}, kn, {
 		screenX: 0,
 		screenY: 0,
 		clientX: 0,
@@ -1175,13 +1176,13 @@ var l = /* @__PURE__ */ t(((e) => {
 		movementY: function(e) {
 			return "movementY" in e ? e.movementY : Mn;
 		}
-	}), Fn = En(Pn), In = En(h({}, Pn, { dataTransfer: 0 })), Ln = En(h({}, kn, { relatedTarget: 0 })), Rn = En(h({}, Dn, {
+	}), Fn = En(Pn), In = En(m({}, Pn, { dataTransfer: 0 })), Ln = En(m({}, kn, { relatedTarget: 0 })), Rn = En(m({}, Dn, {
 		animationName: 0,
 		elapsedTime: 0,
 		pseudoElement: 0
-	})), zn = En(h({}, Dn, { clipboardData: function(e) {
+	})), zn = En(m({}, Dn, { clipboardData: function(e) {
 		return "clipboardData" in e ? e.clipboardData : window.clipboardData;
-	} })), Bn = En(h({}, Dn, { data: 0 })), Vn = {
+	} })), Bn = En(m({}, Dn, { data: 0 })), Vn = {
 		Esc: "Escape",
 		Spacebar: " ",
 		Left: "ArrowLeft",
@@ -1244,7 +1245,7 @@ var l = /* @__PURE__ */ t(((e) => {
 	function Gn() {
 		return Wn;
 	}
-	var Kn = En(h({}, kn, {
+	var Kn = En(m({}, kn, {
 		key: function(e) {
 			if (e.key) {
 				var t = Vn[e.key] || e.key;
@@ -1270,7 +1271,7 @@ var l = /* @__PURE__ */ t(((e) => {
 		which: function(e) {
 			return e.type === "keypress" ? Cn(e) : e.type === "keydown" || e.type === "keyup" ? e.keyCode : 0;
 		}
-	})), qn = En(h({}, Pn, {
+	})), qn = En(m({}, Pn, {
 		pointerId: 0,
 		width: 0,
 		height: 0,
@@ -1281,7 +1282,7 @@ var l = /* @__PURE__ */ t(((e) => {
 		twist: 0,
 		pointerType: 0,
 		isPrimary: 0
-	})), Jn = En(h({}, kn, {
+	})), Jn = En(m({}, kn, {
 		touches: 0,
 		targetTouches: 0,
 		changedTouches: 0,
@@ -1290,11 +1291,11 @@ var l = /* @__PURE__ */ t(((e) => {
 		ctrlKey: 0,
 		shiftKey: 0,
 		getModifierState: Gn
-	})), Yn = En(h({}, Dn, {
+	})), Yn = En(m({}, Dn, {
 		propertyName: 0,
 		elapsedTime: 0,
 		pseudoElement: 0
-	})), Xn = En(h({}, Pn, {
+	})), Xn = En(m({}, Pn, {
 		deltaX: function(e) {
 			return "deltaX" in e ? e.deltaX : "wheelDeltaX" in e ? -e.wheelDeltaX : 0;
 		},
@@ -1303,7 +1304,7 @@ var l = /* @__PURE__ */ t(((e) => {
 		},
 		deltaZ: 0,
 		deltaMode: 0
-	})), Zn = En(h({}, Dn, {
+	})), Zn = En(m({}, Dn, {
 		newState: 0,
 		oldState: 0
 	})), Qn = [
@@ -1609,29 +1610,29 @@ var l = /* @__PURE__ */ t(((e) => {
 		if (r = e, typeof e == "function") gi(e) && (s = 1);
 		else if (typeof e == "string") s = Uf(e, n, pe.current) ? 26 : e === "html" || e === "head" || e === "body" ? 27 : 5;
 		else a: switch (e) {
-			case te: return e = hi(31, n, t, i), e.elementType = te, e.lanes = a, e;
+			case E: return e = hi(31, n, t, i), e.elementType = E, e.lanes = a, e;
 			case y: return bi(n.children, i, a, t);
 			case b:
 				s = 8, i |= 24;
 				break;
 			case x: return e = hi(12, n, t, i | 2), e.elementType = x, e.lanes = a, e;
-			case T: return e = hi(13, n, t, i), e.elementType = T, e.lanes = a, e;
-			case ee: return e = hi(19, n, t, i), e.elementType = ee, e.lanes = a, e;
+			case C: return e = hi(13, n, t, i), e.elementType = C, e.lanes = a, e;
+			case w: return e = hi(19, n, t, i), e.elementType = w, e.lanes = a, e;
 			default:
 				if (typeof e == "object" && e) switch (e.$$typeof) {
-					case C:
+					case S:
 						s = 10;
 						break a;
-					case S:
+					case ee:
 						s = 9;
 						break a;
-					case w:
+					case te:
 						s = 11;
 						break a;
-					case E:
+					case ne:
 						s = 14;
 						break a;
-					case D:
+					case T:
 						s = 16, r = null;
 						break a;
 				}
@@ -1775,12 +1776,12 @@ var l = /* @__PURE__ */ t(((e) => {
 	function Xi(e) {
 		Vi === null ? Vi = [e] : Vi.push(e);
 	}
-	var Zi = de(null), Qi = null, $i = null;
+	var Zi = fe(null), Qi = null, $i = null;
 	function ea(e, t, n) {
 		A(Zi, t._currentValue), t._currentValue = n;
 	}
 	function ta(e) {
-		e._currentValue = Zi.current, fe(Zi);
+		e._currentValue = Zi.current, k(Zi);
 	}
 	function na(e, t, n) {
 		for (; e !== null;) {
@@ -1890,7 +1891,7 @@ var l = /* @__PURE__ */ t(((e) => {
 			});
 		};
 	}, da = t.unstable_scheduleCallback, fa = t.unstable_NormalPriority, P = {
-		$$typeof: C,
+		$$typeof: S,
 		Consumer: null,
 		Provider: null,
 		_currentValue: null,
@@ -1947,11 +1948,11 @@ var l = /* @__PURE__ */ t(((e) => {
 			for (r.status = "rejected", r.reason = e, e = 0; e < n.length; e++) (0, n[e])(void 0);
 		}), r;
 	}
-	var Sa = O.S;
-	O.S = function(e, t) {
+	var Sa = D.S;
+	D.S = function(e, t) {
 		eu = Ne(), typeof t == "object" && t && typeof t.then == "function" && ya(e, t), Sa !== null && Sa(e, t);
 	};
-	var Ca = de(null);
+	var Ca = fe(null);
 	function wa() {
 		var e = Ca.current;
 		return e === null ? K.pooledCache : e;
@@ -2055,7 +2056,7 @@ var l = /* @__PURE__ */ t(((e) => {
 		}
 		function l(e, t, n, r) {
 			var a = n.type;
-			return a === y ? d(e, t, n.props.children, r, n.key) : t !== null && (t.elementType === a || typeof a == "object" && a && a.$$typeof === D && Na(a) === t.type) ? (t = i(t, n.props), Ba(t, n), t.return = e, t) : (t = yi(n.type, n.key, n.props, null, e.mode, r), Ba(t, n), t.return = e, t);
+			return a === y ? d(e, t, n.props.children, r, n.key) : t !== null && (t.elementType === a || typeof a == "object" && a && a.$$typeof === T && Na(a) === t.type) ? (t = i(t, n.props), Ba(t, n), t.return = e, t) : (t = yi(n.type, n.key, n.props, null, e.mode, r), Ba(t, n), t.return = e, t);
 		}
 		function u(e, t, n, r) {
 			return t === null || t.tag !== 4 || t.stateNode.containerInfo !== n.containerInfo || t.stateNode.implementation !== n.implementation ? (t = Ci(n, e.mode, r), t.return = e, t) : (t = i(t, n.children || []), t.return = e, t);
@@ -2069,11 +2070,11 @@ var l = /* @__PURE__ */ t(((e) => {
 				switch (t.$$typeof) {
 					case _: return n = yi(t.type, t.key, t.props, null, e.mode, n), Ba(n, t), n.return = e, n;
 					case v: return t = Ci(t, e.mode, n), t.return = e, t;
-					case D: return t = Na(t), f(e, t, n);
+					case T: return t = Na(t), f(e, t, n);
 				}
-				if (se(t) || ie(t)) return t = bi(t, e.mode, n, null), t.return = e, t;
+				if (ce(t) || ae(t)) return t = bi(t, e.mode, n, null), t.return = e, t;
 				if (typeof t.then == "function") return f(e, za(t), n);
-				if (t.$$typeof === C) return f(e, ca(e, t), n);
+				if (t.$$typeof === S) return f(e, ca(e, t), n);
 				Va(e, t);
 			}
 			return null;
@@ -2085,11 +2086,11 @@ var l = /* @__PURE__ */ t(((e) => {
 				switch (n.$$typeof) {
 					case _: return n.key === i ? l(e, t, n, r) : null;
 					case v: return n.key === i ? u(e, t, n, r) : null;
-					case D: return n = Na(n), p(e, t, n, r);
+					case T: return n = Na(n), p(e, t, n, r);
 				}
-				if (se(n) || ie(n)) return i === null ? d(e, t, n, r, null) : null;
+				if (ce(n) || ae(n)) return i === null ? d(e, t, n, r, null) : null;
 				if (typeof n.then == "function") return p(e, t, za(n), r);
-				if (n.$$typeof === C) return p(e, t, ca(e, n), r);
+				if (n.$$typeof === S) return p(e, t, ca(e, n), r);
 				Va(e, n);
 			}
 			return null;
@@ -2100,11 +2101,11 @@ var l = /* @__PURE__ */ t(((e) => {
 				switch (r.$$typeof) {
 					case _: return e = e.get(r.key === null ? n : r.key) || null, l(t, e, r, i);
 					case v: return e = e.get(r.key === null ? n : r.key) || null, u(t, e, r, i);
-					case D: return r = Na(r), m(e, t, n, r, i);
+					case T: return r = Na(r), m(e, t, n, r, i);
 				}
-				if (se(r) || ie(r)) return e = e.get(n) || null, d(t, e, r, i, null);
+				if (ce(r) || ae(r)) return e = e.get(n) || null, d(t, e, r, i, null);
 				if (typeof r.then == "function") return m(e, t, n, za(r), i);
-				if (r.$$typeof === C) return m(e, t, n, ca(t, r), i);
+				if (r.$$typeof === S) return m(e, t, n, ca(t, r), i);
 				Va(t, r);
 			}
 			return null;
@@ -2162,7 +2163,7 @@ var l = /* @__PURE__ */ t(((e) => {
 											n(e, r.sibling), c = i(r, a.props.children), c.return = e, e = c;
 											break a;
 										}
-									} else if (r.elementType === l || typeof l == "object" && l && l.$$typeof === D && Na(l) === r.type) {
+									} else if (r.elementType === l || typeof l == "object" && l && l.$$typeof === T && Na(l) === r.type) {
 										n(e, r.sibling), c = i(r, a.props), Ba(c, a), c.return = e, e = c;
 										break a;
 									}
@@ -2190,15 +2191,15 @@ var l = /* @__PURE__ */ t(((e) => {
 							c = Ci(a, e.mode, c), c.return = e, e = c;
 						}
 						return s(e);
-					case D: return a = Na(a), b(e, r, a, c);
+					case T: return a = Na(a), b(e, r, a, c);
 				}
-				if (se(a)) return h(e, r, a, c);
-				if (ie(a)) {
-					if (l = ie(a), typeof l != "function") throw Error(o(150));
+				if (ce(a)) return h(e, r, a, c);
+				if (ae(a)) {
+					if (l = ae(a), typeof l != "function") throw Error(o(150));
 					return a = l.call(a), g(e, r, a, c);
 				}
 				if (typeof a.then == "function") return b(e, r, za(a), c);
-				if (a.$$typeof === C) return b(e, r, ca(e, a), c);
+				if (a.$$typeof === S) return b(e, r, ca(e, a), c);
 				Va(e, a);
 			}
 			return typeof a == "string" && a !== "" || typeof a == "number" || typeof a == "bigint" ? (a = "" + a, r !== null && r.tag === 6 ? (n(e, r.sibling), c = i(r, a), c.return = e, e = c) : (n(e, r), c = xi(a, e.mode, c), c.return = e, e = c), s(e)) : n(e, r);
@@ -2321,21 +2322,21 @@ var l = /* @__PURE__ */ t(((e) => {
 						next: null
 					});
 					a: {
-						var m = e, g = s;
+						var h = e, g = s;
 						f = t;
 						var _ = n;
 						switch (g.tag) {
 							case 1:
-								if (m = g.payload, typeof m == "function") {
-									d = m.call(_, d, f);
+								if (h = g.payload, typeof h == "function") {
+									d = h.call(_, d, f);
 									break a;
 								}
-								d = m;
+								d = h;
 								break a;
-							case 3: m.flags = m.flags & -65537 | 128;
+							case 3: h.flags = h.flags & -65537 | 128;
 							case 0:
-								if (m = g.payload, f = typeof m == "function" ? m.call(_, d, f) : m, f == null) break a;
-								d = h({}, d, f);
+								if (h = g.payload, f = typeof h == "function" ? h.call(_, d, f) : h, f == null) break a;
+								d = m({}, d, f);
 								break a;
 							case 2: Ga = !0;
 						}
@@ -2364,7 +2365,7 @@ var l = /* @__PURE__ */ t(((e) => {
 		var n = e.callbacks;
 		if (n !== null) for (e.callbacks = null, e = 0; e < n.length; e++) to(n[e], t);
 	}
-	var ro = de(null), io = de(0);
+	var ro = fe(null), io = fe(0);
 	function ao(e, t) {
 		e = Wl, A(io, e), A(ro, t), Wl = e | t.baseLanes;
 	}
@@ -2372,9 +2373,9 @@ var l = /* @__PURE__ */ t(((e) => {
 		A(io, Wl), A(ro, ro.current);
 	}
 	function so() {
-		Wl = io.current, fe(ro), fe(io);
+		Wl = io.current, k(ro), k(io);
 	}
-	var co = de(null), lo = null;
+	var co = fe(null), lo = null;
 	function uo(e) {
 		var t = e.alternate;
 		A(F, F.current & 1), A(co, e), lo === null && (t === null || ro.current !== null || t.memoizedState !== null) && (lo = e);
@@ -2389,9 +2390,9 @@ var l = /* @__PURE__ */ t(((e) => {
 		A(F, F.current), A(co, co.current);
 	}
 	function ho(e) {
-		fe(co), lo === e && (lo = null), fe(F);
+		k(co), lo === e && (lo = null), k(F);
 	}
-	var F = de(0);
+	var F = fe(0);
 	function go(e) {
 		for (var t = e; t !== null;) {
 			if (t.tag === 13) {
@@ -2422,10 +2423,10 @@ var l = /* @__PURE__ */ t(((e) => {
 		return !0;
 	}
 	function Eo(e, t, n, r, i, a) {
-		return _o = a, I = t, t.memoizedState = null, t.updateQueue = null, t.lanes = 0, O.H = e === null || e.memoizedState === null ? Hs : Us, bo = !1, a = n(r, i), bo = !1, yo && (a = Oo(t, n, r, i)), Do(e), a;
+		return _o = a, I = t, t.memoizedState = null, t.updateQueue = null, t.lanes = 0, D.H = e === null || e.memoizedState === null ? Hs : Us, bo = !1, a = n(r, i), bo = !1, yo && (a = Oo(t, n, r, i)), Do(e), a;
 	}
 	function Do(e) {
-		O.H = Vs;
+		D.H = Vs;
 		var t = L !== null && L.next !== null;
 		if (_o = 0, R = L = I = null, vo = !1, So = 0, Co = null, t) throw Error(o(300));
 		e === null || V || (e = e.dependencies, e !== null && aa(e) && (V = !0));
@@ -2439,12 +2440,12 @@ var l = /* @__PURE__ */ t(((e) => {
 				var a = e.updateQueue;
 				a.lastEffect = null, a.events = null, a.stores = null, a.memoCache != null && (a.memoCache.index = 0);
 			}
-			O.H = Ws, a = t(n, r);
+			D.H = Ws, a = t(n, r);
 		} while (yo);
 		return a;
 	}
 	function ko() {
-		var e = O.H, t = e.useState()[0];
+		var e = D.H, t = e.useState()[0];
 		return t = typeof t.then == "function" ? Fo(t) : t, e = e.useState()[0], (L === null ? null : L.memoizedState) !== e && (I.flags |= 1024), t;
 	}
 	function Ao() {
@@ -2503,12 +2504,12 @@ var l = /* @__PURE__ */ t(((e) => {
 	}
 	function Fo(e) {
 		var t = So;
-		return So += 1, Co === null && (Co = []), e = Ma(Co, e, t), t = I, (R === null ? t.memoizedState : R.next) === null && (t = t.alternate, O.H = t === null || t.memoizedState === null ? Hs : Us), e;
+		return So += 1, Co === null && (Co = []), e = Ma(Co, e, t), t = I, (R === null ? t.memoizedState : R.next) === null && (t = t.alternate, D.H = t === null || t.memoizedState === null ? Hs : Us), e;
 	}
 	function Io(e) {
 		if (typeof e == "object" && e) {
 			if (typeof e.then == "function") return Fo(e);
-			if (e.$$typeof === C) return sa(e);
+			if (e.$$typeof === S) return sa(e);
 		}
 		throw Error(o(438, String(e)));
 	}
@@ -2526,7 +2527,7 @@ var l = /* @__PURE__ */ t(((e) => {
 		if (t ??= {
 			data: [],
 			index: 0
-		}, n === null && (n = Po(), I.updateQueue = n), n.memoCache = t, n = t.data[t.index], n === void 0) for (n = t.data[t.index] = Array(e), r = 0; r < e; r++) n[r] = ne;
+		}, n === null && (n = Po(), I.updateQueue = n), n.memoCache = t, n = t.data[t.index], n === void 0) for (n = t.data[t.index] = Array(e), r = 0; r < e; r++) n[r] = re;
 		return t.index++, n;
 	}
 	function Ro(e, t) {
@@ -2689,21 +2690,21 @@ var l = /* @__PURE__ */ t(((e) => {
 					a.listeners.push(e);
 				}
 			};
-			O.T === null ? a.isTransition = !1 : n(!0), r(a), n = t.pending, n === null ? (a.next = t.pending = a, Zo(t, a)) : (a.next = n.next, t.pending = n.next = a);
+			D.T === null ? a.isTransition = !1 : n(!0), r(a), n = t.pending, n === null ? (a.next = t.pending = a, Zo(t, a)) : (a.next = n.next, t.pending = n.next = a);
 		}
 	}
 	function Zo(e, t) {
 		var n = t.action, r = t.payload, i = e.state;
 		if (t.isTransition) {
-			var a = O.T, o = {};
-			O.T = o;
+			var a = D.T, o = {};
+			D.T = o;
 			try {
-				var s = n(i, r), c = O.S;
+				var s = n(i, r), c = D.S;
 				c !== null && c(o, s), Qo(e, t, s);
 			} catch (n) {
 				es(e, t, n);
 			} finally {
-				a !== null && o.types !== null && (a.types = o.types), O.T = a;
+				a !== null && o.types !== null && (a.types = o.types), D.T = a;
 			}
 		} else try {
 			a = n(i, r), Qo(e, t, a);
@@ -2911,12 +2912,12 @@ var l = /* @__PURE__ */ t(((e) => {
 		return kr(n, t) ? n : ro.current === null ? !(_o & 42) || _o & 1073741824 && !(J & 261930) ? (V = !0, e.memoizedState = n) : (e = mu(), I.lanes |= e, Gl |= e, t) : (e = Cs(e, n, r), kr(e, t) || (V = !0), e);
 	}
 	function Ts(e, t, n, r, i) {
-		var a = k.p;
-		k.p = a !== 0 && 8 > a ? a : 8;
-		var o = O.T, s = {};
-		O.T = s, Ls(e, !1, t, n);
+		var a = O.p;
+		O.p = a !== 0 && 8 > a ? a : 8;
+		var o = D.T, s = {};
+		D.T = s, Ls(e, !1, t, n);
 		try {
-			var c = i(), l = O.S;
+			var c = i(), l = D.S;
 			l !== null && l(s, c), typeof c == "object" && c && typeof c.then == "function" ? Is(e, t, xa(c, r), pu(e)) : Is(e, t, r, pu(e));
 		} catch (n) {
 			Is(e, t, {
@@ -2925,14 +2926,14 @@ var l = /* @__PURE__ */ t(((e) => {
 				reason: n
 			}, pu());
 		} finally {
-			k.p = a, o !== null && s.types !== null && (o.types = s.types), O.T = o;
+			O.p = a, o !== null && s.types !== null && (o.types = s.types), D.T = o;
 		}
 	}
 	function Es() {}
 	function Ds(e, t, n, r) {
 		if (e.tag !== 5) throw Error(o(476));
 		var i = Os(e).queue;
-		Ts(e, i, t, ce, n === null ? Es : function() {
+		Ts(e, i, t, le, n === null ? Es : function() {
 			return ks(e), n(r);
 		});
 	}
@@ -2940,15 +2941,15 @@ var l = /* @__PURE__ */ t(((e) => {
 		var t = e.memoizedState;
 		if (t !== null) return t;
 		t = {
-			memoizedState: ce,
-			baseState: ce,
+			memoizedState: le,
+			baseState: le,
 			baseQueue: null,
 			queue: {
 				pending: null,
 				lanes: 0,
 				dispatch: null,
 				lastRenderedReducer: Ro,
-				lastRenderedState: ce
+				lastRenderedState: le
 			},
 			next: null
 		};
@@ -3276,7 +3277,7 @@ var l = /* @__PURE__ */ t(((e) => {
 	};
 	Ws.useEffectEvent = hs;
 	function Gs(e, t, n, r) {
-		t = e.memoizedState, n = n(r, t), n = n == null ? t : h({}, t, n), e.memoizedState = n, e.lanes === 0 && (e.updateQueue.baseState = n);
+		t = e.memoizedState, n = n(r, t), n = n == null ? t : m({}, t, n), e.memoizedState = n, e.lanes === 0 && (e.updateQueue.baseState = n);
 	}
 	var Ks = {
 		enqueueSetState: function(e, t, n) {
@@ -3304,7 +3305,7 @@ var l = /* @__PURE__ */ t(((e) => {
 	function Ys(e, t) {
 		var n = t;
 		if ("ref" in t) for (var r in n = {}, t) r !== "ref" && (n[r] = t[r]);
-		if (e = e.defaultProps) for (var i in n === t && (n = h({}, n)), e) n[i] === void 0 && (n[i] = e[i]);
+		if (e = e.defaultProps) for (var i in n === t && (n = m({}, n)), e) n[i] === void 0 && (n[i] = e[i]);
 		return n;
 	}
 	function Xs(e) {
@@ -3758,16 +3759,16 @@ var l = /* @__PURE__ */ t(((e) => {
 					else {
 						if (e != null) {
 							var i = e.$$typeof;
-							if (i === w) {
+							if (i === te) {
 								t.tag = 11, t = sc(null, t, e, r, n);
 								break a;
 							}
-							if (i === E) {
+							if (i === ne) {
 								t.tag = 14, t = cc(null, t, e, r, n);
 								break a;
 							}
 						}
-						throw t = oe(e) || e, Error(o(306, t, ""));
+						throw t = se(e) || e, Error(o(306, t, ""));
 					}
 				}
 				return t;
@@ -4013,7 +4014,7 @@ var l = /* @__PURE__ */ t(((e) => {
 			case 4: return ve(), e === null && Sd(t.stateNode.containerInfo), H(t), null;
 			case 10: return ta(t.type), H(t), null;
 			case 19:
-				if (fe(F), r = t.memoizedState, r === null) return H(t), null;
+				if (k(F), r = t.memoizedState, r === null) return H(t), null;
 				if (i = !!(t.flags & 128), a = r.rendering, a === null) {
 					if (i) zc(r, !1);
 					else {
@@ -4036,7 +4037,7 @@ var l = /* @__PURE__ */ t(((e) => {
 				}
 				return r.tail === null ? (H(t), null) : (e = r.tail, r.rendering = e, r.tail = e.sibling, r.renderingStartTime = Ne(), e.sibling = null, n = F.current, A(F, i ? n & 1 | 2 : n & 1), N && Fi(t, r.treeForkCount), e);
 			case 22:
-			case 23: return ho(t), so(), r = t.memoizedState !== null, e === null ? r && (t.flags |= 8192) : e.memoizedState !== null !== r && (t.flags |= 8192), r ? n & 536870912 && !(t.flags & 128) && (H(t), t.subtreeFlags & 6 && (t.flags |= 8192)) : H(t), n = t.updateQueue, n !== null && Rc(t, n.retryQueue), n = null, e !== null && e.memoizedState !== null && e.memoizedState.cachePool !== null && (n = e.memoizedState.cachePool.pool), r = null, t.memoizedState !== null && t.memoizedState.cachePool !== null && (r = t.memoizedState.cachePool.pool), r !== n && (t.flags |= 2048), e !== null && fe(Ca), null;
+			case 23: return ho(t), so(), r = t.memoizedState !== null, e === null ? r && (t.flags |= 8192) : e.memoizedState !== null !== r && (t.flags |= 8192), r ? n & 536870912 && !(t.flags & 128) && (H(t), t.subtreeFlags & 6 && (t.flags |= 8192)) : H(t), n = t.updateQueue, n !== null && Rc(t, n.retryQueue), n = null, e !== null && e.memoizedState !== null && e.memoizedState.cachePool !== null && (n = e.memoizedState.cachePool.pool), r = null, t.memoizedState !== null && t.memoizedState.cachePool !== null && (r = t.memoizedState.cachePool.pool), r !== n && (t.flags |= 2048), e !== null && k(Ca), null;
 			case 24: return n = null, e !== null && (n = e.memoizedState.cache), t.memoizedState.cache !== n && (t.flags |= 2048), ta(P), H(t), null;
 			case 25: return null;
 			case 30: return null;
@@ -4062,11 +4063,11 @@ var l = /* @__PURE__ */ t(((e) => {
 					Ji();
 				}
 				return e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
-			case 19: return fe(F), null;
+			case 19: return k(F), null;
 			case 4: return ve(), null;
 			case 10: return ta(t.type), null;
 			case 22:
-			case 23: return ho(t), so(), e !== null && fe(Ca), e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
+			case 23: return ho(t), so(), e !== null && k(Ca), e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
 			case 24: return ta(P), null;
 			case 25: return null;
 			default: return null;
@@ -4092,14 +4093,14 @@ var l = /* @__PURE__ */ t(((e) => {
 				ho(t);
 				break;
 			case 19:
-				fe(F);
+				k(F);
 				break;
 			case 10:
 				ta(t.type);
 				break;
 			case 22:
 			case 23:
-				ho(t), so(), e !== null && fe(Ca);
+				ho(t), so(), e !== null && k(Ca);
 				break;
 			case 24: ta(P);
 		}
@@ -5051,7 +5052,7 @@ var l = /* @__PURE__ */ t(((e) => {
 		}
 	}, zl = typeof WeakMap == "function" ? WeakMap : Map, G = 0, K = null, q = null, J = 0, Y = 0, Bl = null, Vl = !1, Hl = !1, Ul = !1, Wl = 0, X = 0, Gl = 0, Kl = 0, ql = 0, Jl = 0, Yl = 0, Xl = null, Zl = null, Ql = !1, $l = 0, eu = 0, tu = Infinity, nu = null, ru = null, iu = 0, au = null, ou = null, su = 0, cu = 0, lu = null, uu = null, du = 0, fu = null;
 	function pu() {
-		return G & 2 && J !== 0 ? J & -J : O.T === null ? dt() : dd();
+		return G & 2 && J !== 0 ? J & -J : D.T === null ? dt() : dd();
 	}
 	function mu() {
 		if (Jl === 0) {
@@ -5201,19 +5202,19 @@ var l = /* @__PURE__ */ t(((e) => {
 		return Wl = t, si(), n;
 	}
 	function Cu(e, t) {
-		I = null, O.H = Vs, t === Da || t === ka ? (t = Fa(), Y = 3) : t === Oa ? (t = Fa(), Y = 4) : Y = t === ac ? 8 : typeof t == "object" && t && typeof t.then == "function" ? 6 : 1, Bl = t, q === null && (X = 1, $s(e, Ti(t, e.current)));
+		I = null, D.H = Vs, t === Da || t === ka ? (t = Fa(), Y = 3) : t === Oa ? (t = Fa(), Y = 4) : Y = t === ac ? 8 : typeof t == "object" && t && typeof t.then == "function" ? 6 : 1, Bl = t, q === null && (X = 1, $s(e, Ti(t, e.current)));
 	}
 	function wu() {
 		var e = co.current;
 		return e === null ? !0 : (J & 4194048) === J ? lo === null : (J & 62914560) === J || J & 536870912 ? e === lo : !1;
 	}
 	function Tu() {
-		var e = O.H;
-		return O.H = Vs, e === null ? Vs : e;
+		var e = D.H;
+		return D.H = Vs, e === null ? Vs : e;
 	}
 	function Eu() {
-		var e = O.A;
-		return O.A = Rl, e;
+		var e = D.A;
+		return D.A = Rl, e;
 	}
 	function Du() {
 		X = 4, Vl || (J & 4194048) !== J && co.current !== null || (Hl = !0), !(Gl & 134217727) && !(Kl & 134217727) || K === null || yu(K, J, Jl, !1);
@@ -5252,7 +5253,7 @@ var l = /* @__PURE__ */ t(((e) => {
 				Cu(e, t);
 			}
 		while (1);
-		return t && e.shellSuspendCounter++, $i = Qi = null, G = r, O.H = i, O.A = a, q === null && (K = null, J = 0, si()), o;
+		return t && e.shellSuspendCounter++, $i = Qi = null, G = r, D.H = i, D.A = a, q === null && (K = null, J = 0, si()), o;
 	}
 	function ku() {
 		for (; q !== null;) Mu(q);
@@ -5325,7 +5326,7 @@ var l = /* @__PURE__ */ t(((e) => {
 				Cu(e, t);
 			}
 		while (1);
-		return $i = Qi = null, O.H = r, O.A = i, G = n, q === null ? (K = null, J = 0, si(), X) : 0;
+		return $i = Qi = null, D.H = r, D.A = i, G = n, q === null ? (K = null, J = 0, si(), X) : 0;
 	}
 	function ju() {
 		for (; q !== null && !je();) Mu(q);
@@ -5411,11 +5412,11 @@ var l = /* @__PURE__ */ t(((e) => {
 			if (a = t.lanes | t.childLanes, a |= oi, at(e, n, a, s, c, l), e === K && (q = K = null, J = 0), ou = t, au = e, su = n, cu = a, lu = i, uu = r, t.subtreeFlags & 10256 || t.flags & 10256 ? (e.callbackNode = null, e.callbackPriority = 0, Xu(Le, function() {
 				return Uu(), null;
 			})) : (e.callbackNode = null, e.callbackPriority = 0), r = !!(t.flags & 13878), t.subtreeFlags & 13878 || r) {
-				r = O.T, O.T = null, i = k.p, k.p = 2, s = G, G |= 4;
+				r = D.T, D.T = null, i = O.p, O.p = 2, s = G, G |= 4;
 				try {
 					ol(e, t, n);
 				} finally {
-					G = s, k.p = i, O.T = r;
+					G = s, O.p = i, D.T = r;
 				}
 			}
 			iu = 1, Ru(), zu(), Bu();
@@ -5426,9 +5427,9 @@ var l = /* @__PURE__ */ t(((e) => {
 			iu = 0;
 			var e = au, t = ou, n = !!(t.flags & 13878);
 			if (t.subtreeFlags & 13878 || n) {
-				n = O.T, O.T = null;
-				var r = k.p;
-				k.p = 2;
+				n = D.T, D.T = null;
+				var r = O.p;
+				O.p = 2;
 				var i = G;
 				G |= 4;
 				try {
@@ -5463,7 +5464,7 @@ var l = /* @__PURE__ */ t(((e) => {
 					}
 					sp = !!Rd, zd = Rd = null;
 				} finally {
-					G = i, k.p = r, O.T = n;
+					G = i, O.p = r, D.T = n;
 				}
 			}
 			e.current = t, iu = 2;
@@ -5474,15 +5475,15 @@ var l = /* @__PURE__ */ t(((e) => {
 			iu = 0;
 			var e = au, t = ou, n = !!(t.flags & 8772);
 			if (t.subtreeFlags & 8772 || n) {
-				n = O.T, O.T = null;
-				var r = k.p;
-				k.p = 2;
+				n = D.T, D.T = null;
+				var r = O.p;
+				O.p = 2;
 				var i = G;
 				G |= 4;
 				try {
 					sl(e, t.alternate, t);
 				} finally {
-					G = i, k.p = r, O.T = n;
+					G = i, O.p = r, D.T = n;
 				}
 			}
 			iu = 3;
@@ -5498,14 +5499,14 @@ var l = /* @__PURE__ */ t(((e) => {
 				Ue.onCommitFiberRoot(He, t, void 0, (t.current.flags & 128) == 128);
 			} catch {}
 			if (r !== null) {
-				t = O.T, i = k.p, k.p = 2, O.T = null;
+				t = D.T, i = O.p, O.p = 2, D.T = null;
 				try {
 					for (var a = e.onRecoverableError, o = 0; o < r.length; o++) {
 						var s = r[o];
 						a(s.value, { componentStack: s.stack });
 					}
 				} finally {
-					O.T = t, k.p = i;
+					D.T = t, O.p = i;
 				}
 			}
 			su & 3 && Hu(), rd(e), i = e.pendingLanes, n & 261930 && i & 42 ? e === fu ? du++ : (du = 0, fu = e) : du = 0, id(0, !1);
@@ -5521,9 +5522,9 @@ var l = /* @__PURE__ */ t(((e) => {
 		if (iu !== 5) return !1;
 		var e = au, t = cu;
 		cu = 0;
-		var n = ut(su), r = O.T, i = k.p;
+		var n = ut(su), r = D.T, i = O.p;
 		try {
-			k.p = 32 > n ? 32 : n, O.T = null, n = lu, lu = null;
+			O.p = 32 > n ? 32 : n, D.T = null, n = lu, lu = null;
 			var a = au, s = su;
 			if (iu = 0, ou = au = null, su = 0, G & 6) throw Error(o(331));
 			var c = G;
@@ -5532,7 +5533,7 @@ var l = /* @__PURE__ */ t(((e) => {
 			} catch {}
 			return !0;
 		} finally {
-			k.p = i, O.T = r, Vu(e, t);
+			O.p = i, D.T = r, Vu(e, t);
 		}
 	}
 	function Wu(e, t, n) {
@@ -6776,8 +6777,8 @@ var l = /* @__PURE__ */ t(((e) => {
 	function gf(e) {
 		return typeof e.getRootNode == "function" ? e.getRootNode() : e.nodeType === 9 ? e : e.ownerDocument;
 	}
-	var _f = k.d;
-	k.d = {
+	var _f = O.d;
+	O.d = {
 		f: vf,
 		r: yf,
 		D: Sf,
@@ -6827,7 +6828,7 @@ var l = /* @__PURE__ */ t(((e) => {
 					break;
 				case "script": a = Pf(e);
 			}
-			mf.has(a) || (e = h({
+			mf.has(a) || (e = m({
 				rel: "preload",
 				href: t === "image" && n && n.imageSrcSet ? void 0 : e,
 				as: t
@@ -6847,7 +6848,7 @@ var l = /* @__PURE__ */ t(((e) => {
 				case "worker":
 				case "script": a = Pf(e);
 			}
-			if (!mf.has(a) && (e = h({
+			if (!mf.has(a) && (e = m({
 				rel: "modulepreload",
 				href: e
 			}, t), mf.set(a, e), n.querySelector(i) === null)) {
@@ -6877,7 +6878,7 @@ var l = /* @__PURE__ */ t(((e) => {
 				};
 				if (o = r.querySelector(jf(a))) s.loading = 5;
 				else {
-					e = h({
+					e = m({
 						rel: "stylesheet",
 						href: e,
 						"data-precedence": t
@@ -6905,7 +6906,7 @@ var l = /* @__PURE__ */ t(((e) => {
 		var n = bf;
 		if (n && e) {
 			var r = Et(n).hoistableScripts, i = Pf(e), a = r.get(i);
-			a || (a = n.querySelector(Ff(i)), a || (e = h({
+			a || (a = n.querySelector(Ff(i)), a || (e = m({
 				src: e,
 				async: !0
 			}, t), (t = mf.get(i)) && zf(e, t), a = n.createElement("script"), j(a), Pd(a, "link", e), n.head.appendChild(a)), a = {
@@ -6921,7 +6922,7 @@ var l = /* @__PURE__ */ t(((e) => {
 		var n = bf;
 		if (n && e) {
 			var r = Et(n).hoistableScripts, i = Pf(e), a = r.get(i);
-			a || (a = n.querySelector(Ff(i)), a || (e = h({
+			a || (a = n.querySelector(Ff(i)), a || (e = m({
 				src: e,
 				async: !0,
 				type: "module"
@@ -6997,7 +6998,7 @@ var l = /* @__PURE__ */ t(((e) => {
 		return "link[rel=\"stylesheet\"][" + e + "]";
 	}
 	function Mf(e) {
-		return h({}, e, {
+		return m({}, e, {
 			"data-precedence": e.precedence,
 			precedence: null
 		});
@@ -7020,7 +7021,7 @@ var l = /* @__PURE__ */ t(((e) => {
 			case "style":
 				var r = e.querySelector("style[data-href~=\"" + Gt(n.href) + "\"]");
 				if (r) return t.instance = r, j(r), r;
-				var i = h({}, n, {
+				var i = m({}, n, {
 					"data-href": n.href,
 					"data-precedence": n.precedence,
 					href: null,
@@ -7036,7 +7037,7 @@ var l = /* @__PURE__ */ t(((e) => {
 				return s._p = new Promise(function(e, t) {
 					s.onload = e, s.onerror = t;
 				}), Pd(a, "link", r), t.state.loading |= 4, Lf(a, n.precedence, e), t.instance = a;
-			case "script": return a = Pf(n.src), (i = e.querySelector(Ff(a))) ? (t.instance = i, j(i), i) : (r = n, (i = mf.get(a)) && (r = h({}, n), zf(r, i)), e = e.ownerDocument || e, i = e.createElement("script"), j(i), Pd(i, "link", r), e.head.appendChild(i), t.instance = i);
+			case "script": return a = Pf(n.src), (i = e.querySelector(Ff(a))) ? (t.instance = i, j(i), i) : (r = n, (i = mf.get(a)) && (r = m({}, n), zf(r, i)), e = e.ownerDocument || e, i = e.createElement("script"), j(i), Pd(i, "link", r), e.head.appendChild(i), t.instance = i);
 			case "void": return null;
 			default: throw Error(o(443, t.type));
 		}
@@ -7166,11 +7167,11 @@ var l = /* @__PURE__ */ t(((e) => {
 		}
 	}
 	var Qf = {
-		$$typeof: C,
+		$$typeof: S,
 		Provider: null,
 		Consumer: null,
-		_currentValue: ce,
-		_currentValue2: ce,
+		_currentValue: le,
+		_currentValue2: le,
 		_threadCount: 0
 	};
 	function $f(e, t, n, r, i, a, o, s, c) {
@@ -7214,23 +7215,23 @@ var l = /* @__PURE__ */ t(((e) => {
 	}
 	var sp = !0;
 	function cp(e, t, n, r) {
-		var i = O.T;
-		O.T = null;
-		var a = k.p;
+		var i = D.T;
+		D.T = null;
+		var a = O.p;
 		try {
-			k.p = 2, up(e, t, n, r);
+			O.p = 2, up(e, t, n, r);
 		} finally {
-			k.p = a, O.T = i;
+			O.p = a, D.T = i;
 		}
 	}
 	function lp(e, t, n, r) {
-		var i = O.T;
-		O.T = null;
-		var a = k.p;
+		var i = D.T;
+		D.T = null;
+		var a = O.p;
 		try {
-			k.p = 8, up(e, t, n, r);
+			O.p = 8, up(e, t, n, r);
 		} finally {
-			k.p = a, O.T = i;
+			O.p = a, D.T = i;
 		}
 	}
 	function up(e, t, n, r) {
@@ -7279,7 +7280,7 @@ var l = /* @__PURE__ */ t(((e) => {
 					if (e = l(t), e !== null) return e;
 					e = null;
 				} else if (n === 31) {
-					if (e = d(t), e !== null) return e;
+					if (e = u(t), e !== null) return e;
 					e = null;
 				} else if (n === 3) {
 					if (t.stateNode.current.memoizedState.isDehydrated) return t.tag === 3 ? t.stateNode.containerInfo : null;
@@ -7430,7 +7431,7 @@ var l = /* @__PURE__ */ t(((e) => {
 						return;
 					}
 				} else if (t === 31) {
-					if (t = d(n), t !== null) {
+					if (t = u(n), t !== null) {
 						e.blockedOn = t, ft(e.priority, function() {
 							op(n);
 						});
@@ -7574,16 +7575,16 @@ var l = /* @__PURE__ */ t(((e) => {
 	};
 	var Lp = r.version;
 	if (Lp !== "19.2.8") throw Error(o(527, Lp, "19.2.8"));
-	k.findDOMNode = function(e) {
+	O.findDOMNode = function(e) {
 		var t = e._reactInternals;
 		if (t === void 0) throw typeof e.render == "function" ? Error(o(188)) : (e = Object.keys(e).join(","), Error(o(268, e)));
-		return e = p(t), e = e === null ? null : m(e), e = e === null ? null : e.stateNode, e;
+		return e = f(t), e = e === null ? null : p(e), e = e === null ? null : e.stateNode, e;
 	};
 	var Rp = {
 		bundleType: 0,
 		version: "19.2.8",
 		rendererPackageName: "react-dom",
-		currentDispatcherRef: O,
+		currentDispatcherRef: D,
 		reconcilerVersion: "19.2.8"
 	};
 	if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u") {
@@ -7597,7 +7598,7 @@ var l = /* @__PURE__ */ t(((e) => {
 		var n = !1, r = "", i = Xs, a = Zs, c = Qs;
 		return t != null && (!0 === t.unstable_strictMode && (n = !0), t.identifierPrefix !== void 0 && (r = t.identifierPrefix), t.onUncaughtError !== void 0 && (i = t.onUncaughtError), t.onCaughtError !== void 0 && (a = t.onCaughtError), t.onRecoverableError !== void 0 && (c = t.onRecoverableError)), t = ep(e, 1, !1, null, null, n, r, null, i, a, c, Pp), e[gt] = t.current, Sd(e), new Fp(t);
 	};
-})), f = /* @__PURE__ */ t(((e, t) => {
+})), _ = /* @__PURE__ */ t(((e, t) => {
 	function n() {
 		if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE == "function") try {
 			__REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE(n);
@@ -7605,24 +7606,24 @@ var l = /* @__PURE__ */ t(((e) => {
 			console.error(e);
 		}
 	}
-	n(), t.exports = d();
-})), p = /* @__PURE__ */ e(n(), 1), m = f(), h = r();
-function g(e, t, n) {
+	n(), t.exports = g();
+})), v = /* @__PURE__ */ e(n(), 1), y = _(), b = r();
+function x(e, t, n) {
 	if (!e) return;
 	let r = e.closest("[data-screen]"), i = !1, a = () => {
 		if (i || r && !r.classList.contains("is-active")) return;
 		i = !0, window.removeEventListener("app:screen-change", a);
-		let o = (0, m.createRoot)(e);
-		o.render(/* @__PURE__ */ (0, h.jsx)("p", {
+		let o = (0, y.createRoot)(e);
+		o.render(/* @__PURE__ */ (0, b.jsx)("p", {
 			role: "status",
 			children: "Loading…"
 		})), t().then((e) => {
 			let t = e[n];
-			o.render(/* @__PURE__ */ (0, h.jsx)(t, {}));
+			o.render(/* @__PURE__ */ (0, b.jsx)(t, {}));
 		}).catch(() => {
-			o.render(/* @__PURE__ */ (0, h.jsxs)("div", {
+			o.render(/* @__PURE__ */ (0, b.jsxs)("div", {
 				role: "alert",
-				children: [/* @__PURE__ */ (0, h.jsx)("p", { children: "This page could not load. Check your connection and try again." }), /* @__PURE__ */ (0, h.jsx)("button", {
+				children: [/* @__PURE__ */ (0, b.jsx)("p", { children: "This page could not load. Check your connection and try again." }), /* @__PURE__ */ (0, b.jsx)("button", {
 					type: "button",
 					onClick: () => window.location.reload(),
 					children: "Reload page"
@@ -7633,14 +7634,14 @@ function g(e, t, n) {
 	window.addEventListener("app:screen-change", a), a();
 }
 // node_modules/@capacitor/haptics/dist/esm/index.js
-var _ = a("Haptics", { web: () => import("./web-BQIuAsSL.js").then((e) => new e.HapticsWeb()) }), v = i(), y = [
+var ee = a("Haptics", { web: () => import("./web-BQIuAsSL.js").then((e) => new e.HapticsWeb()) }), S = i(), te = [
 	"M5 3h14v18H5z",
 	"M8 7h8",
 	"M8 11h8",
 	"M8 15h5"
 ];
-function b() {
-	return /* @__PURE__ */ (0, h.jsx)("svg", {
+function C() {
+	return /* @__PURE__ */ (0, b.jsx)("svg", {
 		viewBox: "0 0 24 24",
 		"aria-hidden": "true",
 		fill: "none",
@@ -7648,42 +7649,42 @@ function b() {
 		strokeWidth: "1.8",
 		strokeLinecap: "round",
 		strokeLinejoin: "round",
-		children: y.map((e) => /* @__PURE__ */ (0, h.jsx)("path", { d: e }, e))
+		children: te.map((e) => /* @__PURE__ */ (0, b.jsx)("path", { d: e }, e))
 	});
 }
-function x({ row: e, onOpen: t }) {
+function w({ row: e, onOpen: t }) {
 	let n = e.items || [], r = n.map((e) => e.reference || "").filter(Boolean), i = `${e.title || "Untitled note"} ${r.join(" ")} ${e.note || ""}`.toLowerCase();
-	return /* @__PURE__ */ (0, h.jsx)("article", {
+	return /* @__PURE__ */ (0, b.jsx)("article", {
 		className: "saved-note-card",
 		"data-note-searchable": i,
-		children: /* @__PURE__ */ (0, h.jsxs)("button", {
+		children: /* @__PURE__ */ (0, b.jsxs)("button", {
 			className: "saved-note-open",
 			type: "button",
 			onClick: () => t(e),
 			children: [
-				/* @__PURE__ */ (0, h.jsx)("strong", {
+				/* @__PURE__ */ (0, b.jsx)("strong", {
 					className: "saved-note-card-title",
 					children: e.title || "Untitled note"
 				}),
-				/* @__PURE__ */ (0, h.jsxs)("span", {
+				/* @__PURE__ */ (0, b.jsxs)("span", {
 					className: "saved-note-card-heading",
-					children: [/* @__PURE__ */ (0, h.jsx)(b, {}), /* @__PURE__ */ (0, h.jsxs)("strong", { children: [
+					children: [/* @__PURE__ */ (0, b.jsx)(C, {}), /* @__PURE__ */ (0, b.jsxs)("strong", { children: [
 						n.length,
 						" verse",
 						n.length === 1 ? "" : "s"
 					] })]
 				}),
-				/* @__PURE__ */ (0, h.jsx)("span", {
+				/* @__PURE__ */ (0, b.jsx)("span", {
 					className: "saved-note-references",
 					children: r.join(" · ")
 				}),
-				/* @__PURE__ */ (0, h.jsx)("p", { children: e.note || "No preview available" })
+				/* @__PURE__ */ (0, b.jsx)("p", { children: e.note || "No preview available" })
 			]
 		})
 	});
 }
 // src/react/home.jsx
-var S = /* @__PURE__ */ (0, h.jsxs)("svg", {
+var ne = /* @__PURE__ */ (0, b.jsxs)("svg", {
 	viewBox: "0 0 24 24",
 	"aria-hidden": "true",
 	fill: "none",
@@ -7691,16 +7692,16 @@ var S = /* @__PURE__ */ (0, h.jsxs)("svg", {
 	strokeWidth: "1.8",
 	strokeLinecap: "round",
 	strokeLinejoin: "round",
-	children: [/* @__PURE__ */ (0, h.jsx)("path", { d: "M5 19 19 5" }), /* @__PURE__ */ (0, h.jsx)("path", { d: "M9 5h10v10" })]
+	children: [/* @__PURE__ */ (0, b.jsx)("path", { d: "M5 19 19 5" }), /* @__PURE__ */ (0, b.jsx)("path", { d: "M9 5h10v10" })]
 });
-function C() {
+function T() {
 	return {
 		streak: document.querySelector("[data-home-streak]")?.textContent?.trim() || "1 day",
 		continueReading: document.querySelector("[data-home-continue-reading]")?.textContent?.trim() || "John 15",
 		prayerCount: document.querySelector("[data-home-prayer-count]")?.textContent?.trim() || "0"
 	};
 }
-function w() {
+function E() {
 	let e = window.bibleReaderBridge?.getChapterSnapshot?.(), t = e?.verses?.[0];
 	return t?.text ? {
 		text: `“${t.text}”`,
@@ -7710,7 +7711,7 @@ function w() {
 		reference: "Your next verse"
 	};
 }
-var T = /* @__PURE__ */ (0, h.jsxs)("svg", {
+var re = /* @__PURE__ */ (0, b.jsxs)("svg", {
 	viewBox: "0 0 24 24",
 	"aria-hidden": "true",
 	fill: "none",
@@ -7718,8 +7719,8 @@ var T = /* @__PURE__ */ (0, h.jsxs)("svg", {
 	strokeWidth: "1.8",
 	strokeLinecap: "round",
 	strokeLinejoin: "round",
-	children: [/* @__PURE__ */ (0, h.jsx)("path", { d: "M20.8 8.8c0 5.4-8.8 10.2-8.8 10.2S3.2 14.2 3.2 8.8A4.7 4.7 0 0 1 12 6.1a4.7 4.7 0 0 1 8.8 2.7Z" }), /* @__PURE__ */ (0, h.jsx)("path", { d: "M7 15h4l2-3 2 2h3" })]
-}), ee = {
+	children: [/* @__PURE__ */ (0, b.jsx)("path", { d: "M20.8 8.8c0 5.4-8.8 10.2-8.8 10.2S3.2 14.2 3.2 8.8A4.7 4.7 0 0 1 12 6.1a4.7 4.7 0 0 1 8.8 2.7Z" }), /* @__PURE__ */ (0, b.jsx)("path", { d: "M7 15h4l2-3 2 2h3" })]
+}), ie = {
 	highlights: [
 		"M4 20 15.5 8.5",
 		"m14 5 5 5",
@@ -7733,8 +7734,8 @@ var T = /* @__PURE__ */ (0, h.jsxs)("svg", {
 		"M8 15h5"
 	]
 };
-function E({ name: e }) {
-	return /* @__PURE__ */ (0, h.jsx)("svg", {
+function ae({ name: e }) {
+	return /* @__PURE__ */ (0, b.jsx)("svg", {
 		viewBox: "0 0 24 24",
 		"aria-hidden": "true",
 		fill: "none",
@@ -7742,11 +7743,11 @@ function E({ name: e }) {
 		strokeWidth: "1.8",
 		strokeLinecap: "round",
 		strokeLinejoin: "round",
-		children: ee[e].map((e) => /* @__PURE__ */ (0, h.jsx)("path", { d: e }, e))
+		children: ie[e].map((e) => /* @__PURE__ */ (0, b.jsx)("path", { d: e }, e))
 	});
 }
-function D() {
-	let e = (0, p.useRef)(null), [t, n] = (0, p.useState)(null), [r, i] = (0, p.useState)(!1), [a, o] = (0, p.useState)(""), s = t?.books.find((e) => e.id === t.bookId);
+function oe() {
+	let e = (0, v.useRef)(null), [t, n] = (0, v.useState)(null), [r, i] = (0, v.useState)(!1), [a, o] = (0, v.useState)(""), s = t?.books.find((e) => e.id === t.bookId);
 	function c() {
 		let t = window.bibleReaderBridge?.getSnapshot();
 		t && (n(t), o(""), e.current.showModal());
@@ -7763,47 +7764,47 @@ function D() {
 			}
 		}
 	}
-	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [/* @__PURE__ */ (0, h.jsxs)("button", {
+	return /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [/* @__PURE__ */ (0, b.jsxs)("button", {
 		type: "button",
 		className: "home-study-launch",
 		onClick: c,
 		"aria-haspopup": "dialog",
-		children: [/* @__PURE__ */ (0, h.jsxs)("svg", {
+		children: [/* @__PURE__ */ (0, b.jsxs)("svg", {
 			viewBox: "0 0 24 24",
 			fill: "none",
 			stroke: "currentColor",
 			strokeWidth: "1.8",
 			"aria-hidden": "true",
-			children: [/* @__PURE__ */ (0, h.jsx)("circle", {
+			children: [/* @__PURE__ */ (0, b.jsx)("circle", {
 				cx: "10.8",
 				cy: "10.8",
 				r: "6.8"
-			}), /* @__PURE__ */ (0, h.jsx)("path", { d: "m16 16 5 5" })]
+			}), /* @__PURE__ */ (0, b.jsx)("path", { d: "m16 16 5 5" })]
 		}), "Bible Study"]
-	}), (0, v.createPortal)(/* @__PURE__ */ (0, h.jsx)("dialog", {
+	}), (0, S.createPortal)(/* @__PURE__ */ (0, b.jsx)("dialog", {
 		ref: e,
 		className: "home-study-dialog",
 		"aria-labelledby": "home-study-heading",
 		onCancel: (e) => {
 			r && e.preventDefault();
 		},
-		children: /* @__PURE__ */ (0, h.jsxs)("form", {
+		children: /* @__PURE__ */ (0, b.jsxs)("form", {
 			onSubmit: l,
 			children: [
-				/* @__PURE__ */ (0, h.jsxs)("header", { children: [/* @__PURE__ */ (0, h.jsx)("h2", {
+				/* @__PURE__ */ (0, b.jsxs)("header", { children: [/* @__PURE__ */ (0, b.jsx)("h2", {
 					id: "home-study-heading",
 					children: "Bible Study"
-				}), /* @__PURE__ */ (0, h.jsx)("button", {
+				}), /* @__PURE__ */ (0, b.jsx)("button", {
 					type: "button",
 					"aria-label": "Close Bible Study selection",
 					disabled: r,
 					onClick: () => e.current.close(),
 					children: "×"
 				})] }),
-				/* @__PURE__ */ (0, h.jsx)("p", { children: "Choose a chapter to explore." }),
-				/* @__PURE__ */ (0, h.jsxs)("div", {
+				/* @__PURE__ */ (0, b.jsx)("p", { children: "Choose a chapter to explore." }),
+				/* @__PURE__ */ (0, b.jsxs)("div", {
 					className: "home-study-selectors",
-					children: [/* @__PURE__ */ (0, h.jsxs)("label", { children: ["Book", /* @__PURE__ */ (0, h.jsx)("select", {
+					children: [/* @__PURE__ */ (0, b.jsxs)("label", { children: ["Book", /* @__PURE__ */ (0, b.jsx)("select", {
 						value: t?.bookId || "",
 						disabled: r,
 						onChange: (e) => n((t) => ({
@@ -7811,30 +7812,30 @@ function D() {
 							bookId: e.target.value,
 							chapter: 1
 						})),
-						children: t?.books.map((e) => /* @__PURE__ */ (0, h.jsx)("option", {
+						children: t?.books.map((e) => /* @__PURE__ */ (0, b.jsx)("option", {
 							value: e.id,
 							children: e.name
 						}, e.id))
-					})] }), /* @__PURE__ */ (0, h.jsxs)("label", { children: ["Chapter", /* @__PURE__ */ (0, h.jsx)("select", {
+					})] }), /* @__PURE__ */ (0, b.jsxs)("label", { children: ["Chapter", /* @__PURE__ */ (0, b.jsx)("select", {
 						value: t?.chapter || 1,
 						disabled: r,
 						onChange: (e) => n((t) => ({
 							...t,
 							chapter: Number(e.target.value)
 						})),
-						children: Array.from({ length: s?.chapters || 1 }, (e, t) => /* @__PURE__ */ (0, h.jsx)("option", {
+						children: Array.from({ length: s?.chapters || 1 }, (e, t) => /* @__PURE__ */ (0, b.jsx)("option", {
 							value: t + 1,
 							children: t + 1
 						}, t + 1))
 					})] })]
 				}),
-				/* @__PURE__ */ (0, h.jsx)("p", {
+				/* @__PURE__ */ (0, b.jsx)("p", {
 					className: "home-study-error",
 					role: "status",
 					"aria-live": "polite",
 					children: a
 				}),
-				/* @__PURE__ */ (0, h.jsx)("button", {
+				/* @__PURE__ */ (0, b.jsx)("button", {
 					className: "home-study-start",
 					type: "submit",
 					disabled: r,
@@ -7844,80 +7845,80 @@ function D() {
 		})
 	}), document.body)] });
 }
-function te() {
-	let [e, t] = (0, p.useState)(() => window.profileBridge?.getHero?.().coverImage || "assets/home-hero-mountain-sunrise.webp"), [n, r] = (0, p.useState)(w);
-	return (0, p.useEffect)(() => {
+function se() {
+	let [e, t] = (0, v.useState)(() => window.profileBridge?.getHero?.().coverImage || "assets/home-hero-mountain-sunrise.webp"), [n, r] = (0, v.useState)(E);
+	return (0, v.useEffect)(() => {
 		let e = () => {
 			let e = window.profileBridge?.getHero?.().coverImage;
 			e && t(e);
 		};
 		return document.addEventListener("profile:hero-change", e), () => document.removeEventListener("profile:hero-change", e);
-	}, []), (0, p.useEffect)(() => {
-		let e = () => r(w());
+	}, []), (0, v.useEffect)(() => {
+		let e = () => r(E());
 		return document.addEventListener("bible:reader-change", e), document.addEventListener("bible:chapter-change", e), e(), () => {
 			document.removeEventListener("bible:reader-change", e), document.removeEventListener("bible:chapter-change", e);
 		};
-	}, []), /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [
-		/* @__PURE__ */ (0, h.jsx)("img", {
+	}, []), /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [
+		/* @__PURE__ */ (0, b.jsx)("img", {
 			src: e,
 			alt: "Selected hero image"
 		}),
-		/* @__PURE__ */ (0, h.jsxs)("h1", {
+		/* @__PURE__ */ (0, b.jsxs)("h1", {
 			className: "home-hero-app-title",
 			"aria-label": "Think Bible!",
-			children: [/* @__PURE__ */ (0, h.jsx)("span", {
+			children: [/* @__PURE__ */ (0, b.jsx)("span", {
 				className: "home-hero-app-title-think",
 				children: "Think"
-			}), /* @__PURE__ */ (0, h.jsx)("span", {
+			}), /* @__PURE__ */ (0, b.jsx)("span", {
 				className: "home-hero-app-title-bible",
 				children: "Bible!"
 			})]
 		}),
-		/* @__PURE__ */ (0, h.jsxs)("div", {
+		/* @__PURE__ */ (0, b.jsxs)("div", {
 			className: "home-hero-image-copy",
-			children: [/* @__PURE__ */ (0, h.jsxs)("div", {
+			children: [/* @__PURE__ */ (0, b.jsxs)("div", {
 				className: "home-hero-verse",
-				children: [/* @__PURE__ */ (0, h.jsxs)("div", {
+				children: [/* @__PURE__ */ (0, b.jsxs)("div", {
 					className: "home-hero-verse-heading",
 					children: [
-						/* @__PURE__ */ (0, h.jsx)("span", { children: "Verse of the day" }),
-						/* @__PURE__ */ (0, h.jsx)("span", {
+						/* @__PURE__ */ (0, b.jsx)("span", { children: "Verse of the day" }),
+						/* @__PURE__ */ (0, b.jsx)("span", {
 							"aria-hidden": "true",
 							children: "-"
 						}),
-						/* @__PURE__ */ (0, h.jsx)("small", { children: n.reference })
+						/* @__PURE__ */ (0, b.jsx)("small", { children: n.reference })
 					]
-				}), /* @__PURE__ */ (0, h.jsx)("strong", { children: n.text })]
-			}), /* @__PURE__ */ (0, h.jsxs)("div", {
+				}), /* @__PURE__ */ (0, b.jsx)("strong", { children: n.text })]
+			}), /* @__PURE__ */ (0, b.jsxs)("div", {
 				className: "home-hero-actions",
-				children: [/* @__PURE__ */ (0, h.jsxs)("button", {
+				children: [/* @__PURE__ */ (0, b.jsxs)("button", {
 					type: "button",
 					"data-nav": "bible",
-					children: ["Start reading ", S]
-				}), /* @__PURE__ */ (0, h.jsx)(D, {})]
+					children: ["Start reading ", ne]
+				}), /* @__PURE__ */ (0, b.jsx)(oe, {})]
 			})]
 		})
 	] });
 }
-function ne() {
-	let [e, t] = (0, p.useState)(() => C().prayerCount);
-	return (0, p.useEffect)(() => {
+function ce() {
+	let [e, t] = (0, v.useState)(() => T().prayerCount);
+	return (0, v.useEffect)(() => {
 		let e = (e) => {
 			e.detail?.prayerCount !== void 0 && t(e.detail.prayerCount);
 		};
 		return window.addEventListener("home:stats-change", e), () => window.removeEventListener("home:stats-change", e);
-	}, []), /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [
-		/* @__PURE__ */ (0, h.jsx)("span", {
+	}, []), /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [
+		/* @__PURE__ */ (0, b.jsx)("span", {
 			className: "home-prayer-card-icon",
-			children: T
+			children: re
 		}),
-		/* @__PURE__ */ (0, h.jsxs)("span", { children: [/* @__PURE__ */ (0, h.jsx)("small", { children: "Pray for someone" }), /* @__PURE__ */ (0, h.jsxs)("strong", { children: [/* @__PURE__ */ (0, h.jsx)("span", { children: e }), " people are waiting for prayer"] })] }),
-		S
+		/* @__PURE__ */ (0, b.jsxs)("span", { children: [/* @__PURE__ */ (0, b.jsx)("small", { children: "Pray for someone" }), /* @__PURE__ */ (0, b.jsxs)("strong", { children: [/* @__PURE__ */ (0, b.jsx)("span", { children: e }), " people are waiting for prayer"] })] }),
+		ne
 	] });
 }
-function re() {
-	let [e, t] = (0, p.useState)(() => document.querySelector("[data-home-library-tab].is-active")?.dataset.homeLibraryTab || "highlights");
-	(0, p.useEffect)(() => {
+function D() {
+	let [e, t] = (0, v.useState)(() => document.querySelector("[data-home-library-tab].is-active")?.dataset.homeLibraryTab || "highlights");
+	(0, v.useEffect)(() => {
 		let e = (e) => {
 			e.detail?.tab && t(e.detail.tab);
 		};
@@ -7930,15 +7931,15 @@ function re() {
 		["highlights", "Highlights"],
 		["bookmarks", "Bookmarks"],
 		["notes", "Notes"]
-	].map(([t, r]) => /* @__PURE__ */ (0, h.jsxs)("button", {
+	].map(([t, r]) => /* @__PURE__ */ (0, b.jsxs)("button", {
 		className: e === t ? "is-active" : "",
 		type: "button",
 		"data-home-library-tab": t,
 		onClick: (e) => n(t, e),
-		children: [/* @__PURE__ */ (0, h.jsx)(E, { name: t }), /* @__PURE__ */ (0, h.jsx)("span", { children: r })]
+		children: [/* @__PURE__ */ (0, b.jsx)(ae, { name: t }), /* @__PURE__ */ (0, b.jsx)("span", { children: r })]
 	}, t));
 }
-var ie = /* @__PURE__ */ (0, h.jsx)("svg", {
+var O = /* @__PURE__ */ (0, b.jsx)("svg", {
 	viewBox: "0 0 24 24",
 	"aria-hidden": "true",
 	fill: "none",
@@ -7946,8 +7947,8 @@ var ie = /* @__PURE__ */ (0, h.jsx)("svg", {
 	strokeWidth: "1.8",
 	strokeLinecap: "round",
 	strokeLinejoin: "round",
-	children: /* @__PURE__ */ (0, h.jsx)("path", { d: "M3 6.5A2.5 2.5 0 0 1 5.5 4H10l2 2h6.5A2.5 2.5 0 0 1 21 8.5v8A2.5 2.5 0 0 1 18.5 19h-13A2.5 2.5 0 0 1 3 16.5z" })
-}), ae = /* @__PURE__ */ (0, h.jsxs)("svg", {
+	children: /* @__PURE__ */ (0, b.jsx)("path", { d: "M3 6.5A2.5 2.5 0 0 1 5.5 4H10l2 2h6.5A2.5 2.5 0 0 1 21 8.5v8A2.5 2.5 0 0 1 18.5 19h-13A2.5 2.5 0 0 1 3 16.5z" })
+}), le = /* @__PURE__ */ (0, b.jsxs)("svg", {
 	viewBox: "0 0 24 24",
 	"aria-hidden": "true",
 	fill: "none",
@@ -7955,10 +7956,10 @@ var ie = /* @__PURE__ */ (0, h.jsx)("svg", {
 	strokeWidth: "1.8",
 	strokeLinecap: "round",
 	strokeLinejoin: "round",
-	children: [/* @__PURE__ */ (0, h.jsx)("path", { d: "m12 3-1.3 5.7L5 10l5.7 1.3L12 17l1.3-5.7L19 10l-5.7-1.3z" }), /* @__PURE__ */ (0, h.jsx)("path", { d: "m5 17-.6 2.4L2 20l2.4.6L5 23l.6-2.4L8 20l-2.4-.6z" })]
+	children: [/* @__PURE__ */ (0, b.jsx)("path", { d: "m12 3-1.3 5.7L5 10l5.7 1.3L12 17l1.3-5.7L19 10l-5.7-1.3z" }), /* @__PURE__ */ (0, b.jsx)("path", { d: "m5 17-.6 2.4L2 20l2.4.6L5 23l.6-2.4L8 20l-2.4-.6z" })]
 });
-function oe({ snapshot: e, tab: t, onChange: n }) {
-	let [r, i] = (0, p.useState)(""), [a, o] = (0, p.useState)(!1), [s, c] = (0, p.useState)(null);
+function ue({ snapshot: e, tab: t, onChange: n }) {
+	let [r, i] = (0, v.useState)(""), [a, o] = (0, v.useState)(!1), [s, c] = (0, v.useState)(null);
 	if (t === "notes") return null;
 	let l = (e) => {
 		e.preventDefault();
@@ -7974,15 +7975,15 @@ function oe({ snapshot: e, tab: t, onChange: n }) {
 		a.preventDefault();
 		let o = r.trim();
 		s && o && window.homeLibraryBridge.renameFolder(t, s.id, o) && (c(null), i(""), n(e.activeFolder));
-	}, m = (r) => {
+	}, p = (r) => {
 		if (!window.confirm(`Delete the folder “${r.name}”? Saved items will move to No folder.`) || !window.homeLibraryBridge.deleteFolder(t, r.id)) return;
 		let i = e.activeFolder === r.id ? "" : e.activeFolder;
 		c(null), n(i);
 	};
-	return /* @__PURE__ */ (0, h.jsxs)("div", {
+	return /* @__PURE__ */ (0, b.jsxs)("div", {
 		className: "saved-folder-tools",
 		children: [
-			/* @__PURE__ */ (0, h.jsx)("button", {
+			/* @__PURE__ */ (0, b.jsx)("button", {
 				className: "saved-folder-create-trigger",
 				type: "button",
 				onClick: u,
@@ -7990,23 +7991,23 @@ function oe({ snapshot: e, tab: t, onChange: n }) {
 				title: "New folder",
 				children: "+"
 			}),
-			/* @__PURE__ */ (0, h.jsxs)("div", {
+			/* @__PURE__ */ (0, b.jsxs)("div", {
 				className: "saved-folder-chips",
 				"aria-label": `${t} folders`,
 				children: [
-					/* @__PURE__ */ (0, h.jsx)("button", {
+					/* @__PURE__ */ (0, b.jsx)("button", {
 						className: e.activeFolder === "" ? "is-active" : "",
 						type: "button",
 						onClick: () => n(""),
 						children: "All"
 					}),
-					/* @__PURE__ */ (0, h.jsx)("button", {
+					/* @__PURE__ */ (0, b.jsx)("button", {
 						className: e.activeFolder === "unfiled" ? "is-active" : "",
 						type: "button",
 						onClick: () => n("unfiled"),
 						children: "No folder"
 					}),
-					e.folders.map((t) => /* @__PURE__ */ (0, h.jsx)("button", {
+					e.folders.map((t) => /* @__PURE__ */ (0, b.jsx)("button", {
 						className: e.activeFolder === t.id ? "is-active" : "",
 						type: "button",
 						onClick: () => n(t.id),
@@ -8014,23 +8015,23 @@ function oe({ snapshot: e, tab: t, onChange: n }) {
 					}, t.id))
 				]
 			}),
-			a && (0, v.createPortal)(/* @__PURE__ */ (0, h.jsx)("div", {
+			a && (0, S.createPortal)(/* @__PURE__ */ (0, b.jsx)("div", {
 				className: "saved-folder-modal",
 				role: "presentation",
 				onMouseDown: (e) => e.target === e.currentTarget && o(!1),
-				children: /* @__PURE__ */ (0, h.jsxs)("form", {
+				children: /* @__PURE__ */ (0, b.jsxs)("form", {
 					className: "saved-folder-popover saved-folder-create-popover",
 					onSubmit: s ? f : l,
 					role: "dialog",
 					"aria-modal": "true",
 					"aria-labelledby": "new-folder-title",
 					children: [
-						/* @__PURE__ */ (0, h.jsxs)("div", {
+						/* @__PURE__ */ (0, b.jsxs)("div", {
 							className: "saved-folder-create-heading",
-							children: [/* @__PURE__ */ (0, h.jsxs)("div", { children: [/* @__PURE__ */ (0, h.jsx)("span", { children: "Organize your library" }), /* @__PURE__ */ (0, h.jsx)("h3", {
+							children: [/* @__PURE__ */ (0, b.jsxs)("div", { children: [/* @__PURE__ */ (0, b.jsx)("span", { children: "Organize your library" }), /* @__PURE__ */ (0, b.jsx)("h3", {
 								id: "new-folder-title",
 								children: s ? "Rename folder" : "New folder"
-							})] }), /* @__PURE__ */ (0, h.jsx)("button", {
+							})] }), /* @__PURE__ */ (0, b.jsx)("button", {
 								type: "button",
 								className: "saved-folder-create-close",
 								onClick: () => o(!1),
@@ -8038,8 +8039,8 @@ function oe({ snapshot: e, tab: t, onChange: n }) {
 								children: "×"
 							})]
 						}),
-						s && /* @__PURE__ */ (0, h.jsx)("p", { children: "Update the name of this folder." }),
-						/* @__PURE__ */ (0, h.jsx)("input", {
+						s && /* @__PURE__ */ (0, b.jsx)("p", { children: "Update the name of this folder." }),
+						/* @__PURE__ */ (0, b.jsx)("input", {
 							autoFocus: !0,
 							value: r,
 							onChange: (e) => i(e.target.value),
@@ -8049,28 +8050,28 @@ function oe({ snapshot: e, tab: t, onChange: n }) {
 							"aria-label": "Folder name",
 							maxLength: "40"
 						}),
-						/* @__PURE__ */ (0, h.jsx)("div", {
+						/* @__PURE__ */ (0, b.jsx)("div", {
 							className: "saved-folder-create-actions",
-							children: /* @__PURE__ */ (0, h.jsx)("button", {
+							children: /* @__PURE__ */ (0, b.jsx)("button", {
 								type: "submit",
 								children: s ? "Save changes" : "Create folder"
 							})
 						}),
-						!s && e.folders.length > 0 && /* @__PURE__ */ (0, h.jsxs)("div", {
+						!s && e.folders.length > 0 && /* @__PURE__ */ (0, b.jsxs)("div", {
 							className: "saved-folder-management-list",
-							children: [/* @__PURE__ */ (0, h.jsx)("span", { children: "Existing folders" }), e.folders.map((e) => /* @__PURE__ */ (0, h.jsxs)("div", {
+							children: [/* @__PURE__ */ (0, b.jsx)("span", { children: "Existing folders" }), e.folders.map((e) => /* @__PURE__ */ (0, b.jsxs)("div", {
 								className: "saved-folder-management-row",
 								children: [
-									/* @__PURE__ */ (0, h.jsx)("strong", { children: e.name }),
-									/* @__PURE__ */ (0, h.jsx)("button", {
+									/* @__PURE__ */ (0, b.jsx)("strong", { children: e.name }),
+									/* @__PURE__ */ (0, b.jsx)("button", {
 										type: "button",
 										onClick: () => d(e),
 										children: "Rename"
 									}),
-									/* @__PURE__ */ (0, h.jsx)("button", {
+									/* @__PURE__ */ (0, b.jsx)("button", {
 										type: "button",
 										className: "saved-folder-delete",
-										onClick: () => m(e),
+										onClick: () => p(e),
 										children: "Delete"
 									})
 								]
@@ -8082,23 +8083,23 @@ function oe({ snapshot: e, tab: t, onChange: n }) {
 		]
 	});
 }
-function se({ row: e, tab: t, onOpen: n }) {
-	return /* @__PURE__ */ (0, h.jsxs)("article", {
+function de({ row: e, tab: t, onOpen: n }) {
+	return /* @__PURE__ */ (0, b.jsxs)("article", {
 		className: "saved-verse-row",
-		children: [/* @__PURE__ */ (0, h.jsxs)("button", {
+		children: [/* @__PURE__ */ (0, b.jsxs)("button", {
 			className: "saved-verse-open",
 			type: "button",
 			onClick: () => n(e),
-			children: [t === "highlights" ? /* @__PURE__ */ (0, h.jsx)("span", {
+			children: [t === "highlights" ? /* @__PURE__ */ (0, b.jsx)("span", {
 				className: "saved-color-dot",
 				style: { "--saved-color": e.colorValue || "var(--beige)" },
 				"aria-hidden": "true"
-			}) : /* @__PURE__ */ (0, h.jsx)(E, { name: "bookmarks" }), /* @__PURE__ */ (0, h.jsxs)("span", { children: [
-				/* @__PURE__ */ (0, h.jsx)("strong", { children: e.reference || `${e.bookId} ${e.chapter}:${e.number}` }),
-				/* @__PURE__ */ (0, h.jsx)("small", { children: e.version || "" }),
-				/* @__PURE__ */ (0, h.jsx)("p", { children: e.text || "" })
+			}) : /* @__PURE__ */ (0, b.jsx)(ae, { name: "bookmarks" }), /* @__PURE__ */ (0, b.jsxs)("span", { children: [
+				/* @__PURE__ */ (0, b.jsx)("strong", { children: e.reference || `${e.bookId} ${e.chapter}:${e.number}` }),
+				/* @__PURE__ */ (0, b.jsx)("small", { children: e.version || "" }),
+				/* @__PURE__ */ (0, b.jsx)("p", { children: e.text || "" })
 			] })]
-		}), /* @__PURE__ */ (0, h.jsx)("button", {
+		}), /* @__PURE__ */ (0, b.jsx)("button", {
 			className: "saved-folder-trigger",
 			type: "button",
 			"data-saved-folder-trigger": !0,
@@ -8107,13 +8108,13 @@ function se({ row: e, tab: t, onOpen: n }) {
 			"data-saved-folder-current": e.folderId || "",
 			"aria-label": "Choose folder",
 			title: "Choose folder",
-			children: ie
+			children: O
 		})]
 	});
 }
-function O() {
-	let e = window.homeLibraryBridge, t = document.querySelector("[data-home-library-panel]")?.dataset.homeLibraryView || "highlights", [n, r] = (0, p.useState)(t), [i, a] = (0, p.useState)(() => e.getSnapshot(t)), [o, s] = (0, p.useState)(""), [c, l] = (0, p.useState)({});
-	(0, p.useEffect)(() => {
+function fe() {
+	let e = window.homeLibraryBridge, t = document.querySelector("[data-home-library-panel]")?.dataset.homeLibraryView || "highlights", [n, r] = (0, v.useState)(t), [i, a] = (0, v.useState)(() => e.getSnapshot(t)), [o, s] = (0, v.useState)(""), [c, l] = (0, v.useState)({});
+	(0, v.useEffect)(() => {
 		let t = (t) => {
 			let i = t.detail?.tab || n;
 			r(i), a(e.getSnapshot(i)), i !== "notes" && s("");
@@ -8124,22 +8125,22 @@ function O() {
 	}, [n, e]);
 	let u = (t) => {
 		e.setFolder(n, t);
-	}, d = n === "notes" && o.trim() ? i.rows.filter((e) => `${e.title || "Untitled note"} ${e.items.map((e) => e.reference || "").join(" ")} ${e.note || ""}`.toLowerCase().includes(o.trim().toLowerCase())) : i.rows, f = i.totalRows > 0 || i.folders.length > 0 || !!i.activeFolder, m = [...n === "notes" ? d.map((t) => /* @__PURE__ */ (0, h.jsx)(x, {
+	}, d = n === "notes" && o.trim() ? i.rows.filter((e) => `${e.title || "Untitled note"} ${e.items.map((e) => e.reference || "").join(" ")} ${e.note || ""}`.toLowerCase().includes(o.trim().toLowerCase())) : i.rows, f = i.totalRows > 0 || i.folders.length > 0 || !!i.activeFolder, p = [...n === "notes" ? d.map((t) => /* @__PURE__ */ (0, b.jsx)(w, {
 		row: t,
 		onOpen: e.openSavedNote
-	}, t.id)) : d.map((t) => /* @__PURE__ */ (0, h.jsx)(se, {
+	}, t.id)) : d.map((t) => /* @__PURE__ */ (0, b.jsx)(de, {
 		row: t,
 		tab: n,
 		onOpen: e.openSavedVerse
-	}, t.storageKey)), ...i.aiRows.map((e) => /* @__PURE__ */ (0, h.jsxs)("article", {
+	}, t.storageKey)), ...i.aiRows.map((e) => /* @__PURE__ */ (0, b.jsxs)("article", {
 		className: "saved-ai-row",
 		children: [
-			/* @__PURE__ */ (0, h.jsxs)("div", {
+			/* @__PURE__ */ (0, b.jsxs)("div", {
 				className: "saved-ai-row-heading",
-				children: [ae, /* @__PURE__ */ (0, h.jsx)("strong", { children: "AI response" })]
+				children: [le, /* @__PURE__ */ (0, b.jsx)("strong", { children: "AI response" })]
 			}),
-			/* @__PURE__ */ (0, h.jsx)("p", { children: e.text || "" }),
-			/* @__PURE__ */ (0, h.jsx)("button", {
+			/* @__PURE__ */ (0, b.jsx)("p", { children: e.text || "" }),
+			/* @__PURE__ */ (0, b.jsx)("button", {
 				className: "saved-folder-trigger",
 				type: "button",
 				"data-saved-folder-trigger": !0,
@@ -8148,41 +8149,41 @@ function O() {
 				"data-saved-folder-current": e.folderId || "",
 				"aria-label": "Choose folder",
 				title: "Choose folder",
-				children: ie
+				children: O
 			})
 		]
-	}, `ai-${e.id}`))], g = !!c[n], _ = m.length > 5, v = () => l((e) => ({
+	}, `ai-${e.id}`))], m = !!c[n], h = p.length > 5, g = () => l((e) => ({
 		...e,
 		[n]: !e[n]
 	}));
 	if (!f) {
 		let e = i.isConnected;
-		return /* @__PURE__ */ (0, h.jsxs)("div", {
+		return /* @__PURE__ */ (0, b.jsxs)("div", {
 			className: "home-library-empty-state",
 			children: [
-				/* @__PURE__ */ (0, h.jsx)(E, { name: "notes" }),
-				/* @__PURE__ */ (0, h.jsx)("strong", { children: e ? "Your library is empty" : "Sign in to see more" }),
-				/* @__PURE__ */ (0, h.jsx)("p", { children: e ? "Save highlights, bookmarks and notes from the Bible tab to find them here." : "Sign in to sync your notes, bookmarks and highlights across your devices." }),
-				/* @__PURE__ */ (0, h.jsxs)("button", {
+				/* @__PURE__ */ (0, b.jsx)(ae, { name: "notes" }),
+				/* @__PURE__ */ (0, b.jsx)("strong", { children: e ? "Your library is empty" : "Sign in to see more" }),
+				/* @__PURE__ */ (0, b.jsx)("p", { children: e ? "Save highlights, bookmarks and notes from the Bible tab to find them here." : "Sign in to sync your notes, bookmarks and highlights across your devices." }),
+				/* @__PURE__ */ (0, b.jsxs)("button", {
 					type: "button",
 					"data-nav": e ? "bible" : "profile",
 					children: [
 						e ? "Start reading" : "Sign in or create an account",
 						" ",
-						S
+						ne
 					]
 				})
 			]
 		});
 	}
-	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [
-		/* @__PURE__ */ (0, h.jsxs)("div", {
+	return /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [
+		/* @__PURE__ */ (0, b.jsxs)("div", {
 			className: "saved-panel-title",
-			children: [/* @__PURE__ */ (0, h.jsx)("h3", { children: n === "notes" ? "Notes" : n === "highlights" ? "Highlights" : "Bookmarks" }), /* @__PURE__ */ (0, h.jsx)("span", { children: i.totalRows })]
+			children: [/* @__PURE__ */ (0, b.jsx)("h3", { children: n === "notes" ? "Notes" : n === "highlights" ? "Highlights" : "Bookmarks" }), /* @__PURE__ */ (0, b.jsx)("span", { children: i.totalRows })]
 		}),
-		n === "notes" && /* @__PURE__ */ (0, h.jsxs)("label", {
+		n === "notes" && /* @__PURE__ */ (0, b.jsxs)("label", {
 			className: "saved-notes-search",
-			children: [/* @__PURE__ */ (0, h.jsx)(E, { name: "notes" }), /* @__PURE__ */ (0, h.jsx)("input", {
+			children: [/* @__PURE__ */ (0, b.jsx)(ae, { name: "notes" }), /* @__PURE__ */ (0, b.jsx)("input", {
 				value: o,
 				onChange: (e) => s(e.target.value),
 				type: "search",
@@ -8190,30 +8191,30 @@ function O() {
 				"aria-label": "Search notes"
 			})]
 		}),
-		/* @__PURE__ */ (0, h.jsx)(oe, {
+		/* @__PURE__ */ (0, b.jsx)(ue, {
 			snapshot: i,
 			tab: n,
 			onChange: u
 		}),
-		d.length || i.aiRows.length ? /* @__PURE__ */ (0, h.jsxs)("div", {
-			className: `home-library-cards${g ? " is-expanded" : ""}`,
-			children: [g ? m : m.slice(0, 5), _ && /* @__PURE__ */ (0, h.jsx)("button", {
+		d.length || i.aiRows.length ? /* @__PURE__ */ (0, b.jsxs)("div", {
+			className: `home-library-cards${m ? " is-expanded" : ""}`,
+			children: [m ? p : p.slice(0, 5), h && /* @__PURE__ */ (0, b.jsx)("button", {
 				className: "home-library-expand",
 				type: "button",
-				onClick: v,
-				"aria-label": g ? `Show fewer ${n}` : `Show all ${n}`,
-				"aria-expanded": g,
-				children: /* @__PURE__ */ (0, h.jsx)("svg", {
+				onClick: g,
+				"aria-label": m ? `Show fewer ${n}` : `Show all ${n}`,
+				"aria-expanded": m,
+				children: /* @__PURE__ */ (0, b.jsx)("svg", {
 					viewBox: "0 0 24 24",
 					"aria-hidden": "true",
 					fill: "none",
 					stroke: "currentColor",
 					strokeWidth: "2",
 					strokeLinecap: "round",
-					children: g ? /* @__PURE__ */ (0, h.jsx)("path", { d: "M5 12h14" }) : /* @__PURE__ */ (0, h.jsx)("path", { d: "M12 5v14M5 12h14" })
+					children: m ? /* @__PURE__ */ (0, b.jsx)("path", { d: "M5 12h14" }) : /* @__PURE__ */ (0, b.jsx)("path", { d: "M12 5v14M5 12h14" })
 				})
 			})]
-		}) : /* @__PURE__ */ (0, h.jsx)("p", {
+		}) : /* @__PURE__ */ (0, b.jsx)("p", {
 			className: "saved-empty",
 			children: i.activeFolder ? `No saved verses in ${i.folders.find((e) => e.id === i.activeFolder)?.name || "this folder"} yet.` : n === "notes" ? "No notes match your search." : `No ${n} yet.`
 		})
@@ -8222,37 +8223,37 @@ function O() {
 // src/react/prayer-read-only-card.jsx
 function k({ request: e, bridge: t, index: n }) {
 	let r = t.getBackgroundOptions()[e.backgroundIndex]?.src || "assets/prayer-backgrounds/prayer-1.webp";
-	return /* @__PURE__ */ (0, h.jsxs)("article", {
+	return /* @__PURE__ */ (0, b.jsxs)("article", {
 		className: `prayer-card prayer-card--${n % 4} prayer-card--readonly`,
 		style: { "--prayer-card-image": `url('${r}')` },
-		children: [/* @__PURE__ */ (0, h.jsx)("div", {
+		children: [/* @__PURE__ */ (0, b.jsx)("div", {
 			className: "prayer-card-toggle",
-			children: /* @__PURE__ */ (0, h.jsxs)("span", { children: [
-				/* @__PURE__ */ (0, h.jsx)("small", {
+			children: /* @__PURE__ */ (0, b.jsxs)("span", { children: [
+				/* @__PURE__ */ (0, b.jsx)("small", {
 					className: "prayer-card-category",
 					children: e.category || "General"
 				}),
-				/* @__PURE__ */ (0, h.jsx)("strong", {
+				/* @__PURE__ */ (0, b.jsx)("strong", {
 					className: "prayer-card-title",
 					children: e.title?.trim() || "Prayer request"
 				}),
-				/* @__PURE__ */ (0, h.jsx)("p", {
+				/* @__PURE__ */ (0, b.jsx)("p", {
 					className: "prayer-card-preview",
 					children: e.preview || e.text
 				})
 			] })
-		}), /* @__PURE__ */ (0, h.jsx)("div", {
+		}), /* @__PURE__ */ (0, b.jsx)("div", {
 			className: "prayer-card-meta",
-			children: /* @__PURE__ */ (0, h.jsxs)("span", {
+			children: /* @__PURE__ */ (0, b.jsxs)("span", {
 				className: `prayer-action profile-prayer-count${e.hasPrayed ? " is-prayed" : ""}`,
 				"aria-label": `${e.prayerCount || 0} prayers`,
-				children: [/* @__PURE__ */ (0, h.jsx)("span", { children: e.prayerCount || 0 }), /* @__PURE__ */ (0, h.jsx)(c, { name: "heart" })]
+				children: [/* @__PURE__ */ (0, b.jsx)("span", { children: e.prayerCount || 0 }), /* @__PURE__ */ (0, b.jsx)(c, { name: "heart" })]
 			})
 		})]
 	});
 }
 // src/react/profile.jsx
-var ce = [
+var A = [
 	[
 		"preferences",
 		"Preferences",
@@ -8285,25 +8286,25 @@ var ce = [
 		["M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"]
 	]
 ];
-function le() {
-	let e = window.prayerBridge, [t, n] = (0, p.useState)(() => e.getSnapshot().ownRequests);
-	return (0, p.useEffect)(() => {
+function pe() {
+	let e = window.prayerBridge, [t, n] = (0, v.useState)(() => e.getSnapshot().ownRequests);
+	return (0, v.useEffect)(() => {
 		let t = () => n(e.getSnapshot().ownRequests);
 		return document.addEventListener("prayer:state-change", t), () => document.removeEventListener("prayer:state-change", t);
-	}, [e]), /* @__PURE__ */ (0, h.jsx)("div", {
+	}, [e]), /* @__PURE__ */ (0, b.jsx)("div", {
 		className: "prayer-list profile-prayer-list",
-		children: t.length ? t.map((t, n) => /* @__PURE__ */ (0, h.jsx)(k, {
+		children: t.length ? t.map((t, n) => /* @__PURE__ */ (0, b.jsx)(k, {
 			request: t,
 			index: n,
 			bridge: e
-		}, t.id)) : /* @__PURE__ */ (0, h.jsx)("p", {
+		}, t.id)) : /* @__PURE__ */ (0, b.jsx)("p", {
 			className: "saved-empty",
 			children: "No prayers yet."
 		})
 	});
 }
-function ue({ paths: e }) {
-	return /* @__PURE__ */ (0, h.jsx)("svg", {
+function me({ paths: e }) {
+	return /* @__PURE__ */ (0, b.jsx)("svg", {
 		viewBox: "0 0 24 24",
 		"aria-hidden": "true",
 		fill: "none",
@@ -8311,12 +8312,12 @@ function ue({ paths: e }) {
 		strokeWidth: "1.8",
 		strokeLinecap: "round",
 		strokeLinejoin: "round",
-		children: e.map((e) => /* @__PURE__ */ (0, h.jsx)("path", { d: e }, e))
+		children: e.map((e) => /* @__PURE__ */ (0, b.jsx)("path", { d: e }, e))
 	});
 }
-function de() {
-	let [e, t] = (0, p.useState)(() => document.querySelector("[data-profile-tab].is-active")?.dataset.profileTab || "preferences");
-	(0, p.useEffect)(() => {
+function he() {
+	let [e, t] = (0, v.useState)(() => document.querySelector("[data-profile-tab].is-active")?.dataset.profileTab || "preferences");
+	(0, v.useEffect)(() => {
 		let e = (e) => {
 			e.detail?.tab && t(e.detail.tab);
 		};
@@ -8325,38 +8326,38 @@ function de() {
 	let n = (e, n) => {
 		n?.nativeEvent?.__primaryTabHandled || (t(e), typeof window.profileBridge?.selectTab == "function" ? window.profileBridge.selectTab(e) : document.dispatchEvent(new CustomEvent("profile:tab-change", { detail: { tab: e } })));
 	};
-	return ce.map(([t, r, i]) => /* @__PURE__ */ (0, h.jsxs)("button", {
+	return A.map(([t, r, i]) => /* @__PURE__ */ (0, b.jsxs)("button", {
 		className: e === t ? "is-active" : "",
 		type: "button",
 		"data-profile-tab": t,
 		onClick: (e) => n(t, e),
-		children: [/* @__PURE__ */ (0, h.jsx)(ue, { paths: i }), /* @__PURE__ */ (0, h.jsx)("span", { children: r })]
+		children: [/* @__PURE__ */ (0, b.jsx)(me, { paths: i }), /* @__PURE__ */ (0, b.jsx)("span", { children: r })]
 	}, t));
 }
-function fe() {
-	let e = window.profileBridge, [t, n] = (0, p.useState)(() => e.getHero());
-	return (0, p.useEffect)(() => {
+function ge() {
+	let e = window.profileBridge, [t, n] = (0, v.useState)(() => e.getHero());
+	return (0, v.useEffect)(() => {
 		let t = () => {
 			n(e.getHero());
 		};
 		return document.addEventListener("profile:hero-change", t), document.addEventListener("profile:auth-change", t), () => {
 			document.removeEventListener("profile:hero-change", t), document.removeEventListener("profile:auth-change", t);
 		};
-	}, [e]), /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [/* @__PURE__ */ (0, h.jsx)("img", {
+	}, [e]), /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [/* @__PURE__ */ (0, b.jsx)("img", {
 		src: t.coverImage,
 		alt: "Profile background",
 		"data-profile-cover": !0,
 		loading: "lazy",
 		decoding: "async"
-	}), /* @__PURE__ */ (0, h.jsx)("div", {
+	}), /* @__PURE__ */ (0, b.jsx)("div", {
 		className: "profile-hero-caption",
-		children: /* @__PURE__ */ (0, h.jsx)("div", { children: /* @__PURE__ */ (0, h.jsx)("h1", {
+		children: /* @__PURE__ */ (0, b.jsx)("div", { children: /* @__PURE__ */ (0, b.jsx)("h1", {
 			"data-profile-name": !0,
 			children: t.welcome
 		}) })
 	})] });
 }
-var A = {
+var _e = {
 	image: [
 		"M4 4h16v16H4z",
 		"m4 16 4-4 3 3 3-4 6 6",
@@ -8376,8 +8377,8 @@ var A = {
 		"M23 8v8"
 	]
 };
-function pe({ name: e }) {
-	return /* @__PURE__ */ (0, h.jsx)("svg", {
+function ve({ name: e }) {
+	return /* @__PURE__ */ (0, b.jsx)("svg", {
 		viewBox: "0 0 24 24",
 		"aria-hidden": "true",
 		fill: "none",
@@ -8385,15 +8386,15 @@ function pe({ name: e }) {
 		strokeWidth: "1.8",
 		strokeLinecap: "round",
 		strokeLinejoin: "round",
-		children: A[e].map((e) => /* @__PURE__ */ (0, h.jsx)("path", { d: e }, e))
+		children: _e[e].map((e) => /* @__PURE__ */ (0, b.jsx)("path", { d: e }, e))
 	});
 }
-function me() {
-	let e = window.profileBridge, [t, n] = (0, p.useState)(() => e.getPreferences()), [r, i] = (0, p.useState)(() => e.getHero()), a = (0, p.useRef)(null);
-	(0, p.useEffect)(() => {
+function ye() {
+	let e = window.profileBridge, [t, n] = (0, v.useState)(() => e.getPreferences()), [r, i] = (0, v.useState)(() => e.getHero()), a = (0, v.useRef)(null);
+	(0, v.useEffect)(() => {
 		let t = () => n(e.getPreferences());
 		return document.addEventListener("profile:preferences-change", t), () => document.removeEventListener("profile:preferences-change", t);
-	}, [e]), (0, p.useEffect)(() => {
+	}, [e]), (0, v.useEffect)(() => {
 		let t = () => i(e.getHero());
 		return document.addEventListener("profile:hero-change", t), () => document.removeEventListener("profile:hero-change", t);
 	}, [e]);
@@ -8403,52 +8404,52 @@ function me() {
 			behavior: "smooth"
 		});
 	};
-	return /* @__PURE__ */ (0, h.jsx)(h.Fragment, { children: /* @__PURE__ */ (0, h.jsxs)("div", {
+	return /* @__PURE__ */ (0, b.jsx)(b.Fragment, { children: /* @__PURE__ */ (0, b.jsxs)("div", {
 		className: "preference-card profile-preference-sections",
 		children: [
-			/* @__PURE__ */ (0, h.jsxs)("section", {
+			/* @__PURE__ */ (0, b.jsxs)("section", {
 				className: "profile-preference-section preference-cover-picker",
 				"aria-labelledby": "profile-hero-setting-title",
-				children: [/* @__PURE__ */ (0, h.jsxs)("div", {
+				children: [/* @__PURE__ */ (0, b.jsxs)("div", {
 					className: "preference-copy",
-					children: [/* @__PURE__ */ (0, h.jsx)(pe, { name: "image" }), /* @__PURE__ */ (0, h.jsxs)("div", { children: [/* @__PURE__ */ (0, h.jsx)("h3", {
+					children: [/* @__PURE__ */ (0, b.jsx)(ve, { name: "image" }), /* @__PURE__ */ (0, b.jsxs)("div", { children: [/* @__PURE__ */ (0, b.jsx)("h3", {
 						id: "profile-hero-setting-title",
 						children: "Hero image"
-					}), /* @__PURE__ */ (0, h.jsx)("p", { children: "Choose the image shown at the top of your profile." })] })]
-				}), /* @__PURE__ */ (0, h.jsxs)("div", {
+					}), /* @__PURE__ */ (0, b.jsx)("p", { children: "Choose the image shown at the top of your profile." })] })]
+				}), /* @__PURE__ */ (0, b.jsxs)("div", {
 					className: "profile-cover-carousel",
 					role: "region",
 					"aria-label": "Hero image carousel",
 					children: [
-						/* @__PURE__ */ (0, h.jsx)("button", {
+						/* @__PURE__ */ (0, b.jsx)("button", {
 							className: "profile-cover-arrow",
 							type: "button",
 							onClick: () => o(-1),
 							"aria-label": "Previous hero images",
 							children: "‹"
 						}),
-						/* @__PURE__ */ (0, h.jsx)("div", {
+						/* @__PURE__ */ (0, b.jsx)("div", {
 							className: "profile-cover-viewport",
 							ref: a,
-							children: /* @__PURE__ */ (0, h.jsx)("div", {
+							children: /* @__PURE__ */ (0, b.jsx)("div", {
 								className: "profile-cover-grid",
 								"aria-label": "Hero image choices",
-								children: (r.coverOptions || []).map((t) => /* @__PURE__ */ (0, h.jsxs)("button", {
+								children: (r.coverOptions || []).map((t) => /* @__PURE__ */ (0, b.jsxs)("button", {
 									className: r.coverImage === t.src ? "is-active" : "",
 									type: "button",
 									onClick: () => e.saveCover(t.src),
 									"aria-label": `Use ${t.label} hero image`,
 									"aria-pressed": r.coverImage === t.src,
-									children: [/* @__PURE__ */ (0, h.jsx)("img", {
+									children: [/* @__PURE__ */ (0, b.jsx)("img", {
 										src: t.src,
 										alt: "",
 										loading: "lazy",
 										decoding: "async"
-									}), /* @__PURE__ */ (0, h.jsx)("span", { children: t.label })]
+									}), /* @__PURE__ */ (0, b.jsx)("span", { children: t.label })]
 								}, t.id))
 							})
 						}),
-						/* @__PURE__ */ (0, h.jsx)("button", {
+						/* @__PURE__ */ (0, b.jsx)("button", {
 							className: "profile-cover-arrow",
 							type: "button",
 							onClick: () => o(1),
@@ -8458,18 +8459,18 @@ function me() {
 					]
 				})]
 			}),
-			/* @__PURE__ */ (0, h.jsxs)("section", {
+			/* @__PURE__ */ (0, b.jsxs)("section", {
 				className: "profile-preference-section",
 				"aria-labelledby": "profile-text-setting-title",
 				children: [
-					/* @__PURE__ */ (0, h.jsxs)("div", {
+					/* @__PURE__ */ (0, b.jsxs)("div", {
 						className: "preference-copy",
-						children: [/* @__PURE__ */ (0, h.jsx)(pe, { name: "type" }), /* @__PURE__ */ (0, h.jsxs)("div", { children: [/* @__PURE__ */ (0, h.jsx)("h3", {
+						children: [/* @__PURE__ */ (0, b.jsx)(ve, { name: "type" }), /* @__PURE__ */ (0, b.jsxs)("div", { children: [/* @__PURE__ */ (0, b.jsx)("h3", {
 							id: "profile-text-setting-title",
 							children: "Text size"
-						}), /* @__PURE__ */ (0, h.jsx)("p", { children: "Adjust the Scripture reading size." })] })]
+						}), /* @__PURE__ */ (0, b.jsx)("p", { children: "Adjust the Scripture reading size." })] })]
 					}),
-					/* @__PURE__ */ (0, h.jsx)("div", {
+					/* @__PURE__ */ (0, b.jsx)("div", {
 						className: "segmented-control",
 						"data-text-size-options": !0,
 						children: [
@@ -8498,7 +8499,7 @@ function me() {
 								"A+",
 								"Extra large text"
 							]
-						].map(([n, r, i]) => /* @__PURE__ */ (0, h.jsx)("button", {
+						].map(([n, r, i]) => /* @__PURE__ */ (0, b.jsx)("button", {
 							className: t.textSize === n ? "is-active" : "",
 							type: "button",
 							onClick: () => e.setPreference("textSize", n),
@@ -8506,22 +8507,22 @@ function me() {
 							children: r
 						}, n))
 					}),
-					/* @__PURE__ */ (0, h.jsxs)("div", {
+					/* @__PURE__ */ (0, b.jsxs)("div", {
 						className: "text-size-preview",
-						children: [/* @__PURE__ */ (0, h.jsx)("span", { children: "Preview" }), /* @__PURE__ */ (0, h.jsxs)("p", { children: [/* @__PURE__ */ (0, h.jsx)("sup", { children: "1" }), " In the beginning was the Word."] })]
+						children: [/* @__PURE__ */ (0, b.jsx)("span", { children: "Preview" }), /* @__PURE__ */ (0, b.jsxs)("p", { children: [/* @__PURE__ */ (0, b.jsx)("sup", { children: "1" }), " In the beginning was the Word."] })]
 					})
 				]
 			}),
-			/* @__PURE__ */ (0, h.jsxs)("section", {
+			/* @__PURE__ */ (0, b.jsxs)("section", {
 				className: "profile-preference-section",
 				"aria-labelledby": "profile-vibration-setting-title",
-				children: [/* @__PURE__ */ (0, h.jsxs)("div", {
+				children: [/* @__PURE__ */ (0, b.jsxs)("div", {
 					className: "preference-copy",
-					children: [/* @__PURE__ */ (0, h.jsx)(pe, { name: "vibration" }), /* @__PURE__ */ (0, h.jsxs)("div", { children: [/* @__PURE__ */ (0, h.jsx)("h3", {
+					children: [/* @__PURE__ */ (0, b.jsx)(ve, { name: "vibration" }), /* @__PURE__ */ (0, b.jsxs)("div", { children: [/* @__PURE__ */ (0, b.jsx)("h3", {
 						id: "profile-vibration-setting-title",
 						children: "Button vibration"
-					}), /* @__PURE__ */ (0, h.jsx)("p", { children: "Off, or choose a strength." })] })]
-				}), /* @__PURE__ */ (0, h.jsx)("div", {
+					}), /* @__PURE__ */ (0, b.jsx)("p", { children: "Off, or choose a strength." })] })]
+				}), /* @__PURE__ */ (0, b.jsx)("div", {
 					className: "segmented-control haptics-strength-control",
 					role: "group",
 					"aria-label": "Button vibration strength",
@@ -8556,7 +8557,7 @@ function me() {
 							"5",
 							"Level 5 of 5, very strong"
 						]
-					].map(([n, r, i]) => /* @__PURE__ */ (0, h.jsx)("button", {
+					].map(([n, r, i]) => /* @__PURE__ */ (0, b.jsx)("button", {
 						className: t.hapticsStrength === n ? "is-active" : "",
 						type: "button",
 						onClick: () => e.setPreference("hapticsStrength", n),
@@ -8569,9 +8570,9 @@ function me() {
 		]
 	}) });
 }
-function he() {
-	let e = window.profileBridge, [t, n] = (0, p.useState)(() => e.getInfo());
-	(0, p.useEffect)(() => {
+function be() {
+	let e = window.profileBridge, [t, n] = (0, v.useState)(() => e.getInfo());
+	(0, v.useEffect)(() => {
 		let t = () => n(e.getInfo());
 		return document.addEventListener("profile:info-change", t), () => document.removeEventListener("profile:info-change", t);
 	}, [e]);
@@ -8579,17 +8580,17 @@ function he() {
 		...n,
 		[e]: t
 	}));
-	return /* @__PURE__ */ (0, h.jsx)(h.Fragment, { children: /* @__PURE__ */ (0, h.jsx)("div", {
+	return /* @__PURE__ */ (0, b.jsx)(b.Fragment, { children: /* @__PURE__ */ (0, b.jsx)("div", {
 		className: "profile-info-card",
-		children: /* @__PURE__ */ (0, h.jsxs)("form", {
+		children: /* @__PURE__ */ (0, b.jsxs)("form", {
 			className: "profile-info-form",
 			onSubmit: (n) => {
 				n.preventDefault(), e.saveInfo(t);
 			},
 			children: [
-				/* @__PURE__ */ (0, h.jsxs)("label", {
+				/* @__PURE__ */ (0, b.jsxs)("label", {
 					className: "profile-field",
-					children: [/* @__PURE__ */ (0, h.jsx)("span", { children: "Name" }), /* @__PURE__ */ (0, h.jsx)("input", {
+					children: [/* @__PURE__ */ (0, b.jsx)("span", { children: "Name" }), /* @__PURE__ */ (0, b.jsx)("input", {
 						type: "text",
 						value: t.displayName,
 						onChange: (e) => r("displayName", e.target.value),
@@ -8597,9 +8598,9 @@ function he() {
 						placeholder: "Your name"
 					})]
 				}),
-				/* @__PURE__ */ (0, h.jsxs)("label", {
+				/* @__PURE__ */ (0, b.jsxs)("label", {
 					className: "profile-field",
-					children: [/* @__PURE__ */ (0, h.jsx)("span", { children: "Country" }), /* @__PURE__ */ (0, h.jsx)("input", {
+					children: [/* @__PURE__ */ (0, b.jsx)("span", { children: "Country" }), /* @__PURE__ */ (0, b.jsx)("input", {
 						type: "text",
 						value: t.country,
 						onChange: (e) => r("country", e.target.value),
@@ -8607,17 +8608,17 @@ function he() {
 						placeholder: "Canada"
 					})]
 				}),
-				/* @__PURE__ */ (0, h.jsxs)("label", {
+				/* @__PURE__ */ (0, b.jsxs)("label", {
 					className: "profile-field",
-					children: [/* @__PURE__ */ (0, h.jsx)("span", { children: "Date of birth" }), /* @__PURE__ */ (0, h.jsx)("input", {
+					children: [/* @__PURE__ */ (0, b.jsx)("span", { children: "Date of birth" }), /* @__PURE__ */ (0, b.jsx)("input", {
 						type: "date",
 						value: t.dateOfBirth,
 						onChange: (e) => r("dateOfBirth", e.target.value)
 					})]
 				}),
-				/* @__PURE__ */ (0, h.jsx)("div", {
+				/* @__PURE__ */ (0, b.jsx)("div", {
 					className: "profile-info-actions",
-					children: /* @__PURE__ */ (0, h.jsx)("button", {
+					children: /* @__PURE__ */ (0, b.jsx)("button", {
 						type: "submit",
 						className: "profile-save-button",
 						children: "Save information"
@@ -8627,67 +8628,67 @@ function he() {
 		})
 	}) });
 }
-function ge() {
-	let e = window.profileBridge, [t, n] = (0, p.useState)(() => e.getAuth()), [r, i] = (0, p.useState)("sign-in"), [a, o] = (0, p.useState)(""), [s, c] = (0, p.useState)(""), [l, u] = (0, p.useState)(""), [d, f] = (0, p.useState)(!1), [m, g] = (0, p.useState)(!1), [_, y] = (0, p.useState)(!1), [b, x] = (0, p.useState)(""), [S, C] = (0, p.useState)(!1), [w, T] = (0, p.useState)(""), [ee, E] = (0, p.useState)(""), [D, te] = (0, p.useState)(!1), [ne, re] = (0, p.useState)(""), [ie, ae] = (0, p.useState)(!1);
-	return (0, p.useEffect)(() => {
-		t.connected || (C(!1), T(""), E(""), re(""));
-	}, [t.connected]), (0, p.useEffect)(() => {
+function xe() {
+	let e = window.profileBridge, [t, n] = (0, v.useState)(() => e.getAuth()), [r, i] = (0, v.useState)("sign-in"), [a, o] = (0, v.useState)(""), [s, c] = (0, v.useState)(""), [l, u] = (0, v.useState)(""), [d, f] = (0, v.useState)(!1), [p, m] = (0, v.useState)(!1), [h, g] = (0, v.useState)(!1), [_, y] = (0, v.useState)(""), [x, ee] = (0, v.useState)(!1), [te, C] = (0, v.useState)(""), [w, ne] = (0, v.useState)(""), [T, E] = (0, v.useState)(!1), [re, ie] = (0, v.useState)(""), [ae, oe] = (0, v.useState)(!1);
+	return (0, v.useEffect)(() => {
+		t.connected || (ee(!1), C(""), ne(""), ie(""));
+	}, [t.connected]), (0, v.useEffect)(() => {
 		let t = () => n(e.getAuth());
 		return document.addEventListener("profile:auth-change", t), () => document.removeEventListener("profile:auth-change", t);
-	}, [e]), (0, p.useEffect)(() => {
-		if (!m) return;
+	}, [e]), (0, v.useEffect)(() => {
+		if (!p) return;
 		let e = (e) => {
-			e.key === "Escape" && !_ && g(!1);
+			e.key === "Escape" && !h && m(!1);
 		};
 		return document.addEventListener("keydown", e), () => document.removeEventListener("keydown", e);
-	}, [m, _]), t.connected ? /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [
-		/* @__PURE__ */ (0, h.jsxs)("div", {
+	}, [p, h]), t.connected ? /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [
+		/* @__PURE__ */ (0, b.jsxs)("div", {
 			className: "preference-heading",
-			children: [/* @__PURE__ */ (0, h.jsx)("h2", {
+			children: [/* @__PURE__ */ (0, b.jsx)("h2", {
 				id: "profile-auth-title",
 				children: "Cloud account"
-			}), /* @__PURE__ */ (0, h.jsx)("span", { children: "Connected" })]
+			}), /* @__PURE__ */ (0, b.jsx)("span", { children: "Connected" })]
 		}),
-		/* @__PURE__ */ (0, h.jsxs)("div", {
+		/* @__PURE__ */ (0, b.jsxs)("div", {
 			className: "profile-auth-form",
 			children: [
-				/* @__PURE__ */ (0, h.jsxs)("div", {
+				/* @__PURE__ */ (0, b.jsxs)("div", {
 					className: "auth-connected-email",
-					children: [/* @__PURE__ */ (0, h.jsx)("span", { children: "Connected with" }), /* @__PURE__ */ (0, h.jsx)("strong", { children: t.email })]
+					children: [/* @__PURE__ */ (0, b.jsx)("span", { children: "Connected with" }), /* @__PURE__ */ (0, b.jsx)("strong", { children: t.email })]
 				}),
-				/* @__PURE__ */ (0, h.jsxs)("div", {
+				/* @__PURE__ */ (0, b.jsxs)("div", {
 					className: "profile-auth-actions",
-					children: [/* @__PURE__ */ (0, h.jsx)("button", {
+					children: [/* @__PURE__ */ (0, b.jsx)("button", {
 						type: "button",
 						"data-auth-action": "sign-out",
 						onClick: e.signOut,
 						children: "Sign out"
-					}), /* @__PURE__ */ (0, h.jsx)("button", {
+					}), /* @__PURE__ */ (0, b.jsx)("button", {
 						type: "button",
 						className: "profile-delete-trigger",
 						onClick: () => {
-							x(""), g(!0);
+							y(""), m(!0);
 						},
 						"aria-haspopup": "dialog",
-						"aria-expanded": m,
+						"aria-expanded": p,
 						children: "Delete my account"
 					})]
 				}),
-				/* @__PURE__ */ (0, h.jsxs)("section", {
+				/* @__PURE__ */ (0, b.jsxs)("section", {
 					className: "profile-password-section",
 					"aria-label": "Password",
 					children: [
-						/* @__PURE__ */ (0, h.jsx)("div", {
+						/* @__PURE__ */ (0, b.jsx)("div", {
 							className: "profile-auth-actions profile-password-trigger",
-							children: /* @__PURE__ */ (0, h.jsxs)("button", {
+							children: /* @__PURE__ */ (0, b.jsxs)("button", {
 								type: "button",
-								"aria-expanded": S,
+								"aria-expanded": x,
 								"aria-controls": "profile-password-form",
-								disabled: D,
+								disabled: T,
 								onClick: () => {
-									C((e) => !e), re(""), T(""), E("");
+									ee((e) => !e), ie(""), C(""), ne("");
 								},
-								children: [/* @__PURE__ */ (0, h.jsx)("span", { children: "Change password" }), /* @__PURE__ */ (0, h.jsx)("svg", {
+								children: [/* @__PURE__ */ (0, b.jsx)("span", { children: "Change password" }), /* @__PURE__ */ (0, b.jsx)("svg", {
 									className: "profile-password-chevron",
 									viewBox: "0 0 24 24",
 									width: "18",
@@ -8698,143 +8699,143 @@ function ge() {
 									strokeLinecap: "round",
 									strokeLinejoin: "round",
 									"aria-hidden": "true",
-									children: /* @__PURE__ */ (0, h.jsx)("path", { d: "m6 9 6 6 6-6" })
+									children: /* @__PURE__ */ (0, b.jsx)("path", { d: "m6 9 6 6 6-6" })
 								})]
 							})
 						}),
-						S && /* @__PURE__ */ (0, h.jsxs)("form", {
+						x && /* @__PURE__ */ (0, b.jsxs)("form", {
 							id: "profile-password-form",
 							className: "profile-auth-form profile-password-form",
 							onSubmit: async (t) => {
-								if (t.preventDefault(), !D) {
-									te(!0), re("");
+								if (t.preventDefault(), !T) {
+									E(!0), ie("");
 									try {
-										let t = await e.changePassword(w, ee);
-										ae(!!t.error), re(t.error || "Your password has been changed."), t.error || (T(""), E(""), C(!1));
+										let t = await e.changePassword(te, w);
+										oe(!!t.error), ie(t.error || "Your password has been changed."), t.error || (C(""), ne(""), ee(!1));
 									} catch {
-										ae(!0), re("Could not change your password. Please try again.");
+										oe(!0), ie("Could not change your password. Please try again.");
 									} finally {
-										te(!1);
+										E(!1);
 									}
 								}
 							},
 							children: [
-								/* @__PURE__ */ (0, h.jsxs)("label", { children: [/* @__PURE__ */ (0, h.jsx)("span", { children: "New password" }), /* @__PURE__ */ (0, h.jsx)("input", {
+								/* @__PURE__ */ (0, b.jsxs)("label", { children: [/* @__PURE__ */ (0, b.jsx)("span", { children: "New password" }), /* @__PURE__ */ (0, b.jsx)("input", {
 									autoFocus: !0,
 									type: "password",
 									autoComplete: "new-password",
 									"aria-label": "New password",
-									value: w,
-									onChange: (e) => T(e.target.value),
+									value: te,
+									onChange: (e) => C(e.target.value),
 									minLength: 6,
 									required: !0,
-									disabled: D
+									disabled: T
 								})] }),
-								/* @__PURE__ */ (0, h.jsxs)("label", { children: [/* @__PURE__ */ (0, h.jsx)("span", { children: "Confirm new password" }), /* @__PURE__ */ (0, h.jsx)("input", {
+								/* @__PURE__ */ (0, b.jsxs)("label", { children: [/* @__PURE__ */ (0, b.jsx)("span", { children: "Confirm new password" }), /* @__PURE__ */ (0, b.jsx)("input", {
 									type: "password",
 									autoComplete: "new-password",
 									"aria-label": "Confirm new password",
-									value: ee,
-									onChange: (e) => E(e.target.value),
+									value: w,
+									onChange: (e) => ne(e.target.value),
 									minLength: 6,
 									required: !0,
-									disabled: D
+									disabled: T
 								})] }),
-								/* @__PURE__ */ (0, h.jsxs)("div", {
+								/* @__PURE__ */ (0, b.jsxs)("div", {
 									className: "profile-auth-actions",
-									children: [/* @__PURE__ */ (0, h.jsx)("button", {
+									children: [/* @__PURE__ */ (0, b.jsx)("button", {
 										type: "submit",
-										disabled: D,
-										children: D ? "Saving…" : "Save password"
-									}), /* @__PURE__ */ (0, h.jsx)("button", {
+										disabled: T,
+										children: T ? "Saving…" : "Save password"
+									}), /* @__PURE__ */ (0, b.jsx)("button", {
 										type: "button",
-										disabled: D,
+										disabled: T,
 										onClick: () => {
-											C(!1), T(""), E(""), re("");
+											ee(!1), C(""), ne(""), ie("");
 										},
 										children: "Cancel"
 									})]
 								})
 							]
 						}),
-						ne && /* @__PURE__ */ (0, h.jsx)("p", {
+						re && /* @__PURE__ */ (0, b.jsx)("p", {
 							className: "profile-password-feedback",
-							role: ie ? "alert" : "status",
-							"data-state": ie ? "error" : "success",
-							children: ne
+							role: ae ? "alert" : "status",
+							"data-state": ae ? "error" : "success",
+							children: re
 						})
 					]
 				})
 			]
 		}),
-		m && (0, v.createPortal)(/* @__PURE__ */ (0, h.jsx)("div", {
+		p && (0, S.createPortal)(/* @__PURE__ */ (0, b.jsx)("div", {
 			className: "profile-delete-dialog-backdrop",
 			role: "presentation",
 			onMouseDown: (e) => {
-				e.target === e.currentTarget && !_ && g(!1);
+				e.target === e.currentTarget && !h && m(!1);
 			},
-			children: /* @__PURE__ */ (0, h.jsxs)("section", {
+			children: /* @__PURE__ */ (0, b.jsxs)("section", {
 				className: "profile-delete-dialog",
 				role: "alertdialog",
 				"aria-modal": "true",
 				"aria-labelledby": "profile-delete-title",
 				"aria-describedby": "profile-delete-description",
 				children: [
-					/* @__PURE__ */ (0, h.jsx)("div", {
+					/* @__PURE__ */ (0, b.jsx)("div", {
 						className: "profile-delete-dialog-icon",
 						"aria-hidden": "true",
 						children: "!"
 					}),
-					/* @__PURE__ */ (0, h.jsx)("span", {
+					/* @__PURE__ */ (0, b.jsx)("span", {
 						className: "profile-delete-dialog-eyebrow",
 						children: "ACCOUNT SECURITY"
 					}),
-					/* @__PURE__ */ (0, h.jsx)("h3", {
+					/* @__PURE__ */ (0, b.jsx)("h3", {
 						id: "profile-delete-title",
 						children: "Delete your account?"
 					}),
-					/* @__PURE__ */ (0, h.jsx)("p", {
+					/* @__PURE__ */ (0, b.jsx)("p", {
 						id: "profile-delete-description",
 						children: "Your profile, preferences, prayer requests, saved items, and conversations will be permanently deleted. This cannot be undone."
 					}),
-					b && /* @__PURE__ */ (0, h.jsx)("p", {
+					_ && /* @__PURE__ */ (0, b.jsx)("p", {
 						className: "profile-delete-error",
 						role: "alert",
-						children: b
+						children: _
 					}),
-					/* @__PURE__ */ (0, h.jsxs)("div", {
+					/* @__PURE__ */ (0, b.jsxs)("div", {
 						className: "profile-delete-dialog-actions",
-						children: [/* @__PURE__ */ (0, h.jsx)("button", {
+						children: [/* @__PURE__ */ (0, b.jsx)("button", {
 							type: "button",
-							onClick: () => g(!1),
-							disabled: _,
+							onClick: () => m(!1),
+							disabled: h,
 							children: "Cancel"
-						}), /* @__PURE__ */ (0, h.jsx)("button", {
+						}), /* @__PURE__ */ (0, b.jsx)("button", {
 							type: "button",
 							className: "profile-delete-confirm",
 							onClick: async () => {
-								y(!0), x(""), await e.deleteAccount() ? g(!1) : (x(e.getAuth().feedback), y(!1));
+								g(!0), y(""), await e.deleteAccount() ? m(!1) : (y(e.getAuth().feedback), g(!1));
 							},
-							disabled: _,
-							children: _ ? "Deleting…" : "Delete permanently"
+							disabled: h,
+							children: h ? "Deleting…" : "Delete permanently"
 						})]
 					})
 				]
 			})
 		}), document.querySelector(".phone-frame") || document.body)
-	] }) : /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [/* @__PURE__ */ (0, h.jsxs)("div", {
+	] }) : /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [/* @__PURE__ */ (0, b.jsxs)("div", {
 		className: "preference-heading",
-		children: [/* @__PURE__ */ (0, h.jsx)("h2", {
+		children: [/* @__PURE__ */ (0, b.jsx)("h2", {
 			id: "profile-auth-title",
 			children: "Cloud account"
-		}), /* @__PURE__ */ (0, h.jsx)("span", { children: "Not connected" })]
-	}), /* @__PURE__ */ (0, h.jsxs)("form", {
+		}), /* @__PURE__ */ (0, b.jsx)("span", { children: "Not connected" })]
+	}), /* @__PURE__ */ (0, b.jsxs)("form", {
 		className: "profile-auth-form",
 		onSubmit: async (t) => {
 			t.preventDefault(), await e.submitAuth(r, a.trim(), s, l);
 		},
 		children: [
-			/* @__PURE__ */ (0, h.jsx)("input", {
+			/* @__PURE__ */ (0, b.jsx)("input", {
 				type: "email",
 				value: a,
 				onChange: (e) => o(e.target.value),
@@ -8842,9 +8843,9 @@ function ge() {
 				autoComplete: "email",
 				required: !0
 			}),
-			/* @__PURE__ */ (0, h.jsxs)("div", {
+			/* @__PURE__ */ (0, b.jsxs)("div", {
 				className: "auth-password-field",
-				children: [/* @__PURE__ */ (0, h.jsx)("input", {
+				children: [/* @__PURE__ */ (0, b.jsx)("input", {
 					type: d ? "text" : "password",
 					value: s,
 					onChange: (e) => c(e.target.value),
@@ -8852,7 +8853,7 @@ function ge() {
 					autoComplete: r === "sign-up" ? "new-password" : "current-password",
 					minLength: "6",
 					required: !0
-				}), /* @__PURE__ */ (0, h.jsx)("button", {
+				}), /* @__PURE__ */ (0, b.jsx)("button", {
 					type: "button",
 					className: "auth-password-toggle",
 					onClick: () => f((e) => !e),
@@ -8860,9 +8861,9 @@ function ge() {
 					children: "◉"
 				})]
 			}),
-			r === "sign-up" && /* @__PURE__ */ (0, h.jsx)("div", {
+			r === "sign-up" && /* @__PURE__ */ (0, b.jsx)("div", {
 				className: "auth-password-field",
-				children: /* @__PURE__ */ (0, h.jsx)("input", {
+				children: /* @__PURE__ */ (0, b.jsx)("input", {
 					type: d ? "text" : "password",
 					value: l,
 					onChange: (e) => u(e.target.value),
@@ -8872,27 +8873,27 @@ function ge() {
 					required: !0
 				})
 			}),
-			/* @__PURE__ */ (0, h.jsxs)("div", {
+			/* @__PURE__ */ (0, b.jsxs)("div", {
 				className: "profile-auth-actions",
-				children: [/* @__PURE__ */ (0, h.jsx)("button", {
+				children: [/* @__PURE__ */ (0, b.jsx)("button", {
 					type: r === "sign-in" ? "submit" : "button",
 					className: r === "sign-up" ? "is-secondary" : "is-primary",
 					onClick: () => r === "sign-up" && i("sign-in"),
 					children: "Sign in"
-				}), /* @__PURE__ */ (0, h.jsx)("button", {
+				}), /* @__PURE__ */ (0, b.jsx)("button", {
 					type: r === "sign-up" ? "submit" : "button",
 					className: r === "sign-up" ? "is-primary" : "is-secondary",
 					onClick: () => r === "sign-in" && i("sign-up"),
 					children: "Create account"
 				})]
 			}),
-			/* @__PURE__ */ (0, h.jsx)("button", {
+			/* @__PURE__ */ (0, b.jsx)("button", {
 				type: "button",
 				className: "auth-forgot-button",
 				onClick: () => e.forgotPassword(a.trim()),
 				children: "Forgot password?"
 			}),
-			/* @__PURE__ */ (0, h.jsx)("p", {
+			/* @__PURE__ */ (0, b.jsx)("p", {
 				"data-state": t.feedback.includes("not configured") ? "error" : "",
 				children: t.feedback
 			})
@@ -8900,13 +8901,13 @@ function ge() {
 	})] });
 }
 // lib/bible/chapter-quiz.js
-var _e = (e) => String(e || "").normalize("NFKC").replace(/\s+/g, " ").trim();
-function ve(e, t) {
+var Se = (e) => String(e || "").normalize("NFKC").replace(/\s+/g, " ").trim();
+function Ce(e, t) {
 	if (!Array.isArray(e?.questions) || e.questions.length !== 10) throw Error("The quiz must contain exactly 10 questions.");
 	let n = /* @__PURE__ */ new Set();
 	return e.questions.map((e) => {
-		let r = _e(e.question), i = Array.isArray(e.options) ? e.options.map(_e) : [], a = _e(e.explanation), o = _e(e.quote), s = t.verses.find((t) => t.number === e.verse);
-		if (!r || r.length > 350 || n.has(r.toLowerCase()) || i.length !== 4 || i.some((e) => !e || e.length > 200) || new Set(i.map((e) => e.toLowerCase())).size !== 4 || !Number.isInteger(e.correctAnswer) || e.correctAnswer < 0 || e.correctAnswer > 3 || !a || a.length > 800 || !s || o.length < 3 || !_e(s.text).toLowerCase().includes(o.toLowerCase())) throw Error("A question or its explanation does not match the chapter.");
+		let r = Se(e.question), i = Array.isArray(e.options) ? e.options.map(Se) : [], a = Se(e.explanation), o = Se(e.quote), s = t.verses.find((t) => t.number === e.verse);
+		if (!r || r.length > 350 || n.has(r.toLowerCase()) || i.length !== 4 || i.some((e) => !e || e.length > 200) || new Set(i.map((e) => e.toLowerCase())).size !== 4 || !Number.isInteger(e.correctAnswer) || e.correctAnswer < 0 || e.correctAnswer > 3 || !a || a.length > 800 || !s || o.length < 3 || !Se(s.text).toLowerCase().includes(o.toLowerCase())) throw Error("A question or its explanation does not match the chapter.");
 		return n.add(r.toLowerCase()), {
 			question: r,
 			options: i,
@@ -8918,60 +8919,60 @@ function ve(e, t) {
 	});
 }
 // src/react/chapter-quiz.jsx
-function ye({ source: e, bridge: t }) {
-	let [n, r] = (0, p.useState)("loading"), [i, a] = (0, p.useState)(0), [o, s] = (0, p.useState)([]), [c, l] = (0, p.useState)(""), [u, d] = (0, p.useState)(0), [f, m] = (0, p.useState)(0), [g, _] = (0, p.useState)({}), [v, y] = (0, p.useState)({}), [b, x] = (0, p.useState)(!1), S = (0, p.useRef)(null), C = (0, p.useRef)(null), w = JSON.stringify(e), T = (0, p.useCallback)(() => {
-		C.current?.scrollIntoView({
+function we({ source: e, bridge: t }) {
+	let [n, r] = (0, v.useState)("loading"), [i, a] = (0, v.useState)(0), [o, s] = (0, v.useState)([]), [c, l] = (0, v.useState)(""), [u, d] = (0, v.useState)(0), [f, p] = (0, v.useState)(0), [m, h] = (0, v.useState)({}), [g, _] = (0, v.useState)({}), [y, x] = (0, v.useState)(!1), ee = (0, v.useRef)(null), S = (0, v.useRef)(null), te = JSON.stringify(e), C = (0, v.useCallback)(() => {
+		S.current?.scrollIntoView({
 			behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
 			block: "start"
-		}), S.current?.focus({ preventScroll: !0 });
+		}), ee.current?.focus({ preventScroll: !0 });
 	}, []);
-	(0, p.useEffect)(() => {
-		n === "ready" && T();
-	}, [n, T]), (0, p.useEffect)(() => {
+	(0, v.useEffect)(() => {
+		n === "ready" && C();
+	}, [n, C]), (0, v.useEffect)(() => {
 		let e = new AbortController(), n = performance.now(), i;
 		r("loading"), l(""), a(0);
 		let o = window.setInterval(() => {
 			let e = performance.now() - n;
 			a(Math.min(95, Math.round(95 * (1 - Math.exp(-e / 18e3)))));
 		}, 400);
-		return t.createChapterQuiz(JSON.parse(w), e.signal).then((t) => {
-			e.signal.aborted || (s(ve(t, JSON.parse(w))), window.clearInterval(o), a(100), r("finishing"), i = window.setTimeout(() => r("ready"), 250));
+		return t.createChapterQuiz(JSON.parse(te), e.signal).then((t) => {
+			e.signal.aborted || (s(Ce(t, JSON.parse(te))), window.clearInterval(o), a(100), r("finishing"), i = window.setTimeout(() => r("ready"), 250));
 		}).catch((t) => {
 			window.clearInterval(o), e.signal.aborted || (l(t.message), r("error"));
 		}), () => {
 			e.abort(), window.clearInterval(o), window.clearTimeout(i);
 		};
 	}, [
-		w,
+		te,
 		t,
 		u
 	]);
-	let ee = (e) => {
-		m(e), x(!1), requestAnimationFrame(T);
-	}, E = o.reduce((e, t, n) => e + Number(g[n] === t.correctAnswer), 0), D = Object.hasOwn(g, f), te = o[f], ne = D ? g[f] : v[f];
-	return /* @__PURE__ */ (0, h.jsxs)("section", {
-		ref: C,
+	let w = (e) => {
+		p(e), x(!1), requestAnimationFrame(C);
+	}, ne = o.reduce((e, t, n) => e + Number(m[n] === t.correctAnswer), 0), T = Object.hasOwn(m, f), E = o[f], re = T ? m[f] : g[f];
+	return /* @__PURE__ */ (0, b.jsxs)("section", {
+		ref: S,
 		className: "chapter-quiz",
 		"aria-label": `Quiz — ${e.reference}`,
 		"aria-busy": n === "loading" || n === "finishing",
 		children: [
-			/* @__PURE__ */ (0, h.jsxs)("header", {
+			/* @__PURE__ */ (0, b.jsxs)("header", {
 				className: "chapter-quiz-header",
-				children: [/* @__PURE__ */ (0, h.jsxs)("div", { children: [/* @__PURE__ */ (0, h.jsx)("span", { children: "Chapter quiz" }), /* @__PURE__ */ (0, h.jsx)("h2", { children: e.reference })] }), n === "ready" && /* @__PURE__ */ (0, h.jsxs)("span", { children: [Object.keys(g).length, " / 10 checked"] })]
+				children: [/* @__PURE__ */ (0, b.jsxs)("div", { children: [/* @__PURE__ */ (0, b.jsx)("span", { children: "Chapter quiz" }), /* @__PURE__ */ (0, b.jsx)("h2", { children: e.reference })] }), n === "ready" && /* @__PURE__ */ (0, b.jsxs)("span", { children: [Object.keys(m).length, " / 10 checked"] })]
 			}),
-			(n === "loading" || n === "finishing") && /* @__PURE__ */ (0, h.jsxs)("div", {
+			(n === "loading" || n === "finishing") && /* @__PURE__ */ (0, b.jsxs)("div", {
 				className: `chapter-quiz-loading${n === "finishing" ? " is-complete" : ""}`,
 				children: [
-					/* @__PURE__ */ (0, h.jsxs)("div", {
+					/* @__PURE__ */ (0, b.jsxs)("div", {
 						className: "chapter-quiz-loading-ring",
 						"aria-hidden": "true",
-						children: [/* @__PURE__ */ (0, h.jsx)("span", { className: "chapter-quiz-spinner" }), /* @__PURE__ */ (0, h.jsxs)("strong", { children: [i, /* @__PURE__ */ (0, h.jsx)("small", { children: "%" })] })]
+						children: [/* @__PURE__ */ (0, b.jsx)("span", { className: "chapter-quiz-spinner" }), /* @__PURE__ */ (0, b.jsxs)("strong", { children: [i, /* @__PURE__ */ (0, b.jsx)("small", { children: "%" })] })]
 					}),
-					/* @__PURE__ */ (0, h.jsx)("p", {
+					/* @__PURE__ */ (0, b.jsx)("p", {
 						role: "status",
 						children: n === "finishing" ? "Your questions are ready!" : "Creating 10 questions…"
 					}),
-					/* @__PURE__ */ (0, h.jsx)("div", {
+					/* @__PURE__ */ (0, b.jsx)("div", {
 						className: "chapter-quiz-loading-bar",
 						role: "progressbar",
 						"aria-label": "Preparing questions, estimated progress",
@@ -8979,51 +8980,51 @@ function ye({ source: e, bridge: t }) {
 						"aria-valuemax": 100,
 						"aria-valuenow": i,
 						"aria-valuetext": `${i} %${i < 100 ? ", estimated" : ""}`,
-						children: /* @__PURE__ */ (0, h.jsx)("span", { style: { transform: `scaleX(${i / 100})` } })
+						children: /* @__PURE__ */ (0, b.jsx)("span", { style: { transform: `scaleX(${i / 100})` } })
 					}),
-					/* @__PURE__ */ (0, h.jsx)("span", {
+					/* @__PURE__ */ (0, b.jsx)("span", {
 						className: "chapter-quiz-loading-note",
 						children: n === "finishing" ? "Let’s go!" : "Estimated progress"
 					})
 				]
 			}),
-			n === "error" && /* @__PURE__ */ (0, h.jsxs)("div", {
+			n === "error" && /* @__PURE__ */ (0, b.jsxs)("div", {
 				role: "alert",
-				children: [/* @__PURE__ */ (0, h.jsx)("p", { children: c }), /* @__PURE__ */ (0, h.jsx)("button", {
+				children: [/* @__PURE__ */ (0, b.jsx)("p", { children: c }), /* @__PURE__ */ (0, b.jsx)("button", {
 					type: "button",
 					onClick: () => d((e) => e + 1),
 					children: "Try again"
 				})]
 			}),
-			n === "ready" && (b ? /* @__PURE__ */ (0, h.jsxs)("div", {
+			n === "ready" && (y ? /* @__PURE__ */ (0, b.jsxs)("div", {
 				className: "chapter-quiz-result",
 				"aria-live": "polite",
 				children: [
-					/* @__PURE__ */ (0, h.jsx)("h3", {
-						ref: S,
+					/* @__PURE__ */ (0, b.jsx)("h3", {
+						ref: ee,
 						tabIndex: -1,
 						children: "Quiz complete!"
 					}),
-					/* @__PURE__ */ (0, h.jsxs)("p", {
+					/* @__PURE__ */ (0, b.jsxs)("p", {
 						className: "chapter-quiz-score",
-						children: [E, " / 10"]
+						children: [ne, " / 10"]
 					}),
-					/* @__PURE__ */ (0, h.jsx)("p", { children: "You can review your answers or start again." }),
-					/* @__PURE__ */ (0, h.jsx)("button", {
+					/* @__PURE__ */ (0, b.jsx)("p", { children: "You can review your answers or start again." }),
+					/* @__PURE__ */ (0, b.jsx)("button", {
 						type: "button",
-						onClick: () => ee(0),
+						onClick: () => w(0),
 						children: "Review my answers"
 					}),
-					/* @__PURE__ */ (0, h.jsx)("button", {
+					/* @__PURE__ */ (0, b.jsx)("button", {
 						type: "button",
 						onClick: () => {
-							_({}), y({}), ee(0);
+							h({}), _({}), w(0);
 						},
 						children: "Start again"
 					})
 				]
-			}) : /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [
-				/* @__PURE__ */ (0, h.jsxs)("p", {
+			}) : /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [
+				/* @__PURE__ */ (0, b.jsxs)("p", {
 					className: "chapter-quiz-progress",
 					children: [
 						"Question ",
@@ -9031,90 +9032,90 @@ function ye({ source: e, bridge: t }) {
 						" / 10"
 					]
 				}),
-				/* @__PURE__ */ (0, h.jsx)("h3", {
-					ref: S,
+				/* @__PURE__ */ (0, b.jsx)("h3", {
+					ref: ee,
 					tabIndex: -1,
-					children: te.question
+					children: E.question
 				}),
-				/* @__PURE__ */ (0, h.jsxs)("fieldset", {
+				/* @__PURE__ */ (0, b.jsxs)("fieldset", {
 					className: "chapter-quiz-options",
-					disabled: D,
-					children: [/* @__PURE__ */ (0, h.jsx)("legend", {
+					disabled: T,
+					children: [/* @__PURE__ */ (0, b.jsx)("legend", {
 						className: "sr-only",
 						children: "Choose an answer"
-					}), te.options.map((e, t) => /* @__PURE__ */ (0, h.jsxs)("label", {
-						className: `chapter-quiz-option${ne === t ? " is-selected" : ""}${D && t === te.correctAnswer ? " is-correct" : ""}${D && ne === t && t !== te.correctAnswer ? " is-incorrect" : ""}`,
+					}), E.options.map((e, t) => /* @__PURE__ */ (0, b.jsxs)("label", {
+						className: `chapter-quiz-option${re === t ? " is-selected" : ""}${T && t === E.correctAnswer ? " is-correct" : ""}${T && re === t && t !== E.correctAnswer ? " is-incorrect" : ""}`,
 						children: [
-							/* @__PURE__ */ (0, h.jsx)("input", {
+							/* @__PURE__ */ (0, b.jsx)("input", {
 								type: "radio",
 								name: "chapter-quiz-answer",
 								value: t,
-								checked: ne === t,
-								onChange: () => y((e) => ({
+								checked: re === t,
+								onChange: () => _((e) => ({
 									...e,
 									[f]: t
 								}))
 							}),
-							/* @__PURE__ */ (0, h.jsx)("span", {
+							/* @__PURE__ */ (0, b.jsx)("span", {
 								className: "chapter-quiz-letter",
 								children: "ABCD"[t]
 							}),
-							/* @__PURE__ */ (0, h.jsx)("span", { children: e }),
-							D && t === te.correctAnswer && /* @__PURE__ */ (0, h.jsx)("span", {
+							/* @__PURE__ */ (0, b.jsx)("span", { children: e }),
+							T && t === E.correctAnswer && /* @__PURE__ */ (0, b.jsx)("span", {
 								className: "chapter-quiz-answer-label",
 								children: "Correct answer"
 							}),
-							D && ne === t && t !== te.correctAnswer && /* @__PURE__ */ (0, h.jsx)("span", {
+							T && re === t && t !== E.correctAnswer && /* @__PURE__ */ (0, b.jsx)("span", {
 								className: "chapter-quiz-answer-label",
 								children: "Your answer"
 							})
 						]
 					}, t))]
 				}),
-				D ? /* @__PURE__ */ (0, h.jsxs)("div", {
+				T ? /* @__PURE__ */ (0, b.jsxs)("div", {
 					className: "chapter-quiz-feedback",
 					role: "status",
 					children: [
-						/* @__PURE__ */ (0, h.jsx)("strong", { children: ne === te.correctAnswer ? "Correct answer!" : "That’s not the right answer." }),
-						/* @__PURE__ */ (0, h.jsx)("p", { children: te.explanation }),
-						/* @__PURE__ */ (0, h.jsxs)("blockquote", { children: [
+						/* @__PURE__ */ (0, b.jsx)("strong", { children: re === E.correctAnswer ? "Correct answer!" : "That’s not the right answer." }),
+						/* @__PURE__ */ (0, b.jsx)("p", { children: E.explanation }),
+						/* @__PURE__ */ (0, b.jsxs)("blockquote", { children: [
 							"« ",
-							te.quote,
+							E.quote,
 							" »"
 						] }),
-						/* @__PURE__ */ (0, h.jsxs)("small", { children: [
+						/* @__PURE__ */ (0, b.jsxs)("small", { children: [
 							e.reference,
 							":",
-							te.verse
+							E.verse
 						] })
 					]
-				}) : /* @__PURE__ */ (0, h.jsx)("button", {
+				}) : /* @__PURE__ */ (0, b.jsx)("button", {
 					className: "chapter-quiz-validate",
 					type: "button",
-					disabled: ne === void 0,
-					onClick: () => _((e) => ({
+					disabled: re === void 0,
+					onClick: () => h((e) => ({
 						...e,
-						[f]: ne
+						[f]: re
 					})),
 					children: "Check my answer"
 				}),
-				/* @__PURE__ */ (0, h.jsxs)("nav", {
+				/* @__PURE__ */ (0, b.jsxs)("nav", {
 					className: "chapter-quiz-navigation",
 					"aria-label": "Quiz navigation",
 					children: [
-						/* @__PURE__ */ (0, h.jsx)("button", {
+						/* @__PURE__ */ (0, b.jsx)("button", {
 							type: "button",
-							onClick: () => ee(f - 1),
+							onClick: () => w(f - 1),
 							disabled: f === 0,
 							"aria-label": "Previous question",
 							children: "←"
 						}),
-						/* @__PURE__ */ (0, h.jsxs)("span", { children: [f + 1, " / 10"] }),
-						/* @__PURE__ */ (0, h.jsx)("button", {
+						/* @__PURE__ */ (0, b.jsxs)("span", { children: [f + 1, " / 10"] }),
+						/* @__PURE__ */ (0, b.jsx)("button", {
 							type: "button",
-							disabled: !D,
+							disabled: !T,
 							onClick: () => {
-								f < 9 ? ee(f + 1) : (x(!0), requestAnimationFrame(T));
+								f < 9 ? w(f + 1) : (x(!0), requestAnimationFrame(C));
 							},
 							"aria-label": f === 9 ? "See my result" : "Next question",
 							children: f === 9 ? "Finish" : "→"
@@ -9125,87 +9126,8 @@ function ye({ source: e, bridge: t }) {
 		]
 	});
 }
-// src/shared/bible-voice-recorder.js
-function be({ getStream: e, createRecorder: t, createAudioContext: n, requestFrame: r, cancelFrame: i, onLevels: a = () => {}, onReady: o = () => {}, onSilence: s = () => {}, silenceMs: c = 2e3, maxDurationMs: l = 3e4 }) {
-	let u, d, f, p, m, h, g, _ = !1, v = !1, y = !1, b = !1, x = null, S = 0, C = [], w = () => {
-		y || (y = !0, h !== void 0 && i(h), clearTimeout(g), f?.disconnect(), p?.disconnect(), u?.getTracks().forEach((e) => e.stop()), d && d.state !== "closed" && d.close().catch(() => {}));
-	}, T = new Promise((i, T) => {
-		let E;
-		try {
-			d = n(), d.resume().catch(() => {}), E = e();
-		} catch (e) {
-			T(e);
-			return;
-		}
-		Promise.resolve(E).then(async (e) => {
-			if (u = e, _) u.getTracks().forEach((e) => e.stop()), w(), i(null);
-			else try {
-				if (m = t(u), p = d.createAnalyser(), p.fftSize = 1024, p.smoothingTimeConstant = .65, f = d.createMediaStreamSource(u), f.connect(p), await d.resume(), _) {
-					w(), i(null);
-					return;
-				}
-				m.ondataavailable = (e) => {
-					e.data?.size && C.push(e.data);
-				}, m.onerror = (e) => {
-					w(), T(e.error || /* @__PURE__ */ Error("Voice recording failed."));
-				}, m.onstop = () => {
-					let e = _ ? null : new Blob(C, { type: m.mimeType || "audio/webm" });
-					w(), i(e);
-				}, m.start(250), o(), g = setTimeout(() => ee(), l);
-				let e = new Uint8Array(p.frequencyBinCount), n = new Uint8Array(p.fftSize), E = (t) => {
-					if (y || v) return;
-					p.getByteFrequencyData(e), p.getByteTimeDomainData(n);
-					let i = 0;
-					for (let e of n) {
-						let t = (e - 128) / 128;
-						i += t * t;
-					}
-					if (Math.sqrt(i / n.length) >= .018) b = !0, x = null;
-					else if (b && (x ??= t, t - x >= c)) {
-						s(), ee();
-						return;
-					}
-					if (t - S >= 50) {
-						let n = Array(18);
-						for (let t = 0; t < n.length; t++) {
-							let r = Math.floor(100 * 80 ** (t / n.length) / (d.sampleRate / p.fftSize)), i = Math.min(e.length, Math.max(r + 1, Math.ceil(100 * 80 ** ((t + 1) / n.length) / (d.sampleRate / p.fftSize)))), a = 0;
-							for (let t = r; t < i; t++) a += e[t] ** 2;
-							n[t] = Math.sqrt(a / Math.max(1, i - r)) / 255;
-						}
-						a(n), S = t;
-					}
-					h = r(E);
-				};
-				h = r(E);
-			} catch (e) {
-				w(), T(e);
-			}
-		}, (e) => {
-			w(), T(e);
-		});
-	});
-	function ee() {
-		if (!(v || y)) {
-			if (v = !0, !m) _ = !0;
-			else if (m.state !== "recording") _ = !0;
-			else try {
-				m.stop();
-			} catch {
-				w();
-			}
-		}
-	}
-	function E() {
-		_ = !0, ee();
-	}
-	return {
-		done: T,
-		stop: ee,
-		cancel: E
-	};
-}
 // src/shared/bible-reference.js
-var xe = {
+var Te = {
 	genese: "GEN",
 	exode: "EXO",
 	levitique: "LEV",
@@ -9277,7 +9199,7 @@ var xe = {
 	jude: "JUD",
 	apocalypse: "REV",
 	revelation: "REV"
-}, Se = {
+}, Ee = {
 	zero: 0,
 	un: 1,
 	une: 1,
@@ -9326,16 +9248,16 @@ var xe = {
 	seventy: 70,
 	eighty: 80,
 	ninety: 90
-}, Ce = RegExp(`\\b\\d+\\b|\\b(?:${Object.keys(Se).sort((e, t) => t.length - e.length).join("|")}|et|and)\\b`, "g");
-function we(e) {
+}, De = RegExp(`\\b\\d+\\b|\\b(?:${Object.keys(Ee).sort((e, t) => t.length - e.length).join("|")}|et|and)\\b`, "g");
+function Oe(e) {
 	return String(e).toLocaleLowerCase("fr-CA").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[’']/g, " ").replace(/[^a-z0-9]+/g, " ").trim();
 }
-function Te(e) {
-	let t = we(e);
+function ke(e) {
+	let t = Oe(e);
 	if (/^\d+$/.test(t)) return Number(t);
 	let n = t.split(" ").filter(Boolean);
 	if (!n.length) return NaN;
-	if (n[0] === "quatre" && n[1] === "vingt") return 80 + n.filter((e) => e !== "et" && e !== "and").slice(2).map((e) => Se[e]).reduce((e, t) => e + (t || 0), 0);
+	if (n[0] === "quatre" && n[1] === "vingt") return 80 + n.filter((e) => e !== "et" && e !== "and").slice(2).map((e) => Ee[e]).reduce((e, t) => e + (t || 0), 0);
 	let r = 0;
 	for (let e of n) {
 		if (e === "cent" || e === "hundred") {
@@ -9343,18 +9265,18 @@ function Te(e) {
 			continue;
 		}
 		if (e === "et" || e === "and") continue;
-		let t = Se[e];
+		let t = Ee[e];
 		if (t === void 0) return NaN;
 		r += t;
 	}
 	return r;
 }
-function Ee(e, t) {
-	let n = we(e), r = [...Object.entries(xe), ...t.map((e) => [we(e.name), e.id])].sort((e, t) => t[0].length - e[0].length).find(([e]) => e && RegExp(`(?:^| )${e.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?: |$)`).test(n));
+function Ae(e, t) {
+	let n = Oe(e), r = [...Object.entries(Te), ...t.map((e) => [Oe(e.name), e.id])].sort((e, t) => t[0].length - e[0].length).find(([e]) => e && RegExp(`(?:^| )${e.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?: |$)`).test(n));
 	if (!r) return null;
 	let i = n.replace(RegExp(`(?:^| )${r[0].replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?: |$)`), " ").trim(), a = /\b(?:chapter|chapitre)\b/.exec(i), o = /\b(?:verse|verset)\b/.exec(i), s = t.find((e) => e.id === r[1]);
 	if (a && o && o.index > a.index) {
-		let e = i.slice(a.index + a[0].length, o.index).match(Ce) || [], t = i.slice(o.index + o[0].length).match(Ce) || [], n = Te(e.join(" ")), r = Te(t.join(" "));
+		let e = i.slice(a.index + a[0].length, o.index).match(De) || [], t = i.slice(o.index + o[0].length).match(De) || [], n = ke(e.join(" ")), r = ke(t.join(" "));
 		if (s && Number.isInteger(n) && n > 0 && Number.isInteger(r) && r > 0) return {
 			bookId: s.id,
 			chapter: n,
@@ -9362,10 +9284,10 @@ function Ee(e, t) {
 			bookName: s.name
 		};
 	}
-	let c = i.match(Ce) || [], l = [];
+	let c = i.match(De) || [], l = [];
 	for (let e = 0; e < c.length && l.length < 2; e++) {
 		let t = c[e];
-		t === "quatre" && c[e + 1] === "vingt" ? (t += ` ${c[++e]}`, c[e + 1] === "et" && c[e + 2] ? t += ` et ${c[e += 2]}` : /^(dix|onze|douze|treize|quatorze|quinze|seize|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf)$/.test(c[e + 1] || "") && (t += ` ${c[++e]}`)) : /^(vingt|trente|quarante|cinquante|soixante|twenty|thirty|forty|fifty|sixty)$/.test(t) && c[e + 1] === "et" && c[e + 2] ? t += ` et ${c[e += 2]}` : /^(vingt|trente|quarante|cinquante|soixante|twenty|thirty|forty|fifty|sixty)$/.test(t) && c[e + 1] && /^(un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|treize|quatorze|quinze|seize|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen)$/.test(c[e + 1]) && (t += ` ${c[++e]}`), l.push(Te(t));
+		t === "quatre" && c[e + 1] === "vingt" ? (t += ` ${c[++e]}`, c[e + 1] === "et" && c[e + 2] ? t += ` et ${c[e += 2]}` : /^(dix|onze|douze|treize|quatorze|quinze|seize|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf)$/.test(c[e + 1] || "") && (t += ` ${c[++e]}`)) : /^(vingt|trente|quarante|cinquante|soixante|twenty|thirty|forty|fifty|sixty)$/.test(t) && c[e + 1] === "et" && c[e + 2] ? t += ` et ${c[e += 2]}` : /^(vingt|trente|quarante|cinquante|soixante|twenty|thirty|forty|fifty|sixty)$/.test(t) && c[e + 1] && /^(un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|treize|quatorze|quinze|seize|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen)$/.test(c[e + 1]) && (t += ` ${c[++e]}`), l.push(ke(t));
 	}
 	return l.length < 2 || l.some((e) => !Number.isInteger(e) || e < 1) ? null : s ? {
 		bookId: s.id,
@@ -9374,54 +9296,8 @@ function Ee(e, t) {
 		bookName: s.name
 	} : null;
 }
-// src/react/bible-voice-client.js
-function De() {
-	return window.Capacitor?.isNativePlatform?.() || ["android", "ios"].includes(window.Capacitor?.getPlatform?.()) || window.location.hostname === "localhost" && !window.location.port ? "https://logicbible.vercel.app" : "";
-}
-async function Oe(e, t, n) {
-	let r = De(), i = await fetch(`${r}/api/supabase/config`, { signal: n }), a = await i.json().catch(() => null);
-	if (!i.ok || !a?.configured) throw Error("La transcription IA est indisponible.");
-	let { createClient: o } = await import("./dist-Dg8SfVZz.js").then((e) => e.n), { data: s, error: c } = await o(a.url, a.anonKey, { auth: {
-		persistSession: !0,
-		autoRefreshToken: !1,
-		detectSessionInUrl: !1
-	} }).auth.getSession(), l = s?.session?.access_token;
-	if (c || !l) throw Error("Connectez-vous pour utiliser la reconnaissance vocale par IA.");
-	let u = await fetch(`${r}${e}`, {
-		method: "POST",
-		signal: n,
-		headers: {
-			"Content-Type": "application/json",
-			Authorization: `Bearer ${l}`
-		},
-		body: JSON.stringify(t)
-	}), d = await u.json().catch(() => null);
-	if (!u.ok || !d) throw Error(d?.error || "La transcription IA a échoué. Réessayez.");
-	return d;
-}
-async function ke(e, { signal: t } = {}) {
-	let n = new Uint8Array(await e.arrayBuffer()), r = "";
-	for (let e = 0; e < n.length; e += 32768) r += String.fromCharCode(...n.subarray(e, e + 32768));
-	let i = await Oe("/api/ai/bible-voice-transcribe", {
-		audioBase64: btoa(r),
-		mimeType: e.type || "audio/webm"
-	}, t);
-	return String(i.text || "").trim();
-}
-function Ae(e, { signal: t } = {}) {
-	return Oe("/api/ai/bible-voice-search", { query: e }, t);
-}
-function je(e, { signal: t } = {}) {
-	return Oe("/api/ai/voice-assistant", { query: e }, t);
-}
-function Me(e, { signal: t } = {}) {
-	return Oe("/api/ai/voice-assistant", {
-		query: e,
-		action: "kids-story"
-	}, t);
-}
 // src/react/bible.jsx
-var Ne = /* @__PURE__ */ (0, h.jsxs)("svg", {
+var je = /* @__PURE__ */ (0, b.jsxs)("svg", {
 	viewBox: "0 0 24 24",
 	"aria-hidden": "true",
 	fill: "none",
@@ -9429,20 +9305,20 @@ var Ne = /* @__PURE__ */ (0, h.jsxs)("svg", {
 	strokeWidth: "1.8",
 	strokeLinecap: "round",
 	strokeLinejoin: "round",
-	children: [/* @__PURE__ */ (0, h.jsx)("rect", {
+	children: [/* @__PURE__ */ (0, b.jsx)("rect", {
 		x: "4",
 		y: "4",
 		width: "6",
 		height: "16",
 		rx: "1"
-	}), /* @__PURE__ */ (0, h.jsx)("rect", {
+	}), /* @__PURE__ */ (0, b.jsx)("rect", {
 		x: "14",
 		y: "4",
 		width: "6",
 		height: "16",
 		rx: "1"
 	})]
-}), Pe = /* @__PURE__ */ (0, h.jsxs)("svg", {
+}), Me = /* @__PURE__ */ (0, b.jsxs)("svg", {
 	viewBox: "0 0 24 24",
 	"aria-hidden": "true",
 	fill: "none",
@@ -9451,19 +9327,19 @@ var Ne = /* @__PURE__ */ (0, h.jsxs)("svg", {
 	strokeLinecap: "round",
 	strokeLinejoin: "round",
 	children: [
-		/* @__PURE__ */ (0, h.jsx)("circle", {
+		/* @__PURE__ */ (0, b.jsx)("circle", {
 			cx: "12",
 			cy: "12",
 			r: "7"
 		}),
-		/* @__PURE__ */ (0, h.jsx)("circle", {
+		/* @__PURE__ */ (0, b.jsx)("circle", {
 			cx: "12",
 			cy: "12",
 			r: "2"
 		}),
-		/* @__PURE__ */ (0, h.jsx)("path", { d: "M12 2v3M12 19v3M2 12h3M19 12h3" })
+		/* @__PURE__ */ (0, b.jsx)("path", { d: "M12 2v3M12 19v3M2 12h3M19 12h3" })
 	]
-}), Fe = {
+}), Ne = {
 	highlight: [
 		"m4 20 11.5-11.5",
 		"m14 5 5 5",
@@ -9492,8 +9368,8 @@ var Ne = /* @__PURE__ */ (0, h.jsxs)("svg", {
 		"M16 5v14"
 	]
 };
-function Ie({ name: e }) {
-	return /* @__PURE__ */ (0, h.jsx)("svg", {
+function Pe({ name: e }) {
+	return /* @__PURE__ */ (0, b.jsx)("svg", {
 		viewBox: "0 0 24 24",
 		"aria-hidden": "true",
 		fill: "none",
@@ -9501,23 +9377,23 @@ function Ie({ name: e }) {
 		strokeWidth: "1.8",
 		strokeLinecap: "round",
 		strokeLinejoin: "round",
-		children: Fe[e].map((e) => /* @__PURE__ */ (0, h.jsx)("path", { d: e }, e))
+		children: Ne[e].map((e) => /* @__PURE__ */ (0, b.jsx)("path", { d: e }, e))
 	});
 }
-function Le() {
-	let e = window.bibleReaderBridge, [t, n] = (0, p.useState)(() => e.getSnapshot());
-	return (0, p.useEffect)(() => {
+function Fe() {
+	let e = window.bibleReaderBridge, [t, n] = (0, v.useState)(() => e.getSnapshot());
+	return (0, v.useEffect)(() => {
 		let t = () => n(e.getSnapshot());
 		return document.addEventListener("bible:reader-change", t), () => document.removeEventListener("bible:reader-change", t);
 	}, [e]), [t, e];
 }
-function Re() {
-	let [e, t] = Le(), n = (0, p.useRef)(null), r = (0, p.useRef)(null), i = e.books.find((t) => t.id === e.bookId)?.name || "Bible", a = () => {
+function Ie() {
+	let [e, t] = Fe(), n = (0, v.useRef)(null), r = (0, v.useRef)(null), i = e.books.find((t) => t.id === e.bookId)?.name || "Bible", a = () => {
 		n.current.showModal();
 		let e = n.current.querySelector("[aria-current=\"true\"]");
 		e?.focus({ preventScroll: !0 }), e?.scrollIntoView({ block: "nearest" });
 	};
-	(0, p.useEffect)(() => {
+	(0, v.useEffect)(() => {
 		r.current === e.bookId && (r.current = null, a());
 	}, [e.bookId]);
 	let o = (e) => {
@@ -9528,72 +9404,72 @@ function Re() {
 			behavior: "instant"
 		});
 	};
-	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [
-		/* @__PURE__ */ (0, h.jsx)("label", {
+	return /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [
+		/* @__PURE__ */ (0, b.jsx)("label", {
 			className: "reader-select-label bible-glass-select",
 			"aria-label": "Bible version",
-			children: /* @__PURE__ */ (0, h.jsx)("select", {
+			children: /* @__PURE__ */ (0, b.jsx)("select", {
 				className: "bible-glass-select-input",
 				value: e.versionId,
 				onChange: (e) => t.setVersion(e.target.value),
-				children: e.versionOptions.map((e) => e.separator ? /* @__PURE__ */ (0, h.jsx)("option", {
+				children: e.versionOptions.map((e) => e.separator ? /* @__PURE__ */ (0, b.jsx)("option", {
 					disabled: !0,
 					value: "",
 					children: "────────────"
-				}, "separator") : /* @__PURE__ */ (0, h.jsx)("option", {
+				}, "separator") : /* @__PURE__ */ (0, b.jsx)("option", {
 					value: e.id,
 					children: e.label
 				}, e.id))
 			})
 		}),
-		/* @__PURE__ */ (0, h.jsx)("label", {
+		/* @__PURE__ */ (0, b.jsx)("label", {
 			className: "reader-select-label bible-glass-select",
 			"aria-label": "Book",
-			children: /* @__PURE__ */ (0, h.jsx)("select", {
+			children: /* @__PURE__ */ (0, b.jsx)("select", {
 				className: "bible-glass-select-input",
 				value: e.bookId,
 				onChange: (e) => o(e.target.value),
-				children: e.books.map((e) => /* @__PURE__ */ (0, h.jsx)("option", {
+				children: e.books.map((e) => /* @__PURE__ */ (0, b.jsx)("option", {
 					value: e.id,
 					children: e.name
 				}, e.id))
 			})
 		}),
-		/* @__PURE__ */ (0, h.jsx)("button", {
+		/* @__PURE__ */ (0, b.jsx)("button", {
 			className: "reader-select-label compact bible-glass-select bible-chapter-picker-trigger",
 			type: "button",
 			"aria-label": `Choose chapter, current chapter ${e.chapter}`,
 			"aria-haspopup": "dialog",
 			onClick: a,
-			children: /* @__PURE__ */ (0, h.jsx)("span", { children: e.chapter })
+			children: /* @__PURE__ */ (0, b.jsx)("span", { children: e.chapter })
 		}),
-		/* @__PURE__ */ (0, h.jsx)("dialog", {
+		/* @__PURE__ */ (0, b.jsx)("dialog", {
 			className: "bible-chapter-picker",
 			ref: n,
 			"aria-labelledby": "bible-chapter-picker-title",
 			onClick: (e) => {
 				e.target === e.currentTarget && e.currentTarget.close();
 			},
-			children: /* @__PURE__ */ (0, h.jsxs)("div", {
+			children: /* @__PURE__ */ (0, b.jsxs)("div", {
 				className: "bible-chapter-picker-content",
 				children: [
-					/* @__PURE__ */ (0, h.jsxs)("header", { children: [/* @__PURE__ */ (0, h.jsxs)("div", { children: [/* @__PURE__ */ (0, h.jsx)("span", {
+					/* @__PURE__ */ (0, b.jsxs)("header", { children: [/* @__PURE__ */ (0, b.jsxs)("div", { children: [/* @__PURE__ */ (0, b.jsx)("span", {
 						className: "bible-chapter-picker-eyebrow",
 						children: "CHOOSE A CHAPTER"
-					}), /* @__PURE__ */ (0, h.jsx)("h2", {
+					}), /* @__PURE__ */ (0, b.jsx)("h2", {
 						id: "bible-chapter-picker-title",
 						children: i
-					})] }), /* @__PURE__ */ (0, h.jsx)("button", {
+					})] }), /* @__PURE__ */ (0, b.jsx)("button", {
 						type: "button",
 						className: "bible-chapter-picker-close",
 						"aria-label": "Close chapter selection",
 						onClick: () => n.current.close(),
 						children: "×"
 					})] }),
-					/* @__PURE__ */ (0, h.jsx)("p", { children: "Select a number to start reading." }),
-					/* @__PURE__ */ (0, h.jsx)("div", {
+					/* @__PURE__ */ (0, b.jsx)("p", { children: "Select a number to start reading." }),
+					/* @__PURE__ */ (0, b.jsx)("div", {
 						className: "bible-chapter-picker-grid",
-						children: e.chapters.map((t) => /* @__PURE__ */ (0, h.jsx)("button", {
+						children: e.chapters.map((t) => /* @__PURE__ */ (0, b.jsx)("button", {
 							type: "button",
 							"aria-label": `${i} ${t}`,
 							"aria-current": t === e.chapter ? "true" : void 0,
@@ -9601,7 +9477,7 @@ function Re() {
 							children: t
 						}, t))
 					}),
-					/* @__PURE__ */ (0, h.jsxs)("footer", { children: [
+					/* @__PURE__ */ (0, b.jsxs)("footer", { children: [
 						e.chapters.length,
 						" chapters · Chapter ",
 						e.chapter,
@@ -9610,16 +9486,16 @@ function Re() {
 				]
 			})
 		}),
-		/* @__PURE__ */ (0, h.jsx)("button", {
+		/* @__PURE__ */ (0, b.jsx)("button", {
 			className: "icon-button bible-glass-control bible-glass-search",
 			type: "button",
 			"data-bible-menu-toggle": !0,
 			"aria-label": "Open Bible menu",
 			"aria-controls": "bible-menu-drawer",
 			"aria-expanded": "false",
-			children: /* @__PURE__ */ (0, h.jsx)("span", {
+			children: /* @__PURE__ */ (0, b.jsx)("span", {
 				className: "bible-glass-control-content",
-				children: /* @__PURE__ */ (0, h.jsxs)("svg", {
+				children: /* @__PURE__ */ (0, b.jsxs)("svg", {
 					viewBox: "0 0 24 24",
 					"aria-hidden": "true",
 					fill: "none",
@@ -9627,49 +9503,49 @@ function Re() {
 					strokeWidth: "1.8",
 					strokeLinecap: "round",
 					strokeLinejoin: "round",
-					children: [/* @__PURE__ */ (0, h.jsx)("circle", {
+					children: [/* @__PURE__ */ (0, b.jsx)("circle", {
 						cx: "10.8",
 						cy: "10.8",
 						r: "6.8"
-					}), /* @__PURE__ */ (0, h.jsx)("path", { d: "m16 16 5 5" })]
+					}), /* @__PURE__ */ (0, b.jsx)("path", { d: "m16 16 5 5" })]
 				})
 			})
 		})
 	] });
 }
-function ze({ assistant: e = !1 }) {
-	let [t, n] = Le(), [r, i] = (0, p.useState)(!1), [a, o] = (0, p.useState)("idle"), [s, c] = (0, p.useState)(""), [l, u] = (0, p.useState)(""), [d, f] = (0, p.useState)([]), [m, g] = (0, p.useState)([]), [_, y] = (0, p.useState)(Array(18).fill(.12)), b = (0, p.useRef)(null), x = (0, p.useRef)(null), S = (0, p.useRef)(!1), C = (0, p.useRef)(null), w = () => {
-		b.current?.cancel(), b.current = null, x.current?.abort(), x.current = null, i(!1), o("idle");
+function Le({ assistant: e = !1 }) {
+	let [t, n] = Fe(), [r, i] = (0, v.useState)(!1), [a, o] = (0, v.useState)("idle"), [s, c] = (0, v.useState)(""), [m, h] = (0, v.useState)(""), [g, _] = (0, v.useState)([]), [y, x] = (0, v.useState)([]), [ee, te] = (0, v.useState)(Array(18).fill(.12)), C = (0, v.useRef)(null), w = (0, v.useRef)(null), ne = (0, v.useRef)(!1), T = (0, v.useRef)(null), E = () => {
+		C.current?.cancel(), C.current = null, w.current?.abort(), w.current = null, i(!1), o("idle");
 	};
-	(0, p.useEffect)(() => () => {
-		b.current?.cancel(), x.current?.abort();
-	}, []), (0, p.useEffect)(() => {
+	(0, v.useEffect)(() => () => {
+		C.current?.cancel(), w.current?.abort();
+	}, []), (0, v.useEffect)(() => {
 		let t = () => {
-			!S.current && document.querySelector(".app-shell")?.dataset.activeScreen !== (e ? "home" : "bible") && w();
+			!ne.current && document.querySelector(".app-shell")?.dataset.activeScreen !== (e ? "home" : "bible") && E();
 		};
 		return window.addEventListener("app:screen-change", t), () => window.removeEventListener("app:screen-change", t);
-	}, [e]), (0, p.useEffect)(() => {
+	}, [e]), (0, v.useEffect)(() => {
 		if (!r) return;
 		let e = (e) => {
-			e.key === "Escape" && w();
+			e.key === "Escape" && E();
 		};
 		return window.addEventListener("keydown", e), () => window.removeEventListener("keydown", e);
 	}, [r]);
-	let T = (t) => {
+	let re = (t) => {
 		o("opening"), c(`${t.bookName} ${t.chapter}:${t.verse}`), (async () => {
 			try {
-				if (S.current = !0, e && !window.aiBridge.navigateVoiceScreen("bible")) throw Error("Navigation cancelled.");
-				await n.navigateToReference(t.bookId, t.chapter, t.verse), w();
+				if (ne.current = !0, e && !window.aiBridge.navigateVoiceScreen("bible")) throw Error("Navigation cancelled.");
+				await n.navigateToReference(t.bookId, t.chapter, t.verse), E();
 			} catch {
 				o("error"), c(`Je n’ai pas pu ouvrir ${t.bookName} ${t.chapter}:${t.verse}. Vérifiez la référence et réessayez.`);
 			} finally {
-				S.current = !1;
+				ne.current = !1;
 			}
 		})();
-	}, ee = (e) => {
-		window.voiceKidsStoryId = e.id, window.aiBridge.navigateVoiceScreen("kids-bible") ? (document.dispatchEvent(new Event("kids:voice-story")), w()) : (delete window.voiceKidsStoryId, o("error"), c("Je n’ai pas pu ouvrir Kids Bible."));
-	}, E = () => {
-		if (i(!0), u(""), f([]), g([]), c(""), o("starting"), !navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
+	}, ie = (e) => {
+		window.voiceKidsStoryId = e.id, window.aiBridge.navigateVoiceScreen("kids-bible") ? (document.dispatchEvent(new Event("kids:voice-story")), E()) : (delete window.voiceKidsStoryId, o("error"), c("Je n’ai pas pu ouvrir Kids Bible."));
+	}, ae = () => {
+		if (i(!0), h(""), _([]), x([]), c(""), o("starting"), !navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
 			o("error"), c("L’enregistrement audio n’est pas disponible dans ce navigateur.");
 			return;
 		}
@@ -9680,13 +9556,13 @@ function ze({ assistant: e = !1 }) {
 			"audio/ogg"
 		].find((e) => window.MediaRecorder.isTypeSupported?.(e)), r;
 		try {
-			r = be({
+			r = l({
 				getStream: () => navigator.mediaDevices.getUserMedia({ audio: !0 }),
 				createRecorder: (e) => n ? new window.MediaRecorder(e, { mimeType: n }) : new window.MediaRecorder(e),
 				createAudioContext: () => new (window.AudioContext || window.webkitAudioContext)(),
 				requestFrame: (e) => window.requestAnimationFrame(e),
 				cancelFrame: (e) => window.cancelAnimationFrame(e),
-				onLevels: (e) => y(e.map((e) => Number.isFinite(e) ? e : 0)),
+				onLevels: (e) => te(e.map((e) => Number.isFinite(e) ? e : 0)),
 				onReady: () => {
 					o("listening"), c("Je vous écoute… une pause de 2 secondes lancera la recherche.");
 				},
@@ -9695,7 +9571,7 @@ function ze({ assistant: e = !1 }) {
 				},
 				silenceMs: 2e3,
 				maxDurationMs: 3e4
-			}), b.current = r;
+			}), C.current = r;
 		} catch {
 			o("error"), c("Le microphone n’a pas pu démarrer.");
 			return;
@@ -9703,20 +9579,20 @@ function ze({ assistant: e = !1 }) {
 		(async () => {
 			try {
 				let n = await r.done;
-				if (b.current !== r) return;
-				if (b.current = null, !n?.size) throw Error("Aucune parole n’a été détectée. Réessayez.");
+				if (C.current !== r) return;
+				if (C.current = null, !n?.size) throw Error("Aucune parole n’a été détectée. Réessayez.");
 				o("transcribing"), c("Transcription par IA en cours…");
 				let i = new AbortController();
-				x.current = i;
-				let a = await ke(n, { signal: i.signal });
-				if (x.current !== i) return;
-				if (u(a), e) {
+				w.current = i;
+				let a = await d(n, { signal: i.signal });
+				if (w.current !== i) return;
+				if (h(a), e) {
 					c("Je prépare votre demande…");
-					let e = await je(a, { signal: i.signal });
-					if (x.current !== i) return;
+					let e = await u(a, { signal: i.signal });
+					if (w.current !== i) return;
 					if (e.type === "navigate") {
-						if (x.current = null, !window.aiBridge.navigateVoiceScreen(e.screen)) throw Error("Je n’ai pas pu ouvrir cette page.");
-						w();
+						if (w.current = null, !window.aiBridge.navigateVoiceScreen(e.screen)) throw Error("Je n’ai pas pu ouvrir cette page.");
+						E();
 						return;
 					}
 					if (e.type === "prayer") {
@@ -9725,56 +9601,56 @@ function ze({ assistant: e = !1 }) {
 							title: e.title,
 							text: e.text,
 							category: e.category
-						}, x.current = null, !window.aiBridge.navigateVoiceScreen("prayer")) throw delete window.voicePrayerDraft, Error("Je n’ai pas pu ouvrir la page de prière.");
-						document.dispatchEvent(new Event("prayer:voice-draft")), w();
+						}, w.current = null, !window.aiBridge.navigateVoiceScreen("prayer")) throw delete window.voicePrayerDraft, Error("Je n’ai pas pu ouvrir la page de prière.");
+						document.dispatchEvent(new Event("prayer:voice-draft")), E();
 						return;
 					}
 					if (e.type === "kids_story") {
 						o("searching");
-						let e = await Me(a, { signal: i.signal });
-						if (x.current !== i) return;
-						if (x.current = null, e.certain && e.matches?.length === 1) ee(e.matches[0]);
-						else if (e.matches?.length) g(e.matches), o("choosing");
+						let e = await f(a, { signal: i.signal });
+						if (w.current !== i) return;
+						if (w.current = null, e.certain && e.matches?.length === 1) ie(e.matches[0]);
+						else if (e.matches?.length) x(e.matches), o("choosing");
 						else throw Error("Je n’ai pas trouvé cette histoire dans Kids Bible. Essayez de préciser l’histoire.");
 						return;
 					}
 					if (e.type === "question") {
 						c("Brother AI prépare sa réponse…");
 						let e = window.aiBridge.getSnapshot().messages.filter((e) => !e.pending).slice(-24);
-						if (await window.aiBridge.send(a, e), x.current !== i) return;
-						if (x.current = null, !window.aiBridge.navigateVoiceScreen("ai")) throw Error("La réponse est enregistrée dans Brother AI, mais la page n’a pas pu s’ouvrir.");
-						w();
+						if (await window.aiBridge.send(a, e), w.current !== i) return;
+						if (w.current = null, !window.aiBridge.navigateVoiceScreen("ai")) throw Error("La réponse est enregistrée dans Brother AI, mais la page n’a pas pu s’ouvrir.");
+						E();
 						return;
 					}
 					if (e.type !== "reference") throw Error("Je peux ouvrir une page, un verset ou une histoire Kids Bible, préparer une prière ou transmettre une question à Brother AI.");
 				}
-				let s = Ee(a, t.books);
-				if (s) x.current = null, T(s);
+				let s = Ae(a, t.books);
+				if (s) w.current = null, re(s);
 				else {
 					o("searching");
-					let e = await Ae(a, { signal: i.signal });
-					if (x.current !== i) return;
-					x.current = null;
+					let e = await p(a, { signal: i.signal });
+					if (w.current !== i) return;
+					w.current = null;
 					let n = (e.matches || []).filter((e) => t.books.some((t) => t.id === e.bookId && e.chapter <= t.chapters));
-					e.certain && n.length === 1 ? T(n[0]) : n.length ? (f(n), o("choosing")) : (o("error"), c("Je n’ai pas trouvé de verset précis. Ajoutez quelques mots ou le contexte du passage."));
+					e.certain && n.length === 1 ? re(n[0]) : n.length ? (_(n), o("choosing")) : (o("error"), c("Je n’ai pas trouvé de verset précis. Ajoutez quelques mots ou le contexte du passage."));
 				}
 			} catch (e) {
 				if (e.name === "AbortError") return;
-				b.current === r && (b.current = null), x.current = null, o("error"), c(e.name === "NotAllowedError" ? "Autorisez le microphone dans les paramètres de l’application. Sur Android, installez la version 1.2 ou ultérieure." : e.message || "La transcription IA a échoué. Réessayez.");
+				C.current === r && (C.current = null), w.current = null, o("error"), c(e.name === "NotAllowedError" ? "Autorisez le microphone dans les paramètres de l’application. Sur Android, installez la version 1.2 ou ultérieure." : e.message || "La transcription IA a échoué. Réessayez.");
 			}
 		})();
 	};
-	return C.current = E, (0, p.useEffect)(() => {
+	return T.current = ae, (0, v.useEffect)(() => {
 		if (!e) return;
-		let t = () => C.current?.();
+		let t = () => T.current?.();
 		return window.addEventListener("app:voice-assistant", t), () => window.removeEventListener("app:voice-assistant", t);
-	}, [e]), /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [!e && /* @__PURE__ */ (0, h.jsx)("button", {
+	}, [e]), /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [!e && /* @__PURE__ */ (0, b.jsx)("button", {
 		type: "button",
 		className: "icon-button bible-glass-control bible-glass-search bible-voice-button",
 		"aria-label": "Chercher un verset par la voix",
 		title: "Chercher un verset par la voix",
-		onClick: E,
-		children: /* @__PURE__ */ (0, h.jsxs)("svg", {
+		onClick: ae,
+		children: /* @__PURE__ */ (0, b.jsxs)("svg", {
 			viewBox: "0 0 24 24",
 			"aria-hidden": "true",
 			fill: "none",
@@ -9782,56 +9658,56 @@ function ze({ assistant: e = !1 }) {
 			strokeWidth: "1.8",
 			strokeLinecap: "round",
 			strokeLinejoin: "round",
-			children: [/* @__PURE__ */ (0, h.jsx)("rect", {
+			children: [/* @__PURE__ */ (0, b.jsx)("rect", {
 				x: "9",
 				y: "2",
 				width: "6",
 				height: "12",
 				rx: "3"
-			}), /* @__PURE__ */ (0, h.jsx)("path", { d: "M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" })]
+			}), /* @__PURE__ */ (0, b.jsx)("path", { d: "M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" })]
 		})
-	}), r && (0, v.createPortal)(/* @__PURE__ */ (0, h.jsxs)("div", {
+	}), r && (0, S.createPortal)(/* @__PURE__ */ (0, b.jsxs)("div", {
 		className: "bible-voice-overlay",
 		role: "dialog",
 		"aria-modal": "true",
 		"aria-label": e ? "Assistant vocal" : "Recherche vocale de verset",
-		children: [/* @__PURE__ */ (0, h.jsx)("button", {
+		children: [/* @__PURE__ */ (0, b.jsx)("button", {
 			type: "button",
 			className: "bible-voice-dismiss",
 			"aria-label": "Fermer",
-			onClick: w
-		}), /* @__PURE__ */ (0, h.jsxs)("section", {
+			onClick: E
+		}), /* @__PURE__ */ (0, b.jsxs)("section", {
 			className: "bible-voice-listening",
 			children: [
-				/* @__PURE__ */ (0, h.jsx)("p", {
+				/* @__PURE__ */ (0, b.jsx)("p", {
 					className: "bible-voice-prompt",
 					children: e ? "Ask a question or open a page" : "Ask me to search a scripture"
 				}),
-				/* @__PURE__ */ (0, h.jsx)("div", {
+				/* @__PURE__ */ (0, b.jsx)("div", {
 					className: `bible-voice-wave${a === "listening" ? " is-listening" : ["error", "choosing"].includes(a) ? "" : " is-processing"}`,
 					"aria-hidden": "true",
-					children: _.map((e, t) => /* @__PURE__ */ (0, h.jsx)("i", { style: {
+					children: ee.map((e, t) => /* @__PURE__ */ (0, b.jsx)("i", { style: {
 						"--voice-level": `${Math.max(.12, e) * 100}%`,
 						"--voice-delay": `${t * 24}ms`
 					} }, t))
 				}),
-				/* @__PURE__ */ (0, h.jsxs)("div", {
+				/* @__PURE__ */ (0, b.jsxs)("div", {
 					className: "bible-voice-feedback",
 					children: [
-						l && /* @__PURE__ */ (0, h.jsx)("p", {
+						m && /* @__PURE__ */ (0, b.jsx)("p", {
 							className: "bible-voice-transcript",
 							"aria-live": "polite",
-							children: l
+							children: m
 						}),
-						a === "choosing" && /* @__PURE__ */ (0, h.jsxs)("div", {
+						a === "choosing" && /* @__PURE__ */ (0, b.jsxs)("div", {
 							className: "bible-voice-matches",
 							children: [
-								/* @__PURE__ */ (0, h.jsx)("p", { children: m.length ? "Quelle histoire cherchez-vous ?" : "Quel passage cherchez-vous ?" }),
-								m.map((e) => /* @__PURE__ */ (0, h.jsxs)("button", {
+								/* @__PURE__ */ (0, b.jsx)("p", { children: y.length ? "Quelle histoire cherchez-vous ?" : "Quel passage cherchez-vous ?" }),
+								y.map((e) => /* @__PURE__ */ (0, b.jsxs)("button", {
 									className: "bible-voice-retry",
 									type: "button",
 									onClick: () => {
-										g([]), ee(e);
+										x([]), ie(e);
 									},
 									children: [
 										e.title,
@@ -9839,11 +9715,11 @@ function ze({ assistant: e = !1 }) {
 										e.reference
 									]
 								}, e.id)),
-								d.map((e) => /* @__PURE__ */ (0, h.jsxs)("button", {
+								g.map((e) => /* @__PURE__ */ (0, b.jsxs)("button", {
 									className: "bible-voice-retry",
 									type: "button",
 									onClick: () => {
-										f([]), T(e);
+										_([]), re(e);
 									},
 									children: [
 										e.bookName,
@@ -9855,14 +9731,14 @@ function ze({ assistant: e = !1 }) {
 								}, `${e.bookId}.${e.chapter}.${e.verse}`))
 							]
 						}),
-						a === "error" && /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [/* @__PURE__ */ (0, h.jsx)("p", {
+						a === "error" && /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [/* @__PURE__ */ (0, b.jsx)("p", {
 							className: "bible-voice-status",
 							role: "alert",
 							children: s
-						}), /* @__PURE__ */ (0, h.jsx)("button", {
+						}), /* @__PURE__ */ (0, b.jsx)("button", {
 							className: "bible-voice-retry",
 							type: "button",
-							onClick: E,
+							onClick: ae,
 							children: "Réessayer"
 						})] })
 					]
@@ -9871,39 +9747,39 @@ function ze({ assistant: e = !1 }) {
 		})]
 	}), document.body)] });
 }
-function Be() {
-	let [e, t] = Le();
-	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [/* @__PURE__ */ (0, h.jsx)("button", {
+function Re() {
+	let [e, t] = Fe();
+	return /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [/* @__PURE__ */ (0, b.jsx)("button", {
 		className: `parallel-toggle bible-glass-control bible-glass-parallel${e.parallelEnabled ? " is-active" : ""}`,
 		type: "button",
 		onClick: t.toggleParallel,
-		children: /* @__PURE__ */ (0, h.jsxs)("span", {
+		children: /* @__PURE__ */ (0, b.jsxs)("span", {
 			className: "bible-glass-control-content",
-			children: [Ne, /* @__PURE__ */ (0, h.jsx)("span", { children: "Parallel" })]
+			children: [je, /* @__PURE__ */ (0, b.jsx)("span", { children: "Parallel" })]
 		})
-	}), /* @__PURE__ */ (0, h.jsx)("button", {
+	}), /* @__PURE__ */ (0, b.jsx)("button", {
 		className: `parallel-toggle reader-target-toggle bible-glass-control bible-glass-target${e.showHighlightsOnly ? " is-active" : ""}`,
 		type: "button",
 		onClick: t.toggleTarget,
-		children: /* @__PURE__ */ (0, h.jsxs)("span", {
+		children: /* @__PURE__ */ (0, b.jsxs)("span", {
 			className: "bible-glass-control-content",
-			children: [Pe, /* @__PURE__ */ (0, h.jsx)("span", { children: "Highlights" })]
+			children: [Me, /* @__PURE__ */ (0, b.jsx)("span", { children: "Highlights" })]
 		})
 	})] });
 }
-function Ve() {
-	let e = window.bibleReaderBridge, [t, n] = (0, p.useState)(() => e.getVerseSnapshot());
-	return (0, p.useEffect)(() => {
+function ze() {
+	let e = window.bibleReaderBridge, [t, n] = (0, v.useState)(() => e.getVerseSnapshot());
+	return (0, v.useEffect)(() => {
 		let t = () => n(e.getVerseSnapshot());
 		return document.addEventListener("bible:verse-ui-change", t), () => document.removeEventListener("bible:verse-ui-change", t);
 	}, [e]), [t, e];
 }
-function He() {
-	let [e] = Ve();
-	return /* @__PURE__ */ (0, h.jsx)(h.Fragment, { children: e.reference });
+function Be() {
+	let [e] = ze();
+	return /* @__PURE__ */ (0, b.jsx)(b.Fragment, { children: e.reference });
 }
-function Ue() {
-	let [e, t] = Ve();
+function Ve() {
+	let [e, t] = ze();
 	return [
 		[
 			"highlight",
@@ -9935,17 +9811,17 @@ function Ue() {
 			"Bookmark",
 			"action-secondary"
 		]
-	].map(([n, r, i]) => /* @__PURE__ */ (0, h.jsxs)("button", {
+	].map(([n, r, i]) => /* @__PURE__ */ (0, b.jsxs)("button", {
 		className: `${i}${e.active[n] ? " is-active" : ""}`,
 		type: "button",
 		"data-verse-action": n,
 		onClick: () => t.runAction(n),
-		children: [/* @__PURE__ */ (0, h.jsx)(Ie, { name: n }), /* @__PURE__ */ (0, h.jsx)("span", { children: r })]
+		children: [/* @__PURE__ */ (0, b.jsx)(Pe, { name: n }), /* @__PURE__ */ (0, b.jsx)("span", { children: r })]
 	}, n));
 }
-function We() {
-	let e = window.bibleReaderBridge, [t, n] = (0, p.useState)(() => e.getChapterSnapshot()), [r, i] = (0, p.useState)(() => e.getVerseSnapshot());
-	return (0, p.useEffect)(() => {
+function He() {
+	let e = window.bibleReaderBridge, [t, n] = (0, v.useState)(() => e.getChapterSnapshot()), [r, i] = (0, v.useState)(() => e.getVerseSnapshot());
+	return (0, v.useEffect)(() => {
 		let t = () => n(e.getChapterSnapshot()), r = () => i(e.getVerseSnapshot());
 		return document.addEventListener("bible:chapter-change", t), document.addEventListener("bible:verse-ui-change", r), () => {
 			document.removeEventListener("bible:chapter-change", t), document.removeEventListener("bible:verse-ui-change", r);
@@ -9956,11 +9832,11 @@ function We() {
 		bridge: e
 	};
 }
-function Ge(e, t) {
-	let n = (0, p.useRef)(null), r = (0, p.useRef)(!1), i = (0, p.useRef)(null), a = () => {
+function Ue(e, t) {
+	let n = (0, v.useRef)(null), r = (0, v.useRef)(!1), i = (0, v.useRef)(null), a = () => {
 		n.current && window.clearTimeout(n.current), n.current = null;
 	};
-	return (0, p.useEffect)(() => a, []), {
+	return (0, v.useEffect)(() => a, []), {
 		onClick: () => {
 			r.current ? r.current = !1 : t.selectVerse(e);
 		},
@@ -9981,8 +9857,8 @@ function Ge(e, t) {
 		}
 	};
 }
-function Ke({ verse: e, selection: t, bridge: n }) {
-	let r = Ge(e, n), i = [
+function We({ verse: e, selection: t, bridge: n }) {
+	let r = Ue(e, n), i = [
 		"scripture-line",
 		e.highlighted ? "is-highlighted" : "",
 		e.bookmarked ? "is-bookmarked" : "",
@@ -9990,7 +9866,7 @@ function Ke({ verse: e, selection: t, bridge: n }) {
 		t.selectedKey === e.key ? "is-selected" : "",
 		t.selectedKeys.includes(e.key) ? "is-multi-selected" : ""
 	].filter(Boolean).join(" ");
-	return /* @__PURE__ */ (0, h.jsxs)("p", {
+	return /* @__PURE__ */ (0, b.jsxs)("p", {
 		className: i,
 		style: e.highlightColor ? { "--highlight-color": e.highlightColor } : void 0,
 		"data-verse": e.reference,
@@ -10000,69 +9876,69 @@ function Ke({ verse: e, selection: t, bridge: n }) {
 		"data-verse-version": e.version,
 		"data-verse-text": e.text,
 		...r,
-		children: [e.number ? /* @__PURE__ */ (0, h.jsx)("sup", { children: e.number }) : null, e.text]
+		children: [e.number ? /* @__PURE__ */ (0, b.jsx)("sup", { children: e.number }) : null, e.text]
 	});
 }
-function qe({ state: e }) {
-	return e.status === "loading" ? /* @__PURE__ */ (0, h.jsx)("p", {
+function Ge({ state: e }) {
+	return e.status === "loading" ? /* @__PURE__ */ (0, b.jsx)("p", {
 		className: "reader-empty",
 		children: "Loading chapter..."
-	}) : e.status === "error" ? /* @__PURE__ */ (0, h.jsxs)("div", {
+	}) : e.status === "error" ? /* @__PURE__ */ (0, b.jsxs)("div", {
 		className: "reader-empty",
-		children: [/* @__PURE__ */ (0, h.jsx)("strong", { children: "Could not load this version." }), /* @__PURE__ */ (0, h.jsx)("span", { children: e.error })]
-	}) : e.verses.length || e.showHighlightsOnly ? /* @__PURE__ */ (0, h.jsx)("p", {
+		children: [/* @__PURE__ */ (0, b.jsx)("strong", { children: "Could not load this version." }), /* @__PURE__ */ (0, b.jsx)("span", { children: e.error })]
+	}) : e.verses.length || e.showHighlightsOnly ? /* @__PURE__ */ (0, b.jsx)("p", {
 		className: "reader-empty reader-empty-highlight",
 		children: "No highlighted verses."
-	}) : /* @__PURE__ */ (0, h.jsxs)("div", {
+	}) : /* @__PURE__ */ (0, b.jsxs)("div", {
 		className: "reader-empty",
-		children: [/* @__PURE__ */ (0, h.jsx)("strong", { children: e.title }), /* @__PURE__ */ (0, h.jsx)("span", { children: e.copyright })]
+		children: [/* @__PURE__ */ (0, b.jsx)("strong", { children: e.title }), /* @__PURE__ */ (0, b.jsx)("span", { children: e.copyright })]
 	});
 }
-function Je({ state: e, selection: t, bridge: n }) {
-	let [r, i] = Le();
-	return /* @__PURE__ */ (0, h.jsxs)("div", {
+function Ke({ state: e, selection: t, bridge: n }) {
+	let [r, i] = Fe();
+	return /* @__PURE__ */ (0, b.jsxs)("div", {
 		className: "parallel-scripture-grid",
-		children: [/* @__PURE__ */ (0, h.jsxs)("div", {
+		children: [/* @__PURE__ */ (0, b.jsxs)("div", {
 			className: "parallel-version-headers",
 			"aria-label": "Bible versions",
-			children: [/* @__PURE__ */ (0, h.jsxs)("label", {
+			children: [/* @__PURE__ */ (0, b.jsxs)("label", {
 				className: "parallel-version-header is-primary",
 				children: [
-					/* @__PURE__ */ (0, h.jsx)("span", { children: "Current version" }),
-					/* @__PURE__ */ (0, h.jsx)("strong", { children: e.parallel.primary.label }),
-					/* @__PURE__ */ (0, h.jsx)("small", { children: e.parallel.primary.name }),
-					/* @__PURE__ */ (0, h.jsx)("select", {
+					/* @__PURE__ */ (0, b.jsx)("span", { children: "Current version" }),
+					/* @__PURE__ */ (0, b.jsx)("strong", { children: e.parallel.primary.label }),
+					/* @__PURE__ */ (0, b.jsx)("small", { children: e.parallel.primary.name }),
+					/* @__PURE__ */ (0, b.jsx)("select", {
 						"aria-label": "Choose current Bible version",
 						value: r.versionId,
 						onChange: (e) => i.setVersion(e.target.value),
-						children: r.versionOptions.map((e) => e.separator ? /* @__PURE__ */ (0, h.jsx)("option", {
+						children: r.versionOptions.map((e) => e.separator ? /* @__PURE__ */ (0, b.jsx)("option", {
 							disabled: !0,
 							value: "",
 							children: "────────────"
-						}, "separator") : /* @__PURE__ */ (0, h.jsx)("option", {
+						}, "separator") : /* @__PURE__ */ (0, b.jsx)("option", {
 							value: e.id,
 							children: e.label
 						}, e.id))
 					})
 				]
-			}), /* @__PURE__ */ (0, h.jsxs)("label", {
+			}), /* @__PURE__ */ (0, b.jsxs)("label", {
 				className: "parallel-version-header is-compare",
 				children: [
-					/* @__PURE__ */ (0, h.jsx)("span", { children: "Compared version" }),
-					/* @__PURE__ */ (0, h.jsx)("strong", { children: e.parallel.compare.label }),
-					/* @__PURE__ */ (0, h.jsx)("small", { children: e.parallel.compare.name }),
-					/* @__PURE__ */ (0, h.jsx)("select", {
+					/* @__PURE__ */ (0, b.jsx)("span", { children: "Compared version" }),
+					/* @__PURE__ */ (0, b.jsx)("strong", { children: e.parallel.compare.label }),
+					/* @__PURE__ */ (0, b.jsx)("small", { children: e.parallel.compare.name }),
+					/* @__PURE__ */ (0, b.jsx)("select", {
 						"aria-label": "Choose compared Bible version",
 						value: r.parallelVersionId,
 						onChange: (e) => i.setParallelVersion(e.target.value),
-						children: r.parallelOptions.map((e) => /* @__PURE__ */ (0, h.jsx)("option", {
+						children: r.parallelOptions.map((e) => /* @__PURE__ */ (0, b.jsx)("option", {
 							value: e.id,
 							children: e.label
 						}, e.id))
 					})
 				]
 			})]
-		}), e.parallel.rows.map((r) => /* @__PURE__ */ (0, h.jsx)(Ye, {
+		}), e.parallel.rows.map((r) => /* @__PURE__ */ (0, b.jsx)(qe, {
 			verse: r,
 			state: e,
 			selection: t,
@@ -10070,9 +9946,9 @@ function Je({ state: e, selection: t, bridge: n }) {
 		}, r.key))]
 	});
 }
-function Ye({ verse: e, state: t, selection: n, bridge: r }) {
-	let i = Ge(e, r);
-	return /* @__PURE__ */ (0, h.jsxs)("article", {
+function qe({ verse: e, state: t, selection: n, bridge: r }) {
+	let i = Ue(e, r);
+	return /* @__PURE__ */ (0, b.jsxs)("article", {
 		className: `parallel-scripture-line${e.highlighted ? " is-highlighted" : ""}${e.bookmarked ? " is-bookmarked" : ""}${e.noted ? " is-noted" : ""}${n.selectedKey === e.key ? " is-selected" : ""}${n.selectedKeys.includes(e.key) ? " is-multi-selected" : ""}`,
 		style: e.highlightColor ? { "--highlight-color": e.highlightColor } : void 0,
 		"data-verse": e.reference,
@@ -10082,22 +9958,22 @@ function Ye({ verse: e, state: t, selection: n, bridge: r }) {
 		"data-verse-version": e.version,
 		"data-verse-text": e.text,
 		...i,
-		children: [/* @__PURE__ */ (0, h.jsxs)("p", {
+		children: [/* @__PURE__ */ (0, b.jsxs)("p", {
 			className: "parallel-scripture-column",
 			"data-parallel-role": "primary",
 			"aria-label": t.parallel.primary.label,
-			children: [e.number ? /* @__PURE__ */ (0, h.jsx)("sup", { children: e.number }) : null, e.text]
-		}), /* @__PURE__ */ (0, h.jsxs)("p", {
+			children: [e.number ? /* @__PURE__ */ (0, b.jsx)("sup", { children: e.number }) : null, e.text]
+		}), /* @__PURE__ */ (0, b.jsxs)("p", {
 			className: "parallel-scripture-column",
 			"data-parallel-role": "compare",
 			"aria-label": t.parallel.compare.label,
-			children: [e.number ? /* @__PURE__ */ (0, h.jsx)("sup", { children: e.number }) : null, e.comparisonText]
+			children: [e.number ? /* @__PURE__ */ (0, b.jsx)("sup", { children: e.number }) : null, e.comparisonText]
 		})]
 	});
 }
-function Xe({ state: e, bridge: t }) {
-	let [n, r] = (0, p.useState)(!1), [i, a] = (0, p.useState)(!1), o = (0, p.useRef)(null);
-	(0, p.useEffect)(() => {
+function Je({ state: e, bridge: t }) {
+	let [n, r] = (0, v.useState)(!1), [i, a] = (0, v.useState)(!1), o = (0, v.useRef)(null);
+	(0, v.useEffect)(() => {
 		n && o.current?.scrollIntoView({
 			behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
 			block: "start"
@@ -10109,16 +9985,16 @@ function Xe({ state: e, bridge: t }) {
 			behavior: "smooth"
 		});
 	};
-	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [/* @__PURE__ */ (0, h.jsxs)("nav", {
+	return /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [/* @__PURE__ */ (0, b.jsxs)("nav", {
 		className: "bible-chapter-navigation",
 		"aria-label": "Chapter navigation",
 		children: [
-			/* @__PURE__ */ (0, h.jsx)("button", {
+			/* @__PURE__ */ (0, b.jsx)("button", {
 				type: "button",
 				onClick: () => u(-1),
 				disabled: c,
 				"aria-label": "Previous chapter",
-				children: /* @__PURE__ */ (0, h.jsx)("svg", {
+				children: /* @__PURE__ */ (0, b.jsx)("svg", {
 					viewBox: "0 0 24 24",
 					"aria-hidden": "true",
 					fill: "none",
@@ -10126,10 +10002,10 @@ function Xe({ state: e, bridge: t }) {
 					strokeWidth: "2",
 					strokeLinecap: "round",
 					strokeLinejoin: "round",
-					children: /* @__PURE__ */ (0, h.jsx)("path", { d: "m15 18-6-6 6-6" })
+					children: /* @__PURE__ */ (0, b.jsx)("path", { d: "m15 18-6-6 6-6" })
 				})
 			}),
-			/* @__PURE__ */ (0, h.jsx)("button", {
+			/* @__PURE__ */ (0, b.jsx)("button", {
 				className: "bible-chapter-quiz-toggle",
 				type: "button",
 				onClick: () => {
@@ -10137,14 +10013,14 @@ function Xe({ state: e, bridge: t }) {
 				},
 				"aria-expanded": n,
 				"aria-controls": "bible-chapter-quiz",
-				children: /* @__PURE__ */ (0, h.jsx)("span", { children: "Quiz" })
+				children: /* @__PURE__ */ (0, b.jsx)("span", { children: "Quiz" })
 			}),
-			/* @__PURE__ */ (0, h.jsx)("button", {
+			/* @__PURE__ */ (0, b.jsx)("button", {
 				type: "button",
 				onClick: () => u(1),
 				disabled: l,
 				"aria-label": "Next chapter",
-				children: /* @__PURE__ */ (0, h.jsx)("svg", {
+				children: /* @__PURE__ */ (0, b.jsx)("svg", {
 					viewBox: "0 0 24 24",
 					"aria-hidden": "true",
 					fill: "none",
@@ -10152,39 +10028,39 @@ function Xe({ state: e, bridge: t }) {
 					strokeWidth: "2",
 					strokeLinecap: "round",
 					strokeLinejoin: "round",
-					children: /* @__PURE__ */ (0, h.jsx)("path", { d: "m9 18 6-6-6-6" })
+					children: /* @__PURE__ */ (0, b.jsx)("path", { d: "m9 18 6-6-6-6" })
 				})
 			})
 		]
-	}), /* @__PURE__ */ (0, h.jsx)("div", {
+	}), /* @__PURE__ */ (0, b.jsx)("div", {
 		id: "bible-chapter-quiz",
 		ref: o,
 		hidden: !n,
-		children: i && /* @__PURE__ */ (0, h.jsx)(ye, {
+		children: i && /* @__PURE__ */ (0, b.jsx)(we, {
 			source: e.quizSource,
 			bridge: t
 		})
 	})] });
 }
-function Ze() {
-	let { state: e, verseState: t, bridge: n } = We();
-	if (e.status !== "ready" || !e.verses.length) return /* @__PURE__ */ (0, h.jsx)(qe, { state: e });
-	let r = e.parallelEnabled && e.parallel ? /* @__PURE__ */ (0, h.jsx)(Je, {
+function Ye() {
+	let { state: e, verseState: t, bridge: n } = He();
+	if (e.status !== "ready" || !e.verses.length) return /* @__PURE__ */ (0, b.jsx)(Ge, { state: e });
+	let r = e.parallelEnabled && e.parallel ? /* @__PURE__ */ (0, b.jsx)(Ke, {
 		state: e,
 		selection: t,
 		bridge: n
-	}) : e.verses.map((e) => /* @__PURE__ */ (0, h.jsx)(Ke, {
+	}) : e.verses.map((e) => /* @__PURE__ */ (0, b.jsx)(We, {
 		verse: e,
 		selection: t,
 		bridge: n
 	}, e.key));
-	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [r, /* @__PURE__ */ (0, h.jsx)(Xe, {
+	return /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [r, /* @__PURE__ */ (0, b.jsx)(Je, {
 		state: e,
 		bridge: n
 	}, `${e.versionId}:${e.bookId}:${e.chapter}`)] });
 }
 // src/react/notes.jsx
-var Qe = {
+var Xe = {
 	text: [
 		"M4 5h16",
 		"M12 5v14",
@@ -10192,8 +10068,8 @@ var Qe = {
 	],
 	highlight: ["M4 16 14 6l4 4L8 20H4z", "m14 6 2-2 4 4-2 2"]
 };
-function $e({ name: e }) {
-	return /* @__PURE__ */ (0, h.jsx)("svg", {
+function Ze({ name: e }) {
+	return /* @__PURE__ */ (0, b.jsx)("svg", {
 		viewBox: "0 0 24 24",
 		"aria-hidden": "true",
 		fill: "none",
@@ -10201,124 +10077,124 @@ function $e({ name: e }) {
 		strokeWidth: "1.8",
 		strokeLinecap: "round",
 		strokeLinejoin: "round",
-		children: Qe[e].map((e) => /* @__PURE__ */ (0, h.jsx)("path", { d: e }, e))
+		children: Xe[e].map((e) => /* @__PURE__ */ (0, b.jsx)("path", { d: e }, e))
 	});
 }
-function et() {
-	let e = window.noteEditorBridge, [t, n] = (0, p.useState)(() => e.getSnapshot());
-	(0, p.useEffect)(() => {
+function Qe() {
+	let e = window.noteEditorBridge, [t, n] = (0, v.useState)(() => e.getSnapshot());
+	(0, v.useEffect)(() => {
 		let t = () => n(e.getSnapshot());
 		return document.addEventListener("note:toolbar-change", t), () => document.removeEventListener("note:toolbar-change", t);
 	}, [e]);
 	let r = (t, n) => e.command(t, n);
-	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [
-		/* @__PURE__ */ (0, h.jsx)("button", {
+	return /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [
+		/* @__PURE__ */ (0, b.jsx)("button", {
 			type: "button",
 			onClick: () => r("bold"),
 			"aria-label": "Bold",
-			children: /* @__PURE__ */ (0, h.jsx)("b", { children: "B" })
+			children: /* @__PURE__ */ (0, b.jsx)("b", { children: "B" })
 		}),
-		/* @__PURE__ */ (0, h.jsx)("button", {
+		/* @__PURE__ */ (0, b.jsx)("button", {
 			type: "button",
 			onClick: () => r("italic"),
 			"aria-label": "Italic",
-			children: /* @__PURE__ */ (0, h.jsx)("i", { children: "I" })
+			children: /* @__PURE__ */ (0, b.jsx)("i", { children: "I" })
 		}),
-		/* @__PURE__ */ (0, h.jsx)("button", {
+		/* @__PURE__ */ (0, b.jsx)("button", {
 			type: "button",
 			onClick: () => r("underline"),
 			"aria-label": "Underline",
-			children: /* @__PURE__ */ (0, h.jsx)("u", { children: "U" })
+			children: /* @__PURE__ */ (0, b.jsx)("u", { children: "U" })
 		}),
-		/* @__PURE__ */ (0, h.jsx)("button", {
+		/* @__PURE__ */ (0, b.jsx)("button", {
 			type: "button",
 			onClick: () => r("formatBlock", "h2"),
 			"aria-label": "Title",
 			children: "H"
 		}),
-		/* @__PURE__ */ (0, h.jsx)("span", {
+		/* @__PURE__ */ (0, b.jsx)("span", {
 			className: "note-toolbar-divider",
 			"aria-hidden": "true"
 		}),
-		/* @__PURE__ */ (0, h.jsx)("button", {
+		/* @__PURE__ */ (0, b.jsx)("button", {
 			type: "button",
 			onClick: () => r("insertUnorderedList"),
 			"aria-label": "Bulleted list",
 			children: "•"
 		}),
-		/* @__PURE__ */ (0, h.jsx)("button", {
+		/* @__PURE__ */ (0, b.jsx)("button", {
 			type: "button",
 			onClick: () => r("insertOrderedList"),
 			"aria-label": "Numbered list",
 			children: "1."
 		}),
-		/* @__PURE__ */ (0, h.jsx)("span", {
+		/* @__PURE__ */ (0, b.jsx)("span", {
 			className: "note-toolbar-divider",
 			"aria-hidden": "true"
 		}),
-		/* @__PURE__ */ (0, h.jsxs)("label", {
+		/* @__PURE__ */ (0, b.jsxs)("label", {
 			className: "note-format-select",
 			"aria-label": "Text color",
 			children: [
-				/* @__PURE__ */ (0, h.jsx)($e, { name: "text" }),
-				/* @__PURE__ */ (0, h.jsx)("span", {
+				/* @__PURE__ */ (0, b.jsx)(Ze, { name: "text" }),
+				/* @__PURE__ */ (0, b.jsx)("span", {
 					className: "note-color-swatch",
 					style: { background: t.textColor }
 				}),
-				/* @__PURE__ */ (0, h.jsx)("input", {
+				/* @__PURE__ */ (0, b.jsx)("input", {
 					type: "color",
 					value: t.textColor,
 					onChange: (t) => e.color("text", t.target.value)
 				})
 			]
 		}),
-		/* @__PURE__ */ (0, h.jsxs)("label", {
+		/* @__PURE__ */ (0, b.jsxs)("label", {
 			className: "note-format-select",
 			"aria-label": "Highlight color",
 			children: [
-				/* @__PURE__ */ (0, h.jsx)($e, { name: "highlight" }),
-				/* @__PURE__ */ (0, h.jsx)("span", {
+				/* @__PURE__ */ (0, b.jsx)(Ze, { name: "highlight" }),
+				/* @__PURE__ */ (0, b.jsx)("span", {
 					className: "note-color-swatch",
 					style: { background: t.highlightColor }
 				}),
-				/* @__PURE__ */ (0, h.jsx)("input", {
+				/* @__PURE__ */ (0, b.jsx)("input", {
 					type: "color",
 					value: t.highlightColor,
 					onChange: (t) => e.color("highlight", t.target.value)
 				})
 			]
 		}),
-		/* @__PURE__ */ (0, h.jsx)("button", {
+		/* @__PURE__ */ (0, b.jsx)("button", {
 			type: "button",
 			onClick: () => e.changeSize(-1),
 			"aria-label": "Make text smaller",
 			title: "Make text smaller",
 			children: "A−"
 		}),
-		/* @__PURE__ */ (0, h.jsx)("button", {
+		/* @__PURE__ */ (0, b.jsx)("button", {
 			type: "button",
 			onClick: () => e.changeSize(1),
 			"aria-label": "Make text larger",
 			title: "Make text larger",
 			children: "A+"
 		}),
-		/* @__PURE__ */ (0, h.jsx)("span", {
+		/* @__PURE__ */ (0, b.jsx)("span", {
 			className: "note-toolbar-divider",
 			"aria-hidden": "true"
 		}),
-		/* @__PURE__ */ (0, h.jsx)("button", {
+		/* @__PURE__ */ (0, b.jsx)("button", {
 			type: "button",
 			onClick: () => r("justifyLeft"),
 			"aria-label": "Align left",
 			children: "≡"
 		}),
-		/* @__PURE__ */ (0, h.jsx)("button", {
+		/* @__PURE__ */ (0, b.jsx)("button", {
 			type: "button",
 			onClick: () => r("justifyCenter"),
 			"aria-label": "Center",
 			children: "≡"
 		}),
-		/* @__PURE__ */ (0, h.jsx)("button", {
+		/* @__PURE__ */ (0, b.jsx)("button", {
 			type: "button",
 			onClick: () => r("justifyFull"),
 			"aria-label": "Justify",
@@ -10326,7 +10202,7 @@ function et() {
 		})
 	] });
 }
-var tt = {
+var $e = {
 	undo: ["M9 14 4 9l5-5", "M4 9h10a6 6 0 0 1 0 12h-2"],
 	trash: [
 		"M4 7h16",
@@ -10343,8 +10219,8 @@ var tt = {
 	close: ["M6 6l12 12", "M18 6 6 18"],
 	chevron: ["m6 9 6 6 6-6"]
 };
-function nt({ name: e }) {
-	return /* @__PURE__ */ (0, h.jsx)("svg", {
+function et({ name: e }) {
+	return /* @__PURE__ */ (0, b.jsx)("svg", {
 		viewBox: "0 0 24 24",
 		"aria-hidden": "true",
 		fill: "none",
@@ -10352,19 +10228,19 @@ function nt({ name: e }) {
 		strokeWidth: "1.8",
 		strokeLinecap: "round",
 		strokeLinejoin: "round",
-		children: tt[e].map((e) => /* @__PURE__ */ (0, h.jsx)("path", { d: e }, e))
+		children: $e[e].map((e) => /* @__PURE__ */ (0, b.jsx)("path", { d: e }, e))
 	});
 }
-function rt() {
-	let e = window.noteEditorBridge, [t, n] = (0, p.useState)(() => e.getEditorSnapshot());
-	return (0, p.useEffect)(() => {
+function tt() {
+	let e = window.noteEditorBridge, [t, n] = (0, v.useState)(() => e.getEditorSnapshot());
+	return (0, v.useEffect)(() => {
 		let t = () => n(e.getEditorSnapshot());
 		return document.addEventListener("note:editor-change", t), () => document.removeEventListener("note:editor-change", t);
 	}, [e]), [t, e];
 }
-function it() {
-	let [e, t] = rt();
-	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [/* @__PURE__ */ (0, h.jsxs)("div", { children: [/* @__PURE__ */ (0, h.jsx)("span", { children: "Notes" }), /* @__PURE__ */ (0, h.jsx)("input", {
+function nt() {
+	let [e, t] = tt();
+	return /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [/* @__PURE__ */ (0, b.jsxs)("div", { children: [/* @__PURE__ */ (0, b.jsx)("span", { children: "Notes" }), /* @__PURE__ */ (0, b.jsx)("input", {
 		className: "note-editor-title note-editor-heading-title",
 		value: e.title,
 		onChange: (e) => t.setTitle(e.target.value),
@@ -10372,86 +10248,86 @@ function it() {
 		maxLength: "100",
 		placeholder: "Note title",
 		"aria-label": "Note title"
-	})] }), /* @__PURE__ */ (0, h.jsxs)("div", {
+	})] }), /* @__PURE__ */ (0, b.jsxs)("div", {
 		className: "note-editor-header-actions",
 		children: [
-			/* @__PURE__ */ (0, h.jsx)("button", {
+			/* @__PURE__ */ (0, b.jsx)("button", {
 				type: "button",
 				className: "note-undo-button",
 				onClick: () => t.command("undo"),
 				"aria-label": "Undo",
 				title: "Undo",
-				children: /* @__PURE__ */ (0, h.jsx)(nt, { name: "undo" })
+				children: /* @__PURE__ */ (0, b.jsx)(et, { name: "undo" })
 			}),
-			/* @__PURE__ */ (0, h.jsx)("button", {
+			/* @__PURE__ */ (0, b.jsx)("button", {
 				type: "button",
 				className: "note-delete-button",
 				onClick: t.delete,
 				"aria-label": "Delete note",
 				title: "Delete note",
-				children: /* @__PURE__ */ (0, h.jsx)(nt, { name: "trash" })
+				children: /* @__PURE__ */ (0, b.jsx)(et, { name: "trash" })
 			}),
-			/* @__PURE__ */ (0, h.jsx)("button", {
+			/* @__PURE__ */ (0, b.jsx)("button", {
 				type: "button",
 				className: "primary-button note-save-button",
 				"data-save-rich-note": !0,
 				onClick: t.save,
 				"aria-label": "Save note",
 				title: "Save note",
-				children: /* @__PURE__ */ (0, h.jsx)(nt, { name: "save" })
+				children: /* @__PURE__ */ (0, b.jsx)(et, { name: "save" })
 			}),
-			/* @__PURE__ */ (0, h.jsx)("button", {
+			/* @__PURE__ */ (0, b.jsx)("button", {
 				type: "button",
 				className: "note-close-button",
 				onClick: t.close,
 				"aria-label": "Close note editor",
 				title: "Close",
-				children: /* @__PURE__ */ (0, h.jsx)(nt, { name: "close" })
+				children: /* @__PURE__ */ (0, b.jsx)(et, { name: "close" })
 			})
 		]
 	})] });
 }
-function at() {
-	let [e, t] = rt(), [n, r] = (0, p.useState)(!1);
-	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [/* @__PURE__ */ (0, h.jsxs)("button", {
+function rt() {
+	let [e, t] = tt(), [n, r] = (0, v.useState)(!1);
+	return /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [/* @__PURE__ */ (0, b.jsxs)("button", {
 		type: "button",
 		className: "note-editor-verse-summary",
 		"aria-expanded": n,
 		onClick: () => r((e) => !e),
-		children: [/* @__PURE__ */ (0, h.jsx)("span", {
+		children: [/* @__PURE__ */ (0, b.jsx)("span", {
 			className: "note-editor-verse-summary-copy",
-			children: /* @__PURE__ */ (0, h.jsx)("strong", { children: "View verses" })
-		}), /* @__PURE__ */ (0, h.jsx)(nt, { name: "chevron" })]
-	}), n && /* @__PURE__ */ (0, h.jsxs)("div", {
+			children: /* @__PURE__ */ (0, b.jsx)("strong", { children: "View verses" })
+		}), /* @__PURE__ */ (0, b.jsx)(et, { name: "chevron" })]
+	}), n && /* @__PURE__ */ (0, b.jsxs)("div", {
 		className: "note-editor-verse-menu",
-		children: [/* @__PURE__ */ (0, h.jsxs)("button", {
+		children: [/* @__PURE__ */ (0, b.jsxs)("button", {
 			type: "button",
 			className: "note-editor-add-verse",
 			onClick: t.startAdding,
-			children: [/* @__PURE__ */ (0, h.jsx)("span", {
+			children: [/* @__PURE__ */ (0, b.jsx)("span", {
 				"aria-hidden": "true",
 				children: "+"
 			}), " Add verse"]
-		}), e.items.length ? e.items.map((e) => /* @__PURE__ */ (0, h.jsxs)("article", {
+		}), e.items.length ? e.items.map((e) => /* @__PURE__ */ (0, b.jsxs)("article", {
 			className: "note-editor-verse-item",
-			children: [/* @__PURE__ */ (0, h.jsxs)("div", {
+			children: [/* @__PURE__ */ (0, b.jsxs)("div", {
 				className: "note-editor-verse-item-heading",
-				children: [/* @__PURE__ */ (0, h.jsx)("strong", { children: e.reference }), /* @__PURE__ */ (0, h.jsx)("button", {
+				children: [/* @__PURE__ */ (0, b.jsx)("strong", { children: e.reference }), /* @__PURE__ */ (0, b.jsx)("button", {
 					type: "button",
 					onClick: () => t.removeVerse(e.key),
 					"aria-label": `Remove ${e.reference} from note`,
 					children: "×"
 				})]
-			}), /* @__PURE__ */ (0, h.jsx)("p", { children: e.text || "Verse text unavailable." })]
-		}, e.key)) : /* @__PURE__ */ (0, h.jsx)("span", {
+			}), /* @__PURE__ */ (0, b.jsx)("p", { children: e.text || "Verse text unavailable." })]
+		}, e.key)) : /* @__PURE__ */ (0, b.jsx)("span", {
 			className: "note-editor-no-verses",
 			children: "No verses attached"
 		})]
 	})] });
 }
-function ot() {
-	let e = window.noteEditorBridge, t = (0, p.useRef)(null);
-	return (0, p.useEffect)(() => {
+function it() {
+	let e = window.noteEditorBridge, t = (0, v.useRef)(null);
+	return (0, v.useEffect)(() => {
 		e.attachContent(t.current);
 		let n = () => {
 			let n = t.current, r = e.getContentHtml();
@@ -10460,7 +10336,7 @@ function ot() {
 		return document.addEventListener("note:editor-change", n), n(), () => {
 			document.removeEventListener("note:editor-change", n), e.attachContent(null);
 		};
-	}, [e]), /* @__PURE__ */ (0, h.jsx)("div", {
+	}, [e]), /* @__PURE__ */ (0, b.jsx)("div", {
 		ref: t,
 		className: "note-editor-content",
 		"data-note-editor-content": !0,
@@ -10472,22 +10348,22 @@ function ot() {
 	});
 }
 // src/react/page-top-spacer.jsx
-function st() {
-	return /* @__PURE__ */ (0, h.jsx)("div", {
+function at() {
+	return /* @__PURE__ */ (0, b.jsx)("div", {
 		className: "page-top-spacer",
 		"aria-hidden": "true"
 	});
 }
 // node_modules/@capawesome/capacitor-live-update/dist/esm/index.js
-var ct = a("LiveUpdate", { web: () => import("./web-DKGBeYoZ.js").then((e) => new e.LiveUpdateWeb()) }), lt = {
+var ot = a("LiveUpdate", { web: () => import("./web-DKGBeYoZ.js").then((e) => new e.LiveUpdateWeb()) }), st = {
 	origin: "https://logicbible.vercel.app",
 	nativeVersion: "1.2"
 };
 // src/react/mobile-updates.js
-async function ut() {
+async function ct() {
 	if (o.getPlatform() !== "android") return;
 	try {
-		await ct.ready();
+		await ot.ready();
 	} catch (e) {
 		console.warn("Mobile update initialization failed", e);
 		return;
@@ -10500,7 +10376,7 @@ async function ut() {
 			e.type = "button", e.textContent = "Apply", e.addEventListener("click", async () => {
 				e.disabled = !0;
 				try {
-					await ct.reload();
+					await ot.reload();
 				} catch {
 					e.disabled = !1, n.textContent = "Close the app completely, then reopen it to apply the update.";
 				}
@@ -10511,24 +10387,24 @@ async function ut() {
 		if (!(e || Date.now() - t < n)) {
 			e = !0, t = Date.now();
 			try {
-				let e = await fetch(`${lt.origin}/mobile-updates/latest.json?t=${Date.now()}`, {
+				let e = await fetch(`${st.origin}/mobile-updates/latest.json?t=${Date.now()}`, {
 					cache: "no-store",
 					signal: AbortSignal.timeout(15e3)
 				});
 				if (!e.ok) throw Error(`Update manifest HTTP ${e.status}`);
-				let t = await e.json(), { versionName: r } = await ct.getVersionName();
+				let t = await e.json(), { versionName: r } = await ot.getVersionName();
 				if (t.nativeVersion !== r || !/^[a-f0-9]{64}$/.test(t.bundleId) || !/^[a-f0-9]{64}$/.test(t.checksum)) return;
-				let a = new URL(t.url, lt.origin);
-				if (a.origin !== lt.origin || a.pathname !== `/mobile-updates/${t.bundleId}.zip`) return;
-				let { bundleId: o } = await ct.getCurrentBundle(), s = await fetch("mobile-version.json").then((e) => e.json());
-				if (t.bundleId === (o || s.bundleId) || s.builtAt && (!Number.isFinite(Date.parse(t.builtAt)) || Date.parse(t.builtAt) <= Date.parse(s.builtAt)) || (await ct.getBlockedBundles()).bundleIds.includes(t.bundleId)) return;
-				if (!(await ct.getDownloadedBundles()).bundleIds.includes(t.bundleId)) {
+				let a = new URL(t.url, st.origin);
+				if (a.origin !== st.origin || a.pathname !== `/mobile-updates/${t.bundleId}.zip`) return;
+				let { bundleId: o } = await ot.getCurrentBundle(), s = await fetch("mobile-version.json").then((e) => e.json());
+				if (t.bundleId === (o || s.bundleId) || s.builtAt && (!Number.isFinite(Date.parse(t.builtAt)) || Date.parse(t.builtAt) <= Date.parse(s.builtAt)) || (await ot.getBlockedBundles()).bundleIds.includes(t.bundleId)) return;
+				if (!(await ot.getDownloadedBundles()).bundleIds.includes(t.bundleId)) {
 					i("Downloading the update… Keep the app open.");
-					let e = await ct.addListener("downloadBundleProgress", (e) => {
+					let e = await ot.addListener("downloadBundleProgress", (e) => {
 						e.bundleId === t.bundleId && Number.isFinite(e.progress) && i(`Update: ${Math.max(0, Math.min(99, Math.round(e.progress * 100)))} % · downloading`);
 					});
 					try {
-						await ct.downloadBundle({
+						await ot.downloadBundle({
 							bundleId: t.bundleId,
 							url: a.href,
 							checksum: t.checksum
@@ -10537,7 +10413,7 @@ async function ut() {
 						await e.remove();
 					}
 				}
-				await ct.setNextBundle({ bundleId: t.bundleId }), n = 6e5, i("Update ready. Apply will restart the app.", !0);
+				await ot.setNextBundle({ bundleId: t.bundleId }), n = 6e5, i("Update ready. Apply will restart the app.", !0);
 			} catch (e) {
 				console.warn("Mobile update unavailable; keeping the installed version", e), n = 6e4, r?.isConnected && i("Download interrupted. Retrying in one minute.");
 			} finally {
@@ -10554,20 +10430,20 @@ async function ut() {
 	}, 6e4);
 }
 // src/react/main.jsx
-var dt = document.querySelector("[data-react-page-top-spacer-root]");
-dt && (0, m.createRoot)(dt).render(/* @__PURE__ */ (0, h.jsx)(st, {}));
-var ft = document.querySelector("[data-react-home-voice-root]");
-ft && window.bibleReaderBridge && window.aiBridge && (0, m.createRoot)(ft).render(/* @__PURE__ */ (0, h.jsx)(ze, { assistant: !0 }));
-var pt = document.querySelector("[data-react-church-root]");
-pt && g(pt, () => import("./church-tool-DquYiB3U.js"), "ChurchToolPage");
-var mt = document.querySelector("[data-projection-root]");
-mt && g(mt, () => import("./church-CzULZ-DI.js"), "ProjectionScreen");
-var ht = document.querySelector("[data-debate-projection-root]");
-ht && g(ht, () => import("./debate-projection-BXKW8O_n.js").then((e) => e.n), "DebateProjectionScreen");
-var gt = document.querySelector("[data-evangelism-pilot-root]");
-gt && g(gt, () => import("./church-mode-DZOA40IB.js"), "ChurchModePage");
-var _t = document.querySelector("[data-session-admin-root]");
-if (_t && g(_t, () => import("./church-CzULZ-DI.js"), "SessionAdmin"), o.isNativePlatform()) {
+var lt = document.querySelector("[data-react-page-top-spacer-root]");
+lt && (0, y.createRoot)(lt).render(/* @__PURE__ */ (0, b.jsx)(at, {}));
+var ut = document.querySelector("[data-react-home-voice-root]");
+ut && window.bibleReaderBridge && window.aiBridge && (0, y.createRoot)(ut).render(/* @__PURE__ */ (0, b.jsx)(Le, { assistant: !0 }));
+var dt = document.querySelector("[data-react-church-root]");
+dt && x(dt, () => import("./church-tool-BCsHlRAw.js"), "ChurchToolPage");
+var ft = document.querySelector("[data-projection-root]");
+ft && x(ft, () => import("./church-CzULZ-DI.js"), "ProjectionScreen");
+var pt = document.querySelector("[data-debate-projection-root]");
+pt && x(pt, () => import("./debate-projection-BXKW8O_n.js").then((e) => e.n), "DebateProjectionScreen");
+var mt = document.querySelector("[data-evangelism-pilot-root]");
+mt && x(mt, () => import("./church-mode-DcwB6wJF.js"), "ChurchModePage");
+var ht = document.querySelector("[data-session-admin-root]");
+if (ht && x(ht, () => import("./church-CzULZ-DI.js"), "SessionAdmin"), o.isNativePlatform()) {
 	let e = a("GentleHaptics");
 	window.appButtonHaptic = () => {
 		let t = localStorage.getItem("brother.hapticsStrength") || "1", n = {
@@ -10577,22 +10453,22 @@ if (_t && g(_t, () => import("./church-CzULZ-DI.js"), "SessionAdmin"), o.isNativ
 		}[t] || t;
 		if (n === "off") return;
 		let r = Math.max(1, Math.min(5, Number(n) || 1));
-		o.getPlatform() === "android" ? e.tap({ level: r }).catch(() => {}) : _.impact({ style: s.Light }).catch(() => {});
+		o.getPlatform() === "android" ? e.tap({ level: r }).catch(() => {}) : ee.impact({ style: s.Light }).catch(() => {});
 	};
 }
-var vt = /* @__PURE__ */ new WeakMap();
+var gt = /* @__PURE__ */ new WeakMap();
 window.renderProfileSavedNoteCards = (e, t, n) => {
 	if (!e) return;
-	let r = vt.get(e);
-	r || (r = (0, m.createRoot)(e), vt.set(e, r)), r.render(t.map((e) => /* @__PURE__ */ (0, h.jsx)(x, {
+	let r = gt.get(e);
+	r || (r = (0, y.createRoot)(e), gt.set(e, r)), r.render(t.map((e) => /* @__PURE__ */ (0, b.jsx)(w, {
 		row: e,
 		onOpen: n
 	}, e.id)));
 }, window.unmountProfileSavedNoteCards = (e) => {
-	let t = e && vt.get(e);
-	t && (t.unmount(), vt.delete(e));
+	let t = e && gt.get(e);
+	t && (t.unmount(), gt.delete(e));
 };
-var yt = [
+var _t = [
 	[
 		"kids-bible",
 		"Kids Bible",
@@ -10623,7 +10499,7 @@ var yt = [
 		"Home",
 		"home"
 	]
-], bt = {
+], vt = {
 	home: [
 		"M3 10.5 12 3l9 7.5",
 		"M5 9.5V21h14V9.5",
@@ -10649,9 +10525,9 @@ var yt = [
 		"M12 19v3m-4 0h8"
 	]
 };
-function xt({ name: e, hasActiveGradient: t = !1 }) {
+function yt({ name: e, hasActiveGradient: t = !1 }) {
 	let n = `active-nav-gradient-${e}`;
-	return /* @__PURE__ */ (0, h.jsxs)("svg", {
+	return /* @__PURE__ */ (0, b.jsxs)("svg", {
 		viewBox: "0 0 24 24",
 		"aria-hidden": "true",
 		fill: "none",
@@ -10659,28 +10535,28 @@ function xt({ name: e, hasActiveGradient: t = !1 }) {
 		strokeWidth: "1.8",
 		strokeLinecap: "round",
 		strokeLinejoin: "round",
-		children: [t && /* @__PURE__ */ (0, h.jsx)("defs", { children: /* @__PURE__ */ (0, h.jsxs)("linearGradient", {
+		children: [t && /* @__PURE__ */ (0, b.jsx)("defs", { children: /* @__PURE__ */ (0, b.jsxs)("linearGradient", {
 			id: n,
 			x1: "0%",
 			y1: "0%",
 			x2: "100%",
 			y2: "100%",
-			children: [/* @__PURE__ */ (0, h.jsx)("stop", {
+			children: [/* @__PURE__ */ (0, b.jsx)("stop", {
 				offset: "0%",
 				stopColor: "#5edcff"
-			}), /* @__PURE__ */ (0, h.jsx)("stop", {
+			}), /* @__PURE__ */ (0, b.jsx)("stop", {
 				offset: "100%",
 				stopColor: "#ff9d00"
 			})]
-		}) }), bt[e].map((e) => /* @__PURE__ */ (0, h.jsx)("path", {
+		}) }), vt[e].map((e) => /* @__PURE__ */ (0, b.jsx)("path", {
 			d: e,
 			stroke: t ? `url(#${n})` : void 0
 		}, e))]
 	});
 }
-function St() {
-	let [e, t] = (0, p.useState)(0);
-	return (0, p.useEffect)(() => {
+function bt() {
+	let [e, t] = (0, v.useState)(0);
+	return (0, v.useEffect)(() => {
 		let e = document.querySelector("#bible");
 		if (!e) return;
 		let n = 0, r = () => {
@@ -10693,19 +10569,19 @@ function St() {
 		return e.addEventListener("scroll", i, { passive: !0 }), document.addEventListener("bible:chapter-change", i), window.addEventListener("resize", i), i(), () => {
 			e.removeEventListener("scroll", i), document.removeEventListener("bible:chapter-change", i), window.removeEventListener("resize", i), n && window.cancelAnimationFrame(n);
 		};
-	}, []), /* @__PURE__ */ (0, h.jsx)("div", {
+	}, []), /* @__PURE__ */ (0, b.jsx)("div", {
 		className: "reader-reading-progress",
 		"aria-label": `Reading progress: ${Math.round(e)}%`,
 		role: "progressbar",
 		"aria-valuemin": "0",
 		"aria-valuemax": "100",
 		"aria-valuenow": Math.round(e),
-		children: /* @__PURE__ */ (0, h.jsx)("span", { style: { width: `${e}%` } })
+		children: /* @__PURE__ */ (0, b.jsx)("span", { style: { width: `${e}%` } })
 	});
 }
-function Ct() {
-	let e = document.querySelector(".app-shell")?.dataset.activeScreen || "home", [t, n] = (0, p.useState)(e);
-	(0, p.useEffect)(() => {
+function xt() {
+	let e = document.querySelector(".app-shell")?.dataset.activeScreen || "home", [t, n] = (0, v.useState)(e);
+	(0, v.useEffect)(() => {
 		let e = (e) => n(e.detail?.activeNavId || e.detail?.id || "home");
 		return window.addEventListener("app:screen-change", e), () => window.removeEventListener("app:screen-change", e);
 	}, []);
@@ -10714,81 +10590,81 @@ function Ct() {
 	}, i = (e) => {
 		e.pointerType === "touch" && (window.appButtonHaptic || navigator.vibrate?.(8));
 	};
-	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [
-		yt.map(([e, n, a]) => /* @__PURE__ */ (0, h.jsxs)("button", {
+	return /* @__PURE__ */ (0, b.jsxs)(b.Fragment, { children: [
+		_t.map(([e, n, a]) => /* @__PURE__ */ (0, b.jsxs)("button", {
 			className: t === e ? "is-active" : "",
 			"data-nav": e,
 			type: "button",
 			"aria-label": e === "home" ? n : void 0,
 			onPointerDown: i,
 			onClick: () => r(e),
-			children: [/* @__PURE__ */ (0, h.jsx)(xt, {
+			children: [/* @__PURE__ */ (0, b.jsx)(yt, {
 				name: a,
 				hasActiveGradient: t === e && e !== "home"
-			}), /* @__PURE__ */ (0, h.jsx)("span", { children: n })]
+			}), /* @__PURE__ */ (0, b.jsx)("span", { children: n })]
 		}, e)),
-		/* @__PURE__ */ (0, h.jsxs)("button", {
+		/* @__PURE__ */ (0, b.jsxs)("button", {
 			type: "button",
 			className: "bottom-nav-voice",
 			"aria-label": "Open voice assistant",
 			onPointerDown: i,
 			onClick: () => window.dispatchEvent(new Event("app:voice-assistant")),
-			children: [/* @__PURE__ */ (0, h.jsx)(xt, { name: "mic" }), /* @__PURE__ */ (0, h.jsx)("span", { children: "Voice" })]
+			children: [/* @__PURE__ */ (0, b.jsx)(yt, { name: "mic" }), /* @__PURE__ */ (0, b.jsx)("span", { children: "Voice" })]
 		}),
-		t === "bible" && /* @__PURE__ */ (0, h.jsx)(St, {})
+		t === "bible" && /* @__PURE__ */ (0, b.jsx)(bt, {})
 	] });
 }
-var wt = document.querySelector("[data-react-navigation-root]");
-wt && (0, m.createRoot)(wt).render(/* @__PURE__ */ (0, h.jsx)(Ct, {}));
-var Tt = document.querySelector("[data-react-home-hero-root]");
-Tt && (0, m.createRoot)(Tt).render(/* @__PURE__ */ (0, h.jsx)(te, {}));
-var Et = document.querySelector("[data-react-home-prayer-root]");
-Et && (0, m.createRoot)(Et).render(/* @__PURE__ */ (0, h.jsx)(ne, {}));
-var j = document.querySelector("[data-react-home-library-tabs-root]");
-j && (0, m.createRoot)(j).render(/* @__PURE__ */ (0, h.jsx)(re, {}));
-var Dt = document.querySelector("[data-react-home-library-panel-root]");
-Dt && window.homeLibraryBridge && (window.reactHomeLibraryPanelMounted = !0, (0, m.createRoot)(Dt).render(/* @__PURE__ */ (0, h.jsx)(O, {})));
-var Ot = document.querySelector("[data-react-profile-tabs-root]"), kt = document.querySelector("[data-react-profile-prayers-root]");
-kt && (0, m.createRoot)(kt).render(/* @__PURE__ */ (0, h.jsx)(le, {})), Ot && (0, m.createRoot)(Ot).render(/* @__PURE__ */ (0, h.jsx)(de, {}));
-var At = document.querySelector("[data-react-profile-hero-root]");
-At && window.profileBridge && (0, m.createRoot)(At).render(/* @__PURE__ */ (0, h.jsx)(fe, {}));
-var jt = document.querySelector("[data-react-profile-preferences-root]");
-jt && window.profileBridge && (0, m.createRoot)(jt).render(/* @__PURE__ */ (0, h.jsx)(me, {}));
-var Mt = document.querySelector("[data-react-profile-information-root]");
-Mt && window.profileBridge && (0, m.createRoot)(Mt).render(/* @__PURE__ */ (0, h.jsx)(he, {}));
-var Nt = document.querySelector("[data-react-profile-cloud-root]");
-Nt && window.profileBridge && (0, m.createRoot)(Nt).render(/* @__PURE__ */ (0, h.jsx)(ge, {}));
-var Pt = document.querySelector("[data-react-bible-controls-root]");
-Pt && window.bibleReaderBridge && (0, m.createRoot)(Pt).render(/* @__PURE__ */ (0, h.jsx)(Re, {}));
-var Ft = document.querySelector("[data-react-bible-parallel-root]");
-Ft && window.bibleReaderBridge && (0, m.createRoot)(Ft).render(/* @__PURE__ */ (0, h.jsx)(Be, {}));
-var It = document.querySelector("[data-react-bible-chapter-root]");
-It && window.bibleReaderBridge && (window.reactBibleChapterMounted = !0, (0, m.createRoot)(It).render(/* @__PURE__ */ (0, h.jsx)(Ze, {})));
-var Lt = document.querySelector("[data-react-selected-verse-root]");
-Lt && window.bibleReaderBridge && (0, m.createRoot)(Lt).render(/* @__PURE__ */ (0, h.jsx)(He, {}));
-var Rt = document.querySelector("[data-react-verse-actions-root]");
-Rt && window.bibleReaderBridge && (0, m.createRoot)(Rt).render(/* @__PURE__ */ (0, h.jsx)(Ue, {}));
-var zt = document.querySelector("[data-react-note-toolbar-root]");
-zt && window.noteEditorBridge && (0, m.createRoot)(zt).render(/* @__PURE__ */ (0, h.jsx)(et, {}));
-var Bt = document.querySelector("[data-react-note-content-root]");
-Bt && window.noteEditorBridge && (0, m.createRoot)(Bt).render(/* @__PURE__ */ (0, h.jsx)(ot, {}));
-var Vt = document.querySelector("[data-react-note-header-root]");
-Vt && window.noteEditorBridge && (0, m.createRoot)(Vt).render(/* @__PURE__ */ (0, h.jsx)(it, {}));
-var Ht = document.querySelector("[data-react-note-chips-root]");
-Ht && window.noteEditorBridge && (0, m.createRoot)(Ht).render(/* @__PURE__ */ (0, h.jsx)(at, {}));
-var Ut = document.querySelector("[data-react-prayer-root]");
-Ut && window.prayerBridge && g(Ut, () => import("./prayer-BU5acA8c.js"), "PrayerPage");
-var Wt = document.querySelector("[data-react-ai-root]");
-Wt && window.aiBridge && g(Wt, () => import("./ai-wKSLK5kv.js"), "AiPage");
-var Gt = document.querySelector("[data-react-kids-bible-root]");
-Gt && g(Gt, () => import("./kids-bible-VOXksY8g.js"), "KidsBiblePage");
-var Kt = document.querySelector("[data-react-think-room-resume-root]");
-Kt && g(Kt, () => import("./apologetics-debate-DqXPuoru.js"), "ThinkRoomResume");
-var qt = document.querySelector("[data-react-apologetics-debate-root]");
-qt && g(qt, () => import("./apologetics-debate-DqXPuoru.js"), "ApologeticsDebatePage");
-var Jt = document.querySelector("[data-react-apologetics-coach-root]");
-Jt && g(Jt, () => import("./apologetics-coach-NGmXsEpP.js"), "ApologeticsCoachPage");
-var Yt = document.querySelector("[data-react-apologetics-xp-root]");
-Yt && window.aiBridge && g(Yt, () => import("./apologetics-coach-NGmXsEpP.js"), "ApologeticsXpCard");
-var Xt = document.querySelector("[data-react-admin-root]");
-Xt && window.moderationBridge && g(Xt, () => import("./admin-D9fuLROe.js"), "AdminPage"), requestAnimationFrame(() => requestAnimationFrame(() => void ut()));
+var St = document.querySelector("[data-react-navigation-root]");
+St && (0, y.createRoot)(St).render(/* @__PURE__ */ (0, b.jsx)(xt, {}));
+var Ct = document.querySelector("[data-react-home-hero-root]");
+Ct && (0, y.createRoot)(Ct).render(/* @__PURE__ */ (0, b.jsx)(se, {}));
+var wt = document.querySelector("[data-react-home-prayer-root]");
+wt && (0, y.createRoot)(wt).render(/* @__PURE__ */ (0, b.jsx)(ce, {}));
+var Tt = document.querySelector("[data-react-home-library-tabs-root]");
+Tt && (0, y.createRoot)(Tt).render(/* @__PURE__ */ (0, b.jsx)(D, {}));
+var Et = document.querySelector("[data-react-home-library-panel-root]");
+Et && window.homeLibraryBridge && (window.reactHomeLibraryPanelMounted = !0, (0, y.createRoot)(Et).render(/* @__PURE__ */ (0, b.jsx)(fe, {})));
+var j = document.querySelector("[data-react-profile-tabs-root]"), Dt = document.querySelector("[data-react-profile-prayers-root]");
+Dt && (0, y.createRoot)(Dt).render(/* @__PURE__ */ (0, b.jsx)(pe, {})), j && (0, y.createRoot)(j).render(/* @__PURE__ */ (0, b.jsx)(he, {}));
+var Ot = document.querySelector("[data-react-profile-hero-root]");
+Ot && window.profileBridge && (0, y.createRoot)(Ot).render(/* @__PURE__ */ (0, b.jsx)(ge, {}));
+var kt = document.querySelector("[data-react-profile-preferences-root]");
+kt && window.profileBridge && (0, y.createRoot)(kt).render(/* @__PURE__ */ (0, b.jsx)(ye, {}));
+var At = document.querySelector("[data-react-profile-information-root]");
+At && window.profileBridge && (0, y.createRoot)(At).render(/* @__PURE__ */ (0, b.jsx)(be, {}));
+var jt = document.querySelector("[data-react-profile-cloud-root]");
+jt && window.profileBridge && (0, y.createRoot)(jt).render(/* @__PURE__ */ (0, b.jsx)(xe, {}));
+var Mt = document.querySelector("[data-react-bible-controls-root]");
+Mt && window.bibleReaderBridge && (0, y.createRoot)(Mt).render(/* @__PURE__ */ (0, b.jsx)(Ie, {}));
+var Nt = document.querySelector("[data-react-bible-parallel-root]");
+Nt && window.bibleReaderBridge && (0, y.createRoot)(Nt).render(/* @__PURE__ */ (0, b.jsx)(Re, {}));
+var Pt = document.querySelector("[data-react-bible-chapter-root]");
+Pt && window.bibleReaderBridge && (window.reactBibleChapterMounted = !0, (0, y.createRoot)(Pt).render(/* @__PURE__ */ (0, b.jsx)(Ye, {})));
+var Ft = document.querySelector("[data-react-selected-verse-root]");
+Ft && window.bibleReaderBridge && (0, y.createRoot)(Ft).render(/* @__PURE__ */ (0, b.jsx)(Be, {}));
+var It = document.querySelector("[data-react-verse-actions-root]");
+It && window.bibleReaderBridge && (0, y.createRoot)(It).render(/* @__PURE__ */ (0, b.jsx)(Ve, {}));
+var Lt = document.querySelector("[data-react-note-toolbar-root]");
+Lt && window.noteEditorBridge && (0, y.createRoot)(Lt).render(/* @__PURE__ */ (0, b.jsx)(Qe, {}));
+var Rt = document.querySelector("[data-react-note-content-root]");
+Rt && window.noteEditorBridge && (0, y.createRoot)(Rt).render(/* @__PURE__ */ (0, b.jsx)(it, {}));
+var zt = document.querySelector("[data-react-note-header-root]");
+zt && window.noteEditorBridge && (0, y.createRoot)(zt).render(/* @__PURE__ */ (0, b.jsx)(nt, {}));
+var Bt = document.querySelector("[data-react-note-chips-root]");
+Bt && window.noteEditorBridge && (0, y.createRoot)(Bt).render(/* @__PURE__ */ (0, b.jsx)(rt, {}));
+var Vt = document.querySelector("[data-react-prayer-root]");
+Vt && window.prayerBridge && x(Vt, () => import("./prayer-DGIdwdOX.js"), "PrayerPage");
+var Ht = document.querySelector("[data-react-ai-root]");
+Ht && window.aiBridge && x(Ht, () => import("./ai-DnZS9QiZ.js"), "AiPage");
+var Ut = document.querySelector("[data-react-kids-bible-root]");
+Ut && x(Ut, () => import("./kids-bible-VOXksY8g.js"), "KidsBiblePage");
+var Wt = document.querySelector("[data-react-think-room-resume-root]");
+Wt && x(Wt, () => import("./apologetics-debate-CZwBnFx4.js"), "ThinkRoomResume");
+var Gt = document.querySelector("[data-react-apologetics-debate-root]");
+Gt && x(Gt, () => import("./apologetics-debate-CZwBnFx4.js"), "ApologeticsDebatePage");
+var Kt = document.querySelector("[data-react-apologetics-coach-root]");
+Kt && x(Kt, () => import("./apologetics-coach-CYiyb0Jl.js"), "ApologeticsCoachPage");
+var qt = document.querySelector("[data-react-apologetics-xp-root]");
+qt && window.aiBridge && x(qt, () => import("./apologetics-coach-CYiyb0Jl.js"), "ApologeticsXpCard");
+var Jt = document.querySelector("[data-react-admin-root]");
+Jt && window.moderationBridge && x(Jt, () => import("./admin-D9fuLROe.js"), "AdminPage"), requestAnimationFrame(() => requestAnimationFrame(() => void ct()));

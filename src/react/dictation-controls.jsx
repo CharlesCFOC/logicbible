@@ -7,6 +7,7 @@ export function VoiceMeter({ active, dictation, bibleStyle = false }) {
   const waveRef = useRef(null);
   const [unavailable, setUnavailable] = useState(false);
   useEffect(() => {
+    if (dictation.recorded) return;
     if (!active) return;
     const canvas = canvasRef.current;
     const drawing = canvas?.getContext('2d');
@@ -38,7 +39,11 @@ export function VoiceMeter({ active, dictation, bibleStyle = false }) {
       },
       onUnavailable: () => { dictation.setAudioMonitoring?.(false); setUnavailable(true); },
     });
-  }, [active, bibleStyle]);
+  }, [active, bibleStyle, dictation.recorded]);
+  useEffect(() => {
+    if (!dictation.recorded || !bibleStyle) return;
+    waveRef.current?.querySelectorAll('i').forEach((bar, index) => bar.style.setProperty('--voice-level', `${Math.max(.12, dictation.levels?.[index] || 0) * 100}%`));
+  }, [dictation.recorded, dictation.levels, bibleStyle]);
   if (bibleStyle) return <div ref={waveRef} className="bible-voice-wave is-listening brother-ai-voice-wave" hidden={unavailable} aria-hidden="true">{Array.from({ length: 18 }, (_, index) => <i key={index} style={{ '--voice-level': '12%' }} />)}</div>;
   return <div className="church-voice-meter" hidden={unavailable} aria-hidden="true"><canvas ref={canvasRef} width="216" height="56" /></div>;
 }

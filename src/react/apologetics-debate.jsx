@@ -213,7 +213,7 @@ function DebateRoomView({ theme, question, difficulty, opponentPersonality = "se
   ];
   const [messages, setMessages] = useState(() => normalizeDebateOpening(savedMessages?.length ? savedMessages : readDebateConversation(theme, question), question) || initialMessages);
   const [draft, setDraft] = useState("");
-  const dictation = useDictation({ values: { message: draft }, onChange: (_, text) => setDraft(text), language: "en", maxLength: 4000, silenceTimeoutMs: 2500 });
+  const dictation = useDictation({ values: { message: draft }, onChange: (_, text) => setDraft(text), language: "en", maxLength: 4000, silenceTimeoutMs: 2500, recorded: true });
   const [pending, setPending] = useState(false);
   const [verseSupportOpen, setVerseSupportOpen] = useState(false);
   const [verseSupportLoading, setVerseSupportLoading] = useState(false);

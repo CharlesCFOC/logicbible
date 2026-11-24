@@ -138,7 +138,7 @@ export function AiPage() {
   const [messages, setMessages] = useState(initial.messages);
   const [histories, setHistories] = useState(initial.histories);
   const [prompt, setPrompt] = useState("");
-  const dictation = useDictation({ values: { message: prompt }, onChange: (_field, value) => setPrompt(value), language: "en", maxLength: Infinity, silenceTimeoutMs: 2500 });
+  const dictation = useDictation({ values: { message: prompt }, onChange: (_field, value) => setPrompt(value), language: "en", maxLength: Infinity, silenceTimeoutMs: 2500, recorded: true });
   const [isAiScreenActive, setIsAiScreenActive] = useState(() => document.querySelector("#ai")?.classList.contains("is-active") || false);
   useEffect(() => {
     const handleScreenChange = (event) => setIsAiScreenActive(event.detail?.id === "ai");

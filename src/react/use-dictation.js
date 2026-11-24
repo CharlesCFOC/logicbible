@@ -1,9 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { createDictationSession } from '../shared/speech-dictation.js';
 import { stopReadAloud } from './read-aloud.jsx';
+import { createRecordedDictationSession } from '../shared/recorded-dictation.js';
+import { startBibleVoiceRecorder } from '../shared/bible-voice-recorder.js';
+import { requestBibleVoiceTranscript } from './bible-voice-client.js';
 
-export function useDictation({ values, onChange, language = 'en', maxLength = 1200, silenceTimeoutMs = 0 }) {
+export function useDictation({ values, onChange, language = 'en', maxLength = 1200, silenceTimeoutMs = 0, recorded = false }) {
   const [state, setState] = useState({ field: null, phase: 'idle', message: '', interim: '', error: false });
+  const [levels, setLevels] = useState(Array(18).fill(0));
   const session = useRef(null);
   const valuesRef = useRef(values);
   const changeRef = useRef(onChange);
@@ -23,19 +27,40 @@ export function useDictation({ values, onChange, language = 'en', maxLength = 12
   }, []);
   function start(field) {
     stopReadAloud();
-    if (!session.current) session.current = createDictationSession({
-      createRecognition: () => {
-        const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        return Recognition ? new Recognition() : null;
-      },
+    const shared = {
       getText: key => valuesRef.current[key],
       writeText: (key, text) => {
-        // Keep the live textarea value available to the next recognition event.
         valuesRef.current = { ...valuesRef.current, [key]: text };
         changeRef.current(key, text);
       },
       onState: setState,
       maxLength,
+    };
+    if (!session.current && recorded) session.current = createRecordedDictationSession({
+      ...shared,
+      transcribe: requestBibleVoiceTranscript,
+      onLevels: setLevels,
+      createRecorder: callbacks => {
+        if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder || !(window.AudioContext || window.webkitAudioContext)) throw new Error('Audio recording is not available on this device.');
+        const mimeType = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg'].find(type => window.MediaRecorder.isTypeSupported?.(type));
+        return startBibleVoiceRecorder({
+          ...callbacks,
+          getStream: () => navigator.mediaDevices.getUserMedia({ audio: true }),
+          createRecorder: stream => mimeType ? new window.MediaRecorder(stream, { mimeType }) : new window.MediaRecorder(stream),
+          createAudioContext: () => new (window.AudioContext || window.webkitAudioContext)(),
+          requestFrame: callback => window.requestAnimationFrame(callback),
+          cancelFrame: id => window.cancelAnimationFrame(id),
+          silenceMs: silenceTimeoutMs || 2500,
+          maxDurationMs: 60_000,
+        });
+      },
+    });
+    if (!session.current) session.current = createDictationSession({
+      ...shared,
+      createRecognition: () => {
+        const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        return Recognition ? new Recognition() : null;
+      },
       silenceTimeoutMs,
     });
     session.current.start(field, language);
@@ -45,5 +70,5 @@ export function useDictation({ values, onChange, language = 'en', maxLength = 12
     valuesRef.current = { ...valuesRef.current, [field]: text };
     changeRef.current(field, text);
   }
-  return { ...state, start, edit, stop: () => session.current?.stop(), setAudioMonitoring: enabled => session.current?.setAudioMonitoring(enabled), audioLevel: level => session.current?.audioLevel(level), active: state.phase !== 'idle' };
+  return { ...state, start, edit, stop: () => session.current?.stop(), setAudioMonitoring: enabled => session.current?.setAudioMonitoring?.(enabled), audioLevel: level => session.current?.audioLevel?.(level), recorded, levels, active: state.phase !== 'idle' };
 }
