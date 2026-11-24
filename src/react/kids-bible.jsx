@@ -6,9 +6,22 @@ import { createKidsBadgeStore } from './kids-badges-store.js';
 export function KidsBiblePage() {
   const [bookId, setBookId] = useState(null);
   const [tab, setTab] = useState('adventures');
+  const [voiceSelection, setVoiceSelection] = useState(null);
   const [store] = useState(() => createKidsBadgeStore(window.kidsBadgesBridge));
   const badges = useSyncExternalStore(store.subscribe, store.getSnapshot);
   const book = kidsBooks.find(book => book.id === bookId);
+  useEffect(() => {
+    const receive = () => {
+      const id = window.voiceKidsStoryId;
+      if (!kidsAdventures.some(adventure => adventure.id === id)) return;
+      delete window.voiceKidsStoryId;
+      setTab('adventures');
+      setVoiceSelection({ id });
+    };
+    document.addEventListener('kids:voice-story', receive);
+    receive();
+    return () => document.removeEventListener('kids:voice-story', receive);
+  }, []);
   useEffect(() => {
     const sync = () => { void store.sync(); };
     sync();
@@ -35,7 +48,7 @@ export function KidsBiblePage() {
       {[['adventures', 'Adventures'], ['badges', 'My badges']].map(([id, label]) => <button key={id} id={`kids-tab-${id}`} type="button" role="tab" className={tab === id ? "is-active" : ""} aria-selected={tab === id} aria-controls={`kids-panel-${id}`} tabIndex={tab === id ? 0 : -1} onClick={() => selectTab(id)}><span>{label}</span>{id === 'badges' && <span className="kids-tab-count">{badges.records.length}</span>}</button>)}
     </nav>
     <div id="kids-panel-adventures" role="tabpanel" aria-labelledby="kids-tab-adventures" hidden={tab !== 'adventures'}>
-      <KidsAdventureHub bookId={bookId} onBookChange={setBookId} earnedIds={badges.records.map(r => r.adventureId)} onEarn={store.earn} />
+      <KidsAdventureHub bookId={bookId} onBookChange={setBookId} earnedIds={badges.records.map(r => r.adventureId)} onEarn={store.earn} voiceSelection={voiceSelection} />
     </div>
     <div id="kids-panel-badges" role="tabpanel" aria-labelledby="kids-tab-badges" hidden={tab !== 'badges'}>
       <section className="kids-adventure-collection kids-badges-page" aria-label="My earned badges"><div><h2>My badges</h2><span>{badges.records.length} / {kidsAdventures.length}</span></div><p className="kids-badges-sync" role="status">{message}</p>

@@ -73,7 +73,7 @@ function KidsAdventure({ adventure, onBack, onEarn }) {
   </section>;
 }
 
-export function KidsAdventureHub({ bookId, onBookChange, earnedIds, onEarn }) {
+export function KidsAdventureHub({ bookId, onBookChange, earnedIds, onEarn, voiceSelection }) {
   const [selectedId, setSelectedId] = useState(null);
   const [revision, setRevision] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
@@ -85,6 +85,7 @@ export function KidsAdventureHub({ bookId, onBookChange, earnedIds, onEarn }) {
   const book = kidsBooks.find(b => b.id === bookId);
   const adventures = kidsAdventures.filter(a => a.bookId === bookId);
   const open = id => { onBookChange(kidsAdventures.find(a => a.id === id)?.bookId || null); setSelectedId(id); };
+  useEffect(() => { if (voiceSelection && kidsAdventures.some(a => a.id === voiceSelection.id)) open(voiceSelection.id); }, [voiceSelection]);
   const query = searchQuery.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase();
   const searchTerms = query.split(/\s+/).filter(Boolean);
   const matches = (...parts) => { const content = parts.flat(Infinity).filter(Boolean).join(" ").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase(); return searchTerms.every(term => content.includes(term)); };

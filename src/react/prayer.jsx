@@ -73,11 +73,31 @@ function PrayerRequestForm({ state, bridge }) {
   const backgrounds = bridge.getSelectableBackgroundOptions();
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
-  const dictation = useDictation({ values: { request: text }, onChange: (_field, value) => setText(value), language: "en", maxLength: 2200 });
+  const dictation = useDictation({ values: { request: text }, onChange: (_field, value) => setText(value), language: "en", maxLength: 2200, silenceTimeoutMs: 2500 });
   const [category, setCategory] = useState(state.requestCategory || "general");
   const [background, setBackground] = useState(() => backgrounds.some((option) => option.index === state.backgroundIndex) ? state.backgroundIndex : backgrounds[0].index);
   const [sending, setSending] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [incomingDraft, setIncomingDraft] = useState(null);
+  const draftRef = useRef({ title, text });
+  draftRef.current = { title, text };
+  useEffect(() => {
+    const receiveDraft = () => {
+      const draft = window.voicePrayerDraft;
+      if (!draft) return;
+      delete window.voicePrayerDraft;
+      if (draftRef.current.title.trim() || draftRef.current.text.trim()) {
+        setIncomingDraft(draft);
+      } else {
+        setTitle(draft.title);
+        dictation.edit("request", draft.text);
+        setCategory(draft.category);
+      }
+    };
+    document.addEventListener("prayer:voice-draft", receiveDraft);
+    receiveDraft();
+    return () => document.removeEventListener("prayer:voice-draft", receiveDraft);
+  }, []);
   const words = text.trim() ? text.trim().split(/\s+/).length : 0;
 
   const submit = async (event) => {
@@ -102,6 +122,7 @@ function PrayerRequestForm({ state, bridge }) {
         <p>Share your request anonymously and let the community pray with you.</p>
       </article>
       <form className="prayer-compose" onSubmit={submit}>
+        {incomingDraft && <div className="prayer-voice-draft" role="status"><p>Une nouvelle prière a été préparée. Votre brouillon actuel est conservé.</p><button type="button" onClick={() => { setTitle(incomingDraft.title); dictation.edit("request", incomingDraft.text); setCategory(incomingDraft.category); setIncomingDraft(null); }}>Utiliser la nouvelle prière</button><button type="button" onClick={() => setIncomingDraft(null)}>Garder mon brouillon</button></div>}
         <div className="prayer-request-title-field">
           <input value={title} onChange={(event) => setTitle(event.target.value)} type="text" maxLength="120" placeholder="Prayer title" aria-label="Prayer title" required />
         </div>

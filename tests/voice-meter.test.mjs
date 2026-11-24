@@ -6,7 +6,7 @@ const settle = () => new Promise(resolve => setImmediate(resolve));
 function setup(overrides = {}) {
   const state = { stopped: 0, closed: 0, cancelled: [], levels: [], unavailable: 0, loud: false };
   const stream = { getTracks: () => [{ stop() { state.stopped++; } }] };
-  const analyser = { frequencyBinCount: 512, disconnect() {}, getByteFrequencyData(array) { array.fill(0); if (state.loud) array.fill(220, 40, 80); } };
+  const analyser = { frequencyBinCount: 512, disconnect() {}, getByteFrequencyData(array) { array.fill(0); if (state.loud) array.fill(220, 40, 80); }, getByteTimeDomainData(array) { array.fill(state.loud ? 150 : 128); } };
   const context = { sampleRate: 48000, state: 'running', createAnalyser: () => analyser, createMediaStreamSource: () => ({ connect() {}, disconnect() {} }), resume: async () => {}, async close() { state.closed++; this.state = 'closed'; } };
   const stop = startVoiceMeter({ getStream: async () => stream, createContext: () => context, requestFrame(callback) { state.next = callback; return 7; }, cancelFrame: id => state.cancelled.push(id), onLevels: levels => state.levels.push([...levels]), onUnavailable: () => state.unavailable++, ...overrides });
   return { state, stop, stream };

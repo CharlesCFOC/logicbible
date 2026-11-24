@@ -39,3 +39,9 @@ export async function requestBibleVoiceTranscript(blob, { signal } = {}) {
 export function requestBibleVoiceSearch(query, { signal } = {}) {
   return voiceRequest("/api/ai/bible-voice-search", {query}, signal);
 }
+export function requestVoiceAssistant(query, { signal } = {}) {
+  return voiceRequest("/api/ai/voice-assistant", { query }, signal);
+}
+export function requestKidsVoiceStory(query, { signal } = {}) {
+  return voiceRequest("/api/ai/voice-assistant", { query, action: "kids-story" }, signal);
+}

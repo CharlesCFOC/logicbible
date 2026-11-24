@@ -58,29 +58,29 @@ var l = /* @__PURE__ */ t(((e) => {
 	}
 	function x(e) {
 		if (h = !1, b(e), !m) {
-			if (n(c) !== null) m = !0, ee || (ee = !0, E());
+			if (n(c) !== null) m = !0, S || (S = !0, D());
 			else {
 				var t = n(l);
-				t !== null && ie(x, t.startTime - e);
+				t !== null && re(x, t.startTime - e);
 			}
 		}
 	}
-	var ee = !1, S = -1, C = 5, w = -1;
-	function te() {
-		return g ? !0 : !(e.unstable_now() - w < C);
+	var S = !1, C = -1, w = 5, T = -1;
+	function ee() {
+		return g ? !0 : !(e.unstable_now() - T < w);
 	}
-	function T() {
-		if (g = !1, ee) {
+	function E() {
+		if (g = !1, S) {
 			var t = e.unstable_now();
-			w = t;
+			T = t;
 			var i = !0;
 			try {
 				a: {
-					m = !1, h && (h = !1, v(S), S = -1), p = !0;
+					m = !1, h && (h = !1, v(C), C = -1), p = !0;
 					var a = f;
 					try {
 						b: {
-							for (b(t), d = n(c); d !== null && !(d.expirationTime > t && te());) {
+							for (b(t), d = n(c); d !== null && !(d.expirationTime > t && ee());) {
 								var o = d.callback;
 								if (typeof o == "function") {
 									d.callback = null, f = d.priorityLevel;
@@ -96,7 +96,7 @@ var l = /* @__PURE__ */ t(((e) => {
 							if (d !== null) i = !0;
 							else {
 								var u = n(l);
-								u !== null && ie(x, u.startTime - t), i = !1;
+								u !== null && re(x, u.startTime - t), i = !1;
 							}
 						}
 						break a;
@@ -106,31 +106,31 @@ var l = /* @__PURE__ */ t(((e) => {
 					i = void 0;
 				}
 			} finally {
-				i ? E() : ee = !1;
+				i ? D() : S = !1;
 			}
 		}
 	}
-	var E;
-	if (typeof y == "function") E = function() {
-		y(T);
+	var D;
+	if (typeof y == "function") D = function() {
+		y(E);
 	};
 	else if (typeof MessageChannel < "u") {
-		var ne = new MessageChannel(), re = ne.port2;
-		ne.port1.onmessage = T, E = function() {
-			re.postMessage(null);
+		var te = new MessageChannel(), ne = te.port2;
+		te.port1.onmessage = E, D = function() {
+			ne.postMessage(null);
 		};
-	} else E = function() {
-		_(T, 0);
+	} else D = function() {
+		_(E, 0);
 	};
-	function ie(t, n) {
-		S = _(function() {
+	function re(t, n) {
+		C = _(function() {
 			t(e.unstable_now());
 		}, n);
 	}
 	e.unstable_IdlePriority = 5, e.unstable_ImmediatePriority = 1, e.unstable_LowPriority = 4, e.unstable_NormalPriority = 3, e.unstable_Profiling = null, e.unstable_UserBlockingPriority = 2, e.unstable_cancelCallback = function(e) {
 		e.callback = null;
 	}, e.unstable_forceFrameRate = function(e) {
-		0 > e || 125 < e ? console.error("forceFrameRate takes a positive int between 0 and 125, forcing frame rates higher than 125 fps is not supported") : C = 0 < e ? Math.floor(1e3 / e) : 5;
+		0 > e || 125 < e ? console.error("forceFrameRate takes a positive int between 0 and 125, forcing frame rates higher than 125 fps is not supported") : w = 0 < e ? Math.floor(1e3 / e) : 5;
 	}, e.unstable_getCurrentPriorityLevel = function() {
 		return f;
 	}, e.unstable_next = function(e) {
@@ -191,8 +191,8 @@ var l = /* @__PURE__ */ t(((e) => {
 			startTime: a,
 			expirationTime: s,
 			sortIndex: -1
-		}, a > o ? (r.sortIndex = a, t(l, r), n(c) === null && r === n(l) && (h ? (v(S), S = -1) : h = !0, ie(x, a - o))) : (r.sortIndex = s, t(c, r), m || p || (m = !0, ee || (ee = !0, E()))), r;
-	}, e.unstable_shouldYield = te, e.unstable_wrapCallback = function(e) {
+		}, a > o ? (r.sortIndex = a, t(l, r), n(c) === null && r === n(l) && (h ? (v(C), C = -1) : h = !0, re(x, a - o))) : (r.sortIndex = s, t(c, r), m || p || (m = !0, S || (S = !0, D()))), r;
+	}, e.unstable_shouldYield = ee, e.unstable_wrapCallback = function(e) {
 		var t = f;
 		return function() {
 			var n = f;
@@ -314,55 +314,55 @@ var l = /* @__PURE__ */ t(((e) => {
 		}
 		return null;
 	}
-	var h = Object.assign, g = Symbol.for("react.element"), _ = Symbol.for("react.transitional.element"), v = Symbol.for("react.portal"), y = Symbol.for("react.fragment"), b = Symbol.for("react.strict_mode"), x = Symbol.for("react.profiler"), ee = Symbol.for("react.consumer"), S = Symbol.for("react.context"), C = Symbol.for("react.forward_ref"), w = Symbol.for("react.suspense"), te = Symbol.for("react.suspense_list"), T = Symbol.for("react.memo"), E = Symbol.for("react.lazy"), ne = Symbol.for("react.activity"), re = Symbol.for("react.memo_cache_sentinel"), ie = Symbol.iterator;
-	function ae(e) {
-		return typeof e != "object" || !e ? null : (e = ie && e[ie] || e["@@iterator"], typeof e == "function" ? e : null);
+	var h = Object.assign, g = Symbol.for("react.element"), _ = Symbol.for("react.transitional.element"), v = Symbol.for("react.portal"), y = Symbol.for("react.fragment"), b = Symbol.for("react.strict_mode"), x = Symbol.for("react.profiler"), S = Symbol.for("react.consumer"), C = Symbol.for("react.context"), w = Symbol.for("react.forward_ref"), T = Symbol.for("react.suspense"), ee = Symbol.for("react.suspense_list"), E = Symbol.for("react.memo"), D = Symbol.for("react.lazy"), te = Symbol.for("react.activity"), ne = Symbol.for("react.memo_cache_sentinel"), re = Symbol.iterator;
+	function ie(e) {
+		return typeof e != "object" || !e ? null : (e = re && e[re] || e["@@iterator"], typeof e == "function" ? e : null);
 	}
-	var oe = Symbol.for("react.client.reference");
-	function se(e) {
+	var ae = Symbol.for("react.client.reference");
+	function oe(e) {
 		if (e == null) return null;
-		if (typeof e == "function") return e.$$typeof === oe ? null : e.displayName || e.name || null;
+		if (typeof e == "function") return e.$$typeof === ae ? null : e.displayName || e.name || null;
 		if (typeof e == "string") return e;
 		switch (e) {
 			case y: return "Fragment";
 			case x: return "Profiler";
 			case b: return "StrictMode";
-			case w: return "Suspense";
-			case te: return "SuspenseList";
-			case ne: return "Activity";
+			case T: return "Suspense";
+			case ee: return "SuspenseList";
+			case te: return "Activity";
 		}
 		if (typeof e == "object") switch (e.$$typeof) {
 			case v: return "Portal";
-			case S: return e.displayName || "Context";
-			case ee: return (e._context.displayName || "Context") + ".Consumer";
-			case C:
+			case C: return e.displayName || "Context";
+			case S: return (e._context.displayName || "Context") + ".Consumer";
+			case w:
 				var t = e.render;
 				return e = e.displayName, e ||= (e = t.displayName || t.name || "", e === "" ? "ForwardRef" : "ForwardRef(" + e + ")"), e;
-			case T: return t = e.displayName || null, t === null ? se(e.type) || "Memo" : t;
-			case E:
+			case E: return t = e.displayName || null, t === null ? oe(e.type) || "Memo" : t;
+			case D:
 				t = e._payload, e = e._init;
 				try {
-					return se(e(t));
+					return oe(e(t));
 				} catch {}
 		}
 		return null;
 	}
-	var ce = Array.isArray, D = r.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, O = a.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, le = {
+	var se = Array.isArray, O = r.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, k = a.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ce = {
 		pending: !1,
 		data: null,
 		method: null,
 		action: null
-	}, ue = [], de = -1;
-	function fe(e) {
+	}, le = [], ue = -1;
+	function de(e) {
 		return { current: e };
 	}
-	function k(e) {
-		0 > de || (e.current = ue[de], ue[de] = null, de--);
+	function fe(e) {
+		0 > ue || (e.current = le[ue], le[ue] = null, ue--);
 	}
 	function A(e, t) {
-		de++, ue[de] = e.current, e.current = t;
+		ue++, le[ue] = e.current, e.current = t;
 	}
-	var pe = fe(null), me = fe(null), he = fe(null), ge = fe(null);
+	var pe = de(null), me = de(null), he = de(null), ge = de(null);
 	function _e(e, t) {
 		switch (A(he, t), A(me, e), A(pe, null), t.nodeType) {
 			case 9:
@@ -380,10 +380,10 @@ var l = /* @__PURE__ */ t(((e) => {
 				default: e = 0;
 			}
 		}
-		k(pe), A(pe, e);
+		fe(pe), A(pe, e);
 	}
 	function ve() {
-		k(pe), k(me), k(he);
+		fe(pe), fe(me), fe(he);
 	}
 	function ye(e) {
 		e.memoizedState !== null && A(ge, e);
@@ -391,7 +391,7 @@ var l = /* @__PURE__ */ t(((e) => {
 		t !== n && (A(me, e), A(pe, n));
 	}
 	function be(e) {
-		me.current === e && (k(pe), k(me)), ge.current === e && (k(ge), Qf._currentValue = le);
+		me.current === e && (fe(pe), fe(me)), ge.current === e && (fe(ge), Qf._currentValue = ce);
 	}
 	var xe, Se;
 	function Ce(e) {
@@ -678,15 +678,15 @@ var l = /* @__PURE__ */ t(((e) => {
 		return e &= -e, 2 < e ? 8 < e ? e & 134217727 ? 32 : 268435456 : 8 : 2;
 	}
 	function dt() {
-		var e = O.p;
+		var e = k.p;
 		return e === 0 ? (e = window.event, e === void 0 ? 32 : mp(e.type)) : e;
 	}
 	function ft(e, t) {
-		var n = O.p;
+		var n = k.p;
 		try {
-			return O.p = e, t();
+			return k.p = e, t();
 		} finally {
-			O.p = n;
+			k.p = n;
 		}
 	}
 	var pt = Math.random().toString(36).slice(2), mt = "__reactFiber$" + pt, ht = "__reactProps$" + pt, gt = "__reactContainer$" + pt, _t = "__reactEvents$" + pt, vt = "__reactListeners$" + pt, yt = "__reactHandles$" + pt, bt = "__reactResources$" + pt, xt = "__reactMarker$" + pt;
@@ -896,7 +896,7 @@ var l = /* @__PURE__ */ t(((e) => {
 		if (t == null) {
 			if (r != null) {
 				if (n != null) throw Error(o(92));
-				if (ce(r)) {
+				if (se(r)) {
 					if (1 < r.length) throw Error(o(93));
 					r = r[0];
 				}
@@ -1609,29 +1609,29 @@ var l = /* @__PURE__ */ t(((e) => {
 		if (r = e, typeof e == "function") gi(e) && (s = 1);
 		else if (typeof e == "string") s = Uf(e, n, pe.current) ? 26 : e === "html" || e === "head" || e === "body" ? 27 : 5;
 		else a: switch (e) {
-			case ne: return e = hi(31, n, t, i), e.elementType = ne, e.lanes = a, e;
+			case te: return e = hi(31, n, t, i), e.elementType = te, e.lanes = a, e;
 			case y: return bi(n.children, i, a, t);
 			case b:
 				s = 8, i |= 24;
 				break;
 			case x: return e = hi(12, n, t, i | 2), e.elementType = x, e.lanes = a, e;
-			case w: return e = hi(13, n, t, i), e.elementType = w, e.lanes = a, e;
-			case te: return e = hi(19, n, t, i), e.elementType = te, e.lanes = a, e;
+			case T: return e = hi(13, n, t, i), e.elementType = T, e.lanes = a, e;
+			case ee: return e = hi(19, n, t, i), e.elementType = ee, e.lanes = a, e;
 			default:
 				if (typeof e == "object" && e) switch (e.$$typeof) {
-					case S:
+					case C:
 						s = 10;
 						break a;
-					case ee:
+					case S:
 						s = 9;
 						break a;
-					case C:
+					case w:
 						s = 11;
 						break a;
-					case T:
+					case E:
 						s = 14;
 						break a;
-					case E:
+					case D:
 						s = 16, r = null;
 						break a;
 				}
@@ -1775,12 +1775,12 @@ var l = /* @__PURE__ */ t(((e) => {
 	function Xi(e) {
 		Vi === null ? Vi = [e] : Vi.push(e);
 	}
-	var Zi = fe(null), Qi = null, $i = null;
+	var Zi = de(null), Qi = null, $i = null;
 	function ea(e, t, n) {
 		A(Zi, t._currentValue), t._currentValue = n;
 	}
 	function ta(e) {
-		e._currentValue = Zi.current, k(Zi);
+		e._currentValue = Zi.current, fe(Zi);
 	}
 	function na(e, t, n) {
 		for (; e !== null;) {
@@ -1890,7 +1890,7 @@ var l = /* @__PURE__ */ t(((e) => {
 			});
 		};
 	}, da = t.unstable_scheduleCallback, fa = t.unstable_NormalPriority, P = {
-		$$typeof: S,
+		$$typeof: C,
 		Consumer: null,
 		Provider: null,
 		_currentValue: null,
@@ -1947,11 +1947,11 @@ var l = /* @__PURE__ */ t(((e) => {
 			for (r.status = "rejected", r.reason = e, e = 0; e < n.length; e++) (0, n[e])(void 0);
 		}), r;
 	}
-	var Sa = D.S;
-	D.S = function(e, t) {
+	var Sa = O.S;
+	O.S = function(e, t) {
 		eu = Ne(), typeof t == "object" && t && typeof t.then == "function" && ya(e, t), Sa !== null && Sa(e, t);
 	};
-	var Ca = fe(null);
+	var Ca = de(null);
 	function wa() {
 		var e = Ca.current;
 		return e === null ? K.pooledCache : e;
@@ -2055,7 +2055,7 @@ var l = /* @__PURE__ */ t(((e) => {
 		}
 		function l(e, t, n, r) {
 			var a = n.type;
-			return a === y ? d(e, t, n.props.children, r, n.key) : t !== null && (t.elementType === a || typeof a == "object" && a && a.$$typeof === E && Na(a) === t.type) ? (t = i(t, n.props), Ba(t, n), t.return = e, t) : (t = yi(n.type, n.key, n.props, null, e.mode, r), Ba(t, n), t.return = e, t);
+			return a === y ? d(e, t, n.props.children, r, n.key) : t !== null && (t.elementType === a || typeof a == "object" && a && a.$$typeof === D && Na(a) === t.type) ? (t = i(t, n.props), Ba(t, n), t.return = e, t) : (t = yi(n.type, n.key, n.props, null, e.mode, r), Ba(t, n), t.return = e, t);
 		}
 		function u(e, t, n, r) {
 			return t === null || t.tag !== 4 || t.stateNode.containerInfo !== n.containerInfo || t.stateNode.implementation !== n.implementation ? (t = Ci(n, e.mode, r), t.return = e, t) : (t = i(t, n.children || []), t.return = e, t);
@@ -2069,11 +2069,11 @@ var l = /* @__PURE__ */ t(((e) => {
 				switch (t.$$typeof) {
 					case _: return n = yi(t.type, t.key, t.props, null, e.mode, n), Ba(n, t), n.return = e, n;
 					case v: return t = Ci(t, e.mode, n), t.return = e, t;
-					case E: return t = Na(t), f(e, t, n);
+					case D: return t = Na(t), f(e, t, n);
 				}
-				if (ce(t) || ae(t)) return t = bi(t, e.mode, n, null), t.return = e, t;
+				if (se(t) || ie(t)) return t = bi(t, e.mode, n, null), t.return = e, t;
 				if (typeof t.then == "function") return f(e, za(t), n);
-				if (t.$$typeof === S) return f(e, ca(e, t), n);
+				if (t.$$typeof === C) return f(e, ca(e, t), n);
 				Va(e, t);
 			}
 			return null;
@@ -2085,11 +2085,11 @@ var l = /* @__PURE__ */ t(((e) => {
 				switch (n.$$typeof) {
 					case _: return n.key === i ? l(e, t, n, r) : null;
 					case v: return n.key === i ? u(e, t, n, r) : null;
-					case E: return n = Na(n), p(e, t, n, r);
+					case D: return n = Na(n), p(e, t, n, r);
 				}
-				if (ce(n) || ae(n)) return i === null ? d(e, t, n, r, null) : null;
+				if (se(n) || ie(n)) return i === null ? d(e, t, n, r, null) : null;
 				if (typeof n.then == "function") return p(e, t, za(n), r);
-				if (n.$$typeof === S) return p(e, t, ca(e, n), r);
+				if (n.$$typeof === C) return p(e, t, ca(e, n), r);
 				Va(e, n);
 			}
 			return null;
@@ -2100,11 +2100,11 @@ var l = /* @__PURE__ */ t(((e) => {
 				switch (r.$$typeof) {
 					case _: return e = e.get(r.key === null ? n : r.key) || null, l(t, e, r, i);
 					case v: return e = e.get(r.key === null ? n : r.key) || null, u(t, e, r, i);
-					case E: return r = Na(r), m(e, t, n, r, i);
+					case D: return r = Na(r), m(e, t, n, r, i);
 				}
-				if (ce(r) || ae(r)) return e = e.get(n) || null, d(t, e, r, i, null);
+				if (se(r) || ie(r)) return e = e.get(n) || null, d(t, e, r, i, null);
 				if (typeof r.then == "function") return m(e, t, n, za(r), i);
-				if (r.$$typeof === S) return m(e, t, n, ca(t, r), i);
+				if (r.$$typeof === C) return m(e, t, n, ca(t, r), i);
 				Va(t, r);
 			}
 			return null;
@@ -2162,7 +2162,7 @@ var l = /* @__PURE__ */ t(((e) => {
 											n(e, r.sibling), c = i(r, a.props.children), c.return = e, e = c;
 											break a;
 										}
-									} else if (r.elementType === l || typeof l == "object" && l && l.$$typeof === E && Na(l) === r.type) {
+									} else if (r.elementType === l || typeof l == "object" && l && l.$$typeof === D && Na(l) === r.type) {
 										n(e, r.sibling), c = i(r, a.props), Ba(c, a), c.return = e, e = c;
 										break a;
 									}
@@ -2190,15 +2190,15 @@ var l = /* @__PURE__ */ t(((e) => {
 							c = Ci(a, e.mode, c), c.return = e, e = c;
 						}
 						return s(e);
-					case E: return a = Na(a), b(e, r, a, c);
+					case D: return a = Na(a), b(e, r, a, c);
 				}
-				if (ce(a)) return h(e, r, a, c);
-				if (ae(a)) {
-					if (l = ae(a), typeof l != "function") throw Error(o(150));
+				if (se(a)) return h(e, r, a, c);
+				if (ie(a)) {
+					if (l = ie(a), typeof l != "function") throw Error(o(150));
 					return a = l.call(a), g(e, r, a, c);
 				}
 				if (typeof a.then == "function") return b(e, r, za(a), c);
-				if (a.$$typeof === S) return b(e, r, ca(e, a), c);
+				if (a.$$typeof === C) return b(e, r, ca(e, a), c);
 				Va(e, a);
 			}
 			return typeof a == "string" && a !== "" || typeof a == "number" || typeof a == "bigint" ? (a = "" + a, r !== null && r.tag === 6 ? (n(e, r.sibling), c = i(r, a), c.return = e, e = c) : (n(e, r), c = xi(a, e.mode, c), c.return = e, e = c), s(e)) : n(e, r);
@@ -2364,7 +2364,7 @@ var l = /* @__PURE__ */ t(((e) => {
 		var n = e.callbacks;
 		if (n !== null) for (e.callbacks = null, e = 0; e < n.length; e++) to(n[e], t);
 	}
-	var ro = fe(null), io = fe(0);
+	var ro = de(null), io = de(0);
 	function ao(e, t) {
 		e = Wl, A(io, e), A(ro, t), Wl = e | t.baseLanes;
 	}
@@ -2372,9 +2372,9 @@ var l = /* @__PURE__ */ t(((e) => {
 		A(io, Wl), A(ro, ro.current);
 	}
 	function so() {
-		Wl = io.current, k(ro), k(io);
+		Wl = io.current, fe(ro), fe(io);
 	}
-	var co = fe(null), lo = null;
+	var co = de(null), lo = null;
 	function uo(e) {
 		var t = e.alternate;
 		A(F, F.current & 1), A(co, e), lo === null && (t === null || ro.current !== null || t.memoizedState !== null) && (lo = e);
@@ -2389,9 +2389,9 @@ var l = /* @__PURE__ */ t(((e) => {
 		A(F, F.current), A(co, co.current);
 	}
 	function ho(e) {
-		k(co), lo === e && (lo = null), k(F);
+		fe(co), lo === e && (lo = null), fe(F);
 	}
-	var F = fe(0);
+	var F = de(0);
 	function go(e) {
 		for (var t = e; t !== null;) {
 			if (t.tag === 13) {
@@ -2422,10 +2422,10 @@ var l = /* @__PURE__ */ t(((e) => {
 		return !0;
 	}
 	function Eo(e, t, n, r, i, a) {
-		return _o = a, I = t, t.memoizedState = null, t.updateQueue = null, t.lanes = 0, D.H = e === null || e.memoizedState === null ? Hs : Us, bo = !1, a = n(r, i), bo = !1, yo && (a = Oo(t, n, r, i)), Do(e), a;
+		return _o = a, I = t, t.memoizedState = null, t.updateQueue = null, t.lanes = 0, O.H = e === null || e.memoizedState === null ? Hs : Us, bo = !1, a = n(r, i), bo = !1, yo && (a = Oo(t, n, r, i)), Do(e), a;
 	}
 	function Do(e) {
-		D.H = Vs;
+		O.H = Vs;
 		var t = L !== null && L.next !== null;
 		if (_o = 0, R = L = I = null, vo = !1, So = 0, Co = null, t) throw Error(o(300));
 		e === null || V || (e = e.dependencies, e !== null && aa(e) && (V = !0));
@@ -2439,12 +2439,12 @@ var l = /* @__PURE__ */ t(((e) => {
 				var a = e.updateQueue;
 				a.lastEffect = null, a.events = null, a.stores = null, a.memoCache != null && (a.memoCache.index = 0);
 			}
-			D.H = Ws, a = t(n, r);
+			O.H = Ws, a = t(n, r);
 		} while (yo);
 		return a;
 	}
 	function ko() {
-		var e = D.H, t = e.useState()[0];
+		var e = O.H, t = e.useState()[0];
 		return t = typeof t.then == "function" ? Fo(t) : t, e = e.useState()[0], (L === null ? null : L.memoizedState) !== e && (I.flags |= 1024), t;
 	}
 	function Ao() {
@@ -2503,12 +2503,12 @@ var l = /* @__PURE__ */ t(((e) => {
 	}
 	function Fo(e) {
 		var t = So;
-		return So += 1, Co === null && (Co = []), e = Ma(Co, e, t), t = I, (R === null ? t.memoizedState : R.next) === null && (t = t.alternate, D.H = t === null || t.memoizedState === null ? Hs : Us), e;
+		return So += 1, Co === null && (Co = []), e = Ma(Co, e, t), t = I, (R === null ? t.memoizedState : R.next) === null && (t = t.alternate, O.H = t === null || t.memoizedState === null ? Hs : Us), e;
 	}
 	function Io(e) {
 		if (typeof e == "object" && e) {
 			if (typeof e.then == "function") return Fo(e);
-			if (e.$$typeof === S) return sa(e);
+			if (e.$$typeof === C) return sa(e);
 		}
 		throw Error(o(438, String(e)));
 	}
@@ -2526,7 +2526,7 @@ var l = /* @__PURE__ */ t(((e) => {
 		if (t ??= {
 			data: [],
 			index: 0
-		}, n === null && (n = Po(), I.updateQueue = n), n.memoCache = t, n = t.data[t.index], n === void 0) for (n = t.data[t.index] = Array(e), r = 0; r < e; r++) n[r] = re;
+		}, n === null && (n = Po(), I.updateQueue = n), n.memoCache = t, n = t.data[t.index], n === void 0) for (n = t.data[t.index] = Array(e), r = 0; r < e; r++) n[r] = ne;
 		return t.index++, n;
 	}
 	function Ro(e, t) {
@@ -2689,21 +2689,21 @@ var l = /* @__PURE__ */ t(((e) => {
 					a.listeners.push(e);
 				}
 			};
-			D.T === null ? a.isTransition = !1 : n(!0), r(a), n = t.pending, n === null ? (a.next = t.pending = a, Zo(t, a)) : (a.next = n.next, t.pending = n.next = a);
+			O.T === null ? a.isTransition = !1 : n(!0), r(a), n = t.pending, n === null ? (a.next = t.pending = a, Zo(t, a)) : (a.next = n.next, t.pending = n.next = a);
 		}
 	}
 	function Zo(e, t) {
 		var n = t.action, r = t.payload, i = e.state;
 		if (t.isTransition) {
-			var a = D.T, o = {};
-			D.T = o;
+			var a = O.T, o = {};
+			O.T = o;
 			try {
-				var s = n(i, r), c = D.S;
+				var s = n(i, r), c = O.S;
 				c !== null && c(o, s), Qo(e, t, s);
 			} catch (n) {
 				es(e, t, n);
 			} finally {
-				a !== null && o.types !== null && (a.types = o.types), D.T = a;
+				a !== null && o.types !== null && (a.types = o.types), O.T = a;
 			}
 		} else try {
 			a = n(i, r), Qo(e, t, a);
@@ -2911,12 +2911,12 @@ var l = /* @__PURE__ */ t(((e) => {
 		return kr(n, t) ? n : ro.current === null ? !(_o & 42) || _o & 1073741824 && !(J & 261930) ? (V = !0, e.memoizedState = n) : (e = mu(), I.lanes |= e, Gl |= e, t) : (e = Cs(e, n, r), kr(e, t) || (V = !0), e);
 	}
 	function Ts(e, t, n, r, i) {
-		var a = O.p;
-		O.p = a !== 0 && 8 > a ? a : 8;
-		var o = D.T, s = {};
-		D.T = s, Ls(e, !1, t, n);
+		var a = k.p;
+		k.p = a !== 0 && 8 > a ? a : 8;
+		var o = O.T, s = {};
+		O.T = s, Ls(e, !1, t, n);
 		try {
-			var c = i(), l = D.S;
+			var c = i(), l = O.S;
 			l !== null && l(s, c), typeof c == "object" && c && typeof c.then == "function" ? Is(e, t, xa(c, r), pu(e)) : Is(e, t, r, pu(e));
 		} catch (n) {
 			Is(e, t, {
@@ -2925,14 +2925,14 @@ var l = /* @__PURE__ */ t(((e) => {
 				reason: n
 			}, pu());
 		} finally {
-			O.p = a, o !== null && s.types !== null && (o.types = s.types), D.T = o;
+			k.p = a, o !== null && s.types !== null && (o.types = s.types), O.T = o;
 		}
 	}
 	function Es() {}
 	function Ds(e, t, n, r) {
 		if (e.tag !== 5) throw Error(o(476));
 		var i = Os(e).queue;
-		Ts(e, i, t, le, n === null ? Es : function() {
+		Ts(e, i, t, ce, n === null ? Es : function() {
 			return ks(e), n(r);
 		});
 	}
@@ -2940,15 +2940,15 @@ var l = /* @__PURE__ */ t(((e) => {
 		var t = e.memoizedState;
 		if (t !== null) return t;
 		t = {
-			memoizedState: le,
-			baseState: le,
+			memoizedState: ce,
+			baseState: ce,
 			baseQueue: null,
 			queue: {
 				pending: null,
 				lanes: 0,
 				dispatch: null,
 				lastRenderedReducer: Ro,
-				lastRenderedState: le
+				lastRenderedState: ce
 			},
 			next: null
 		};
@@ -3758,16 +3758,16 @@ var l = /* @__PURE__ */ t(((e) => {
 					else {
 						if (e != null) {
 							var i = e.$$typeof;
-							if (i === C) {
+							if (i === w) {
 								t.tag = 11, t = sc(null, t, e, r, n);
 								break a;
 							}
-							if (i === T) {
+							if (i === E) {
 								t.tag = 14, t = cc(null, t, e, r, n);
 								break a;
 							}
 						}
-						throw t = se(e) || e, Error(o(306, t, ""));
+						throw t = oe(e) || e, Error(o(306, t, ""));
 					}
 				}
 				return t;
@@ -4013,7 +4013,7 @@ var l = /* @__PURE__ */ t(((e) => {
 			case 4: return ve(), e === null && Sd(t.stateNode.containerInfo), H(t), null;
 			case 10: return ta(t.type), H(t), null;
 			case 19:
-				if (k(F), r = t.memoizedState, r === null) return H(t), null;
+				if (fe(F), r = t.memoizedState, r === null) return H(t), null;
 				if (i = !!(t.flags & 128), a = r.rendering, a === null) {
 					if (i) zc(r, !1);
 					else {
@@ -4036,7 +4036,7 @@ var l = /* @__PURE__ */ t(((e) => {
 				}
 				return r.tail === null ? (H(t), null) : (e = r.tail, r.rendering = e, r.tail = e.sibling, r.renderingStartTime = Ne(), e.sibling = null, n = F.current, A(F, i ? n & 1 | 2 : n & 1), N && Fi(t, r.treeForkCount), e);
 			case 22:
-			case 23: return ho(t), so(), r = t.memoizedState !== null, e === null ? r && (t.flags |= 8192) : e.memoizedState !== null !== r && (t.flags |= 8192), r ? n & 536870912 && !(t.flags & 128) && (H(t), t.subtreeFlags & 6 && (t.flags |= 8192)) : H(t), n = t.updateQueue, n !== null && Rc(t, n.retryQueue), n = null, e !== null && e.memoizedState !== null && e.memoizedState.cachePool !== null && (n = e.memoizedState.cachePool.pool), r = null, t.memoizedState !== null && t.memoizedState.cachePool !== null && (r = t.memoizedState.cachePool.pool), r !== n && (t.flags |= 2048), e !== null && k(Ca), null;
+			case 23: return ho(t), so(), r = t.memoizedState !== null, e === null ? r && (t.flags |= 8192) : e.memoizedState !== null !== r && (t.flags |= 8192), r ? n & 536870912 && !(t.flags & 128) && (H(t), t.subtreeFlags & 6 && (t.flags |= 8192)) : H(t), n = t.updateQueue, n !== null && Rc(t, n.retryQueue), n = null, e !== null && e.memoizedState !== null && e.memoizedState.cachePool !== null && (n = e.memoizedState.cachePool.pool), r = null, t.memoizedState !== null && t.memoizedState.cachePool !== null && (r = t.memoizedState.cachePool.pool), r !== n && (t.flags |= 2048), e !== null && fe(Ca), null;
 			case 24: return n = null, e !== null && (n = e.memoizedState.cache), t.memoizedState.cache !== n && (t.flags |= 2048), ta(P), H(t), null;
 			case 25: return null;
 			case 30: return null;
@@ -4062,11 +4062,11 @@ var l = /* @__PURE__ */ t(((e) => {
 					Ji();
 				}
 				return e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
-			case 19: return k(F), null;
+			case 19: return fe(F), null;
 			case 4: return ve(), null;
 			case 10: return ta(t.type), null;
 			case 22:
-			case 23: return ho(t), so(), e !== null && k(Ca), e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
+			case 23: return ho(t), so(), e !== null && fe(Ca), e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
 			case 24: return ta(P), null;
 			case 25: return null;
 			default: return null;
@@ -4092,14 +4092,14 @@ var l = /* @__PURE__ */ t(((e) => {
 				ho(t);
 				break;
 			case 19:
-				k(F);
+				fe(F);
 				break;
 			case 10:
 				ta(t.type);
 				break;
 			case 22:
 			case 23:
-				ho(t), so(), e !== null && k(Ca);
+				ho(t), so(), e !== null && fe(Ca);
 				break;
 			case 24: ta(P);
 		}
@@ -5051,7 +5051,7 @@ var l = /* @__PURE__ */ t(((e) => {
 		}
 	}, zl = typeof WeakMap == "function" ? WeakMap : Map, G = 0, K = null, q = null, J = 0, Y = 0, Bl = null, Vl = !1, Hl = !1, Ul = !1, Wl = 0, X = 0, Gl = 0, Kl = 0, ql = 0, Jl = 0, Yl = 0, Xl = null, Zl = null, Ql = !1, $l = 0, eu = 0, tu = Infinity, nu = null, ru = null, iu = 0, au = null, ou = null, su = 0, cu = 0, lu = null, uu = null, du = 0, fu = null;
 	function pu() {
-		return G & 2 && J !== 0 ? J & -J : D.T === null ? dt() : dd();
+		return G & 2 && J !== 0 ? J & -J : O.T === null ? dt() : dd();
 	}
 	function mu() {
 		if (Jl === 0) {
@@ -5201,19 +5201,19 @@ var l = /* @__PURE__ */ t(((e) => {
 		return Wl = t, si(), n;
 	}
 	function Cu(e, t) {
-		I = null, D.H = Vs, t === Da || t === ka ? (t = Fa(), Y = 3) : t === Oa ? (t = Fa(), Y = 4) : Y = t === ac ? 8 : typeof t == "object" && t && typeof t.then == "function" ? 6 : 1, Bl = t, q === null && (X = 1, $s(e, Ti(t, e.current)));
+		I = null, O.H = Vs, t === Da || t === ka ? (t = Fa(), Y = 3) : t === Oa ? (t = Fa(), Y = 4) : Y = t === ac ? 8 : typeof t == "object" && t && typeof t.then == "function" ? 6 : 1, Bl = t, q === null && (X = 1, $s(e, Ti(t, e.current)));
 	}
 	function wu() {
 		var e = co.current;
 		return e === null ? !0 : (J & 4194048) === J ? lo === null : (J & 62914560) === J || J & 536870912 ? e === lo : !1;
 	}
 	function Tu() {
-		var e = D.H;
-		return D.H = Vs, e === null ? Vs : e;
+		var e = O.H;
+		return O.H = Vs, e === null ? Vs : e;
 	}
 	function Eu() {
-		var e = D.A;
-		return D.A = Rl, e;
+		var e = O.A;
+		return O.A = Rl, e;
 	}
 	function Du() {
 		X = 4, Vl || (J & 4194048) !== J && co.current !== null || (Hl = !0), !(Gl & 134217727) && !(Kl & 134217727) || K === null || yu(K, J, Jl, !1);
@@ -5252,7 +5252,7 @@ var l = /* @__PURE__ */ t(((e) => {
 				Cu(e, t);
 			}
 		while (1);
-		return t && e.shellSuspendCounter++, $i = Qi = null, G = r, D.H = i, D.A = a, q === null && (K = null, J = 0, si()), o;
+		return t && e.shellSuspendCounter++, $i = Qi = null, G = r, O.H = i, O.A = a, q === null && (K = null, J = 0, si()), o;
 	}
 	function ku() {
 		for (; q !== null;) Mu(q);
@@ -5325,7 +5325,7 @@ var l = /* @__PURE__ */ t(((e) => {
 				Cu(e, t);
 			}
 		while (1);
-		return $i = Qi = null, D.H = r, D.A = i, G = n, q === null ? (K = null, J = 0, si(), X) : 0;
+		return $i = Qi = null, O.H = r, O.A = i, G = n, q === null ? (K = null, J = 0, si(), X) : 0;
 	}
 	function ju() {
 		for (; q !== null && !je();) Mu(q);
@@ -5411,11 +5411,11 @@ var l = /* @__PURE__ */ t(((e) => {
 			if (a = t.lanes | t.childLanes, a |= oi, at(e, n, a, s, c, l), e === K && (q = K = null, J = 0), ou = t, au = e, su = n, cu = a, lu = i, uu = r, t.subtreeFlags & 10256 || t.flags & 10256 ? (e.callbackNode = null, e.callbackPriority = 0, Xu(Le, function() {
 				return Uu(), null;
 			})) : (e.callbackNode = null, e.callbackPriority = 0), r = !!(t.flags & 13878), t.subtreeFlags & 13878 || r) {
-				r = D.T, D.T = null, i = O.p, O.p = 2, s = G, G |= 4;
+				r = O.T, O.T = null, i = k.p, k.p = 2, s = G, G |= 4;
 				try {
 					ol(e, t, n);
 				} finally {
-					G = s, O.p = i, D.T = r;
+					G = s, k.p = i, O.T = r;
 				}
 			}
 			iu = 1, Ru(), zu(), Bu();
@@ -5426,9 +5426,9 @@ var l = /* @__PURE__ */ t(((e) => {
 			iu = 0;
 			var e = au, t = ou, n = !!(t.flags & 13878);
 			if (t.subtreeFlags & 13878 || n) {
-				n = D.T, D.T = null;
-				var r = O.p;
-				O.p = 2;
+				n = O.T, O.T = null;
+				var r = k.p;
+				k.p = 2;
 				var i = G;
 				G |= 4;
 				try {
@@ -5463,7 +5463,7 @@ var l = /* @__PURE__ */ t(((e) => {
 					}
 					sp = !!Rd, zd = Rd = null;
 				} finally {
-					G = i, O.p = r, D.T = n;
+					G = i, k.p = r, O.T = n;
 				}
 			}
 			e.current = t, iu = 2;
@@ -5474,15 +5474,15 @@ var l = /* @__PURE__ */ t(((e) => {
 			iu = 0;
 			var e = au, t = ou, n = !!(t.flags & 8772);
 			if (t.subtreeFlags & 8772 || n) {
-				n = D.T, D.T = null;
-				var r = O.p;
-				O.p = 2;
+				n = O.T, O.T = null;
+				var r = k.p;
+				k.p = 2;
 				var i = G;
 				G |= 4;
 				try {
 					sl(e, t.alternate, t);
 				} finally {
-					G = i, O.p = r, D.T = n;
+					G = i, k.p = r, O.T = n;
 				}
 			}
 			iu = 3;
@@ -5498,14 +5498,14 @@ var l = /* @__PURE__ */ t(((e) => {
 				Ue.onCommitFiberRoot(He, t, void 0, (t.current.flags & 128) == 128);
 			} catch {}
 			if (r !== null) {
-				t = D.T, i = O.p, O.p = 2, D.T = null;
+				t = O.T, i = k.p, k.p = 2, O.T = null;
 				try {
 					for (var a = e.onRecoverableError, o = 0; o < r.length; o++) {
 						var s = r[o];
 						a(s.value, { componentStack: s.stack });
 					}
 				} finally {
-					D.T = t, O.p = i;
+					O.T = t, k.p = i;
 				}
 			}
 			su & 3 && Hu(), rd(e), i = e.pendingLanes, n & 261930 && i & 42 ? e === fu ? du++ : (du = 0, fu = e) : du = 0, id(0, !1);
@@ -5521,9 +5521,9 @@ var l = /* @__PURE__ */ t(((e) => {
 		if (iu !== 5) return !1;
 		var e = au, t = cu;
 		cu = 0;
-		var n = ut(su), r = D.T, i = O.p;
+		var n = ut(su), r = O.T, i = k.p;
 		try {
-			O.p = 32 > n ? 32 : n, D.T = null, n = lu, lu = null;
+			k.p = 32 > n ? 32 : n, O.T = null, n = lu, lu = null;
 			var a = au, s = su;
 			if (iu = 0, ou = au = null, su = 0, G & 6) throw Error(o(331));
 			var c = G;
@@ -5532,7 +5532,7 @@ var l = /* @__PURE__ */ t(((e) => {
 			} catch {}
 			return !0;
 		} finally {
-			O.p = i, D.T = r, Vu(e, t);
+			k.p = i, O.T = r, Vu(e, t);
 		}
 	}
 	function Wu(e, t, n) {
@@ -6776,8 +6776,8 @@ var l = /* @__PURE__ */ t(((e) => {
 	function gf(e) {
 		return typeof e.getRootNode == "function" ? e.getRootNode() : e.nodeType === 9 ? e : e.ownerDocument;
 	}
-	var _f = O.d;
-	O.d = {
+	var _f = k.d;
+	k.d = {
 		f: vf,
 		r: yf,
 		D: Sf,
@@ -7166,11 +7166,11 @@ var l = /* @__PURE__ */ t(((e) => {
 		}
 	}
 	var Qf = {
-		$$typeof: S,
+		$$typeof: C,
 		Provider: null,
 		Consumer: null,
-		_currentValue: le,
-		_currentValue2: le,
+		_currentValue: ce,
+		_currentValue2: ce,
 		_threadCount: 0
 	};
 	function $f(e, t, n, r, i, a, o, s, c) {
@@ -7214,23 +7214,23 @@ var l = /* @__PURE__ */ t(((e) => {
 	}
 	var sp = !0;
 	function cp(e, t, n, r) {
-		var i = D.T;
-		D.T = null;
-		var a = O.p;
+		var i = O.T;
+		O.T = null;
+		var a = k.p;
 		try {
-			O.p = 2, up(e, t, n, r);
+			k.p = 2, up(e, t, n, r);
 		} finally {
-			O.p = a, D.T = i;
+			k.p = a, O.T = i;
 		}
 	}
 	function lp(e, t, n, r) {
-		var i = D.T;
-		D.T = null;
-		var a = O.p;
+		var i = O.T;
+		O.T = null;
+		var a = k.p;
 		try {
-			O.p = 8, up(e, t, n, r);
+			k.p = 8, up(e, t, n, r);
 		} finally {
-			O.p = a, D.T = i;
+			k.p = a, O.T = i;
 		}
 	}
 	function up(e, t, n, r) {
@@ -7574,7 +7574,7 @@ var l = /* @__PURE__ */ t(((e) => {
 	};
 	var Lp = r.version;
 	if (Lp !== "19.2.8") throw Error(o(527, Lp, "19.2.8"));
-	O.findDOMNode = function(e) {
+	k.findDOMNode = function(e) {
 		var t = e._reactInternals;
 		if (t === void 0) throw typeof e.render == "function" ? Error(o(188)) : (e = Object.keys(e).join(","), Error(o(268, e)));
 		return e = p(t), e = e === null ? null : m(e), e = e === null ? null : e.stateNode, e;
@@ -7583,7 +7583,7 @@ var l = /* @__PURE__ */ t(((e) => {
 		bundleType: 0,
 		version: "19.2.8",
 		rendererPackageName: "react-dom",
-		currentDispatcherRef: D,
+		currentDispatcherRef: O,
 		reconcilerVersion: "19.2.8"
 	};
 	if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u") {
@@ -7683,7 +7683,7 @@ function x({ row: e, onOpen: t }) {
 	});
 }
 // src/react/home.jsx
-var ee = /* @__PURE__ */ (0, h.jsxs)("svg", {
+var S = /* @__PURE__ */ (0, h.jsxs)("svg", {
 	viewBox: "0 0 24 24",
 	"aria-hidden": "true",
 	fill: "none",
@@ -7693,14 +7693,14 @@ var ee = /* @__PURE__ */ (0, h.jsxs)("svg", {
 	strokeLinejoin: "round",
 	children: [/* @__PURE__ */ (0, h.jsx)("path", { d: "M5 19 19 5" }), /* @__PURE__ */ (0, h.jsx)("path", { d: "M9 5h10v10" })]
 });
-function S() {
+function C() {
 	return {
 		streak: document.querySelector("[data-home-streak]")?.textContent?.trim() || "1 day",
 		continueReading: document.querySelector("[data-home-continue-reading]")?.textContent?.trim() || "John 15",
 		prayerCount: document.querySelector("[data-home-prayer-count]")?.textContent?.trim() || "0"
 	};
 }
-function C() {
+function w() {
 	let e = window.bibleReaderBridge?.getChapterSnapshot?.(), t = e?.verses?.[0];
 	return t?.text ? {
 		text: `“${t.text}”`,
@@ -7710,7 +7710,7 @@ function C() {
 		reference: "Your next verse"
 	};
 }
-var w = /* @__PURE__ */ (0, h.jsxs)("svg", {
+var T = /* @__PURE__ */ (0, h.jsxs)("svg", {
 	viewBox: "0 0 24 24",
 	"aria-hidden": "true",
 	fill: "none",
@@ -7719,7 +7719,7 @@ var w = /* @__PURE__ */ (0, h.jsxs)("svg", {
 	strokeLinecap: "round",
 	strokeLinejoin: "round",
 	children: [/* @__PURE__ */ (0, h.jsx)("path", { d: "M20.8 8.8c0 5.4-8.8 10.2-8.8 10.2S3.2 14.2 3.2 8.8A4.7 4.7 0 0 1 12 6.1a4.7 4.7 0 0 1 8.8 2.7Z" }), /* @__PURE__ */ (0, h.jsx)("path", { d: "M7 15h4l2-3 2 2h3" })]
-}), te = {
+}), ee = {
 	highlights: [
 		"M4 20 15.5 8.5",
 		"m14 5 5 5",
@@ -7733,7 +7733,7 @@ var w = /* @__PURE__ */ (0, h.jsxs)("svg", {
 		"M8 15h5"
 	]
 };
-function T({ name: e }) {
+function E({ name: e }) {
 	return /* @__PURE__ */ (0, h.jsx)("svg", {
 		viewBox: "0 0 24 24",
 		"aria-hidden": "true",
@@ -7742,10 +7742,10 @@ function T({ name: e }) {
 		strokeWidth: "1.8",
 		strokeLinecap: "round",
 		strokeLinejoin: "round",
-		children: te[e].map((e) => /* @__PURE__ */ (0, h.jsx)("path", { d: e }, e))
+		children: ee[e].map((e) => /* @__PURE__ */ (0, h.jsx)("path", { d: e }, e))
 	});
 }
-function E() {
+function D() {
 	let e = (0, p.useRef)(null), [t, n] = (0, p.useState)(null), [r, i] = (0, p.useState)(!1), [a, o] = (0, p.useState)(""), s = t?.books.find((e) => e.id === t.bookId);
 	function c() {
 		let t = window.bibleReaderBridge?.getSnapshot();
@@ -7844,8 +7844,8 @@ function E() {
 		})
 	}), document.body)] });
 }
-function ne() {
-	let [e, t] = (0, p.useState)(() => window.profileBridge?.getHero?.().coverImage || "assets/home-hero-mountain-sunrise.webp"), [n, r] = (0, p.useState)(C);
+function te() {
+	let [e, t] = (0, p.useState)(() => window.profileBridge?.getHero?.().coverImage || "assets/home-hero-mountain-sunrise.webp"), [n, r] = (0, p.useState)(w);
 	return (0, p.useEffect)(() => {
 		let e = () => {
 			let e = window.profileBridge?.getHero?.().coverImage;
@@ -7853,7 +7853,7 @@ function ne() {
 		};
 		return document.addEventListener("profile:hero-change", e), () => document.removeEventListener("profile:hero-change", e);
 	}, []), (0, p.useEffect)(() => {
-		let e = () => r(C());
+		let e = () => r(w());
 		return document.addEventListener("bible:reader-change", e), document.addEventListener("bible:chapter-change", e), e(), () => {
 			document.removeEventListener("bible:reader-change", e), document.removeEventListener("bible:chapter-change", e);
 		};
@@ -7893,14 +7893,14 @@ function ne() {
 				children: [/* @__PURE__ */ (0, h.jsxs)("button", {
 					type: "button",
 					"data-nav": "bible",
-					children: ["Start reading ", ee]
-				}), /* @__PURE__ */ (0, h.jsx)(E, {})]
+					children: ["Start reading ", S]
+				}), /* @__PURE__ */ (0, h.jsx)(D, {})]
 			})]
 		})
 	] });
 }
-function re() {
-	let [e, t] = (0, p.useState)(() => S().prayerCount);
+function ne() {
+	let [e, t] = (0, p.useState)(() => C().prayerCount);
 	return (0, p.useEffect)(() => {
 		let e = (e) => {
 			e.detail?.prayerCount !== void 0 && t(e.detail.prayerCount);
@@ -7909,13 +7909,13 @@ function re() {
 	}, []), /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [
 		/* @__PURE__ */ (0, h.jsx)("span", {
 			className: "home-prayer-card-icon",
-			children: w
+			children: T
 		}),
 		/* @__PURE__ */ (0, h.jsxs)("span", { children: [/* @__PURE__ */ (0, h.jsx)("small", { children: "Pray for someone" }), /* @__PURE__ */ (0, h.jsxs)("strong", { children: [/* @__PURE__ */ (0, h.jsx)("span", { children: e }), " people are waiting for prayer"] })] }),
-		ee
+		S
 	] });
 }
-function ie() {
+function re() {
 	let [e, t] = (0, p.useState)(() => document.querySelector("[data-home-library-tab].is-active")?.dataset.homeLibraryTab || "highlights");
 	(0, p.useEffect)(() => {
 		let e = (e) => {
@@ -7935,10 +7935,10 @@ function ie() {
 		type: "button",
 		"data-home-library-tab": t,
 		onClick: (e) => n(t, e),
-		children: [/* @__PURE__ */ (0, h.jsx)(T, { name: t }), /* @__PURE__ */ (0, h.jsx)("span", { children: r })]
+		children: [/* @__PURE__ */ (0, h.jsx)(E, { name: t }), /* @__PURE__ */ (0, h.jsx)("span", { children: r })]
 	}, t));
 }
-var ae = /* @__PURE__ */ (0, h.jsx)("svg", {
+var ie = /* @__PURE__ */ (0, h.jsx)("svg", {
 	viewBox: "0 0 24 24",
 	"aria-hidden": "true",
 	fill: "none",
@@ -7947,7 +7947,7 @@ var ae = /* @__PURE__ */ (0, h.jsx)("svg", {
 	strokeLinecap: "round",
 	strokeLinejoin: "round",
 	children: /* @__PURE__ */ (0, h.jsx)("path", { d: "M3 6.5A2.5 2.5 0 0 1 5.5 4H10l2 2h6.5A2.5 2.5 0 0 1 21 8.5v8A2.5 2.5 0 0 1 18.5 19h-13A2.5 2.5 0 0 1 3 16.5z" })
-}), oe = /* @__PURE__ */ (0, h.jsxs)("svg", {
+}), ae = /* @__PURE__ */ (0, h.jsxs)("svg", {
 	viewBox: "0 0 24 24",
 	"aria-hidden": "true",
 	fill: "none",
@@ -7957,7 +7957,7 @@ var ae = /* @__PURE__ */ (0, h.jsx)("svg", {
 	strokeLinejoin: "round",
 	children: [/* @__PURE__ */ (0, h.jsx)("path", { d: "m12 3-1.3 5.7L5 10l5.7 1.3L12 17l1.3-5.7L19 10l-5.7-1.3z" }), /* @__PURE__ */ (0, h.jsx)("path", { d: "m5 17-.6 2.4L2 20l2.4.6L5 23l.6-2.4L8 20l-2.4-.6z" })]
 });
-function se({ snapshot: e, tab: t, onChange: n }) {
+function oe({ snapshot: e, tab: t, onChange: n }) {
 	let [r, i] = (0, p.useState)(""), [a, o] = (0, p.useState)(!1), [s, c] = (0, p.useState)(null);
 	if (t === "notes") return null;
 	let l = (e) => {
@@ -8082,7 +8082,7 @@ function se({ snapshot: e, tab: t, onChange: n }) {
 		]
 	});
 }
-function ce({ row: e, tab: t, onOpen: n }) {
+function se({ row: e, tab: t, onOpen: n }) {
 	return /* @__PURE__ */ (0, h.jsxs)("article", {
 		className: "saved-verse-row",
 		children: [/* @__PURE__ */ (0, h.jsxs)("button", {
@@ -8093,7 +8093,7 @@ function ce({ row: e, tab: t, onOpen: n }) {
 				className: "saved-color-dot",
 				style: { "--saved-color": e.colorValue || "var(--beige)" },
 				"aria-hidden": "true"
-			}) : /* @__PURE__ */ (0, h.jsx)(T, { name: "bookmarks" }), /* @__PURE__ */ (0, h.jsxs)("span", { children: [
+			}) : /* @__PURE__ */ (0, h.jsx)(E, { name: "bookmarks" }), /* @__PURE__ */ (0, h.jsxs)("span", { children: [
 				/* @__PURE__ */ (0, h.jsx)("strong", { children: e.reference || `${e.bookId} ${e.chapter}:${e.number}` }),
 				/* @__PURE__ */ (0, h.jsx)("small", { children: e.version || "" }),
 				/* @__PURE__ */ (0, h.jsx)("p", { children: e.text || "" })
@@ -8107,11 +8107,11 @@ function ce({ row: e, tab: t, onOpen: n }) {
 			"data-saved-folder-current": e.folderId || "",
 			"aria-label": "Choose folder",
 			title: "Choose folder",
-			children: ae
+			children: ie
 		})]
 	});
 }
-function D() {
+function O() {
 	let e = window.homeLibraryBridge, t = document.querySelector("[data-home-library-panel]")?.dataset.homeLibraryView || "highlights", [n, r] = (0, p.useState)(t), [i, a] = (0, p.useState)(() => e.getSnapshot(t)), [o, s] = (0, p.useState)(""), [c, l] = (0, p.useState)({});
 	(0, p.useEffect)(() => {
 		let t = (t) => {
@@ -8127,7 +8127,7 @@ function D() {
 	}, d = n === "notes" && o.trim() ? i.rows.filter((e) => `${e.title || "Untitled note"} ${e.items.map((e) => e.reference || "").join(" ")} ${e.note || ""}`.toLowerCase().includes(o.trim().toLowerCase())) : i.rows, f = i.totalRows > 0 || i.folders.length > 0 || !!i.activeFolder, m = [...n === "notes" ? d.map((t) => /* @__PURE__ */ (0, h.jsx)(x, {
 		row: t,
 		onOpen: e.openSavedNote
-	}, t.id)) : d.map((t) => /* @__PURE__ */ (0, h.jsx)(ce, {
+	}, t.id)) : d.map((t) => /* @__PURE__ */ (0, h.jsx)(se, {
 		row: t,
 		tab: n,
 		onOpen: e.openSavedVerse
@@ -8136,7 +8136,7 @@ function D() {
 		children: [
 			/* @__PURE__ */ (0, h.jsxs)("div", {
 				className: "saved-ai-row-heading",
-				children: [oe, /* @__PURE__ */ (0, h.jsx)("strong", { children: "AI response" })]
+				children: [ae, /* @__PURE__ */ (0, h.jsx)("strong", { children: "AI response" })]
 			}),
 			/* @__PURE__ */ (0, h.jsx)("p", { children: e.text || "" }),
 			/* @__PURE__ */ (0, h.jsx)("button", {
@@ -8148,7 +8148,7 @@ function D() {
 				"data-saved-folder-current": e.folderId || "",
 				"aria-label": "Choose folder",
 				title: "Choose folder",
-				children: ae
+				children: ie
 			})
 		]
 	}, `ai-${e.id}`))], g = !!c[n], _ = m.length > 5, v = () => l((e) => ({
@@ -8160,7 +8160,7 @@ function D() {
 		return /* @__PURE__ */ (0, h.jsxs)("div", {
 			className: "home-library-empty-state",
 			children: [
-				/* @__PURE__ */ (0, h.jsx)(T, { name: "notes" }),
+				/* @__PURE__ */ (0, h.jsx)(E, { name: "notes" }),
 				/* @__PURE__ */ (0, h.jsx)("strong", { children: e ? "Your library is empty" : "Sign in to see more" }),
 				/* @__PURE__ */ (0, h.jsx)("p", { children: e ? "Save highlights, bookmarks and notes from the Bible tab to find them here." : "Sign in to sync your notes, bookmarks and highlights across your devices." }),
 				/* @__PURE__ */ (0, h.jsxs)("button", {
@@ -8169,7 +8169,7 @@ function D() {
 					children: [
 						e ? "Start reading" : "Sign in or create an account",
 						" ",
-						ee
+						S
 					]
 				})
 			]
@@ -8182,7 +8182,7 @@ function D() {
 		}),
 		n === "notes" && /* @__PURE__ */ (0, h.jsxs)("label", {
 			className: "saved-notes-search",
-			children: [/* @__PURE__ */ (0, h.jsx)(T, { name: "notes" }), /* @__PURE__ */ (0, h.jsx)("input", {
+			children: [/* @__PURE__ */ (0, h.jsx)(E, { name: "notes" }), /* @__PURE__ */ (0, h.jsx)("input", {
 				value: o,
 				onChange: (e) => s(e.target.value),
 				type: "search",
@@ -8190,7 +8190,7 @@ function D() {
 				"aria-label": "Search notes"
 			})]
 		}),
-		/* @__PURE__ */ (0, h.jsx)(se, {
+		/* @__PURE__ */ (0, h.jsx)(oe, {
 			snapshot: i,
 			tab: n,
 			onChange: u
@@ -8220,7 +8220,7 @@ function D() {
 	] });
 }
 // src/react/prayer-read-only-card.jsx
-function O({ request: e, bridge: t, index: n }) {
+function k({ request: e, bridge: t, index: n }) {
 	let r = t.getBackgroundOptions()[e.backgroundIndex]?.src || "assets/prayer-backgrounds/prayer-1.webp";
 	return /* @__PURE__ */ (0, h.jsxs)("article", {
 		className: `prayer-card prayer-card--${n % 4} prayer-card--readonly`,
@@ -8252,7 +8252,7 @@ function O({ request: e, bridge: t, index: n }) {
 	});
 }
 // src/react/profile.jsx
-var le = [
+var ce = [
 	[
 		"preferences",
 		"Preferences",
@@ -8285,14 +8285,14 @@ var le = [
 		["M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"]
 	]
 ];
-function ue() {
+function le() {
 	let e = window.prayerBridge, [t, n] = (0, p.useState)(() => e.getSnapshot().ownRequests);
 	return (0, p.useEffect)(() => {
 		let t = () => n(e.getSnapshot().ownRequests);
 		return document.addEventListener("prayer:state-change", t), () => document.removeEventListener("prayer:state-change", t);
 	}, [e]), /* @__PURE__ */ (0, h.jsx)("div", {
 		className: "prayer-list profile-prayer-list",
-		children: t.length ? t.map((t, n) => /* @__PURE__ */ (0, h.jsx)(O, {
+		children: t.length ? t.map((t, n) => /* @__PURE__ */ (0, h.jsx)(k, {
 			request: t,
 			index: n,
 			bridge: e
@@ -8302,7 +8302,7 @@ function ue() {
 		})
 	});
 }
-function de({ paths: e }) {
+function ue({ paths: e }) {
 	return /* @__PURE__ */ (0, h.jsx)("svg", {
 		viewBox: "0 0 24 24",
 		"aria-hidden": "true",
@@ -8314,7 +8314,7 @@ function de({ paths: e }) {
 		children: e.map((e) => /* @__PURE__ */ (0, h.jsx)("path", { d: e }, e))
 	});
 }
-function fe() {
+function de() {
 	let [e, t] = (0, p.useState)(() => document.querySelector("[data-profile-tab].is-active")?.dataset.profileTab || "preferences");
 	(0, p.useEffect)(() => {
 		let e = (e) => {
@@ -8325,15 +8325,15 @@ function fe() {
 	let n = (e, n) => {
 		n?.nativeEvent?.__primaryTabHandled || (t(e), typeof window.profileBridge?.selectTab == "function" ? window.profileBridge.selectTab(e) : document.dispatchEvent(new CustomEvent("profile:tab-change", { detail: { tab: e } })));
 	};
-	return le.map(([t, r, i]) => /* @__PURE__ */ (0, h.jsxs)("button", {
+	return ce.map(([t, r, i]) => /* @__PURE__ */ (0, h.jsxs)("button", {
 		className: e === t ? "is-active" : "",
 		type: "button",
 		"data-profile-tab": t,
 		onClick: (e) => n(t, e),
-		children: [/* @__PURE__ */ (0, h.jsx)(de, { paths: i }), /* @__PURE__ */ (0, h.jsx)("span", { children: r })]
+		children: [/* @__PURE__ */ (0, h.jsx)(ue, { paths: i }), /* @__PURE__ */ (0, h.jsx)("span", { children: r })]
 	}, t));
 }
-function k() {
+function fe() {
 	let e = window.profileBridge, [t, n] = (0, p.useState)(() => e.getHero());
 	return (0, p.useEffect)(() => {
 		let t = () => {
@@ -8628,9 +8628,9 @@ function he() {
 	}) });
 }
 function ge() {
-	let e = window.profileBridge, [t, n] = (0, p.useState)(() => e.getAuth()), [r, i] = (0, p.useState)("sign-in"), [a, o] = (0, p.useState)(""), [s, c] = (0, p.useState)(""), [l, u] = (0, p.useState)(""), [d, f] = (0, p.useState)(!1), [m, g] = (0, p.useState)(!1), [_, y] = (0, p.useState)(!1), [b, x] = (0, p.useState)(""), [ee, S] = (0, p.useState)(!1), [C, w] = (0, p.useState)(""), [te, T] = (0, p.useState)(""), [E, ne] = (0, p.useState)(!1), [re, ie] = (0, p.useState)(""), [ae, oe] = (0, p.useState)(!1);
+	let e = window.profileBridge, [t, n] = (0, p.useState)(() => e.getAuth()), [r, i] = (0, p.useState)("sign-in"), [a, o] = (0, p.useState)(""), [s, c] = (0, p.useState)(""), [l, u] = (0, p.useState)(""), [d, f] = (0, p.useState)(!1), [m, g] = (0, p.useState)(!1), [_, y] = (0, p.useState)(!1), [b, x] = (0, p.useState)(""), [S, C] = (0, p.useState)(!1), [w, T] = (0, p.useState)(""), [ee, E] = (0, p.useState)(""), [D, te] = (0, p.useState)(!1), [ne, re] = (0, p.useState)(""), [ie, ae] = (0, p.useState)(!1);
 	return (0, p.useEffect)(() => {
-		t.connected || (S(!1), w(""), T(""), ie(""));
+		t.connected || (C(!1), T(""), E(""), re(""));
 	}, [t.connected]), (0, p.useEffect)(() => {
 		let t = () => n(e.getAuth());
 		return document.addEventListener("profile:auth-change", t), () => document.removeEventListener("profile:auth-change", t);
@@ -8681,11 +8681,11 @@ function ge() {
 							className: "profile-auth-actions profile-password-trigger",
 							children: /* @__PURE__ */ (0, h.jsxs)("button", {
 								type: "button",
-								"aria-expanded": ee,
+								"aria-expanded": S,
 								"aria-controls": "profile-password-form",
-								disabled: E,
+								disabled: D,
 								onClick: () => {
-									S((e) => !e), ie(""), w(""), T("");
+									C((e) => !e), re(""), T(""), E("");
 								},
 								children: [/* @__PURE__ */ (0, h.jsx)("span", { children: "Change password" }), /* @__PURE__ */ (0, h.jsx)("svg", {
 									className: "profile-password-chevron",
@@ -8702,19 +8702,19 @@ function ge() {
 								})]
 							})
 						}),
-						ee && /* @__PURE__ */ (0, h.jsxs)("form", {
+						S && /* @__PURE__ */ (0, h.jsxs)("form", {
 							id: "profile-password-form",
 							className: "profile-auth-form profile-password-form",
 							onSubmit: async (t) => {
-								if (t.preventDefault(), !E) {
-									ne(!0), ie("");
+								if (t.preventDefault(), !D) {
+									te(!0), re("");
 									try {
-										let t = await e.changePassword(C, te);
-										oe(!!t.error), ie(t.error || "Your password has been changed."), t.error || (w(""), T(""), S(!1));
+										let t = await e.changePassword(w, ee);
+										ae(!!t.error), re(t.error || "Your password has been changed."), t.error || (T(""), E(""), C(!1));
 									} catch {
-										oe(!0), ie("Could not change your password. Please try again.");
+										ae(!0), re("Could not change your password. Please try again.");
 									} finally {
-										ne(!1);
+										te(!1);
 									}
 								}
 							},
@@ -8724,44 +8724,44 @@ function ge() {
 									type: "password",
 									autoComplete: "new-password",
 									"aria-label": "New password",
-									value: C,
-									onChange: (e) => w(e.target.value),
+									value: w,
+									onChange: (e) => T(e.target.value),
 									minLength: 6,
 									required: !0,
-									disabled: E
+									disabled: D
 								})] }),
 								/* @__PURE__ */ (0, h.jsxs)("label", { children: [/* @__PURE__ */ (0, h.jsx)("span", { children: "Confirm new password" }), /* @__PURE__ */ (0, h.jsx)("input", {
 									type: "password",
 									autoComplete: "new-password",
 									"aria-label": "Confirm new password",
-									value: te,
-									onChange: (e) => T(e.target.value),
+									value: ee,
+									onChange: (e) => E(e.target.value),
 									minLength: 6,
 									required: !0,
-									disabled: E
+									disabled: D
 								})] }),
 								/* @__PURE__ */ (0, h.jsxs)("div", {
 									className: "profile-auth-actions",
 									children: [/* @__PURE__ */ (0, h.jsx)("button", {
 										type: "submit",
-										disabled: E,
-										children: E ? "Saving…" : "Save password"
+										disabled: D,
+										children: D ? "Saving…" : "Save password"
 									}), /* @__PURE__ */ (0, h.jsx)("button", {
 										type: "button",
-										disabled: E,
+										disabled: D,
 										onClick: () => {
-											S(!1), w(""), T(""), ie("");
+											C(!1), T(""), E(""), re("");
 										},
 										children: "Cancel"
 									})]
 								})
 							]
 						}),
-						re && /* @__PURE__ */ (0, h.jsx)("p", {
+						ne && /* @__PURE__ */ (0, h.jsx)("p", {
 							className: "profile-password-feedback",
-							role: ae ? "alert" : "status",
-							"data-state": ae ? "error" : "success",
-							children: re
+							role: ie ? "alert" : "status",
+							"data-state": ie ? "error" : "success",
+							children: ne
 						})
 					]
 				})
@@ -8919,38 +8919,38 @@ function ve(e, t) {
 }
 // src/react/chapter-quiz.jsx
 function ye({ source: e, bridge: t }) {
-	let [n, r] = (0, p.useState)("loading"), [i, a] = (0, p.useState)(0), [o, s] = (0, p.useState)([]), [c, l] = (0, p.useState)(""), [u, d] = (0, p.useState)(0), [f, m] = (0, p.useState)(0), [g, _] = (0, p.useState)({}), [v, y] = (0, p.useState)({}), [b, x] = (0, p.useState)(!1), ee = (0, p.useRef)(null), S = (0, p.useRef)(null), C = JSON.stringify(e), w = (0, p.useCallback)(() => {
-		S.current?.scrollIntoView({
+	let [n, r] = (0, p.useState)("loading"), [i, a] = (0, p.useState)(0), [o, s] = (0, p.useState)([]), [c, l] = (0, p.useState)(""), [u, d] = (0, p.useState)(0), [f, m] = (0, p.useState)(0), [g, _] = (0, p.useState)({}), [v, y] = (0, p.useState)({}), [b, x] = (0, p.useState)(!1), S = (0, p.useRef)(null), C = (0, p.useRef)(null), w = JSON.stringify(e), T = (0, p.useCallback)(() => {
+		C.current?.scrollIntoView({
 			behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
 			block: "start"
-		}), ee.current?.focus({ preventScroll: !0 });
+		}), S.current?.focus({ preventScroll: !0 });
 	}, []);
 	(0, p.useEffect)(() => {
-		n === "ready" && w();
-	}, [n, w]), (0, p.useEffect)(() => {
+		n === "ready" && T();
+	}, [n, T]), (0, p.useEffect)(() => {
 		let e = new AbortController(), n = performance.now(), i;
 		r("loading"), l(""), a(0);
 		let o = window.setInterval(() => {
 			let e = performance.now() - n;
 			a(Math.min(95, Math.round(95 * (1 - Math.exp(-e / 18e3)))));
 		}, 400);
-		return t.createChapterQuiz(JSON.parse(C), e.signal).then((t) => {
-			e.signal.aborted || (s(ve(t, JSON.parse(C))), window.clearInterval(o), a(100), r("finishing"), i = window.setTimeout(() => r("ready"), 250));
+		return t.createChapterQuiz(JSON.parse(w), e.signal).then((t) => {
+			e.signal.aborted || (s(ve(t, JSON.parse(w))), window.clearInterval(o), a(100), r("finishing"), i = window.setTimeout(() => r("ready"), 250));
 		}).catch((t) => {
 			window.clearInterval(o), e.signal.aborted || (l(t.message), r("error"));
 		}), () => {
 			e.abort(), window.clearInterval(o), window.clearTimeout(i);
 		};
 	}, [
-		C,
+		w,
 		t,
 		u
 	]);
-	let te = (e) => {
-		m(e), x(!1), requestAnimationFrame(w);
-	}, T = o.reduce((e, t, n) => e + Number(g[n] === t.correctAnswer), 0), E = Object.hasOwn(g, f), ne = o[f], re = E ? g[f] : v[f];
+	let ee = (e) => {
+		m(e), x(!1), requestAnimationFrame(T);
+	}, E = o.reduce((e, t, n) => e + Number(g[n] === t.correctAnswer), 0), D = Object.hasOwn(g, f), te = o[f], ne = D ? g[f] : v[f];
 	return /* @__PURE__ */ (0, h.jsxs)("section", {
-		ref: S,
+		ref: C,
 		className: "chapter-quiz",
 		"aria-label": `Quiz — ${e.reference}`,
 		"aria-busy": n === "loading" || n === "finishing",
@@ -9000,24 +9000,24 @@ function ye({ source: e, bridge: t }) {
 				"aria-live": "polite",
 				children: [
 					/* @__PURE__ */ (0, h.jsx)("h3", {
-						ref: ee,
+						ref: S,
 						tabIndex: -1,
 						children: "Quiz complete!"
 					}),
 					/* @__PURE__ */ (0, h.jsxs)("p", {
 						className: "chapter-quiz-score",
-						children: [T, " / 10"]
+						children: [E, " / 10"]
 					}),
 					/* @__PURE__ */ (0, h.jsx)("p", { children: "You can review your answers or start again." }),
 					/* @__PURE__ */ (0, h.jsx)("button", {
 						type: "button",
-						onClick: () => te(0),
+						onClick: () => ee(0),
 						children: "Review my answers"
 					}),
 					/* @__PURE__ */ (0, h.jsx)("button", {
 						type: "button",
 						onClick: () => {
-							_({}), y({}), te(0);
+							_({}), y({}), ee(0);
 						},
 						children: "Start again"
 					})
@@ -9032,24 +9032,24 @@ function ye({ source: e, bridge: t }) {
 					]
 				}),
 				/* @__PURE__ */ (0, h.jsx)("h3", {
-					ref: ee,
+					ref: S,
 					tabIndex: -1,
-					children: ne.question
+					children: te.question
 				}),
 				/* @__PURE__ */ (0, h.jsxs)("fieldset", {
 					className: "chapter-quiz-options",
-					disabled: E,
+					disabled: D,
 					children: [/* @__PURE__ */ (0, h.jsx)("legend", {
 						className: "sr-only",
 						children: "Choose an answer"
-					}), ne.options.map((e, t) => /* @__PURE__ */ (0, h.jsxs)("label", {
-						className: `chapter-quiz-option${re === t ? " is-selected" : ""}${E && t === ne.correctAnswer ? " is-correct" : ""}${E && re === t && t !== ne.correctAnswer ? " is-incorrect" : ""}`,
+					}), te.options.map((e, t) => /* @__PURE__ */ (0, h.jsxs)("label", {
+						className: `chapter-quiz-option${ne === t ? " is-selected" : ""}${D && t === te.correctAnswer ? " is-correct" : ""}${D && ne === t && t !== te.correctAnswer ? " is-incorrect" : ""}`,
 						children: [
 							/* @__PURE__ */ (0, h.jsx)("input", {
 								type: "radio",
 								name: "chapter-quiz-answer",
 								value: t,
-								checked: re === t,
+								checked: ne === t,
 								onChange: () => y((e) => ({
 									...e,
 									[f]: t
@@ -9060,41 +9060,41 @@ function ye({ source: e, bridge: t }) {
 								children: "ABCD"[t]
 							}),
 							/* @__PURE__ */ (0, h.jsx)("span", { children: e }),
-							E && t === ne.correctAnswer && /* @__PURE__ */ (0, h.jsx)("span", {
+							D && t === te.correctAnswer && /* @__PURE__ */ (0, h.jsx)("span", {
 								className: "chapter-quiz-answer-label",
 								children: "Correct answer"
 							}),
-							E && re === t && t !== ne.correctAnswer && /* @__PURE__ */ (0, h.jsx)("span", {
+							D && ne === t && t !== te.correctAnswer && /* @__PURE__ */ (0, h.jsx)("span", {
 								className: "chapter-quiz-answer-label",
 								children: "Your answer"
 							})
 						]
 					}, t))]
 				}),
-				E ? /* @__PURE__ */ (0, h.jsxs)("div", {
+				D ? /* @__PURE__ */ (0, h.jsxs)("div", {
 					className: "chapter-quiz-feedback",
 					role: "status",
 					children: [
-						/* @__PURE__ */ (0, h.jsx)("strong", { children: re === ne.correctAnswer ? "Correct answer!" : "That’s not the right answer." }),
-						/* @__PURE__ */ (0, h.jsx)("p", { children: ne.explanation }),
+						/* @__PURE__ */ (0, h.jsx)("strong", { children: ne === te.correctAnswer ? "Correct answer!" : "That’s not the right answer." }),
+						/* @__PURE__ */ (0, h.jsx)("p", { children: te.explanation }),
 						/* @__PURE__ */ (0, h.jsxs)("blockquote", { children: [
 							"« ",
-							ne.quote,
+							te.quote,
 							" »"
 						] }),
 						/* @__PURE__ */ (0, h.jsxs)("small", { children: [
 							e.reference,
 							":",
-							ne.verse
+							te.verse
 						] })
 					]
 				}) : /* @__PURE__ */ (0, h.jsx)("button", {
 					className: "chapter-quiz-validate",
 					type: "button",
-					disabled: re === void 0,
+					disabled: ne === void 0,
 					onClick: () => _((e) => ({
 						...e,
-						[f]: re
+						[f]: ne
 					})),
 					children: "Check my answer"
 				}),
@@ -9104,7 +9104,7 @@ function ye({ source: e, bridge: t }) {
 					children: [
 						/* @__PURE__ */ (0, h.jsx)("button", {
 							type: "button",
-							onClick: () => te(f - 1),
+							onClick: () => ee(f - 1),
 							disabled: f === 0,
 							"aria-label": "Previous question",
 							children: "←"
@@ -9112,9 +9112,9 @@ function ye({ source: e, bridge: t }) {
 						/* @__PURE__ */ (0, h.jsxs)("span", { children: [f + 1, " / 10"] }),
 						/* @__PURE__ */ (0, h.jsx)("button", {
 							type: "button",
-							disabled: !E,
+							disabled: !D,
 							onClick: () => {
-								f < 9 ? te(f + 1) : (x(!0), requestAnimationFrame(w));
+								f < 9 ? ee(f + 1) : (x(!0), requestAnimationFrame(T));
 							},
 							"aria-label": f === 9 ? "See my result" : "Next question",
 							children: f === 9 ? "Finish" : "→"
@@ -9127,32 +9127,32 @@ function ye({ source: e, bridge: t }) {
 }
 // src/shared/bible-voice-recorder.js
 function be({ getStream: e, createRecorder: t, createAudioContext: n, requestFrame: r, cancelFrame: i, onLevels: a = () => {}, onReady: o = () => {}, onSilence: s = () => {}, silenceMs: c = 2e3, maxDurationMs: l = 3e4 }) {
-	let u, d, f, p, m, h, g, _ = !1, v = !1, y = !1, b = !1, x = null, ee = 0, S = [], C = () => {
+	let u, d, f, p, m, h, g, _ = !1, v = !1, y = !1, b = !1, x = null, S = 0, C = [], w = () => {
 		y || (y = !0, h !== void 0 && i(h), clearTimeout(g), f?.disconnect(), p?.disconnect(), u?.getTracks().forEach((e) => e.stop()), d && d.state !== "closed" && d.close().catch(() => {}));
-	}, w = new Promise((i, w) => {
-		let T;
+	}, T = new Promise((i, T) => {
+		let E;
 		try {
-			d = n(), d.resume().catch(() => {}), T = e();
+			d = n(), d.resume().catch(() => {}), E = e();
 		} catch (e) {
-			w(e);
+			T(e);
 			return;
 		}
-		Promise.resolve(T).then(async (e) => {
-			if (u = e, _) u.getTracks().forEach((e) => e.stop()), C(), i(null);
+		Promise.resolve(E).then(async (e) => {
+			if (u = e, _) u.getTracks().forEach((e) => e.stop()), w(), i(null);
 			else try {
 				if (m = t(u), p = d.createAnalyser(), p.fftSize = 1024, p.smoothingTimeConstant = .65, f = d.createMediaStreamSource(u), f.connect(p), await d.resume(), _) {
-					C(), i(null);
+					w(), i(null);
 					return;
 				}
 				m.ondataavailable = (e) => {
-					e.data?.size && S.push(e.data);
+					e.data?.size && C.push(e.data);
 				}, m.onerror = (e) => {
-					C(), w(e.error || /* @__PURE__ */ Error("Voice recording failed."));
+					w(), T(e.error || /* @__PURE__ */ Error("Voice recording failed."));
 				}, m.onstop = () => {
-					let e = _ ? null : new Blob(S, { type: m.mimeType || "audio/webm" });
-					C(), i(e);
-				}, m.start(250), o(), g = setTimeout(() => te(), l);
-				let e = new Uint8Array(p.frequencyBinCount), n = new Uint8Array(p.fftSize), T = (t) => {
+					let e = _ ? null : new Blob(C, { type: m.mimeType || "audio/webm" });
+					w(), i(e);
+				}, m.start(250), o(), g = setTimeout(() => ee(), l);
+				let e = new Uint8Array(p.frequencyBinCount), n = new Uint8Array(p.fftSize), E = (t) => {
 					if (y || v) return;
 					p.getByteFrequencyData(e), p.getByteTimeDomainData(n);
 					let i = 0;
@@ -9162,46 +9162,46 @@ function be({ getStream: e, createRecorder: t, createAudioContext: n, requestFra
 					}
 					if (Math.sqrt(i / n.length) >= .018) b = !0, x = null;
 					else if (b && (x ??= t, t - x >= c)) {
-						s(), te();
+						s(), ee();
 						return;
 					}
-					if (t - ee >= 50) {
+					if (t - S >= 50) {
 						let n = Array(18);
 						for (let t = 0; t < n.length; t++) {
 							let r = Math.floor(100 * 80 ** (t / n.length) / (d.sampleRate / p.fftSize)), i = Math.min(e.length, Math.max(r + 1, Math.ceil(100 * 80 ** ((t + 1) / n.length) / (d.sampleRate / p.fftSize)))), a = 0;
 							for (let t = r; t < i; t++) a += e[t] ** 2;
 							n[t] = Math.sqrt(a / Math.max(1, i - r)) / 255;
 						}
-						a(n), ee = t;
+						a(n), S = t;
 					}
-					h = r(T);
+					h = r(E);
 				};
-				h = r(T);
+				h = r(E);
 			} catch (e) {
-				C(), w(e);
+				w(), T(e);
 			}
 		}, (e) => {
-			C(), w(e);
+			w(), T(e);
 		});
 	});
-	function te() {
+	function ee() {
 		if (!(v || y)) {
 			if (v = !0, !m) _ = !0;
 			else if (m.state !== "recording") _ = !0;
 			else try {
 				m.stop();
 			} catch {
-				C();
+				w();
 			}
 		}
 	}
-	function T() {
-		_ = !0, te();
+	function E() {
+		_ = !0, ee();
 	}
 	return {
-		done: w,
-		stop: te,
-		cancel: T
+		done: T,
+		stop: ee,
+		cancel: E
 	};
 }
 // src/shared/bible-reference.js
@@ -9411,8 +9411,17 @@ async function ke(e, { signal: t } = {}) {
 function Ae(e, { signal: t } = {}) {
 	return Oe("/api/ai/bible-voice-search", { query: e }, t);
 }
+function je(e, { signal: t } = {}) {
+	return Oe("/api/ai/voice-assistant", { query: e }, t);
+}
+function Me(e, { signal: t } = {}) {
+	return Oe("/api/ai/voice-assistant", {
+		query: e,
+		action: "kids-story"
+	}, t);
+}
 // src/react/bible.jsx
-var je = /* @__PURE__ */ (0, h.jsxs)("svg", {
+var Ne = /* @__PURE__ */ (0, h.jsxs)("svg", {
 	viewBox: "0 0 24 24",
 	"aria-hidden": "true",
 	fill: "none",
@@ -9433,7 +9442,7 @@ var je = /* @__PURE__ */ (0, h.jsxs)("svg", {
 		height: "16",
 		rx: "1"
 	})]
-}), Me = /* @__PURE__ */ (0, h.jsxs)("svg", {
+}), Pe = /* @__PURE__ */ (0, h.jsxs)("svg", {
 	viewBox: "0 0 24 24",
 	"aria-hidden": "true",
 	fill: "none",
@@ -9454,7 +9463,7 @@ var je = /* @__PURE__ */ (0, h.jsxs)("svg", {
 		}),
 		/* @__PURE__ */ (0, h.jsx)("path", { d: "M12 2v3M12 19v3M2 12h3M19 12h3" })
 	]
-}), Ne = {
+}), Fe = {
 	highlight: [
 		"m4 20 11.5-11.5",
 		"m14 5 5 5",
@@ -9483,7 +9492,7 @@ var je = /* @__PURE__ */ (0, h.jsxs)("svg", {
 		"M16 5v14"
 	]
 };
-function Pe({ name: e }) {
+function Ie({ name: e }) {
 	return /* @__PURE__ */ (0, h.jsx)("svg", {
 		viewBox: "0 0 24 24",
 		"aria-hidden": "true",
@@ -9492,18 +9501,18 @@ function Pe({ name: e }) {
 		strokeWidth: "1.8",
 		strokeLinecap: "round",
 		strokeLinejoin: "round",
-		children: Ne[e].map((e) => /* @__PURE__ */ (0, h.jsx)("path", { d: e }, e))
+		children: Fe[e].map((e) => /* @__PURE__ */ (0, h.jsx)("path", { d: e }, e))
 	});
 }
-function Fe() {
+function Le() {
 	let e = window.bibleReaderBridge, [t, n] = (0, p.useState)(() => e.getSnapshot());
 	return (0, p.useEffect)(() => {
 		let t = () => n(e.getSnapshot());
 		return document.addEventListener("bible:reader-change", t), () => document.removeEventListener("bible:reader-change", t);
 	}, [e]), [t, e];
 }
-function Ie() {
-	let [e, t] = Fe(), n = (0, p.useRef)(null), r = (0, p.useRef)(null), i = e.books.find((t) => t.id === e.bookId)?.name || "Bible", a = () => {
+function Re() {
+	let [e, t] = Le(), n = (0, p.useRef)(null), r = (0, p.useRef)(null), i = e.books.find((t) => t.id === e.bookId)?.name || "Bible", a = () => {
 		n.current.showModal();
 		let e = n.current.querySelector("[aria-current=\"true\"]");
 		e?.focus({ preventScroll: !0 }), e?.scrollIntoView({ block: "nearest" });
@@ -9520,7 +9529,7 @@ function Ie() {
 		});
 	};
 	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [
-		/* @__PURE__ */ (0, h.jsx)(Le, {}),
+		/* @__PURE__ */ (0, h.jsx)(ze, {}),
 		/* @__PURE__ */ (0, h.jsx)("label", {
 			className: "reader-select-label bible-glass-select",
 			"aria-label": "Bible version",
@@ -9629,97 +9638,139 @@ function Ie() {
 		})
 	] });
 }
-function Le() {
-	let [e, t] = Fe(), [n, r] = (0, p.useState)(!1), [i, a] = (0, p.useState)("idle"), [o, s] = (0, p.useState)(""), [c, l] = (0, p.useState)(""), [u, d] = (0, p.useState)([]), [f, m] = (0, p.useState)(Array(18).fill(.12)), g = (0, p.useRef)(null), _ = (0, p.useRef)(null), y = () => {
-		g.current?.cancel(), g.current = null, _.current?.abort(), _.current = null, r(!1), a("idle");
+function ze({ assistant: e = !1 }) {
+	let [t, n] = Le(), [r, i] = (0, p.useState)(!1), [a, o] = (0, p.useState)("idle"), [s, c] = (0, p.useState)(""), [l, u] = (0, p.useState)(""), [d, f] = (0, p.useState)([]), [m, g] = (0, p.useState)([]), [_, y] = (0, p.useState)(Array(18).fill(.12)), b = (0, p.useRef)(null), x = (0, p.useRef)(null), S = (0, p.useRef)(!1), C = () => {
+		b.current?.cancel(), b.current = null, x.current?.abort(), x.current = null, i(!1), o("idle");
 	};
 	(0, p.useEffect)(() => () => {
-		g.current?.cancel(), _.current?.abort();
+		b.current?.cancel(), x.current?.abort();
 	}, []), (0, p.useEffect)(() => {
-		let e = () => {
-			document.querySelector(".app-shell")?.dataset.activeScreen !== "bible" && y();
+		let t = () => {
+			!S.current && document.querySelector(".app-shell")?.dataset.activeScreen !== (e ? "home" : "bible") && C();
 		};
-		return window.addEventListener("app:screen-change", e), () => window.removeEventListener("app:screen-change", e);
-	}, []), (0, p.useEffect)(() => {
-		if (!n) return;
+		return window.addEventListener("app:screen-change", t), () => window.removeEventListener("app:screen-change", t);
+	}, [e]), (0, p.useEffect)(() => {
+		if (!r) return;
 		let e = (e) => {
-			e.key === "Escape" && y();
+			e.key === "Escape" && C();
 		};
 		return window.addEventListener("keydown", e), () => window.removeEventListener("keydown", e);
-	}, [n]);
-	let b = (e) => {
-		a("opening"), s(`${e.bookName} ${e.chapter}:${e.verse}`), (async () => {
+	}, [r]);
+	let w = (t) => {
+		o("opening"), c(`${t.bookName} ${t.chapter}:${t.verse}`), (async () => {
 			try {
-				await t.navigateToReference(e.bookId, e.chapter, e.verse), y();
+				if (S.current = !0, e && !window.aiBridge.navigateVoiceScreen("bible")) throw Error("Navigation cancelled.");
+				await n.navigateToReference(t.bookId, t.chapter, t.verse), C();
 			} catch {
-				a("error"), s(`Je n’ai pas pu ouvrir ${e.bookName} ${e.chapter}:${e.verse}. Vérifiez la référence et réessayez.`);
+				o("error"), c(`Je n’ai pas pu ouvrir ${t.bookName} ${t.chapter}:${t.verse}. Vérifiez la référence et réessayez.`);
+			} finally {
+				S.current = !1;
 			}
 		})();
-	}, x = () => {
-		if (r(!0), l(""), d([]), s(""), a("starting"), !navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
-			a("error"), s("L’enregistrement audio n’est pas disponible dans ce navigateur.");
+	}, T = (e) => {
+		window.voiceKidsStoryId = e.id, window.aiBridge.navigateVoiceScreen("kids-bible") ? (document.dispatchEvent(new Event("kids:voice-story")), C()) : (delete window.voiceKidsStoryId, o("error"), c("Je n’ai pas pu ouvrir Kids Bible."));
+	}, ee = () => {
+		if (i(!0), u(""), f([]), g([]), c(""), o("starting"), !navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
+			o("error"), c("L’enregistrement audio n’est pas disponible dans ce navigateur.");
 			return;
 		}
-		let t = [
+		let n = [
 			"audio/webm;codecs=opus",
 			"audio/webm",
 			"audio/mp4",
 			"audio/ogg"
-		].find((e) => window.MediaRecorder.isTypeSupported?.(e)), n;
+		].find((e) => window.MediaRecorder.isTypeSupported?.(e)), r;
 		try {
-			n = be({
+			r = be({
 				getStream: () => navigator.mediaDevices.getUserMedia({ audio: !0 }),
-				createRecorder: (e) => t ? new window.MediaRecorder(e, { mimeType: t }) : new window.MediaRecorder(e),
+				createRecorder: (e) => n ? new window.MediaRecorder(e, { mimeType: n }) : new window.MediaRecorder(e),
 				createAudioContext: () => new (window.AudioContext || window.webkitAudioContext)(),
 				requestFrame: (e) => window.requestAnimationFrame(e),
 				cancelFrame: (e) => window.cancelAnimationFrame(e),
-				onLevels: (e) => m(e.map((e) => Number.isFinite(e) ? e : 0)),
+				onLevels: (e) => y(e.map((e) => Number.isFinite(e) ? e : 0)),
 				onReady: () => {
-					a("listening"), s("Je vous écoute… une pause de 2 secondes lancera la recherche.");
+					o("listening"), c("Je vous écoute… une pause de 2 secondes lancera la recherche.");
 				},
 				onSilence: () => {
-					a("transcribing"), s("Pause détectée. Transcription IA en cours…");
+					o("transcribing"), c("Pause détectée. Transcription IA en cours…");
 				},
 				silenceMs: 2e3,
 				maxDurationMs: 3e4
-			}), g.current = n;
+			}), b.current = r;
 		} catch {
-			a("error"), s("Le microphone n’a pas pu démarrer.");
+			o("error"), c("Le microphone n’a pas pu démarrer.");
 			return;
 		}
 		(async () => {
 			try {
-				let t = await n.done;
-				if (g.current !== n) return;
-				if (g.current = null, !t?.size) throw Error("Aucune parole n’a été détectée. Réessayez.");
-				a("transcribing"), s("Transcription par IA en cours…");
-				let r = new AbortController();
-				_.current = r;
-				let i = await ke(t, { signal: r.signal });
-				if (_.current !== r) return;
-				l(i);
-				let o = Ee(i, e.books);
-				if (o) _.current = null, b(o);
+				let n = await r.done;
+				if (b.current !== r) return;
+				if (b.current = null, !n?.size) throw Error("Aucune parole n’a été détectée. Réessayez.");
+				o("transcribing"), c("Transcription par IA en cours…");
+				let i = new AbortController();
+				x.current = i;
+				let a = await ke(n, { signal: i.signal });
+				if (x.current !== i) return;
+				if (u(a), e) {
+					c("Je prépare votre demande…");
+					let e = await je(a, { signal: i.signal });
+					if (x.current !== i) return;
+					if (e.type === "navigate") {
+						if (x.current = null, !window.aiBridge.navigateVoiceScreen(e.screen)) throw Error("Je n’ai pas pu ouvrir cette page.");
+						C();
+						return;
+					}
+					if (e.type === "prayer") {
+						if (window.prayerBridge.setPageTab("request"), window.prayerBridge.getSnapshot().pageTab !== "request") throw Error("Je n’ai pas pu ouvrir le formulaire de prière.");
+						if (window.voicePrayerDraft = {
+							title: e.title,
+							text: e.text,
+							category: e.category
+						}, x.current = null, !window.aiBridge.navigateVoiceScreen("prayer")) throw delete window.voicePrayerDraft, Error("Je n’ai pas pu ouvrir la page de prière.");
+						document.dispatchEvent(new Event("prayer:voice-draft")), C();
+						return;
+					}
+					if (e.type === "kids_story") {
+						o("searching");
+						let e = await Me(a, { signal: i.signal });
+						if (x.current !== i) return;
+						if (x.current = null, e.certain && e.matches?.length === 1) T(e.matches[0]);
+						else if (e.matches?.length) g(e.matches), o("choosing");
+						else throw Error("Je n’ai pas trouvé cette histoire dans Kids Bible. Essayez de préciser l’histoire.");
+						return;
+					}
+					if (e.type === "question") {
+						c("Brother AI prépare sa réponse…");
+						let e = window.aiBridge.getSnapshot().messages.filter((e) => !e.pending).slice(-24);
+						if (await window.aiBridge.send(a, e), x.current !== i) return;
+						if (x.current = null, !window.aiBridge.navigateVoiceScreen("ai")) throw Error("La réponse est enregistrée dans Brother AI, mais la page n’a pas pu s’ouvrir.");
+						C();
+						return;
+					}
+					if (e.type !== "reference") throw Error("Je peux ouvrir une page, un verset ou une histoire Kids Bible, préparer une prière ou transmettre une question à Brother AI.");
+				}
+				let s = Ee(a, t.books);
+				if (s) x.current = null, w(s);
 				else {
-					a("searching");
-					let t = await Ae(i, { signal: r.signal });
-					if (_.current !== r) return;
-					_.current = null;
-					let n = (t.matches || []).filter((t) => e.books.some((e) => e.id === t.bookId && t.chapter <= e.chapters));
-					t.certain && n.length === 1 ? b(n[0]) : n.length ? (d(n), a("choosing")) : (a("error"), s("Je n’ai pas trouvé de verset précis. Ajoutez quelques mots ou le contexte du passage."));
+					o("searching");
+					let e = await Ae(a, { signal: i.signal });
+					if (x.current !== i) return;
+					x.current = null;
+					let n = (e.matches || []).filter((e) => t.books.some((t) => t.id === e.bookId && e.chapter <= t.chapters));
+					e.certain && n.length === 1 ? w(n[0]) : n.length ? (f(n), o("choosing")) : (o("error"), c("Je n’ai pas trouvé de verset précis. Ajoutez quelques mots ou le contexte du passage."));
 				}
 			} catch (e) {
 				if (e.name === "AbortError") return;
-				g.current === n && (g.current = null), _.current = null, a("error"), s(e.name === "NotAllowedError" ? "Autorisez le microphone dans les paramètres de l’application. Sur Android, installez la version 1.2 ou ultérieure." : e.message || "La transcription IA a échoué. Réessayez.");
+				b.current === r && (b.current = null), x.current = null, o("error"), c(e.name === "NotAllowedError" ? "Autorisez le microphone dans les paramètres de l’application. Sur Android, installez la version 1.2 ou ultérieure." : e.message || "La transcription IA a échoué. Réessayez.");
 			}
 		})();
 	};
 	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [/* @__PURE__ */ (0, h.jsx)("button", {
 		type: "button",
-		className: "icon-button bible-glass-control bible-glass-search bible-voice-button",
-		"aria-label": "Chercher un verset par la voix",
-		title: "Chercher un verset par la voix",
-		onClick: x,
+		className: e ? "home-voice-assistant" : "icon-button bible-glass-control bible-glass-search bible-voice-button",
+		"aria-label": e ? "Ouvrir l’assistant vocal" : "Chercher un verset par la voix",
+		title: e ? "Assistant vocal" : "Chercher un verset par la voix",
+		onClick: ee,
 		children: /* @__PURE__ */ (0, h.jsxs)("svg", {
 			viewBox: "0 0 24 24",
 			"aria-hidden": "true",
@@ -9736,27 +9787,27 @@ function Le() {
 				rx: "3"
 			}), /* @__PURE__ */ (0, h.jsx)("path", { d: "M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" })]
 		})
-	}), n && (0, v.createPortal)(/* @__PURE__ */ (0, h.jsxs)("div", {
+	}), r && (0, v.createPortal)(/* @__PURE__ */ (0, h.jsxs)("div", {
 		className: "bible-voice-overlay",
 		role: "dialog",
 		"aria-modal": "true",
-		"aria-label": "Recherche vocale de verset",
+		"aria-label": e ? "Assistant vocal" : "Recherche vocale de verset",
 		children: [/* @__PURE__ */ (0, h.jsx)("button", {
 			type: "button",
 			className: "bible-voice-dismiss",
 			"aria-label": "Fermer",
-			onClick: y
+			onClick: C
 		}), /* @__PURE__ */ (0, h.jsxs)("section", {
 			className: "bible-voice-listening",
 			children: [
 				/* @__PURE__ */ (0, h.jsx)("p", {
 					className: "bible-voice-prompt",
-					children: "Ask me to search a scripture"
+					children: e ? "Ask a question or open a page" : "Ask me to search a scripture"
 				}),
 				/* @__PURE__ */ (0, h.jsx)("div", {
-					className: `bible-voice-wave${i === "listening" ? " is-listening" : ["error", "choosing"].includes(i) ? "" : " is-processing"}`,
+					className: `bible-voice-wave${a === "listening" ? " is-listening" : ["error", "choosing"].includes(a) ? "" : " is-processing"}`,
 					"aria-hidden": "true",
-					children: f.map((e, t) => /* @__PURE__ */ (0, h.jsx)("i", { style: {
+					children: _.map((e, t) => /* @__PURE__ */ (0, h.jsx)("i", { style: {
 						"--voice-level": `${Math.max(.12, e) * 100}%`,
 						"--voice-delay": `${t * 24}ms`
 					} }, t))
@@ -9764,36 +9815,51 @@ function Le() {
 				/* @__PURE__ */ (0, h.jsxs)("div", {
 					className: "bible-voice-feedback",
 					children: [
-						c && /* @__PURE__ */ (0, h.jsx)("p", {
+						l && /* @__PURE__ */ (0, h.jsx)("p", {
 							className: "bible-voice-transcript",
 							"aria-live": "polite",
-							children: c
+							children: l
 						}),
-						i === "choosing" && /* @__PURE__ */ (0, h.jsxs)("div", {
+						a === "choosing" && /* @__PURE__ */ (0, h.jsxs)("div", {
 							className: "bible-voice-matches",
-							children: [/* @__PURE__ */ (0, h.jsx)("p", { children: "Quel passage cherchez-vous ?" }), u.map((e) => /* @__PURE__ */ (0, h.jsxs)("button", {
-								className: "bible-voice-retry",
-								type: "button",
-								onClick: () => {
-									d([]), b(e);
-								},
-								children: [
-									e.bookName,
-									" ",
-									e.chapter,
-									":",
-									e.verse
-								]
-							}, `${e.bookId}.${e.chapter}.${e.verse}`))]
+							children: [
+								/* @__PURE__ */ (0, h.jsx)("p", { children: m.length ? "Quelle histoire cherchez-vous ?" : "Quel passage cherchez-vous ?" }),
+								m.map((e) => /* @__PURE__ */ (0, h.jsxs)("button", {
+									className: "bible-voice-retry",
+									type: "button",
+									onClick: () => {
+										g([]), T(e);
+									},
+									children: [
+										e.title,
+										" · ",
+										e.reference
+									]
+								}, e.id)),
+								d.map((e) => /* @__PURE__ */ (0, h.jsxs)("button", {
+									className: "bible-voice-retry",
+									type: "button",
+									onClick: () => {
+										f([]), w(e);
+									},
+									children: [
+										e.bookName,
+										" ",
+										e.chapter,
+										":",
+										e.verse
+									]
+								}, `${e.bookId}.${e.chapter}.${e.verse}`))
+							]
 						}),
-						i === "error" && /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [/* @__PURE__ */ (0, h.jsx)("p", {
+						a === "error" && /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [/* @__PURE__ */ (0, h.jsx)("p", {
 							className: "bible-voice-status",
 							role: "alert",
-							children: o
+							children: s
 						}), /* @__PURE__ */ (0, h.jsx)("button", {
 							className: "bible-voice-retry",
 							type: "button",
-							onClick: x,
+							onClick: ee,
 							children: "Réessayer"
 						})] })
 					]
@@ -9802,15 +9868,15 @@ function Le() {
 		})]
 	}), document.body)] });
 }
-function Re() {
-	let [e, t] = Fe();
+function Be() {
+	let [e, t] = Le();
 	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [/* @__PURE__ */ (0, h.jsx)("button", {
 		className: `parallel-toggle bible-glass-control bible-glass-parallel${e.parallelEnabled ? " is-active" : ""}`,
 		type: "button",
 		onClick: t.toggleParallel,
 		children: /* @__PURE__ */ (0, h.jsxs)("span", {
 			className: "bible-glass-control-content",
-			children: [je, /* @__PURE__ */ (0, h.jsx)("span", { children: "Parallel" })]
+			children: [Ne, /* @__PURE__ */ (0, h.jsx)("span", { children: "Parallel" })]
 		})
 	}), /* @__PURE__ */ (0, h.jsx)("button", {
 		className: `parallel-toggle reader-target-toggle bible-glass-control bible-glass-target${e.showHighlightsOnly ? " is-active" : ""}`,
@@ -9818,23 +9884,23 @@ function Re() {
 		onClick: t.toggleTarget,
 		children: /* @__PURE__ */ (0, h.jsxs)("span", {
 			className: "bible-glass-control-content",
-			children: [Me, /* @__PURE__ */ (0, h.jsx)("span", { children: "Highlights" })]
+			children: [Pe, /* @__PURE__ */ (0, h.jsx)("span", { children: "Highlights" })]
 		})
 	})] });
 }
-function ze() {
+function Ve() {
 	let e = window.bibleReaderBridge, [t, n] = (0, p.useState)(() => e.getVerseSnapshot());
 	return (0, p.useEffect)(() => {
 		let t = () => n(e.getVerseSnapshot());
 		return document.addEventListener("bible:verse-ui-change", t), () => document.removeEventListener("bible:verse-ui-change", t);
 	}, [e]), [t, e];
 }
-function Be() {
-	let [e] = ze();
+function He() {
+	let [e] = Ve();
 	return /* @__PURE__ */ (0, h.jsx)(h.Fragment, { children: e.reference });
 }
-function Ve() {
-	let [e, t] = ze();
+function Ue() {
+	let [e, t] = Ve();
 	return [
 		[
 			"highlight",
@@ -9871,10 +9937,10 @@ function Ve() {
 		type: "button",
 		"data-verse-action": n,
 		onClick: () => t.runAction(n),
-		children: [/* @__PURE__ */ (0, h.jsx)(Pe, { name: n }), /* @__PURE__ */ (0, h.jsx)("span", { children: r })]
+		children: [/* @__PURE__ */ (0, h.jsx)(Ie, { name: n }), /* @__PURE__ */ (0, h.jsx)("span", { children: r })]
 	}, n));
 }
-function He() {
+function We() {
 	let e = window.bibleReaderBridge, [t, n] = (0, p.useState)(() => e.getChapterSnapshot()), [r, i] = (0, p.useState)(() => e.getVerseSnapshot());
 	return (0, p.useEffect)(() => {
 		let t = () => n(e.getChapterSnapshot()), r = () => i(e.getVerseSnapshot());
@@ -9887,7 +9953,7 @@ function He() {
 		bridge: e
 	};
 }
-function Ue(e, t) {
+function Ge(e, t) {
 	let n = (0, p.useRef)(null), r = (0, p.useRef)(!1), i = (0, p.useRef)(null), a = () => {
 		n.current && window.clearTimeout(n.current), n.current = null;
 	};
@@ -9912,8 +9978,8 @@ function Ue(e, t) {
 		}
 	};
 }
-function We({ verse: e, selection: t, bridge: n }) {
-	let r = Ue(e, n), i = [
+function Ke({ verse: e, selection: t, bridge: n }) {
+	let r = Ge(e, n), i = [
 		"scripture-line",
 		e.highlighted ? "is-highlighted" : "",
 		e.bookmarked ? "is-bookmarked" : "",
@@ -9934,7 +10000,7 @@ function We({ verse: e, selection: t, bridge: n }) {
 		children: [e.number ? /* @__PURE__ */ (0, h.jsx)("sup", { children: e.number }) : null, e.text]
 	});
 }
-function Ge({ state: e }) {
+function qe({ state: e }) {
 	return e.status === "loading" ? /* @__PURE__ */ (0, h.jsx)("p", {
 		className: "reader-empty",
 		children: "Loading chapter..."
@@ -9949,8 +10015,8 @@ function Ge({ state: e }) {
 		children: [/* @__PURE__ */ (0, h.jsx)("strong", { children: e.title }), /* @__PURE__ */ (0, h.jsx)("span", { children: e.copyright })]
 	});
 }
-function Ke({ state: e, selection: t, bridge: n }) {
-	let [r, i] = Fe();
+function Je({ state: e, selection: t, bridge: n }) {
+	let [r, i] = Le();
 	return /* @__PURE__ */ (0, h.jsxs)("div", {
 		className: "parallel-scripture-grid",
 		children: [/* @__PURE__ */ (0, h.jsxs)("div", {
@@ -9993,7 +10059,7 @@ function Ke({ state: e, selection: t, bridge: n }) {
 					})
 				]
 			})]
-		}), e.parallel.rows.map((r) => /* @__PURE__ */ (0, h.jsx)(qe, {
+		}), e.parallel.rows.map((r) => /* @__PURE__ */ (0, h.jsx)(Ye, {
 			verse: r,
 			state: e,
 			selection: t,
@@ -10001,8 +10067,8 @@ function Ke({ state: e, selection: t, bridge: n }) {
 		}, r.key))]
 	});
 }
-function qe({ verse: e, state: t, selection: n, bridge: r }) {
-	let i = Ue(e, r);
+function Ye({ verse: e, state: t, selection: n, bridge: r }) {
+	let i = Ge(e, r);
 	return /* @__PURE__ */ (0, h.jsxs)("article", {
 		className: `parallel-scripture-line${e.highlighted ? " is-highlighted" : ""}${e.bookmarked ? " is-bookmarked" : ""}${e.noted ? " is-noted" : ""}${n.selectedKey === e.key ? " is-selected" : ""}${n.selectedKeys.includes(e.key) ? " is-multi-selected" : ""}`,
 		style: e.highlightColor ? { "--highlight-color": e.highlightColor } : void 0,
@@ -10026,7 +10092,7 @@ function qe({ verse: e, state: t, selection: n, bridge: r }) {
 		})]
 	});
 }
-function Je({ state: e, bridge: t }) {
+function Xe({ state: e, bridge: t }) {
 	let [n, r] = (0, p.useState)(!1), [i, a] = (0, p.useState)(!1), o = (0, p.useRef)(null);
 	(0, p.useEffect)(() => {
 		n && o.current?.scrollIntoView({
@@ -10097,25 +10163,25 @@ function Je({ state: e, bridge: t }) {
 		})
 	})] });
 }
-function Ye() {
-	let { state: e, verseState: t, bridge: n } = He();
-	if (e.status !== "ready" || !e.verses.length) return /* @__PURE__ */ (0, h.jsx)(Ge, { state: e });
-	let r = e.parallelEnabled && e.parallel ? /* @__PURE__ */ (0, h.jsx)(Ke, {
+function Ze() {
+	let { state: e, verseState: t, bridge: n } = We();
+	if (e.status !== "ready" || !e.verses.length) return /* @__PURE__ */ (0, h.jsx)(qe, { state: e });
+	let r = e.parallelEnabled && e.parallel ? /* @__PURE__ */ (0, h.jsx)(Je, {
 		state: e,
 		selection: t,
 		bridge: n
-	}) : e.verses.map((e) => /* @__PURE__ */ (0, h.jsx)(We, {
+	}) : e.verses.map((e) => /* @__PURE__ */ (0, h.jsx)(Ke, {
 		verse: e,
 		selection: t,
 		bridge: n
 	}, e.key));
-	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [r, /* @__PURE__ */ (0, h.jsx)(Je, {
+	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [r, /* @__PURE__ */ (0, h.jsx)(Xe, {
 		state: e,
 		bridge: n
 	}, `${e.versionId}:${e.bookId}:${e.chapter}`)] });
 }
 // src/react/notes.jsx
-var Xe = {
+var Qe = {
 	text: [
 		"M4 5h16",
 		"M12 5v14",
@@ -10123,7 +10189,7 @@ var Xe = {
 	],
 	highlight: ["M4 16 14 6l4 4L8 20H4z", "m14 6 2-2 4 4-2 2"]
 };
-function Ze({ name: e }) {
+function $e({ name: e }) {
 	return /* @__PURE__ */ (0, h.jsx)("svg", {
 		viewBox: "0 0 24 24",
 		"aria-hidden": "true",
@@ -10132,10 +10198,10 @@ function Ze({ name: e }) {
 		strokeWidth: "1.8",
 		strokeLinecap: "round",
 		strokeLinejoin: "round",
-		children: Xe[e].map((e) => /* @__PURE__ */ (0, h.jsx)("path", { d: e }, e))
+		children: Qe[e].map((e) => /* @__PURE__ */ (0, h.jsx)("path", { d: e }, e))
 	});
 }
-function Qe() {
+function et() {
 	let e = window.noteEditorBridge, [t, n] = (0, p.useState)(() => e.getSnapshot());
 	(0, p.useEffect)(() => {
 		let t = () => n(e.getSnapshot());
@@ -10191,7 +10257,7 @@ function Qe() {
 			className: "note-format-select",
 			"aria-label": "Text color",
 			children: [
-				/* @__PURE__ */ (0, h.jsx)(Ze, { name: "text" }),
+				/* @__PURE__ */ (0, h.jsx)($e, { name: "text" }),
 				/* @__PURE__ */ (0, h.jsx)("span", {
 					className: "note-color-swatch",
 					style: { background: t.textColor }
@@ -10207,7 +10273,7 @@ function Qe() {
 			className: "note-format-select",
 			"aria-label": "Highlight color",
 			children: [
-				/* @__PURE__ */ (0, h.jsx)(Ze, { name: "highlight" }),
+				/* @__PURE__ */ (0, h.jsx)($e, { name: "highlight" }),
 				/* @__PURE__ */ (0, h.jsx)("span", {
 					className: "note-color-swatch",
 					style: { background: t.highlightColor }
@@ -10257,7 +10323,7 @@ function Qe() {
 		})
 	] });
 }
-var $e = {
+var tt = {
 	undo: ["M9 14 4 9l5-5", "M4 9h10a6 6 0 0 1 0 12h-2"],
 	trash: [
 		"M4 7h16",
@@ -10274,7 +10340,7 @@ var $e = {
 	close: ["M6 6l12 12", "M18 6 6 18"],
 	chevron: ["m6 9 6 6 6-6"]
 };
-function et({ name: e }) {
+function nt({ name: e }) {
 	return /* @__PURE__ */ (0, h.jsx)("svg", {
 		viewBox: "0 0 24 24",
 		"aria-hidden": "true",
@@ -10283,18 +10349,18 @@ function et({ name: e }) {
 		strokeWidth: "1.8",
 		strokeLinecap: "round",
 		strokeLinejoin: "round",
-		children: $e[e].map((e) => /* @__PURE__ */ (0, h.jsx)("path", { d: e }, e))
+		children: tt[e].map((e) => /* @__PURE__ */ (0, h.jsx)("path", { d: e }, e))
 	});
 }
-function tt() {
+function rt() {
 	let e = window.noteEditorBridge, [t, n] = (0, p.useState)(() => e.getEditorSnapshot());
 	return (0, p.useEffect)(() => {
 		let t = () => n(e.getEditorSnapshot());
 		return document.addEventListener("note:editor-change", t), () => document.removeEventListener("note:editor-change", t);
 	}, [e]), [t, e];
 }
-function nt() {
-	let [e, t] = tt();
+function it() {
+	let [e, t] = rt();
 	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [/* @__PURE__ */ (0, h.jsxs)("div", { children: [/* @__PURE__ */ (0, h.jsx)("span", { children: "Notes" }), /* @__PURE__ */ (0, h.jsx)("input", {
 		className: "note-editor-title note-editor-heading-title",
 		value: e.title,
@@ -10312,7 +10378,7 @@ function nt() {
 				onClick: () => t.command("undo"),
 				"aria-label": "Undo",
 				title: "Undo",
-				children: /* @__PURE__ */ (0, h.jsx)(et, { name: "undo" })
+				children: /* @__PURE__ */ (0, h.jsx)(nt, { name: "undo" })
 			}),
 			/* @__PURE__ */ (0, h.jsx)("button", {
 				type: "button",
@@ -10320,7 +10386,7 @@ function nt() {
 				onClick: t.delete,
 				"aria-label": "Delete note",
 				title: "Delete note",
-				children: /* @__PURE__ */ (0, h.jsx)(et, { name: "trash" })
+				children: /* @__PURE__ */ (0, h.jsx)(nt, { name: "trash" })
 			}),
 			/* @__PURE__ */ (0, h.jsx)("button", {
 				type: "button",
@@ -10329,7 +10395,7 @@ function nt() {
 				onClick: t.save,
 				"aria-label": "Save note",
 				title: "Save note",
-				children: /* @__PURE__ */ (0, h.jsx)(et, { name: "save" })
+				children: /* @__PURE__ */ (0, h.jsx)(nt, { name: "save" })
 			}),
 			/* @__PURE__ */ (0, h.jsx)("button", {
 				type: "button",
@@ -10337,13 +10403,13 @@ function nt() {
 				onClick: t.close,
 				"aria-label": "Close note editor",
 				title: "Close",
-				children: /* @__PURE__ */ (0, h.jsx)(et, { name: "close" })
+				children: /* @__PURE__ */ (0, h.jsx)(nt, { name: "close" })
 			})
 		]
 	})] });
 }
-function rt() {
-	let [e, t] = tt(), [n, r] = (0, p.useState)(!1);
+function at() {
+	let [e, t] = rt(), [n, r] = (0, p.useState)(!1);
 	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [/* @__PURE__ */ (0, h.jsxs)("button", {
 		type: "button",
 		className: "note-editor-verse-summary",
@@ -10352,7 +10418,7 @@ function rt() {
 		children: [/* @__PURE__ */ (0, h.jsx)("span", {
 			className: "note-editor-verse-summary-copy",
 			children: /* @__PURE__ */ (0, h.jsx)("strong", { children: "View verses" })
-		}), /* @__PURE__ */ (0, h.jsx)(et, { name: "chevron" })]
+		}), /* @__PURE__ */ (0, h.jsx)(nt, { name: "chevron" })]
 	}), n && /* @__PURE__ */ (0, h.jsxs)("div", {
 		className: "note-editor-verse-menu",
 		children: [/* @__PURE__ */ (0, h.jsxs)("button", {
@@ -10380,7 +10446,7 @@ function rt() {
 		})]
 	})] });
 }
-function it() {
+function ot() {
 	let e = window.noteEditorBridge, t = (0, p.useRef)(null);
 	return (0, p.useEffect)(() => {
 		e.attachContent(t.current);
@@ -10403,22 +10469,22 @@ function it() {
 	});
 }
 // src/react/page-top-spacer.jsx
-function at() {
+function st() {
 	return /* @__PURE__ */ (0, h.jsx)("div", {
 		className: "page-top-spacer",
 		"aria-hidden": "true"
 	});
 }
 // node_modules/@capawesome/capacitor-live-update/dist/esm/index.js
-var ot = a("LiveUpdate", { web: () => import("./web-DKGBeYoZ.js").then((e) => new e.LiveUpdateWeb()) }), st = {
+var ct = a("LiveUpdate", { web: () => import("./web-DKGBeYoZ.js").then((e) => new e.LiveUpdateWeb()) }), lt = {
 	origin: "https://logicbible.vercel.app",
 	nativeVersion: "1.2"
 };
 // src/react/mobile-updates.js
-async function ct() {
+async function ut() {
 	if (o.getPlatform() !== "android") return;
 	try {
-		await ot.ready();
+		await ct.ready();
 	} catch (e) {
 		console.warn("Mobile update initialization failed", e);
 		return;
@@ -10431,7 +10497,7 @@ async function ct() {
 			e.type = "button", e.textContent = "Apply", e.addEventListener("click", async () => {
 				e.disabled = !0;
 				try {
-					await ot.reload();
+					await ct.reload();
 				} catch {
 					e.disabled = !1, n.textContent = "Close the app completely, then reopen it to apply the update.";
 				}
@@ -10442,24 +10508,24 @@ async function ct() {
 		if (!(e || Date.now() - t < n)) {
 			e = !0, t = Date.now();
 			try {
-				let e = await fetch(`${st.origin}/mobile-updates/latest.json?t=${Date.now()}`, {
+				let e = await fetch(`${lt.origin}/mobile-updates/latest.json?t=${Date.now()}`, {
 					cache: "no-store",
 					signal: AbortSignal.timeout(15e3)
 				});
 				if (!e.ok) throw Error(`Update manifest HTTP ${e.status}`);
-				let t = await e.json(), { versionName: r } = await ot.getVersionName();
+				let t = await e.json(), { versionName: r } = await ct.getVersionName();
 				if (t.nativeVersion !== r || !/^[a-f0-9]{64}$/.test(t.bundleId) || !/^[a-f0-9]{64}$/.test(t.checksum)) return;
-				let a = new URL(t.url, st.origin);
-				if (a.origin !== st.origin || a.pathname !== `/mobile-updates/${t.bundleId}.zip`) return;
-				let { bundleId: o } = await ot.getCurrentBundle(), s = await fetch("mobile-version.json").then((e) => e.json());
-				if (t.bundleId === (o || s.bundleId) || s.builtAt && (!Number.isFinite(Date.parse(t.builtAt)) || Date.parse(t.builtAt) <= Date.parse(s.builtAt)) || (await ot.getBlockedBundles()).bundleIds.includes(t.bundleId)) return;
-				if (!(await ot.getDownloadedBundles()).bundleIds.includes(t.bundleId)) {
+				let a = new URL(t.url, lt.origin);
+				if (a.origin !== lt.origin || a.pathname !== `/mobile-updates/${t.bundleId}.zip`) return;
+				let { bundleId: o } = await ct.getCurrentBundle(), s = await fetch("mobile-version.json").then((e) => e.json());
+				if (t.bundleId === (o || s.bundleId) || s.builtAt && (!Number.isFinite(Date.parse(t.builtAt)) || Date.parse(t.builtAt) <= Date.parse(s.builtAt)) || (await ct.getBlockedBundles()).bundleIds.includes(t.bundleId)) return;
+				if (!(await ct.getDownloadedBundles()).bundleIds.includes(t.bundleId)) {
 					i("Downloading the update… Keep the app open.");
-					let e = await ot.addListener("downloadBundleProgress", (e) => {
+					let e = await ct.addListener("downloadBundleProgress", (e) => {
 						e.bundleId === t.bundleId && Number.isFinite(e.progress) && i(`Update: ${Math.max(0, Math.min(99, Math.round(e.progress * 100)))} % · downloading`);
 					});
 					try {
-						await ot.downloadBundle({
+						await ct.downloadBundle({
 							bundleId: t.bundleId,
 							url: a.href,
 							checksum: t.checksum
@@ -10468,7 +10534,7 @@ async function ct() {
 						await e.remove();
 					}
 				}
-				await ot.setNextBundle({ bundleId: t.bundleId }), n = 6e5, i("Update ready. Apply will restart the app.", !0);
+				await ct.setNextBundle({ bundleId: t.bundleId }), n = 6e5, i("Update ready. Apply will restart the app.", !0);
 			} catch (e) {
 				console.warn("Mobile update unavailable; keeping the installed version", e), n = 6e4, r?.isConnected && i("Download interrupted. Retrying in one minute.");
 			} finally {
@@ -10485,18 +10551,20 @@ async function ct() {
 	}, 6e4);
 }
 // src/react/main.jsx
-var lt = document.querySelector("[data-react-page-top-spacer-root]");
-lt && (0, m.createRoot)(lt).render(/* @__PURE__ */ (0, h.jsx)(at, {}));
-var ut = document.querySelector("[data-react-church-root]");
-ut && g(ut, () => import("./church-tool-I8ASHgAN.js"), "ChurchToolPage");
-var dt = document.querySelector("[data-projection-root]");
-dt && g(dt, () => import("./church-CzULZ-DI.js"), "ProjectionScreen");
-var ft = document.querySelector("[data-debate-projection-root]");
-ft && g(ft, () => import("./debate-projection-BXKW8O_n.js").then((e) => e.n), "DebateProjectionScreen");
-var pt = document.querySelector("[data-evangelism-pilot-root]");
-pt && g(pt, () => import("./church-mode-BZBZMHEa.js"), "ChurchModePage");
-var mt = document.querySelector("[data-session-admin-root]");
-if (mt && g(mt, () => import("./church-CzULZ-DI.js"), "SessionAdmin"), o.isNativePlatform()) {
+var dt = document.querySelector("[data-react-page-top-spacer-root]");
+dt && (0, m.createRoot)(dt).render(/* @__PURE__ */ (0, h.jsx)(st, {}));
+var ft = document.querySelector("[data-react-home-voice-root]");
+ft && window.bibleReaderBridge && window.aiBridge && (0, m.createRoot)(ft).render(/* @__PURE__ */ (0, h.jsx)(ze, { assistant: !0 }));
+var pt = document.querySelector("[data-react-church-root]");
+pt && g(pt, () => import("./church-tool-DquYiB3U.js"), "ChurchToolPage");
+var mt = document.querySelector("[data-projection-root]");
+mt && g(mt, () => import("./church-CzULZ-DI.js"), "ProjectionScreen");
+var ht = document.querySelector("[data-debate-projection-root]");
+ht && g(ht, () => import("./debate-projection-BXKW8O_n.js").then((e) => e.n), "DebateProjectionScreen");
+var gt = document.querySelector("[data-evangelism-pilot-root]");
+gt && g(gt, () => import("./church-mode-DZOA40IB.js"), "ChurchModePage");
+var _t = document.querySelector("[data-session-admin-root]");
+if (_t && g(_t, () => import("./church-CzULZ-DI.js"), "SessionAdmin"), o.isNativePlatform()) {
 	let e = a("GentleHaptics");
 	window.appButtonHaptic = () => {
 		let t = localStorage.getItem("brother.hapticsStrength") || "1", n = {
@@ -10509,19 +10577,19 @@ if (mt && g(mt, () => import("./church-CzULZ-DI.js"), "SessionAdmin"), o.isNativ
 		o.getPlatform() === "android" ? e.tap({ level: r }).catch(() => {}) : _.impact({ style: s.Light }).catch(() => {});
 	};
 }
-var ht = /* @__PURE__ */ new WeakMap();
+var vt = /* @__PURE__ */ new WeakMap();
 window.renderProfileSavedNoteCards = (e, t, n) => {
 	if (!e) return;
-	let r = ht.get(e);
-	r || (r = (0, m.createRoot)(e), ht.set(e, r)), r.render(t.map((e) => /* @__PURE__ */ (0, h.jsx)(x, {
+	let r = vt.get(e);
+	r || (r = (0, m.createRoot)(e), vt.set(e, r)), r.render(t.map((e) => /* @__PURE__ */ (0, h.jsx)(x, {
 		row: e,
 		onOpen: n
 	}, e.id)));
 }, window.unmountProfileSavedNoteCards = (e) => {
-	let t = e && ht.get(e);
-	t && (t.unmount(), ht.delete(e));
+	let t = e && vt.get(e);
+	t && (t.unmount(), vt.delete(e));
 };
-var gt = [
+var yt = [
 	[
 		"my-church",
 		"Church Tool",
@@ -10557,7 +10625,7 @@ var gt = [
 		"Prayer",
 		"heart"
 	]
-], _t = {
+], bt = {
 	home: [
 		"M3 10.5 12 3l9 7.5",
 		"M5 9.5V21h14V9.5",
@@ -10585,7 +10653,7 @@ var gt = [
 		"M10 4h4"
 	]
 };
-function vt({ name: e, hasActiveGradient: t = !1 }) {
+function xt({ name: e, hasActiveGradient: t = !1 }) {
 	let n = `active-nav-gradient-${e}`;
 	return /* @__PURE__ */ (0, h.jsxs)("svg", {
 		viewBox: "0 0 24 24",
@@ -10608,13 +10676,13 @@ function vt({ name: e, hasActiveGradient: t = !1 }) {
 				offset: "100%",
 				stopColor: "#ff9d00"
 			})]
-		}) }), _t[e].map((e) => /* @__PURE__ */ (0, h.jsx)("path", {
+		}) }), bt[e].map((e) => /* @__PURE__ */ (0, h.jsx)("path", {
 			d: e,
 			stroke: t ? `url(#${n})` : void 0
 		}, e))]
 	});
 }
-function yt() {
+function St() {
 	let [e, t] = (0, p.useState)(0);
 	return (0, p.useEffect)(() => {
 		let e = document.querySelector("#bible");
@@ -10639,7 +10707,7 @@ function yt() {
 		children: /* @__PURE__ */ (0, h.jsx)("span", { style: { width: `${e}%` } })
 	});
 }
-function bt() {
+function Ct() {
 	let e = document.querySelector(".app-shell")?.dataset.activeScreen || "home", [t, n] = (0, p.useState)(e);
 	(0, p.useEffect)(() => {
 		let e = (e) => n(e.detail?.activeNavId || e.detail?.id || "home");
@@ -10650,69 +10718,69 @@ function bt() {
 	}, i = (e) => {
 		e.pointerType === "touch" && (window.appButtonHaptic || navigator.vibrate?.(8));
 	};
-	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [gt.map(([e, n, a]) => /* @__PURE__ */ (0, h.jsxs)("button", {
+	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [yt.map(([e, n, a]) => /* @__PURE__ */ (0, h.jsxs)("button", {
 		className: t === e ? "is-active" : "",
 		"data-nav": e,
 		type: "button",
 		onPointerDown: i,
 		onClick: () => r(e),
-		children: [/* @__PURE__ */ (0, h.jsx)(vt, {
+		children: [/* @__PURE__ */ (0, h.jsx)(xt, {
 			name: a,
 			hasActiveGradient: t === e && e !== "home"
 		}), /* @__PURE__ */ (0, h.jsx)("span", { children: n })]
-	}, e)), t === "bible" && /* @__PURE__ */ (0, h.jsx)(yt, {})] });
+	}, e)), t === "bible" && /* @__PURE__ */ (0, h.jsx)(St, {})] });
 }
-var xt = document.querySelector("[data-react-navigation-root]");
-xt && (0, m.createRoot)(xt).render(/* @__PURE__ */ (0, h.jsx)(bt, {}));
-var St = document.querySelector("[data-react-home-hero-root]");
-St && (0, m.createRoot)(St).render(/* @__PURE__ */ (0, h.jsx)(ne, {}));
-var Ct = document.querySelector("[data-react-home-prayer-root]");
-Ct && (0, m.createRoot)(Ct).render(/* @__PURE__ */ (0, h.jsx)(re, {}));
-var wt = document.querySelector("[data-react-home-library-tabs-root]");
-wt && (0, m.createRoot)(wt).render(/* @__PURE__ */ (0, h.jsx)(ie, {}));
-var Tt = document.querySelector("[data-react-home-library-panel-root]");
-Tt && window.homeLibraryBridge && (window.reactHomeLibraryPanelMounted = !0, (0, m.createRoot)(Tt).render(/* @__PURE__ */ (0, h.jsx)(D, {})));
-var Et = document.querySelector("[data-react-profile-tabs-root]"), j = document.querySelector("[data-react-profile-prayers-root]");
-j && (0, m.createRoot)(j).render(/* @__PURE__ */ (0, h.jsx)(ue, {})), Et && (0, m.createRoot)(Et).render(/* @__PURE__ */ (0, h.jsx)(fe, {}));
-var Dt = document.querySelector("[data-react-profile-hero-root]");
-Dt && window.profileBridge && (0, m.createRoot)(Dt).render(/* @__PURE__ */ (0, h.jsx)(k, {}));
-var Ot = document.querySelector("[data-react-profile-preferences-root]");
-Ot && window.profileBridge && (0, m.createRoot)(Ot).render(/* @__PURE__ */ (0, h.jsx)(me, {}));
-var kt = document.querySelector("[data-react-profile-information-root]");
-kt && window.profileBridge && (0, m.createRoot)(kt).render(/* @__PURE__ */ (0, h.jsx)(he, {}));
-var At = document.querySelector("[data-react-profile-cloud-root]");
-At && window.profileBridge && (0, m.createRoot)(At).render(/* @__PURE__ */ (0, h.jsx)(ge, {}));
-var jt = document.querySelector("[data-react-bible-controls-root]");
-jt && window.bibleReaderBridge && (0, m.createRoot)(jt).render(/* @__PURE__ */ (0, h.jsx)(Ie, {}));
-var Mt = document.querySelector("[data-react-bible-parallel-root]");
-Mt && window.bibleReaderBridge && (0, m.createRoot)(Mt).render(/* @__PURE__ */ (0, h.jsx)(Re, {}));
-var Nt = document.querySelector("[data-react-bible-chapter-root]");
-Nt && window.bibleReaderBridge && (window.reactBibleChapterMounted = !0, (0, m.createRoot)(Nt).render(/* @__PURE__ */ (0, h.jsx)(Ye, {})));
-var Pt = document.querySelector("[data-react-selected-verse-root]");
-Pt && window.bibleReaderBridge && (0, m.createRoot)(Pt).render(/* @__PURE__ */ (0, h.jsx)(Be, {}));
-var Ft = document.querySelector("[data-react-verse-actions-root]");
-Ft && window.bibleReaderBridge && (0, m.createRoot)(Ft).render(/* @__PURE__ */ (0, h.jsx)(Ve, {}));
-var It = document.querySelector("[data-react-note-toolbar-root]");
-It && window.noteEditorBridge && (0, m.createRoot)(It).render(/* @__PURE__ */ (0, h.jsx)(Qe, {}));
-var Lt = document.querySelector("[data-react-note-content-root]");
-Lt && window.noteEditorBridge && (0, m.createRoot)(Lt).render(/* @__PURE__ */ (0, h.jsx)(it, {}));
-var Rt = document.querySelector("[data-react-note-header-root]");
-Rt && window.noteEditorBridge && (0, m.createRoot)(Rt).render(/* @__PURE__ */ (0, h.jsx)(nt, {}));
-var zt = document.querySelector("[data-react-note-chips-root]");
-zt && window.noteEditorBridge && (0, m.createRoot)(zt).render(/* @__PURE__ */ (0, h.jsx)(rt, {}));
-var Bt = document.querySelector("[data-react-prayer-root]");
-Bt && window.prayerBridge && g(Bt, () => import("./prayer-UFn_2d3K.js"), "PrayerPage");
-var Vt = document.querySelector("[data-react-ai-root]");
-Vt && window.aiBridge && g(Vt, () => import("./ai-BkwJbga0.js"), "AiPage");
-var Ht = document.querySelector("[data-react-kids-bible-root]");
-Ht && g(Ht, () => import("./kids-bible-CYfIACHA.js"), "KidsBiblePage");
-var Ut = document.querySelector("[data-react-think-room-resume-root]");
-Ut && g(Ut, () => import("./apologetics-debate-8dq4yLcG.js"), "ThinkRoomResume");
-var Wt = document.querySelector("[data-react-apologetics-debate-root]");
-Wt && g(Wt, () => import("./apologetics-debate-8dq4yLcG.js"), "ApologeticsDebatePage");
-var Gt = document.querySelector("[data-react-apologetics-coach-root]");
-Gt && g(Gt, () => import("./apologetics-coach-Dy7WMvvy.js"), "ApologeticsCoachPage");
-var Kt = document.querySelector("[data-react-apologetics-xp-root]");
-Kt && window.aiBridge && g(Kt, () => import("./apologetics-coach-Dy7WMvvy.js"), "ApologeticsXpCard");
-var qt = document.querySelector("[data-react-admin-root]");
-qt && window.moderationBridge && g(qt, () => import("./admin-D9fuLROe.js"), "AdminPage"), requestAnimationFrame(() => requestAnimationFrame(() => void ct()));
+var wt = document.querySelector("[data-react-navigation-root]");
+wt && (0, m.createRoot)(wt).render(/* @__PURE__ */ (0, h.jsx)(Ct, {}));
+var Tt = document.querySelector("[data-react-home-hero-root]");
+Tt && (0, m.createRoot)(Tt).render(/* @__PURE__ */ (0, h.jsx)(te, {}));
+var Et = document.querySelector("[data-react-home-prayer-root]");
+Et && (0, m.createRoot)(Et).render(/* @__PURE__ */ (0, h.jsx)(ne, {}));
+var j = document.querySelector("[data-react-home-library-tabs-root]");
+j && (0, m.createRoot)(j).render(/* @__PURE__ */ (0, h.jsx)(re, {}));
+var Dt = document.querySelector("[data-react-home-library-panel-root]");
+Dt && window.homeLibraryBridge && (window.reactHomeLibraryPanelMounted = !0, (0, m.createRoot)(Dt).render(/* @__PURE__ */ (0, h.jsx)(O, {})));
+var Ot = document.querySelector("[data-react-profile-tabs-root]"), kt = document.querySelector("[data-react-profile-prayers-root]");
+kt && (0, m.createRoot)(kt).render(/* @__PURE__ */ (0, h.jsx)(le, {})), Ot && (0, m.createRoot)(Ot).render(/* @__PURE__ */ (0, h.jsx)(de, {}));
+var At = document.querySelector("[data-react-profile-hero-root]");
+At && window.profileBridge && (0, m.createRoot)(At).render(/* @__PURE__ */ (0, h.jsx)(fe, {}));
+var jt = document.querySelector("[data-react-profile-preferences-root]");
+jt && window.profileBridge && (0, m.createRoot)(jt).render(/* @__PURE__ */ (0, h.jsx)(me, {}));
+var Mt = document.querySelector("[data-react-profile-information-root]");
+Mt && window.profileBridge && (0, m.createRoot)(Mt).render(/* @__PURE__ */ (0, h.jsx)(he, {}));
+var Nt = document.querySelector("[data-react-profile-cloud-root]");
+Nt && window.profileBridge && (0, m.createRoot)(Nt).render(/* @__PURE__ */ (0, h.jsx)(ge, {}));
+var Pt = document.querySelector("[data-react-bible-controls-root]");
+Pt && window.bibleReaderBridge && (0, m.createRoot)(Pt).render(/* @__PURE__ */ (0, h.jsx)(Re, {}));
+var Ft = document.querySelector("[data-react-bible-parallel-root]");
+Ft && window.bibleReaderBridge && (0, m.createRoot)(Ft).render(/* @__PURE__ */ (0, h.jsx)(Be, {}));
+var It = document.querySelector("[data-react-bible-chapter-root]");
+It && window.bibleReaderBridge && (window.reactBibleChapterMounted = !0, (0, m.createRoot)(It).render(/* @__PURE__ */ (0, h.jsx)(Ze, {})));
+var Lt = document.querySelector("[data-react-selected-verse-root]");
+Lt && window.bibleReaderBridge && (0, m.createRoot)(Lt).render(/* @__PURE__ */ (0, h.jsx)(He, {}));
+var Rt = document.querySelector("[data-react-verse-actions-root]");
+Rt && window.bibleReaderBridge && (0, m.createRoot)(Rt).render(/* @__PURE__ */ (0, h.jsx)(Ue, {}));
+var zt = document.querySelector("[data-react-note-toolbar-root]");
+zt && window.noteEditorBridge && (0, m.createRoot)(zt).render(/* @__PURE__ */ (0, h.jsx)(et, {}));
+var Bt = document.querySelector("[data-react-note-content-root]");
+Bt && window.noteEditorBridge && (0, m.createRoot)(Bt).render(/* @__PURE__ */ (0, h.jsx)(ot, {}));
+var Vt = document.querySelector("[data-react-note-header-root]");
+Vt && window.noteEditorBridge && (0, m.createRoot)(Vt).render(/* @__PURE__ */ (0, h.jsx)(it, {}));
+var Ht = document.querySelector("[data-react-note-chips-root]");
+Ht && window.noteEditorBridge && (0, m.createRoot)(Ht).render(/* @__PURE__ */ (0, h.jsx)(at, {}));
+var Ut = document.querySelector("[data-react-prayer-root]");
+Ut && window.prayerBridge && g(Ut, () => import("./prayer-BU5acA8c.js"), "PrayerPage");
+var Wt = document.querySelector("[data-react-ai-root]");
+Wt && window.aiBridge && g(Wt, () => import("./ai-wKSLK5kv.js"), "AiPage");
+var Gt = document.querySelector("[data-react-kids-bible-root]");
+Gt && g(Gt, () => import("./kids-bible-VOXksY8g.js"), "KidsBiblePage");
+var Kt = document.querySelector("[data-react-think-room-resume-root]");
+Kt && g(Kt, () => import("./apologetics-debate-DqXPuoru.js"), "ThinkRoomResume");
+var qt = document.querySelector("[data-react-apologetics-debate-root]");
+qt && g(qt, () => import("./apologetics-debate-DqXPuoru.js"), "ApologeticsDebatePage");
+var Jt = document.querySelector("[data-react-apologetics-coach-root]");
+Jt && g(Jt, () => import("./apologetics-coach-NGmXsEpP.js"), "ApologeticsCoachPage");
+var Yt = document.querySelector("[data-react-apologetics-xp-root]");
+Yt && window.aiBridge && g(Yt, () => import("./apologetics-coach-NGmXsEpP.js"), "ApologeticsXpCard");
+var Xt = document.querySelector("[data-react-admin-root]");
+Xt && window.moderationBridge && g(Xt, () => import("./admin-D9fuLROe.js"), "AdminPage"), requestAnimationFrame(() => requestAnimationFrame(() => void ut()));

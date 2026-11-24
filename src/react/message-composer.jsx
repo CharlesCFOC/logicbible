@@ -1,5 +1,5 @@
 import React, { useEffect, useId, useRef } from "react";
-import { DictationControls } from "./dictation-controls.jsx";
+import { DictationControls, VoiceMeter } from "./dictation-controls.jsx";
 
 // Field only: the owning page supplies the form and its submission rules.
 // Prayer, Debate and Brother AI share this markup and components/message-composer.css.
@@ -31,10 +31,14 @@ export function MessageComposer({ value, onChange, placeholder, ariaLabel, id, d
     disabled={disabled}
   />;
 
-  return <div className="message-composer">
-    {dictation ? <DictationControls field={dictationField} fieldId={fieldId} label={ariaLabel} dictation={dictation} disabled={disabled} showReadAloud={false}>{input}</DictationControls> : input}
+  const listening = dictation?.field === dictationField && ["starting", "listening"].includes(dictation.phase);
+  return <div className="message-composer-container">
+    {listening && <VoiceMeter active={dictation.phase === "listening"} dictation={dictation} bibleStyle />}
+    <div className="message-composer">
+    {dictation ? <DictationControls field={dictationField} fieldId={fieldId} label={ariaLabel} dictation={dictation} disabled={disabled} showReadAloud={false} externalVoiceMeter>{input}</DictationControls> : input}
     <button className="message-composer-send" type="submit" aria-label={submitLabel} title={submitLabel} disabled={disabled || Boolean(dictation?.active)}>
       <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m22 2-7 20-4-9-9-4Z" /><path d="M22 2 11 13" /></svg>
     </button>
+    </div>
   </div>;
 }

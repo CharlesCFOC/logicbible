@@ -1,6 +1,11 @@
 // Adapter used by React; installed at the original bootstrap point.
 function installAiBridge() {
 window.aiBridge = {
+  navigateVoiceScreen(id) {
+    if (!["home", "bible", "kids-bible", "prayer", "ai", "apologetics", "apologetics-debate", "apologetics-coach", "my-church", "profile"].includes(id)) return false;
+    setScreen(id);
+    return appShell.dataset.activeScreen === id;
+  },
   async createDebateProjection(state) {
     let response;
     try {

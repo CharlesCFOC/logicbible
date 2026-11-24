@@ -29,7 +29,8 @@ test('Brother AI reuses the dictation field, preserves its draft and waits for f
 
     const listening = render({ dictation: { ...dictation, active: true, phase: 'listening', message: 'Listening in English…' } });
     assert.match(listening, /aria-label="Stop dictation: Message Brother AI"/);
-    assert.match(listening, /class="church-voice-meter"/);
+    assert.match(listening, /class="bible-voice-wave is-listening brother-ai-voice-wave"[\s\S]*class="message-composer"[\s\S]*<textarea/);
+    assert.doesNotMatch(idle, /brother-ai-voice-wave/);
     assert.match(listening, /type="submit"[^>]*disabled/);
 
     const finishing = render({ dictation: { ...dictation, active: true, phase: 'finishing' } });

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { createDictationSession } from '../shared/speech-dictation.js';
 import { stopReadAloud } from './read-aloud.jsx';
 
-export function useDictation({ values, onChange, language = 'en', maxLength = 1200 }) {
+export function useDictation({ values, onChange, language = 'en', maxLength = 1200, silenceTimeoutMs = 0 }) {
   const [state, setState] = useState({ field: null, phase: 'idle', message: '', interim: '', error: false });
   const session = useRef(null);
   const valuesRef = useRef(values);
@@ -36,6 +36,7 @@ export function useDictation({ values, onChange, language = 'en', maxLength = 12
       },
       onState: setState,
       maxLength,
+      silenceTimeoutMs,
     });
     session.current.start(field, language);
   }
@@ -44,5 +45,5 @@ export function useDictation({ values, onChange, language = 'en', maxLength = 12
     valuesRef.current = { ...valuesRef.current, [field]: text };
     changeRef.current(field, text);
   }
-  return { ...state, start, edit, stop: () => session.current?.stop(), active: state.phase !== 'idle' };
+  return { ...state, start, edit, stop: () => session.current?.stop(), setAudioMonitoring: enabled => session.current?.setAudioMonitoring(enabled), audioLevel: level => session.current?.audioLevel(level), active: state.phase !== 'idle' };
 }

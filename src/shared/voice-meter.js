@@ -1,5 +1,5 @@
 // The meter reads local microphone frequencies only; no audio is saved or sent.
-export function startVoiceMeter({ getStream, createContext, requestFrame, cancelFrame, onLevels, onUnavailable = () => {}, barCount = 18 }) {
+export function startVoiceMeter({ getStream, createContext, requestFrame, cancelFrame, onLevels, onVoiceLevel = () => {}, onReady = () => {}, onUnavailable = () => {}, barCount = 18 }) {
   let disposed = false;
   let stream;
   let context;
@@ -29,13 +29,19 @@ export function startVoiceMeter({ getStream, createContext, requestFrame, cancel
       await context.resume();
       if (disposed) return;
       const frequencies = new Uint8Array(analyser.frequencyBinCount);
+      const waveform = new Uint8Array(analyser.fftSize);
       const levels = new Float32Array(barCount);
       const sampleRate = Number(context.sampleRate) || 44100;
       const binHz = sampleRate / analyser.fftSize;
       const maxHz = Math.min(8000, sampleRate / 2);
+      onReady();
       function draw() {
         if (disposed) return;
         analyser.getByteFrequencyData(frequencies);
+        analyser.getByteTimeDomainData(waveform);
+        let signal = 0;
+        for (const sample of waveform) signal += ((sample - 128) / 128) ** 2;
+        onVoiceLevel(Math.sqrt(signal / waveform.length));
         // Logarithmic bands show both low voices and higher speech frequencies.
         for (let bar = 0; bar < barCount; bar++) {
           const first = Math.min(frequencies.length - 1, Math.floor(100 * (maxHz / 100) ** (bar / barCount) / binHz));

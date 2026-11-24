@@ -6,7 +6,7 @@ import { Haptics, ImpactStyle } from "@capacitor/haptics";
 import { HomeHero, HomeLibraryPanel, HomeLibraryTabs, HomePrayerCard } from "./home.jsx";
 import { SavedNoteCard } from "./saved-note-card.jsx";
 import { ProfileCloudAccount, ProfileHero, ProfileInformation, ProfilePreferences, ProfilePrayers, ProfileTabs } from "./profile.jsx";
-import { BibleChapterContent, BibleParallelControls, BibleReaderControls, BibleSelectedVerse, BibleVerseActions } from "./bible.jsx";
+import { BibleChapterContent, BibleParallelControls, BibleReaderControls, BibleSelectedVerse, BibleVerseActions, BibleVoiceSearch } from "./bible.jsx";
 import { NoteEditorContent, NoteEditorHeader, NoteEditorVerseChips, NoteToolbar } from "./notes.jsx";
 import { PageTopSpacer } from "./page-top-spacer.jsx";
 import { startMobileUpdates } from "./mobile-updates.js";
@@ -15,6 +15,9 @@ const pageTopSpacerNode = document.querySelector("[data-react-page-top-spacer-ro
 if (pageTopSpacerNode) {
   createRoot(pageTopSpacerNode).render(<PageTopSpacer />);
 }
+
+const homeVoiceNode = document.querySelector("[data-react-home-voice-root]");
+if (homeVoiceNode && window.bibleReaderBridge && window.aiBridge) createRoot(homeVoiceNode).render(<BibleVoiceSearch assistant />);
 
 const churchSpaceNode = document.querySelector("[data-react-church-root]");
 if (churchSpaceNode) mountDeferredScreen(churchSpaceNode, () => import("./church-tool.jsx"), "ChurchToolPage");

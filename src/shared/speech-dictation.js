@@ -10,7 +10,7 @@ const errorMessages = {
 
 // Rebuild the current utterance in place as recognition revises it. The prefix
 // typed before dictation stays intact, and manual edits stop late voice updates.
-export function createDictationSession({ createRecognition, getText, writeText, onState, maxLength = 1200, restartDelayMs = 250 }) {
+export function createDictationSession({ createRecognition, getText, writeText, onState, maxLength = 1200, restartDelayMs = 250, silenceTimeoutMs = 0 }) {
   let active = null;
   let disposed = false;
   function emit(session, phase, message, interim = '', error = false) {
@@ -19,7 +19,8 @@ export function createDictationSession({ createRecognition, getText, writeText, 
   function detach(session) {
     clearTimeout(session.stopTimer);
     clearTimeout(session.restartTimer);
-    for (const handler of ['onstart', 'onresult', 'onerror', 'onend', 'onspeechend']) session.recognition[handler] = null;
+    clearTimeout(session.silenceTimer);
+    for (const handler of ['onstart', 'onresult', 'onerror', 'onend', 'onspeechstart', 'onspeechend']) session.recognition[handler] = null;
     if (active === session) active = null;
   }
   function finish(session, message, error = false, abort = false) {
@@ -32,14 +33,15 @@ export function createDictationSession({ createRecognition, getText, writeText, 
     const session = active;
     if (!session || session.stopping) return;
     session.stopping = true;
+    clearTimeout(session.silenceTimer);
     emit(session, 'finishing', 'Microphone off. Finishing your transcription…');
     if (session.restartTimer !== null) {
-      finish(session, session.received ? '' : 'Dictation stopped.');
+      finish(session, '');
       return;
     }
     session.stopTimer = setTimeout(() => finish(session, session.received ? '' : 'No text received. You can try again.', false, true), 5000);
     try { session.recognition.stop(); }
-    catch { finish(session, 'Dictation stopped. You can try again.', false, true); }
+    catch { finish(session, 'The microphone could not stop normally. You can try again.', true, true); }
   }
   function start(field, language) {
     if (disposed || active || !dictationLanguages[language]) return false;
@@ -51,14 +53,20 @@ export function createDictationSession({ createRecognition, getText, writeText, 
       return false;
     }
     const prefix = String(getText(field) || '');
-    const session = { field, recognition, prefix, lastWritten: prefix, received: false, stopping: false, limited: false, stopTimer: null, restartTimer: null };
+    const session = { field, recognition, prefix, lastWritten: prefix, received: false, stopping: false, limited: false, stopTimer: null, restartTimer: null, silenceTimer: null, audioMonitoring: false, heardVoice: false };
     active = session;
     recognition.lang = dictationLanguages[language].locale;
     recognition.continuous = true;
     recognition.interimResults = true;
     recognition.maxAlternatives = 1;
-    const listeningMessage = `Listening in ${dictationLanguages[language].label}… Click the microphone to stop.`;
+    const listeningMessage = `Listening in ${dictationLanguages[language].label}…`;
+    const scheduleSilenceStop = () => {
+      if (!silenceTimeoutMs || session.stopping || session.audioMonitoring || session.silenceTimer !== null) return;
+      session.silenceTimer = setTimeout(() => { session.silenceTimer = null; if (active === session) stop(); }, silenceTimeoutMs);
+    };
     recognition.onstart = () => { if (active === session && !session.stopping) emit(session, 'listening', listeningMessage); };
+    recognition.onspeechstart = () => { clearTimeout(session.silenceTimer); session.silenceTimer = null; };
+    recognition.onspeechend = scheduleSilenceStop;
     recognition.onresult = event => {
       if (active !== session) return;
       if (String(getText(field) || '') !== session.lastWritten) {
@@ -89,14 +97,15 @@ export function createDictationSession({ createRecognition, getText, writeText, 
       // Some browsers end even continuous recognition after a silent interval.
       // Their following end event resumes listening until the user clicks stop.
       if (event.error === 'no-speech' && !session.stopping) return;
-      finish(session, errorMessages[event.error] || (event.error === 'aborted' ? 'Dictation stopped.' : 'Dictation could not be completed. Try again.'), event.error !== 'aborted', true);
+      finish(session, errorMessages[event.error] || (event.error === 'aborted' ? '' : 'Dictation could not be completed. Try again.'), event.error !== 'aborted', true);
     };
     recognition.onend = () => {
       if (active !== session) return;
       if (session.stopping) {
-        finish(session, session.limited ? `The ${maxLength}-character limit has been reached. You can edit the text.` : session.received ? '' : 'Dictation stopped.');
+        finish(session, session.limited ? `The ${maxLength}-character limit has been reached. You can edit the text.` : '');
         return;
       }
+      if (session.received) scheduleSilenceStop();
       if (session.restartTimer !== null) return;
       session.restartTimer = setTimeout(() => {
         session.restartTimer = null;
@@ -119,6 +128,22 @@ export function createDictationSession({ createRecognition, getText, writeText, 
   function stopForEdit(field) {
     if (active?.field === field) finish(active, 'Dictation stopped so you can edit the text.', false, true);
   }
+  function setAudioMonitoring(enabled) {
+    if (!active || !silenceTimeoutMs) return;
+    active.audioMonitoring = enabled;
+    if (enabled) { clearTimeout(active.silenceTimer); active.silenceTimer = null; }
+  }
+  function audioLevel(level) {
+    const session = active;
+    if (!session || !silenceTimeoutMs || !session.audioMonitoring || session.stopping) return;
+    if (level >= .018) {
+      session.heardVoice = true;
+      clearTimeout(session.silenceTimer);
+      session.silenceTimer = null;
+    } else if (session.heardVoice && session.silenceTimer === null) {
+      session.silenceTimer = setTimeout(() => { session.silenceTimer = null; if (active === session) stop(); }, silenceTimeoutMs);
+    }
+  }
   function dispose() {
     disposed = true;
     if (active) {
@@ -127,5 +152,5 @@ export function createDictationSession({ createRecognition, getText, writeText, 
       try { session.recognition.abort(); } catch { /* Already stopped. */ }
     }
   }
-  return { start, stop, stopForEdit, dispose };
+  return { start, stop, stopForEdit, setAudioMonitoring, audioLevel, dispose };
 }

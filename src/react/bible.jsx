@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { ChapterQuiz } from "./chapter-quiz.jsx";
 import { startBibleVoiceRecorder } from "../shared/bible-voice-recorder.js";
 import { parseBibleReference } from "../shared/bible-reference.js";
-import { requestBibleVoiceTranscript, requestBibleVoiceSearch } from "./bible-voice-client.js";
+import { requestBibleVoiceTranscript, requestBibleVoiceSearch, requestVoiceAssistant, requestKidsVoiceStory } from "./bible-voice-client.js";
 
 const columnsIcon = (
   <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -117,16 +117,18 @@ export function BibleReaderControls() {
   );
 }
 
-export function BibleVoiceSearch() {
+export function BibleVoiceSearch({ assistant = false }) {
   const [state, bridge] = useBibleReaderState();
   const [open, setOpen] = useState(false);
   const [phase, setPhase] = useState("idle");
   const [message, setMessage] = useState("");
   const [transcript, setTranscript] = useState("");
   const [matches, setMatches] = useState([]);
+  const [kidsMatches, setKidsMatches] = useState([]);
   const [levels, setLevels] = useState(Array(18).fill(.12));
   const recording = useRef(null);
   const requestController = useRef(null);
+  const openingReference = useRef(false);
 
   const close = () => {
     recording.current?.cancel();
@@ -142,11 +144,11 @@ export function BibleVoiceSearch() {
   }, []);
   useEffect(() => {
     const onScreenChange = () => {
-      if (document.querySelector(".app-shell")?.dataset.activeScreen !== "bible") close();
+      if (!openingReference.current && document.querySelector(".app-shell")?.dataset.activeScreen !== (assistant ? "home" : "bible")) close();
     };
     window.addEventListener("app:screen-change", onScreenChange);
     return () => window.removeEventListener("app:screen-change", onScreenChange);
-  }, []);
+  }, [assistant]);
   useEffect(() => {
     if (!open) return undefined;
     const onKeyDown = event => { if (event.key === "Escape") close(); };
@@ -159,19 +161,34 @@ export function BibleVoiceSearch() {
     setMessage(`${reference.bookName} ${reference.chapter}:${reference.verse}`);
     void (async () => {
       try {
+        openingReference.current = true;
+        if (assistant && !window.aiBridge.navigateVoiceScreen("bible")) throw new Error("Navigation cancelled.");
         await bridge.navigateToReference(reference.bookId, reference.chapter, reference.verse);
         close();
       } catch {
         setPhase("error");
         setMessage(`Je n’ai pas pu ouvrir ${reference.bookName} ${reference.chapter}:${reference.verse}. Vérifiez la référence et réessayez.`);
-      }
+      } finally { openingReference.current = false; }
     })();
+  };
+
+  const openKidsStory = story => {
+    window.voiceKidsStoryId = story.id;
+    if (!window.aiBridge.navigateVoiceScreen("kids-bible")) {
+      delete window.voiceKidsStoryId;
+      setPhase("error");
+      setMessage("Je n’ai pas pu ouvrir Kids Bible.");
+      return;
+    }
+    document.dispatchEvent(new Event("kids:voice-story"));
+    close();
   };
 
   const start = () => {
     setOpen(true);
     setTranscript("");
     setMatches([]);
+    setKidsMatches([]);
     setMessage("");
     setPhase("starting");
     if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
@@ -214,6 +231,51 @@ export function BibleVoiceSearch() {
         const text = await requestBibleVoiceTranscript(blob, { signal: controller.signal });
         if (requestController.current !== controller) return;
         setTranscript(text);
+        if (assistant) {
+          setMessage("Je prépare votre demande…");
+          const intent = await requestVoiceAssistant(text, { signal: controller.signal });
+          if (requestController.current !== controller) return;
+          if (intent.type === "navigate") {
+            requestController.current = null;
+            if (!window.aiBridge.navigateVoiceScreen(intent.screen)) throw new Error("Je n’ai pas pu ouvrir cette page.");
+            close();
+            return;
+          }
+          if (intent.type === "prayer") {
+            window.prayerBridge.setPageTab("request");
+            if (window.prayerBridge.getSnapshot().pageTab !== "request") throw new Error("Je n’ai pas pu ouvrir le formulaire de prière.");
+            window.voicePrayerDraft = { title: intent.title, text: intent.text, category: intent.category };
+            requestController.current = null;
+            if (!window.aiBridge.navigateVoiceScreen("prayer")) {
+              delete window.voicePrayerDraft;
+              throw new Error("Je n’ai pas pu ouvrir la page de prière.");
+            }
+            document.dispatchEvent(new Event("prayer:voice-draft"));
+            close();
+            return;
+          }
+          if (intent.type === "kids_story") {
+            setPhase("searching");
+            const result = await requestKidsVoiceStory(text, { signal: controller.signal });
+            if (requestController.current !== controller) return;
+            requestController.current = null;
+            if (result.certain && result.matches?.length === 1) openKidsStory(result.matches[0]);
+            else if (result.matches?.length) { setKidsMatches(result.matches); setPhase("choosing"); }
+            else throw new Error("Je n’ai pas trouvé cette histoire dans Kids Bible. Essayez de préciser l’histoire.");
+            return;
+          }
+          if (intent.type === "question") {
+            setMessage("Brother AI prépare sa réponse…");
+            const history = window.aiBridge.getSnapshot().messages.filter(item => !item.pending).slice(-24);
+            await window.aiBridge.send(text, history);
+            if (requestController.current !== controller) return;
+            requestController.current = null;
+            if (!window.aiBridge.navigateVoiceScreen("ai")) throw new Error("La réponse est enregistrée dans Brother AI, mais la page n’a pas pu s’ouvrir.");
+            close();
+            return;
+          }
+          if (intent.type !== "reference") throw new Error("Je peux ouvrir une page, un verset ou une histoire Kids Bible, préparer une prière ou transmettre une question à Brother AI.");
+        }
         const reference = parseBibleReference(text, state.books);
         if (reference) {
           requestController.current = null;
@@ -244,19 +306,19 @@ export function BibleVoiceSearch() {
   };
 
   return <>
-    <button type="button" className="icon-button bible-glass-control bible-glass-search bible-voice-button" aria-label="Chercher un verset par la voix" title="Chercher un verset par la voix" onClick={start}>
+    <button type="button" className={assistant ? "home-voice-assistant" : "icon-button bible-glass-control bible-glass-search bible-voice-button"} aria-label={assistant ? "Ouvrir l’assistant vocal" : "Chercher un verset par la voix"} title={assistant ? "Assistant vocal" : "Chercher un verset par la voix"} onClick={start}>
       <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="2" width="6" height="12" rx="3" /><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" /></svg>
     </button>
-    {open && createPortal(<div className="bible-voice-overlay" role="dialog" aria-modal="true" aria-label="Recherche vocale de verset">
+    {open && createPortal(<div className="bible-voice-overlay" role="dialog" aria-modal="true" aria-label={assistant ? "Assistant vocal" : "Recherche vocale de verset"}>
       <button type="button" className="bible-voice-dismiss" aria-label="Fermer" onClick={close} />
       <section className="bible-voice-listening">
-        <p className="bible-voice-prompt">Ask me to search a scripture</p>
+        <p className="bible-voice-prompt">{assistant ? "Ask a question or open a page" : "Ask me to search a scripture"}</p>
         <div className={`bible-voice-wave${phase === "listening" ? " is-listening" : !["error", "choosing"].includes(phase) ? " is-processing" : ""}`} aria-hidden="true">
           {levels.map((level, index) => <i key={index} style={{ "--voice-level": `${Math.max(.12, level) * 100}%`, "--voice-delay": `${index * 24}ms` }} />)}
         </div>
         <div className="bible-voice-feedback">
           {transcript && <p className="bible-voice-transcript" aria-live="polite">{transcript}</p>}
-          {phase === "choosing" && <div className="bible-voice-matches"><p>Quel passage cherchez-vous ?</p>{matches.map(item => <button className="bible-voice-retry" type="button" key={`${item.bookId}.${item.chapter}.${item.verse}`} onClick={() => { setMatches([]); openReference(item); }}>{item.bookName} {item.chapter}:{item.verse}</button>)}</div>}
+          {phase === "choosing" && <div className="bible-voice-matches"><p>{kidsMatches.length ? "Quelle histoire cherchez-vous ?" : "Quel passage cherchez-vous ?"}</p>{kidsMatches.map(item => <button className="bible-voice-retry" type="button" key={item.id} onClick={() => { setKidsMatches([]); openKidsStory(item); }}>{item.title} · {item.reference}</button>)}{matches.map(item => <button className="bible-voice-retry" type="button" key={`${item.bookId}.${item.chapter}.${item.verse}`} onClick={() => { setMatches([]); openReference(item); }}>{item.bookName} {item.chapter}:{item.verse}</button>)}</div>}
           {phase === "error" && <>
             <p className="bible-voice-status" role="alert">{message}</p>
             <button className="bible-voice-retry" type="button" onClick={start}>Réessayer</button>

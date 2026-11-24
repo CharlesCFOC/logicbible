@@ -44,6 +44,48 @@ test('speech pauses keep the microphone on until the user stops it, including tr
   assert.equal(text.context, 'Un groupe de jeunes adultes.');assert.equal(states.at(-1).phase, 'idle');session.dispose();
 });
 
+test('optional silence timeout resets when speech resumes and keeps the final transcription', async () => {
+  const { session, text, states, recordings } = setup({ silenceTimeoutMs: 50 });
+  session.start('context', 'en');
+  const recognition = recordings[0];
+  recognition.onresult({ results: [result('First words', false)] });
+  recognition.onspeechend();
+  await new Promise(resolve => setTimeout(resolve, 20));
+  recognition.onspeechstart();
+  await new Promise(resolve => setTimeout(resolve, 60));
+  assert.equal(recognition.stopped, undefined);
+  recognition.onspeechend();
+  await new Promise(resolve => setTimeout(resolve, 70));
+  assert.equal(recognition.stopped, true);
+  assert.equal(states.at(-1).phase, 'finishing');
+  recognition.onresult({ results: [result('First words and the rest.', true)] });
+  recognition.onend();
+  assert.equal(text.context, 'First words and the rest.');
+  assert.equal(states.at(-1).phase, 'idle');
+  session.dispose();
+});
+
+test('microphone audio stops dictation after silence even without speech recognition events', async () => {
+  const { session, text, recordings } = setup({ silenceTimeoutMs: 40 });
+  session.start('context', 'en');
+  const recognition = recordings[0];
+  session.setAudioMonitoring(true);
+  session.audioLevel(.04);
+  recognition.onresult({ results: [result('Hello', false)] });
+  session.audioLevel(0);
+  await new Promise(resolve => setTimeout(resolve, 20));
+  session.audioLevel(.04);
+  await new Promise(resolve => setTimeout(resolve, 50));
+  assert.equal(recognition.stopped, undefined);
+  session.audioLevel(0);
+  await new Promise(resolve => setTimeout(resolve, 60));
+  assert.equal(recognition.stopped, true);
+  recognition.onresult({ results: [result('Hello there.', true)] });
+  recognition.onend();
+  assert.equal(text.context, 'Hello there.');
+  session.dispose();
+});
+
 test('browser silence timeouts resume recognition and append new speech without duplication', async () => {
   const { session, text, states, recordings } = setup({ restartDelayMs: 5 });session.start('context', 'en');
   const recognition = recordings[0];

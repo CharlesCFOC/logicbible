@@ -464,6 +464,9 @@
 
 
 /* Fade the Home hero image into the phone background at the bottom. */
+.home-voice-assistant { position: absolute; z-index: 7; top: calc(16px + var(--page-top-space, 32px)); right: 16px; display: grid; place-items: center; width: 48px; height: 48px; padding: 12px; border: 0; border-radius: 14px; color: #f5fbff; background: rgba(12, 39, 66, .86); box-shadow: 0 4px 16px rgba(0, 12, 28, .3); }
+.home-voice-assistant svg { width: 24px; height: 24px; }
+.home-voice-assistant:focus-visible { outline: 2px solid #8bdcff; outline-offset: 3px; }
 .app-shell[data-app-background="black"] .home-hero-image {
   background: transparent !important;
 }

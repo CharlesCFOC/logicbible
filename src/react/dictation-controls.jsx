@@ -2,24 +2,31 @@ import React, { useEffect, useRef, useState } from 'react';
 import { startVoiceMeter } from '../shared/voice-meter.js';
 import { ReadAloudButton } from './read-aloud.jsx';
 
-function VoiceMeter({ active }) {
+export function VoiceMeter({ active, dictation, bibleStyle = false }) {
   const canvasRef = useRef(null);
+  const waveRef = useRef(null);
   const [unavailable, setUnavailable] = useState(false);
   useEffect(() => {
     if (!active) return;
     const canvas = canvasRef.current;
     const drawing = canvas?.getContext('2d');
-    if (!drawing) return;
+    if (!drawing && !waveRef.current) return;
     setUnavailable(false);
-    const gradient = drawing.createLinearGradient(0, 0, canvas.width, 0);
-    gradient.addColorStop(0, '#a855f7');
-    gradient.addColorStop(1, '#e879f9');
+    const gradient = drawing?.createLinearGradient(0, 0, canvas.width, 0);
+    gradient?.addColorStop(0, '#a855f7');
+    gradient?.addColorStop(1, '#e879f9');
     return startVoiceMeter({
       getStream: () => navigator.mediaDevices.getUserMedia({ audio: true }),
       createContext: () => new (window.AudioContext || window.webkitAudioContext)(),
       requestFrame: callback => window.requestAnimationFrame(callback),
       cancelFrame: id => window.cancelAnimationFrame(id),
+      onReady: () => dictation.setAudioMonitoring?.(true),
+      onVoiceLevel: level => dictation.audioLevel?.(level),
       onLevels: levels => {
+        if (bibleStyle) {
+          waveRef.current?.querySelectorAll('i').forEach((bar, index) => bar.style.setProperty('--voice-level', `${Math.max(.12, levels[index] || 0) * 100}%`));
+          return;
+        }
         drawing.clearRect(0, 0, canvas.width, canvas.height);
         drawing.fillStyle = gradient;
         levels.forEach((level, index) => {
@@ -29,13 +36,14 @@ function VoiceMeter({ active }) {
           drawing.fill();
         });
       },
-      onUnavailable: () => setUnavailable(true),
+      onUnavailable: () => { dictation.setAudioMonitoring?.(false); setUnavailable(true); },
     });
-  }, [active]);
+  }, [active, bibleStyle]);
+  if (bibleStyle) return <div ref={waveRef} className="bible-voice-wave is-listening brother-ai-voice-wave" hidden={unavailable} aria-hidden="true">{Array.from({ length: 18 }, (_, index) => <i key={index} style={{ '--voice-level': '12%' }} />)}</div>;
   return <div className="church-voice-meter" hidden={unavailable} aria-hidden="true"><canvas ref={canvasRef} width="216" height="56" /></div>;
 }
 
-export function DictationControls({ field, fieldId, label, dictation, disabled = false, showReadAloud = true, inputClassName = '', children }) {
+export function DictationControls({ field, fieldId, label, dictation, disabled = false, showReadAloud = true, inputClassName = '', externalVoiceMeter = false, children }) {
   const selected = dictation.field === field;
   const listening = selected && ['starting', 'listening'].includes(dictation.phase);
   const finishing = selected && dictation.phase === 'finishing';
@@ -44,7 +52,7 @@ export function DictationControls({ field, fieldId, label, dictation, disabled =
   return <div className={`church-dictation${listening ? ' is-listening' : ''}`}>
     <div className={`church-dictation-input${inputClassName ? ` ${inputClassName}` : ''}`}>
       {children}
-      {listening && <VoiceMeter active={dictation.phase === 'listening'} />}
+      {listening && !externalVoiceMeter && <VoiceMeter active={dictation.phase === 'listening'} dictation={dictation} />}
       <button type="button" className="church-dictation-button" disabled={disabled || finishing || (dictation.active && !selected)} onClick={() => listening ? dictation.stop() : dictation.start(field)} aria-label={actionLabel} title={actionLabel} aria-pressed={listening} aria-controls={fieldId} aria-describedby={statusId}>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{listening ? <rect x="6" y="6" width="12" height="12" rx="2" /> : <><rect x="9" y="2" width="6" height="12" rx="3" /><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" /></>}</svg>
       </button>
