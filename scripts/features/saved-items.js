@@ -353,6 +353,7 @@ async function openSavedVerse(row) {
     ? readerState.versions.find((version) => version.abbreviation === row.version)
     : null;
   if (matchingVersion) {
+    pendingPreferredBibleVersion = null;
     readerState.versionId = matchingVersion.id;
     renderVersionOptions();
   }

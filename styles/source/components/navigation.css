@@ -42,16 +42,23 @@
   box-shadow: none !important;
 }
 
-/* Keep Home centered and visually prominent in the seven-item navigation. */
+/* Give Home and the voice shortcut matching surfaces. */
 .app-shell .bottom-nav button[data-nav="home"],
-.app-shell[data-app-background] .bottom-nav button[data-nav="home"] {
+.app-shell[data-app-background] .bottom-nav button[data-nav="home"],
+.app-shell .bottom-nav button.bottom-nav-voice,
+.app-shell[data-app-background] .bottom-nav button.bottom-nav-voice {
   z-index: 1;
-  transform: scale(1.06) !important;
-  border-radius: 20px;
+  transform: none !important;
+  margin: 0 2px;
+  border-radius: 10px;
   background: rgba(76, 153, 194, 0.3) !important;
   background-image: linear-gradient(180deg, rgba(125, 210, 247, 0.2), rgba(33, 87, 116, 0.34)) !important;
   box-shadow: inset 0 1px 0 rgba(236, 250, 255, 0.2), 0 4px 12px rgba(0, 0, 0, 0.16) !important;
 }
+.app-shell .bottom-nav button[data-nav="home"] > span,
+.app-shell .bottom-nav button.bottom-nav-voice > span { display: none !important; }
+.app-shell .bottom-nav button[data-nav="home"] > svg,
+.app-shell .bottom-nav button.bottom-nav-voice > svg { width: 25px; height: 25px; }
 
 .app-shell .bottom-nav button[data-nav="home"].is-active,
 .app-shell[data-app-background] .bottom-nav button[data-nav="home"].is-active {

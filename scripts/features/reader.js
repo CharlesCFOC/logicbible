@@ -445,7 +445,7 @@ async function loadChapter() {
   bibleChapterLoading = true;
   bibleChapterError = "";
   renderLoading();
-  setLocalValue("brother.version", readerState.versionId);
+  if (!pendingPreferredBibleVersion) setLocalValue("brother.version", readerState.versionId);
   setLocalValue("brother.book", readerState.bookId);
   setLocalValue("brother.chapter", String(readerState.chapter));
   updateHomeContinueReading();
@@ -615,6 +615,10 @@ async function loadRemoteVersions() {
       ...LOCAL_VERSIONS,
       ...remoteVersions.filter((version) => !/\bWEB\b|World English Bible/i.test(`${version.abbreviation || ""} ${version.name || ""}`)),
     ]);
+    if (pendingPreferredBibleVersion && readerState.versions.some(version => version.id === pendingPreferredBibleVersion)) {
+      readerState.versionId = pendingPreferredBibleVersion;
+      pendingPreferredBibleVersion = null;
+    }
     renderVersionOptions();
     loadChapter();
   } catch {

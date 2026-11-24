@@ -9529,7 +9529,6 @@ function Re() {
 		});
 	};
 	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [
-		/* @__PURE__ */ (0, h.jsx)(ze, {}),
 		/* @__PURE__ */ (0, h.jsx)("label", {
 			className: "reader-select-label bible-glass-select",
 			"aria-label": "Bible version",
@@ -9639,37 +9638,37 @@ function Re() {
 	] });
 }
 function ze({ assistant: e = !1 }) {
-	let [t, n] = Le(), [r, i] = (0, p.useState)(!1), [a, o] = (0, p.useState)("idle"), [s, c] = (0, p.useState)(""), [l, u] = (0, p.useState)(""), [d, f] = (0, p.useState)([]), [m, g] = (0, p.useState)([]), [_, y] = (0, p.useState)(Array(18).fill(.12)), b = (0, p.useRef)(null), x = (0, p.useRef)(null), S = (0, p.useRef)(!1), C = () => {
+	let [t, n] = Le(), [r, i] = (0, p.useState)(!1), [a, o] = (0, p.useState)("idle"), [s, c] = (0, p.useState)(""), [l, u] = (0, p.useState)(""), [d, f] = (0, p.useState)([]), [m, g] = (0, p.useState)([]), [_, y] = (0, p.useState)(Array(18).fill(.12)), b = (0, p.useRef)(null), x = (0, p.useRef)(null), S = (0, p.useRef)(!1), C = (0, p.useRef)(null), w = () => {
 		b.current?.cancel(), b.current = null, x.current?.abort(), x.current = null, i(!1), o("idle");
 	};
 	(0, p.useEffect)(() => () => {
 		b.current?.cancel(), x.current?.abort();
 	}, []), (0, p.useEffect)(() => {
 		let t = () => {
-			!S.current && document.querySelector(".app-shell")?.dataset.activeScreen !== (e ? "home" : "bible") && C();
+			!S.current && document.querySelector(".app-shell")?.dataset.activeScreen !== (e ? "home" : "bible") && w();
 		};
 		return window.addEventListener("app:screen-change", t), () => window.removeEventListener("app:screen-change", t);
 	}, [e]), (0, p.useEffect)(() => {
 		if (!r) return;
 		let e = (e) => {
-			e.key === "Escape" && C();
+			e.key === "Escape" && w();
 		};
 		return window.addEventListener("keydown", e), () => window.removeEventListener("keydown", e);
 	}, [r]);
-	let w = (t) => {
+	let T = (t) => {
 		o("opening"), c(`${t.bookName} ${t.chapter}:${t.verse}`), (async () => {
 			try {
 				if (S.current = !0, e && !window.aiBridge.navigateVoiceScreen("bible")) throw Error("Navigation cancelled.");
-				await n.navigateToReference(t.bookId, t.chapter, t.verse), C();
+				await n.navigateToReference(t.bookId, t.chapter, t.verse), w();
 			} catch {
 				o("error"), c(`Je n’ai pas pu ouvrir ${t.bookName} ${t.chapter}:${t.verse}. Vérifiez la référence et réessayez.`);
 			} finally {
 				S.current = !1;
 			}
 		})();
-	}, T = (e) => {
-		window.voiceKidsStoryId = e.id, window.aiBridge.navigateVoiceScreen("kids-bible") ? (document.dispatchEvent(new Event("kids:voice-story")), C()) : (delete window.voiceKidsStoryId, o("error"), c("Je n’ai pas pu ouvrir Kids Bible."));
-	}, ee = () => {
+	}, ee = (e) => {
+		window.voiceKidsStoryId = e.id, window.aiBridge.navigateVoiceScreen("kids-bible") ? (document.dispatchEvent(new Event("kids:voice-story")), w()) : (delete window.voiceKidsStoryId, o("error"), c("Je n’ai pas pu ouvrir Kids Bible."));
+	}, E = () => {
 		if (i(!0), u(""), f([]), g([]), c(""), o("starting"), !navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
 			o("error"), c("L’enregistrement audio n’est pas disponible dans ce navigateur.");
 			return;
@@ -9717,7 +9716,7 @@ function ze({ assistant: e = !1 }) {
 					if (x.current !== i) return;
 					if (e.type === "navigate") {
 						if (x.current = null, !window.aiBridge.navigateVoiceScreen(e.screen)) throw Error("Je n’ai pas pu ouvrir cette page.");
-						C();
+						w();
 						return;
 					}
 					if (e.type === "prayer") {
@@ -9727,14 +9726,14 @@ function ze({ assistant: e = !1 }) {
 							text: e.text,
 							category: e.category
 						}, x.current = null, !window.aiBridge.navigateVoiceScreen("prayer")) throw delete window.voicePrayerDraft, Error("Je n’ai pas pu ouvrir la page de prière.");
-						document.dispatchEvent(new Event("prayer:voice-draft")), C();
+						document.dispatchEvent(new Event("prayer:voice-draft")), w();
 						return;
 					}
 					if (e.type === "kids_story") {
 						o("searching");
 						let e = await Me(a, { signal: i.signal });
 						if (x.current !== i) return;
-						if (x.current = null, e.certain && e.matches?.length === 1) T(e.matches[0]);
+						if (x.current = null, e.certain && e.matches?.length === 1) ee(e.matches[0]);
 						else if (e.matches?.length) g(e.matches), o("choosing");
 						else throw Error("Je n’ai pas trouvé cette histoire dans Kids Bible. Essayez de préciser l’histoire.");
 						return;
@@ -9744,20 +9743,20 @@ function ze({ assistant: e = !1 }) {
 						let e = window.aiBridge.getSnapshot().messages.filter((e) => !e.pending).slice(-24);
 						if (await window.aiBridge.send(a, e), x.current !== i) return;
 						if (x.current = null, !window.aiBridge.navigateVoiceScreen("ai")) throw Error("La réponse est enregistrée dans Brother AI, mais la page n’a pas pu s’ouvrir.");
-						C();
+						w();
 						return;
 					}
 					if (e.type !== "reference") throw Error("Je peux ouvrir une page, un verset ou une histoire Kids Bible, préparer une prière ou transmettre une question à Brother AI.");
 				}
 				let s = Ee(a, t.books);
-				if (s) x.current = null, w(s);
+				if (s) x.current = null, T(s);
 				else {
 					o("searching");
 					let e = await Ae(a, { signal: i.signal });
 					if (x.current !== i) return;
 					x.current = null;
 					let n = (e.matches || []).filter((e) => t.books.some((t) => t.id === e.bookId && e.chapter <= t.chapters));
-					e.certain && n.length === 1 ? w(n[0]) : n.length ? (f(n), o("choosing")) : (o("error"), c("Je n’ai pas trouvé de verset précis. Ajoutez quelques mots ou le contexte du passage."));
+					e.certain && n.length === 1 ? T(n[0]) : n.length ? (f(n), o("choosing")) : (o("error"), c("Je n’ai pas trouvé de verset précis. Ajoutez quelques mots ou le contexte du passage."));
 				}
 			} catch (e) {
 				if (e.name === "AbortError") return;
@@ -9765,12 +9764,16 @@ function ze({ assistant: e = !1 }) {
 			}
 		})();
 	};
-	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [/* @__PURE__ */ (0, h.jsx)("button", {
+	return C.current = E, (0, p.useEffect)(() => {
+		if (!e) return;
+		let t = () => C.current?.();
+		return window.addEventListener("app:voice-assistant", t), () => window.removeEventListener("app:voice-assistant", t);
+	}, [e]), /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [!e && /* @__PURE__ */ (0, h.jsx)("button", {
 		type: "button",
-		className: e ? "home-voice-assistant" : "icon-button bible-glass-control bible-glass-search bible-voice-button",
-		"aria-label": e ? "Ouvrir l’assistant vocal" : "Chercher un verset par la voix",
-		title: e ? "Assistant vocal" : "Chercher un verset par la voix",
-		onClick: ee,
+		className: "icon-button bible-glass-control bible-glass-search bible-voice-button",
+		"aria-label": "Chercher un verset par la voix",
+		title: "Chercher un verset par la voix",
+		onClick: E,
 		children: /* @__PURE__ */ (0, h.jsxs)("svg", {
 			viewBox: "0 0 24 24",
 			"aria-hidden": "true",
@@ -9796,7 +9799,7 @@ function ze({ assistant: e = !1 }) {
 			type: "button",
 			className: "bible-voice-dismiss",
 			"aria-label": "Fermer",
-			onClick: C
+			onClick: w
 		}), /* @__PURE__ */ (0, h.jsxs)("section", {
 			className: "bible-voice-listening",
 			children: [
@@ -9828,7 +9831,7 @@ function ze({ assistant: e = !1 }) {
 									className: "bible-voice-retry",
 									type: "button",
 									onClick: () => {
-										g([]), T(e);
+										g([]), ee(e);
 									},
 									children: [
 										e.title,
@@ -9840,7 +9843,7 @@ function ze({ assistant: e = !1 }) {
 									className: "bible-voice-retry",
 									type: "button",
 									onClick: () => {
-										f([]), w(e);
+										f([]), T(e);
 									},
 									children: [
 										e.bookName,
@@ -9859,7 +9862,7 @@ function ze({ assistant: e = !1 }) {
 						}), /* @__PURE__ */ (0, h.jsx)("button", {
 							className: "bible-voice-retry",
 							type: "button",
-							onClick: ee,
+							onClick: E,
 							children: "Réessayer"
 						})] })
 					]
@@ -10591,9 +10594,9 @@ window.renderProfileSavedNoteCards = (e, t, n) => {
 };
 var yt = [
 	[
-		"my-church",
-		"Church Tool",
-		"church"
+		"kids-bible",
+		"Kids Bible",
+		"image"
 	],
 	[
 		"ai",
@@ -10606,9 +10609,9 @@ var yt = [
 		"shield"
 	],
 	[
-		"home",
-		"Home",
-		"home"
+		"prayer",
+		"Prayer",
+		"heart"
 	],
 	[
 		"bible",
@@ -10616,14 +10619,9 @@ var yt = [
 		"book"
 	],
 	[
-		"kids-bible",
-		"Kids Bible",
-		"image"
-	],
-	[
-		"prayer",
-		"Prayer",
-		"heart"
+		"home",
+		"Home",
+		"home"
 	]
 ], bt = {
 	home: [
@@ -10645,12 +10643,10 @@ var yt = [
 	],
 	shield: ["M12 3 20 6v5c0 5.2-3.4 8.8-8 10-4.6-1.2-8-4.8-8-10V6z", "m8.5 12 2.2 2.2 4.8-5"],
 	user: ["M20 21a8 8 0 0 0-16 0", "M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8"],
-	church: [
-		"M3 21h18",
-		"M5 21V10l7-5 7 5v11",
-		"M9 21v-6h6v6",
-		"M12 2v3",
-		"M10 4h4"
+	mic: [
+		"M9 5a3 3 0 0 1 6 0v7a3 3 0 0 1-6 0z",
+		"M5 10v2a7 7 0 0 0 14 0v-2",
+		"M12 19v3m-4 0h8"
 	]
 };
 function xt({ name: e, hasActiveGradient: t = !1 }) {
@@ -10718,17 +10714,29 @@ function Ct() {
 	}, i = (e) => {
 		e.pointerType === "touch" && (window.appButtonHaptic || navigator.vibrate?.(8));
 	};
-	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [yt.map(([e, n, a]) => /* @__PURE__ */ (0, h.jsxs)("button", {
-		className: t === e ? "is-active" : "",
-		"data-nav": e,
-		type: "button",
-		onPointerDown: i,
-		onClick: () => r(e),
-		children: [/* @__PURE__ */ (0, h.jsx)(xt, {
-			name: a,
-			hasActiveGradient: t === e && e !== "home"
-		}), /* @__PURE__ */ (0, h.jsx)("span", { children: n })]
-	}, e)), t === "bible" && /* @__PURE__ */ (0, h.jsx)(St, {})] });
+	return /* @__PURE__ */ (0, h.jsxs)(h.Fragment, { children: [
+		yt.map(([e, n, a]) => /* @__PURE__ */ (0, h.jsxs)("button", {
+			className: t === e ? "is-active" : "",
+			"data-nav": e,
+			type: "button",
+			"aria-label": e === "home" ? n : void 0,
+			onPointerDown: i,
+			onClick: () => r(e),
+			children: [/* @__PURE__ */ (0, h.jsx)(xt, {
+				name: a,
+				hasActiveGradient: t === e && e !== "home"
+			}), /* @__PURE__ */ (0, h.jsx)("span", { children: n })]
+		}, e)),
+		/* @__PURE__ */ (0, h.jsxs)("button", {
+			type: "button",
+			className: "bottom-nav-voice",
+			"aria-label": "Open voice assistant",
+			onPointerDown: i,
+			onClick: () => window.dispatchEvent(new Event("app:voice-assistant")),
+			children: [/* @__PURE__ */ (0, h.jsx)(xt, { name: "mic" }), /* @__PURE__ */ (0, h.jsx)("span", { children: "Voice" })]
+		}),
+		t === "bible" && /* @__PURE__ */ (0, h.jsx)(St, {})
+	] });
 }
 var wt = document.querySelector("[data-react-navigation-root]");
 wt && (0, m.createRoot)(wt).render(/* @__PURE__ */ (0, h.jsx)(Ct, {}));

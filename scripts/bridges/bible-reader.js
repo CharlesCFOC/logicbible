@@ -1,5 +1,7 @@
 // Adapter used by React; installed at the original bootstrap point.
 function installBibleReaderBridge() {
+let voiceHighlightTimer = null;
+let voiceHighlightedVerse = null;
 window.bibleReaderBridge = {
   async prepareStudy(bookId, chapterNumber) {
     const book = BOOKS.find(item => item.id === bookId);
@@ -34,8 +36,15 @@ window.bibleReaderBridge = {
     if (!target) throw new Error("Verse not found.");
     document.querySelector("#bible")?.scrollTo({ top: 0, behavior: "instant" });
     target.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (voiceHighlightTimer !== null) window.clearTimeout(voiceHighlightTimer);
+    voiceHighlightedVerse?.classList.remove("is-voice-target");
+    voiceHighlightedVerse = target;
     target.classList.add("is-voice-target");
-    window.setTimeout(() => target.classList.remove("is-voice-target"), 2600);
+    voiceHighlightTimer = window.setTimeout(() => {
+      target.classList.remove("is-voice-target");
+      if (voiceHighlightedVerse === target) voiceHighlightedVerse = null;
+      voiceHighlightTimer = null;
+    }, 4000);
   },
   openStudy() {
     setScreen("bible");
@@ -77,6 +86,7 @@ window.bibleReaderBridge = {
     };
   },
   setVersion(value) {
+    pendingPreferredBibleVersion = null;
     readerState.versionId = value;
     renderParallelOptions();
     loadChapter();

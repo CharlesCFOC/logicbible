@@ -63,13 +63,12 @@ window.unmountProfileSavedNoteCards = (container) => {
 };
 
 const navigationItems = [
-  ["my-church", "Church Tool", "church"],
+  ["kids-bible", "Kids Bible", "image"],
   ["ai", "Brother AI", "sparkles"],
   ["apologetics", "Debate", "shield"],
-  ["home", "Home", "home"],
-  ["bible", "Bible", "book"],
-  ["kids-bible", "Kids Bible", "image"],
   ["prayer", "Prayer", "heart"],
+  ["bible", "Bible", "book"],
+  ["home", "Home", "home"],
 ];
 
 const iconPaths = {
@@ -80,7 +79,7 @@ const iconPaths = {
   sparkles: ["m12 3-1.3 5.7L5 10l5.7 1.3L12 17l1.3-5.7L19 10l-5.7-1.3z", "m5 17-.6 2.4L2 20l2.4.6L5 23l.6-2.4L8 20l-2.4-.6z", "m19 3-.5 1.5L17 5l1.5.5L19 7l.5-1.5L21 5l-1.5-.5z"],
   shield: ["M12 3 20 6v5c0 5.2-3.4 8.8-8 10-4.6-1.2-8-4.8-8-10V6z", "m8.5 12 2.2 2.2 4.8-5"],
   user: ["M20 21a8 8 0 0 0-16 0", "M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8"],
-  church: ["M3 21h18", "M5 21V10l7-5 7 5v11", "M9 21v-6h6v6", "M12 2v3", "M10 4h4"],
+  mic: ["M9 5a3 3 0 0 1 6 0v7a3 3 0 0 1-6 0z", "M5 10v2a7 7 0 0 0 14 0v-2", "M12 19v3m-4 0h8"],
 };
 
 function NavigationIcon({ name, hasActiveGradient = false }) {
@@ -168,11 +167,14 @@ function BottomNavigation() {
   return (
     <>
       {navigationItems.map(([id, label, icon]) => (
-        <button key={id} className={activeScreen === id ? "is-active" : ""} data-nav={id} type="button" onPointerDown={triggerNavigationHaptic} onClick={() => navigate(id)}>
+        <button key={id} className={activeScreen === id ? "is-active" : ""} data-nav={id} type="button" aria-label={id === "home" ? label : undefined} onPointerDown={triggerNavigationHaptic} onClick={() => navigate(id)}>
           <NavigationIcon name={icon} hasActiveGradient={activeScreen === id && id !== "home"} />
           <span>{label}</span>
         </button>
       ))}
+      <button type="button" className="bottom-nav-voice" aria-label="Open voice assistant" onPointerDown={triggerNavigationHaptic} onClick={() => window.dispatchEvent(new Event("app:voice-assistant"))}>
+        <NavigationIcon name="mic" /><span>Voice</span>
+      </button>
       {activeScreen === "bible" && <BibleReadingProgress />}
     </>
   );

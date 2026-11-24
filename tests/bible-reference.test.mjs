@@ -30,9 +30,10 @@ test('voice references resolve French, English, and numeric chapter and verse ph
 
 test('Bible bridge loads the requested chapter and scrolls to the matching verse', async () => {
   const calls = [];
+  let finishHighlight;
   const target = {
     dataset: { verseNumber: '16' },
-    classList: { add: name => calls.push(['highlight', name]) },
+    classList: { add: name => calls.push(['highlight', name]), remove: name => calls.push(['remove', name]) },
     scrollIntoView: options => calls.push(['scroll', options]),
   };
   const bibleScreen = { scrollTo: options => calls.push(['top', options]) };
@@ -48,7 +49,7 @@ test('Bible bridge loads the requested chapter and scrolls to the matching verse
       querySelectorAll: () => [target],
       querySelector: () => bibleScreen,
     },
-    window: { setTimeout: () => 1 },
+    window: { setTimeout: (callback, delay) => { finishHighlight = callback; calls.push(['timer', delay]); return 1; } },
   });
   vm.runInContext(readFileSync(new URL('../scripts/bridges/bible-reader.js', import.meta.url), 'utf8'), context);
   context.installBibleReaderBridge();
@@ -60,4 +61,7 @@ test('Bible bridge loads the requested chapter and scrolls to the matching verse
   assert.ok(calls.some(([name]) => name === 'parallel-options'));
   assert.ok(calls.some(([name, options]) => name === 'scroll' && options.block === 'center'));
   assert.ok(calls.some(([name]) => name === 'highlight'));
+  assert.ok(calls.some(([name, delay]) => name === 'timer' && delay === 4000));
+  finishHighlight();
+  assert.ok(calls.some(([name, value]) => name === 'remove' && value === 'is-voice-target'));
 });

@@ -320,6 +320,9 @@ const readerState = {
   parallelEnabled: localStorage.getItem("brother.parallel") === "true",
   parallelVersionIds: readJson("brother.parallelVersions", ["local-kjv"]),
 };
+// Remote versions arrive after the initial local menu. Keep the saved choice
+// while the reader temporarily displays a locally available version.
+let pendingPreferredBibleVersion = LOCAL_VERSIONS.some(version => version.id === readerState.versionId) ? null : readerState.versionId;
 let chapterRequestId = 0;
 let remoteBibleVersions = [];
 const bibleChapterCache = new Map();

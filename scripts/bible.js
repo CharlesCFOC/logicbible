@@ -6,6 +6,7 @@ function initReader() {
   renderChapterOptions();
 
   versionSelect.addEventListener("change", () => {
+    pendingPreferredBibleVersion = null;
     readerState.versionId = versionSelect.value;
     renderParallelOptions();
     loadChapter();

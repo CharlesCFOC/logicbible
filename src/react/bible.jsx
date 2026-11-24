@@ -84,7 +84,6 @@ export function BibleReaderControls() {
 
   return (
     <>
-      <BibleVoiceSearch />
       <label className="reader-select-label bible-glass-select" aria-label="Bible version">
         <select className="bible-glass-select-input" value={state.versionId} onChange={(event) => bridge.setVersion(event.target.value)}>
           {state.versionOptions.map((option) => option.separator
@@ -129,6 +128,7 @@ export function BibleVoiceSearch({ assistant = false }) {
   const recording = useRef(null);
   const requestController = useRef(null);
   const openingReference = useRef(false);
+  const startRef = useRef(null);
 
   const close = () => {
     recording.current?.cancel();
@@ -305,10 +305,18 @@ export function BibleVoiceSearch({ assistant = false }) {
     })();
   };
 
+  startRef.current = start;
+  useEffect(() => {
+    if (!assistant) return undefined;
+    const openAssistant = () => startRef.current?.();
+    window.addEventListener("app:voice-assistant", openAssistant);
+    return () => window.removeEventListener("app:voice-assistant", openAssistant);
+  }, [assistant]);
+
   return <>
-    <button type="button" className={assistant ? "home-voice-assistant" : "icon-button bible-glass-control bible-glass-search bible-voice-button"} aria-label={assistant ? "Ouvrir l’assistant vocal" : "Chercher un verset par la voix"} title={assistant ? "Assistant vocal" : "Chercher un verset par la voix"} onClick={start}>
+    {!assistant && <button type="button" className="icon-button bible-glass-control bible-glass-search bible-voice-button" aria-label="Chercher un verset par la voix" title="Chercher un verset par la voix" onClick={start}>
       <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="2" width="6" height="12" rx="3" /><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" /></svg>
-    </button>
+    </button>}
     {open && createPortal(<div className="bible-voice-overlay" role="dialog" aria-modal="true" aria-label={assistant ? "Assistant vocal" : "Recherche vocale de verset"}>
       <button type="button" className="bible-voice-dismiss" aria-label="Fermer" onClick={close} />
       <section className="bible-voice-listening">

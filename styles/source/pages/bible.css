@@ -1941,12 +1941,15 @@ dialog.study-chat-dialog .study-chat-compose-row textarea { background: transpar
 .bible-voice-retry { min-height: 42px; margin-top: 12px; padding: 0 20px; border-radius: 999px; color: white; background: #234b70; font-size: 13px; font-weight: 700; }
 @keyframes bible-voice-processing { from { opacity: .35; } to { opacity: 1; } }
 .scripture-line.is-voice-target,
-.parallel-scripture-line.is-voice-target { position: relative; z-index: 2; border-radius: 12px; animation: bible-voice-target 2.4s ease both; }
+.parallel-scripture-line.is-voice-target { position: relative; z-index: 2; }
+.scripture-line.is-voice-target::before,
+.parallel-scripture-line.is-voice-target::before { position: absolute; z-index: 1; inset: 0; border-radius: 12px; background: rgba(93, 185, 235, .32); content: ""; pointer-events: none; animation: bible-voice-target 4s ease both; }
 
 @keyframes bible-voice-fade-in { from { opacity: 0; } to { opacity: 1; } }
-@keyframes bible-voice-target { 0%, 100% { background-color: transparent; box-shadow: none; } 18%, 70% { background-color: rgba(128, 184, 221, .28); box-shadow: 0 0 0 2px rgba(68, 127, 171, .34); } }
+@keyframes bible-voice-target { 0% { opacity: 0; } 8%, 75% { opacity: 1; } 100% { opacity: 0; } }
 
 @media (prefers-reduced-motion: reduce) {
-  .bible-voice-overlay, .scripture-line.is-voice-target, .parallel-scripture-line.is-voice-target { animation-duration: .01ms; }
+  .bible-voice-overlay { animation-duration: .01ms; }
+  .scripture-line.is-voice-target::before, .parallel-scripture-line.is-voice-target::before { animation: none; }
   .bible-voice-wave i { transition-duration: .01ms; animation: none !important; }
 }
