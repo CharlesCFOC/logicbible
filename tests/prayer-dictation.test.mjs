@@ -118,6 +118,10 @@ test('Prayer request renders an accessible microphone without a dictation langua
     assert.ok(!html.includes('Dictation language'));
     assert.ok(!html.includes('prayer-dictation-language'));
     assert.ok(!html.includes('Read aloud: Prayer request'));
+    assert.match(html, /class="message-composer"/);
+    assert.equal((html.match(/type="submit"/g) || []).length, 1);
+    assert.match(html, /type="submit" aria-label="Send prayer request"/);
+    assert.match(html, /<input[^>]*type="checkbox"[^>]*required=""/);
   } finally {
     await server.close();
     if (originalWindow === undefined) delete globalThis.window;

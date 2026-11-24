@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { highlightBibleCitations } from "../../lib/ai/bible-citations.js";
 import { useDictation } from "./use-dictation.js";
 import { DictationControls } from "./dictation-controls.jsx";
+import { MessageComposer } from "./message-composer.jsx";
 
 const aiIcons = {
   plus: ["M12 5v14", "M5 12h14"],
@@ -78,6 +79,27 @@ export function AiComposer({ value, onChange, onSubmit, placeholder, ariaLabel, 
       </button>
     </form>
   );
+}
+
+export function BrotherAiComposer({ onSubmit, ...props }) {
+  const formRef = useRef(null);
+  useEffect(() => {
+    const screen = document.querySelector("#ai");
+    const form = formRef.current;
+    if (!screen || !form) return;
+    const updateHeight = () => screen.style.setProperty("--ai-composer-height", `${form.getBoundingClientRect().height}px`);
+    updateHeight();
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(form);
+    return () => {
+      observer.disconnect();
+      screen.style.removeProperty("--ai-composer-height");
+    };
+  }, []);
+  return <form ref={formRef} className="brother-ai-reply-form" onSubmit={event => {
+    if (props.dictation?.active) { event.preventDefault(); return; }
+    onSubmit(event);
+  }}><MessageComposer {...props} /></form>;
 }
 
 export function AiMessage({ message, bridge, formatText, pendingLabel = "Brother AI is thinking...", showAvatar = false, showName = false, name = "BROTHER AI" }) {
@@ -219,7 +241,7 @@ export function AiPage() {
         <p className="ai-history-retention">Conversations are saved for 24 hours after your last message.</p>
       </section>
       {isAiScreenActive && tab === "chat" && createPortal(
-        <AiComposer value={prompt} onChange={setPrompt} onSubmit={send} placeholder={aiComposerPrompts[promptIndex]} ariaLabel="Message Brother AI" disabled={pending} className="brother-ai-composer" textareaClassName={promptFading ? "is-placeholder-fading" : ""} dictation={dictation} />,
+        <BrotherAiComposer value={prompt} onChange={setPrompt} onSubmit={send} placeholder={aiComposerPrompts[promptIndex]} ariaLabel="Message Brother AI" disabled={pending} placeholderFading={promptFading} dictation={dictation} />,
         document.querySelector(".phone-frame"),
       )}
     </>

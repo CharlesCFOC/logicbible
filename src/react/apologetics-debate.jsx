@@ -3,7 +3,8 @@ import { createPortal } from "react-dom";
 import { confidenceScoringRows, getConfidenceScoringInstruction, normalizeConfidenceChange } from "../../lib/ai/debate-scoring.js";
 import { opponentPersonalities } from "../../lib/ai/debate-personality.js";
 import { highlightBibleCitations } from "../../lib/ai/bible-citations.js";
-import { AiComposer, AiIcon, AiMessage } from "./ai.jsx";
+import { AiIcon, AiMessage } from "./ai.jsx";
+import { MessageComposer } from "./message-composer.jsx";
 import { useDictation } from "./use-dictation.js";
 import { debateDifficultyDescriptions, debateScoringRubrics, getDebateDifficulty } from "../../lib/ai/debate-difficulty.js";
 import { debateThemes } from "../../lib/ai/debate-topics.js";
@@ -377,6 +378,7 @@ function DebateRoomView({ theme, question, difficulty, opponentPersonality = "se
 
   const sendMessage = async (event) => {
     event.preventDefault();
+    if (pending || dictation.active) return;
     const text = draft.trim();
     if (!text) return;
     setDraft("");
@@ -403,15 +405,13 @@ function DebateRoomView({ theme, question, difficulty, opponentPersonality = "se
             <span>Think room</span><i aria-hidden="true">/</i><strong>Debate room</strong>
           </nav>
         </div>
+        <DebateTrainingControls key={question} question={question || generalQuestion} theme={theme?.label || "General"} opponent={selectedPersonality.label} messages={messages} verseSupportText={verseSupportText} />
       </header>
-
-      <DebateTrainingControls key={question} question={question || generalQuestion} theme={theme?.label || "General"} opponent={selectedPersonality.label} messages={messages} verseSupportText={verseSupportText} />
 
       <div className="apologetics-debate-room-settings">
         <div className="apologetics-debate-room-info">
           <button className="apologetics-debate-room-info-toggle" type="button" onMouseDown={(event) => event.preventDefault()} onClick={toggleRoomInfo} aria-expanded={roomInfoOpen} aria-controls="debate-room-information">
             <span>Room information</span>
-            <span className={`apologetics-debate-room-info-arrow${roomInfoOpen ? " is-open" : ""}`} aria-hidden="true">⌄</span>
           </button>
           {roomInfoOpen && (
             <div className="apologetics-debate-room-context" id="debate-room-information">
@@ -426,7 +426,6 @@ function DebateRoomView({ theme, question, difficulty, opponentPersonality = "se
         <div className="apologetics-debate-room-info">
           <button className="apologetics-debate-room-info-toggle" type="button" onClick={() => setScoringTableOpen((open) => !open)} aria-expanded={scoringTableOpen} aria-controls="debate-scoring-table">
             <span id="debate-scoring-table-title">Confidence points - scoring table</span>
-            <span className={`apologetics-debate-room-info-arrow${scoringTableOpen ? " is-open" : ""}`} aria-hidden="true">⌄</span>
           </button>
           {scoringTableOpen && (
             <div className="debate-scoring-guide" id="debate-scoring-table">
@@ -504,7 +503,9 @@ function DebateRoomView({ theme, question, difficulty, opponentPersonality = "se
     </div>
     {isDebateScreenActive && createPortal(
       <>
-        <AiComposer value={draft} onChange={setDraft} onSubmit={sendMessage} placeholder="Type your response..." ariaLabel="Type your response" disabled={pending} className="apologetics-debate-composer" submitLabel="Send response" dictation={dictation} />
+        <form className="debate-reply-form" onSubmit={sendMessage}>
+          <MessageComposer value={draft} onChange={setDraft} placeholder="Type your response..." ariaLabel="Type your response" disabled={pending} submitLabel="Send response" dictation={dictation} />
+        </form>
         {verseSupportOpen && (
           <div className="apologetics-debate-verse-overlay" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setVerseSupportOpen(false); }}>
             <section className="apologetics-debate-verse-modal" role="dialog" aria-modal="true" aria-labelledby="verse-support-title">
@@ -617,8 +618,6 @@ export function ApologeticsDebatePage() {
         </div>
       </header>
 
-      <a className="pilot-debate-entry" href="evangelism-pilot.html"><span>DISCUSSION EN GROUPE</span><strong>Mode église</strong><small>Ouvrir le scénario pilote et les commandes de projection ↗</small></a>
-
       <nav className="apologetics-debate-setup-progress" aria-label="Debate setup progress">
         <span className={theme ? "is-complete" : ""}><b>1</b><small>Beliefs</small></span>
         <i aria-hidden="true"></i>
@@ -629,6 +628,7 @@ export function ApologeticsDebatePage() {
         <span className={opponentPersonality ? "is-complete" : ""}><b>4</b><small>Personality</small></span>
       </nav>
 
+      <div className="apologetics-debate-setup-scroll" role="region" aria-label="Debate setup choices" tabIndex={0}>
       <section className="apologetics-debate-step apologetics-debate-step--theme" aria-labelledby="debate-theme-title">
         <div className="apologetics-debate-step-heading">
           <span>1</span>
@@ -740,6 +740,7 @@ export function ApologeticsDebatePage() {
             Continue my debate
           </button>
         )}
+      </div>
       </div>
     </div>
   );

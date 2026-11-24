@@ -20,5 +20,6 @@
   "pages/debate-projection.css",
   "pages/evangelism-pilot.css",
   "pages/church-mode.css",
-  "pages/church-competition.css"
+  "pages/church-competition.css",
+  "components/message-composer.css"
 ]

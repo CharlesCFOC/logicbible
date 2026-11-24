@@ -416,86 +416,6 @@ body .app-shell[data-app-background="black"] .prayer-request-title-field input {
   background: transparent !important;
 }
 
-@property --prayer-neon-angle {
-  syntax: "<angle>";
-  inherits: false;
-  initial-value: 0deg;
-}
-
-/* Neon writing field for prayer requests. */
-.prayer-request-textarea {
-  position: relative;
-  min-width: 0;
-  padding: 2px;
-  border-radius: 22px;
-  border: 1px solid rgba(205, 224, 255, 0.57);
-  background: transparent;
-  box-shadow: 0 0 13px rgba(110, 160, 255, 0.17), 0 10px 19px rgba(0, 8, 32, 0.3);
-  animation: none;
-}
-
-.prayer-request-textarea:focus-within {
-  border-color: rgba(218, 240, 255, 0.9);
-  box-shadow: 0 0 16px rgba(110, 190, 255, 0.28), 0 10px 19px rgba(0, 8, 32, 0.3);
-}
-
-.prayer-request-textarea textarea,
-body:has(.app-shell[data-app-background="black"]) .prayer-request-textarea textarea {
-  display: block;
-  width: 100%;
-  border: 0 !important;
-  border-radius: 20px !important;
-  box-shadow: none !important;
-}
-
-@keyframes prayerNeonRotate {
-  to {
-    --prayer-neon-angle: 360deg;
-  }
-}
-
-.prayer-compose .prayer-request-textarea textarea {
-  padding-right: 62px;
-  padding-bottom: 58px;
-}
-
-.prayer-compose .church-dictation-button {
-  z-index: 2;
-  right: 12px;
-  bottom: 12px;
-  width: 44px;
-  height: 44px;
-  border-color: rgba(139, 220, 255, 0.65);
-  color: #ffffff;
-  background: #245b83;
-}
-
-.prayer-compose .church-voice-meter {
-  z-index: 2;
-}
-
-.prayer-compose .church-dictation-button[aria-pressed="true"] {
-  color: #ffffff;
-  background: #9c3157;
-  border-color: #ffc2d6;
-}
-
-.prayer-compose .church-dictation-button:focus-visible {
-  outline: 2px solid #8bdcff;
-  outline-offset: 3px;
-}
-
-.prayer-compose .church-dictation-status {
-  margin: 7px 0 0;
-  color: #d4eaff;
-  font-size: 12px;
-  line-height: 1.5;
-}
-
-.prayer-compose .church-dictation-status.is-error {
-  color: #ffd0df;
-}
-
 .prayer-writing-tools {
   display: flex;
   align-items: center;
@@ -507,19 +427,6 @@ body:has(.app-shell[data-app-background="black"]) .prayer-request-textarea texta
 
 .prayer-writing-tools .prayer-word-count {
   margin: 0;
-}
-
-/* Keep the writing surface transparent over the Prayer page. */
-body:has(.app-shell[data-app-background="black"]) .prayer-compose textarea {
-  background: transparent !important;
-  border-color: rgba(139, 220, 255, 0.48) !important;
-  color: #f4fbff !important;
-  box-shadow: inset 0 1px 0 rgba(220, 248, 255, 0.08), 0 8px 20px rgba(0, 0, 0, 0.16) !important;
-}
-
-body:has(.app-shell[data-app-background="black"]) .prayer-compose textarea:focus {
-  border-color: #8bdcff !important;
-  box-shadow: 0 0 0 3px rgba(139, 220, 255, 0.18), inset 0 1px 0 rgba(220, 248, 255, 0.1) !important;
 }
 
 
@@ -1631,24 +1538,6 @@ body .app-shell[data-app-background="black"] .prayer-list .prayer-card {
 /* Prayer request fields show the page background through their borders. */
 body .app-shell[data-app-background="black"] #prayer .prayer-request-title-field input,
 body .app-shell[data-app-background="black"] #prayer .prayer-compose textarea {
-  background: transparent !important;
-  background-image: none !important;
-}
-
-/* Use the same calm cyan/blue/violet neon treatment as the other Prayer cards. */
-#prayer .prayer-request-textarea {
-  border: 1px solid rgba(205, 224, 255, 0.57) !important;
-  background: transparent !important;
-  box-shadow: 0 0 13px rgba(110, 160, 255, 0.17), 0 10px 19px rgba(0, 8, 32, 0.3) !important;
-}
-
-#prayer .prayer-request-textarea::before {
-  display: none;
-}
-
-#prayer .prayer-request-textarea textarea {
-  position: relative;
-  z-index: 1;
   background: transparent !important;
   background-image: none !important;
 }

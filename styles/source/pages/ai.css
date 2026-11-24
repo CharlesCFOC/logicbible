@@ -1,5 +1,14 @@
 /* pages/ai.css */
 
+.brother-ai-reply-form {
+  position: absolute;
+  z-index: 20;
+  right: 14px;
+  bottom: calc(var(--bottom-nav-offset) + 14px);
+  left: 14px;
+  margin: 0;
+}
+
 /* AI dark theme: user bubble, tabs and response actions. */
 .app-shell[data-app-background="black"] .user-message {
   border: 1px solid rgba(139, 220, 255, 0.32) !important;

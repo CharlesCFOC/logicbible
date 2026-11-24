@@ -1,0 +1,111 @@
+/* Shared Prayer / Debate / Brother AI field. Keep page-specific positioning outside it. */
+@property --message-composer-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.app-shell .phone-frame .message-composer {
+  position: relative;
+  isolation: isolate;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 116px;
+  padding: 10px 66px 10px 14px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  background: transparent;
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+.message-composer::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--message-composer-angle), #4fc3ff, #8bdcff, #ff9d00, #ffb6dc, #4fc3ff);
+  content: "";
+  pointer-events: none;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: messageComposerBorder 6s linear infinite;
+}
+
+.app-shell .phone-frame .message-composer .church-dictation,
+.app-shell .phone-frame .message-composer .church-dictation-input {
+  position: static;
+  min-width: 0;
+}
+
+.app-shell .phone-frame .message-composer .church-dictation-input {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.app-shell .phone-frame .message-composer textarea {
+  position: relative;
+  z-index: 1;
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 88px;
+  max-height: 180px;
+  margin: 0;
+  padding: 9px 4px;
+  border: 0 !important;
+  border-radius: 0 !important;
+  outline: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  color: #f4fbff !important;
+  font-size: var(--chat-text-size, 15px);
+  line-height: 1.4;
+  resize: none;
+  scrollbar-width: thin;
+  scrollbar-color: #5b9bc1 transparent;
+}
+
+.app-shell .phone-frame .message-composer textarea::placeholder { color: rgba(224, 239, 248, .7) !important; opacity: 1; }
+.app-shell .phone-frame .message-composer textarea::placeholder { transition: opacity .26s ease; }
+.app-shell .phone-frame .message-composer textarea.is-placeholder-fading::placeholder { opacity: 0; }
+.app-shell .phone-frame .message-composer button {
+  position: absolute;
+  z-index: 1;
+  right: 10px;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+  margin: 0;
+  padding: 10px;
+  border: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #34d5ed, #2774eb);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(60, 157, 204, .3), inset 0 1px 0 rgba(255, 255, 255, .2);
+}
+.app-shell .phone-frame .message-composer button svg { width: 20px; height: 20px; }
+.app-shell .phone-frame .message-composer .church-dictation-button { top: 10px; bottom: auto; }
+.app-shell .phone-frame .message-composer .message-composer-send { top: 62px; }
+.app-shell .phone-frame .message-composer button[aria-pressed="true"] { background: #9c3157; }
+.app-shell .phone-frame .message-composer button:disabled,
+.app-shell .phone-frame .message-composer textarea:disabled { opacity: .6; }
+.app-shell .phone-frame .message-composer button:focus-visible { outline: 2px solid #8bdcff; outline-offset: 3px; }
+.message-composer:has(textarea:focus-visible) { outline: 2px solid #8bdcff; outline-offset: 3px; }
+.app-shell .phone-frame .message-composer .church-voice-meter { position: static; box-sizing: border-box; width: 100%; max-width: 176px; height: 32px; margin: 0; padding: 2px 8px; border: 0; border-radius: 10px; background: rgba(67, 155, 197, .2); }
+.app-shell .phone-frame .message-composer .church-dictation-toolbar { display: none; }
+.app-shell .phone-frame .message-composer .church-dictation-status { margin: 7px 0 0; color: #d4eaff; font-size: 12px; line-height: 1.5; }
+.app-shell .phone-frame .message-composer .church-dictation-status.is-error { color: #ffd0df; }
+
+@keyframes messageComposerBorder { to { --message-composer-angle: 360deg; } }
+@media (prefers-reduced-motion: reduce) { .message-composer::before { animation: none; } }

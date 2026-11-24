@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { IntercessionPanel } from "./intercession.jsx";
 import { useDictation } from "./use-dictation.js";
-import { DictationControls } from "./dictation-controls.jsx";
+import { MessageComposer } from "./message-composer.jsx";
 
 const categories = [
   ["general", "General"],
@@ -105,9 +105,7 @@ function PrayerRequestForm({ state, bridge }) {
         <div className="prayer-request-title-field">
           <input value={title} onChange={(event) => setTitle(event.target.value)} type="text" maxLength="120" placeholder="Prayer title" aria-label="Prayer title" required />
         </div>
-        <DictationControls field="request" fieldId="prayer-request-text" label="Prayer request" dictation={dictation} disabled={sending} showReadAloud={false} inputClassName="prayer-request-textarea">
-          <textarea id="prayer-request-text" aria-label="Prayer request" aria-describedby="prayer-request-text-dictation-status" value={text} onChange={(event) => dictation.edit("request", event.target.value)} rows="5" maxLength="2200" placeholder="What would you like us to pray for?" required disabled={sending} />
-        </DictationControls>
+        <MessageComposer id="prayer-request-text" value={text} onChange={setText} ariaLabel="Prayer request" placeholder="What would you like us to pray for?" required maxLength={2200} disabled={sending} dictation={dictation} dictationField="request" submitLabel={sending ? "Sending..." : "Send prayer request"} />
         <div className="prayer-writing-tools">
           <small className={`prayer-word-count${words > 300 ? " is-over-limit" : ""}`}>{words} / 300 words</small>
         </div>
@@ -129,9 +127,6 @@ function PrayerRequestForm({ state, bridge }) {
           <span className="prayer-checkbox-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4 10-10" /></svg></span>
           <span>I agree to the community rules</span>
         </label>
-        <div className="prayer-compose-footer">
-          <button type="submit" disabled={sending || dictation.active}><PrayerIcon name="send" /><span>{sending ? "Sending..." : state.sent ? "Sent" : "Send prayer request"}</span></button>
-        </div>
         <p className="prayer-form-feedback" aria-live="polite">{state.feedback}</p>
       </form>
     </section>

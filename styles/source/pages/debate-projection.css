@@ -96,8 +96,8 @@ body.debate-projection-document { min-height: 100vh; min-height: 100dvh; height:
 :fullscreen .debate-projection-shell { padding: 0; }
 :fullscreen .debate-projection-shell > .debate-stage { width: min(100vw, calc(100dvh * 16 / 9)); border: 0; border-radius: 0; }
 
-.app-shell .debate-training-launch { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 44px; margin: 8px 0 12px; padding: 10px 12px; border: 1px solid #456787; border-radius: 12px; color: #eaf2ff; background: #203e5b; font-size: 12px; font-weight: 700; }
-.debate-training-launch small { padding: 2px 5px; border: 1px solid #6984a0; border-radius: 4px; color: #c4d9ee; font-size: 9px; }
+.app-shell .debate-training-launch { display: inline-flex; align-items: center; justify-content: center; justify-self: end; align-self: flex-end; gap: 6px; width: fit-content; max-width: 100%; min-height: 32px; margin: 0 0 4px auto; padding: 6px 9px; border: 0; border-radius: 8px; color: #eaf2ff; background: #203e5b; font-size: 10px; line-height: 1.2; font-weight: 700; }
+.debate-training-launch small { display: none; }
 .debate-training-overlay { position: fixed; z-index: 20000; inset: 0; display: grid; place-items: center; padding: 24px; background: #060d1cbd; backdrop-filter: blur(8px); }
 .debate-training-dialog { display: flex; flex-direction: column; width: min(1500px, 100%); max-height: calc(100dvh - 48px); overflow: hidden; border: 1px solid #cbd4e0; border-radius: 22px; color: #233148; background: #f4f6fa; box-shadow: 0 28px 90px #0005; font-family: var(--font-body); text-align: left; color-scheme: light; }
 .debate-training-header { display: flex; flex: 0 0 auto; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 26px; border-bottom: 1px solid #d7dee8; background: #fff; }

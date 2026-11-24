@@ -7,13 +7,16 @@ import { createServer } from 'vite';
 test('Brother AI reuses the dictation field, preserves its draft and waits for final transcription before sending', async () => {
   const server = await createServer({ configFile: false, server: { middlewareMode: true, hmr: false }, appType: 'custom' });
   try {
-    const { AiComposer } = await server.ssrLoadModule('/src/react/ai.jsx');
+    const { AiComposer, BrotherAiComposer } = await server.ssrLoadModule('/src/react/ai.jsx');
     const draft = 'Existing question. What does this verse mean?';
     const dictation = { field: 'message', phase: 'idle', active: false, message: '', edit() {}, start() {}, stop() {} };
-    const render = (props = {}) => renderToStaticMarkup(React.createElement(AiComposer, {
-      value: draft, onChange() {}, onSubmit() {}, ariaLabel: 'Message Brother AI', className: 'brother-ai-composer', dictation, ...props,
+    const render = (props = {}) => renderToStaticMarkup(React.createElement(BrotherAiComposer, {
+      value: draft, onChange() {}, onSubmit() {}, ariaLabel: 'Message Brother AI', dictation, ...props,
     }));
     const idle = render();
+    assert.match(idle, /class="message-composer"/);
+    assert.equal((idle.match(/<form/g) || []).length, 1);
+    assert.equal((idle.match(/type="submit"/g) || []).length, 1);
     assert.match(idle, /class="church-dictation"/);
     assert.match(idle, /aria-label="Dictate: Message Brother AI"/);
     assert.match(idle, /<textarea[^>]*>[\s\S]*Existing question\. What does this verse mean\?<\/textarea>/);
@@ -38,7 +41,9 @@ test('Brother AI reuses the dictation field, preserves its draft and waits for f
     assert.match(pending, /disabled=""[^>]*aria-label="Dictate: Message Brother AI"/);
 
     // The other users of AiComposer keep their existing text-only composer.
-    const plain = render({ dictation: null, className: 'apologetics-debate-composer' });
+    const plain = renderToStaticMarkup(React.createElement(AiComposer, {
+      value: draft, onChange() {}, onSubmit() {}, ariaLabel: 'Coach message', className: 'apologetics-debate-composer',
+    }));
     assert.ok(!plain.includes('church-dictation'));
     assert.doesNotMatch(plain, /type="submit"[^>]*disabled/);
   } finally { await server.close(); }
